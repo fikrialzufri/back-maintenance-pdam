@@ -1,331 +1,83 @@
-<aside class="main-sidebar sidebar-collapse sidebar-dark-primary elevation-4">
-    <!-- Brand Logo -->
-    <a href="{{ route('home') }}" class="brand-link">
-        <img src="{{ asset('img/logo.png') }}" width="30%" alt="AdminLTE Logo"
-            class="brand-image img-circle elevation-3" style="opacity: .8">
-        <span class="brand-text font-weight-light">Dashboard</span>
-    </a>
-
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <!-- Sidebar user panel (optional) -->
-        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-            <div class="image">
-                <!-- <img src="{{ asset('template/dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image"> -->
+<div class="app-sidebar colored">
+    <div class="sidebar-header">
+        <a class="header-brand" href="{{ route('home') }}">
+            <div class="logo-img">
+                <img height="30" src="{{ asset('img/logo_white.png') }}" class="header-brand-img" title="RADMIN">
             </div>
-            <div class="info">
-                <a href="{{ route('user.ubah') }}" class="d-block">{{ ucfirst(Auth::user()->name) }}</a>
-            </div>
-        </div>
+        </a>
+        <div class="sidebar-action"><i class="ik ik-arrow-left-circle"></i></div>
+        <button id="sidebarClose" class="nav-close"><i class="ik ik-x"></i></button>
+    </div>
 
-        <!-- Sidebar Menu -->
-        <nav class="mt-2">
-            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                <!-- Add icons to the links using the .nav-icon class  with font-awesome or any other icon font library -->
-                <li class="nav-item">
-                    <a href="{{ route('home') }}" class="nav-link {{ Request::is('/') ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-tachometer-alt"></i>
-                        <p>
-                            Dashboard
-                        </p>
+    @php
+        $segment1 = request()->segment(1);
+        $segment2 = request()->segment(2);
+    @endphp
+
+    <div class="sidebar-content">
+        <div class="nav-container">
+            <nav id="main-menu-navigation" class="navigation-main">
+                <div class="nav-item {{ $segment1 == 'home' ? 'active' : '' }}">
+                    <a href="{{ route('home') }}">
+                        <i class="ik ik-bar-chart-2"></i>
+                        <span>{{ __('Dashboard') }}</span>
                     </a>
-                </li>
+                </div>
                 @can('view-satuan', 'view-kategori', 'view-jenis', 'view-ukuran', 'view-kategori-harga-jual')
-                    <li
-                        class="nav-item has-treeview
-                    {{ Request::segment(1) === 'satuan' ? 'menu-open' : '' }}
-                    {{ Request::segment(1) === 'kategori' ? 'menu-open' : '' }}
-                    {{ Request::segment(1) === 'jenis' ? 'menu-open' : '' }}
-                    {{ Request::segment(1) === 'ukuran' ? 'menu-open' : '' }}
-                    {{ Request::segment(1) === 'kategori_harga_jual' ? 'menu-open' : '' }}
-                    ">
-                        <a href="#"
-                            class="nav-link
-                        {{ Request::segment(1) === 'satuan' ? 'active' : '' }}
-                        {{ Request::segment(1) === 'kategori' ? 'active' : '' }}
-                        {{ Request::segment(1) === 'jenis' ? 'active' : '' }}
-                        {{ Request::segment(1) === 'ukuran' ? 'active' : '' }}
-                        {{ Request::segment(1) === 'kategori_harga_jual' ? 'active' : '' }}
-                        ">
-                            <i class=" nav-icon fa fa-archive"></i>
-                            <p>
-                                Master Data
-                                <i class="fas fa-angle-left right"></i>
-                            </p>
-                        </a>
-                        <ul class="nav nav-treeview">
+                    <div class="nav-lavel">{{ __('Master Data') }} </div>
+                    <div
+                        class="nav-item {{ $segment1 == 'satuan' || $segment1 == 'navigation' ? 'active open' : '' }} has-sub">
+                        <a href="#"><i class="ik ik-box"></i><span>{{ __('Item') }}</span></a>
+                        <div class="submenu-content">
                             @can('view-satuan')
-                                <li class="nav-item">
-                                    <a href="{{ route('satuan.index') }}"
-                                        class="nav-link {{ Request::is('satuan') ? 'active' : '' }}">
-                                        <i class="nav-icon fa fa-archive"></i>
-
-                                        <p>
-                                            Satuan
-                                        </p>
-                                    </a>
-                                </li>
+                                <a href="{{ route('satuan.index') }}"
+                                    class="menu-item {{ Request::is('satuan') ? 'active' : '' }}">
+                                    Satuan
+                                </a>
                             @endcan
                             @can('view-kategori')
-                                <li class="nav-item">
-                                    <a href="{{ route('kategori.index') }}"
-                                        class="nav-link {{ Request::is('kategori') ? 'active' : '' }}">
-                                        <i class="nav-icon fa fa-cubes"></i>
-                                        <p>
-                                            Kategori
-                                        </p>
-                                    </a>
-                                </li>
+                                <a href="{{ route('kategori.index') }}"
+                                    class="menu-item {{ Request::is('kategori') ? 'active' : '' }}">
+                                    Kategori
+                                </a>
                             @endcan
                             @can('view-jenis')
-                                <li class="nav-item">
-                                    <a href="{{ route('jenis.index') }}"
-                                        class="nav-link {{ Request::is('jenis') ? 'active' : '' }}">
-                                        <i class="nav-icon fa fa-cube"></i>
-                                        <p>
-                                            Jenis
-                                        </p>
-                                    </a>
-                                </li>
-                            @endcan
-                            @can('view-merek')
-                                <li class="nav-item">
-                                    <a href="{{ route('merek.index') }}"
-                                        class="nav-link {{ Request::is('merek') ? 'active' : '' }}">
-                                        <i class="nav-icon fas fa-inbox"></i>
-                                        <p>
-                                            Merek
-                                        </p>
-                                    </a>
-                                </li>
-                            @endcan
-                            @can('view-ukuran')
-                                <li class="nav-item">
-                                    <a href="{{ route('ukuran.index') }}"
-                                        class="nav-link {{ Request::is('ukuran') ? 'active' : '' }}">
-                                        <i class="nav-icon fas fa-pencil-alt"></i>
-                                        <p>
-                                            Ukuran
-                                        </p>
-                                    </a>
-                                </li>
-                            @endcan
-                            @can('view-kategori-harga-jual')
-                                <li class="nav-item">
-                                    <a href="{{ route('kategori_harga_jual.index') }}"
-                                        class="nav-link {{ Request::is('kategori_harga_jual') ? 'active' : '' }}">
-                                        <i class="nav-icon fas fa-book"></i>
-                                        <p>
-                                            Kategori Harga Jual
-                                        </p>
-                                    </a>
-                                </li>
-                            @endcan
-                        </ul>
-                    </li>
-                @endcan
-                @can('view-produk')
-                    <li class="nav-item">
-                        <a href="{{ route('produk.index') }}"
-                            class="nav-link {{ Request::is('produk') ? 'active' : '' }}">
-                            <i class="nav-icon fa fa-briefcase"></i>
-                            <p>
-                                Produk
-                            </p>
-                        </a>
-                    </li>
-                @endcan
-
-                @can('view-pusat', 'view-cabang', 'view-toko', 'view-gudang', 'view-supplier')
-                    <li
-                        class="nav-item has-treeview
-                    {{ Request::segment(1) === 'pusat' ? 'menu-open' : '' }}
-                    {{ Request::segment(1) === 'cabang' ? 'menu-open' : '' }}
-                    {{ Request::segment(1) === 'toko' ? 'menu-open' : '' }}
-                    {{ Request::segment(1) === 'gudang' ? 'menu-open' : '' }}
-                    {{ Request::segment(1) === 'supplier' ? 'menu-open' : '' }}
-                    ">
-                        <a href="#"
-                            class="nav-link
-                        {{ Request::segment(1) === 'pusat' ? 'active' : '' }} {{ Request::segment(1) === 'cabang' ? 'active' : '' }} {{ Request::segment(1) === 'pusat' ? 'active' : '' }}
-                            {{ Request::segment(1) === 'toko' ? 'active' : '' }}
-                            {{ Request::segment(1) === 'supplier' ? 'active' : '' }}
-                            {{ Request::segment(1) === 'gudang' ? 'active' : '' }} ">
-                            <i class="    nav-icon fa fa-building"></i>
-                            <p>
-                                Perusahaan
-                                <i class="fas fa-angle-left right"></i>
-                            </p>
-                        </a>
-                        <ul class="nav nav-treeview">
-                            @can('view-pusat')
-                                <li class="nav-item">
-                                    <a href="{{ route('pusat.index') }}"
-                                        class="nav-link {{ Request::is('pusat') ? 'active' : '' }}">
-                                        <i class="nav-icon fa fa-university"></i>
-                                        <p>
-                                            Pusat
-                                        </p>
-                                    </a>
-                                </li>
-                            @endcan
-
-                            @can('view-cabang')
-                                <li class="nav-item">
-                                    <a href="{{ route('cabang.index') }}"
-                                        class="nav-link {{ Request::is('cabang') ? 'active' : '' }}">
-                                        <i class="nav-icon fa fa-shopping-bag"></i>
-                                        <p>
-                                            Cabang
-                                        </p>
-                                    </a>
-                                </li>
-                            @endcan
-
-                            @can('view-gudang')
-                                <li class="nav-item">
-                                    <a href="{{ route('gudang.index') }}"
-                                        class="nav-link {{ Request::is('gudang') ? 'active' : '' }}">
-                                        <i class="nav-icon fa fa-building"></i>
-                                        <p>
-                                            Gudang
-                                        </p>
-                                    </a>
-                                </li>
-                            @endcan
-
-                            @can('view-toko')
-                                <li class="nav-item">
-                                    <a href="{{ route('toko.index') }}"
-                                        class="nav-link {{ Request::is('toko') ? 'active' : '' }}">
-                                        <i class="nav-icon fas fa-store-alt"></i>
-                                        <p>
-                                            Toko
-                                        </p>
-                                    </a>
-                                </li>
-                            @endcan
-                            @can('view-supplier')
-                                <li class="nav-item">
-                                    <a href="{{ route('supplier.index') }}"
-                                        class="nav-link {{ Request::is('supplier') ? 'active' : '' }}">
-                                        <i class="nav-icon fa fa-credit-card"></i>
-                                        <p>
-                                            Supplier
-                                        </p>
-                                    </a>
-                                </li>
-                            @endcan
-                        </ul>
-
-                    </li>
-                @endcan
-                @can('view-jabatan', 'view-karyawan')
-                    <li
-                        class="nav-item has-treeview
-                    {{ Request::segment(1) === 'jabatan' ? 'menu-open' : '' }}
-                    {{ Request::segment(1) === 'karyawan' ? 'menu-open' : '' }}">
-                        <a href="#"
-                            class="nav-link {{ Request::segment(1) === 'jabatan' ? 'active' : '' }}  {{ Request::segment(1) === 'karyawan' ? 'active' : '' }}">
-                            <i class=" nav-icon fa fa-users"></i>
-                            <p>
-                                Karyawan
-                                <i class="fas fa-angle-left right"></i>
-                            </p>
-                        </a>
-                        <ul class="nav nav-treeview">
-                            @can('view-jabatan')
-                                <li class="nav-item">
-                                    <a href="{{ route('jabatan.index') }}"
-                                        class="nav-link {{ Request::is('jabatan') ? 'active' : '' }}">
-                                        <i class="nav-icon fa fa-address-card"></i>
-                                        <p>
-                                            Jabatan
-                                        </p>
-                                    </a>
-                                </li>
-                            @endcan
-
-                            @can('view-karyawan')
-                                <li class="nav-item">
-                                    <a href="{{ route('karyawan.index') }}"
-                                        class="nav-link {{ Request::is('karyawan') ? 'active' : '' }}">
-                                        <i class="nav-icon fa fa-users"></i>
-                                        <p>
-                                            Karyawan
-                                        </p>
-                                    </a>
-                                </li>
-                            @endcan
-                        </ul>
-                    </li>
-                @endcan
-
-
-
-                @can('view-user')
-
-                    <li
-                        class="nav-item has-treeview {{ Request::segment(1) === 'user' ? 'menu-open' : '' }} {{ Request::segment(1) === 'role' ? 'menu-open' : '' }} {{ Request::segment(1) === 'task' ? 'menu-open' : '' }}">
-                        <a href="#"
-                            class="nav-link {{ Request::segment(1) === 'user' ? 'active' : '' }} {{ Request::segment(1) === 'role' ? 'active' : '' }}  {{ Request::segment(1) === 'task' ? 'active' : '' }}">
-                            <i class=" nav-icon fas fa-table"></i>
-                            <p>
-                                Pengguna
-                                <i class="fas fa-angle-left right"></i>
-                            </p>
-                        </a>
-                        <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                                <a href="{{ route('user.index') }}"
-                                    class="nav-link {{ Request::segment(1) === 'user' ? 'active' : '' }}">
-                                    <i class="far fa-user nav-icon"></i>
-                                    <p>Pengguna</p>
+                                <a href="{{ route('jenis.index') }}"
+                                    class="menu-item {{ Request::is('jenis') ? 'active' : '' }}">
+                                    Jenis
                                 </a>
-                            </li>
-                        </ul>
-
-                        @can('view-roles')
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{{ route('role.index') }}"
-                                        class="nav-link {{ Request::segment(1) === 'role' ? 'active' : '' }}">
-                                        <i class="fa fa-key nav-icon"></i>
-                                        <p>Hak Akses</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        @endcan
-                        @role('superadmin')
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{{ route('task.index') }}"
-                                        class="nav-link {{ Request::segment(1) === 'task' ? 'active' : '' }}">
-                                        <i class="fa fa-archive nav-icon"></i>
-                                        <p>Task</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        @endrole
-                    </li>
+                            @endcan
+                        </div>
+                    </div>
                 @endcan
-
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('logout') }}"
-                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                        <i class="nav-icon fa fa-power-off"></i>
-                        <p>
-                            Keluar
-                            <!-- <span class="right badge badge-danger">New</span> -->
-                        </p>
-                    </a>
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                        {{ csrf_field() }}
-                    </form>
-                </li>
-            </ul>
-        </nav>
-        <!-- /.sidebar-menu -->
+                @can('view-user', 'view-roles')
+                    <div class="nav-lavel">{{ __('User') }} </div>
+                    <div
+                        class="nav-item {{ $segment1 == 'user' || $segment1 == 'navigation' ? 'active open' : '' }} has-sub">
+                        <a href="#"><i class="ik ik-user dropdown-icon"></i><span>{{ __('Pengguna') }}</span></a>
+                        <div class="submenu-content">
+                            @can('view-user')
+                                <a href="{{ route('user.index') }}"
+                                    class="menu-item {{ Request::is('user') ? 'active' : '' }}">
+                                    Pengguna
+                                </a>
+                            @endcan
+                            @can('view-roles')
+                                <a href="{{ route('role.index') }}"
+                                    class="menu-item {{ Request::is('roles') ? 'active' : '' }}">
+                                    Hak Akses
+                                </a>
+                            @endcan
+                            @role('superadmin')
+                                <a href="{{ route('task.index') }}"
+                                    class="menu-item {{ Request::is('task') ? 'active' : '' }}">
+                                    Task
+                                </a>
+                            @endrole
+                        </div>
+                    </div>
+                @endcan
+            </nav>
+        </div>
     </div>
-    <!-- /.sidebar -->
-</aside>
+</div>

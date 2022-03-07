@@ -1,5 +1,5 @@
 @extends('template.app')
-
+@section('title', ucwords(str_replace([':', '_', '-', '*'], ' ', $title)))
 @section('content')
 
     <div class="container-fluid">
@@ -7,7 +7,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header">
+                    <div class="card-header d-flex justify-content-between">
                         <h3 class="card-title">Daftar {{ ucwords(str_replace([':', '_', '-', '*'], ' ', $title)) }}
                         </h3>
                         <a href="{{ route($route . '.create') }}" class="btn btn-sm btn-primary float-right text-light">
@@ -69,7 +69,8 @@
                                                 @endforeach
                                             @endif
                                             <a href="{{ route($route . '.edit', $item->id) }}"
-                                                class="btn btn-sm btn-warning text-light">
+                                                class="btn btn-sm btn-warning text-light" data-toggle="tooltip"
+                                                data-placement="top" title="Edit">
                                                 <i class="nav-icon fas fa-edit"></i> Ubah</a>
                                             <form id="form-{{ $item->id }}"
                                                 action="{{ route($route . '.destroy', $item->id) }}" method="POST"
@@ -103,27 +104,26 @@
             <!-- Main row -->
             <!-- /.row (main row) -->
         </div><!-- /.container-fluid -->
+    </div>
+@endsection
 
-    @stop
-
-    @push('style')
-        <!-- DataTables -->
-        <link rel="stylesheet" href="{{ asset('template/plugins/datatables-bs4/css/dataTables.bootstrap4.css') }}">
-    @endpush
-    @push('script')
-        <!-- DataTables -->
-        <script src="{{ asset('template/plugins/datatables/jquery.dataTables.js') }}">
-        </script>
-        <script src="{{ asset('template/plugins/datatables-bs4/js/dataTables.bootstrap4.js') }}"></script>
-        <script>
-            // $('#example').DataTable({
-            //   "paging": true,
-            //   "lengthChange": true,
-            //   "searching": true,
-            //   "ordering": true,
-            //   "info": true,
-            //   "autoWidth": true,
-            //   "pageLength": 20,
-            // });
-        </script>
-    @endpush
+@push('style')
+    <!-- DataTables -->
+    <link rel="stylesheet" href="{{ asset('plugins/DataTables/css/datatables.css') }}">
+@endpush
+@push('script')
+    <!-- DataTables -->
+    <script src="{{ asset('plugins/DataTables/datatables.js') }}">
+    </script>
+    <script>
+        // $('#example').DataTable({
+        //   "paging": true,
+        //   "lengthChange": true,
+        //   "searching": true,
+        //   "ordering": true,
+        //   "info": true,
+        //   "autoWidth": true,
+        //   "pageLength": 20,
+        // });
+    </script>
+@endpush

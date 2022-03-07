@@ -1,121 +1,102 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html class="no-js" lang="en">
 
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Jordan Hair Studio</title>
-    <!-- Tell the browser to be responsive to screen width -->
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Login | PDAM Samarinda</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="{{ asset('img/logo.png') }}" />
 
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="{{ asset('template/plugins/fontawesome-free/css/all.min.css') }}">
-    <!-- Ionicons -->
-    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css')}}">
-    <!-- icheck bootstrap -->
-    <link rel="stylesheet" href="{{ asset('template/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
-    <!-- Theme style -->
-    <link rel="stylesheet" href="{{ asset('template/dist/css/adminlte.min.css') }}">
-    <!-- Google Font: Source Sans Pro -->
-    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <link rel="icon" href="{{ asset('favicon.png') }}" type="image/x-icon" />
 
-    <style>
-        body,
-        html {
-            height: 100%;
-        }
+    <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,600,700,800" rel="stylesheet">
 
-        .bg {
-            /* The image used */
-            background-image: url("img/BACKGROUNDLOGIN.jpg");
-
-            /* Full height */
-            height: 100%;
-
-            /* Center and scale the image nicely */
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: cover;
-        }
-
-    </style>
+    <link rel="stylesheet" href="{{ asset('plugins/bootstrap/dist/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/ionicons/dist/css/ionicons.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/icon-kit/dist/css/iconkit.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/perfect-scrollbar/css/perfect-scrollbar.css') }}">
+    <link rel="stylesheet" href="{{ asset('dist/css/theme.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <script src="{{ asset('src/js/vendor/modernizr-2.8.3.min.js') }}"></script>
 </head>
 
-<body class="hold-transition login-page bg">
-    <div class="login-box">
-        <div class="login-logo">
-            <img src="{{ 'img/logo.png' }}" width="70%">
-            <!--alt="Barbershop Logo" class="brand-image img-circle elevation-3" style="opacity: .8">-->
-        </div>
-        <!-- /.login-logo -->
-        <div class="card" style="opacity: .9">
-            <div class="card-body login-card-body">
-                <p class="login-box-msg">Sign in to start your session</p>
+<body>
+    <!--[if lt IE 8]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
 
-                <form method="POST" action="{{ route('login') }}">
-                    @csrf
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control @error('username') is-invalid @enderror "
-                            placeholder="{{ __('E-Mail / Username') }}" name="username"
-                            value="{{ old('username') }}" required autocomplete="username" autofocus>
-
-                        @error('username')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                                <span class="fas fa-envelope"></span>
+    <div class="auth-wrapper">
+        <div class="container-fluid h-100">
+            <div class="row flex-row h-100">
+                <div class="col-xl-4 col-lg-4 col-md-4 m-auto">
+                    <div class="authentication-form mx-auto">
+                        <div class="logo-centered">
+                            <a href="http://radmin.rakibhstu.com"><img height="40" src="{{ asset('img/logo.png') }}"
+                                    alt="RADMIN"></a>
+                        </div>
+                        <p>Welcome back! </p>
+                        <form method="POST" action="{{ route('login') }}">
+                            @csrf
+                            <div class="form-group">
+                                <input id="username" type="text" placeholder="username"
+                                    class="form-control @error('username') is-invalid @enderror" name="username"
+                                    value="{{ old('username') }}" required autocomplete="username" autofocus>
+                                <i class="ik ik-user"></i>
+                                @error('username')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
-                        </div>
-                    </div>
-                    <div class="input-group mb-3">
-                        <input type="password" class="form-control @error('password') is-invalid @enderror"
-                            name="password" required autocomplete="current-password" placeholder="Password">
-
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                                <span class="fas fa-lock"></span>
+                            <div class="form-group">
+                                <input id="password" type="password" placeholder="Password"
+                                    class="form-control @error('password') is-invalid @enderror" name="password"
+                                    required>
+                                <i class="ik ik-lock"></i>
+                                @error('password')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-8">
-                            <div class="icheck-primary">
-                                <input class="form-check-input" type="checkbox" name="remember" id="remember"
-                                    {{ old('remember') ? 'checked' : '' }}>
-                                <label for="remember">
-                                    Remember Me
-                                </label>
+                            <div class="row">
+                                <div class="col text-left">
+                                    <label class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="item_checkbox"
+                                            name="item_checkbox" value="option1">
+                                        <span class="custom-control-label">&nbsp;Remember Me</span>
+                                    </label>
+                                </div>
+                                <div class="col text-right">
+                                    <a class="btn text-danger" href="{{ url('password/forget') }}">
+                                        {{ __('Forgot Password?') }}
+                                    </a>
+                                </div>
                             </div>
-                        </div>
-                        <!-- /.col -->
-                        <div class="col-4">
-                            <button type="submit"
-                                class="btn btn-primary btn-block btn-flat">{{ __('Login') }}</button>
-                        </div>
-                        <!-- /.col -->
+                            <div class="sign-btn text-center">
+                                <button class="btn btn-custom">Sign In</button>
+                            </div>
+                            <div class="register">
+                                <p>{{ __('No account?') }} <a
+                                        href="{{ url('register') }}">{{ __('Sign Up') }}</a>
+                                </p>
+                            </div>
+
+                        </form>
                     </div>
-                </form>
-
-                <!-- /.social-auth-links -->
-
+                </div>
             </div>
-            <!-- /.login-card-body -->
         </div>
     </div>
-    <!-- /.login-box -->
 
-    <!-- jQuery -->
-    <script src="{{ asset('template/plugins/jquery/jquery.min.js') }}"></script>
-    <!-- Bootstrap 4 -->
-    <script src="{{ asset('template/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-    <!-- AdminLTE App -->
-    <script src="{{ asset('template/dist/js/adminlte.min.js') }}"></script>
+    <script src="{{ asset('src/js/vendor/jquery-3.3.1.min.js') }}"></script>
+    <script src="{{ asset('plugins/popper.js/dist/umd/popper.min.js') }}"></script>
+    <script src="{{ asset('plugins/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('plugins/perfect-scrollbar/dist/perfect-scrollbar.min.js') }}"></script>
+    <script src="{{ asset('plugins/screenfull/dist/screenfull.js') }}"></script>
 
 </body>
 
