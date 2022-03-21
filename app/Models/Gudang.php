@@ -29,4 +29,9 @@ class Gudang extends Model
             return $this->hasCabang->nama;
         }
     }
+
+    public function karyawan()
+    {
+        return $this->belongsToMany(Karyawan::class, 'karyawans_gudangs');
+    }
 }

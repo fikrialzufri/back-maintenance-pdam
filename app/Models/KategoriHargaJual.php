@@ -17,4 +17,9 @@ class KategoriHargaJual extends Model
         $this->attributes['nama'] = $value;
         $this->attributes['slug'] = Str::slug($value);
     }
+
+    public function produk()
+    {
+        return $this->belongsToMany(Produk::class, 'produk_kategori_harga')->withPivot('harga_jual');
+    }
 }

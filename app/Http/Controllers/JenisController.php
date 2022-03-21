@@ -37,7 +37,7 @@ class JenisController extends Controller
             [
                 'name'    => 'nama',
                 'input'    => 'text',
-                'alias'    => 'Nama Cabang',
+                'alias'    => 'Nama Jenis',
                 'value'    => null
             ],
         ];
@@ -49,7 +49,7 @@ class JenisController extends Controller
             [
                 'name'    => 'nama',
                 'input'    => 'text',
-                'alias'    => 'Nama Cabang',
+                'alias'    => 'Nama Jenis',
                 'validasi'    => ['required', 'unique', 'min:1'],
             ],
             [
@@ -57,6 +57,13 @@ class JenisController extends Controller
                 'input'    => 'combo',
                 'alias'    => 'Kategori',
                 'value' => $this->combobox('kategori'),
+                'validasi'    => ['required'],
+            ],
+            [
+                'name'    => 'inc_nota',
+                'alias'    => 'Nota',
+                'input'    => 'radio',
+                'value' => ['ya', 'tidak'],
                 'validasi'    => ['required'],
             ],
         ];

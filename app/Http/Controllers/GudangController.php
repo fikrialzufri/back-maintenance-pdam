@@ -41,6 +41,10 @@ class GudangController extends Controller
                 'name'    => 'email',
                 'alias'    => 'Email',
             ],
+            [
+                'name'    => 'ip_public',
+                'alias'    => 'IP Public',
+            ],
         ];
     }
     public function configSearch()
@@ -88,6 +92,12 @@ class GudangController extends Controller
                 'alias'    => 'Cabang',
                 'value' => $this->combobox('cabang'),
                 'validasi'    => ['required'],
+            ],
+            [
+                'name'    => 'ip_public',
+                'input'    => 'text',
+                'alias'    => 'IP Public',
+                'validasi'    => ['required', 'min:1'],
             ],
         ];
     }

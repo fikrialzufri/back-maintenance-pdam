@@ -18,6 +18,7 @@ class CreateKaryawansTable extends Migration
             $table->string('nip', 20)->nullable();
             $table->string('nik', 20)->nullable();
             $table->string('nama', 50);
+            $table->string('slug', 50);
             $table->string('jabatan_id')->references('id')->on('jabatan');
             $table->string('user_id')->references('id')->on('user');
             $table->timestamps();

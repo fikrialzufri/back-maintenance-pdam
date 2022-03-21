@@ -23,22 +23,18 @@ class SupplierController extends Controller
         return [
             [
                 'name'    => 'nama',
-                'input'    => 'text',
                 'alias'    => 'Nama Supplier',
             ],
             [
                 'name'    => 'alamat',
-                'input'    => 'text',
                 'alias'    => 'Alamat',
             ],
             [
                 'name'    => 'no_hp',
-                'input'    => 'text',
                 'alias'    => 'No HP',
             ],
             [
                 'name'    => 'email',
-                'input'    => 'text',
                 'alias'    => 'Email',
             ],
         ];

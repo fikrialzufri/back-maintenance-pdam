@@ -23,7 +23,6 @@ class UkuranController extends Controller
         return [
             [
                 'name'    => 'nama',
-                'input'    => 'text',
                 'alias'    => 'Nama Ukuran',
             ],
         ];

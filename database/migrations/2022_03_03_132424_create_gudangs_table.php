@@ -20,6 +20,7 @@ class CreateGudangsTable extends Migration
             $table->text('alamat')->nullable();
             $table->string('no_hp', 13)->nullable();
             $table->string('email')->nullable();
+            $table->string('ip_public')->nullable();
             $table->string('cabang_id')->references('id')->on('cabang');
             $table->timestamps();
         });

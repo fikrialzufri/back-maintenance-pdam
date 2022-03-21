@@ -23,7 +23,6 @@ class WarnaController extends Controller
         return [
             [
                 'name'    => 'nama',
-                'input'    => 'text',
                 'alias'    => 'Nama Warna',
             ],
         ];

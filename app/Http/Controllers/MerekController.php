@@ -23,7 +23,6 @@ class MerekController extends Controller
         return [
             [
                 'name'    => 'nama',
-                'input'    => 'text',
                 'alias'    => 'Nama Merek',
             ],
         ];

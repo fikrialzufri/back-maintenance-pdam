@@ -10,6 +10,7 @@
                     <div class="card-header d-flex justify-content-between">
                         <h3 class="card-title">Daftar {{ ucwords(str_replace([':', '_', '-', '*'], ' ', $title)) }}
                         </h3>
+                        {{ $data->appends(request()->input())->links() }}
                         <a href="{{ route($route . '.create') }}" class="btn btn-sm btn-primary float-right text-light">
                             <i class="fa fa-plus"></i> Tambah Data
                         </a>
@@ -60,7 +61,19 @@
                                     <tr>
                                         <td>{{ $index + 1 + ($data->CurrentPage() - 1) * $data->PerPage() }}</td>
                                         @foreach ($configHeaders as $key => $header)
-                                            <td>{{ ucfirst($item[$header['name']]) }}</td>
+                                            @if (isset($header['input']))
+                                                @if ($header['input'] == 'rupiah')
+                                                    <td>Rp. {{ format_uang($item[$header['name']]) }}</td>
+                                                @elseif ($header['input'] == 'date')
+                                                    <td>
+                                                        @if ($item[$header['name']] != null || $item[$header['name']] != '')
+                                                            {{ tanggal_indonesia($item[$header['name']]) }}
+                                                        @endif
+                                                    </td>
+                                                @endif
+                                            @else
+                                                <td>{{ $item[$header['name']] }}</td>
+                                            @endif
                                         @endforeach
                                         <td class="text-center">
                                             @if (isset($button))
@@ -95,7 +108,7 @@
                     </div>
                     <!-- /.card-body -->
                     <div class="card-footer clearfix">
-                        {{ $data->appends(request()->input())->links() }}
+
                     </div>
                 </div>
                 <!-- ./col -->

@@ -1,4 +1,4 @@
-<div class="form-group form-textinput">
+<div class="form-group form-textinput" id="form_{{ $item['name'] }}">
 
     <div>
         <label for="{{ $item['name'] }}" class=" form-control-label">{{ $item['alias'] }}</label>
@@ -10,7 +10,11 @@
             @if ($store == 'update') value="{{ $data[$item['name']] }}" @else value="{{ old($item['name']) }}" @endif>
     @else
         @if ($item['input'] == 'combo')
-
+            {{-- @if (isset($hasValue))
+                @if ($hasValue . '_id' == $item['name'])
+                    TODO: WORK ON THIS TOMORROW
+                    <h1>{{ $hasValue . '_id' }}</h1>
+                @else --}}
             <select class="form-control {{ $errors->has($item['name']) ? 'is-invalid' : '' }} selected2"
                 @if (isset($item['multiple'])) name="{{ $item['name'] }}[]" multiple @else name="{{ $item['name'] }}" @endif
                 id="cmb{{ $item['name'] }}">
@@ -19,7 +23,9 @@
                     @foreach ($item['value'] as $key => $val)
                         @if (isset($val['id']))
                             <option value="{{ $val['id'] }}"
-                                @if ($store == 'update') @if (is_array($data[$item['name'] . 'id'])) {{ in_array($val['id'], $data[$item['name'] . 'id']) ? 'selected' : '' }} @else {{ $data[$item['name']] == $val['id'] ? 'selected' : '' }} @endif
+                                @if ($store == 'update') @if (is_array($data[$item['name'] . 'id']))
+                                {{ in_array($val['id'], $data[$item['name'] . 'id']) ? 'selected' : '' }}
+                                @else {{ $data[$item['name']] == $val['id'] ? 'selected' : '' }} @endif
                             @else {{ old($item['name']) == $val['id'] ? 'selected' : '' }} @endif>
                                 @if (isset($val['value']))
                                     {{ ucfirst($val['value']) }}
@@ -36,35 +42,51 @@
                     @endforeach
                 @endif
             </select>
+            {{-- @endif
+            @endif --}}
+
+        @endif
+        @if ($item['input'] == 'rupiah')
+            <div class="input-group mb-2 mr-sm-2">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">Rp.</div>
+                </div>
+                <input type="text" name="{{ $item['name'] }}" id="{{ $item['name'] }}"
+                    placeholder="{{ $item['alias'] }}"
+                    class="form-control {{ $errors->has($item['name']) ? 'is-invalid' : '' }}"
+                    @if ($store == 'update') value="{{ format_uang($data[$item['name']]) }}" @else value="{{ old($item['name']) }}" @endif>
+            </div>
+
 
         @endif
         @if ($item['input'] == 'radio')
-            <div class="row">
+            <div class="form-radio">
                 @foreach ($item['value'] as $key => $val)
-                    <div class="col-sm-3">
-                        <!-- radio -->
-                        <div class="form-group">
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="{{ $item['name'] }}"
-                                    value="{{ $val }}"
-                                    @if ($store == 'update') {{ $data[$item['name']] == $val ? 'checked' : '' }} @endif>
-                                <label class="form-check-label">{{ ucfirst($val) }}</label>
-                            </div>
-                        </div>
+                    <div class="radio radiofill radio-inline">
+                        <label>
+                            <input type="radio" name="{{ $item['name'] }}" value="{{ $val }}"
+                                @if ($store == 'update') {{ $data[$item['name']] == $val ? 'checked' : '' }} @else {{ old($item['name']) == $val ? 'checked' : '' }} @endif>
+                            <i class="helper"></i>{{ ucfirst($val) }}
+                        </label>
                     </div>
                 @endforeach
             </div>
         @endif
+        @if ($item['input'] == 'date')
+            <input type="{{ $item['input'] }}" name="{{ $item['name'] }}" id="{{ $item['name'] }}"
+                @if ($item['input'] == 'password') autocomplete="on" @else placeholder="{{ $item['alias'] }}" @endif
+                class="form-control {{ $errors->has($item['name']) ? 'is-invalid' : '' }}"
+                @if ($store == 'update') value="{{ $data[$item['name']] }}" @else value="{{ old($item['name']) }}" @endif>
+        @endif
         @if ($item['input'] == 'textarea')
-            <textarea class="form-control" rows="3" placeholder="{{ $item['alias'] }}"
-                name="{{ $item['name'] }}">
+            <textarea class="form-control" rows="3" placeholder="{{ $item['alias'] }}" name="{{ $item['name'] }}">
 @if ($store == 'update'){{ $data[$item['name']] }}
 @else
 @endif
 </textarea>
         @endif
 
-        @if ($item['input'] == 'text' || $item['input'] == 'number' || $item['input'] == 'date' || $item['input'] == 'email' || $item['input'] == 'password' || $item['input'] == 'time')
+        @if ($item['input'] == 'text' || $item['input'] == 'number' || $item['input'] == 'email' || $item['input'] == 'password' || $item['input'] == 'time')
             <div>
                 <input type="{{ $item['input'] }}" name="{{ $item['name'] }}" id="{{ $item['name'] }}"
                     @if ($item['input'] == 'password') autocomplete="on" @else placeholder="{{ $item['alias'] }}" @endif
@@ -88,36 +110,73 @@
 </div>
 @push('style')
     <style type="text/css">
-        .select2-selection--multiple {
-            overflow: hidden !important;
-            height: auto !important;
-        }
+
 
     </style>
 @endpush
-<script>
-    @push('scriptdinamis')
-        @if (isset($item['input']))
-            @if ($item['input'] == 'combo')
-                $("#cmb{{ $item['name'] }}").select2({
-                placeholder: '--- Pilih ' + "{{ $item['alias'] }}" + ' ---',
-                width: '100%'
-                });
-                $("#cmb{{ $item['name'] }}").on("change", function(e) {
+@push('scriptdinamis')
+    <script script src="{{ asset('plugins/select2/dist/js/select2.min.js') }}">
+    </script>
+    <script type="text/javascript">
+        $(function() {
+            @if (isset($item['input']))
+                @if ($item['input'] == 'combo')
+                    $("#cmb{{ $item['name'] }}").select2({
+                    placeholder: '--- Pilih ' + "{{ $item['alias'] }}" + ' ---',
+                    width: '100%'
+                    });
+                    $("#cmb{{ $item['name'] }}").on("change", function(e) {
+                    $("#{{ $item['name'] }}").removeClass("is-invalid");
+                    $("#text{{ $item['name'] }}").html("");
+                    });
+                @endif
+            @endif
+            @if (isset($item['input']))
+                @if ($item['input'] == 'rupiah')
+                    let rupiah = document.getElementsByClassName('rupiah');
+                    $('#{{ $item['name'] }}').on("input", function() {
+
+                    let val = formatRupiah(this.value, '');
+                    $('#{{ $item['name'] }}').val(val);
+                    });
+
+                    /* Fungsi formatRupiah */
+                    function formatRupiah(angka, prefix){
+                    var number_string = angka.replace(/[^,\d]/g, '').toString(),
+                    split = number_string.split(','),
+                    sisa = split[0].length % 3,
+                    rupiah = split[0].substr(0, sisa),
+                    ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+                    // tambahkan titik jika yang di input sudah menjadi angka ribuan
+                    if(ribuan){
+                    separator = sisa ? '.' : '';
+                    rupiah += separator + ribuan.join('.');
+                    }
+
+                    rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+                    return prefix == undefined ? rupiah : (rupiah ? rupiah : '');
+                    }
+                @endif
+            @endif
+
+            $("#{{ $item['name'] }}").keypress(function() {
+
                 $("#{{ $item['name'] }}").removeClass("is-invalid");
                 $("#text{{ $item['name'] }}").html("");
-                });
+            });
+            $("#{{ $item['name'] }}").change(function() {
+                $("#{{ $item['name'] }}").removeClass("is-invalid");
+                $("#text{{ $item['name'] }}").html("");
+            });
+            @if (isset($item['input']))
+                @if ($item['input'] == 'radio')
+                    if($("input:radio[name='{{ $item['name'] }}']").is(":checked")) {
+                    $("#{{ $item['name'] }}").removeClass("is-invalid");
+                    $("#text{{ $item['name'] }}").html("");
+                    }
+                @endif
             @endif
-        @endif
-
-        $("#{{ $item['name'] }}").keypress(function() {
-
-        $("#{{ $item['name'] }}").removeClass("is-invalid");
-        $("#text{{ $item['name'] }}").html("");
         });
-        $("#{{ $item['name'] }}").change(function() {
-        $("#{{ $item['name'] }}").removeClass("is-invalid");
-        $("#text{{ $item['name'] }}").html("");
-        });
-    @endpush
-</script>
+    </script>
+@endpush

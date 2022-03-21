@@ -17,6 +17,7 @@ class CreateJenisTable extends Migration
             $table->uuid('id')->primary();
             $table->string('nama');
             $table->string('slug');
+            $table->enum('inc_nota', ['tidak', 'ya'])->default('tidak')->nullable();
             $table->string('kategori_id')->references('id')->on('kategori');
             $table->timestamps();
         });

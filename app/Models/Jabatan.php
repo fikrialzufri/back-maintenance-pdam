@@ -10,7 +10,24 @@ use Str;
 class Jabatan extends Model
 {
     use HasFactory, UsesUuid;
-    protected $table = "Jabatan";
+    protected $table = "jabatan";
+
+    public function hasToko()
+    {
+        return $this->belongsTo(Toko::class, 'toko_id');
+    }
+
+    public function getTokoAttribute()
+    {
+        if ($this->hasToko) {
+            return $this->hasToko->nama;
+        }
+    }
+
+    public function hasShift()
+    {
+        return $this->belongsToMany(Shift::class, 'shifts_jabatans')->withPivot('denda');
+    }
 
     public function setNamaAttribute($value)
     {

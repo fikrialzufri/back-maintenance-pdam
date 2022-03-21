@@ -4,12 +4,12 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Login | PDAM Samarinda</title>
+    <title>Login | Jordan</title>
     <meta name="description" content="">
-    <meta name="keywords" content="">
+    <meta name="keywords" content="Jordan Studio">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="icon" href="{{ asset('favicon.png') }}" type="image/x-icon" />
+    <link rel="icon" href="{{ asset('img/logo.png') }}" type="image/x-icon" />
 
     <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,600,700,800" rel="stylesheet">
 
@@ -21,6 +21,26 @@
     <link rel="stylesheet" href="{{ asset('dist/css/theme.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <script src="{{ asset('src/js/vendor/modernizr-2.8.3.min.js') }}"></script>
+    <style>
+        body,
+        html {
+            height: 100%;
+        }
+
+        .bg {
+            /* The image used */
+            background-image: url("img/PDAM-BG.jpg");
+
+            /* Full height */
+            height: 100%;
+
+            /* Center and scale the image nicely */
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+    </style>
 </head>
 
 <body>
@@ -28,13 +48,13 @@
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
 
-    <div class="auth-wrapper">
+    <div class="auth-wrapper bg">
         <div class="container-fluid h-100">
             <div class="row flex-row h-100">
                 <div class="col-xl-4 col-lg-4 col-md-4 m-auto">
                     <div class="authentication-form mx-auto">
                         <div class="logo-centered">
-                            <a href="http://radmin.rakibhstu.com"><img height="40" src="{{ asset('img/logo.png') }}"
+                            <a href="http://radmin.rakibhstu.com"><img height="100" src="{{ asset('img/logo.png') }}"
                                     alt="RADMIN"></a>
                         </div>
                         <p>Welcome back! </p>
@@ -62,27 +82,9 @@
                                     </span>
                                 @enderror
                             </div>
-                            <div class="row">
-                                <div class="col text-left">
-                                    <label class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="item_checkbox"
-                                            name="item_checkbox" value="option1">
-                                        <span class="custom-control-label">&nbsp;Remember Me</span>
-                                    </label>
-                                </div>
-                                <div class="col text-right">
-                                    <a class="btn text-danger" href="{{ url('password/forget') }}">
-                                        {{ __('Forgot Password?') }}
-                                    </a>
-                                </div>
-                            </div>
+
                             <div class="sign-btn text-center">
                                 <button class="btn btn-custom">Sign In</button>
-                            </div>
-                            <div class="register">
-                                <p>{{ __('No account?') }} <a
-                                        href="{{ url('register') }}">{{ __('Sign Up') }}</a>
-                                </p>
                             </div>
 
                         </form>

@@ -17,8 +17,15 @@ class CreateProduksTable extends Migration
             $table->uuid('id')->primary();
             $table->string('nama');
             $table->string('slug');
-            $table->integer('harga_beli');
-            $table->string('jenis_id')->references('id')->on('pusat');
+            $table->integer('komisi')->default(0);
+            $table->integer('harga_beli')->default(0);
+            $table->enum('karyawan', ['tidak', 'ya'])->default('tidak')->nullable();
+            $table->enum('inc_stok', ['tidak', 'ya'])->default('tidak')->nullable();
+            $table->enum('inc_bahan', ['tidak', 'ya'])->default('tidak')->nullable();
+            $table->enum('inc_jual', ['tidak', 'ya'])->default('ya')->nullable();
+            $table->integer('stok')->default(0)->nullable();
+            $table->string('jenis_id')->references('id')->on('jenis');
+            $table->string('satuan_id')->references('id')->on('satuan');
             $table->timestamps();
         });
     }

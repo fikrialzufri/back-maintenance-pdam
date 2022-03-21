@@ -23,7 +23,6 @@ class KategoriController extends Controller
         return [
             [
                 'name'    => 'nama',
-                'input'    => 'text',
                 'alias'    => 'Nama Kategori',
             ],
         ];

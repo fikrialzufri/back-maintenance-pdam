@@ -52,10 +52,13 @@ trait CrudTrait
     //many to many
     private $manyToMany;
 
+    //many to many
+    private $oneToMany;
+
     // validation rule harus pkai object
     // tentukan jumlah col-sm boostrap
     // ooption object label
-    // span untuk colom 
+    // span untuk colom
     // textfield harus ada option untuk diab
     // menetukan option selecet dalam bentuk object
 
@@ -103,22 +106,22 @@ trait CrudTrait
             if ($search[$key]) {
                 $query = $query->where($val['name'], 'like', '%' . $search[$key] . '%');
             }
-            $export .= $val['name'].'=' .$search[$key].'&';
+            $export .= $val['name'] . '=' . $search[$key] . '&';
         }
-        
-        // return 
+
+        // return
         if (request()->input('from') && request()->input('to')) {
             $from =   request()->input('from') ?: '';
             $to = request()->input('to') ?: '';
-            
+
             // return $from;
             // $query = $query->whereDate('tgl', '<=', $from);
             $query = $query->whereBetween(DB::raw('DATE(tgl)'), array($from, $to));
-            $export .= 'from='.$from.'&to='.$to;
+            $export .= 'from=' . $from . '&to=' . $to;
         }
         //akhir pencarian --------------------------------
         // relatio
-        // sort by 
+        // sort by
         if ($this->user) {
             if (!Auth::user()->hasRole('superadmin') && !Auth::user()->hasRole('admin')) {
                 $query->where('user_id', Auth::user()->id);
@@ -130,7 +133,7 @@ trait CrudTrait
         //mendapilkan data model setelah query pencarian
         if ($paginate) {
             $data = $query->paginate($paginate);
-        }else{
+        } else {
             $data = $query->get();
         }
 
@@ -182,6 +185,7 @@ trait CrudTrait
 
         $countColom = $this->countColom($count);
         $countColomFooter = $this->countColomFooter($count);
+        // $hasValue = $this->hasValue;
 
         return view('template.form', compact(
             'title',
@@ -191,6 +195,7 @@ trait CrudTrait
             'countColomFooter',
             'store',
             'route'
+            // 'hasValue'
         ));
     }
 
@@ -202,7 +207,7 @@ trait CrudTrait
      */
     public function store(Request $request)
     {
-        // return $request->userAgent();
+        // return $request;
 
         //get dari post form
         $getRequest = $this->getRequest($request);
@@ -217,6 +222,7 @@ trait CrudTrait
             $validation,
             $messages
         );
+
         //open model
         $data = $this->model();
         if (isset($relation)) {
@@ -248,14 +254,19 @@ trait CrudTrait
                     $data->$relationsFields = $relationModels->id;
                 } catch (\Throwable $th) { }
             }
-            // return $extraFrom;
         }
 
         //post ke model
-        // return $form['anggota'];
+
         foreach ($form as $index => $item) {
             if (isset($this->manyToMany)) {
                 if (in_array($index, $this->manyToMany)) {
+                    break;
+                }
+            }
+            if ($this->oneToMany) {
+                if (in_array(str_replace('_id', '', $index), $this->oneToMany)) {
+                    $oneToMany = str_replace('_id', '', $index);
                     break;
                 }
             }
@@ -272,14 +283,21 @@ trait CrudTrait
 
         if (isset($this->manyToMany)) {
             if (!isset($this->extraFrom)) {
+                return $this->manyToMany;
                 foreach ($this->manyToMany as  $value) {
                     $hasRalation = 'has' . ucfirst($value);
                     $valueField = $data->$hasRalation()->attach($form[$value]);
-                    try { } catch (\Throwable $th) { }
                 }
             }
         }
-
+        if (isset($this->oneToMany)) {
+            foreach ($this->oneToMany as $index => $value) {
+                $hasRalation = 'has' . ucfirst($value);
+                $idRelation = $value . '_id';
+                $valueField = $data->$hasRalation()->attach($form[$idRelation]);
+            }
+        }
+        // $hasRalation;
         //redirect
         return redirect()->route($this->route . '.index')->with('message', ucwords(str_replace('-', ' ', $this->route)) . ' Berhasil Ditambahkan')->with('Class', 'success');
     }
@@ -287,7 +305,7 @@ trait CrudTrait
     /**
      * Display the specified resource.
      *
-     * 
+     *
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -334,6 +352,14 @@ trait CrudTrait
                 }
             }
         }
+        if (isset($this->oneToMany)) {
+            foreach ($this->oneToMany as $item) {
+                $hasRalation = 'has' . ucfirst($item);
+                $field = $item . '_id';
+                $valueField = $data->$hasRalation()->first()->id;
+                $data->$field = $valueField;
+            }
+        }
 
         //nama route dan action route
         $route =  $this->route;
@@ -346,8 +372,6 @@ trait CrudTrait
 
         $countColom = $this->countColom($count);
         $countColomFooter = $this->countColomFooter($count);
-
-        // return $data;
 
         return view('template.form', compact(
             'route',
@@ -409,6 +433,12 @@ trait CrudTrait
                     break;
                 }
             }
+            if ($this->oneToMany) {
+                if (in_array(str_replace('_id', '', $index), $this->oneToMany)) {
+                    $oneToMany = str_replace('_id', '', $index);
+                    break;
+                }
+            }
             $data->$index = $item;
         }
 
@@ -442,20 +472,25 @@ trait CrudTrait
                     } catch (\Throwable $th) { }
                 }
             }
-            // return $extraFrom;
         }
 
         $data->save();
-        // try { } catch (\Throwable $th) {
-        //     $this->model()->rollback();
-        // }
+
         if (isset($this->manyToMany)) {
             if (!isset($this->extraFrom)) {
                 foreach ($this->manyToMany as  $value) {
                     $hasRalation = 'has' . ucfirst($value);
                     $valueField = $data->$hasRalation()->sync($form[$value]);
-                    try { } catch (\Throwable $th) { }
                 }
+            }
+        }
+
+        if (isset($this->oneToMany)) {
+            foreach ($this->oneToMany as $index => $value) {
+                $hasRalation = 'has' . ucfirst($value);
+                $idRelation = $value . '_id';
+
+                $valueField = $data->$hasRalation()->sync($form[$idRelation]);
             }
         }
 
@@ -481,6 +516,12 @@ trait CrudTrait
                 }
             }
         }
+        if (isset($this->oneToMany)) {
+            foreach ($this->oneToMany as $index => $value) {
+                $hasRalation = 'has' . ucfirst($value);
+                $valueField = $data->$hasRalation()->detach();
+            }
+        }
         return redirect()->route($this->route . '.index')->with('message', ucwords(str_replace('-', ' ', $this->route)) . ' berhasil dihapus')->with('Class', 'danger');
     }
 
@@ -488,7 +529,7 @@ trait CrudTrait
     /**
      * get all request form.
      *
-     * 
+     *
      */
     public function getRequest($request, $id = null, $relationId = null)
     {
@@ -551,7 +592,17 @@ trait CrudTrait
             }
 
             if (!isset($value['extraForm'])) {
-                $form[$value['name']] = $request->input($value['name']);
+                if (isset($value['input'])) {
+                    if ($value['input'] === "rupiah") {
+                        $form[$value['name']] = str_replace(".", "", $request->input($value['name']));
+                    } else {
+
+                        $form[$value['name']] = $request->input($value['name']);
+                    }
+                } else {
+
+                    $form[$value['name']] = $request->input($value['name']);
+                }
             } else {
                 foreach ($this->extraFrom as $realtion) {
                     if ($realtion == $value['extraForm']) {
@@ -561,8 +612,6 @@ trait CrudTrait
             }
         }
 
-        // return $validation;
-
         return [
             "messages" => $messages,
             "validasi" => $validation,
@@ -571,7 +620,7 @@ trait CrudTrait
         ];
     }
 
-    public function combobox($table, $colom = null, $field = null, $operator = null, $sort = null, $appendModel = null, $colomAppend = null, $fieldAppend = null, $operatorAppend = null, $sortAppend = null)
+    public function combobox($table, $colom = null, $field = null, $operator = null, $sort = null, $appendModel = null, $colomAppend = null, $fieldAppend = null, $operatorAppend = null, $sortAppend = null, $hasRelation = null, $hasColom = null, $arrayColom = null)
     {
         $model = '\\App\Models\\' . ucfirst($table);
         $model = new $model;
@@ -582,7 +631,7 @@ trait CrudTrait
         if ($sort) {
             $query->orderBy($sort);
         }
-        $relationData = $query->limit(100)->get();
+        $relationData = $query->get();
 
 
         if ($appendModel) {
@@ -602,9 +651,25 @@ trait CrudTrait
 
         $data = [];
         foreach ($relationData as $key => $item) {
-            $nama = $item->nama;
-            if (!$nama) {
-                $nama = $item->name;
+
+            if ($hasRelation) {
+                $nama = ucfirst($table) . ' : ' . $item->nama . " | " . ucfirst($hasRelation)  . " : " .  $item->$hasColom;
+                if (!$nama) {
+                    $nama = ucfirst($table) . ' : ' . $item->name . " | " . ucfirst($hasRelation) . " : " .  $item->$hasColom;
+                }
+            } else {
+                $nama = $item->nama;
+                if (!$nama) {
+                    $nama = $item->name;
+                }
+            }
+            // return $arrayColom;
+            if (isset($arrayColom)) {
+                foreach ($arrayColom as $value) {
+                    $rplcs = str_replace("_", " ",  $value);
+                    $nama[$value] = ucwords($rplcs) . ' : ' . $item->$value . ' | ';
+                }
+                $nama = implode(" ", $nama);
             }
 
             $data[$key] = [

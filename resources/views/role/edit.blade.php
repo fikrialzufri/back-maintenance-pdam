@@ -1,5 +1,5 @@
 @extends('template.app')
-@section('title', 'Edit Hak Akses')
+@section('title', 'Edit Hak Akses ' . $role->name)
 @section('content')
 
     <div class="container-fluid">
@@ -8,7 +8,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">{{ $title }}</h3>
+                        <h3 class="card-title">{{ $title }} {{ $role->name }}</h3>
                     </div>
                     <!-- /.card-header -->
                     <form action="{{ $action }}" method="post" role="form" enctype="multipart/form-data">

@@ -17,10 +17,12 @@ class CreateJabatansTable extends Migration
             $table->uuid('id')->primary();
             $table->string('nama');
             $table->string('slug');
-            $table->integer('komisi');
-            $table->integer('absen');
-            $table->string('cabang_id')->references('id')->on('cabang');
-            $table->string('toko_id')->references('id')->on('toko');
+            $table->integer('komisi')->default(0);
+            $table->integer('target_pendapatan')->default(0);
+            $table->integer('bonus_target')->default(0);
+            $table->integer('gajih_perbulan')->default(0);
+            $table->integer('gajih_perhari')->default(0);
+            $table->enum('gajih', ['perbulan', 'perhari'])->default('perbulan');
             $table->timestamps();
         });
     }

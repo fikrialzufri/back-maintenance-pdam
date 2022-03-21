@@ -2,7 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
-    <title>@yield('title','') | PDAM</title>
+    <title>@yield('title','') | Jordan</title>
     <!-- initiate head with meta tags, css and script -->
     @include('template.head')
 
@@ -17,7 +17,9 @@
             @include('template.menu')
 
             <div class="main-content">
+                @include('template.breadcrumb')
                 <!-- yeild contents here -->
+
                 @yield('content')
             </div>
             {{-- <!-- initiate chat section-->

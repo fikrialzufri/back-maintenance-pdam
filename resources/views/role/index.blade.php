@@ -7,7 +7,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header">
+                    <div class="card-header justify-content-between">
                         <h3 class="card-title">Daftar {{ $title }}</h3>
                         <a href="{{ route($route . '.create') }}" class="btn btn-sm btn-primary float-right text-light">
                             <i class="fa fa-plus"></i>Tambah Data
@@ -63,8 +63,8 @@
             <!-- Main row -->
             <!-- /.row (main row) -->
         </div><!-- /.container-fluid -->
+    </div><!-- /.container-fluid -->
+@stop
 
-    @stop
-
-    @push('script')
-    @endpush
+@push('script')
+@endpush
