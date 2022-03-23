@@ -99,7 +99,28 @@
     <script src="{{ asset('plugins/bootstrap/dist/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('plugins/perfect-scrollbar/dist/perfect-scrollbar.min.js') }}"></script>
     <script src="{{ asset('plugins/screenfull/dist/screenfull.js') }}"></script>
+    {{-- Firebase --}}
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import {
+            initializeApp
+        } from "https://www.gstatic.com/firebasejs/9.6.9/firebase-app.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
 
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAiIdOVXPc1C90tWcDrpG984rzidIgU9Kk",
+            authDomain: "pdam-work-order.firebaseapp.com",
+            projectId: "pdam-work-order",
+            storageBucket: "pdam-work-order.appspot.com",
+            messagingSenderId: "167105139450",
+            appId: "1:167105139450:web:cf92428440b90382686f43"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+    </script>
 </body>
 
 </html>
