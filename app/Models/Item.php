@@ -7,14 +7,26 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Str;
 
-class Pelanggan extends Model
+class Item extends Model
 {
     use HasFactory, UsesUuid;
-    protected $table = "pelanggan";
+    protected $table = "item";
 
     public function setNamaAttribute($value)
     {
         $this->attributes['nama'] = $value;
         $this->attributes['slug'] = Str::slug($value);
+    }
+
+    public function hasJenis()
+    {
+        return $this->belongsTo(Jenis::class, 'jenis_id');
+    }
+
+    public function getJenisAttribute()
+    {
+        if ($this->hasJenis) {
+            return $this->hasJenis->nama;
+        }
     }
 }

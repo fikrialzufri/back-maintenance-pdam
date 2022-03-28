@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Ukuran;
-use App\Traits\CrudTrait;
+use App\Models\Divisi;
+use Illuminate\Http\Request;
 
-class UkuranController extends Controller
+class DivisiController extends Controller
 {
     use CrudTrait;
 
     public function __construct()
     {
-        $this->route = 'ukuran';
+        $this->route = 'divisi';
         $this->middleware('permission:view-' . $this->route, ['only' => ['index', 'show']]);
         $this->middleware('permission:create-' . $this->route, ['only' => ['create', 'store']]);
         $this->middleware('permission:edit-' . $this->route, ['only' => ['edit', 'update']]);
@@ -23,8 +23,12 @@ class UkuranController extends Controller
         return [
             [
                 'name'    => 'nama',
-                'alias'    => 'Nama Ukuran',
+                'alias'    => 'Nama Divisi',
             ],
+            [
+                'name'    => 'nama_departemen',
+                'alias'    => 'Nama Departemen',
+            ]
         ];
     }
     public function configSearch()
@@ -33,7 +37,7 @@ class UkuranController extends Controller
             [
                 'name'    => 'nama',
                 'input'    => 'text',
-                'alias'    => 'Nama Ukuran',
+                'alias'    => 'Nama Divisi',
                 'value'    => null
             ],
         ];
@@ -45,14 +49,21 @@ class UkuranController extends Controller
             [
                 'name'    => 'nama',
                 'input'    => 'text',
-                'alias'    => 'Nama Ukuran',
+                'alias'    => 'Nama Divisi',
                 'validasi'    => ['required', 'unique', 'min:1'],
-            ]
+            ],
+            [
+                'name'    => 'departemen_id',
+                'input'    => 'combo',
+                'alias'    => 'Departemen',
+                'value' => $this->combobox('Departemen'),
+                'validasi'    => ['required'],
+            ],
         ];
     }
 
     public function model()
     {
-        return new Ukuran();
+        return new Divisi();
     }
 }

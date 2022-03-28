@@ -1,18 +1,10 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\ItemController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
+
 
 Route::get(
     '/csrf-cookie',
@@ -23,5 +15,10 @@ Route::get(
 Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('logout', [AuthController::class, 'logout'])->name('auth.logout');
     Route::get('me', AuthController::class . '@me')->name('auth.me');
+    Route::get('refresh', AuthController::class . '@refresh')->name('auth.refresh');
+
+    // Item
+    Route::get('item', ItemController::class . '@getall')->name('item.all');
+    Route::get('item/{slug}', ItemController::class . '@detail')->name('item.detail');
 });
 Route::post('login', [AuthController::class, 'login'])->name('auth.login');

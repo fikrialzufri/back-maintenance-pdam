@@ -58,14 +58,7 @@ class JenisController extends Controller
                 'alias'    => 'Kategori',
                 'value' => $this->combobox('kategori'),
                 'validasi'    => ['required'],
-            ],
-            [
-                'name'    => 'inc_nota',
-                'alias'    => 'Nota',
-                'input'    => 'radio',
-                'value' => ['ya', 'tidak'],
-                'validasi'    => ['required'],
-            ],
+            ]
         ];
     }
 

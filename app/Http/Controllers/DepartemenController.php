@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Warna;
+use App\Models\Departemen;
 use App\Traits\CrudTrait;
 
-class WarnaController extends Controller
+class DepartemenController extends Controller
 {
     use CrudTrait;
 
     public function __construct()
     {
-        $this->route = 'warna';
+        $this->route = 'departemen';
         $this->middleware('permission:view-' . $this->route, ['only' => ['index', 'show']]);
         $this->middleware('permission:create-' . $this->route, ['only' => ['create', 'store']]);
         $this->middleware('permission:edit-' . $this->route, ['only' => ['edit', 'update']]);
@@ -23,7 +23,7 @@ class WarnaController extends Controller
         return [
             [
                 'name'    => 'nama',
-                'alias'    => 'Nama Warna',
+                'alias'    => 'Nama Departemen',
             ],
         ];
     }
@@ -33,7 +33,7 @@ class WarnaController extends Controller
             [
                 'name'    => 'nama',
                 'input'    => 'text',
-                'alias'    => 'Nama Warna',
+                'alias'    => 'Nama Departemen',
                 'value'    => null
             ],
         ];
@@ -45,7 +45,7 @@ class WarnaController extends Controller
             [
                 'name'    => 'nama',
                 'input'    => 'text',
-                'alias'    => 'Nama Warna',
+                'alias'    => 'Nama Departemen',
                 'validasi'    => ['required', 'unique', 'min:1'],
             ]
         ];
@@ -53,6 +53,6 @@ class WarnaController extends Controller
 
     public function model()
     {
-        return new Warna();
+        return new Departemen();
     }
 }

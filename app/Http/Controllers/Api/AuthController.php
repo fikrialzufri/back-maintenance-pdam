@@ -79,6 +79,22 @@ class AuthController extends Controller
         return $this->sendResponse($result, $message, 200);
     }
 
+    public function refresh()
+    {
+        $user =  Auth::user();
+        $user->tokens()->delete();
+
+        $token = $user->createToken("access_token")
+            ->plainTextToken;
+        $result = [
+            'user' => $user,
+            'token' => $token
+        ];
+
+        $message = 'resfresh token';
+        return $this->sendResponse($result, $message, 200);
+    }
+
     public function user()
     {
         return Auth::user()->with('role')->with('permissions');

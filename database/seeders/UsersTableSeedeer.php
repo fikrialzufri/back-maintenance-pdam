@@ -25,17 +25,8 @@ class UsersTableSeedeer extends Seeder
         $adminRole->name = 'Admin';
         $adminRole->save();
 
-        $kasirRole = new Role();
-        $kasirRole->name = 'Kasir';
-        $kasirRole->save();
-
-        $KaryawanRole = new Role();
-        $KaryawanRole->name = 'Karyawan';
-        $KaryawanRole->save();
 
         $superadmin = Role::where('slug', 'superadmin')->first();
-        $adminRole = Role::where('slug', 'admin')->first();
-        $adminKasir = Role::where('slug', 'kasir')->first();
 
         $superadminUser = new User();
         $superadminUser->name = 'Superadmin';
@@ -46,16 +37,6 @@ class UsersTableSeedeer extends Seeder
         $superadminUser->save();
 
         $superadminUser->role()->attach($superadmin);
-
-        $kasirUser = new User();
-        $kasirUser->name = 'kasir';
-        $kasirUser->username = 'kasir';
-        $kasirUser->email = 'kasir@admin.com';
-        $kasirUser->password = bcrypt('secret');
-        // $kasirUser->icon = 'default-icon.png';
-        $kasirUser->save();
-
-        $kasirUser->role()->attach($adminKasir);
 
         $admin = new User();
         $admin->name = 'admin';
@@ -91,20 +72,30 @@ class UsersTableSeedeer extends Seeder
         $taskKategori->description = 'Manajemen Kategori';
         $taskKategori->save();
 
-        $taskProduk = new Task();
-        $taskProduk->name = 'Produk';
-        $taskProduk->description = 'Manajemen Produk';
-        $taskProduk->save();
+        $taskItem = new Task();
+        $taskItem->name = 'Item';
+        $taskItem->description = 'Manajemen Item';
+        $taskItem->save();
 
-        $taskPelanggan = new Task();
-        $taskPelanggan->name = 'Pelanggan';
-        $taskPelanggan->description = 'Manajemen Pelanggan';
-        $taskPelanggan->save();
+        $taskDepartemen = new Task();
+        $taskDepartemen->name = 'Departemen';
+        $taskDepartemen->description = 'Manajemen Departemen';
+        $taskDepartemen->save();
 
-        $taskPenjualan = new Task();
-        $taskPenjualan->name = 'Penjualan';
-        $taskPenjualan->description = 'Manajemen Penjualan';
-        $taskPenjualan->save();
+        $taskDivisi = new Task();
+        $taskDivisi->name = 'Divisi';
+        $taskDivisi->description = 'Manajemen Divisi';
+        $taskDivisi->save();
+
+        $taskJabatan = new Task();
+        $taskJabatan->name = 'Jabatan';
+        $taskJabatan->description = 'Manajemen Jabatan';
+        $taskJabatan->save();
+
+        $taskKaryawan = new Task();
+        $taskKaryawan->name = 'Karyawan';
+        $taskKaryawan->description = 'Manajemen Karyawan';
+        $taskKaryawan->save();
 
         $tasks = Task::all();
 

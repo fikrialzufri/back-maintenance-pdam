@@ -16,9 +16,7 @@ class KaryawanController extends Controller
         $this->plural = 'true';
         $this->manyToMany = ['role'];
         $this->relations = ['user'];
-        $this->extraFrom = ['user', 'jabatan'];
-        $this->oneToMany = ['toko'];
-        $this->hasValue = 'toko';
+        $this->extraFrom = ['user'];
         $this->middleware('permission:view-' . $this->route, ['only' => ['index']]);
         $this->middleware('permission:create-' . $this->route, ['only' => ['create', 'store']]);
         $this->middleware('permission:edit-' . $this->route, ['only' => ['edit', 'update']]);
@@ -101,39 +99,11 @@ class KaryawanController extends Controller
                 'extraForm' => 'user',
                 'hasMany'    => ['role'],
             ],
-            [
-                'name'    => 'toko_id',
-                'input'    => 'combo',
-                'alias'    => 'Toko',
-                'value' => $this->combobox('Toko'),
-            ],
         ];
     }
 
     public function model()
     {
         return new Karyawan();
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $model = $this->model()->find($id);
-        $message = "Data ada";
-
-        $data  = [
-            'id' => $model->id,
-            'nama' => ucwords($model->nama),
-        ];
-        $result = [
-            'data' => $data,
-            'message' =>  $message,
-        ];
-        return response()->json($result);
     }
 }

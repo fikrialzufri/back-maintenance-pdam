@@ -29,45 +29,4 @@ class Karyawan extends Model
             return $this->hasJabatan->nama;
         }
     }
-
-    public function getKomisiAttribute()
-    {
-        if ($this->hasJabatan) {
-            return $this->hasJabatan->komisi;
-        }
-    }
-
-    public function hasUser()
-    {
-        return $this->belongsTo(User::class, 'user_id');
-    }
-
-    public function getUsernameAttribute()
-    {
-        if ($this->hasUser) {
-            return $this->hasUser->username;
-        }
-    }
-
-    public function getEmailAttribute()
-    {
-        if ($this->hasUser) {
-            return $this->hasUser->email;
-        }
-    }
-
-    public function hasToko()
-    {
-        return $this->belongsToMany(Toko::class, 'karyawans_tokos');
-    }
-
-    public function hasGudang()
-    {
-        return $this->belongsToMany(Gudang::class, 'karyawans_gudangs');
-    }
-
-    public function hasJadwal()
-    {
-        return $this->belongsTo(Jadwal::class, 'id', 'karyawan_id');
-    }
 }

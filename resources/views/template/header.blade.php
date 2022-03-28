@@ -61,20 +61,6 @@
                     </div>
                 </div> --}}
                 <div class="dropdown">
-                    <a class="nav-link dropdown-toggle" href="{{ route('absensi.scan') }}" data-toggle="tooltip"
-                        data-placement="top" title="Absensi">
-                        <i class="ik ik-user"></i>
-                    </a>
-                </div>
-                @can('create-penjualan')
-                    <div class="dropdown">
-                        <a class="nav-link dropdown-toggle" href="{{ route('penjualan.create') }}" data-toggle="tooltip"
-                            data-placement="top" title="Penjualan">
-                            <i class="ik ik-shopping-cart"></i>
-                        </a>
-                    </div>
-                @endcan
-                <div class="dropdown">
                     <a class="dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false"><img class="avatar"
                             src="{{ asset('img/user.jpg') }}" alt=""></a>
