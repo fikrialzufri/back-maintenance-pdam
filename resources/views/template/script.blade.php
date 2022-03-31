@@ -9,32 +9,22 @@
         $(".alert").slideUp(6000);
     });
 </script>
-@stack('script')
+
 
 <script src="{{ asset('dist/js/theme.js') }}"></script>
 {{-- <script src="{{ asset('js/chat.js') }}"></script> --}}
 <script src="{{ asset('plugins/sweetalert2/sweetalert2.all.min.js') }}"></script>
-{{-- Firebase --}}
-<script type="module">
-    // Import the functions you need from the SDKs you need
-    import {
-        initializeApp
-    } from "https://www.gstatic.com/firebasejs/9.6.9/firebase-app.js";
-    // TODO: Add SDKs for Firebase products that you want to use
-    // https://firebase.google.com/docs/web/setup#available-libraries
 
-    // Your web app's Firebase configuration
-    const firebaseConfig = {
-        apiKey: "AIzaSyAiIdOVXPc1C90tWcDrpG984rzidIgU9Kk",
-        authDomain: "pdam-work-order.firebaseapp.com",
-        projectId: "pdam-work-order",
-        storageBucket: "pdam-work-order.appspot.com",
-        messagingSenderId: "167105139450",
-        appId: "1:167105139450:web:cf92428440b90382686f43"
-    };
+{{-- <script src="{{ asset('firebase-messaging-sw.js') }}"></script> --}}
 
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
+<script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('{{ asset('firebase-messaging-sw.js') }}');
+        });
+    }
 </script>
+@stack('script')
+
 @stack('form')
 @stack('scriptdinamis')

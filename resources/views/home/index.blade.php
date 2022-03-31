@@ -408,4 +408,176 @@
     <script src="{{ asset('js/widget-statistic.js') }}"></script>
     <script src="{{ asset('js/widget-data.js') }}"></script>
     <script src="{{ asset('js/dashboard-charts.js') }}"></script>
+    {{-- Firebase --}}
+    {{-- <script type="module">
+        // Import the functions you need from the SDKs you need
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAiIdOVXPc1C90tWcDrpG984rzidIgU9Kk",
+            authDomain: "pdam-work-order.firebaseapp.com",
+            projectId: "pdam-work-order",
+            storageBucket: "pdam-work-order.appspot.com",
+            messagingSenderId: "167105139450",
+            appId: "1:167105139450:web:cf92428440b90382686f43"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const messaging = firebase.messaging();
+
+        function initFirebaseMessagingRegistration() {
+            messaging
+                .requestPermission()
+                .then(function() {
+                    return messaging.getToken()
+                })
+                .then(function(token) {
+                    console.log(token);
+
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+
+                    $.ajax({
+                        url: '{{ route('user.token') }}',
+                        type: 'POST',
+                        data: {
+                            token: token
+                        },
+                        dataType: 'JSON',
+                        success: function(response) {
+                            alert('Token saved successfully.');
+                        },
+                        error: function(err) {
+                            console.log('User Chat Token Error' + err);
+                        },
+                    });
+
+                }).catch(function(err) {
+                    console.log('User Chat Token Error' + err);
+                });
+        }
+
+        messaging.onMessage(function(payload) {
+            const noteTitle = payload.notification.title;
+            const noteOptions = {
+                body: payload.notification.body,
+                icon: payload.notification.icon,
+            };
+            new Notification(noteTitle, noteOptions);
+        });
+    </script> --}}
+
+    <script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-messaging.js"></script>
+    <script>
+        var firebaseConfig = {
+            apiKey: "AIzaSyAEcTgFnE5gzg4QeXqO_blBNGB0h3ZySO8",
+            authDomain: "pdam-work-order-3ee03.firebaseapp.com",
+            projectId: "pdam-work-order-3ee03",
+            storageBucket: "pdam-work-order-3ee03.appspot.com",
+            messagingSenderId: "171277949524",
+            appId: "1:171277949524:web:a5d04bf00c73851c74ebc1",
+            measurementId: "G-H2S25462WF"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+
+        const messaging = firebase.messaging();
+
+        function initFirebaseMessagingRegistration() {
+            messaging.requestPermission().then(function() {
+                return messaging.getToken()
+            }).then(function(token) {
+
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+
+                $.ajax({
+                    url: '{{ route('user.token') }}',
+                    type: 'PUT',
+                    data: {
+                        token: token
+                    },
+                    dataType: 'JSON',
+                    success: function(response) {
+
+                    },
+                    error: function(err) {
+
+                    },
+                });
+
+
+            }).catch(function(err) {
+                console.log(`Token Error :: ${err}`);
+            });
+        }
+
+        initFirebaseMessagingRegistration();
+        messaging.onMessage(function(payload) {
+            const noteTitle = payload.notification.title;
+            const noteOptions = {
+                body: payload.notification.body,
+                icon: payload.notification.icon,
+            };
+            new Notification(noteTitle, noteOptions);
+        });
+    </script>
+    {{-- <script type="module">
+        // Import the functions you need from the SDKs you need
+        import {
+            initializeApp
+        } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+        import {
+            getAnalytics
+        } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-analytics.js";
+        import {
+            getMessaging,
+            getToken
+        } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-messaging.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+            apiKey: "AIzaSyAEcTgFnE5gzg4QeXqO_blBNGB0h3ZySO8",
+            authDomain: "pdam-work-order-3ee03.firebaseapp.com",
+            projectId: "pdam-work-order-3ee03",
+            storageBucket: "pdam-work-order-3ee03.appspot.com",
+            messagingSenderId: "171277949524",
+            appId: "1:171277949524:web:a5d04bf00c73851c74ebc1",
+            measurementId: "G-H2S25462WF"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const messaging = getMessaging();
+        getToken(messaging, {
+            vapidKey: 'BN0RrHuProk7MOXHbBI4rMxg9kp7JKtIXVeZiI02ULY9MyCyMLyFpFD5REM_6mMPzS6H-PalhQLPNAeB7PGgOh8'
+        }).then((currentToken) => {
+            if (currentToken) {
+                // Send the token to your server and update the UI if necessary
+                // ...
+                console.log(currentToken);
+            } else {
+                // Show permission request UI
+                console.log('No registration token available. Request permission to generate one.');
+                // ...
+            }
+        }).catch((err) => {
+            console.log('An error occurred while retrieving token. ', err);
+            // ...
+        });
+    </script> --}}
 @endpush

@@ -233,4 +233,46 @@ class UserController extends Controller
 
         return redirect()->route('home')->with('message', 'User berhasil diubah');
     }
+
+    public function token(Request $request)
+    {
+        auth()->user()->update(['device_token' => $request->token]);
+        return response()->json(['token saved successfully.']);
+    }
+
+    public function notification(Request $request)
+    {
+        $firebaseToken = User::whereNotNull('device_token')->pluck('device_token')->all();
+
+        $SERVER_API_KEY = 'AAAAJ-D2GlQ:APA91bFzJSD-dpuhbAu89iqZUm4x7b3e5PDZ6W5BX7zvEmEaPFQeY6YiiPgaT4DHEOAIjoTddvOmp1BVe-ZXUi9XGO4CFrY68IFgYxtnFD82QmqXQaw7Rzqu4spDRLAdT6CYjgGtPjGq';
+
+        $data = [
+            "registration_ids" => $firebaseToken,
+            "notification" => [
+                "title" => "TEST BARU LAGI",
+                "body" => "AMAN KAH LAGI",
+            ]
+        ];
+        $dataString = json_encode($data);
+
+        $headers = [
+            'Authorization: key=' . $SERVER_API_KEY,
+            'Content-Type: application/json',
+        ];
+
+        // return $data;
+
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
+
+        $response = curl_exec($ch);
+
+        return response()->json(['send message successfully.' . $response]);
+    }
 }

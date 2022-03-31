@@ -39,6 +39,8 @@ Route::group(['middleware' => 'auth'], function () {
     // ubah profile
     Route::get('/ubahuser', [UserController::class, 'ubah'])->name('user.ubah');
     Route::put('/simpanuser', [UserController::class, 'simpan'])->name('user.simpan');
+    Route::put('/save-token', [UserController::class, 'token'])->name('user.token');
+    Route::get('/user-notification', [UserController::class, 'notification'])->name('user.notification');
 
     // Data Iteam
     Route::resource('satuan', SatuanController::class);
