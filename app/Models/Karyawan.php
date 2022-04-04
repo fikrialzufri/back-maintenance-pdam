@@ -29,4 +29,9 @@ class Karyawan extends Model
             return $this->hasJabatan->nama;
         }
     }
+
+    public function hasRekanan()
+    {
+        return $this->belongsToMany(Rekanan::class, 'karyawan_rekanan')->withTimestamps();
+    }
 }

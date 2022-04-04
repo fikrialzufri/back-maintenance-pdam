@@ -2,10 +2,18 @@
 
 namespace App\Models;
 
+use App\Traits\UsesUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Wilayah extends Model
 {
-    use HasFactory;
+    use HasFactory, UsesUuid;
+    protected $table = "wilayah";
+
+    public function setNamaAttribute($value)
+    {
+        $this->attributes['nama'] = $value;
+        $this->attributes['slug'] = Str::slug($value);
+    }
 }
