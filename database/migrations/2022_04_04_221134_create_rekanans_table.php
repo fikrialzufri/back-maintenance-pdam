@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDepartemensTable extends Migration
+class CreateRekanansTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,15 @@ class CreateDepartemensTable extends Migration
      */
     public function up()
     {
-        Schema::create('departemen', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+        Schema::create('rekanan', function (Blueprint $table) {
+            $table->id();
             $table->string('nama');
             $table->string('slug');
+            $table->string('nama_penangung_jawab');
+            $table->string('ktp');
+            $table->string('no_hp');
+            $table->string('email')->nullable();;
+            $table->longText('alamat');
             $table->timestamps();
         });
     }
@@ -28,6 +33,6 @@ class CreateDepartemensTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('departemens');
+        Schema::dropIfExists('rekanans');
     }
 }

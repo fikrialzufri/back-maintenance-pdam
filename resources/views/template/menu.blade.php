@@ -2,7 +2,7 @@
     <div class="sidebar-header">
         <a class="header-brand" href="{{ route('home') }}">
             <div class="logo-img">
-                <img height="30" src="{{ asset('img/jordan-logo.png') }}" class="header-brand-img" title="Jordan">
+                <img height="30" src="{{ asset('img/logo.png') }}" class="header-brand-img" title="PDAM Samarinda">
             </div>
         </a>
         <div class="sidebar-action"><i class="ik ik-arrow-left-circle"></i></div>

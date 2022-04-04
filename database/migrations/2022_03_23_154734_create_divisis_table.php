@@ -13,10 +13,11 @@ class CreateDivisisTable extends Migration
      */
     public function up()
     {
-        Schema::create('divisis', function (Blueprint $table) {
+        Schema::create('divisi', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('nama');
             $table->string('slug');
+            $table->string('wilayah_id')->references('id')->on('wilayah');
             $table->timestamps();
         });
     }
