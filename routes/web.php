@@ -5,6 +5,7 @@ use App\Http\Controllers\JabatanController;
 use App\Http\Controllers\JenisController;
 use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\KategoriController;
+use App\Http\Controllers\JenisAduanController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SatuanController;
 use App\Http\Controllers\TaskController;
@@ -12,6 +13,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\DepartemenController;
 use App\Http\Controllers\DivisiController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\AduanController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -42,11 +44,15 @@ Route::group(['middleware' => 'auth'], function () {
     Route::put('/save-token', [UserController::class, 'token'])->name('user.token');
     Route::get('/user-notification', [UserController::class, 'notification'])->name('user.notification');
 
-    // Data Iteam
+    // Data Item
     Route::resource('satuan', SatuanController::class);
     Route::resource('kategori', KategoriController::class);
     Route::resource('jenis', JenisController::class);
     Route::resource('item', ItemController::class);
+    Route::resource('jenis-aduan', JenisAduanController::class, ['names' => 'jenis_aduan']);
+
+    // Aduan
+    Route::resource('aduan', AduanController::class);
 
     // Karyawan
     Route::resource('departemen', DepartemenController::class);

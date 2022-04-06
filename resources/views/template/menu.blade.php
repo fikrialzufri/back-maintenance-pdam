@@ -53,7 +53,22 @@
                                     Kategori
                                 </a>
                             @endcan
+                            @can('view-jenis-aduan')
+                                <a href="{{ route('jenis_aduan.index') }}"
+                                    class="menu-item {{ $segment1 == 'jenis_aduan' ? 'active' : '' }}">
+                                    Jenis Aduan
+                                </a>
+                            @endcan
                         </div>
+                    </div>
+                @endcan
+                @can('view-aduan')
+                    <div class="nav-lavel">{{ __('Pengaduan') }} </div>
+                    <div class="nav-item {{ $segment1 == 'aduan' ? 'active' : '' }}">
+                        <a href="{{ route('aduan.index') }}">
+                            <i class="ik ik-voicemail"></i>
+                            <span>{{ __('Aduan') }}</span>
+                        </a>
                     </div>
                 @endcan
                 @can('view-karyawan')
