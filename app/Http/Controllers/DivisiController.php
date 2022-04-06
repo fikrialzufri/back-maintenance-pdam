@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Divisi;
-use Illuminate\Http\Request;
+use App\Traits\CrudTrait;
 
 class DivisiController extends Controller
 {
@@ -26,8 +26,12 @@ class DivisiController extends Controller
                 'alias'    => 'Nama Divisi',
             ],
             [
-                'name'    => 'nama_departemen',
+                'name'    => 'departemen',
                 'alias'    => 'Nama Departemen',
+            ],
+            [
+                'name'    => 'wilayah',
+                'alias'    => 'Nama Wilayah',
             ]
         ];
     }
@@ -57,6 +61,13 @@ class DivisiController extends Controller
                 'input'    => 'combo',
                 'alias'    => 'Departemen',
                 'value' => $this->combobox('Departemen'),
+                'validasi'    => ['required'],
+            ],
+            [
+                'name'    => 'wilayah_id',
+                'input'    => 'combo',
+                'alias'    => 'Wilayah',
+                'value' => $this->combobox('Wilayah'),
                 'validasi'    => ['required'],
             ],
         ];

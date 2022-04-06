@@ -14,14 +14,14 @@ class CreateRekanansTable extends Migration
     public function up()
     {
         Schema::create('rekanan', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('nama');
             $table->string('slug');
             $table->string('nama_penangung_jawab');
             $table->string('ktp');
             $table->string('no_hp');
-            $table->string('email')->nullable();;
             $table->longText('alamat');
+            $table->foreignUuid('user_id')->nullable()->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

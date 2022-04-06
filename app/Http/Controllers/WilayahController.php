@@ -3,83 +3,57 @@
 namespace App\Http\Controllers;
 
 use App\Models\Wilayah;
-use Illuminate\Http\Request;
+use App\Traits\CrudTrait;
 
 class WilayahController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    use CrudTrait;
+
+    public function __construct()
     {
-        //
+        $this->route = 'wilayah';
+        $this->sort = 'nama';
+        $this->middleware('permission:view-' . $this->route, ['only' => ['index', 'show']]);
+        $this->middleware('permission:create-' . $this->route, ['only' => ['create', 'store']]);
+        $this->middleware('permission:edit-' . $this->route, ['only' => ['edit', 'update']]);
+        $this->middleware('permission:delete-' . $this->route, ['only' => ['delete']]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function configHeaders()
     {
-        //
+        return [
+            [
+                'name'    => 'nama',
+                'alias'    => 'Nama Wilayah',
+            ],
+        ];
+    }
+    public function configSearch()
+    {
+        return [
+            [
+                'name'    => 'nama',
+                'input'    => 'text',
+                'alias'    => 'Nama Wilayah',
+                'value'    => null
+            ],
+        ];
+    }
+    public function configForm()
+    {
+
+        return [
+            [
+                'name'    => 'nama',
+                'input'    => 'text',
+                'alias'    => 'Nama Wilayah',
+                'validasi'    => ['required', 'unique', 'min:1'],
+            ]
+        ];
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function model()
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Wilayah  $wilayah
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Wilayah $wilayah)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Wilayah  $wilayah
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Wilayah $wilayah)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Wilayah  $wilayah
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Wilayah $wilayah)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Wilayah  $wilayah
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Wilayah $wilayah)
-    {
-        //
+        return new Wilayah();
     }
 }

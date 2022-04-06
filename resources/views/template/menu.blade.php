@@ -2,7 +2,7 @@
     <div class="sidebar-header">
         <a class="header-brand" href="{{ route('home') }}">
             <div class="logo-img">
-                <img height="30" src="{{ asset('img/logo.png') }}" class="header-brand-img" title="PDAM Samarinda">
+                <img height="30" src="{{ asset('img/logopdam.png') }}" class="header-brand-img" title="PDAM Samarinda">
             </div>
         </a>
         <div class="sidebar-action"><i class="ik ik-arrow-left-circle"></i></div>
@@ -23,7 +23,7 @@
                         <span>{{ __('Dashboard') }}</span>
                     </a>
                 </div>
-                @can('view-satuan', 'view-kategori', 'view-jenis', 'view-item')
+                @canany('view-satuan', 'view-kategori', 'view-jenis', 'view-item')
                     <div class="nav-lavel">{{ __('Master Data') }} </div>
                     <div
                         class="nav-item {{ $segment1 == 'satuan' || $segment1 == 'item' || $segment1 == 'kategori' || $segment1 == 'jenis'? 'active open': '' }} has-sub">
@@ -56,10 +56,10 @@
                         </div>
                     </div>
                 @endcan
-                @can('view-karyawan')
+                @canany(['view-karyawan', 'view-jabatan', 'view-divisi', 'view-wilayah', 'view-departemen'])
                     <div class="nav-lavel">{{ __('Karyawan') }} </div>
                     <div
-                        class="nav-item {{ $segment1 == 'jabatan' || $segment1 == 'karyawan' || $segment1 == 'departemen' || $segment1 == 'divisi'? 'active open': '' }} has-sub">
+                        class="nav-item {{ $segment1 == 'jabatan' ||$segment1 == 'karyawan' ||$segment1 == 'divisi' ||$segment1 == 'wilayah' ||$segment1 == 'departemen' ||$segment1 == 'divisi'? 'active open': '' }} has-sub">
                         <a href="#"><i class="fa fa-users dropdown-icon"></i><span>{{ __('Karyawan') }}</span></a>
                         <div class="submenu-content">
 
@@ -75,6 +75,18 @@
                                     Jabatan
                                 </a>
                             @endcan
+                            @can('view-divisi')
+                                <a href="{{ route('divisi.index') }}"
+                                    class="menu-item {{ $segment1 == 'divisi' ? 'active' : '' }}">
+                                    Divisi
+                                </a>
+                            @endcan
+                            @can('view-wilayah')
+                                <a href="{{ route('wilayah.index') }}"
+                                    class="menu-item {{ $segment1 == 'wilayah' ? 'active' : '' }}">
+                                    Wilayah
+                                </a>
+                            @endcan
                             @can('view-departemen')
                                 <a href="{{ route('departemen.index') }}"
                                     class="menu-item {{ $segment1 == 'departemen' ? 'active' : '' }}">
@@ -85,7 +97,15 @@
                         </div>
                     </div>
                 @endcan
-                @can('view-user', 'view-roles')
+                @can('create-rekanan')
+                    <div class="nav-item  {{ $segment1 == 'rekanan' ? 'active' : '' }}">
+                        <a href="{{ route('rekanan.create') }}">
+                            <i class="ik ik-briefcase dropdown-icon"></i>
+                            <span>Rekanan</span>
+                        </a>
+                    </div>
+                @endcan
+                @canany(['view-user', 'view-roles'])
                     <div class="nav-lavel">{{ __('User') }} </div>
                     <div
                         class="nav-item {{ $segment1 == 'user' || $segment1 == 'role' || $segment1 == 'task' ? 'active open' : '' }} has-sub">

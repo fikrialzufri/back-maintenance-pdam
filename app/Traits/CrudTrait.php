@@ -3,10 +3,8 @@
 namespace App\Traits;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 use Auth;
-use Illuminate\Support\Facades\DB;
+use DB;
 
 trait CrudTrait
 {
@@ -39,6 +37,9 @@ trait CrudTrait
 
     //pemberian jumlah data dalam tabel
     protected $paginate = 15;
+
+    //import
+    private $import;
 
     //pemberian nama user
     private $user;
@@ -92,6 +93,13 @@ trait CrudTrait
         //button
         $button = null;
 
+        //import
+        $import = null;
+
+        if ($this->import) {
+            $import = $this->import;
+        }
+
         $export = null;
 
         if ($this->configButton()) {
@@ -116,7 +124,7 @@ trait CrudTrait
 
             // return $from;
             // $query = $query->whereDate('tgl', '<=', $from);
-            $query = $query->whereBetween(DB::raw('DATE(tgl)'), array($from, $to));
+            $query = $query->whereBetween(DB::raw('DATE(created_at)'), array($from, $to));
             $export .= 'from=' . $from . '&to=' . $to;
         }
         //akhir pencarian --------------------------------
@@ -149,6 +157,7 @@ trait CrudTrait
             "data",
             'searches',
             'hasilSearch',
+            'import',
             'button',
             'search',
             'export',
@@ -185,8 +194,6 @@ trait CrudTrait
 
         $countColom = $this->countColom($count);
         $countColomFooter = $this->countColomFooter($count);
-        // $hasValue = $this->hasValue;
-
         return view('template.form', compact(
             'title',
             'form',
@@ -224,82 +231,90 @@ trait CrudTrait
         );
 
         //open model
-        $data = $this->model();
-        if (isset($relation)) {
-            $firstColumn = [];
-            $manyToMany  = null;
-            $manyRelation  = null;
-            $valueMany  = null;
-            foreach ($relation as $key => $value) {
-                try { //
-                    $relationModels = '\\App\Models\\' . ucfirst($key);
-                    $relationModels = new $relationModels;
-                    foreach ($value as $colom => $val) {
-                        if ($colom === "password") {
-                            $val = bcrypt($val);
-                        }
-                        if (in_array(str_replace('_id', '', $colom), $this->manyToMany)) {
-                            $manyToMany = str_replace('_id', '', $colom);
-                            $valueMany[$manyToMany] = $val;
-                            break;
-                        }
-                        $relationModels->$colom = $val;
-                    }
-                    $relationModels->save();
-                    if (isset($manyToMany)) {
-                        $relationModels->$manyToMany()->attach($valueMany);
-                    }
-                    $relationsFields = $key . '_id';
+        DB::beginTransaction();
+        try {
 
-                    $data->$relationsFields = $relationModels->id;
-                } catch (\Throwable $th) { }
+            $data = $this->model();
+            if (isset($relation)) {
+                $firstColumn = [];
+                $manyToMany  = null;
+                $manyRelation  = null;
+                $valueMany  = null;
+                foreach ($relation as $key => $value) {
+                    try { //
+                        $relationModels = '\\App\Models\\' . ucfirst($key);
+                        $relationModels = new $relationModels;
+                        foreach ($value as $colom => $val) {
+                            if ($colom === "password") {
+                                $val = bcrypt($val);
+                            }
+                            if (in_array(str_replace('_id', '', $colom), $this->manyToMany)) {
+                                $manyToMany = str_replace('_id', '', $colom);
+                                $valueMany[$manyToMany] = $val;
+                                break;
+                            }
+                            $relationModels->$colom = $val;
+                        }
+                        $relationModels->save();
+                        if (isset($manyToMany)) {
+                            $relationModels->$manyToMany()->attach($valueMany);
+                        }
+                        $relationsFields = $key . '_id';
+
+                        $data->$relationsFields = $relationModels->id;
+                    } catch (\Throwable $th) { }
+                }
             }
-        }
 
-        //post ke model
+            //post ke model
 
-        foreach ($form as $index => $item) {
+            foreach ($form as $index => $item) {
+                if (isset($this->manyToMany)) {
+                    if (in_array($index, $this->manyToMany)) {
+                        break;
+                    }
+                }
+                if ($this->oneToMany) {
+                    if (in_array(str_replace('_id', '', $index), $this->oneToMany)) {
+                        $oneToMany = str_replace('_id', '', $index);
+                        break;
+                    }
+                }
+                if ($index === "password") {
+                    $item = bcrypt($item);
+                }
+                $data->$index = $item;
+            }
+            if ($this->user && !isset($this->extraFrom)) {
+                $data->user_id = Auth::user()->id;
+            }
+            $data->save();
+
             if (isset($this->manyToMany)) {
-                if (in_array($index, $this->manyToMany)) {
-                    break;
+                if (!isset($this->extraFrom)) {
+                    return $this->manyToMany;
+                    foreach ($this->manyToMany as  $value) {
+                        $hasRalation = 'has' . ucfirst($value);
+                        $valueField = $data->$hasRalation()->attach($form[$value]);
+                    }
                 }
             }
-            if ($this->oneToMany) {
-                if (in_array(str_replace('_id', '', $index), $this->oneToMany)) {
-                    $oneToMany = str_replace('_id', '', $index);
-                    break;
-                }
-            }
-            if ($index === "password") {
-                $item = bcrypt($item);
-            }
-            $data->$index = $item;
-        }
-        if ($this->user && !isset($this->extraFrom)) {
-            // return Auth::user()->id;
-            $data->user_id = Auth::user()->id;
-        }
-        $data->save();
-
-        if (isset($this->manyToMany)) {
-            if (!isset($this->extraFrom)) {
-                return $this->manyToMany;
-                foreach ($this->manyToMany as  $value) {
+            if (isset($this->oneToMany)) {
+                foreach ($this->oneToMany as $index => $value) {
                     $hasRalation = 'has' . ucfirst($value);
-                    $valueField = $data->$hasRalation()->attach($form[$value]);
+                    $idRelation = $value . '_id';
+                    $valueField = $data->$hasRalation()->attach($form[$idRelation]);
                 }
             }
+            // $hasRalation;
+            //redirect
+
+            DB::commit();
+            return redirect()->route($this->route . '.index')->with('message', ucwords(str_replace('-', ' ', $this->route)) . ' Berhasil Ditambahkan')->with('Class', 'success');
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return redirect()->route($this->route . '.index')->with('message', 'Gagal Menambahkan ' . ucwords(str_replace('-', ' ', $this->route)))->with('Class', 'dangger');
         }
-        if (isset($this->oneToMany)) {
-            foreach ($this->oneToMany as $index => $value) {
-                $hasRalation = 'has' . ucfirst($value);
-                $idRelation = $value . '_id';
-                $valueField = $data->$hasRalation()->attach($form[$idRelation]);
-            }
-        }
-        // $hasRalation;
-        //redirect
-        return redirect()->route($this->route . '.index')->with('message', ucwords(str_replace('-', ' ', $this->route)) . ' Berhasil Ditambahkan')->with('Class', 'success');
     }
 
     /**
@@ -356,8 +371,10 @@ trait CrudTrait
             foreach ($this->oneToMany as $item) {
                 $hasRalation = 'has' . ucfirst($item);
                 $field = $item . '_id';
-                $valueField = $data->$hasRalation()->first()->id;
-                $data->$field = $valueField;
+                if (count($data->$hasRalation) > 0) {
+                    $valueField = $data->$hasRalation()->get()->pluck('id');
+                    $data->$field = $valueField;
+                }
             }
         }
 
@@ -489,7 +506,8 @@ trait CrudTrait
             foreach ($this->oneToMany as $index => $value) {
                 $hasRalation = 'has' . ucfirst($value);
                 $idRelation = $value . '_id';
-
+                // return $hasRalation;
+                // return $form[$idRelation];
                 $valueField = $data->$hasRalation()->sync($form[$idRelation]);
             }
         }
@@ -663,13 +681,14 @@ trait CrudTrait
                     $nama = $item->name;
                 }
             }
-            // return $arrayColom;
+            $arrayColomValue = [];
             if (isset($arrayColom)) {
-                foreach ($arrayColom as $value) {
+                foreach ($arrayColom as $key => $value) {
                     $rplcs = str_replace("_", " ",  $value);
-                    $nama[$value] = ucwords($rplcs) . ' : ' . $item->$value . ' | ';
+                    $arrayColomValue[$key] = ucwords($rplcs) . ' : ' . $item->$value . ' | ';
                 }
-                $nama = implode(" ", $nama);
+                $nama = $nama . ' | ' . implode(" ", $arrayColomValue);
+                $nama =  rtrim($nama, ' | ');
             }
 
             $data[$key] = [

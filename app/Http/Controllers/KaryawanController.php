@@ -17,6 +17,7 @@ class KaryawanController extends Controller
         $this->manyToMany = ['role'];
         $this->relations = ['user'];
         $this->extraFrom = ['user'];
+        $this->oneToMany = ['rekanan'];
         $this->middleware('permission:view-' . $this->route, ['only' => ['index']]);
         $this->middleware('permission:create-' . $this->route, ['only' => ['create', 'store']]);
         $this->middleware('permission:edit-' . $this->route, ['only' => ['edit', 'update']]);
@@ -32,7 +33,15 @@ class KaryawanController extends Controller
             ],
             [
                 'name'    => 'nama_jabatan',
-                'alias'    => 'Nama Jabatan',
+                'alias'    => 'Jabatan',
+            ],
+            [
+                'name'    => 'divisi',
+                'alias'    => 'Divisi',
+            ],
+            [
+                'name'    => 'departemen',
+                'alias'    => 'Departemen',
             ],
         ];
     }
@@ -58,6 +67,12 @@ class KaryawanController extends Controller
                 'validasi'    => ['required', 'min:1'],
             ],
             [
+                'name'    => 'nip',
+                'input'    => 'text',
+                'alias'    => 'NIP',
+                'validasi'    => ['required', 'min:1', 'unique'],
+            ],
+            [
                 'name'    => 'nik',
                 'input'    => 'text',
                 'alias'    => 'Nomor KTP',
@@ -67,7 +82,31 @@ class KaryawanController extends Controller
                 'name'    => 'jabatan_id',
                 'input'    => 'combo',
                 'alias'    => 'Jabatan',
-                'value' => $this->combobox('Jabatan'),
+                'value' => $this->combobox(
+                    'Jabatan',
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    ['divisi', 'departemen'],
+                ),
+                'validasi'    => ['required'],
+            ],
+            [
+                'name'    => 'rekanan_id',
+                'input'    => 'combo',
+                'alias'    => 'Rekanan',
+                'value' => $this->combobox(
+                    'Rekanan'
+                ),
+                'multiple'    =>  true,
                 'validasi'    => ['required'],
             ],
             [

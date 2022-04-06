@@ -29,4 +29,10 @@ class Jabatan extends Model
             return $this->hasDivisi->nama;
         }
     }
+    public function getDepartemenAttribute()
+    {
+        if ($this->hasDivisi) {
+            return $this->hasDivisi->departemen;
+        }
+    }
 }

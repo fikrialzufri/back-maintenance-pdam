@@ -19,7 +19,8 @@ class CreateKaryawansTable extends Migration
             $table->string('nik', 20)->nullable();
             $table->string('nama');
             $table->string('slug');
-            $table->string('jabatan_id')->references('id')->on('jabatan');
+            $table->foreignUuid('jabatan_id')->references('id')->on('jabatan');
+            $table->foreignUuid('user_id')->nullable()->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

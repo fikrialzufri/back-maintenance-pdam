@@ -12,6 +12,25 @@ class Karyawan extends Model
     use HasFactory, UsesUuid;
     protected $table = "karyawan";
 
+    public function hasUser()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function getUsernameAttribute()
+    {
+        if ($this->hasUser) {
+            return $this->hasUser->username;
+        }
+    }
+
+    public function getEmailAttribute()
+    {
+        if ($this->hasUser) {
+            return $this->hasUser->email;
+        }
+    }
+
     public function setNamaAttribute($value)
     {
         $this->attributes['nama'] = $value;
@@ -27,6 +46,20 @@ class Karyawan extends Model
     {
         if ($this->hasJabatan) {
             return $this->hasJabatan->nama;
+        }
+    }
+
+    public function getDivisiAttribute()
+    {
+        if ($this->hasJabatan) {
+            return $this->hasJabatan->divisi;
+        }
+    }
+
+    public function getDepartemenAttribute()
+    {
+        if ($this->hasJabatan) {
+            return $this->hasJabatan->departemen;
         }
     }
 

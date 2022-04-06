@@ -10,90 +10,127 @@
             @if ($store == 'update') value="{{ $data[$item['name']] }}" @else value="{{ old($item['name']) }}" @endif>
     @else
         @if ($item['input'] == 'combo')
-            {{-- @if (isset($hasValue))
-                @if ($hasValue . '_id' == $item['name'])
-                    TODO: WORK ON THIS TOMORROW
-                    <h1>{{ $hasValue . '_id' }}</h1>
-                @else --}}
             <select class="form-control {{ $errors->has($item['name']) ? 'is-invalid' : '' }} selected2"
                 @if (isset($item['multiple'])) name="{{ $item['name'] }}[]" multiple @else name="{{ $item['name'] }}" @endif
                 id="cmb{{ $item['name'] }}">
                 <option value="">--Pilih {{ $item['alias'] }}--</option>
                 @if (isset($item['value']))
+
                     @foreach ($item['value'] as $key => $val)
                         @if (isset($val['id']))
                             <option value="{{ $val['id'] }}"
-                                @if ($store == 'update') @if (is_array($data[$item['name'] . 'id']))
-                                {{ in_array($val['id'], $data[$item['name'] . 'id']) ? 'selected' : '' }}
-                                @else {{ $data[$item['name']] == $val['id'] ? 'selected' : '' }} @endif
-                            @else {{ old($item['name']) == $val['id'] ? 'selected' : '' }} @endif>
-                                @if (isset($val['value']))
-                                    {{ ucfirst($val['value']) }}
-                                @else
-                                    Array salah harus menggunakan value
+                                @if ($store == 'update') @if (gettype($data[$item['name']]) == 'object')
+                                        {{ strpos($data[$item['name']], $val['id']) ? 'selected' : '' }}
+                                        @else
+                                        @if (is_array($data[$item['name'] . 'id']))
+                                        {{ in_array($val['id'], $data[$item['name'] . 'id']) ? 'selected' : '' }}
+                                        @else
+                                        {{ $data[$item['name']] == $val['id'] ? 'selected' : '' }} @endif
                                 @endif
-                            </option>
+                            @else
+                                {{ old($item['name']) == $val['id'] ? 'selected' : '' }}
+                        @endif>
+                        @if (isset($val['value']))
+                            {{ ucfirst($val['value']) }}
                         @else
-                            <option value="{{ $val }}"
-                                @if ($store == 'update') {{ $data[$item['name']] == $val ? 'selected' : '' }} @else {{ old($item['name']) == $val ? 'selected' : '' }} @endif>
-                                {{ ucfirst($val) }}
-                            </option>
+                            Array salah harus menggunakan value
                         @endif
-                    @endforeach
-                @endif
-            </select>
-            {{-- @endif
+                        </option>
+                    @else
+                        <option value="{{ $val }}"
+                            @if ($store == 'update') @if (isset($item['array']))
+                                    {{ in_array($val, $data[$item['name']]) ? 'selected' : '' }}
+                                    @else
+                                    {{ $data[$item['name']] == $val ? 'selected' : '' }} @endif
+                        @else {{ old($item['name']) == $val ? 'selected' : '' }} @endif>
+                            {{ ucfirst($val) }}
+                        </option>
+                    @endif
+                    @if (isset($item['array']))
+                        @if ($store == 'update')
+                            <option value="{{ $val }}">
+                                {{ $item['name'] }}
+                                {{ implode(' ', $data[$item['name']]) == $val ? 'jhabuk' : 'kada' }}
+
+                            </option>
+
+                        @endif
+                    @endif
+                @endforeach
+        @endif
+        </select>
+        {{-- @endif
             @endif --}}
 
-        @endif
-        @if ($item['input'] == 'rupiah')
-            <div class="input-group mb-2 mr-sm-2">
-                <div class="input-group-prepend">
-                    <div class="input-group-text">Rp.</div>
+    @endif
+    @if ($item['input'] == 'rupiah')
+        <div class="input-group mb-2 mr-sm-2">
+            <div class="input-group-prepend">
+                <div class="input-group-text">Rp.</div>
+            </div>
+            <input type="text" name="{{ $item['name'] }}" id="{{ $item['name'] }}"
+                placeholder="{{ $item['alias'] }}"
+                class="form-control {{ $errors->has($item['name']) ? 'is-invalid' : '' }}"
+                @if ($store == 'update') value="{{ format_uang($data[$item['name']]) }}" @else value="{{ old($item['name']) }}" @endif>
+        </div>
+
+
+    @endif
+    @if ($item['input'] == 'radio')
+        <div class="form-radio">
+            @foreach ($item['value'] as $key => $val)
+                <div class="radio radiofill radio-inline">
+                    <label>
+                        <input type="radio" name="{{ $item['name'] }}" value="{{ $val }}"
+                            @if ($store == 'update') {{ $data[$item['name']] == $val ? 'checked' : '' }} @else {{ old($item['name']) == $val ? 'checked' : '' }} @endif>
+                        <i class="helper"></i>{{ ucfirst($val) }}
+                    </label>
                 </div>
-                <input type="text" name="{{ $item['name'] }}" id="{{ $item['name'] }}"
-                    placeholder="{{ $item['alias'] }}"
-                    class="form-control {{ $errors->has($item['name']) ? 'is-invalid' : '' }}"
-                    @if ($store == 'update') value="{{ format_uang($data[$item['name']]) }}" @else value="{{ old($item['name']) }}" @endif>
+            @endforeach
+        </div>
+    @endif
+    @if ($item['input'] == 'persen')
+        <div class="form-group row">
+            <div class="col-sm-3">
+                <div class="input-group ">
+                    <input type="text" name="{{ $item['name'] }}" id="{{ $item['name'] }}" class="form-control"
+                        @if ($store == 'update') value="{{ $data[$item['name']] }}" @else value="{{ old($item['name']) }}" @endif
+                        placeholder="Isi {{ $item['name'] }}">
+                    <span class="input-group-append">
+                        <label class="input-group-text">%</label>
+                    </span>
+                </div>
             </div>
+        </div>
+    @endif
+    @if ($item['input'] == 'datetimepicker')
+        <input type="text" id="{{ $item['name'] }}" name="{{ $item['name'] }}"
+            @if ($store == 'update') value="{{ $data[$item['name']] }}" @else value="{{ old($item['name']) }}" @endif
+            class="form-control {{ $errors->has($item['name']) ? 'is-invalid' : '' }}">
+    @endif
+    @if ($item['input'] == 'date')
+        <input type="{{ $item['input'] }}" name="{{ $item['name'] }}" id="{{ $item['name'] }}"
+            @if ($item['input'] == 'password') autocomplete="on" @else placeholder="{{ $item['alias'] }}" @endif
+            class="form-control {{ $errors->has($item['name']) ? 'is-invalid' : '' }}"
+            @if ($store == 'update') value="{{ $data[$item['name']] }}" @else value="{{ old($item['name']) }}" @endif>
+    @endif
+    @if ($item['input'] == 'textarea')
+        <textarea class="form-control" rows="3" placeholder="{{ $item['alias'] }}" name="{{ $item['name'] }}">
+@if ($store == 'update'){{ $data[$item['name']] }}
+@else
+{{ old($item['name']) }}
+@endif
+</textarea>
+    @endif
 
-
-        @endif
-        @if ($item['input'] == 'radio')
-            <div class="form-radio">
-                @foreach ($item['value'] as $key => $val)
-                    <div class="radio radiofill radio-inline">
-                        <label>
-                            <input type="radio" name="{{ $item['name'] }}" value="{{ $val }}"
-                                @if ($store == 'update') {{ $data[$item['name']] == $val ? 'checked' : '' }} @else {{ old($item['name']) == $val ? 'checked' : '' }} @endif>
-                            <i class="helper"></i>{{ ucfirst($val) }}
-                        </label>
-                    </div>
-                @endforeach
-            </div>
-        @endif
-        @if ($item['input'] == 'date')
+    @if ($item['input'] == 'text' || $item['input'] == 'number' || $item['input'] == 'email' || $item['input'] == 'password' || $item['input'] == 'time')
+        <div>
             <input type="{{ $item['input'] }}" name="{{ $item['name'] }}" id="{{ $item['name'] }}"
                 @if ($item['input'] == 'password') autocomplete="on" @else placeholder="{{ $item['alias'] }}" @endif
                 class="form-control {{ $errors->has($item['name']) ? 'is-invalid' : '' }}"
                 @if ($store == 'update') value="{{ $data[$item['name']] }}" @else value="{{ old($item['name']) }}" @endif>
-        @endif
-        @if ($item['input'] == 'textarea')
-            <textarea class="form-control" rows="3" placeholder="{{ $item['alias'] }}" name="{{ $item['name'] }}">
-@if ($store == 'update'){{ $data[$item['name']] }}
-@else
-@endif
-</textarea>
-        @endif
-
-        @if ($item['input'] == 'text' || $item['input'] == 'number' || $item['input'] == 'email' || $item['input'] == 'password' || $item['input'] == 'time')
-            <div>
-                <input type="{{ $item['input'] }}" name="{{ $item['name'] }}" id="{{ $item['name'] }}"
-                    @if ($item['input'] == 'password') autocomplete="on" @else placeholder="{{ $item['alias'] }}" @endif
-                    class="form-control {{ $errors->has($item['name']) ? 'is-invalid' : '' }}"
-                    @if ($store == 'update') value="{{ $data[$item['name']] }}" @else value="{{ old($item['name']) }}" @endif>
-            </div>
-        @endif
+        </div>
+    @endif
     @endif
 
     @if ($errors->has($item['name']))
@@ -108,12 +145,15 @@
         </span>
     @endif
 </div>
-@push('style')
-    <style type="text/css">
-
-
-    </style>
+@push('head')
+    @if (isset($item['input']))
+        @if ($item['input'] == 'datetimepicker')
+            <link rel="stylesheet" type="text/css"
+                href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+        @endif
+    @endif
 @endpush
+
 @push('scriptdinamis')
     <script script src="{{ asset('plugins/select2/dist/js/select2.min.js') }}">
     </script>
@@ -179,4 +219,45 @@
             @endif
         });
     </script>
+    @if (isset($item['input']))
+        @if ($item['input'] == 'datetimepicker')
+            <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+            <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+            <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+            @if ($store == 'update')
+                <script type="text/javascript">
+                    $(document).ready(function() {
+                        $("#{{ $item['name'] }}").daterangepicker({
+                            timePicker: true,
+                            timePicker24Hour: true,
+                            timePickerIncrement: 1,
+                            timePickerSeconds: true,
+                            locale: {
+                                format: 'DD/M/Y HH:mm:ss'
+                            }
+                        })
+                    })
+                </script>
+            @else
+                <script type="text/javascript">
+                    $(document).ready(function() {
+                        let start = moment().startOf('month')
+                        let end = moment().endOf('month')
+                        $("#{{ $item['name'] }}").daterangepicker({
+                            startDate: start,
+                            endDate: end,
+                            timePicker: true,
+                            timePicker24Hour: true,
+                            timePickerIncrement: 1,
+                            timePickerSeconds: true,
+                            minDate: start,
+                            locale: {
+                                format: 'DD/M/Y HH:mm:ss'
+                            }
+                        })
+                    })
+                </script>
+            @endif
+        @endif
+    @endif
 @endpush

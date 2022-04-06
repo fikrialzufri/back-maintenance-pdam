@@ -24,13 +24,31 @@ class AuthController extends Controller
             $login_type => $request->input('username')
         ]);
 
+        $dataRole = [];
+        $dataPermission = [];
+
 
         if (Auth::attempt($request->only($login_type, 'password'))) {
             $user =  Auth::user();
             $token = $user->createToken("access_token")
                 ->plainTextToken;
+            $role = $user->role;
+            foreach ($role as $key => $value) {
+                $dataRole[$key] = $value->slug;
+                foreach ($value->permissions as $index => $item) {
+                    $dataPermission[$index] = $item->slug;
+                }
+            }
+            $data = [
+                "id" => $user->id,
+                "username" => $user->username,
+                "name" => $user->name,
+                "email" => $user->email,
+            ];
+
             $result = [
-                'user' => $user,
+                'user' => $data,
+                'role' => $dataRole,
                 'token' => $token
             ];
 
@@ -84,10 +102,20 @@ class AuthController extends Controller
         $user =  Auth::user();
         $user->tokens()->delete();
 
+        $dataRole = [];
+        $dataPermission = [];
+
+        foreach ($user->role as $key => $value) {
+            $dataRole[$key] = $value->slug;
+            foreach ($value->permissions as $index => $item) {
+                $dataPermission[$index] = $item->slug;
+            }
+        }
         $token = $user->createToken("access_token")
             ->plainTextToken;
         $result = [
             'user' => $user,
+            'role' => $dataRole,
             'token' => $token
         ];
 

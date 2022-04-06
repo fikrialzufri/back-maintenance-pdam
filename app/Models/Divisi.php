@@ -29,4 +29,16 @@ class Divisi extends Model
             return $this->hasDepartemen->nama;
         }
     }
+
+    public function hasWilayah()
+    {
+        return $this->belongsTo(Wilayah::class, 'wilayah_id');
+    }
+
+    public function getWilayahAttribute()
+    {
+        if ($this->hasWilayah) {
+            return $this->hasWilayah->nama;
+        }
+    }
 }
