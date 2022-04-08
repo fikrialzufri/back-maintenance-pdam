@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ItemController;
 use App\Http\Controllers\Api\JenisController;
+use App\Http\Controllers\Api\JenisAduanController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
 
@@ -25,7 +26,9 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     // Jenis
     Route::get('jenis', JenisController::class . '@index')->name('jenis.api.index');
-    Route::get('jenis/{slug}', jenisController::class . '@show')->name('jenis.api.show');
+
+    // Jenis Aduan
+    Route::get('jenis-aduan', JenisAduanController::class . '@index')->name('jenis-aduan.api.index');
 
     Route::get('refresh', Aduan::class . '@refresh')->name('auth.refresh');
 });

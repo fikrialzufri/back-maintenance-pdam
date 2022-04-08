@@ -17,11 +17,16 @@ class JenisController extends Controller
         $this->middleware('permission:delete-' . $this->route, ['only' => ['delete']]);
     }
 
-    public function index()
+    public function index(Request $request)
     {
+        $nama = $request->nama;
+        $result = [];
+
         try {
             $message = 'Data Item';
-            $data = $this->model()->get();
+            $query = $this->model();
+            $query = $query->where('nama', 'like', '%' . $nama . '%')->orderBy('nama');
+            $data = $query->get();
             foreach ($data as $key => $value) {
                 $result[$key] = [
                     'nama' =>  $value->nama,
