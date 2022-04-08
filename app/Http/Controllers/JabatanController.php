@@ -31,6 +31,10 @@ class JabatanController extends Controller
                 'name'    => 'divisi',
                 'alias'    => 'Divisi',
             ],
+            [
+                'name'    => 'wilayah',
+                'alias'    => 'Nama Wilayah',
+            ]
         ];
     }
     public function configSearch()
@@ -59,6 +63,13 @@ class JabatanController extends Controller
                 'input'    => 'combo',
                 'alias'    => 'Divisi',
                 'value' => $this->combobox('Divisi'),
+                'validasi'    => ['required'],
+            ],
+            [
+                'name'    => 'wilayah_id',
+                'input'    => 'combo',
+                'alias'    => 'Wilayah',
+                'value' => $this->combobox('Wilayah'),
                 'validasi'    => ['required'],
             ],
         ];

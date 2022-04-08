@@ -30,18 +30,18 @@ class AduanController extends Controller
             $query = $this->model();
             $query = $query->where('nomor_aduan',  $nomor_aduan)->orderBy('created_at');
             $data = $query->get();
-            foreach ($data as $key => $value) {
-                $result[$key] = [
-                    'nama' =>  $value->nama,
-                    'slug' =>  $value->slug,
-                    'satuan' =>  $value->satuan,
-                    'jenis' =>  $value->jenis,
-                ];
-            }
+            // foreach ($data as $key => $value) {
+            //     $result[$key] = [
+            //         'nama' =>  $value->nama,
+            //         'slug' =>  $value->slug,
+            //         'satuan' =>  $value->satuan,
+            //         'jenis' =>  $value->jenis,
+            //     ];
+            // }
             if (count($result) == 0) {
                 $message = 'Data Item Belum Ada';
             }
-            return $this->sendResponse($result, $message, 200);
+            return $this->sendResponse($data, $message, 200);
         } catch (\Throwable $th) {
             $message = 'Detail Item';
             $response = [

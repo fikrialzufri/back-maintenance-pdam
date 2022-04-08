@@ -18,6 +18,7 @@ class CreateJabatansTable extends Migration
             $table->string('nama');
             $table->string('slug');
             $table->string('divisi_id')->references('id')->on('divisi');
+            $table->string('wilayah_id')->references('id')->on('wilayah');
             $table->timestamps();
         });
     }

@@ -35,4 +35,16 @@ class Jabatan extends Model
             return $this->hasDivisi->departemen;
         }
     }
+
+    public function hasWilayah()
+    {
+        return $this->belongsTo(Wilayah::class, 'wilayah_id');
+    }
+
+    public function getWilayahAttribute()
+    {
+        if ($this->hasWilayah) {
+            return $this->hasWilayah->nama;
+        }
+    }
 }

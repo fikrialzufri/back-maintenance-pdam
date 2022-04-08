@@ -18,7 +18,6 @@ class CreateDivisisTable extends Migration
             $table->string('nama');
             $table->string('slug');
             $table->string('departemen_id')->references('id')->on('departemen');
-            $table->string('wilayah_id')->references('id')->on('wilayah');
             $table->timestamps();
         });
     }

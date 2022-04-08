@@ -29,10 +29,6 @@ class DivisiController extends Controller
                 'name'    => 'departemen',
                 'alias'    => 'Nama Departemen',
             ],
-            [
-                'name'    => 'wilayah',
-                'alias'    => 'Nama Wilayah',
-            ]
         ];
     }
     public function configSearch()
@@ -61,13 +57,6 @@ class DivisiController extends Controller
                 'input'    => 'combo',
                 'alias'    => 'Departemen',
                 'value' => $this->combobox('Departemen'),
-                'validasi'    => ['required'],
-            ],
-            [
-                'name'    => 'wilayah_id',
-                'input'    => 'combo',
-                'alias'    => 'Wilayah',
-                'value' => $this->combobox('Wilayah'),
                 'validasi'    => ['required'],
             ],
         ];

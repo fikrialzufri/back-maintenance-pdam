@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Satuan;
 use Illuminate\Database\Seeder;
 
 class SatuanSeeder extends Seeder
