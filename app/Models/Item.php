@@ -29,4 +29,16 @@ class Item extends Model
             return $this->hasJenis->nama;
         }
     }
+
+    public function hasSatuan()
+    {
+        return $this->belongsTo(Satuan::class, 'satuan_id');
+    }
+
+    public function getSatuanAttribute()
+    {
+        if ($this->hasSatuan) {
+            return $this->hasSatuan->nama;
+        }
+    }
 }

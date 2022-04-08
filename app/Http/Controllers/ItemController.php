@@ -26,9 +26,13 @@ class ItemController extends Controller
                 'alias'    => 'Nama Item',
             ],
             [
+                'name'    => 'satuan',
+                'alias'    => 'Nama Satuan',
+            ],
+            [
                 'name'    => 'jenis',
                 'alias'    => 'Nama Jenis',
-            ]
+            ],
         ];
     }
     public function configSearch()
@@ -72,63 +76,20 @@ class ItemController extends Controller
                 ),
                 'validasi'    => ['required'],
             ],
+            [
+                'name'    => 'satuan_id',
+                'input'    => 'combo',
+                'alias'    => 'Satuan',
+                'value' => $this->combobox(
+                    'Satuan'
+                ),
+                'validasi'    => ['required'],
+            ],
         ];
     }
 
     public function model()
     {
         return new Item();
-    }
-
-    public function detail($slug)
-    {
-        try {
-            $message = 'Detail Item';
-            $data = $this->model()->where('slug', $slug)->first();
-            $result = [
-                'nama' =>  $data->nama,
-                'slug' =>  $data->slug,
-                'jenis' =>  $data->jenis
-            ];
-            if (count($result) == 0) {
-                $message = 'Data Item Belum Ada';
-            }
-            return $this->sendResponse($result, $message, 200);
-        } catch (\Throwable $th) {
-            $message = 'Detail Item';
-            $response = [
-                'success' => false,
-                'message' => $message,
-                'code' => '404'
-            ];
-            return $this->sendError($response, $errorMessages = [], 404);
-        }
-    }
-
-    public function getall()
-    {
-        try {
-            $message = 'Data Item';
-            $data = $this->model()->get();
-            foreach ($data as $key => $value) {
-                $result[$key] = [
-                    'nama' =>  $value->nama,
-                    'slug' =>  $value->slug,
-                    'jenis' =>  $value->jenis
-                ];
-            }
-            if (count($result) == 0) {
-                $message = 'Data Item Belum Ada';
-            }
-            return $this->sendResponse($result, $message, 200);
-        } catch (\Throwable $th) {
-            $message = 'Detail Item';
-            $response = [
-                'success' => false,
-                'message' => $message,
-                'code' => '404'
-            ];
-            return $this->sendError($response, $errorMessages = [], 404);
-        }
     }
 }
