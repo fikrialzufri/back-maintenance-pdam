@@ -13,12 +13,22 @@ class Aduan extends Model
     protected $table = 'aduan';
     protected $guarded = ['id'];
     protected $fillable = [
-        'no_ticket', 'title', 'sumber_informasi', 'body', 'lokasi', 'lat_long', 'status', 'file', 'user_id'
+        'no_ticket',
+        'no_aduan',
+        'mps',
+        'atas_nama',
+        'sumber_informasi',
+        'body',
+        'lokasi',
+        'lat_long',
+        'status',
+        'file',
+        'user_id'
     ];
 
-    public function setTitleAttribute($value)
+    public function setNoTicketAttribute($value)
     {
-        $this->attributes['title'] = $value;
+        $this->attributes['no_ticket'] = $value;
         $this->attributes['slug'] = Str::slug($value);
     }
 
@@ -32,7 +42,7 @@ class Aduan extends Model
         return $this->hasOne(User::class, 'id', 'user_id');
     }
 
-    public function jenis()
+    public function jenisAduan()
     {
         return $this->belongsToMany(JenisAduan::class, 'aduan_jenis_aduan');
     }

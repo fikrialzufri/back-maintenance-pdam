@@ -18,6 +18,7 @@ class CreateAduanTable extends Migration
             $table->string('no_ticket');
             $table->string('no_aduan');
             $table->string('mps');
+            $table->string('atas_nama');
             $table->string('sumber_informasi');
             $table->longText('body');
             $table->longText('lokasi');

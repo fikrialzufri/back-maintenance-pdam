@@ -242,29 +242,10 @@ class UserController extends Controller
 
     public function notification(Request $request)
     {
-        // $firebaseToken = User::whereNotNull('device_token')->pluck('device_token')->all();
-
-        // by id
         $user = User::whereNotNull('device_token')->first();
 
         $SERVER_API_KEY = 'AAAAJ-D2GlQ:APA91bFzJSD-dpuhbAu89iqZUm4x7b3e5PDZ6W5BX7zvEmEaPFQeY6YiiPgaT4DHEOAIjoTddvOmp1BVe-ZXUi9XGO4CFrY68IFgYxtnFD82QmqXQaw7Rzqu4spDRLAdT6CYjgGtPjGq';
-        // to token
-        // $data = [
-        //     "registration_ids" => $firebaseToken,
-        //     "notification" => [
-        //         "title" => "TEST BARU LAGI",
-        //         "body" => "MAHDI HABUK",
-        //     ]
-        // ];
-        //         {
-        //    "to":"/topics/all",
-        //    "data":
-        //    {
-        //       "title":"Your title",
-        //       "message":"Your message"
-        //       "image-url":"your_image_url"
-        //    }
-        // }
+
         $data = [
             "to" => "/topics/" . $user->id,
             "data" => [
@@ -278,8 +259,6 @@ class UserController extends Controller
             'Authorization: key=' . $SERVER_API_KEY,
             'Content-Type: application/json',
         ];
-
-        // return $data;
 
         $ch = curl_init();
 
