@@ -18,30 +18,43 @@ class AduanController extends Controller
         $this->middleware('permission:delete-' . $this->route, ['only' => ['delete']]);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $title = 'List Aduan';
-        $route = 'aduan';
-        $search = request()->search;
-        $limit = request()->limit ?? 30;
+        $nomor_aduan = $request->nomor_aduan;
+        $jenis = $request->jenis;
+        $result = [];
 
-        $query = Aduan::query();
-        if ($search) {
-            $query = $query->where('no_ticket', 'like', "%" . $search . "%")->orWhere('title', 'like', "%" . $search . "%");
+        try {
+            $message = 'Data Aduan';
+
+            $query = $this->model();
+            $query = $query->where('nomor_aduan',  $nomor_aduan)->orderBy('created_at');
+            $data = $query->get();
+            foreach ($data as $key => $value) {
+                $result[$key] = [
+                    'nama' =>  $value->nama,
+                    'slug' =>  $value->slug,
+                    'satuan' =>  $value->satuan,
+                    'jenis' =>  $value->jenis,
+                ];
+            }
+            if (count($result) == 0) {
+                $message = 'Data Item Belum Ada';
+            }
+            return $this->sendResponse($result, $message, 200);
+        } catch (\Throwable $th) {
+            $message = 'Detail Item';
+            $response = [
+                'success' => false,
+                'message' => $message,
+                'code' => '404'
+            ];
+            return $this->sendError($response, $errorMessages = [], 404);
         }
+    }
 
-        $aduan = $query->orderBy('created_at', 'desc')->paginate($limit);
-        $count_aduan = $query->count();
-        $no = $limit * ($aduan->currentPage() - 1);
-
-        return view('aduan.index', compact(
-            'title',
-            'route',
-            'aduan',
-            'no',
-            'count_aduan',
-            'search',
-            'limit'
-        ));
+    public function model()
+    {
+        return new Aduan();
     }
 }
