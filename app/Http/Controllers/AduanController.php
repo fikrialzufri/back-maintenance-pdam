@@ -93,11 +93,18 @@ class AduanController extends Controller
     {
         $jenis_aduan = JenisAduan::orderBy('nama')->get();
         $aduan = Aduan::where('slug', $slug)->first();
+        $title = "Ubah Aduan " . $aduan->title;
+        $action = route('aduan.update', $slug);
 
-        if ($adua == null) {
+        if ($aduan == null) {
             return redirect()->route('aduan.index')->with('message', 'Data Aduan tidak ditemukan');
         }
 
-        // TODO: WORK ON THIS TOMORROW
+        return view('aduan.edit', compact(
+            'jenis_aduan',
+            'aduan',
+            'title',
+            'action'
+        ));
     }
 }

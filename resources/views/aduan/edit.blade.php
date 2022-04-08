@@ -1,5 +1,5 @@
 @extends('template.app')
-@section('title', 'Tambah Aduan')
+@section('title', 'Ubah Aduan ' . $aduan->title)
 
 @push('head')
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
@@ -13,6 +13,8 @@
 @section('content')
 <div class="container-fluid">
     <div class="row">
+        {{-- <form action="{{ $action }}" method="post" role="form" enctype="multipart/form-data">
+        @csrf --}}
         <div class="col-6">
             <div class="card">
                 <div class="card-header">
@@ -68,14 +70,13 @@
                                         <label for="jenis_aduan_id" class=" form-control-label">Jenis Aduan</label>
                                     </div>
                                     <div>
+                                        <select class="{{ $errors->has('sumber_informasi') ? 'form-control is-invalid' : 'form-control' }}" name="jenis_aduan_id" id="jenis_aduan_id">
                                         @forelse ($jenis_aduan as $item)
-                                        <div>
-                                            <input class="border-checkbox" type="checkbox" name="jenis_aduan_id[]" value="{{ $item->id }}" id="checkbox0">
-                                            <label class="border-checkbox-label" for="checkbox0">{{ $item->name }}</label>
-                                        </div>
+                                            <option class="form-control" value="{{ $item->id }}">{{ $item->name }}</option>
                                         @empty
                                             <option disabled>-</option>
                                         @endforelse
+                                        </select>
                                     </div>
                                     @if ($errors->has('jenis_aduan_id'))
                                     Sumber Informasi
@@ -108,6 +109,7 @@
                             </div>
                         </div>
                     </div>
+                {{-- </form> --}}
             </div>
         </div>
         <div class="col-6">
@@ -164,26 +166,28 @@
 integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
 crossorigin=""></script>
 <script type="text/javascript">
-    var map = L.map('map').setView([-0.5096845, 117.0354417], 13);
+    var lat_long = "{{ $aduan->lat_long }}";
+    var map = L.map('map').setView(lat_long.split(","), 13);
     L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
-    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-    maxZoom: 18,
-    id: 'mapbox/streets-v11',
-    tileSize: 512,
-    zoomOffset: -1,
-    accessToken: 'pk.eyJ1IjoidnRyYWNlIiwiYSI6ImNsMW5seTQ4MDBlYzYzZHBkb2g3cG5sejkifQ.pdkpsfYUcs6c5Ln0evdR6Q'
-}).addTo(map);
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        maxZoom: 18,
+        id: 'mapbox/streets-v11',
+        tileSize: 512,
+        zoomOffset: -1,
+        accessToken: 'pk.eyJ1IjoidnRyYWNlIiwiYSI6ImNsMW5seTQ4MDBlYzYzZHBkb2g3cG5sejkifQ.pdkpsfYUcs6c5Ln0evdR6Q'
+    }).addTo(map);
 
-var marker = L.marker([-0.5096845, 117.0354417]).addTo(map)
-.bindPopup('<b>Kota Samarinda</b>').openPopup();
+    var marker = L.marker(lat_long.split(",")).addTo(map)
+        .bindPopup('<b>Alamat</b>').openPopup();
 
-var popup = L.popup();
-function onMapClick(e) {
-    popup
-        .setLatLng(e.latlng)
-        .setContent("You clicked the map at " + e.latlng.toString())
-        // .setContent("You clicked the map at " + e.latlng.toString() + " Alamat: " + e.LongLabel)
-        .openOn(map);
+    var popup = L.popup();
+
+    function onMapClick(e) {
+        popup
+            .setLatLng(e.latlng)
+            .setContent("You clicked the map at " + e.latlng.toString())
+            // .setContent("You clicked the map at " + e.latlng.toString() + " Alamat: " + e.LongLabel)
+            .openOn(map);
 
         // Auto Fill form lat_long
         document.getElementById('lat_long').value = e.latlng.toString()
@@ -203,7 +207,7 @@ function onMapClick(e) {
         //     let ad = address.split(',');
         //     alert(ad[0] + ', ' + ad[2] + ' ' + ad[1] + '');
         // });
-}
-map.on('click', onMapClick);
+    }
+    map.on('click', onMapClick);
 </script>
 @endpush

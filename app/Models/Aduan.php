@@ -31,4 +31,9 @@ class Aduan extends Model
     {
         return $this->hasOne(User::class, 'id', 'user_id');
     }
+
+    public function jenis()
+    {
+        return $this->belongsToMany(JenisAduan::class, 'aduan_jenis_aduan');
+    }
 }
