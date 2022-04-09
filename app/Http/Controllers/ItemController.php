@@ -57,6 +57,12 @@ class ItemController extends Controller
                 'validasi'    => ['required', 'unique', 'min:1'],
             ],
             [
+                'name'    => 'harga',
+                'input'    => 'rupiah',
+                'alias'    => 'Harga Item',
+                'validasi'    => ['required', 'unique', 'min:1'],
+            ],
+            [
                 'name'    => 'jenis_id',
                 'input'    => 'combo',
                 'alias'    => 'Jenis',

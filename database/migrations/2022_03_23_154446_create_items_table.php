@@ -17,6 +17,7 @@ class CreateItemsTable extends Migration
             $table->uuid('id')->primary();
             $table->string('nama');
             $table->string('slug');
+            $table->integer('harga')->default(0)->nullable();
             $table->string('jenis_id')->references('id')->on('jenis');
             $table->string('satuan_id')->references('id')->on('satuan');
             $table->timestamps();
