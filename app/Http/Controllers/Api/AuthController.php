@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Karyawan;
+use App\Models\Rekanan;
 use Illuminate\Http\Request;
 use Auth;
 
@@ -26,7 +28,7 @@ class AuthController extends Controller
 
         $dataRole = [];
         $dataPermission = [];
-
+        $profile = [];
 
         if (Auth::attempt($request->only($login_type, 'password'))) {
             $user =  Auth::user();
@@ -36,7 +38,7 @@ class AuthController extends Controller
             foreach ($role as $key => $value) {
                 $dataRole[$key] = $value->slug;
                 foreach ($value->permissions as $index => $item) {
-                    $dataPermission[$index] = $item->slug;
+                    $dataPermission[$key][$index] = $item->slug;
                 }
             }
             $data = [
@@ -46,10 +48,36 @@ class AuthController extends Controller
                 "email" => $user->email,
             ];
 
+            $karyawan = Karyawan::where('user_id', $user->id)->first();
+            $rekanan = Rekanan::where('user_id', $user->id)->first();
+
+            if ($karyawan) {
+                $profile = [
+                    "id" => $karyawan->id,
+                    "nik" => $karyawan->nik,
+                    "nip" => $karyawan->nip,
+                    "jabatan" => $karyawan->nama_jabatan,
+                    "divisi" => $karyawan->divisi,
+                    "departemen" => $karyawan->departemen,
+                ];
+            }
+            if ($rekanan) {
+                $profile = [
+                    "id" => $rekanan->id,
+                    "nama" => $rekanan->nama,
+                    "nama_penangung_jawab" => $rekanan->nama_penangung_jawab,
+                    "nik" => $rekanan->nik,
+                    "no_hp" => $rekanan->no_hp,
+                    "alamat" => $rekanan->alamat,
+                ];
+            }
+
 
             $result = [
                 'user' => $data,
+                'profile' => $profile,
                 'role' => $dataRole,
+                'permission' => $dataPermission,
                 'token' => $token
             ];
 

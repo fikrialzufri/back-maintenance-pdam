@@ -18,7 +18,7 @@ class CreateRekanansTable extends Migration
             $table->string('nama');
             $table->string('slug');
             $table->string('nama_penangung_jawab');
-            $table->string('ktp');
+            $table->string('nik');
             $table->string('no_hp');
             $table->longText('alamat');
             $table->foreignUuid('user_id')->nullable()->references('id')->on('users')->onDelete('cascade');

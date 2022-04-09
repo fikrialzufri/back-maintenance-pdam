@@ -107,7 +107,6 @@ class KaryawanController extends Controller
                     'Rekanan'
                 ),
                 'multiple'    =>  true,
-                'validasi'    => ['required'],
             ],
             [
                 'name'    => 'username',

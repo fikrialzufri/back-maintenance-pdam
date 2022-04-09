@@ -37,7 +37,7 @@ class RekananController extends Controller
 
             ],
             [
-                'name'    => 'ktp',
+                'name'    => 'nik',
                 'alias'    => 'Nomor KTP',
             ],
             [
@@ -78,9 +78,9 @@ class RekananController extends Controller
                 'validasi'    => ['required', 'min:1'],
             ],
             [
-                'name'    => 'ktp',
+                'name'    => 'nik',
                 'input'    => 'text',
-                'alias'    => 'Nomor KTP',
+                'alias'    => 'Nomor KTP / NIK',
                 'validasi'    => ['required', 'min:1', 'unique'],
             ],
             [

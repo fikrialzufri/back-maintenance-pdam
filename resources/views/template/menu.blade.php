@@ -112,9 +112,9 @@
                         </div>
                     </div>
                 @endcan
-                @can('create-rekanan')
+                @can('view-rekanan')
                     <div class="nav-item  {{ $segment1 == 'rekanan' ? 'active' : '' }}">
-                        <a href="{{ route('rekanan.create') }}">
+                        <a href="{{ route('rekanan.index') }}">
                             <i class="ik ik-briefcase dropdown-icon"></i>
                             <span>Rekanan</span>
                         </a>

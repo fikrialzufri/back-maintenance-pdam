@@ -23,7 +23,7 @@ class CreateAduanTable extends Migration
             $table->longText('body');
             $table->longText('lokasi');
             $table->string('lat_long');
-            $table->string('status');
+            $table->enum('status', ['draft', 'proses', 'selesai', 'disetujui']);
             $table->string('file', 2048)->nullable();
             $table->foreignUuid('user_id')->references('id')->on('users');
             $table->string('slug');

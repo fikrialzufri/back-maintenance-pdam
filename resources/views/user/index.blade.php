@@ -1,5 +1,5 @@
 @extends('template.app')
-
+@section('title', ucwords(str_replace([':', '_', '-', '*'], ' ', $title)))
 @section('content')
 
     <div class="container-fluid">

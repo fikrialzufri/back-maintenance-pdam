@@ -84,7 +84,7 @@ class AduanController extends Controller
         $aduan->body = $request->body;
         $aduan->lokasi = $request->lokasi;
         $aduan->lat_long = str_replace(array('LatLng(', ')'), '', $request->lat_long);
-        $aduan->status = "Terbuka";
+        $aduan->status = "draft";
         $aduan->user_id = auth()->user()->id;
         $aduan->save();
         $aduan->jenisAduan()->sync($request->jenis_aduan_id);
