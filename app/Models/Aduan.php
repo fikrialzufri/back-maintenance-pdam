@@ -65,21 +65,16 @@ class Aduan extends Model
 
     public function getStatusMobileAttribute()
     {
-        // 'draft', 'proses', 'selesai', 'disetujui'
         switch ($this->status) {
             case 'proses':
                 return 1;
                 break;
-            case 'proses':
+            case 'selesai':
                 return 2;
                 break;
-            case 'selesai':
+            case 'disetujui':
                 return 3;
                 break;
-            case 'disetujui':
-                return 4;
-                break;
-
             default:
                 return 0;
                 break;
