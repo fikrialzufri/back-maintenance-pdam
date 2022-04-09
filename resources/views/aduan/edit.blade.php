@@ -138,18 +138,18 @@ crossorigin="">
                             <div class="col-12">
                                 <div class="form-group">
                                     <div>
-                                        <label for="body" class=" form-control-label">Detail Aduan</label>
+                                        <label for="keterangan" class=" form-control-label">Keterangan</label>
                                     </div>
                                     <div>
                                         <textarea
-                                            class="{{ $errors->has('body') ? 'form-control is-invalid' : 'form-control' }}"
-                                            name="body" id="body" rows="10" placeholder="Detail Aduan"
-                                            required>{{ $aduan->body }}</textarea>
+                                            class="{{ $errors->has('keterangan') ? 'form-control is-invalid' : 'form-control' }}"
+                                            name="keterangan" id="keterangan" rows="10" placeholder="Keterangan"
+                                            required>{{ $aduan->keterangan }}</textarea>
                                     </div>
-                                    @if ($errors->has('body'))
-                                    Detail Aduan
+                                    @if ($errors->has('keterangan'))
+                                    Keterangan
                                     <span class="text-danger">
-                                        <strong id="textkk">Detail Aduan wajib diisi!</strong>
+                                        <strong id="textkk">Keterangan wajib diisi!</strong>
                                     </span>
                                     @endif
                                 </div>
@@ -239,16 +239,21 @@ crossorigin="">
     });
 
     var popup = L.popup();
+    var newMarker = {};
 
     function onMapClick(e) {
         // Auto Fill form lat_long
         document.getElementById('lat_long').value = e.latlng.toString()
 
+        map.removeLayer(marker);
+
         geocodeService.reverse().latlng(e.latlng).run(function (error, result) {
-            popup
-                .setLatLng(e.latlng)
-                .setContent("Anda memilih koordinat: " + e.latlng.toString() + " Dengan alamat: " + result.address.LongLabel)
-                .openOn(map);
+            if (newMarker != undefined) {
+                map.removeLayer(newMarker);
+            }
+
+            newMarker = L.marker(e.latlng).addTo(map)
+            .bindPopup("Anda memilih koordinat: " + e.latlng.toString() + " Dengan alamat: " + result.address.LongLabel).openPopup();
 
             // Auto Fill form lokasi
             document.getElementById('lokasi').value = result.address.LongLabel.toString()

@@ -20,11 +20,12 @@ class CreateAduanTable extends Migration
             $table->string('mps');
             $table->string('atas_nama');
             $table->string('sumber_informasi');
-            $table->longText('body');
+            $table->longText('keterangan');
             $table->longText('lokasi');
             $table->string('lat_long');
             $table->enum('status', ['draft', 'proses', 'selesai', 'disetujui']);
             $table->string('file', 2048)->nullable();
+            $table->foreignUuid('wilayah_id')->references('id')->on('wilayah');
             $table->foreignUuid('user_id')->references('id')->on('users');
             $table->string('slug');
             $table->timestamps();

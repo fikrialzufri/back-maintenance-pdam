@@ -49,6 +49,20 @@ class Karyawan extends Model
         }
     }
 
+    public function getWilayahAttribute()
+    {
+        if ($this->hasJabatan) {
+            return $this->hasJabatan->wilayah;
+        }
+    }
+
+    public function getIdWilayahAttribute()
+    {
+        if ($this->hasJabatan) {
+            return $this->hasJabatan->id_wilayah;
+        }
+    }
+
     public function getDivisiAttribute()
     {
         if ($this->hasJabatan) {

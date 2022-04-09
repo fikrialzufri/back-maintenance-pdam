@@ -18,11 +18,12 @@ class Aduan extends Model
         'mps',
         'atas_nama',
         'sumber_informasi',
-        'body',
+        'keterangan',
         'lokasi',
         'lat_long',
         'status',
         'file',
+        'wilayah_id',
         'user_id'
     ];
 
@@ -32,13 +33,34 @@ class Aduan extends Model
         $this->attributes['slug'] = Str::slug($value);
     }
 
+    public function hasJenisAduan()
+    {
+        return $this->belongsToMany(JenisAduan::class, 'aduan_jenis_aduan');
+    }
+
     public function hasUser()
     {
         return $this->hasOne(User::class, 'id', 'user_id');
     }
 
-    public function hasJenisAduan()
+    public function getUserAttribute()
     {
-        return $this->belongsToMany(JenisAduan::class, 'aduan_jenis_aduan');
+        if ($this->hasUser)
+        {
+            return $this->hasUser->name;
+        }
+    }
+
+    public function hasWilayah()
+    {
+        return $this->hasOne(Wilayah::class, 'id', 'wilayah_id');
+    }
+
+    public function getWilayahAttribute()
+    {
+        if ($this->hasWilayah)
+        {
+            return $this->hasWilayah->nama;
+        }
     }
 }

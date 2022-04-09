@@ -71,28 +71,34 @@ class AduanController extends Controller
             'no_ticket' => 'required|string',
             'mps' => 'required|string',
             'sumber_informasi' => 'required|string',
-            'body' => 'required|string',
+            'keterangan' => 'required|string',
             'lokasi' => 'required|string',
             'lat_long' => 'required|string',
         ], $messages);
 
+        $dataAduan = Aduan::count();
+        if ($dataAduan >= 1) {
+            $no = str_pad($dataAduan + 1, 4, "0", STR_PAD_LEFT);
+            $noAduan =  $no . "/" . "ADB/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
+        } else {
+            $no = str_pad(1, 4, "0", STR_PAD_LEFT);
+            $noAduan =  $no . "/" . "ADB/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
+        }
+
         $aduan = new Aduan();
         $aduan->no_ticket = $request->no_ticket;
+        $aduan->no_aduan = $noAduan;
         $aduan->mps = $request->mps;
-        $aduan->no_aduan = "Aduan-" . date('YmdHis') . "-" . Str::random(5);
         $aduan->atas_nama = $request->atas_nama;
         $aduan->sumber_informasi = $request->sumber_informasi;
-        $aduan->body = $request->body;
+        $aduan->keterangan = $request->keterangan;
         $aduan->lokasi = $request->lokasi;
         $aduan->lat_long = str_replace(array('LatLng(', ')'), '', $request->lat_long);
         $aduan->status = "draft";
+        $aduan->wilayah_id = auth()->user()->karyawan->id_wilayah;
         $aduan->user_id = auth()->user()->id;
         $aduan->save();
-        $aduan->jenisAduan()->sync($request->jenis_aduan_id);
-
-        $perintah_pelaksana = new PerintahPelaksana;
-        $perintah_pelaksana->aduan_id = $aduan->id;
-        $perintah_pelaksana->save();
+        $aduan->hasJenisAduan()->sync($request->jenis_aduan_id);
 
         // TODO:
         // Notifikasi
@@ -105,7 +111,7 @@ class AduanController extends Controller
     public function edit(Request $request, $slug)
     {
         $aduan = Aduan::where('slug', $slug)->first();
-        $jenisAduan = $aduan->jenisAduan->pluck('id')->toArray();
+        $jenisAduan = $aduan->hasJenisAduan->pluck('id')->toArray();
         $jenis_aduan = JenisAduan::orderBy('nama')->get();
         $title = "Ubah Aduan " . $aduan->title;
         $action = route('aduan.update', $slug);
@@ -133,7 +139,7 @@ class AduanController extends Controller
             'no_ticket' => 'required|string',
             'mps' => 'required|string',
             'sumber_informasi' => 'required|string',
-            'body' => 'required|string',
+            'keterangan' => 'required|string',
             'lokasi' => 'required|string',
             'lat_long' => 'required|string',
         ], $messages);
@@ -143,12 +149,12 @@ class AduanController extends Controller
         $aduan->mps = $request->mps;
         $aduan->atas_nama = $request->atas_nama;
         $aduan->sumber_informasi = $request->sumber_informasi;
-        $aduan->body = $request->body;
+        $aduan->keterangan = $request->keterangan;
         $aduan->lokasi = $request->lokasi;
         $aduan->lat_long = str_replace(array('LatLng(', ')'), '', $request->lat_long);
         $aduan->user_id = auth()->user()->id;
         $aduan->save();
-        $aduan->jenisAduan()->sync($request->jenis_aduan_id);
+        $aduan->hasJenisAduan()->sync($request->jenis_aduan_id);
 
         return redirect()->route('aduan.index')->with('message', 'Aduan berhasil diubah');
     }
@@ -157,12 +163,7 @@ class AduanController extends Controller
     {
         $aduan = Aduan::where('slug', $slug)->first();
         $aduan->delete();
-        $aduan->jenisAduan()->detach();
-        
-        // TODO: CREATE DELETE FOR DETAIL PERINTAH PELAKSANA FIRST
-
-        $perintah_pelaksana = PerintahPelaksana::where('aduan_id', $aduan->id)->first();
-        $perintah_pelaksana->delete();
+        $aduan->hasJenisAduan()->detach();
 
         return redirect()->route('aduan.index')->with('message', 'Aduan berhasil dihapus');
     }

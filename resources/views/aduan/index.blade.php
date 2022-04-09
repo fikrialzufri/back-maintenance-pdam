@@ -23,9 +23,11 @@
                                     <th>Nomor Aduan</th>
                                     <th>Atas Nama</th>
                                     <th>Sumber Informasi</th>
+                                    <th>Tanggal</th>
+                                    <th>Admin Wilayah</th>
+                                    <th>Wilayah</th>
                                     <th>Lokasi</th>
                                     <th>Status</th>
-                                    <th>Tanggal</th>
                                     <th class="text-center" width="20%">Aksi</th>
                                 </tr>
                             </thead>
@@ -37,9 +39,11 @@
                                         <td>{{ $item->no_aduan }}</td>
                                         <td>{{ $item->atas_nama }}</td>
                                         <td>{{ $item->sumber_informasi }}</td>
-                                        <td>{{ $item->lokasi }}</td>
-                                        <td>{{ $item->status }}</td>
                                         <td>{{ tanggal_indonesia($item->created_at) }}</td>
+                                        <td>{{ ucfirst($item->user) }}</td>
+                                        <td>{{ $item->wilayah }}</td>
+                                        <td>{{ $item->lokasi }}</td>
+                                        <td>{{ ucfirst($item->status) }}</td>
                                         <td class="text-center">
                                             <a href="{{ route('aduan.edit', $item->slug) }}"
                                                 class="btn btn-sm btn-warning text-light">
@@ -58,7 +62,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="10">Data Aduan tidak ada</td>
+                                        <td colspan="11">Data Aduan tidak ada</td>
                                     </tr>
                                 @endforelse
                             </tbody>
