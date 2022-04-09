@@ -1,5 +1,5 @@
 @extends('template.app')
-@section('title', 'Tambah Aduan')
+@section('title', 'Ubah Aduan ' . $aduan->no_aduan)
 
 @push('head')
 <!-- Load Leaflet from CDN -->
@@ -27,6 +27,7 @@ crossorigin="">
                 </div>
                 <form action="{{ $action }}" method="post" role="form" enctype="multipart/form-data">
                     @csrf
+                    @method('PUT')
                     <div class="card-body">
                         <div class="row">
                             <div class="col-12">
@@ -37,7 +38,7 @@ crossorigin="">
                                     <div>
                                         <input type="text" name="no_ticket" placeholder="Nomor Tiket"
                                             class="{{ $errors->has('no_ticket') ? 'form-control is-invalid' : 'form-control' }}"
-                                            value="{{ old('no_ticket') }}" required id="">
+                                            value="{{ $aduan->no_ticket }}" required id="">
                                     </div>
                                     @if ($errors->has('no_ticket'))
                                     Nomor Tiket
@@ -57,7 +58,7 @@ crossorigin="">
                                     <div>
                                         <input type="text" name="mps" placeholder="MPS"
                                             class="{{ $errors->has('mps') ? 'form-control is-invalid' : 'form-control' }}"
-                                            value="{{ old('mps') }}" required id="">
+                                            value="{{ $aduan->mps }}" required id="">
                                     </div>
                                     @if ($errors->has('mps'))
                                     MPS
@@ -77,7 +78,7 @@ crossorigin="">
                                     <div>
                                         <input type="text" name="atas_nama" placeholder="Atas Nama"
                                             class="{{ $errors->has('atas_nama') ? 'form-control is-invalid' : 'form-control' }}"
-                                            value="{{ old('atas_nama') }}" required id="">
+                                            value="{{ $aduan->atas_nama }}" required id="">
                                     </div>
                                     @if ($errors->has('atas_nama'))
                                     Atas Nama
@@ -97,7 +98,7 @@ crossorigin="">
                                     <div>
                                         <input type="text" name="sumber_informasi" placeholder="Sumber Informasi"
                                             class="{{ $errors->has('sumber_informasi') ? 'form-control is-invalid' : 'form-control' }}"
-                                            value="{{ old('sumber_informasi') }}" required id="">
+                                            value="{{ $aduan->sumber_informasi }}" required id="">
                                     </div>
                                     @if ($errors->has('sumber_informasi'))
                                     Sumber Informasi
@@ -117,7 +118,7 @@ crossorigin="">
                                     <div>
                                         @forelse ($jenis_aduan as $index => $item)
                                         <div>
-                                            <input class="border-checkbox" type="checkbox" name="jenis_aduan_id[]" value="{{ $item->id }}" id="checkbox{{ $index }}">
+                                            <input class="border-checkbox" type="checkbox" name="jenis_aduan_id[]" value="{{ $item->id }}" id="checkbox{{ $index }}" {{ in_array($item->id, $jenisAduan) ? 'checked' : ''}}>
                                             <label class="border-checkbox-label" for="checkbox{{ $index }}">{{ $item->nama }}</label>
                                         </div>
                                         @empty
@@ -143,7 +144,7 @@ crossorigin="">
                                         <textarea
                                             class="{{ $errors->has('body') ? 'form-control is-invalid' : 'form-control' }}"
                                             name="body" id="body" rows="10" placeholder="Detail Aduan"
-                                            required>{{ old('body') }}</textarea>
+                                            required>{{ $aduan->body }}</textarea>
                                     </div>
                                     @if ($errors->has('body'))
                                     Detail Aduan
@@ -172,7 +173,7 @@ crossorigin="">
                                     <div>
                                         <input type="text" name="lokasi" placeholder="Lokasi"
                                             class="{{ $errors->has('lokasi') ? 'form-control is-invalid' : 'form-control' }}"
-                                            value="{{ old('lokasi') }}" required id="lokasi">
+                                            value="{{ $aduan->lokasi }}" required id="lokasi">
                                     </div>
                                 </div>
                             </div>
@@ -186,7 +187,7 @@ crossorigin="">
                                     <div>
                                         <input type="text" name="lat_long" placeholder="Koordinat"
                                             class="{{ $errors->has('lat_long') ? 'form-control is-invalid' : 'form-control' }}"
-                                            value="{{ old('lat_long') }}" required id="lat_long">
+                                            value="{{ $aduan->lat_long }}" required id="lat_long">
                                     </div>
                                 </div>
                             </div>
@@ -222,14 +223,16 @@ crossorigin="">
     crossorigin=""></script>
 
 <script>
-    var map = L.map('map').setView([-0.5096845, 117.0354417], 13);
+    var lat_long = "{{ $aduan->lat_long }}";
+    var lokasi = "{{ $aduan->lokasi }}";
+    var map = L.map('map').setView(lat_long.split(","), 13);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
-    var marker = L.marker([-0.5096845, 117.0354417]).addTo(map)
-        .bindPopup('<b>Kota Samarinda</b>').openPopup();
+    var marker = L.marker(lat_long.split(",")).addTo(map)
+        .bindPopup('<b>' + lokasi + '</b>').openPopup();
 
     var geocodeService = L.esri.Geocoding.geocodeService({
         apikey: "AAPK8176d782dece458a826c6ad408eeadf1rNg3Erse47Uah_Ij6q4nyG-WI3ryr5IBT8nb3hRNh2TfpyCkl0wVQjdk3nzJbBFo" // replace with your api key - https://developers.arcgis.com

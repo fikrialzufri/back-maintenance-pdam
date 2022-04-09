@@ -54,7 +54,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('jenis-aduan', JenisAduanController::class, ['names' => 'jenis_aduan']);
 
     // Aduan
-    Route::resource('aduan', AduanController::class);
+    Route::resource('aduan', AduanController::class)->except('show');
 
     // Karyawan
     Route::resource('departemen', DepartemenController::class);

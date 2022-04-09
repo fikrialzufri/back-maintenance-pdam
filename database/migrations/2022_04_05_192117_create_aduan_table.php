@@ -16,14 +16,15 @@ class CreateAduanTable extends Migration
         Schema::create('aduan', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('no_ticket');
-            $table->string('title');
+            $table->string('no_aduan');
+            $table->string('mps');
+            $table->string('atas_nama');
             $table->string('sumber_informasi');
             $table->longText('body');
             $table->longText('lokasi');
             $table->string('lat_long');
             $table->string('status');
             $table->string('file', 2048)->nullable();
-            $table->foreignUuid('jenis_aduan_id')->references('id')->on('jenis_aduan');
             $table->foreignUuid('user_id')->references('id')->on('users');
             $table->string('slug');
             $table->timestamps();

@@ -15,13 +15,13 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                        <table class="table table-bordered  table-responsive" width="100%">
+                        <table class="table table-bordered table-responsive" width="100%">
                             <thead>
                                 <tr>
                                     <th>#</th>
                                     <th>Nomor Tiket</th>
-                                    <th>Title</th>
-                                    <th>Jenis Aduan</th>
+                                    <th>Nomor Aduan</th>
+                                    <th>Atas Nama</th>
                                     <th>Sumber Informasi</th>
                                     <th>Lokasi</th>
                                     <th>Status</th>
@@ -34,8 +34,8 @@
                                     <tr>
                                         <td>{{ ++$no }}</td>
                                         <td>{{ $item->no_ticket }}</td>
-                                        <td>{{ $item->title }}</td>
-                                        <td>{{ $item->jenis_aduan->name }}</td>
+                                        <td>{{ $item->no_aduan }}</td>
+                                        <td>{{ $item->atas_nama }}</td>
                                         <td>{{ $item->sumber_informasi }}</td>
                                         <td>{{ $item->lokasi }}</td>
                                         <td>{{ $item->status }}</td>
