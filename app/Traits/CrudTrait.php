@@ -356,8 +356,10 @@ trait CrudTrait
             foreach ($this->oneToMany as $item) {
                 $hasRalation = 'has' . ucfirst($item);
                 $field = $item . '_id';
-                $valueField = $data->$hasRalation()->first()->id;
-                $data->$field = $valueField;
+                if (count($data->$hasRalation) != 0) {
+                    $valueField = $data->$hasRalation()->first()->id;
+                    $data->$field = $valueField;
+                }
             }
         }
 

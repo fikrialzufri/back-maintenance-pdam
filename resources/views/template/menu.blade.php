@@ -26,7 +26,7 @@
                 @canany('view-satuan', 'view-kategori', 'view-jenis', 'view-item')
                     <div class="nav-lavel">{{ __('Master Data') }} </div>
                     <div
-                        class="nav-item {{ $segment1 == 'satuan' || $segment1 == 'item' || $segment1 == 'kategori' || $segment1 == 'jenis'? 'active open': '' }} has-sub">
+                        class="nav-item {{ $segment1 == 'satuan' ||$segment1 == 'jenis-aduan' ||$segment1 == 'item' ||$segment1 == 'kategori' ||$segment1 == 'jenis'? 'active open': '' }} has-sub">
                         <a href="#"><i class="ik ik-box"></i><span>{{ __('Item') }}</span></a>
                         <div class="submenu-content">
                             @can('view-item')
@@ -55,7 +55,7 @@
                             @endcan
                             @can('view-jenis-aduan')
                                 <a href="{{ route('jenis_aduan.index') }}"
-                                    class="menu-item {{ $segment1 == 'jenis_aduan' ? 'active' : '' }}">
+                                    class="menu-item {{ $segment1 == 'jenis-aduan' ? 'active' : '' }}">
                                     Jenis Aduan
                                 </a>
                             @endcan
