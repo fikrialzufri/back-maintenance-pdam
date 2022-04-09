@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\JenisAduan;
 use App\Models\Aduan;
-use Str;
 
 class AduanController extends Controller
 {
@@ -20,30 +19,21 @@ class AduanController extends Controller
 
     public function index(Request $request)
     {
-        $nomor_aduan = $request->nomor_aduan;
+        $no_aduan = $request->no_aduan;
         $jenis = $request->jenis;
         $result = [];
-
+        $message = 'Detail Item';
         try {
             $message = 'Data Aduan';
 
             $query = $this->model();
-            $query = $query->where('nomor_aduan',  $nomor_aduan)->orderBy('created_at');
+            $query = $query->where('no_aduan',  $no_aduan)->orderBy('created_at');
             $data = $query->get();
-            // foreach ($data as $key => $value) {
-            //     $result[$key] = [
-            //         'nama' =>  $value->nama,
-            //         'slug' =>  $value->slug,
-            //         'satuan' =>  $value->satuan,
-            //         'jenis' =>  $value->jenis,
-            //     ];
-            // }
             if (count($result) == 0) {
-                $message = 'Data Item Belum Ada';
+                $message = 'Data Aduan Belum Ada';
             }
             return $this->sendResponse($data, $message, 200);
         } catch (\Throwable $th) {
-            $message = 'Detail Item';
             $response = [
                 'success' => false,
                 'message' => $message,

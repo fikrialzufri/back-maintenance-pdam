@@ -132,7 +132,7 @@ class KaryawanController extends Controller
                 'name'    => 'role_id',
                 'input'    => 'combo',
                 'alias'    => 'Hak Akses',
-                'value' => $this->combobox('Role', 'slug', 'superadmin', '!='),
+                'value' => $this->combobox('Role', 'slug', ['superadmin', 'rekanan'], '!='),
                 'validasi'    => ['required'],
                 'extraForm' => 'user',
                 'hasMany'    => ['role'],

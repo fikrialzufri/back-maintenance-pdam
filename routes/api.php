@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AduanController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ItemController;
 use App\Http\Controllers\Api\JenisController;
@@ -29,6 +30,9 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     // Jenis Aduan
     Route::get('jenis-aduan', JenisAduanController::class . '@index')->name('jenis-aduan.api.index');
+
+    // Aduan
+    Route::get('aduan', AduanController::class . '@index')->name('aduan.api.index');
 
     Route::get('refresh', Aduan::class . '@refresh')->name('auth.refresh');
 });

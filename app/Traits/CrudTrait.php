@@ -626,7 +626,15 @@ trait CrudTrait
         $model = new $model;
         $query = $model->query();
         if ($colom) {
-            $query = $query->where($colom, $operator, $field);
+            if ($field) {
+                if (is_array($field)) {
+                    foreach ($field as $key => $value) {
+                        $query = $query->where($colom, $operator, $value);
+                    }
+                } else {
+                    $query = $query->where($colom, $operator, $field);
+                }
+            }
         }
         if ($sort) {
             $query->orderBy($sort);
@@ -639,7 +647,13 @@ trait CrudTrait
             $modelSecond = new $modelSecond;
             $querySecond = $modelSecond->query();
             if ($colomAppend) {
-                $querySecond = $querySecond->where($colomAppend, $operatorAppend, $fieldAppend);
+                if (is_array($fieldAppend)) {
+                    foreach ($fieldAppend as $key => $value) {
+                        $querySecond = $querySecond->where($colomAppend, $operatorAppend, $value);
+                    }
+                } else {
+                    $querySecond = $querySecond->where($colomAppend, $operatorAppend, $fieldAppend);
+                }
             }
             if ($sortAppend) {
                 $querySecond->orderBy($sortAppend);
