@@ -32,17 +32,12 @@ class Aduan extends Model
         $this->attributes['slug'] = Str::slug($value);
     }
 
-    public function jenis_aduan()
-    {
-        return $this->hasOne(JenisAduan::class, 'id', 'jenis_aduan_id');
-    }
-
-    public function user()
+    public function hasUser()
     {
         return $this->hasOne(User::class, 'id', 'user_id');
     }
 
-    public function jenisAduan()
+    public function hasJenisAduan()
     {
         return $this->belongsToMany(JenisAduan::class, 'aduan_jenis_aduan');
     }

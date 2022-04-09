@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\JenisAduan;
 use App\Models\Aduan;
+use App\Models\PerintahPelaksana;
 use Str;
 
 class AduanController extends Controller
@@ -89,6 +90,10 @@ class AduanController extends Controller
         $aduan->save();
         $aduan->jenisAduan()->sync($request->jenis_aduan_id);
 
+        $perintah_pelaksana = new PerintahPelaksana;
+        $perintah_pelaksana->aduan_id = $aduan->id;
+        $perintah_pelaksana->save();
+
         // TODO:
         // Notifikasi
         // Masuk ke table notifikasi ->
@@ -153,6 +158,12 @@ class AduanController extends Controller
         $aduan = Aduan::where('slug', $slug)->first();
         $aduan->delete();
         $aduan->jenisAduan()->detach();
+        
+        // TODO: CREATE DELETE FOR DETAIL PERINTAH PELAKSANA FIRST
+
+        $perintah_pelaksana = PerintahPelaksana::where('aduan_id', $aduan->id)->first();
+        $perintah_pelaksana->delete();
+
         return redirect()->route('aduan.index')->with('message', 'Aduan berhasil dihapus');
     }
 }
