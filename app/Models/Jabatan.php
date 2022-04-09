@@ -47,4 +47,11 @@ class Jabatan extends Model
             return $this->hasWilayah->nama;
         }
     }
+
+    public function getIdWilayahAttribute()
+    {
+        if ($this->hasWilayah) {
+            return $this->hasWilayah->id;
+        }
+    }
 }
