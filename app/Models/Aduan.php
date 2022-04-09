@@ -12,6 +12,7 @@ class Aduan extends Model
 
     protected $table = 'aduan';
     protected $guarded = ['id'];
+    protected $appends = ['status_mobile'];
     protected $fillable = [
         'no_ticket',
         'no_aduan',
@@ -45,8 +46,7 @@ class Aduan extends Model
 
     public function getUserAttribute()
     {
-        if ($this->hasUser)
-        {
+        if ($this->hasUser) {
             return $this->hasUser->name;
         }
     }
@@ -58,9 +58,32 @@ class Aduan extends Model
 
     public function getWilayahAttribute()
     {
-        if ($this->hasWilayah)
-        {
+        if ($this->hasWilayah) {
             return $this->hasWilayah->nama;
         }
+    }
+
+    public function getStatusMobileAttribute()
+    {
+        // 'draft', 'proses', 'selesai', 'disetujui'
+        switch ($this->status) {
+            case 'proses':
+                return 1;
+                break;
+            case 'proses':
+                return 2;
+                break;
+            case 'selesai':
+                return 3;
+                break;
+            case 'disetujui':
+                return 4;
+                break;
+
+            default:
+                return 0;
+                break;
+        }
+        return 's';
     }
 }

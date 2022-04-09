@@ -22,13 +22,19 @@ class AduanController extends Controller
         $no_aduan = $request->no_aduan;
         $jenis = $request->jenis;
         $result = [];
-        $message = 'Detail Item';
+        $message = 'Detail Aduan';
+        $wilayah_id = auth()->user()->karyawan->id_wilayah;
         try {
             $message = 'Data Aduan';
 
             $query = $this->model();
-            $query = $query->where('no_aduan',  $no_aduan)->orderBy('created_at');
-            $data = $query->get();
+            if ($no_aduan != '') {
+                $query = $query->where('no_aduan',  $no_aduan);
+            }
+            if ($wilayah_id != '') {
+                $query = $query->where('wilayah_id',  $wilayah_id);
+            }
+            $data = $query->orderBy('created_at')->get();
             if (count($result) == 0) {
                 $message = 'Data Aduan Belum Ada';
             }

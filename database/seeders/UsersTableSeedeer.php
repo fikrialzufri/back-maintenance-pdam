@@ -29,6 +29,10 @@ class UsersTableSeedeer extends Seeder
         $RekananRole->name = 'Rekanan';
         $RekananRole->save();
 
+        $KaryawanRole = new Role();
+        $KaryawanRole->name = 'Karyawan';
+        $KaryawanRole->save();
+
         $superadmin = Role::where('slug', 'superadmin')->first();
 
         $superadminUser = new User();
