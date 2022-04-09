@@ -40,6 +40,10 @@ class KaryawanController extends Controller
                 'alias'    => 'Divisi',
             ],
             [
+                'name'    => 'wilayah',
+                'alias'    => 'Wilayah',
+            ],
+            [
                 'name'    => 'departemen',
                 'alias'    => 'Departemen',
             ],
@@ -95,7 +99,7 @@ class KaryawanController extends Controller
                     null,
                     null,
                     null,
-                    ['divisi', 'departemen'],
+                    ['divisi', 'wilayah', 'departemen'],
                 ),
                 'validasi'    => ['required'],
             ],
