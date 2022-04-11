@@ -13,12 +13,13 @@ class CreatePelaksanaanPekerjaanItemTable extends Migration
      */
     public function up()
     {
-        Schema::create('pelaksanaan_pekerjaan_item', function (Blueprint $table) {
+        Schema::create('pelaksanaan_item', function (Blueprint $table) {
             //FOREIGN KEY CONSTRAINTS
             $table->string('pelaksanaan_pekerjaan_id')->references('id')->on('pelaksanaan_pekerjaan')->onDelete('cascade');
             $table->string('item_id')->references('id')->on('item')->onDelete('cascade');
             $table->integer('qty');
             $table->integer('harga');
+            $table->string('keterangan')->nullable();
             //SETTING THE PRIMARY KEYS
             $table->primary(['pelaksanaan_pekerjaan_id', 'item_id']);
             $table->timestamps();

@@ -13,7 +13,7 @@ class CreateTagihanPelaksanaanPekerjaanTable extends Migration
      */
     public function up()
     {
-        Schema::create('tagihan_pelaksanaan_pekerjaan', function (Blueprint $table) {
+        Schema::create('tagihan_pelaksanaan', function (Blueprint $table) {
             //FOREIGN KEY CONSTRAINTS
             $table->string('tagihan_id')->references('id')->on('tagihan')->onDelete('cascade');
             $table->string('pelaksanaan_pekerjaan_id')->references('id')->on('pelaksanaan_pekerjaan')->onDelete('cascade');

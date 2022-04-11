@@ -13,7 +13,7 @@ class CreatePenunjukanPekerjaanUserTable extends Migration
      */
     public function up()
     {
-        Schema::create('penunjukan_pekerjaan_user', function (Blueprint $table) {
+        Schema::create('penunjukan_user', function (Blueprint $table) {
             //FOREIGN KEY CONSTRAINTS
             $table->string('penunjukan_pekerjaan_id')->references('id')->on('penunjukan_pekerjaan')->onDelete('cascade');
             $table->string('user_id')->references('id')->on('users')->onDelete('cascade');

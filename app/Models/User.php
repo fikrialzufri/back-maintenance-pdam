@@ -56,4 +56,25 @@ class User extends Authenticatable
     {
         return $this->hasOne(Karyawan::class, 'user_id');
     }
+
+
+    public function getIdWilyahAttribute()
+    {
+        if ($this->karyawan) {
+            return $this->karyawan->id_wilayah;
+        }
+    }
+
+
+    public function hasRekanan()
+    {
+        return $this->hasOne(Rekanan::class, 'user_id');
+    }
+
+    public function getIdRekananAttribute()
+    {
+        if ($this->hasRekanan) {
+            return $this->hasRekanan->id;
+        }
+    }
 }

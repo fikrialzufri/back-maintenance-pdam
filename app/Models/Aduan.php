@@ -28,9 +28,9 @@ class Aduan extends Model
         'user_id'
     ];
 
-    public function setNoTicketAttribute($value)
+    public function setNoAduanAttribute($value)
     {
-        $this->attributes['no_ticket'] = $value;
+        $this->attributes['no_aduan'] = $value;
         $this->attributes['slug'] = Str::slug($value);
     }
 

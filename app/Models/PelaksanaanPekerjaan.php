@@ -10,10 +10,10 @@ class PelaksanaanPekerjaan extends Model
 {
     use HasFactory, UsesUuid;
 
-    protected $table = 'penunjukan_pekerjaan';
+    protected $table = 'pelaksanaan_pekerjaan';
     protected $guarded = ['id'];
     protected $fillable = [
-        'nomor_pekerjaan',
+        'nomor_pelaksanaan_pekerjaan',
         'status',
         'aduan_id',
         'rekanan_id',
@@ -22,7 +22,7 @@ class PelaksanaanPekerjaan extends Model
 
     public function setNomorPekerjaanAttribute($value)
     {
-        $this->attributes['nomor_pekerjaan'] = $value;
+        $this->attributes['nomor_pelaksanaan_pekerjaan'] = $value;
         $this->attributes['slug'] = Str::slug($value);
     }
 
@@ -31,9 +31,9 @@ class PelaksanaanPekerjaan extends Model
         return $this->hasOne(Rekanan::class, 'id', 'rekanan_id');
     }
 
-    public function hasAduan()
+    public function hasPenunjukanPekerjaan()
     {
-        return $this->hasOne(Aduan::class, 'id', 'aduan_id');
+        return $this->hasOne(PenunjukanPekerjaan::class, 'id', 'penunjukan_pekerjaan_id');
     }
 
     public function hasUser()
@@ -43,6 +43,24 @@ class PelaksanaanPekerjaan extends Model
 
     public function hasUserMany()
     {
-        return $this->belongsToMany(User::class, 'id', 'user_id')->withTimestamps();
+        return $this->belongsToMany(User::class, 'pelaksanaan_user')->with('keterangan')->withTimestamps();
+    }
+
+    public function getStatusMobileAttribute()
+    {
+        switch ($this->status) {
+            case 'proses':
+                return 1;
+                break;
+            case 'selesai':
+                return 2;
+                break;
+            case 'disetujui':
+                return 3;
+                break;
+            default:
+                return 0;
+                break;
+        }
     }
 }

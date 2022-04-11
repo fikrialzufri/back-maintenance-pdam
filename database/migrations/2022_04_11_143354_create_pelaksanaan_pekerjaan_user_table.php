@@ -13,7 +13,7 @@ class CreatePelaksanaanPekerjaanUserTable extends Migration
      */
     public function up()
     {
-        Schema::create('pelaksanaan_pekerjaan_user', function (Blueprint $table) {
+        Schema::create('pelaksanaan_user', function (Blueprint $table) {
             //FOREIGN KEY CONSTRAINTS
             $table->string('pelaksanaan_pekerjaan_id')->references('id')->on('pelaksanaan_pekerjaan')->onDelete('cascade');
             $table->string('user_id')->references('id')->on('users')->onDelete('cascade');

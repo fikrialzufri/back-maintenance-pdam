@@ -20,10 +20,10 @@ class AduanController extends Controller
     public function index(Request $request)
     {
         $no_aduan = $request->no_aduan;
-        $jenis = $request->jenis;
+        $status = $request->status;
         $result = [];
         $message = 'Detail Aduan';
-        $wilayah_id = auth()->user()->karyawan->id_wilayah;
+        $wilayah_id = auth()->user()->id_wilayah;
         try {
             $message = 'Data Aduan';
 
@@ -33,6 +33,9 @@ class AduanController extends Controller
             }
             if ($wilayah_id != '') {
                 $query = $query->where('wilayah_id',  $wilayah_id);
+            }
+            if ($status != '') {
+                $query = $query->where('status',  $status);
             }
             $data = $query->orderBy('created_at')->get();
             if (count($result) == 0) {

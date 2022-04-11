@@ -5,6 +5,8 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ItemController;
 use App\Http\Controllers\Api\JenisController;
 use App\Http\Controllers\Api\JenisAduanController;
+use App\Http\Controllers\Api\PelaksanaanPekerjaanController;
+use App\Http\Controllers\Api\PenunjukanPekerjaanController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
 
@@ -34,6 +36,22 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     // Aduan
     Route::get('aduan', AduanController::class . '@index')->name('aduan.api.index');
 
-    Route::get('refresh', Aduan::class . '@refresh')->name('auth.refresh');
+    Route::get('penunjukan-pekerjaan', PenunjukanPekerjaanController::class . '@index')->name('penunjukan-pekerjaan.api.index');
+
+    Route::post('penunjukan-pekerjaan', PenunjukanPekerjaanController::class . '@store')->name('penunjukan-pekerjaan.api.store');
+
+    // aduan
+    Route::get('pelaksanaan-pekerjaan', PelaksanaanPekerjaanController::class . '@index')->name('pelaksanaan-pekerjaan.api.index');
+
+    Route::post(
+        'pelaksanaan-pekerjaan',
+        PelaksanaanPekerjaanController::class . '@store'
+    )->name('pelaksanaan-pekerjaan.api.store');
+
+    Route::put('pelaksanaan-pekerjaan-proses', PelaksanaanPekerjaanController::class . '@proses')->name('pelaksanaan-pekerjaan.api.proses');
+
+    Route::put('pelaksanaan-pekerjaan-proses-akhir', PelaksanaanPekerjaanController::class . '@prosesAkhir')->name('pelaksanaan-pekerjaan.api.proses.akhir');
+
+    Route::get('refresh', AuthController::class . '@refresh')->name('auth.refresh');
 });
 Route::post('login', [AuthController::class, 'login'])->name('auth.login');

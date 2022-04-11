@@ -26,6 +26,11 @@ class PenunjukanPekerjaan extends Model
         $this->attributes['slug'] = Str::slug($value);
     }
 
+    public function hasAduan()
+    {
+        return $this->hasOne(Aduan::class, 'id', 'aduan_id');
+    }
+
     public function hasRekanan()
     {
         return $this->hasOne(Rekanan::class, 'id', 'rekanan_id');
@@ -43,11 +48,35 @@ class PenunjukanPekerjaan extends Model
 
     public function hasItem()
     {
-        return $this->belongsToMany(Item::class, 'id', 'item_id')->withPivot('qty','harga')->withTimestamps();
+        return $this->belongsToMany(Item::class, 'pelaksanaan_item')->withPivot('qty','harga')->withTimestamps();
     }
 
     public function hasUserMany()
     {
-        return $this->belongsToMany(User::class, 'id', 'user_id')->withTimestamps();
+        return $this->belongsToMany(User::class, 'penunjukan_user')->withPivot('keterangan')->withTimestamps();
+    }
+
+    public function getStatusMobileAttribute()
+    {
+        switch ($this->status) {
+            case 'diterima':
+                return 1;
+                break;
+            case 'proses':
+                return 2;
+                break;
+            case 'proses-akhir':
+                return 3;
+                break;
+            case 'selesai':
+                return 4;
+                break;
+            case 'disetujui':
+                return 5;
+                break;
+            default:
+                return 0;
+                break;
+        }
     }
 }
