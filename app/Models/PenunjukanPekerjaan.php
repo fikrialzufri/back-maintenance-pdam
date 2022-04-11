@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use App\Traits\UsesUuid;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class PenunjukanPekerjaan extends Model
 {
-    use UsesUuid;
+    use HasFactory, UsesUuid;
 
     protected $table = 'penunjukan_pekerjaan';
     protected $guarded = ['id'];
@@ -19,14 +20,14 @@ class PenunjukanPekerjaan extends Model
         'user_id'
     ];
 
-    public function hasAduan()
-    {
-        return $this->hasOne(Aduan::class, 'id', 'aduan_id');
-    }
-
     public function hasRekanan()
     {
         return $this->hasOne(Rekanan::class, 'id', 'rekanan_id');
+    }
+
+    public function hasAduan()
+    {
+        return $this->hasOne(Aduan::class, 'id', 'aduan_id');
     }
 
     public function hasUser()
