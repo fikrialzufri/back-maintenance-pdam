@@ -85,6 +85,7 @@ class PelaksanaanPekerjaanController extends Controller
             $data->nomor_pelaksanaan_pekerjaan = $nomor_pelaksanaan_pekerjaan;
             $data->penunjukan_pekerjaan_id = $penunjukanPekerjaan->id;
             $data->rekanan_id = $rekanan_id;
+            $data->aduan_id = $penunjukanPekerjaan->aduan_id;
             $data->user_id = $user_id;
             $data->status = 'draft';
             $data->save();
@@ -143,8 +144,8 @@ class PelaksanaanPekerjaanController extends Controller
                 }
             }
 
-            $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $data->penunjukan_pekerjaan_id)->first();
-            $penunjukanPekerjaan->status = 'selesai';
+            $penunjukanPekerjaan = PenunjukanPekerjaan::find($data->penunjukan_pekerjaan_id);
+            $penunjukanPekerjaan->status = 'proses';
             $penunjukanPekerjaan->save();
 
             // update histori user
@@ -154,7 +155,9 @@ class PelaksanaanPekerjaanController extends Controller
 
             $syncData  = array_combine($data->id, $keterangan);
 
-            $data->hasItem()->sync($syncData);
+            $data->hasUserMany()->sync($syncData);
+
+            $penunjukanPekerjaan->hasUserMany()->sync($syncData);
 
             $message = 'Berhasil Menyimpan Pelaksanaan Pekerjaan';
             return $this->sendResponse($data, $message, 200);
@@ -228,7 +231,7 @@ class PelaksanaanPekerjaanController extends Controller
 
             $syncData  = array_combine($data->id, $keterangan);
 
-            $data->hasItem()->sync($syncData);
+            $data->hasUserMany()->sync($syncData);
 
             $message = 'Berhasil Menyimpan Pelaksanaan Pekerjaan';
             return $this->sendResponse($data, $message, 200);
@@ -288,7 +291,17 @@ class PelaksanaanPekerjaanController extends Controller
 
             $syncData  = array_combine($data->id, $keterangan);
 
-            $data->hasItem()->sync($syncData);
+            $data->hasUserMany()->sync($syncData);
+
+            $penunjukanPekerjaan = PenunjukanPekerjaan::find($data->penunjukan_pekerjaan_id);
+            $penunjukanPekerjaan->status = 'selesai';
+            $penunjukanPekerjaan->save();
+            $penunjukanPekerjaan->hasUserMany()->sync($syncData);
+
+            $aduan = Aduan::find($data->id_aduan);
+            $aduan->status = 'selesai';
+            $aduan->save();
+            $aduan->hasUserMany()->sync($syncData);
 
             $message = 'Berhasil Menyimpan Pelaksanaan Pekerjaan';
             return $this->sendResponse($data, $message, 200);

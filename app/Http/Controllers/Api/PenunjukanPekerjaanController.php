@@ -109,7 +109,7 @@ class PenunjukanPekerjaanController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $slug)
     {
         DB::beginTransaction();
         $message = 'Gagal Mengubah Penunjukan Pekerjaan';
@@ -117,11 +117,15 @@ class PenunjukanPekerjaanController extends Controller
         $user_id = auth()->user()->id;
         try {
             DB::commit();
-            $data = $this->model()->find($id);
+            $data = $this->model()->whereSlug($slug)->first();
             $data->status = $status;
             $data->save();
 
-            $syncData  = array_combine($user_id, $status);
+            $keterangan = [
+                'keterangan' => $status,
+            ];
+
+            $syncData  = array_combine($user_id, $keterangan);
             $data->hasUserMany()->sync($syncData);
 
             $message = 'Berhasil Mengubah Penunjukan Pekerjaan';
