@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Notifikasi;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -53,7 +54,7 @@ class Controller extends BaseController
         return response()->json($response, $code);
     }
 
-    public function notification($user_id, $title, $body)
+    public function notification($user_id, $title, $body, $modul, $from_user_id, $to_user_id)
     {
         $SERVER_API_KEY = env('FCM_KEY');
 
@@ -81,6 +82,15 @@ class Controller extends BaseController
         curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
 
         $response = curl_exec($ch);
+
+        $notification = new Notifikasi();
+        $notification->title = $title;
+        $notification->body = $body;
+        $notification->modul = $modul;
+        $notification->status = 'belum';
+        $notification->from_user_id = $from_user_id;
+        $notification->to_user_id = $to_user_id;
+        $notification->save();
 
         return response()->json(['send message successfully.' . $response]);
     }

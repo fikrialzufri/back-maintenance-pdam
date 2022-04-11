@@ -17,7 +17,7 @@ class CreatePelaksanaanPekerjaansTable extends Migration
             $table->uuid('id')->primary();
             $table->string('nomor_pelaksanaan_pekerjaan');
             $table->string('slug');
-            $table->enum('status', ['draft', 'proses', 'selesai', 'disetujui']);
+            $table->enum('status', ['draft', 'proses', 'selesai', 'disetujui'])->default('draft');
             $table->foreignUuid('rekanan_id')->references('id')->on('rekanan')->nullable();
             $table->foreignUuid('penunjukan_pekerjaan_id')->references('id')->on('penunjukan_pekerjaan')->nullable();
             $table->foreignUuid('user_id')->references('id')->on('users');

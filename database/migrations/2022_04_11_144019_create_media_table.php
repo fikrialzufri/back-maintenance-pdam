@@ -18,7 +18,8 @@ class CreateMediaTable extends Migration
             $table->string('nama');
             $table->string('slug');
             $table->string('file');
-            $table->string('module');
+            $table->string('modul');
+            $table->string('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

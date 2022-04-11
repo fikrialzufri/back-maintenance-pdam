@@ -16,7 +16,8 @@ class CreatePenunjukanPekerjaanTable extends Migration
         Schema::create('penunjukan_pekerjaan', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('nomor_pekerjaan');
-            $table->enum('status', ['draft', 'proses', 'selesai', 'disetujui']);
+            $table->string('slug');
+            $table->enum('status', ['draft', 'proses', 'selesai', 'disetujui'])->default('draft');
             $table->foreignUuid('aduan_id')->references('id')->on('aduan');
             $table->foreignUuid('rekanan_id')->references('id')->on('rekanan');
             $table->foreignUuid('user_id')->references('id')->on('users');

@@ -19,7 +19,7 @@ class CreateTagihansTable extends Migration
             $table->string('slug');
             $table->string('nomor_bap')->nullable();
             $table->string('kode_vocher')->nullable();
-            $table->enum('status', ['draft', 'proses', 'selesai', 'disetujui']);
+            $table->enum('status', ['draft', 'proses', 'selesai', 'disetujui'])->default('draft');
             $table->foreignUuid('rekanan_id')->references('id')->on('rekanan')->nullable();
             $table->foreignUuid('user_id')->references('id')->on('users');
             $table->timestamps();

@@ -15,10 +15,13 @@ class CreateNotifikasisTable extends Migration
     {
         Schema::create('notifikasi', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('nama');
+            $table->string('title');
             $table->string('slug');
-            $table->string('module');
-            $table->enum('status', ['baca', 'belum']);
+            $table->string('body');
+            $table->string('modul');
+            $table->enum('status', ['baca', 'belum'])->default('belum');
+            $table->string('from_user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->string('to_user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }
