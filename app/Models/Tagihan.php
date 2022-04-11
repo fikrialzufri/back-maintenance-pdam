@@ -6,23 +6,25 @@ use App\Traits\UsesUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class PenunjukanPekerjaan extends Model
+class Tagihan extends Model
 {
     use HasFactory, UsesUuid;
 
-    protected $table = 'penunjukan_pekerjaan';
+    protected $table = 'tagihan';
     protected $guarded = ['id'];
     protected $fillable = [
-        'nomor_pelaksanaan_pekerjaan',
-        'status',
+        'nomor_tagihan',
+        'nomor_bap',
+        'kode_vocher',
         'aduan_id',
         'rekanan_id',
+        'penunjukan_pekerjaan_id',
         'user_id'
     ];
 
-    public function setNomorPelaksanaanPekerjaanAttribute($value)
+    public function setNomorTagihanAttribute($value)
     {
-        $this->attributes['nomor_pelaksanaan_pekerjaan'] = $value;
+        $this->attributes['nomor_tagihan'] = $value;
         $this->attributes['slug'] = Str::slug($value);
     }
 
@@ -31,19 +33,14 @@ class PenunjukanPekerjaan extends Model
         return $this->hasOne(Rekanan::class, 'id', 'rekanan_id');
     }
 
-    public function hasPenunjunkanPekerjaan()
-    {
-        return $this->belongsToMany(PenunjukanPekerjaan::class, 'id', 'penunjukan_pekerjaan_id');
-    }
-
     public function hasUser()
     {
         return $this->hasOne(User::class, 'id', 'user_id');
     }
 
-    public function hasItem()
+    public function hasPelaksanaanPekerjaan()
     {
-        return $this->belongsToMany(Item::class, 'id', 'item_id')->withPivot('qty','harga')->withTimestamps();
+        return $this->belongsToMany(PelaksanaanPekerjaan::class, 'id', 'pelaksanaan_pekerjaan_id')->withPivot('total')->withTimestamps();;
     }
 
     public function hasUserMany()

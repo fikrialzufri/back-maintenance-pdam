@@ -53,15 +53,15 @@ class Controller extends BaseController
         return response()->json($response, $code);
     }
 
-    public function notification($user_id)
+    public function notification($user_id, $title, $body)
     {
-        $SERVER_API_KEY = 'AAAAJ-D2GlQ:APA91bFzJSD-dpuhbAu89iqZUm4x7b3e5PDZ6W5BX7zvEmEaPFQeY6YiiPgaT4DHEOAIjoTddvOmp1BVe-ZXUi9XGO4CFrY68IFgYxtnFD82QmqXQaw7Rzqu4spDRLAdT6CYjgGtPjGq';
+        $SERVER_API_KEY = env('FCM_KEY');
 
         $data = [
             "to" => "/topics/" . $user_id,
             "data" => [
-                "title" => "TEST BARU LAGI",
-                "body" => "MAHDI HABUK",
+                "title" => $title,
+                "body" => $body,
             ]
         ];
         $dataString = json_encode($data);

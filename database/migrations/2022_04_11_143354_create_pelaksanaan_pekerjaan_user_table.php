@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePenunjukanPekerjaanUserTable extends Migration
+class CreatePelaksanaanPekerjaanUserTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,13 @@ class CreatePenunjukanPekerjaanUserTable extends Migration
      */
     public function up()
     {
-        Schema::create('penunjukan_pekerjaan_user', function (Blueprint $table) {
+        Schema::create('pelaksanaan_pekerjaan_user', function (Blueprint $table) {
             //FOREIGN KEY CONSTRAINTS
-            $table->string('penunjukan_pekerjaan_id')->references('id')->on('penunjukan_pekerjaan')->onDelete('cascade');
+            $table->string('pelaksanaan_pekerjaan_id')->references('id')->on('pelaksanaan_pekerjaan')->onDelete('cascade');
             $table->string('user_id')->references('id')->on('users')->onDelete('cascade');
-
+            $table->string('keterangan')->nullable();
             //SETTING THE PRIMARY KEYS
-            $table->primary(['penunjukan_pekerjaan_id', 'user_id']);
+            $table->primary(['pelaksanaan_pekerjaan_id', 'user_id']);
             $table->timestamps();
         });
     }
@@ -31,6 +31,6 @@ class CreatePenunjukanPekerjaanUserTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('penunjukan_pekerjaan_user');
+        Schema::dropIfExists('pelaksanaan_pekerjaan_user');
     }
 }

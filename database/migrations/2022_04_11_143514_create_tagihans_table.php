@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePenunjukanPekerjaansTable extends Migration
+class CreateTagihansTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,14 @@ class CreatePenunjukanPekerjaansTable extends Migration
      */
     public function up()
     {
-        Schema::create('penunjukan_pekerjaan', function (Blueprint $table) {
+        Schema::create('tagihan', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('nomor_pekerjaan');
+            $table->string('nomor_tagihan');
             $table->string('slug');
+            $table->string('nomor_bap')->nullable();
+            $table->string('kode_vocher')->nullable();
             $table->enum('status', ['draft', 'proses', 'selesai', 'disetujui']);
             $table->foreignUuid('rekanan_id')->references('id')->on('rekanan')->nullable();
-            $table->foreignUuid('aduan_id')->references('id')->on('aduan')->nullable();
             $table->foreignUuid('user_id')->references('id')->on('users');
             $table->timestamps();
         });
@@ -32,6 +33,6 @@ class CreatePenunjukanPekerjaansTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('penunjukan_pekerjaans');
+        Schema::dropIfExists('tagihans');
     }
 }

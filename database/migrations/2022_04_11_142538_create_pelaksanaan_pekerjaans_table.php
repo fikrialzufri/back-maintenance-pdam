@@ -19,7 +19,7 @@ class CreatePelaksanaanPekerjaansTable extends Migration
             $table->string('slug');
             $table->enum('status', ['draft', 'proses', 'selesai', 'disetujui']);
             $table->foreignUuid('rekanan_id')->references('id')->on('rekanan')->nullable();
-            $table->foreignUuid('aduan_id')->references('id')->on('aduan')->nullable();
+            $table->foreignUuid('penunjukan_pekerjaan_id')->references('id')->on('penunjukan_pekerjaan')->nullable();
             $table->foreignUuid('user_id')->references('id')->on('users');
             $table->timestamps();
         });

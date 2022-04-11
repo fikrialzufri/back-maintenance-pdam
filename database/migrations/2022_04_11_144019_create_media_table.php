@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateNotifikasisTable extends Migration
+class CreateMediaTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,12 @@ class CreateNotifikasisTable extends Migration
      */
     public function up()
     {
-        Schema::create('notifikasi', function (Blueprint $table) {
+        Schema::create('media', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('nama');
             $table->string('slug');
+            $table->string('file');
             $table->string('module');
-            $table->enum('status', ['baca', 'belum']);
             $table->timestamps();
         });
     }
@@ -30,6 +30,6 @@ class CreateNotifikasisTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('notifikasis');
+        Schema::dropIfExists('media');
     }
 }
