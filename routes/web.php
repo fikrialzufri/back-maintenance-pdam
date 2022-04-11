@@ -14,6 +14,7 @@ use App\Http\Controllers\DepartemenController;
 use App\Http\Controllers\DivisiController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\AduanController;
+use App\Http\Controllers\PenunjukanPekerjaanController;
 use App\Http\Controllers\RekananController;
 use App\Http\Controllers\WilayahController;
 use Illuminate\Support\Facades\Route;
@@ -55,6 +56,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     // Aduan
     Route::resource('aduan', AduanController::class)->except('show');
+    Route::resource('penunjukan-pekerjaan', PenunjukanPekerjaanController::class, ['names' => 'penunjukan_pekerjaan']);
 
     // Karyawan
     Route::resource('departemen', DepartemenController::class);
