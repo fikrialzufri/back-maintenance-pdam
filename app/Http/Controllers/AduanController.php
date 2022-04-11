@@ -28,7 +28,7 @@ class AduanController extends Controller
 
         $query = Aduan::query();
         if ($search) {
-            $query = $query->where('no_ticket', 'like', "%" . $search . "%")->orWhere('title', 'like', "%" . $search . "%");
+            $query = $query->where('no_ticket', 'like', "%" . $search . "%")->orWhere('no_aduan', 'like', "%" . $search . "%");
         }
 
         $aduan = $query->orderBy('created_at', 'desc')->paginate($limit);

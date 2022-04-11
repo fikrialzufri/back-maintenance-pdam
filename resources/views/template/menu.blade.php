@@ -71,6 +71,14 @@
                         </a>
                     </div>
                 @endcan
+                @can('view-penunjukan-pekerjaan')
+                    <div class="nav-item {{ $segment1 == 'penunjukan_pekerjaan' ? 'active' : '' }}">
+                        <a href="{{ route('penunjukan_pekerjaan.index') }}">
+                            <i class="ik ik-voicemail"></i>
+                            <span>{{ __('Penunjukan Pekerjaan') }}</span>
+                        </a>
+                    </div>
+                @endcan
                 @canany(['view-karyawan', 'view-jabatan', 'view-divisi', 'view-wilayah', 'view-departemen'])
                     <div class="nav-lavel">{{ __('Karyawan') }} </div>
                     <div
