@@ -84,7 +84,6 @@ class AduanController extends Controller
             $no = str_pad(1, 4, "0", STR_PAD_LEFT);
             $noAduan =  $no . "/" . "ADB/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
         }
-        return auth()->user()->id_wilayah;
 
         DB::beginTransaction();
 
