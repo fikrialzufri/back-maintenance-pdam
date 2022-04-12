@@ -58,7 +58,7 @@ class User extends Authenticatable
     }
 
 
-    public function getIdWilyahAttribute()
+    public function getIdWilayahAttribute()
     {
         if ($this->karyawan) {
             return $this->karyawan->id_wilayah;

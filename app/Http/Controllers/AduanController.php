@@ -83,11 +83,9 @@ class AduanController extends Controller
             $no = str_pad(1, 4, "0", STR_PAD_LEFT);
             $noAduan =  $no . "/" . "ADB/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
         }
-
+        $id_wilayah =  auth()->user()->id_wilayah;
         DB::beginTransaction();
-
         try {
-            DB::commit();
             $aduan = new Aduan();
             $aduan->no_ticket = $request->no_ticket;
             $aduan->no_aduan = $noAduan;
@@ -98,10 +96,11 @@ class AduanController extends Controller
             $aduan->lokasi = $request->lokasi;
             $aduan->lat_long = str_replace(array('LatLng(', ')'), '', $request->lat_long);
             $aduan->status = "draft";
-            $aduan->wilayah_id = auth()->user()->id_wilayah;
+            $aduan->wilayah_id =  $id_wilayah;
             $aduan->user_id = auth()->user()->id;
             $aduan->save();
             $aduan->hasJenisAduan()->sync($request->jenis_aduan_id);
+            DB::commit();
 
             // TODO:
             // Notifikasi
@@ -111,7 +110,7 @@ class AduanController extends Controller
             return redirect()->route('aduan.index')->with('message', 'Aduan berhasil ditambah')->with('Class', 'primary');
         } catch (\Throwable $th) {
             DB::rollback();
-            return redirect()->route('aduan.index')->with('message', 'Aduan berhasil ditambah')->with('Class', 'danger');
+            return redirect()->route('aduan.index')->with('message', 'Aduan gagal ditambah')->with('Class', 'danger');
         }
     }
 

@@ -33,6 +33,14 @@ class UsersTableSeedeer extends Seeder
         $KaryawanRole->name = 'Karyawan';
         $KaryawanRole->save();
 
+        $AdminDistribusiRole = new Role();
+        $AdminDistribusiRole->name = 'Admin Distribusi';
+        $AdminDistribusiRole->save();
+
+        $AdminAsistenRole = new Role();
+        $AdminAsistenRole->name = 'Admin Asisten Manajer';
+        $AdminAsistenRole->save();
+
         $superadmin = Role::where('slug', 'superadmin')->first();
 
         $superadminUser = new User();
@@ -118,6 +126,16 @@ class UsersTableSeedeer extends Seeder
         $taskAduan->name = 'Aduan';
         $taskAduan->description = 'Manajemen Aduan';
         $taskAduan->save();
+
+        $taskPenunjukanPekerjaan = new Task();
+        $taskPenunjukanPekerjaan->name = 'Penunjukan Pekerjaan';
+        $taskPenunjukanPekerjaan->description = 'Manajemen Penunjukan Pekerjaan';
+        $taskPenunjukanPekerjaan->save();
+
+        $taskPelaksanaanPekerjaan = new Task();
+        $taskPelaksanaanPekerjaan->name = 'Pelaksanaan Pekerjaan';
+        $taskPelaksanaanPekerjaan->description = 'Manajemen Pelaksanaan Pekerjaan';
+        $taskPelaksanaanPekerjaan->save();
 
         $tasks = Task::all();
 
