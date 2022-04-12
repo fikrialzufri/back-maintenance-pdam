@@ -67,7 +67,7 @@ class PelaksanaanPekerjaanController extends Controller
         DB::beginTransaction();
         $message = 'Gagal Menyimpan Pelaksanaan Pekerjaan';
         $user_id = auth()->user()->id;
-        $rekanan_id = auth()->user()->id_rekanan;
+        $rekanan_id = $request->rekanan_id;
         $dataPelaksanaanPekerjaan = $this->model()->count();
         if ($dataPelaksanaanPekerjaan >= 1) {
             $no = str_pad($dataPelaksanaanPekerjaan + 1, 4, "0", STR_PAD_LEFT);

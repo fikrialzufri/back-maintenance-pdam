@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Traits\UsesUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Str;
 
 class PenunjukanPekerjaan extends Model
 {
@@ -13,16 +14,16 @@ class PenunjukanPekerjaan extends Model
     protected $table = 'penunjukan_pekerjaan';
     protected $guarded = ['id'];
     protected $fillable = [
-        'nomor_pelaksanaan_pekerjaan',
+        'nomor_pekerjaan',
         'status',
         'aduan_id',
         'rekanan_id',
         'user_id'
     ];
 
-    public function setNomorPelaksanaanPekerjaanAttribute($value)
+    public function setNomorPekerjaanAttribute($value)
     {
-        $this->attributes['nomor_pelaksanaan_pekerjaan'] = $value;
+        $this->attributes['nomor_pekerjaan'] = $value;
         $this->attributes['slug'] = Str::slug($value);
     }
 
