@@ -12,11 +12,11 @@ class PenunjukanPekerjaanController extends Controller
 {
     public function __construct()
     {
-        // $this->route = 'penunjukan-pekerjaan';
-        // $this->middleware('permission:view-' . $this->route, ['only' => ['index', 'show']]);
-        // $this->middleware('permission:create-' . $this->route, ['only' => ['create', 'store']]);
-        // $this->middleware('permission:edit-' . $this->route, ['only' => ['edit', 'update']]);
-        // $this->middleware('permission:delete-' . $this->route, ['only' => ['delete']]);
+        $this->route = 'penunjukan-pekerjaan';
+        $this->middleware('permission:view-' . $this->route, ['only' => ['index', 'show']]);
+        $this->middleware('permission:create-' . $this->route, ['only' => ['create', 'store']]);
+        $this->middleware('permission:edit-' . $this->route, ['only' => ['edit', 'update']]);
+        $this->middleware('permission:delete-' . $this->route, ['only' => ['delete']]);
     }
 
     public function index(Request $request)
@@ -43,8 +43,8 @@ class PenunjukanPekerjaanController extends Controller
             $query = $query->where('rekanan_id',  $rekanan_id);
         }
         $data = $query->orderBy('created_at')->get();
-        if (count($result) == 0) {
-            $message = 'Data Aduan Belum Ada';
+        if (count($data) == 0) {
+            $message = 'Data Penunjukan Pekerjaan Belum Ada';
         }
         return $this->sendResponse($data, $message, 200);
         try { } catch (\Throwable $th) {
@@ -64,25 +64,25 @@ class PenunjukanPekerjaanController extends Controller
      */
     public function store(Request $request)
     {
-        DB::beginTransaction();
         $message = 'Gagal Menyimpan Penunjukan Pekerjaan';
         $aduan_id = $request->aduan_id;
 
         $dataPenunjukanPerkerjaan = $this->model()->count();
         if ($dataPenunjukanPerkerjaan >= 1) {
             $no = str_pad($dataPenunjukanPerkerjaan + 1, 4, "0", STR_PAD_LEFT);
-            $nomor_pekerjaan =  $no . "/" . "PPK/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
+            $nomor_pekerjaan =  $no . "/" . "SPK/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
         } else {
             $no = str_pad(1, 4, "0", STR_PAD_LEFT);
-            $nomor_pekerjaan =  $no . "/" . "PPK/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
+            $nomor_pekerjaan =  $no . "/" . "SPK/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
         }
+        DB::beginTransaction();
         try {
             DB::commit();
             $data = $this->model();
             $data->nomor_pekerjaan = $nomor_pekerjaan;
             $data->aduan_id = $aduan_id;
             $data->rekanan_id = $request->rekanan_id;
-            $data->user_id = $request->user_id;
+            $data->user_id = auth()->user()->id;
             $data->status = 'draft';
             $data->save();
 

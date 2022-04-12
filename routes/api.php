@@ -5,8 +5,8 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ItemController;
 use App\Http\Controllers\Api\JenisController;
 use App\Http\Controllers\Api\JenisAduanController;
-use App\Http\Controllers\Api\PelaksanaanPekerjaanController;
 use App\Http\Controllers\Api\PenunjukanPekerjaanController;
+use App\Http\Controllers\Api\RekananController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
 
@@ -33,24 +33,29 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     // Jenis Aduan
     Route::get('jenis-aduan', JenisAduanController::class . '@index')->name('jenis-aduan.api.index');
 
+    // Rekanan
+    Route::get('rekanan', RekananController::class . '@index')->name('rekanan.api.index');
+
     // Aduan
     Route::get('aduan', AduanController::class . '@index')->name('aduan.api.index');
 
-    Route::get('penunjukan-pekerjaan', PenunjukanPekerjaanController::class . '@index')->name('penunjukan-pekerjaan.api.index');
+    // penunjukan-pekerjaan
+    Route::get('penunjukan-pekerjaan', PenunjukanPekerjaanController::class . '@index')->name('penunjukan.api.index');
 
-    Route::post('penunjukan-pekerjaan', PenunjukanPekerjaanController::class . '@store')->name('penunjukan-pekerjaan.api.store');
+    // penunjukan-pekerjaan
+    Route::post('penunjukan-pekerjaan', PenunjukanPekerjaanController::class . '@store')->name('penunjukan.api.store');
 
-    // aduan
+    // pelaksanaan-pekerjaan
     Route::get('pelaksanaan-pekerjaan', PelaksanaanPekerjaanController::class . '@index')->name('pelaksanaan-pekerjaan.api.index');
 
-    Route::post(
-        'pelaksanaan-pekerjaan',
-        PelaksanaanPekerjaanController::class . '@store'
-    )->name('pelaksanaan-pekerjaan.api.store');
+    // Route::post(
+    //     'pelaksanaan-pekerjaan',
+    //     PelaksanaanPekerjaanController::class . '@store'
+    // )->name('pelaksanaan-pekerjaan.api.store');
 
-    Route::put('pelaksanaan-pekerjaan-proses', PelaksanaanPekerjaanController::class . '@proses')->name('pelaksanaan-pekerjaan.api.proses');
+    // Route::put('pelaksanaan-pekerjaan-proses', PelaksanaanPekerjaanController::class . '@proses')->name('pelaksanaan-pekerjaan.api.proses');
 
-    Route::put('pelaksanaan-pekerjaan-proses-akhir', PelaksanaanPekerjaanController::class . '@prosesAkhir')->name('pelaksanaan-pekerjaan.api.proses.akhir');
+    // Route::put('pelaksanaan-pekerjaan-proses-akhir', PelaksanaanPekerjaanController::class . '@prosesAkhir')->name('pelaksanaan-pekerjaan.api.proses.akhir');
 
     Route::get('refresh', AuthController::class . '@refresh')->name('auth.refresh');
 });
