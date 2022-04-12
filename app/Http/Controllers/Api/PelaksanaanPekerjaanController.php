@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Media;
+use App\Models\PelaksanaanPekerjaan;
+use App\Models\PenunjukanPekerjaan;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use DB;
 
 class PelaksanaanPekerjaanController extends Controller
 {
@@ -26,9 +29,9 @@ class PelaksanaanPekerjaanController extends Controller
         $result = [];
         $message = 'Detail Pelaksanaan Pekerjaan';
         $rekanan_id = auth()->user()->id_rekanan;
-        try {
-            $message = 'Data Pelaksanaan Pekerjaan';
+        $message = 'Data Pelaksanaan Pekerjaan';
 
+        try {
             $query = $this->model();
             if ($nomor_pelaksanaan_pekerjaan != '') {
                 $query = $query->where('nomor_pelaksanaan_pekerjaan',  $nomor_pelaksanaan_pekerjaan);
@@ -39,12 +42,12 @@ class PelaksanaanPekerjaanController extends Controller
             if ($aduan_id != '') {
                 $query = $query->where('aduan_id',  $aduan_id);
             }
-            if ($rekanan_id != '') {
+            if (request()->user()->hasRole('rekanan')) {
                 $query = $query->where('rekanan_id',  $rekanan_id);
             }
             $data = $query->orderBy('created_at')->get();
             if (count($result) == 0) {
-                $message = 'Data Aduan Belum Ada';
+                $message = 'Data Pelaksanaan Pekerjaan Belum Ada';
             }
             return $this->sendResponse($data, $message, 200);
         } catch (\Throwable $th) {
@@ -64,6 +67,7 @@ class PelaksanaanPekerjaanController extends Controller
      */
     public function store(Request $request)
     {
+        // return $request;
         DB::beginTransaction();
         $message = 'Gagal Menyimpan Pelaksanaan Pekerjaan';
         $user_id = auth()->user()->id;
@@ -77,25 +81,41 @@ class PelaksanaanPekerjaanController extends Controller
             $nomor_pelaksanaan_pekerjaan =  $no . "/" . "PPK/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
         }
 
-        $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $request->penunjukan_pekerjaan_id)->first();
+        $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $request->nomor_pekerjaan)->first();
 
-        try {
-            DB::commit();
-            $data = $this->model();
-            $data->nomor_pelaksanaan_pekerjaan = $nomor_pelaksanaan_pekerjaan;
-            $data->penunjukan_pekerjaan_id = $penunjukanPekerjaan->id;
-            $data->rekanan_id = $rekanan_id;
-            $data->aduan_id = $penunjukanPekerjaan->aduan_id;
-            $data->user_id = $user_id;
-            $data->status = 'draft';
-            $data->save();
+        $pelaksanaan_pekerjaan = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->first();
 
-            $penunjukanPekerjaan->status = 'proses';
-            $penunjukanPekerjaan->save();
+        if ($pelaksanaan_pekerjaan) {
+            $message = "No SPK sudah dikerjakan";
+            $response = [
+                'success' => false,
+                'message' => $message,
+                'code' => '409'
+            ];
+            return $this->sendError($response, $message, 409);
+        }
 
-            $message = 'Berhasil Menyimpan Pelaksanaan Pekerjaan';
-            return $this->sendResponse($data, $message, 200);
-        } catch (\Throwable $th) {
+        DB::commit();
+        $data = $this->model();
+        $data->nomor_pelaksanaan_pekerjaan = $nomor_pelaksanaan_pekerjaan;
+        $data->penunjukan_pekerjaan_id = $penunjukanPekerjaan->id;
+        $data->rekanan_id = $rekanan_id;
+        $data->aduan_id = $penunjukanPekerjaan->aduan_id;
+        $data->user_id = $user_id;
+
+        $data->lokasi = $request->lokasi;
+        $data->lat_long = $request->lat_long;
+        $data->keterangan = $request->keterangan;
+
+        $data->status = 'draft';
+        $data->save();
+
+        $penunjukanPekerjaan->status = 'proses';
+        $penunjukanPekerjaan->save();
+
+        $message = 'Berhasil Menyimpan Pelaksanaan Pekerjaan';
+        return $this->sendResponse($data, $message, 200);
+        try { } catch (\Throwable $th) {
             DB::rollback();
             $response = [
                 'success' => false,

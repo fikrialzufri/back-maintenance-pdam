@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Traits\UsesUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Str;
 
 class PelaksanaanPekerjaan extends Model
 {
@@ -20,7 +21,7 @@ class PelaksanaanPekerjaan extends Model
         'user_id'
     ];
 
-    public function setNomorPekerjaanAttribute($value)
+    public function setNomorPelaksanaanPekerjaanAttribute($value)
     {
         $this->attributes['nomor_pelaksanaan_pekerjaan'] = $value;
         $this->attributes['slug'] = Str::slug($value);

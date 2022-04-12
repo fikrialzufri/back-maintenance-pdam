@@ -49,7 +49,7 @@ class PenunjukanPekerjaan extends Model
 
     public function hasItem()
     {
-        return $this->belongsToMany(Item::class, 'pelaksanaan_item')->withPivot('qty','harga')->withTimestamps();
+        return $this->belongsToMany(Item::class, 'pelaksanaan_item')->withPivot('qty', 'harga')->withTimestamps();
     }
 
     public function hasUserMany()

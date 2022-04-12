@@ -11,6 +11,7 @@ class Rekanan extends Model
 {
     use HasFactory, UsesUuid;
     protected $table = "rekanan";
+    protected $append = "email";
 
     public function setNamaAttribute($value)
     {
