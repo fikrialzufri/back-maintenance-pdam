@@ -44,6 +44,7 @@
                                         <td>{{ $item->wilayah }}</td>
                                         <td>{{ $item->lokasi }}</td>
                                         <td>{{ ucfirst($item->status) }}</td>
+                                        @if ($item->status == 'draft')
                                         <td class="text-center">
                                             <a href="{{ route('aduan.edit', $item->slug) }}"
                                                 class="btn btn-sm btn-warning text-light">
@@ -59,6 +60,7 @@
                                                 <i class="fa fa-trash"></i> Hapus
                                             </button>
                                         </td>
+                                        @endif
                                     </tr>
                                 @empty
                                     <tr>

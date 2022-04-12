@@ -54,12 +54,12 @@ class Controller extends BaseController
         return response()->json($response, $code);
     }
 
-    public function notification($user_id, $title, $body, $modul, $from_user_id, $to_user_id)
+    public function notification($title, $body, $modul, $from_user_id, $to_user_id)
     {
         $SERVER_API_KEY = env('FCM_KEY');
 
         $data = [
-            "to" => "/topics/" . $user_id,
+            "to" => "/topics/" . $to_user_id,
             "data" => [
                 "title" => $title,
                 "body" => $body,

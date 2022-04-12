@@ -5,22 +5,23 @@ namespace App\Models;
 use App\Traits\UsesUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Str;
 
 class Notifikasi extends Model
 {
     use HasFactory, UsesUuid;
 
-    protected $table = 'media';
+    protected $table = 'notifikasi';
     protected $guarded = ['id'];
     protected $fillable = [
-        'nama',
-        'module',
-        'file',
+        'title',
+        'body',
+        'modul',
     ];
 
-    public function setNamaAttribute($value)
+    public function setTitleAttribute($value)
     {
-        $this->attributes['nama'] = $value;
+        $this->attributes['title'] = $value;
         $this->attributes['slug'] = Str::slug($value);
     }
 }

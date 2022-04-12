@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\JenisAduan;
 use App\Models\Aduan;
+use App\Models\Karyawan;
+use App\Models\Jabatan;
 use DB;
 
 class AduanController extends Controller
@@ -85,6 +87,7 @@ class AduanController extends Controller
         }
         $id_wilayah =  auth()->user()->id_wilayah;
         DB::beginTransaction();
+        
         try {
             $aduan = new Aduan();
             $aduan->no_ticket = $request->no_ticket;
@@ -106,6 +109,17 @@ class AduanController extends Controller
             // Notifikasi
             // Masuk ke table notifikasi ->
             // Masuk ke USER dengan JABATAN ADMIN ADMIN MANAGER DISTRIBUSI DAN MANAGER DISTRIBUSI (Di foreach dari karyawan dengan jabatan td)
+
+            $title = "Aduan Baru";
+            $body = "Aduan dengan nomor aduan " . $noAduan . " telah dikirim";
+            $modul = "Tambah aduan";
+
+            $jabatan = Jabatan::where('wilayah_id', $id_wilayah)->where('nama', 'like', "%Asisten Manager%")->pluck('id');
+            $karyawan = Karyawan::whereIn('jabatan_id', $jabatan)->get();
+            foreach ($karyawan as $item)
+            {
+                $this->notification($title, $body, $modul, auth()->user()->id, $item->user_id);
+            }
 
             return redirect()->route('aduan.index')->with('message', 'Aduan berhasil ditambah')->with('Class', 'primary');
         } catch (\Throwable $th) {
