@@ -29,25 +29,26 @@ class PenunjukanPekerjaanController extends Controller
         $rekanan_id = auth()->user()->id_rekanan;
         $message = 'Data Penunjukan Pekerjaan';
 
-        $query = $this->model();
-        if ($nomor_pekerjaan != '') {
-            $query = $query->where('nomor_pekerjaan',  $nomor_pekerjaan);
-        }
-        if ($status != '') {
-            $query = $query->where('status',  $status);
-        }
-        if ($aduan_id != '') {
-            $query = $query->where('aduan_id',  $aduan_id);
-        }
-        if ($rekanan_id != '') {
-            $query = $query->where('rekanan_id',  $rekanan_id);
-        }
-        $data = $query->orderBy('created_at')->get();
-        if (count($data) == 0) {
-            $message = 'Data Penunjukan Pekerjaan Belum Ada';
-        }
-        return $this->sendResponse($data, $message, 200);
-        try { } catch (\Throwable $th) {
+        try {
+            $query = $this->model();
+            if ($nomor_pekerjaan != '') {
+                $query = $query->where('nomor_pekerjaan',  $nomor_pekerjaan);
+            }
+            if ($status != '') {
+                $query = $query->where('status',  $status);
+            }
+            if ($aduan_id != '') {
+                $query = $query->where('aduan_id',  $aduan_id);
+            }
+            if (request()->user()->hasRole('rekanan')) {
+                $query = $query->where('rekanan_id',  $rekanan_id);
+            }
+            $data = $query->orderBy('created_at')->get();
+            if (count($data) == 0) {
+                $message = 'Data Penunjukan Pekerjaan Belum Ada';
+            }
+            return $this->sendResponse($data, $message, 200);
+        } catch (\Throwable $th) {
             $response = [
                 'success' => false,
                 'message' => $message,
@@ -74,6 +75,17 @@ class PenunjukanPekerjaanController extends Controller
         } else {
             $no = str_pad(1, 4, "0", STR_PAD_LEFT);
             $nomor_pekerjaan =  $no . "/" . "SPK/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
+        }
+        $aduan = $this->model()->where('aduan_id', $aduan_id)->first();
+
+        if ($aduan) {
+            $message = "Data Aduan sudah dikerjakan";
+            $response = [
+                'success' => false,
+                'message' => $message,
+                'code' => '409'
+            ];
+            return $this->sendError($response, $message, 409);
         }
         DB::beginTransaction();
         try {

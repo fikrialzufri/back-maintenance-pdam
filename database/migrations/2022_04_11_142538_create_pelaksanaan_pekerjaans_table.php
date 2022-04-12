@@ -19,7 +19,7 @@ class CreatePelaksanaanPekerjaansTable extends Migration
             $table->string('slug');
             $table->date('tanggal_mulai')->nullable();
             $table->date('tanggal_selesai')->nullable();
-            $table->longText('keterangan');
+            $table->longText('keterangan')->nullable();
             $table->longText('lokasi');
             $table->string('lat_long');
             $table->enum('status', ['draft', 'diterima', 'proses', 'proses-akhir', 'selesai', 'disetujui'])->default('draft');
