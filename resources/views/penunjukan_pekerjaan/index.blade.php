@@ -45,19 +45,12 @@
                                         <td>{{ $item->lokasi }}</td>
                                         <td>{{ ucfirst($item->status) }}</td>
                                         <td class="text-center">
-                                            <a href="{{ route('aduan.edit', $item->slug) }}"
+                                            <a href="{{ route('penunjukan_pekerjaan.show', $item->slug) }}"
+                                                class="btn btn-sm btn-primary text-light">
+                                                <i class="nav-icon fas fa-eye"></i> Detail</a>
+                                            <a href="{{ route('penunjukan_pekerjaan.edit', $item->slug) }}"
                                                 class="btn btn-sm btn-warning text-light">
                                                 <i class="nav-icon fas fa-edit"></i> Ubah</a>
-                                            <form id="form-{{ $item->slug }}"
-                                                action="{{ route('aduan.destroy', $item->slug) }}" method="POST"
-                                                style="display: none;">
-                                                {{ csrf_field() }}
-                                                {{ method_field('DELETE') }}
-                                            </form>
-                                            <button class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top"
-                                                title="Hapus" onclick=deleteconf("{{ $item->slug }}")>
-                                                <i class="fa fa-trash"></i> Hapus
-                                            </button>
                                         </td>
                                     </tr>
                                 @empty

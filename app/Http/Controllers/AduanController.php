@@ -123,7 +123,7 @@ class AduanController extends Controller
         $action = route('aduan.update', $slug);
 
         if ($aduan == null) {
-            return redirect()->route('aduan.index')->with('message', 'Data Aduan tidak ditemukan');
+            return redirect()->route('aduan.index')->with('message', 'Data Aduan tidak ditemukan')->with('Class', 'primary');
         }
 
         return view('aduan.edit', compact(
