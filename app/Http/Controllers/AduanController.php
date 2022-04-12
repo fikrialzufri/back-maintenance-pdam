@@ -5,8 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\JenisAduan;
 use App\Models\Aduan;
-use App\Models\PerintahPelaksana;
-use Str;
+use DB;
 
 class AduanController extends Controller
 {
