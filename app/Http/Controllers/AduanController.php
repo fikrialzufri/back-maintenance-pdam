@@ -85,27 +85,36 @@ class AduanController extends Controller
             $noAduan =  $no . "/" . "ADB/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
         }
         return auth()->user()->id_wilayah;
-        $aduan = new Aduan();
-        $aduan->no_ticket = $request->no_ticket;
-        $aduan->no_aduan = $noAduan;
-        $aduan->mps = $request->mps;
-        $aduan->atas_nama = $request->atas_nama;
-        $aduan->sumber_informasi = $request->sumber_informasi;
-        $aduan->keterangan = $request->keterangan;
-        $aduan->lokasi = $request->lokasi;
-        $aduan->lat_long = str_replace(array('LatLng(', ')'), '', $request->lat_long);
-        $aduan->status = "draft";
-        $aduan->wilayah_id = auth()->user()->id_wilayah;
-        $aduan->user_id = auth()->user()->id;
-        $aduan->save();
-        $aduan->hasJenisAduan()->sync($request->jenis_aduan_id);
 
-        // TODO:
-        // Notifikasi
-        // Masuk ke table notifikasi ->
-        // Masuk ke USER dengan JABATAN ADMIN ADMIN MANAGER DISTRIBUSI DAN MANAGER DISTRIBUSI (Di foreach dari karyawan dengan jabatan td)
+        DB::beginTransaction();
 
-        return redirect()->route('aduan.index')->with('message', 'Aduan berhasil ditambah');
+        try {
+            DB::commit();
+            $aduan = new Aduan();
+            $aduan->no_ticket = $request->no_ticket;
+            $aduan->no_aduan = $noAduan;
+            $aduan->mps = $request->mps;
+            $aduan->atas_nama = $request->atas_nama;
+            $aduan->sumber_informasi = $request->sumber_informasi;
+            $aduan->keterangan = $request->keterangan;
+            $aduan->lokasi = $request->lokasi;
+            $aduan->lat_long = str_replace(array('LatLng(', ')'), '', $request->lat_long);
+            $aduan->status = "draft";
+            $aduan->wilayah_id = auth()->user()->id_wilayah;
+            $aduan->user_id = auth()->user()->id;
+            $aduan->save();
+            $aduan->hasJenisAduan()->sync($request->jenis_aduan_id);
+
+            // TODO:
+            // Notifikasi
+            // Masuk ke table notifikasi ->
+            // Masuk ke USER dengan JABATAN ADMIN ADMIN MANAGER DISTRIBUSI DAN MANAGER DISTRIBUSI (Di foreach dari karyawan dengan jabatan td)
+
+            return redirect()->route('aduan.index')->with('message', 'Aduan berhasil ditambah')->with('Class', 'primary');
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return redirect()->route('aduan.index')->with('message', 'Aduan berhasil ditambah')->with('Class', 'danger');
+        }
     }
 
     public function edit(Request $request, $slug)
@@ -156,7 +165,7 @@ class AduanController extends Controller
         $aduan->save();
         $aduan->hasJenisAduan()->sync($request->jenis_aduan_id);
 
-        return redirect()->route('aduan.index')->with('message', 'Aduan berhasil diubah');
+        return redirect()->route('aduan.index')->with('message', 'Aduan berhasil diubah')->with('Class', 'primary');
     }
 
     public function destroy($slug)
@@ -165,6 +174,6 @@ class AduanController extends Controller
         $aduan->delete();
         $aduan->hasJenisAduan()->detach();
 
-        return redirect()->route('aduan.index')->with('message', 'Aduan berhasil dihapus');
+        return redirect()->route('aduan.index')->with('message', 'Aduan berhasil dihapus')->with('Class', 'primary');
     }
 }
