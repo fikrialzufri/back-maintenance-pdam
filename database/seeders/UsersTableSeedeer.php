@@ -21,25 +21,45 @@ class UsersTableSeedeer extends Seeder
         $superadmin->name = 'Superadmin';
         $superadmin->save();
 
-        $adminRole = new Role();
-        $adminRole->name = 'Admin';
-        $adminRole->save();
-
         $RekananRole = new Role();
         $RekananRole->name = 'Rekanan';
         $RekananRole->save();
 
-        $KaryawanRole = new Role();
-        $KaryawanRole->name = 'Karyawan';
-        $KaryawanRole->save();
+        $DirekturRole = new Role();
+        $DirekturRole->name = 'Direktur Teknik';
+        $DirekturRole->save();
+
+        $ManagerDistribusiRole = new Role();
+        $ManagerDistribusiRole->name = 'Manager Distribusi';
+        $ManagerDistribusiRole->save();
+
+        $ManagerPengawasRole = new Role();
+        $ManagerPengawasRole->name = 'Manager Pengawas';
+        $ManagerPengawasRole->save();
 
         $AdminDistribusiRole = new Role();
         $AdminDistribusiRole->name = 'Admin Distribusi';
         $AdminDistribusiRole->save();
 
         $AdminAsistenRole = new Role();
-        $AdminAsistenRole->name = 'Admin Asisten Manajer';
+        $AdminAsistenRole->name = 'Admin Asisten Manager';
         $AdminAsistenRole->save();
+
+        $AsistenRole = new Role();
+        $AsistenRole->name = ' Asisten Manager Distribusi';
+        $AsistenRole->save();
+
+        $HumasRole = new Role();
+        $HumasRole->name = ' Humas';
+        $HumasRole->save();
+
+        $KeuanganRole = new Role();
+        $KeuanganRole->name = ' Keuangan';
+        $KeuanganRole->save();
+
+        $StaffPengawasRole = new Role();
+        $StaffPengawasRole->name = 'Staf Pengawas';
+        $StaffPengawasRole->save();
 
         $superadmin = Role::where('slug', 'superadmin')->first();
 
@@ -52,15 +72,6 @@ class UsersTableSeedeer extends Seeder
         $superadminUser->save();
 
         $superadminUser->role()->attach($superadmin);
-
-        $admin = new User();
-        $admin->name = 'admin';
-        $admin->username = 'admin';
-        $admin->email = 'admin@admin.com';
-        $admin->password = bcrypt('secret');
-        // $admin->icon = 'default-icon.png';
-        $admin->save();
-        $admin->role()->attach($adminRole);
 
         $taskUser = new Task();
         $taskUser->name = 'User';
