@@ -24,4 +24,9 @@ class Notifikasi extends Model
         $this->attributes['title'] = $value;
         $this->attributes['slug'] = Str::slug($value);
     }
+
+    public function hasAduan()
+    {
+        return $this->hasOne(Aduan::class, 'id', 'aduan_id');
+    }
 }
