@@ -174,7 +174,6 @@ class UsersTableSeedeer extends Seeder
 
             foreach ($data as $induk) {
                 $Permission = Permission::Create($induk);
-                $adminRole->permissions()->attach($Permission->id);
             }
         }
     }
