@@ -178,4 +178,3 @@ class UsersTableSeedeer extends Seeder
         }
     }
 }
-[Z]
