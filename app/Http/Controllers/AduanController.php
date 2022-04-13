@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\JenisAduan;
 use App\Models\Aduan;
+use App\Models\Karyawan;
+use App\Models\Jabatan;
+use App\Models\Notifikasi;
+use App\Models\PenunjukanPekerjaan;
 use DB;
 
 class AduanController extends Controller
@@ -85,6 +89,7 @@ class AduanController extends Controller
         }
         $id_wilayah =  auth()->user()->id_wilayah;
         DB::beginTransaction();
+        
         try {
             $aduan = new Aduan();
             $aduan->no_ticket = $request->no_ticket;
@@ -106,6 +111,17 @@ class AduanController extends Controller
             // Notifikasi
             // Masuk ke table notifikasi ->
             // Masuk ke USER dengan JABATAN ADMIN ADMIN MANAGER DISTRIBUSI DAN MANAGER DISTRIBUSI (Di foreach dari karyawan dengan jabatan td)
+
+            $title = "Aduan Baru";
+            $body = "Aduan dengan nomor aduan " . $noAduan . " telah dikirim";
+            $modul = "Tambah aduan";
+
+            $jabatan = Jabatan::where('wilayah_id', $id_wilayah)->where('nama', 'like', "%Asisten Manager%")->pluck('id');
+            $karyawan = Karyawan::whereIn('jabatan_id', $jabatan)->get();
+            foreach ($karyawan as $item)
+            {
+                $this->notification($aduan->id, $title, $body, $modul, auth()->user()->id, $item->user_id);
+            }
 
             return redirect()->route('aduan.index')->with('message', 'Aduan berhasil ditambah')->with('Class', 'primary');
         } catch (\Throwable $th) {
@@ -172,5 +188,16 @@ class AduanController extends Controller
         $aduan->hasJenisAduan()->detach();
 
         return redirect()->route('aduan.index')->with('message', 'Aduan berhasil dihapus')->with('Class', 'primary');
+    }
+
+    public function notifikasi($id)
+    {
+        $notifikasi = Notifikasi::where('aduan_id', $id)->where('to_user_id', auth()->user()->id)->first();
+        $notifikasi->status = 'baca';
+        $notifikasi->save();
+
+        $penunjukan = Aduan::where('id', $id)->first();
+
+        return redirect()->route('penunjukan_pekerjaan.show', $penunjukan->slug);
     }
 }

@@ -62,10 +62,10 @@
                         </div>
                     </div>
                 @endcan
-                @can('create-aduan')
+                @can('view-aduan')
                     <div class="nav-lavel">{{ __('Pengaduan') }} </div>
                     <div class="nav-item {{ $segment1 == 'aduan' ? 'active' : '' }}">
-                        <a href="{{ route('aduan.create') }}">
+                        <a href="{{ route('aduan.index') }}">
                             <i class="ik ik-voicemail"></i>
                             <span>{{ __('Aduan') }}</span>
                         </a>
