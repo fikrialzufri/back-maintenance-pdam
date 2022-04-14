@@ -17,6 +17,10 @@ class Notifikasi extends Model
         'title',
         'body',
         'modul',
+        'status',
+        'from_user_id',
+        'to_user_id',
+        'modul_id'
     ];
 
     public function setTitleAttribute($value)
@@ -25,8 +29,8 @@ class Notifikasi extends Model
         $this->attributes['slug'] = Str::slug($value);
     }
 
-    public function hasAduan()
-    {
-        return $this->hasOne(Aduan::class, 'id', 'aduan_id');
-    }
+    // public function hasAduan()
+    // {
+    //     return $this->hasOne(Aduan::class, 'id', 'modul_id');
+    // }
 }

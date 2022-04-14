@@ -21,15 +21,16 @@
             <div class="top-menu d-flex align-items-center">
                 {{-- Notification --}}
                 <div class="dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="notiDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="ik ik-bell"></i><span class="badge bg-danger">{{ App\Models\Notifikasi::where('to_user_id', auth()->user()->id)->where('status', 'belum')->count() }}</span></a>
+                    {{-- <a class="nav-link dropdown-toggle" href="#" id="notiDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="ik ik-bell"></i><span class="badge bg-danger">{{ App\Models\Notifikasi::where('to_user_id', auth()->user()->id)->where('status', 'belum')->count() }}</span></a> --}}
+                    <a class="nav-link dropdown-toggle" href="#" id="notiDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="ik ik-bell"></i><span class="badge bg-danger">#</span></a>
                     <div class="dropdown-menu dropdown-menu-right notification-dropdown" aria-labelledby="notiDropdown">
                         <h4 class="header">{{ __('Notifications')}}</h4>
-                        <div class="notifications-wrap">
-                            @foreach (App\Models\Notifikasi::where('to_user_id', auth()->user()->id)->where('status', 'belum')->get() as $item)
+                        <div class="notifications-wrap" id="notifikasi">
+                            {{-- @foreach (App\Models\Notifikasi::where('to_user_id', auth()->user()->id)->where('status', 'belum')->get() as $item) --}}
                             {{-- <form class="media" action="{{ route('aduan.notification', $item->id) }}" method="POST">
                                 @csrf
                                 @method('put') --}}
-                                <a href="{{ route('aduan.notification', $item->hasAduan->id) }}" class="media">
+                                {{-- <a href="{{ route('aduan.notification', $item->hasAduan->id) }}" class="media">
                                     <span class="d-flex">
                                         <i class="ik ik-bell"></i> 
                                     </span>
@@ -39,7 +40,7 @@
                                     </span>
                                 </a>
                             {{-- </form> --}}
-                            @endforeach
+                            {{-- @endforeach --}}
                         </div>
                         <div class="footer"><a href="javascript:void(0);">{{ __('See all activity')}}</a></div>
                     </div>

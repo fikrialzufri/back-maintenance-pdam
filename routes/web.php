@@ -17,6 +17,7 @@ use App\Http\Controllers\AduanController;
 use App\Http\Controllers\PenunjukanPekerjaanController;
 use App\Http\Controllers\RekananController;
 use App\Http\Controllers\WilayahController;
+use App\Http\Controllers\NotifikasiController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -68,4 +69,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     // Rekanan
     Route::resource('rekanan', RekananController::class);
+
+    // Notifikasi
+    Route::get('notification', [NotifikasiController::class, 'index'])->name('notification');
 });
