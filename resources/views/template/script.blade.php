@@ -18,11 +18,11 @@
 {{-- <script src="{{ asset('firebase-messaging-sw.js') }}"></script> --}}
 
 <script>
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register('{{ asset('firebase-messaging-sw.js') }}');
-        });
-    }
+    // if ('serviceWorker' in navigator) {
+    //     window.addEventListener('load', () => {
+    //         navigator.serviceWorker.register('{{ asset('firebase-messaging-sw.js') }}');
+    //     });
+    // }
 </script>
 
 {{-- Notifikasi --}}
@@ -37,14 +37,17 @@
                 data: {
                     "_token": "{{ csrf_token() }}",
                 },
-                success: function(data) {
+                success: function(result) {
                     let content = '';
                     let modul = '';
-                    $.each(data.data, function(i, val) {
+                    const {
+                        total,
+                        data
+                    } = result.data;
+                    $('#total_notification').text(total);
+                    $.each(data, function(i, val) {
                         let url = '{{ route('aduan.notification', ':id') }}';
                         url = url.replace(':id', val.modul_id);
-                        let body = val.body;
-                        let title = val.title;
 
                         content += `<a href="${url}" class="media"  id="modul_${val.modul_id}">
                         <span class="d-flex">
@@ -55,69 +58,55 @@
                             <span class="media-content">${val.body}</span>
                         </span>
                     </a>`;
-                        console.log(val);
                         if (val != null) {
-                            console.log(val.modul_id);
+                            let body = val.body;
+                            let title = val.title;
                             let modul_id = val.modul_id;
+                            let url = '{{ route('aduan.notification', ':id') }}';
+                            url = url.replace(':id', val.modul_id);
                             if ($('#modul_' + modul_id).length === 0) {
                                 $('#notifikasi').append(content);
-                                console.log(body);
-                                console.log(title);
-                                console.log(url);
-                                // (async () => {
-                                //     // create and show the notification
-                                //     const showNotification = (title, body,
-                                //         url) => {
-                                //         // create a new notification
+                                let granted = false;
+                                let icon = "{{ asset('img/logo.png') }}";
 
-                                //         let icon =
-                                //             "{{ asset('img/logo.png') }}";
+                                if (body && title && url) {
+                                    let permission = Notification.permission;
+                                    if (permission === "granted") {
+                                        showNotification(body, title,
+                                            url);
+                                    } else if (permission === "default") {
+                                        requestAndShowPermission(body, title, url);
+                                    } else {
+                                        alert("Use normal alert");
+                                    }
 
-                                //         const notification =
-                                //             new Notification(title, {
-                                //                 body: body,
-                                //                 icon: icon
-                                //             });
+                                    function showNotification(body, title, url) {
+                                        console.log(body);
+                                        console.log(title);
+                                        console.log(url);
 
-                                //         // close the notification after 10 seconds
-                                //         setTimeout(() => {
-                                //             notification.close();
-                                //         }, 10 * 1000);
+                                        let notification = new Notification(title, {
+                                            body,
+                                            icon
+                                        });
+                                        notification.onclick = () => {
+                                            notification.close();
+                                            window.open(url);
+                                            window.parent.focus();
+                                        }
+                                    }
 
-                                //         // navigate to a URL when clicked
-                                //         notification.addEventListener(
-                                //             'click', () => {
-
-                                //                 window.open(url);
-                                //             });
-                                //     }
-
-                                //     // show an error message
-                                //     const showError = () => {
-                                //         const error = document
-                                //             .querySelector('.error');
-                                //         error.style.display = 'block';
-                                //         error.textContent =
-                                //             'You blocked the notifications';
-                                //     }
-
-                                //     // check notification permission
-                                //     let granted = false;
-
-                                //     if (Notification.permission === 'granted') {
-                                //         granted = true;
-                                //     } else if (Notification.permission !==
-                                //         'denied') {
-                                //         let permission = await Notification
-                                //             .requestPermission();
-                                //         granted = permission === 'granted' ?
-                                //             true : false;
-                                //     }
-
-                                //     // show notification or error
-                                //     granted ? showNotification() : showError();
-
-                                // })();
+                                    function requestAndShowPermission(body, title,
+                                        url) {
+                                        Notification.requestPermission(function(
+                                            permission) {
+                                            if (permission === "granted") {
+                                                showNotification(body, title,
+                                                    url);
+                                            }
+                                        });
+                                    }
+                                }
                             }
                         }
                     });
