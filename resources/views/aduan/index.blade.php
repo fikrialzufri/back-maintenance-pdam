@@ -45,21 +45,22 @@
                                         <td>{{ $item->lokasi }}</td>
                                         <td>{{ ucfirst($item->status) }}</td>
                                         @if ($item->status == 'draft')
-                                        <td class="text-center">
-                                            <a href="{{ route('aduan.edit', $item->slug) }}"
-                                                class="btn btn-sm btn-warning text-light">
-                                                <i class="nav-icon fas fa-edit"></i> Ubah</a>
-                                            <form id="form-{{ $item->slug }}"
-                                                action="{{ route('aduan.destroy', $item->slug) }}" method="POST"
-                                                style="display: none;">
-                                                {{ csrf_field() }}
-                                                {{ method_field('DELETE') }}
-                                            </form>
-                                            <button class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top"
-                                                title="Hapus" onclick=deleteconf("{{ $item->slug }}")>
-                                                <i class="fa fa-trash"></i> Hapus
-                                            </button>
-                                        </td>
+                                            <td class="text-center">
+                                                <a href="{{ route('aduan.edit', $item->slug) }}"
+                                                    class="btn btn-sm btn-warning text-light">
+                                                    <i class="nav-icon fas fa-edit"></i> Ubah</a>
+                                                <form id="form-{{ $item->slug }}"
+                                                    action="{{ route('aduan.destroy', $item->slug) }}" method="POST"
+                                                    style="display: none;">
+                                                    {{ csrf_field() }}
+                                                    {{ method_field('DELETE') }}
+                                                </form>
+                                                <button class="btn btn-danger btn-sm" data-toggle="tooltip"
+                                                    data-placement="top" title="Hapus"
+                                                    onclick=deleteconf("{{ $item->slug }}")>
+                                                    <i class="fa fa-trash"></i> Hapus
+                                                </button>
+                                            </td>
                                         @endif
                                     </tr>
                                 @empty
@@ -72,7 +73,7 @@
                     </div>
                     <!-- /.card-body -->
                     <div class="card-footer clearfix">
-                        {{ $aduan->links() }}
+                        {{ $aduan->appends(request()->input())->links('template.pagination') }}
                     </div>
                 </div>
                 <!-- ./col -->

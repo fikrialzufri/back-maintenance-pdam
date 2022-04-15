@@ -24,7 +24,7 @@ class RoleController extends Controller
     public function index()
     {
         $title =  "Hak Akses";
-        $dataRole = Role::where('slug', '!=', 'superadmin')->paginate(5);
+        $dataRole = Role::where('slug', '!=', 'superadmin')->orderBy('slug')->paginate(15);
         $route = 'role';
         return view('role.index', compact(
             "title",
@@ -42,7 +42,7 @@ class RoleController extends Controller
     {
         $title =  "Tambah Hak Akses";
         $action = route('role.store');
-        $tasks = Task::all();
+        $tasks = Task::orderBy('slug')->get();
         return view('role.create', compact(
             "title",
             "tasks",
@@ -97,7 +97,7 @@ class RoleController extends Controller
     {
         $title =  "Ubah Hak Akses " . $role->nama;
         $action = route('role.update', $role->id);
-        $tasks = Task::all();
+        $tasks = Task::orderBy('slug')->get();
         $izin = $role->permissions->pluck('name')->toArray();
         return view('role.edit', compact(
             'action',

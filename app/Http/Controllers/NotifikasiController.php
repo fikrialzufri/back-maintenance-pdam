@@ -18,11 +18,12 @@ class NotifikasiController extends Controller
         //     'body' => $notifikasi->body,
         //     'countNotif' => $notifikasi->count()
         // ];
-        // $result = [
-        //     'data' => $data
-        // ];
+        $result = [
+            'data' => $notifikasi,
+            'total' => count($notifikasi),
+        ];
         $message = 'success';
         // return response()->json($notifikasi);
-        return $this->sendResponse($notifikasi, $message, 200);
+        return $this->sendResponse($result, $message, 200);
     }
 }

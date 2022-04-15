@@ -54,7 +54,7 @@
                     </div>
                     <!-- /.card-body -->
                     <div class="card-footer clearfix">
-                        {{ $dataRole->links() }}
+                        {{ $dataRole->appends(request()->input())->links('template.pagination') }}
                     </div>
                 </div>
                 <!-- ./col -->
