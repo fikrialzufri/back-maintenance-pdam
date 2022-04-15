@@ -192,7 +192,7 @@ class AduanController extends Controller
 
     public function notifikasi($id)
     {
-        $notifikasi = Notifikasi::where('aduan_id', $id)->where('to_user_id', auth()->user()->id)->first();
+        $notifikasi = Notifikasi::where('modul_id', $id)->where('to_user_id', auth()->user()->id)->first();
         $notifikasi->status = 'baca';
         $notifikasi->save();
 

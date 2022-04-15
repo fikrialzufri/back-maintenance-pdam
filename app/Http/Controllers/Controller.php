@@ -54,7 +54,7 @@ class Controller extends BaseController
         return response()->json($response, $code);
     }
 
-    public function notification($aduan_id, $title, $body, $modul, $from_user_id, $to_user_id)
+    public function notification($modul_id, $title, $body, $modul, $from_user_id, $to_user_id)
     {
         $SERVER_API_KEY = env('FCM_KEY');
 
@@ -84,7 +84,7 @@ class Controller extends BaseController
         $response = curl_exec($ch);
 
         $notification = new Notifikasi();
-        $notification->aduan_id = $aduan_id;
+        $notification->modul_id = $modul_id;
         $notification->title = $title;
         $notification->body = $body;
         $notification->modul = $modul;

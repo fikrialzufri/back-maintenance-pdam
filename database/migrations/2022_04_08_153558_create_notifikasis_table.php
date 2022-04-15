@@ -22,7 +22,7 @@ class CreateNotifikasisTable extends Migration
             $table->enum('status', ['baca', 'belum'])->default('belum');
             $table->string('from_user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('to_user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreignUuid('aduan_id')->references('id')->on('aduan')->nullable();
+            $table->uuid('modul_id');
             $table->timestamps();
         });
     }
