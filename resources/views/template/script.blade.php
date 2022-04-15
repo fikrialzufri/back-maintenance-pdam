@@ -81,9 +81,6 @@
                                     }
 
                                     function showNotification(body, title, url) {
-                                        console.log(body);
-                                        console.log(title);
-                                        console.log(url);
 
                                         let notification = new Notification(title, {
                                             body,
