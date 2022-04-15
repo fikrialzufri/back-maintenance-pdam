@@ -54,7 +54,8 @@ class AuthController extends Controller
             if ($karyawan) {
                 $profile = [
                     "id" => $karyawan->id,
-                    "nik" => $karyawan->nik,
+                    "nama" => $karyawan->nama,
+                    "nip" => $karyawan->nip,
                     "nip" => $karyawan->nip,
                     "jabatan" => $karyawan->nama_jabatan,
                     "divisi" => $karyawan->divisi,
