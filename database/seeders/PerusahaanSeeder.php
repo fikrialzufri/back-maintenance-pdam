@@ -169,7 +169,7 @@ class PerusahaanSeeder extends Seeder
         $jabatanStafPengawas->save();
 
         $jabatanDirektur = new Jabatan();
-        $jabatanDirektur->nama = 'Direktur Teknis';
+        $jabatanDirektur->nama = 'Direktur Teknik';
         $jabatanDirektur->divisi_id = $divisiDistribusi->id;
         $jabatanDirektur->wilayah_id = $WilayahSamarinda->id;
         $jabatanDirektur->save();

@@ -17,7 +17,7 @@ class CreateRekanansTable extends Migration
             $table->uuid('id')->primary();
             $table->string('nama');
             $table->string('slug');
-            $table->string('nama_penangung_jawab');
+            $table->string('nama_penanggung_jawab');
             $table->string('nik');
             $table->string('no_hp');
             $table->longText('alamat');

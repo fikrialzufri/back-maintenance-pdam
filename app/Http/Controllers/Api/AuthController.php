@@ -66,7 +66,7 @@ class AuthController extends Controller
                 $profile = [
                     "id" => $rekanan->id,
                     "nama" => $rekanan->nama,
-                    "nama_penangung_jawab" => $rekanan->nama_penangung_jawab,
+                    "nama_penanggung_jawab" => $rekanan->nama_penanggung_jawab,
                     "nik" => $rekanan->nik,
                     "no_hp" => $rekanan->no_hp,
                     "alamat" => $rekanan->alamat,
