@@ -37,6 +37,7 @@ class ItemController extends Controller
             $data = $query->get();
             foreach ($data as $key => $value) {
                 $result[$key] = [
+                    'id' =>  $value->id,
                     'nama' =>  $value->nama,
                     'slug' =>  $value->slug,
                     'satuan' =>  $value->satuan,
