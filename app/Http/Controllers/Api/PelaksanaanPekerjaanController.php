@@ -67,55 +67,53 @@ class PelaksanaanPekerjaanController extends Controller
      */
     public function store(Request $request)
     {
-        // return $request;
         DB::beginTransaction();
         $message = 'Gagal Menyimpan Pelaksanaan Pekerjaan';
         $user_id = auth()->user()->id;
         $rekanan_id = auth()->user()->id_rekanan;
-        $dataPelaksanaanPekerjaan = $this->model()->count();
-        if ($dataPelaksanaanPekerjaan >= 1) {
-            $no = str_pad($dataPelaksanaanPekerjaan + 1, 4, "0", STR_PAD_LEFT);
-            $nomor_pelaksanaan_pekerjaan =  $no . "/" . "PPK/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
-        } else {
-            $no = str_pad(1, 4, "0", STR_PAD_LEFT);
-            $nomor_pelaksanaan_pekerjaan =  $no . "/" . "PPK/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
-        }
+        try {
+            $dataPelaksanaanPekerjaan = $this->model()->count();
+            if ($dataPelaksanaanPekerjaan >= 1) {
+                $no = str_pad($dataPelaksanaanPekerjaan + 1, 4, "0", STR_PAD_LEFT);
+                $nomor_pelaksanaan_pekerjaan =  $no . "/" . "PPK/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
+            } else {
+                $no = str_pad(1, 4, "0", STR_PAD_LEFT);
+                $nomor_pelaksanaan_pekerjaan =  $no . "/" . "PPK/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
+            }
 
-        $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $request->nomor_pekerjaan)->first();
+            $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $request->nomor_pekerjaan)->first();
 
-        $pelaksanaan_pekerjaan = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->first();
+            $pelaksanaan_pekerjaan = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->first();
 
-        if ($pelaksanaan_pekerjaan) {
-            $message = "No SPK sudah dikerjakan";
-            $response = [
-                'success' => false,
-                'message' => $message,
-                'code' => '409'
-            ];
-            return $this->sendError($response, $message, 409);
-        }
+            if ($pelaksanaan_pekerjaan) {
+                $message = "No SPK sudah dikerjakan";
+                $response = [
+                    'success' => false,
+                    'message' => $message,
+                    'code' => '409'
+                ];
+                return $this->sendError($response, $message, 409);
+            }
 
-        DB::commit();
-        $data = $this->model();
-        $data->nomor_pelaksanaan_pekerjaan = $nomor_pelaksanaan_pekerjaan;
-        $data->penunjukan_pekerjaan_id = $penunjukanPekerjaan->id;
-        $data->rekanan_id = $rekanan_id;
-        $data->aduan_id = $penunjukanPekerjaan->aduan_id;
-        $data->user_id = $user_id;
+            DB::commit();
+            $data = $this->model();
+            $data->nomor_pelaksanaan_pekerjaan = $nomor_pelaksanaan_pekerjaan;
+            $data->penunjukan_pekerjaan_id = $penunjukanPekerjaan->id;
+            $data->rekanan_id = $rekanan_id;
+            $data->aduan_id = $penunjukanPekerjaan->aduan_id;
+            $data->user_id = $user_id;
 
-        $data->lokasi = $request->lokasi;
-        $data->lat_long = $request->lat_long;
-        $data->keterangan = $request->keterangan;
+            $data->keterangan = $request->keterangan;
 
-        $data->status = 'draft';
-        $data->save();
+            $data->status = 'draft';
+            $data->save();
 
-        $penunjukanPekerjaan->status = 'proses';
-        $penunjukanPekerjaan->save();
+            $penunjukanPekerjaan->status = 'proses';
+            $penunjukanPekerjaan->save();
 
-        $message = 'Berhasil Menyimpan Pelaksanaan Pekerjaan';
-        return $this->sendResponse($data, $message, 200);
-        try { } catch (\Throwable $th) {
+            $message = 'Berhasil Menyimpan Pelaksanaan Pekerjaan';
+            return $this->sendResponse($data, $message, 200);
+        } catch (\Throwable $th) {
             DB::rollback();
             $response = [
                 'success' => false,
