@@ -13,6 +13,7 @@ class PenunjukanPekerjaan extends Model
 
     protected $table = 'penunjukan_pekerjaan';
     protected $guarded = ['id'];
+    protected $appends = ['status_mobile'];
     protected $fillable = [
         'nomor_pekerjaan',
         'status',
