@@ -42,6 +42,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     // list penunjukan-pekerjaan
     Route::get('list-pekerjaan', PenunjukanPekerjaanController::class . '@index')->name('penunjukan.api.index');
+    // Detail penunjukan-pekerjaan
+    Route::get('list-pekerjaan/{slug}', PenunjukanPekerjaanController::class . '@show')->name('penunjukan.api.show');
 
     // simpan penunjukan-pekerjaan
     Route::post('penunjukan-pekerjaan', PenunjukanPekerjaanController::class . '@store')->name('penunjukan.api.store');
