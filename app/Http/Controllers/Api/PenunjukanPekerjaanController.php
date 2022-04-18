@@ -43,7 +43,7 @@ class PenunjukanPekerjaanController extends Controller
             if (request()->user()->hasRole('rekanan')) {
                 $query = $query->where('rekanan_id',  $rekanan_id);
             }
-            $data = $query->orderBy('created_at')->get();
+            $data = $query->with('hasAduan')->orderBy('created_at')->get();
             if (count($data) == 0) {
                 $message = 'Data Penunjukan Pekerjaan Belum Ada';
             }
