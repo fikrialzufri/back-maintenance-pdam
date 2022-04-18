@@ -74,53 +74,6 @@ class PenunjukanPekerjaanController extends Controller
             return $this->sendError($response, $th, 404);
         }
     }
-
-    /**
-     * Display the specified resource.
-     *
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function show($slug)
-    {
-        $result = [];
-        $message = 'List Penunjukan Pekerjaan';
-        $rekanan_id = auth()->user()->id_rekanan;
-        $message = 'Data Penunjukan Pekerjaan';
-
-        try {
-            $query = $this->model();
-            if ($slug != '') {
-                $query = $query->where('slug',  $slug);
-            }
-            if (request()->user()->hasRole('rekanan')) {
-                $query = $query->where('rekanan_id',  $rekanan_id);
-            }
-            $data = $query->with('hasAduan')->orderBy('created_at')->get();
-
-            $result = [
-                'id' =>  $data->id,
-                'nomor_pekerjaan' =>  $data->nomor_pekerjaan,
-                'slug' =>  $data->slug,
-                'status' =>  $data->status,
-                'aduan' =>  $data->hasAduan,
-                'created_at' =>  $data->created_at,
-                'status_mobile' =>  $data->status_mobile,
-            ];
-
-            if (count($data) == 0) {
-                $message = 'Data Penunjukan Pekerjaan Belum Ada';
-            }
-            return $this->sendResponse($result, $message, 200);
-        } catch (\Throwable $th) {
-            $response = [
-                'success' => false,
-                'message' => $message,
-            ];
-            return $this->sendError($response, $th, 404);
-        }
-    }
-
     /**
      * Store a newly created resource in storage.
      *
