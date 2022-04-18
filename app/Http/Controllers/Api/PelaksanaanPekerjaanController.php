@@ -168,16 +168,16 @@ class PelaksanaanPekerjaanController extends Controller
         $penunjukanPekerjaan->status = 'proses';
         $penunjukanPekerjaan->save();
 
-        // update histori user
-        $keterangan = [
-            'keterangan' => 'proses',
-        ];
+        // // update histori user
+        // $keterangan = [
+        //     'keterangan' => 'proses',
+        // ];
 
-        $syncData  = array_combine($data->id, $keterangan);
+        // $syncData  = array_combine($data->id, $keterangan);
 
-        $data->hasUserMany()->sync($syncData);
+        // $data->hasUserMany()->sync($syncData);
 
-        $penunjukanPekerjaan->hasUserMany()->sync($syncData);
+        // $penunjukanPekerjaan->hasUserMany()->sync($syncData);
 
         $message = 'Berhasil Menyimpan Pelaksanaan Pekerjaan';
         return $this->sendResponse($data, $message, 200);
