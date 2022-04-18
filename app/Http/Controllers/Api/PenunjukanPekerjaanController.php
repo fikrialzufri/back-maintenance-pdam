@@ -28,37 +28,38 @@ class PenunjukanPekerjaanController extends Controller
         $message = 'List Penunjukan Pekerjaan';
         $rekanan_id = auth()->user()->id_rekanan;
 
-        $query = $this->model();
-        if ($nomor_pekerjaan != '') {
-            $query = $query->where('nomor_pekerjaan',  $nomor_pekerjaan);
-        }
-        if ($status != '') {
-            $query = $query->where('status',  $status);
-        }
-        if ($aduan_id != '') {
-            $query = $query->where('aduan_id',  $aduan_id);
-        }
-        if (request()->user()->hasRole('rekanan')) {
-            $query = $query->where('rekanan_id',  $rekanan_id);
-        }
-        $data = $query->with('hasAduan')->orderBy('created_at')->get();
+        try {
+            $query = $this->model();
+            if ($nomor_pekerjaan != '') {
+                $query = $query->where('nomor_pekerjaan',  $nomor_pekerjaan);
+            }
+            if ($status != '') {
+                $query = $query->where('status',  $status);
+            }
+            if ($aduan_id != '') {
+                $query = $query->where('aduan_id',  $aduan_id);
+            }
+            if (request()->user()->hasRole('rekanan')) {
+                $query = $query->where('rekanan_id',  $rekanan_id);
+            }
+            $data = $query->with('hasAduan')->orderBy('created_at')->get();
 
-        foreach ($data as $key => $value) {
-            $result[$key] = [
-                'id' =>  $value->id,
-                'nomor_pekerjaan' =>  $value->nomor_pekerjaan,
-                'slug' =>  $value->slug,
-                'status' =>  $value->status,
-                'lokasi' =>  $value->hasAduan->lokasi,
-                'created_at' =>  $value->created_at,
-                'status_mobile' =>  $value->status_mobile,
-            ];
-        }
-        if (count($data) == 0) {
-            $message = 'Data Penunjukan Pekerjaan Belum Ada';
-        }
-        return $this->sendResponse($result, $message, 200);
-        try { } catch (\Throwable $th) {
+            foreach ($data as $key => $value) {
+                $result[$key] = [
+                    'id' =>  $value->id,
+                    'nomor_pekerjaan' =>  $value->nomor_pekerjaan,
+                    'slug' =>  $value->slug,
+                    'status' =>  $value->status,
+                    'lokasi' =>  $value->hasAduan->lokasi,
+                    'created_at' =>  $value->created_at,
+                    'status_mobile' =>  $value->status_mobile,
+                ];
+            }
+            if (count($data) == 0) {
+                $message = 'Data Penunjukan Pekerjaan Belum Ada';
+            }
+            return $this->sendResponse($result, $message, 200);
+        } catch (\Throwable $th) {
             $response = [
                 'success' => false,
                 'message' => $message,
