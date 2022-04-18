@@ -44,10 +44,22 @@ class PenunjukanPekerjaanController extends Controller
                 $query = $query->where('rekanan_id',  $rekanan_id);
             }
             $data = $query->with('hasAduan')->orderBy('created_at')->get();
+
+            foreach ($data as $key => $value) {
+                $result[$key] = [
+                    'id' =>  $value->id,
+                    'nomor_pekerjaan' =>  $value->nomor_pekerjaan,
+                    'slug' =>  $value->slug,
+                    'status' =>  $value->status,
+                    'lokasi' =>  $value->has_aduan->lokasi,
+                    'created_at' =>  $value->created_at,
+                    'status_mobile' =>  $value->status_mobile,
+                ];
+            }
             if (count($data) == 0) {
                 $message = 'Data Penunjukan Pekerjaan Belum Ada';
             }
-            return $this->sendResponse($data, $message, 200);
+            return $this->sendResponse($result, $message, 200);
         } catch (\Throwable $th) {
             $response = [
                 'success' => false,
