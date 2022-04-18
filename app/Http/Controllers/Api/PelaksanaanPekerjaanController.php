@@ -134,53 +134,52 @@ class PelaksanaanPekerjaanController extends Controller
         DB::beginTransaction();
         $message = 'Gagal Menyimpan Pelaksanaan Pekerjaan';
         $slug = $request->slug;
-        try {
-            DB::commit();
-            $data = $this->model()->where('slug', $slug)->first();
-            $data->lokasi = $request->lokasi;
-            $data->lat_long = $request->lat_long;
-            $data->user_id = $request->user_id;
-            $data->tanggal_mulai = Carbon::now();
-            $data->status = 'proses';
-            $data->save();
+        DB::commit();
+        $data = $this->model()->where('slug', $slug)->first();
+        $data->lokasi = $request->lokasi;
+        $data->lat_long = $request->lat_long;
+        $data->user_id = $request->user_id;
+        $data->tanggal_mulai = Carbon::now();
+        $data->status = 'proses';
+        $data->save();
 
-            // TODO
-            // Belum Nyimpan Foto
-            if (isset($request->foto)) {
-                $names = [];
-                if ($request->hasFile('foto')) {
-                    foreach ($request->file('foto') as $image) {
-                        $destinationPath = 'images/';
-                        $filename = $image->getClientOriginalName();
-                        $image->move($destinationPath, $filename);
-                        array_push($names, $filename);
-                    }
-                    $media = new Media();
-                    $media->file = json_encode($names);
-                    $media->nama = 'Proses Pelaksanan Kerja';
-                    $media->modul = 'PelaksananKerja';
-                    $media->save();
+        // TODO
+        // Belum Nyimpan Foto
+        if (isset($request->foto)) {
+            $names = [];
+            if ($request->hasFile('foto')) {
+                foreach ($request->file('foto') as $image) {
+                    $destinationPath = 'images/';
+                    $filename = $image->getClientOriginalName();
+                    $image->move($destinationPath, $filename);
+                    array_push($names, $filename);
                 }
+                $media = new Media();
+                $media->file = json_encode($names);
+                $media->nama = 'Proses Pelaksanan Kerja';
+                $media->modul = 'PelaksananKerja';
+                $media->save();
             }
+        }
 
-            $penunjukanPekerjaan = PenunjukanPekerjaan::find($data->penunjukan_pekerjaan_id);
-            $penunjukanPekerjaan->status = 'proses';
-            $penunjukanPekerjaan->save();
+        $penunjukanPekerjaan = PenunjukanPekerjaan::find($data->penunjukan_pekerjaan_id);
+        $penunjukanPekerjaan->status = 'proses';
+        $penunjukanPekerjaan->save();
 
-            // update histori user
-            $keterangan = [
-                'keterangan' => 'proses',
-            ];
+        // update histori user
+        $keterangan = [
+            'keterangan' => 'proses',
+        ];
 
-            $syncData  = array_combine($data->id, $keterangan);
+        $syncData  = array_combine($data->id, $keterangan);
 
-            $data->hasUserMany()->sync($syncData);
+        $data->hasUserMany()->sync($syncData);
 
-            $penunjukanPekerjaan->hasUserMany()->sync($syncData);
+        $penunjukanPekerjaan->hasUserMany()->sync($syncData);
 
-            $message = 'Berhasil Menyimpan Pelaksanaan Pekerjaan';
-            return $this->sendResponse($data, $message, 200);
-        } catch (\Throwable $th) {
+        $message = 'Berhasil Menyimpan Pelaksanaan Pekerjaan';
+        return $this->sendResponse($data, $message, 200);
+        try { } catch (\Throwable $th) {
             DB::rollback();
             $response = [
                 'success' => false,
