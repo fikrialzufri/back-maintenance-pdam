@@ -134,9 +134,9 @@ class PelaksanaanPekerjaanController extends Controller
         DB::beginTransaction();
         $message = 'Gagal Menyimpan Pelaksanaan Pekerjaan';
         $slug = $request->slug;
-        return $lokasi = $request->lokasi;
+        $lokasi = $request->lokasi;
         DB::commit();
-        $data = $this->model()->where('slug', $slug)->first();
+        return $data = $this->model()->where('slug', $slug)->first();
         $data->lokasi = $request->lokasi;
         $data->lat_long = $request->lat_long;
         $data->user_id = $request->user_id;
