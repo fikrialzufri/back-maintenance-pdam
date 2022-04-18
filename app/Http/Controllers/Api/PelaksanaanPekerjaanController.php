@@ -135,11 +135,12 @@ class PelaksanaanPekerjaanController extends Controller
         $message = 'Gagal Menyimpan Pelaksanaan Pekerjaan';
         $slug = $request->slug;
         $lokasi = $request->lokasi;
+        $user_id = auth()->user()->id;
         DB::commit();
         $data = $this->model()->where('slug', $slug)->first();
         $data->lokasi = $lokasi;
         $data->lat_long = $request->lat_long;
-        $data->user_id = $request->user_id;
+        $data->user_id = $user_id;
         $data->tanggal_mulai = Carbon::now();
         $data->status = 'proses';
         $data->save();
