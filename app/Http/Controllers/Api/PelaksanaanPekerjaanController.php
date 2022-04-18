@@ -244,14 +244,14 @@ class PelaksanaanPekerjaanController extends Controller
                 }
             }
 
-            // update histori user
-            $keterangan = [
-                'keterangan' => $status,
-            ];
+            // // update histori user
+            // $keterangan = [
+            //     'keterangan' => $status,
+            // ];
 
-            $syncData  = array_combine($data->id, $keterangan);
+            // $syncData  = array_combine($data->id, $keterangan);
 
-            $data->hasUserMany()->sync($syncData);
+            // $data->hasUserMany()->sync($syncData);
 
             $message = 'Berhasil Menyimpan Pelaksanaan Pekerjaan';
             return $this->sendResponse($data, $message, 200);
