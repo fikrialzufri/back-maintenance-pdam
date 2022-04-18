@@ -26,11 +26,11 @@ class ItemController extends Controller
 
         try {
             $message = 'Data Item';
-            $listjenis = Jenis::where('nama', 'like', '%' . $jenis . '%')->first();
 
             $query = $this->model();
             $query = $query->where('nama', 'like', '%' . $nama . '%');
-            if ($listjenis) {
+            if ($jenis) {
+                $listjenis = Jenis::where('nama', 'like', '%' . $jenis . '%')->first();
                 $query = $query->where('jenis_id', $listjenis->id);
             }
 

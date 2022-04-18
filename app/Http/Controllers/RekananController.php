@@ -32,7 +32,7 @@ class RekananController extends Controller
                 'alias'    => 'Nama CV',
             ],
             [
-                'name'    => 'nama_penanggung_jawab',
+                'name'    => 'nama_penangung_jawab',
                 'alias'    => 'Nama Penanggung Jawab',
 
             ],
