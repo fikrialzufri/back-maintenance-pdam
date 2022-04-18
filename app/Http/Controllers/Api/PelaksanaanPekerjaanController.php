@@ -129,10 +129,11 @@ class PelaksanaanPekerjaanController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function proses(Request $request, $slug)
+    public function proses(Request $request)
     {
         DB::beginTransaction();
         $message = 'Gagal Menyimpan Pelaksanaan Pekerjaan';
+        $slug = $request->slug;
         try {
             DB::commit();
             $data = $this->model()->where('slug', $slug)->first();
