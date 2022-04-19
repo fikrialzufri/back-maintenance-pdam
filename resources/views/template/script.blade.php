@@ -46,10 +46,12 @@
                     } = result.data;
                     $('#total_notification').text(total);
                     $.each(data, function(i, val) {
+                        let id = val.id;
+                        let lenght = $('#modul_' + id).length;
                         let url = '{{ route('aduan.notification', ':id') }}';
                         url = url.replace(':id', val.modul_id);
 
-                        content += `<a href="${url}" class="media"  id="modul_${val.modul_id}">
+                        content = `<a href="${url}" class="media"  id="modul_${val.id}">
                         <span class="d-flex">
                             <i class="ik ik-bell"></i>
                         </span>
@@ -62,10 +64,14 @@
                             let body = val.body;
                             let title = val.title;
                             let modul_id = val.modul_id;
+
                             let url = '{{ route('aduan.notification', ':id') }}';
                             url = url.replace(':id', val.modul_id);
-                            if ($('#modul_' + modul_id).length === 0) {
+
+                            console.log(lenght);
+                            if (lenght === 0) {
                                 $('#notifikasi').append(content);
+
                                 let granted = false;
                                 let icon = "{{ asset('img/logo.png') }}";
 
@@ -104,9 +110,11 @@
                                         });
                                     }
                                 }
+
                             }
                         }
                     });
+
                 }
             });
         };

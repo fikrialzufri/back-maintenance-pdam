@@ -58,6 +58,12 @@ class PenunjukanPekerjaan extends Model
             return $this->hasAduan->sumber_informasi;
         }
     }
+    public function getKeteranganAduanAttribute()
+    {
+        if ($this->hasAduan) {
+            return $this->hasAduan->keterangan;
+        }
+    }
 
     public function hasRekanan()
     {
