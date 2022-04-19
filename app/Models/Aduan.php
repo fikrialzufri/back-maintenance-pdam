@@ -12,7 +12,7 @@ class Aduan extends Model
 
     protected $table = 'aduan';
     protected $guarded = ['id'];
-    protected $appends = ['status_mobile'];
+    protected $appends = ['status_mobile', 'jenis'];
     protected $fillable = [
         'no_ticket',
         'no_aduan',
@@ -41,13 +41,13 @@ class Aduan extends Model
 
     public function getJenisAttribute()
     {
-        $data = '';
+        $data = [];
         if ($this->hasJenisAduan) {
-            foreach ($this->hasJenisAduan as $value) {
-                $data += $value->nama . ' ,';
+            foreach ($this->hasJenisAduan as $index => $value) {
+                $data[$index] = $value->nama;
             }
         }
-        return rtrim($data, " ,");
+        return rtrim(implode(", ", $data), ", ");
     }
 
     public function hasUser()
