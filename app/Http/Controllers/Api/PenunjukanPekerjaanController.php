@@ -60,7 +60,11 @@ class PenunjukanPekerjaanController extends Controller
                         'status' =>  $data->status,
                         'lokasi_aduan' =>  $data->lokasi,
                         'lokasi_pekerjaan' =>  $data->lokasi_pekerjaan,
+                        'lat_lang' =>  $data->lat_long,
                         'nama_rekanan' =>  $data->rekanan,
+                        'jenis_aduan' =>  $data->jenis_aduan,
+                        'atas_nama' =>  $data->atas_nama,
+                        'sumber_informasi' =>  $data->sumber_informasi,
                         'created_at' =>  $data->created_at,
                         'status_mobile' =>  $data->status_mobile,
                     ];
@@ -77,7 +81,10 @@ class PenunjukanPekerjaanController extends Controller
                         'slug' =>  $value->slug,
                         'status' =>  $value->status,
                         'lokasi_aduan' =>  $value->lokasi,
+                        'jenis_aduan' =>  $data->jenis_aduan,
                         'nama_rekanan' =>  $value->rekanan,
+                        'atas_nama' =>  $data->atas_nama,
+                        'sumber_informasi' =>  $data->sumber_informasi,
                         'created_at' =>  $value->created_at,
                         'status_mobile' =>  $value->status_mobile,
                     ];
@@ -157,11 +164,12 @@ class PenunjukanPekerjaanController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $slug)
+    public function update(Request $request)
     {
         DB::beginTransaction();
         $message = 'Gagal Mengubah Penunjukan Pekerjaan';
         $status = $request->status;
+        $slug = $request->slug;
         $user_id = auth()->user()->id;
         try {
             DB::commit();

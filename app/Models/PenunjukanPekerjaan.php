@@ -39,6 +39,25 @@ class PenunjukanPekerjaan extends Model
             return $this->hasAduan->lokasi;
         }
     }
+    public function getJenisAduanAttribute()
+    {
+        if ($this->hasAduan) {
+            return $this->hasAduan->jenis;
+        }
+    }
+    public function getAtasNamaAttribute()
+    {
+        if ($this->hasAduan) {
+            return $this->hasAduan->atas_nama;
+        }
+    }
+
+    public function getSumberInformasiAttribute()
+    {
+        if ($this->hasAduan) {
+            return $this->hasAduan->sumber_informasi;
+        }
+    }
 
     public function hasRekanan()
     {

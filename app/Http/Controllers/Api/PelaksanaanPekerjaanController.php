@@ -329,7 +329,45 @@ class PelaksanaanPekerjaanController extends Controller
         }
     }
 
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request)
+    {
+        DB::beginTransaction();
+        $message = 'Gagal Mengubah Penunjukan Pekerjaan';
+        $status = $request->status;
+        $slug = $request->slug;
+        $user_id = auth()->user()->id;
+        try {
+            DB::commit();
+            $data = $this->model()->whereSlug($slug)->first();
+            $data->status = $status;
+            $data->save();
 
+            $keterangan = [
+                'keterangan' => $status,
+            ];
+
+            $syncData  = array_combine($user_id, $keterangan);
+            $data->hasUserMany()->sync($syncData);
+
+            $message = 'Berhasil Mengubah Penunjukan Pekerjaan';
+            return $this->sendResponse($data, $message, 200);
+        } catch (\Throwable $th) {
+            DB::rollback();
+            $response = [
+                'success' => false,
+                'message' => $message,
+                'code' => '404'
+            ];
+            return $this->sendError($response, $th, 404);
+        }
+    }
 
     public function model()
     {

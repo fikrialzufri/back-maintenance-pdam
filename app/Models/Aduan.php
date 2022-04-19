@@ -39,6 +39,17 @@ class Aduan extends Model
         return $this->belongsToMany(JenisAduan::class, 'aduan_jenis_aduan');
     }
 
+    public function getJenisAttribute()
+    {
+        $data = '';
+        if ($this->hasJenisAduan) {
+            foreach ($this->hasJenisAduan as $value) {
+                $data += $value->nama . ' ,';
+            }
+        }
+        return rtrim($data, " ,");
+    }
+
     public function hasUser()
     {
         return $this->hasOne(User::class, 'id', 'user_id');
