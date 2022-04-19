@@ -33,6 +33,13 @@ class PenunjukanPekerjaan extends Model
         return $this->hasOne(Aduan::class, 'id', 'aduan_id');
     }
 
+    public function getLokasiAttribute()
+    {
+        if ($this->hasAduan) {
+            return $this->hasAduan->lokasi;
+        }
+    }
+
     public function hasRekanan()
     {
         return $this->hasOne(Rekanan::class, 'id', 'rekanan_id');

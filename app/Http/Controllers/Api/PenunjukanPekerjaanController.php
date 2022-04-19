@@ -56,7 +56,7 @@ class PenunjukanPekerjaanController extends Controller
                         'nomor_pekerjaan' =>  $value->nomor_pekerjaan,
                         'slug' =>  $value->slug,
                         'status' =>  $value->status,
-                        'lokasi' =>  $value->hasAduan->lokasi,
+                        'lokasi' =>  $value->lokasi,
                         'created_at' =>  $value->created_at,
                         'status_mobile' =>  $value->status_mobile,
                     ];
