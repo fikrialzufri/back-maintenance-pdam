@@ -21,15 +21,15 @@ class PenunjukanPekerjaanController extends Controller
 
     public function index(Request $request)
     {
-        $nomor_pekerjaan = $request->nomor_pekerjaan;
-        $status = $request->status;
-        $slug = $request->slug;
-        $aduan_id = $request->aduan_id;
-        $result = [];
-        $message = 'List Penunjukan Pekerjaan';
-        $rekanan_id = auth()->user()->id_rekanan;
-
         try {
+            $nomor_pekerjaan = $request->nomor_pekerjaan;
+            $status = $request->status;
+            $slug = $request->slug;
+            $aduan_id = $request->aduan_id;
+            $result = [];
+            $message = 'List Penunjukan Pekerjaan';
+            $rekanan_id = auth()->user()->id_rekanan;
+
             $query = $this->model();
             if ($nomor_pekerjaan != '') {
                 $query = $query->where('nomor_pekerjaan',  $nomor_pekerjaan);
@@ -49,20 +49,27 @@ class PenunjukanPekerjaanController extends Controller
 
             if ($slug) {
                 $data = $query->with('hasAduan')->orderBy('created_at')->first();
-                $result = [
-                    'id' =>  $data->id,
-                    'nomor_pekerjaan' =>  $data->nomor_pekerjaan,
-                    'nomor_pelaksaan_pekerjaan' =>  $data->nomor_pelaksanaan_pekerjaan,
-                    'slug' =>  $data->slug,
-                    'status' =>  $data->status,
-                    'lokasi_aduan' =>  $data->lokasi,
-                    'lokasi_pekerjaan' =>  $data->lokasi,
-                    'nama_rekanan' =>  $data->rekanan,
-                    'created_at' =>  $data->created_at,
-                    'status_mobile' =>  $data->status_mobile,
-                ];;
+                if (!$data) {
+                    $message = 'Data Penunjukan Pekerjaan Belum Ada';
+                } else {
+                    $result = [
+                        'id' =>  $data->id,
+                        'nomor_pekerjaan' =>  $data->nomor_pekerjaan,
+                        'nomor_pelaksaan_pekerjaan' =>  $data->nomor_pelaksanaan_pekerjaan,
+                        'slug' =>  $data->slug,
+                        'status' =>  $data->status,
+                        'lokasi_aduan' =>  $data->lokasi,
+                        'lokasi_pekerjaan' =>  $data->lokasi_pekerjaan,
+                        'nama_rekanan' =>  $data->rekanan,
+                        'created_at' =>  $data->created_at,
+                        'status_mobile' =>  $data->status_mobile,
+                    ];
+                }
             } else {
                 $data = $query->with('hasAduan')->orderBy('created_at')->get();
+                if (count($data) == 0) {
+                    $message = 'Data Penunjukan Pekerjaan Belum Ada';
+                }
                 foreach ($data as $key => $value) {
                     $result[$key] = [
                         'id' =>  $value->id,
@@ -76,9 +83,7 @@ class PenunjukanPekerjaanController extends Controller
                     ];
                 }
             }
-            if (count($data) == 0) {
-                $message = 'Data Penunjukan Pekerjaan Belum Ada';
-            }
+
             return $this->sendResponse($result, $message, 200);
         } catch (\Throwable $th) {
             $response = [
