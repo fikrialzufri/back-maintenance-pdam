@@ -47,7 +47,10 @@ class Aduan extends Model
                 $data[$index] = $value->nama;
             }
         }
-        return rtrim(implode(", ", $data), ", ");
+        // menjadikan EYD atau comma serta dan di belakang comma
+        $data = rtrim(implode(", ", $data), ", ");
+        $data = substr_replace($data, ' dan', strrpos($data, ','), 1);;
+        return $data;
     }
 
     public function hasUser()
