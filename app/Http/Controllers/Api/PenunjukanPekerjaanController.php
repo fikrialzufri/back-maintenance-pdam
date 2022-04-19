@@ -46,17 +46,31 @@ class PenunjukanPekerjaanController extends Controller
             if (request()->user()->hasRole('rekanan')) {
                 $query = $query->where('rekanan_id',  $rekanan_id);
             }
-            $data = $query->with('hasAduan')->orderBy('created_at')->get();
+
             if ($slug) {
-                $result = $data;
+                $data = $query->with('hasAduan')->orderBy('created_at')->first();
+                $result = [
+                    'id' =>  $data->id,
+                    'nomor_pekerjaan' =>  $data->nomor_pekerjaan,
+                    'nomor_pelaksaan_pekerjaan' =>  $data->nomor_pelaksanaan_pekerjaan,
+                    'slug' =>  $data->slug,
+                    'status' =>  $data->status,
+                    'lokasi_aduan' =>  $data->lokasi,
+                    'lokasi_pekerjaan' =>  $data->lokasi,
+                    'nama_rekanan' =>  $data->rekanan,
+                    'created_at' =>  $data->created_at,
+                    'status_mobile' =>  $data->status_mobile,
+                ];;
             } else {
+                $data = $query->with('hasAduan')->orderBy('created_at')->get();
                 foreach ($data as $key => $value) {
                     $result[$key] = [
                         'id' =>  $value->id,
                         'nomor_pekerjaan' =>  $value->nomor_pekerjaan,
                         'slug' =>  $value->slug,
                         'status' =>  $value->status,
-                        'lokasi' =>  $value->lokasi,
+                        'lokasi_aduan' =>  $value->lokasi,
+                        'nama_rekanan' =>  $value->rekanan,
                         'created_at' =>  $value->created_at,
                         'status_mobile' =>  $value->status_mobile,
                     ];

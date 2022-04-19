@@ -45,10 +45,32 @@ class PenunjukanPekerjaan extends Model
         return $this->hasOne(Rekanan::class, 'id', 'rekanan_id');
     }
 
+    public function getRekananAttribute()
+    {
+        if ($this->hasRekanan) {
+            return $this->hasRekanan->nama;
+        }
+    }
+
     public function hasPenunjunkanPekerjaan()
     {
         return $this->belongsToMany(PenunjukanPekerjaan::class, 'id', 'penunjukan_pekerjaan_id');
     }
+
+    public function getLokasiPekerjaanAttribute()
+    {
+        if ($this->hasPenunjunkanPekerjaan) {
+            return $this->hasPenunjunkanPekerjaan->lokasi;
+        }
+    }
+
+    public function getNomorPelaksanaanPekerjaanAttribute()
+    {
+        if ($this->hasPenunjunkanPekerjaan) {
+            return $this->hasPenunjunkanPekerjaan->nomor_pelaksanaan_pekerjaan;
+        }
+    }
+
 
     public function hasUser()
     {
