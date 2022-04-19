@@ -233,7 +233,7 @@ class PelaksanaanPekerjaanController extends Controller
 
                         $media[$index] = new Media();
                         $media[$index]->file = $imageName[$index];
-                        $media[$index]->nama = 'Bahan Pelaksanan Kerja';
+                        $media[$index]->nama = 'Proses Akhir Pelaksanan Kerja';
                         $media[$index]->modul = 'pelaksanan_kerja';
                         $media[$index]->modul_id = $data->modul_id;
                         $media[$index]->save();
@@ -276,19 +276,22 @@ class PelaksanaanPekerjaanController extends Controller
             // Todo
             // simpan foto
             if (isset($request->foto)) {
-                $names = [];
+                $imageName = [];
                 if ($request->hasFile('foto')) {
-                    foreach ($request->file('foto') as $image) {
-                        $destinationPath = 'images/';
-                        $filename = $image->getClientOriginalName();
-                        $image->move($destinationPath, $filename);
-                        array_push($names, $filename);
+                    foreach ($request->file('foto') as $index => $image) {
+                        $image[$index] = str_replace('data:image/png;base64,', '', $image[$index]);
+                        $image[$index] = str_replace(' ', '+', $image[$index]);
+                        $imageName[$index] = $data->rekanana . Str::random(5) . '.png';
+
+                        Storage::disk('public')->put('bahan/' . $imageName[$index], base64_decode($image[$index]));
+
+                        $media[$index] = new Media();
+                        $media[$index]->file = $imageName[$index];
+                        $media[$index]->nama = 'Bahan Pelaksanan Kerja';
+                        $media[$index]->modul = 'pelaksanan_kerja';
+                        $media[$index]->modul_id = $data->modul_id;
+                        $media[$index]->save();
                     }
-                    $media = new Media();
-                    $media->file = json_encode($names);
-                    $media->nama = 'Penyelesaian Pelaksanan Kerja';
-                    $media->modul = 'pelaksanan_kerja';
-                    $media->save();
                 }
             }
 
