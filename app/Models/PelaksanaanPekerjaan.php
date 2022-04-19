@@ -33,6 +33,13 @@ class PelaksanaanPekerjaan extends Model
         return $this->hasOne(Rekanan::class, 'id', 'rekanan_id');
     }
 
+    public function getRekananAttribute()
+    {
+        if ($this->hasRekanan) {
+            return $this->hasRekanan->nama;
+        }
+    }
+
     public function hasPenunjukanPekerjaan()
     {
         return $this->hasOne(PenunjukanPekerjaan::class, 'id', 'penunjukan_pekerjaan_id');
