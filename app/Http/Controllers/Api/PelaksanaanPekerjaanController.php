@@ -133,49 +133,50 @@ class PelaksanaanPekerjaanController extends Controller
      */
     public function proses(Request $request)
     {
-        DB::beginTransaction();
-        $message = 'Gagal Menyimpan Pelaksanaan Pekerjaan';
-        $slug = $request->slug;
-        $lokasi = $request->lokasi;
-        $user_id = auth()->user()->id;
-        DB::commit();
-        $data = $this->model()->where('slug', $slug)->first();
-        $data->lokasi = $lokasi;
-        $data->lat_long = $request->lat_long;
-        $data->user_id = $user_id;
-        $data->tanggal_mulai = Carbon::now();
-        $data->status = 'proses';
-        $data->save();
+        try {
+            DB::beginTransaction();
+            $message = 'Gagal Menyimpan Pelaksanaan Pekerjaan';
+            $slug = $request->slug;
+            $lokasi = $request->lokasi;
+            $user_id = auth()->user()->id;
+            DB::commit();
+            $data = $this->model()->where('slug', $slug)->first();
+            $data->lokasi = $lokasi;
+            $data->lat_long = $request->lat_long;
+            $data->user_id = $user_id;
+            $data->tanggal_mulai = Carbon::now();
+            $data->status = 'proses';
+            $data->save();
 
-        // TODO
-        // Belum Nyimpan Foto
-        if (isset($request->foto)) {
-            $imageName = [];
-            if ($request->hasFile('foto')) {
-                foreach ($request->file('foto') as $index => $image) {
-                    $image[$index] = str_replace('data:image/png;base64,', '', $image[$index]);
-                    $image[$index] = str_replace(' ', '+', $image[$index]);
-                    $imageName[$index] = $data->rekanana . Str::random(5) . '.png';
+            // TODO
+            // Belum Nyimpan Foto
+            if (isset($request->foto)) {
+                $imageName = [];
+                if ($request->foto) {
+                    foreach ($request->foto as $index => $image) {
+                        $image[$index] = str_replace('data:image/png;base64,', '', $image[$index]);
+                        $image[$index] = str_replace(' ', '+', $image[$index]);
+                        $imageName[$index] = $data->rekanana . Str::random(5) . '.png';
 
-                    Storage::disk('public')->put('proses/' . $imageName[$index], base64_decode($image[$index]));
+                        Storage::disk('public')->put('proses/' . $imageName[$index], base64_decode($image[$index]));
 
-                    $media[$index] = new Media();
-                    $media[$index]->file = $imageName[$index];
-                    $media[$index]->nama = 'Proses Pelaksanan Kerja';
-                    $media[$index]->modul = 'pelaksanan_kerja';
-                    $media[$index]->modul_id = $data->modul_id;
-                    $media[$index]->save();
+                        $media[$index] = new Media();
+                        $media[$index]->file = $imageName[$index];
+                        $media[$index]->nama = 'Proses Pelaksanan Kerja';
+                        $media[$index]->modul = 'pelaksanan_kerja';
+                        $media[$index]->modul_id = $data->modul_id;
+                        $media[$index]->save();
+                    }
                 }
             }
-        }
 
-        $penunjukanPekerjaan = PenunjukanPekerjaan::find($data->penunjukan_pekerjaan_id);
-        $penunjukanPekerjaan->status = 'proses';
-        $penunjukanPekerjaan->save();
+            $penunjukanPekerjaan = PenunjukanPekerjaan::find($data->penunjukan_pekerjaan_id);
+            $penunjukanPekerjaan->status = 'proses';
+            $penunjukanPekerjaan->save();
 
-        $message = 'Berhasil Menyimpan Pelaksanaan Pekerjaan';
-        return $this->sendResponse($data, $message, 200);
-        try { } catch (\Throwable $th) {
+            $message = 'Berhasil Menyimpan Pelaksanaan Pekerjaan';
+            return $this->sendResponse($data, $message, 200);
+        } catch (\Throwable $th) {
             DB::rollback();
             $response = [
                 'success' => false,
@@ -191,15 +192,17 @@ class PelaksanaanPekerjaanController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function prosesAkhir(Request $request, $slug)
+    public function prosesAkhir(Request $request)
     {
         DB::beginTransaction();
         $message = 'Gagal Menyimpan Pelaksanaan Pekerjaan';
         $status = 'proses-akhir';
+        $slug = $request->slug;
         try {
             DB::commit();
             $data = $this->model()->where('slug', $slug)->first();
             $data->status = $status;
+            $data->tanggal_selesai = Carbon::now();
             $data->save();
 
             if (isset($request->id_item)) {
@@ -215,7 +218,6 @@ class PelaksanaanPekerjaanController extends Controller
                     ];
                 }
                 $syncData  = array_combine($item, $listitem);
-
                 $data->hasItem()->sync($syncData);
             }
 
@@ -223,8 +225,8 @@ class PelaksanaanPekerjaanController extends Controller
             // simpan foto
             if (isset($request->foto)) {
                 $imageName = [];
-                if ($request->hasFile('foto')) {
-                    foreach ($request->file('foto') as $index => $image) {
+                if ($request->foto) {
+                    foreach ($request->foto as $index => $image) {
                         $image[$index] = str_replace('data:image/png;base64,', '', $image[$index]);
                         $image[$index] = str_replace(' ', '+', $image[$index]);
                         $imageName[$index] = $data->rekanana . Str::random(5) . '.png';
@@ -259,17 +261,17 @@ class PelaksanaanPekerjaanController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function selesai(Request $request, $slug)
+    public function selesai(Request $request)
     {
         DB::beginTransaction();
         $message = 'Gagal Menyimpan Pelaksanaan Pekerjaan';
         $status = 'selesai';
+        $slug = $request->slug;
         $keterangan = $request->keterangan;
         try {
             DB::commit();
             $data = $this->model()->where('slug', $slug)->first();
             $data->status = $status;
-            $data->tanggal_selesai = Carbon::now();
             $data->keterangan = $keterangan;
             $data->save();
 
@@ -277,8 +279,8 @@ class PelaksanaanPekerjaanController extends Controller
             // simpan foto
             if (isset($request->foto)) {
                 $imageName = [];
-                if ($request->hasFile('foto')) {
-                    foreach ($request->file('foto') as $index => $image) {
+                if ($request->foto) {
+                    foreach ($request->foto as $index => $image) {
                         $image[$index] = str_replace('data:image/png;base64,', '', $image[$index]);
                         $image[$index] = str_replace(' ', '+', $image[$index]);
                         $imageName[$index] = $data->rekanana . Str::random(5) . '.png';
