@@ -156,7 +156,7 @@ class PelaksanaanPekerjaanController extends Controller
                     foreach ($request->foto as $index => $image) {
                         $image[$index] = str_replace('data:image/png;base64,', '', $image[$index]);
                         $image[$index] = str_replace(' ', '+', $image[$index]);
-                        $imageName[$index] = $data->rekanana . Str::random(5) . '.png';
+                        $imageName[$index] = $data->rekanan . Str::random(5) . '.png';
 
                         Storage::disk('public')->put('proses/' . $imageName[$index], base64_decode($image[$index]));
 
@@ -229,7 +229,7 @@ class PelaksanaanPekerjaanController extends Controller
                     foreach ($request->foto as $index => $image) {
                         $image[$index] = str_replace('data:image/png;base64,', '', $image[$index]);
                         $image[$index] = str_replace(' ', '+', $image[$index]);
-                        $imageName[$index] = $data->rekanana . Str::random(5) . '.png';
+                        $imageName[$index] = $data->rekanan . Str::random(5) . '.png';
 
                         Storage::disk('public')->put('bahan/' . $imageName[$index], base64_decode($image[$index]));
 
@@ -283,7 +283,7 @@ class PelaksanaanPekerjaanController extends Controller
                     foreach ($request->foto as $index => $image) {
                         $image[$index] = str_replace('data:image/png;base64,', '', $image[$index]);
                         $image[$index] = str_replace(' ', '+', $image[$index]);
-                        $imageName[$index] = $data->rekanana . Str::random(5) . '.png';
+                        $imageName[$index] = $data->rekanan . Str::random(5) . '.png';
 
                         Storage::disk('public')->put('bahan/' . $imageName[$index], base64_decode($image[$index]));
 
