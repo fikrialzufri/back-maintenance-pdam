@@ -47,7 +47,7 @@ class PenunjukanPekerjaanController extends Controller
         }
 
         if ($slug) {
-            return $data = $query->with('hasAduan')->orderBy('created_at')->first();
+            $data = $query->with('hasAduan')->orderBy('created_at')->first();
             if (!$data) {
                 $message = 'Data Penunjukan Pekerjaan Belum Ada';
             } else {
@@ -69,7 +69,7 @@ class PenunjukanPekerjaanController extends Controller
                 ];
             }
         } else {
-            $data = $query->with('hasAduan')->orderBy('created_at')->get();
+            return $data = $query->with('hasAduan')->orderBy('created_at')->get();
             if (count($data) == 0) {
                 $message = 'Data Penunjukan Pekerjaan Belum Ada';
             }
@@ -79,11 +79,6 @@ class PenunjukanPekerjaanController extends Controller
                     'nomor_pekerjaan' =>  $value->nomor_pekerjaan,
                     'slug' =>  $value->slug,
                     'status' =>  $value->status,
-                    'lokasi_aduan' =>  $value->lokasi,
-                    'jenis_aduan' =>  $data->jenis_aduan,
-                    'nama_rekanan' =>  $value->rekanan,
-                    'atas_nama' =>  $data->atas_nama,
-                    'sumber_informasi' =>  $data->sumber_informasi,
                     'created_at' =>  $value->created_at,
                     'status_mobile' =>  $value->status_mobile,
                 ];
