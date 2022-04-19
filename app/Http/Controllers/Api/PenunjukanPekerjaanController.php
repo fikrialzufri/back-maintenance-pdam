@@ -69,7 +69,7 @@ class PenunjukanPekerjaanController extends Controller
                 ];
             }
         } else {
-            return $data = $query->with('hasAduan')->orderBy('created_at')->get();
+            $data = $query->orderBy('created_at')->get();
             if (count($data) == 0) {
                 $message = 'Data Penunjukan Pekerjaan Belum Ada';
             }

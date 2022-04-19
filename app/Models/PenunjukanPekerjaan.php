@@ -42,7 +42,7 @@ class PenunjukanPekerjaan extends Model
     public function getJenisAduanAttribute()
     {
         if ($this->hasAduan) {
-            return $this->hasAduan->jenis;
+            return $this->hasAduan;
         }
     }
     public function getAtasNamaAttribute()
