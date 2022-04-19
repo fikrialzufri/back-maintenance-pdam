@@ -12,7 +12,7 @@ class Aduan extends Model
 
     protected $table = 'aduan';
     protected $guarded = ['id'];
-    protected $appends = ['status_mobile', 'jenis'];
+    protected $appends = ['status_mobile'];
     protected $fillable = [
         'no_ticket',
         'no_aduan',
