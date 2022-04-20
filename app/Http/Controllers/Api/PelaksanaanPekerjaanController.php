@@ -82,7 +82,7 @@ class PelaksanaanPekerjaanController extends Controller
                 $no = str_pad(1, 4, "0", STR_PAD_LEFT);
                 $nomor_pelaksanaan_pekerjaan =  $no . "/" . "PPK/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
             }
-            $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $request->nomor_pekerjaan)->first();
+            $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $request->slug)->first();
             $pelaksanaan_pekerjaan = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->first();
 
             if ($pelaksanaan_pekerjaan) {
@@ -138,7 +138,8 @@ class PelaksanaanPekerjaanController extends Controller
             $lokasi = $request->lokasi;
             $user_id = auth()->user()->id;
             DB::commit();
-            $data = $this->model()->where('slug', $slug)->first();
+            $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $request->slug)->first();
+            $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->first();
             $data->lokasi = $lokasi;
             $data->lat_long = $request->lat_long;
             $data->user_id = $user_id;
@@ -167,7 +168,6 @@ class PelaksanaanPekerjaanController extends Controller
                 }
             }
 
-            $penunjukanPekerjaan = PenunjukanPekerjaan::find($data->penunjukan_pekerjaan_id);
             $penunjukanPekerjaan->status = 'diterima';
             $penunjukanPekerjaan->save();
 
@@ -197,7 +197,8 @@ class PelaksanaanPekerjaanController extends Controller
         $slug = $request->slug;
         try {
             DB::commit();
-            $data = $this->model()->where('slug', $slug)->first();
+            $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $request->slug)->first();
+            $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->first();
             $data->status = $status;
             $data->tanggal_selesai = Carbon::now();
             $data->save();
@@ -267,7 +268,8 @@ class PelaksanaanPekerjaanController extends Controller
         $keterangan = $request->keterangan;
         try {
             DB::commit();
-            $data = $this->model()->where('slug', $slug)->first();
+            $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $request->slug)->first();
+            $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->first();
             $data->status = $status;
             $data->keterangan = $keterangan;
             $data->save();
@@ -302,8 +304,6 @@ class PelaksanaanPekerjaanController extends Controller
             $syncData  = array_combine($data->id, $keterangan);
 
             $data->hasUserMany()->sync($syncData);
-
-            $penunjukanPekerjaan = PenunjukanPekerjaan::find($data->penunjukan_pekerjaan_id);
             $penunjukanPekerjaan->status = 'selesai';
             $penunjukanPekerjaan->save();
             $penunjukanPekerjaan->hasUserMany()->sync($syncData);
@@ -342,7 +342,8 @@ class PelaksanaanPekerjaanController extends Controller
         $user_id = auth()->user()->id;
         try {
             DB::commit();
-            $data = $this->model()->whereSlug($slug)->first();
+            $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $request->slug)->first();
+            $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->first();
             $data->status = $status;
             $data->save();
 
