@@ -79,7 +79,7 @@ class PenunjukanPekerjaan extends Model
 
     public function hasPelaksanaanPekerjaan()
     {
-        return $this->hasOne(PelaksanaanPekerjaan::class, 'id', 'penunjukan_pekerjaan_id');
+        return $this->hasOne(PelaksanaanPekerjaan::class, 'penunjukan_pekerjaan_id', 'id');
     }
 
     public function getLokasiPekerjaanAttribute()
