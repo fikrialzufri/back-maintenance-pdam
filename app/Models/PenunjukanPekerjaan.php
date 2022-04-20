@@ -76,6 +76,12 @@ class PenunjukanPekerjaan extends Model
             return $this->hasRekanan->nama;
         }
     }
+    public function getMediaAttribute()
+    {
+        if ($this->hasPelaksanaanPekerjaan) {
+            return $this->hasPelaksanaanPekerjaan->hasMedia;
+        }
+    }
 
     public function hasPelaksanaanPekerjaan()
     {
@@ -86,6 +92,13 @@ class PenunjukanPekerjaan extends Model
     {
         if ($this->hasPelaksanaanPekerjaan) {
             return $this->hasPelaksanaanPekerjaan->lokasi;
+        }
+    }
+
+    public function getIdPelaksanaanPekerjaanAttribute()
+    {
+        if ($this->hasPelaksanaanPekerjaan) {
+            return $this->hasPelaksanaanPekerjaan->id;
         }
     }
 

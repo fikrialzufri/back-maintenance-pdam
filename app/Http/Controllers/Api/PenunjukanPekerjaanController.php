@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Aduan;
+use App\Models\Media;
 use App\Models\PenunjukanPekerjaan;
 use Illuminate\Http\Request;
 use DB;
@@ -51,6 +52,7 @@ class PenunjukanPekerjaanController extends Controller
             if (!$data) {
                 $message = 'Data Penunjukan Pekerjaan Belum Ada';
             } else {
+                $media = Media::where('modul',  'pelaksanan_kerja')->where('modul_id', $data->id_pelaksanaan_pekerjaan)->get();
                 $result = [
                     'id' =>  $data->id,
                     'nomor_pekerjaan' =>  $data->nomor_pekerjaan,
@@ -61,6 +63,7 @@ class PenunjukanPekerjaanController extends Controller
                     'lokasi_pekerjaan' =>  $data->lokasi_pekerjaan,
                     'lat_long' =>  $data->lat_long,
                     'nama_rekanan' =>  $data->rekanan,
+                    'foto_lokasi' =>  $media,
                     'jenis_aduan' =>  $data->jenis_aduan,
                     'atas_nama' =>  $data->atas_nama,
                     'sumber_informasi' =>  $data->sumber_informasi,
