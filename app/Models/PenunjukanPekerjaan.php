@@ -118,22 +118,15 @@ class PenunjukanPekerjaan extends Model
         if ($this->hasPelaksanaanPekerjaan) {
             return $this->hasPelaksanaanPekerjaan->status_mobile;
         } else {
-
             switch ($this->status) {
-                case 'diterima':
+                case 'proses':
                     return 1;
                     break;
-                case 'proses':
+                case 'selesai':
                     return 2;
                     break;
-                case 'proses-akhir':
-                    return 3;
-                    break;
-                case 'selesai':
-                    return 4;
-                    break;
                 case 'disetujui':
-                    return 5;
+                    return 3;
                     break;
                 default:
                     return 0;

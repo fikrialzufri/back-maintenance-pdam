@@ -110,7 +110,7 @@ class PelaksanaanPekerjaanController extends Controller
             $data->status = 'draft';
             $data->save();
 
-            $penunjukanPekerjaan->status = 'proses';
+            $penunjukanPekerjaan->status = 'diterima';
             $penunjukanPekerjaan->save();
 
             $message = 'Berhasil Menyimpan Pelaksanaan Pekerjaan';
@@ -147,7 +147,6 @@ class PelaksanaanPekerjaanController extends Controller
             $data->tanggal_mulai = Carbon::now();
             $data->status = 'proses';
             $data->save();
-
             // TODO
             // Belum Nyimpan Foto
             if (isset($request->foto)) {
@@ -171,7 +170,7 @@ class PelaksanaanPekerjaanController extends Controller
             }
 
             $penunjukanPekerjaan = PenunjukanPekerjaan::find($data->penunjukan_pekerjaan_id);
-            $penunjukanPekerjaan->status = 'proses';
+            $penunjukanPekerjaan->status = 'diterima';
             $penunjukanPekerjaan->save();
 
             $message = 'Berhasil Menyimpan Pelaksanaan Pekerjaan';
