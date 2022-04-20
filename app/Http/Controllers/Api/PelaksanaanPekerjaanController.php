@@ -156,7 +156,7 @@ class PelaksanaanPekerjaanController extends Controller
         $data->status = 'proses';
         $data->save();
 
-        $media = Media::where('modul',  'pelaksanan_kerja')->where('modul_id', $data->modul_id)->get();
+        $media = Media::where('modul',  'pelaksanan_kerja')->where('modul_id', $data->id)->get();
         if (count($media) == 0) {
             if (isset($request->foto)) {
                 $imageName = [];
@@ -175,7 +175,7 @@ class PelaksanaanPekerjaanController extends Controller
                             $media->nama = 'Proses Pelaksanan Kerja';
                             $media->modul = 'pelaksanan_kerja';
                             $media->file = $imageName;
-                            $media->modul_id = $data->modul_id;
+                            $media->modul_id = $data->id;
                             $media->user_id = $user_id;
                             $media->save();
                         }
@@ -254,7 +254,7 @@ class PelaksanaanPekerjaanController extends Controller
                 $data->hasItem()->sync($syncData);
             }
 
-            $media = Media::where('modul',  'bahan_perkerjaan')->where('modul_id', $data->modul_id)->get();
+            $media = Media::where('modul',  'bahan_perkerjaan')->where('modul_id', $data->id)->get();
             if (count($media) == 0) {
                 if (isset($request->foto)) {
                     $imageName = [];
@@ -270,7 +270,7 @@ class PelaksanaanPekerjaanController extends Controller
                                 $media->nama = 'Proses Akhir Pelaksanan Kerja';
                                 $media->modul = 'bahan_perkerjaan';
                                 $media->file = $imageName;
-                                $media->modul_id = $data->modul_id;
+                                $media->modul_id = $data->id;
                                 $media->user_id = $user_id;
                                 $media->save();
                             }
@@ -303,10 +303,11 @@ class PelaksanaanPekerjaanController extends Controller
         $message = 'Gagal Menyimpan Pelaksanaan Pekerjaan';
         $status = 'selesai';
         $slug = $request->slug;
+        $user_id = auth()->user()->id;
         $keterangan = $request->keterangan;
         try {
             DB::commit();
-            $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $request->slug)->first();
+            $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $slug)->first();
             $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->first();
 
             if ($data->status == 'selesai') {
@@ -325,22 +326,30 @@ class PelaksanaanPekerjaanController extends Controller
 
             // Todo
             // simpan foto
-            if (isset($request->foto)) {
-                $imageName = [];
-                if ($request->foto) {
-                    foreach ($request->foto as $index => $image) {
-                        $image[$index] = str_replace('data:image/png;base64,', '', $image[$index]);
-                        $image[$index] = str_replace(' ', '+', $image[$index]);
-                        $imageName[$index] = $data->rekanan . Str::random(5) . '.png';
+            $media = Media::where('modul',  'penyelesaian_kerja')->where('modul_id', $data->id)->get();
+            if (count($media) == 0) {
+                if (isset($request->foto)) {
+                    $imageName = [];
+                    if ($request->foto) {
+                        foreach ($request->foto as $index => $image) {
 
-                        Storage::disk('public')->put('bahan/' . $imageName[$index], base64_decode($image[$index]));
+                            if (preg_match('/^data:image\/(\w+);base64,/', $image)) {
+                                $imagebase64 = substr($image, strpos($image, ',') + 1);
+                                $imagebase64 = base64_decode($imagebase64);
+                                $imageName = $data->rekanan . $penunjukanPekerjaan->slug . Str::random(5) . '.png';
+                                Storage::disk('public')->put('proses/' . $imageName, $imagebase64);
 
-                        $media[$index] = new Media();
-                        $media[$index]->file = $imageName[$index];
-                        $media[$index]->nama = 'Bahan Pelaksanan Kerja';
-                        $media[$index]->modul = 'pelaksanan_kerja';
-                        $media[$index]->modul_id = $data->modul_id;
-                        $media[$index]->save();
+
+
+                                $media = new Media();
+                                $media->nama = 'Proses Penyelesaian Pelaksanan Kerja';
+                                $media->modul = 'penyelesaian_kerja';
+                                $media->file = $imageName;
+                                $media->modul_id = $data->id;
+                                $media->user_id = $user_id;
+                                $media->save();
+                            }
+                        }
                     }
                 }
             }
