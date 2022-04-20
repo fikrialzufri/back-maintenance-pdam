@@ -155,10 +155,8 @@ class PelaksanaanPekerjaanController extends Controller
         $data->tanggal_mulai = Carbon::now();
         $data->status = 'proses';
         $data->save();
-        // TODO
-        // Belum Nyimpan Foto
+
         $media = Media::where('modul',  'pelaksanan_kerja')->where('modul_id', $data->modul_id)->get();
-        // return count($media);
         if (count($media) == 0) {
             if (isset($request->foto)) {
                 $imageName = [];
@@ -210,6 +208,7 @@ class PelaksanaanPekerjaanController extends Controller
         $message = 'Gagal Menyimpan Pelaksanaan Pekerjaan';
         $status = 'proses-akhir';
         $slug = $request->slug;
+        $user_id = auth()->user()->id;
         try {
             DB::commit();
             $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug',  $slug)->first();
@@ -245,24 +244,27 @@ class PelaksanaanPekerjaanController extends Controller
                 $data->hasItem()->sync($syncData);
             }
 
-            // Todo
-            // simpan foto
-            if (isset($request->foto)) {
-                $imageName = [];
-                if ($request->foto) {
-                    foreach ($request->foto as $index => $image) {
-                        $image[$index] = str_replace('data:image/png;base64,', '', $image[$index]);
-                        $image[$index] = str_replace(' ', '+', $image[$index]);
-                        $imageName[$index] = $data->rekanan . Str::random(5) . '.png';
+            $media = Media::where('modul',  'bahan_perkerjaan')->where('modul_id', $data->modul_id)->get();
+            if (count($media) == 0) {
+                if (isset($request->foto)) {
+                    $imageName = [];
+                    if ($request->foto) {
+                        foreach ($request->foto as $index => $image) {
+                            if (preg_match('/^data:image\/(\w+);base64,/', $image)) {
+                                $imagebase64 = substr($image, strpos($image, ',') + 1);
+                                $imagebase64 = base64_decode($imagebase64);
+                                $imageName = $data->rekanan . $penunjukanPekerjaan->slug . Str::random(5) . '.png';
+                                Storage::disk('public')->put('proses/' . $imageName, $imagebase64);
 
-                        Storage::disk('public')->put('bahan/' . $imageName[$index], base64_decode($image[$index]));
-
-                        $media[$index] = new Media();
-                        $media[$index]->file = $imageName[$index];
-                        $media[$index]->nama = 'Proses Akhir Pelaksanan Kerja';
-                        $media[$index]->modul = 'pelaksanan_kerja';
-                        $media[$index]->modul_id = $data->modul_id;
-                        $media[$index]->save();
+                                $media = new Media();
+                                $media->nama = 'Proses Akhir Pelaksanan Kerja';
+                                $media->modul = 'bahan_perkerjaan';
+                                $media->file = $imageName;
+                                $media->modul_id = $data->modul_id;
+                                $media->user_id = $user_id;
+                                $media->save();
+                            }
+                        }
                     }
                 }
             }
