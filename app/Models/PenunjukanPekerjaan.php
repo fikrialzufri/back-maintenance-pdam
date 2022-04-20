@@ -96,6 +96,13 @@ class PenunjukanPekerjaan extends Model
         }
     }
 
+    public function getLatLongAttribute()
+    {
+        if ($this->hasPelaksanaanPekerjaan) {
+            return $this->hasPelaksanaanPekerjaan->lat_long;
+        }
+    }
+
 
     public function hasUser()
     {
