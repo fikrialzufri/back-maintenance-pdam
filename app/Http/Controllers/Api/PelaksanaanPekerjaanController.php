@@ -131,56 +131,64 @@ class PelaksanaanPekerjaanController extends Controller
      */
     public function proses(Request $request)
     {
-        try {
-            DB::beginTransaction();
-            $message = 'Gagal Menyimpan Pelaksanaan Pekerjaan';
-            $slug = $request->slug;
-            $lokasi = $request->lokasi;
-            $user_id = auth()->user()->id;
-            DB::commit();
-            $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug',  $slug)->first();
-            $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->first();
+        DB::beginTransaction();
+        $message = 'Gagal Menyimpan Pelaksanaan Pekerjaan';
+        $slug = $request->slug;
+        $lokasi = $request->lokasi;
+        $user_id = auth()->user()->id;
+        DB::commit();
+        $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug',  $slug)->first();
+        $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->first();
 
-            if ($data->status == 'selesai') {
-                $message = "Pekerjaan sudah selesai";
-                $response = [
-                    'success' => false,
-                    'message' => $message,
-                    'code' => '409'
-                ];
-                return $this->sendError($response, $message, 409);
-            }
-            $data->lokasi = $lokasi;
-            $data->lat_long = $request->lat_long;
-            $data->user_id = $user_id;
-            $data->tanggal_mulai = Carbon::now();
-            $data->status = 'proses';
-            $data->save();
-            // TODO
-            // Belum Nyimpan Foto
+        if ($data->status == 'selesai') {
+            $message = "Pekerjaan sudah selesai";
+            $response = [
+                'success' => false,
+                'message' => $message,
+                'code' => '409'
+            ];
+            return $this->sendError($response, $message, 409);
+        }
+        $data->lokasi = $lokasi;
+        $data->lat_long = $request->lat_long;
+        $data->user_id = $user_id;
+        $data->tanggal_mulai = Carbon::now();
+        $data->status = 'proses';
+        $data->save();
+        // TODO
+        // Belum Nyimpan Foto
+        $media = Media::where('modul',  'pelaksanan_kerja')->where('modul_id', $data->modul_id)->get();
+        // return count($media);
+        if (count($media) == 0) {
             if (isset($request->foto)) {
                 $imageName = [];
                 if ($request->foto) {
                     foreach ($request->foto as $index => $image) {
-                        $image[$index] = str_replace('data:image/png;base64,', '', $image[$index]);
-                        $image[$index] = str_replace(' ', '+', $image[$index]);
-                        $imageName[$index] = $data->rekanan . Str::random(5) . '.png';
 
-                        Storage::disk('public')->put('proses/' . $imageName[$index], base64_decode($image[$index]));
+                        if (preg_match('/^data:image\/(\w+);base64,/', $image)) {
+                            $imagebase64 = substr($image, strpos($image, ',') + 1);
+                            $imagebase64 = base64_decode($imagebase64);
+                            $imageName = $data->rekanan . $penunjukanPekerjaan->slug . Str::random(5) . '.png';
+                            Storage::disk('public')->put('proses/' . $imageName, $imagebase64);
 
-                        $media[$index] = new Media();
-                        $media[$index]->file = $imageName[$index];
-                        $media[$index]->nama = 'Proses Pelaksanan Kerja';
-                        $media[$index]->modul = 'pelaksanan_kerja';
-                        $media[$index]->modul_id = $data->modul_id;
-                        $media[$index]->save();
+
+
+                            $media = new Media();
+                            $media->nama = 'Proses Pelaksanan Kerja';
+                            $media->modul = 'pelaksanan_kerja';
+                            $media->file = $imageName;
+                            $media->modul_id = $data->modul_id;
+                            $media->user_id = $user_id;
+                            $media->save();
+                        }
                     }
                 }
             }
+        }
 
-            $message = 'Berhasil Menyimpan Pelaksanaan Pekerjaan';
-            return $this->sendResponse($data, $message, 200);
-        } catch (\Throwable $th) {
+        $message = 'Berhasil Menyimpan Pelaksanaan Pekerjaan';
+        return $this->sendResponse($data, $message, 200);
+        try { } catch (\Throwable $th) {
             DB::rollback();
             $response = [
                 'success' => false,
