@@ -29,6 +29,66 @@ class MediaController extends Controller
         }
     }
 
+    public function store(Request $request)
+    {
+        $image = $request->foto;
+        $slug = $request->slug;
+        $nama = $request->nama;
+        $modul = $request->slug;
+        $modul_id = $request->modul_id;
+        $rekanan = $request->rekanan;
+        $user_id = auth()->user()->id;
+        try {
+            $media = new Media();
+            if (preg_match('/^data:image\/(\w+);base64,/', $image)) {
+                $imagebase64 = substr($image, strpos($image, ',') + 1);
+                $imagebase64 = base64_decode($imagebase64);
+                $imageName = $rekanan . $slug . Str::random(5) . '.png';
+                Storage::disk('public')->put('proses/' . $imageName, $imagebase64);
+
+                $media->nama = $nama;
+                $media->modul = $modul;
+                $media->file = $imageName;
+                $media->modul_id = $modul_id;
+                $media->user_id = $user_id;
+                $media->save();
+            }
+
+
+            $message = 'Berhasil mengirim foto';
+            return $this->sendResponse($media, $message, 200);
+        } catch (\Throwable $th) {
+            $message = 'Detail Media';
+            $response = [
+                'success' => false,
+                'message' => $message,
+                'code' => '404'
+            ];
+            return $this->sendError($response, $th, 404);
+        }
+    }
+
+    public function destroyFoto(Request $request)
+    {
+        $id = $request->id;
+        try {
+            $data = Media::find($id);
+            Storage::disk('public')->delete('proses/' . $data->file);
+            $data->destroy();
+            $message = 'Data Media Belum Ada';
+            return $this->sendResponse($data, $message, 200);
+        } catch (\Throwable $th) {
+            $message = 'Data Tidak bisa dihapus';
+            $response = [
+                'success' => false,
+                'message' => $message,
+                'code' => '404'
+            ];
+            return $this->sendError($response, $th, 404);
+        }
+        return redirect()->route('user.index')->with('message', 'Pengguna berhasil dihapus');
+    }
+
     public function model()
     {
         return new Media();
