@@ -140,6 +140,16 @@ class PelaksanaanPekerjaanController extends Controller
             DB::commit();
             $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug',  $slug)->first();
             $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->first();
+
+            if ($data->status == 'selesai') {
+                $message = "Pekerjaan sudah selesai";
+                $response = [
+                    'success' => false,
+                    'message' => $message,
+                    'code' => '409'
+                ];
+                return $this->sendError($response, $message, 409);
+            }
             $data->lokasi = $lokasi;
             $data->lat_long = $request->lat_long;
             $data->user_id = $user_id;
@@ -196,6 +206,17 @@ class PelaksanaanPekerjaanController extends Controller
             DB::commit();
             $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug',  $slug)->first();
             $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->first();
+
+            if ($data->status == 'selesai') {
+                $message = "Pekerjaan sudah selesai";
+                $response = [
+                    'success' => false,
+                    'message' => $message,
+                    'code' => '409'
+                ];
+                return $this->sendError($response, $message, 409);
+            }
+
             $data->status = $status;
             $data->tanggal_selesai = Carbon::now();
             $data->save();
@@ -267,6 +288,17 @@ class PelaksanaanPekerjaanController extends Controller
             DB::commit();
             $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $request->slug)->first();
             $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->first();
+
+            if ($data->status == 'selesai') {
+                $message = "Pekerjaan sudah selesai";
+                $response = [
+                    'success' => false,
+                    'message' => $message,
+                    'code' => '409'
+                ];
+                return $this->sendError($response, $message, 409);
+            }
+
             $data->status = $status;
             $data->keterangan = $keterangan;
             $data->save();
