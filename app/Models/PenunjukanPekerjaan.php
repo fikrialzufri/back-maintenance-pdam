@@ -115,6 +115,22 @@ class PenunjukanPekerjaan extends Model
             return $this->hasPelaksanaanPekerjaan->lat_long;
         }
     }
+    public function getFotoLokasiAttribute()
+    {
+        $media = Media::where('modul',  'pelaksanan_kerja')->where('modul_id', $this->id_pelaksanaan_pekerjaan)->get();
+        $foto = [];
+        if ($media) {
+            foreach ($media as $key => $value) {
+                $foto[$key] = [
+                    'id' => $value->id,
+                    'url' => asset('storage/proses/' . rawurlencode($value->file)),
+                ];
+            }
+        }
+        return $foto;
+    }
+
+
 
 
     public function hasUser()
