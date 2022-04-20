@@ -138,7 +138,7 @@ class PelaksanaanPekerjaanController extends Controller
             $lokasi = $request->lokasi;
             $user_id = auth()->user()->id;
             DB::commit();
-            $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $request->slug)->first();
+            $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug',  $slug)->first();
             $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->first();
             $data->lokasi = $lokasi;
             $data->lat_long = $request->lat_long;
@@ -168,9 +168,6 @@ class PelaksanaanPekerjaanController extends Controller
                 }
             }
 
-            $penunjukanPekerjaan->status = 'diterima';
-            $penunjukanPekerjaan->save();
-
             $message = 'Berhasil Menyimpan Pelaksanaan Pekerjaan';
             return $this->sendResponse($data, $message, 200);
         } catch (\Throwable $th) {
@@ -197,7 +194,7 @@ class PelaksanaanPekerjaanController extends Controller
         $slug = $request->slug;
         try {
             DB::commit();
-            $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $request->slug)->first();
+            $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug',  $slug)->first();
             $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->first();
             $data->status = $status;
             $data->tanggal_selesai = Carbon::now();
