@@ -66,6 +66,7 @@ class AduanController extends Controller
 
     public function store(Request $request)
     {
+        return $request;
         $messages = [
             'required' => ':attribute tidak boleh kosong',
         ];
@@ -89,7 +90,7 @@ class AduanController extends Controller
         }
         $id_wilayah =  auth()->user()->id_wilayah;
         DB::beginTransaction();
-        
+
         try {
             $aduan = new Aduan();
             $aduan->no_ticket = $request->no_ticket;
@@ -118,8 +119,7 @@ class AduanController extends Controller
 
             $jabatan = Jabatan::where('wilayah_id', $id_wilayah)->where('nama', 'like', "%Asisten Manager%")->pluck('id');
             $karyawan = Karyawan::whereIn('jabatan_id', $jabatan)->get();
-            foreach ($karyawan as $item)
-            {
+            foreach ($karyawan as $item) {
                 $this->notification($aduan->id, $title, $body, $modul, auth()->user()->id, $item->user_id);
             }
 

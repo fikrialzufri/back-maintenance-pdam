@@ -229,6 +229,16 @@ class PelaksanaanPekerjaanController extends Controller
             $data->save();
 
             if (isset($request->id_item)) {
+                foreach ($request->item as $key => $value) {
+                    # code...
+                    $checkItem = Item::find($request->id_item);
+                    if (!$checkItem) {
+                        $checkItem->nama = $request->nama;
+                        $checkItem->save();
+                    }
+                    $idNewItem =  $checkItem->id;
+                }
+
                 $item = [];
                 $keterangan = [];
                 $listitem = [];

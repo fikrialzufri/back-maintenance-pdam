@@ -59,10 +59,10 @@ class PelaksanaanPekerjaan extends Model
     {
         switch ($this->status) {
             case 'proses':
-                return 1;
+                return 2;
                 break;
             case 'proses-akhir':
-                return 2;
+                return 3;
                 break;
             case 'selesai':
                 return 3;
@@ -71,7 +71,7 @@ class PelaksanaanPekerjaan extends Model
                 return 4;
                 break;
             default:
-                return 0;
+                return 1;
                 break;
         }
     }
