@@ -82,9 +82,7 @@ class PelaksanaanPekerjaanController extends Controller
                 $no = str_pad(1, 4, "0", STR_PAD_LEFT);
                 $nomor_pelaksanaan_pekerjaan =  $no . "/" . "PPK/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
             }
-
             $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $request->nomor_pekerjaan)->first();
-
             $pelaksanaan_pekerjaan = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->first();
 
             if ($pelaksanaan_pekerjaan) {
@@ -107,10 +105,10 @@ class PelaksanaanPekerjaanController extends Controller
 
             $data->keterangan = $request->keterangan;
 
-            $data->status = 'draft';
+            $data->status = 'diterima';
             $data->save();
 
-            $penunjukanPekerjaan->status = 'diterima';
+            $penunjukanPekerjaan->status = 'proses';
             $penunjukanPekerjaan->save();
 
             $message = 'Berhasil Menyimpan Pelaksanaan Pekerjaan';

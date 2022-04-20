@@ -58,20 +58,17 @@ class PelaksanaanPekerjaan extends Model
     public function getStatusMobileAttribute()
     {
         switch ($this->status) {
-            case 'diterima':
+            case 'proses':
                 return 1;
                 break;
-            case 'proses':
+            case 'proses-akhir':
                 return 2;
                 break;
-            case 'proses-akhir':
+            case 'selesai':
                 return 3;
                 break;
-            case 'selesai':
-                return 4;
-                break;
             case 'disetujui':
-                return 5;
+                return 4;
                 break;
             default:
                 return 0;
