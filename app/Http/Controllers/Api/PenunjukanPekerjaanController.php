@@ -59,7 +59,7 @@ class PenunjukanPekerjaanController extends Controller
                     'status' =>  $data->status,
                     'lokasi_aduan' =>  $data->lokasi,
                     'lokasi_pekerjaan' =>  $data->lokasi_pekerjaan,
-                    'lat_lang' =>  $data->lat_long,
+                    'lat_long' =>  $data->lat_long,
                     'nama_rekanan' =>  $data->rekanan,
                     'jenis_aduan' =>  $data->jenis_aduan,
                     'atas_nama' =>  $data->atas_nama,
