@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ItemController;
 use App\Http\Controllers\Api\JenisController;
 use App\Http\Controllers\Api\JenisAduanController;
+use App\Http\Controllers\Api\MediaController;
 use App\Http\Controllers\Api\PenunjukanPekerjaanController;
 use App\Http\Controllers\Api\RekananController;
 use App\Http\Controllers\Api\PelaksanaanPekerjaanController;

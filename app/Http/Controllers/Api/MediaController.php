@@ -68,7 +68,7 @@ class MediaController extends Controller
         }
     }
 
-    public function destroyFoto(Request $request)
+    public function destroy(Request $request)
     {
         $id = $request->id;
         try {
