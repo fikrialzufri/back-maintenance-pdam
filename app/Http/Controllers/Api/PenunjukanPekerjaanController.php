@@ -54,7 +54,7 @@ class PenunjukanPekerjaanController extends Controller
                 $result = [
                     'id' =>  $data->id,
                     'nomor_pekerjaan' =>  $data->nomor_pekerjaan,
-                    'nomor_pelaksaan_pekerjaan' =>  $data->hasPelaksanaanPekerjaan,
+                    'nomor_pelaksaan_pekerjaan' =>  $data->nomor_pelaksanaan_pekerjaan,
                     'slug' =>  $data->slug,
                     'status' =>  $data->status,
                     'lokasi_aduan' =>  $data->lokasi,
