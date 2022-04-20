@@ -20,8 +20,8 @@ class CreatePelaksanaanPekerjaansTable extends Migration
             $table->date('tanggal_mulai')->nullable();
             $table->date('tanggal_selesai')->nullable();
             $table->longText('keterangan')->nullable();
-            $table->longText('lokasi');
-            $table->string('lat_long');
+            $table->longText('lokasi')->nullable();
+            $table->string('lat_long')->nullable();
             $table->enum('status', ['draft', 'diterima', 'proses', 'proses-akhir', 'selesai', 'disetujui'])->default('draft');
             $table->foreignUuid('aduan_id')->references('id')->on('aduan')->nullable();
             $table->foreignUuid('rekanan_id')->references('id')->on('rekanan')->nullable();

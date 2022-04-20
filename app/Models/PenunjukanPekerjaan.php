@@ -77,22 +77,22 @@ class PenunjukanPekerjaan extends Model
         }
     }
 
-    public function hasPenunjunkanPekerjaan()
+    public function hasPelaksanaanPekerjaan()
     {
-        return $this->hasOne(PenunjukanPekerjaan::class, 'id', 'penunjukan_pekerjaan_id');
+        return $this->hasOne(PelaksanaanPekerjaan::class, 'id', 'penunjukan_pekerjaan_id');
     }
 
     public function getLokasiPekerjaanAttribute()
     {
-        if ($this->hasPenunjunkanPekerjaan) {
-            return $this->hasPenunjunkanPekerjaan->lokasi;
+        if ($this->hasPelaksanaanPekerjaan) {
+            return $this->hasPelaksanaanPekerjaan->lokasi;
         }
     }
 
     public function getNomorPelaksanaanPekerjaanAttribute()
     {
-        if ($this->hasPenunjunkanPekerjaan) {
-            return $this->hasPenunjunkanPekerjaan->nomor_pelaksanaan_pekerjaan;
+        if ($this->hasPelaksanaanPekerjaan) {
+            return $this->hasPelaksanaanPekerjaan->nomor_pelaksanaan_pekerjaan;
         }
     }
 
