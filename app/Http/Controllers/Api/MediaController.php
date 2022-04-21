@@ -81,12 +81,13 @@ class MediaController extends Controller
     public function destroy(Request $request)
     {
         $id = $request->id;
-        $data = Media::find($id);
-        Storage::disk('public')->delete('proses/' . $data->file);
-        $data->delete();
-        $message = 'Data Media dihapus';
-        return $this->sendResponse($data, $message, 200);
-        try { } catch (\Throwable $th) {
+        try {
+            $data = Media::find($id);
+            Storage::disk('public')->delete('proses/' . $data->file);
+            $data->delete();
+            $message = 'Data Media dihapus';
+            return $this->sendResponse($data, $message, 200);
+        } catch (\Throwable $th) {
             $message = 'Data Tidak bisa dihapus';
             $response = [
                 'success' => false,
