@@ -447,7 +447,7 @@ class PelaksanaanPekerjaanController extends Controller
             'harga' => $item->harga,
             'qty' => $jumlah
         ];
-        $syncData  = array_combine($item, $listitem);
+        return $syncData  = array_combine($item, $listitem);
         $data->hasItem()->attach($syncData);
 
         $message = 'Berhasil Menyimpan Item Pekerjaan';
