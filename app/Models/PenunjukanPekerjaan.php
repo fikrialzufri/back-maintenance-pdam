@@ -117,9 +117,18 @@ class PenunjukanPekerjaan extends Model
     }
     public function getListItemAttribute()
     {
+        $item = [];
         if ($this->hasPelaksanaanPekerjaan) {
-            return $this->hasPelaksanaanPekerjaan->hasItem->pluck('id', 'nama', 'pivot.qty', 'keterangan');
+            foreach ($this->hasPelaksanaanPekerjaan->hasItem as $key => $value) {
+                $item[$key] = [
+                    'id' => $value->id,
+                    'nama' => $value->nama,
+                    'jumlah' => $value->qty,
+                    'keterangan' => $value->keterangan,
+                ];
+            }
         }
+        return $item;
     }
     public function getFotoLokasiAttribute()
     {
