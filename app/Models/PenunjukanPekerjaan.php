@@ -118,7 +118,7 @@ class PenunjukanPekerjaan extends Model
     public function getListItemAttribute()
     {
         if ($this->hasPelaksanaanPekerjaan) {
-            return $this->hasPelaksanaanPekerjaan->hasItem;
+            return $this->hasPelaksanaanPekerjaan->hasItem->pluck('id', 'nama', 'pivot.qty', 'keterangan');
         }
     }
     public function getFotoLokasiAttribute()
