@@ -38,26 +38,25 @@ class MediaController extends Controller
         $modul_id = $request->id;
 
         $user_id = auth()->user()->id;
-        try {
-            $media = new Media();
-            if (preg_match('/^data:image\/(\w+);base64,/', $image)) {
-                $imagebase64 = substr($image, strpos($image, ',') + 1);
-                $imagebase64 = base64_decode($imagebase64);
-                $imageName =  $slug . Str::random(5) . '.png';
-                Storage::disk('public')->put('proses/' . $imageName, $imagebase64);
+        $media = new Media();
+        if (preg_match('/^data:image\/(\w+);base64,/', $image)) {
+            $imagebase64 = substr($image, strpos($image, ',') + 1);
+            $imagebase64 = base64_decode($imagebase64);
+            $imageName =  $slug . Str::random(5) . '.png';
+            Storage::disk('public')->put('proses/' . $imageName, $imagebase64);
 
-                $media->nama = $nama;
-                $media->modul = $modul;
-                $media->file = $imageName;
-                $media->modul_id = $modul_id;
-                $media->user_id = $user_id;
-                $media->save();
-            }
+            $media->nama = $nama;
+            $media->modul = $modul;
+            $media->file = $imageName;
+            $media->modul_id = $modul_id;
+            $media->user_id = $user_id;
+            $media->save();
+        }
 
 
-            $message = 'Berhasil mengirim foto';
-            return $this->sendResponse($media, $message, 200);
-        } catch (\Throwable $th) {
+        $message = 'Berhasil mengirim foto';
+        return $this->sendResponse($media, $message, 200);
+        try { } catch (\Throwable $th) {
             $message = 'Gagal Mengirim foto';
             $response = [
                 'success' => false,
