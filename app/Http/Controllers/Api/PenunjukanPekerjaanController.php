@@ -65,7 +65,7 @@ class PenunjukanPekerjaanController extends Controller
                         'nama_rekanan' =>  $data->rekanan,
                         'foto_lokasi' =>  $data->foto_lokasi,
                         'foto_bahan' =>  $data->foto_bahan,
-                        'foto_peyelesaian' =>  $data->foto_peyelesaian,
+                        'foto_penyelesaian' =>  $data->foto_penyelesaian,
                         'jenis_aduan' =>  $data->jenis_aduan,
                         'atas_nama' =>  $data->atas_nama,
                         'sumber_informasi' =>  $data->sumber_informasi,
