@@ -63,7 +63,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('selesai-pekerjaan', PelaksanaanPekerjaanController::class . '@selesai')->name('pelaksanaan.api.selesai');
     // bahan dari pelaksanaan-pekerjaan
 
-    Route::post('item-pekerjaan', PelaksanaanPekerjaanController::class . '@seleitemsai')->name('pelaksanaan.api.item');
+    Route::post('item-pekerjaan', PelaksanaanPekerjaanController::class . '@item')->name('pelaksanaan.api.item');
 
     Route::get('refresh', AuthController::class . '@refresh')->name('auth.refresh');
 
