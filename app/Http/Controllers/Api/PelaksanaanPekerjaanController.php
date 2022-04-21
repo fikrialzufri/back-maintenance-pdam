@@ -452,8 +452,7 @@ class PelaksanaanPekerjaanController extends Controller
             ];
         }
 
-
-        return $syncData  = array_combine($item, $listitem);
+        return $syncData  = array_combine($item->id, $listitem);
         $data->hasItem()->attach($syncData);
 
         $message = 'Berhasil Menyimpan Item Pekerjaan';
