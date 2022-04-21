@@ -118,6 +118,7 @@ class PenunjukanPekerjaan extends Model
     public function getListItemAttribute()
     {
         $item = [];
+        return $this->hasPelaksanaanPekerjaan->hasItem;
         if ($this->hasPelaksanaanPekerjaan) {
             foreach ($this->hasPelaksanaanPekerjaan->hasItem()->get() as $key => $value) {
                 $item[$key] = [
