@@ -425,7 +425,7 @@ class PelaksanaanPekerjaanController extends Controller
         try {
             DB::commit();
             $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $slug)->first();
-            return $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->first();
+            $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->first();
 
             if (!$id_barang) {
                 $satuan = Satuan::where('slug', 'pcs')->first();
