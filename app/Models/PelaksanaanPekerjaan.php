@@ -57,7 +57,7 @@ class PelaksanaanPekerjaan extends Model
 
     public function hasUserMany()
     {
-        return $this->belongsToMany(User::class, 'pelaksanaan_user')->with('keterangan')->withTimestamps();
+        return $this->belongsToMany(User::class, 'pelaksanaan_user')->withPivot('keterangan')->withTimestamps();
     }
 
     public function getStatusMobileAttribute()

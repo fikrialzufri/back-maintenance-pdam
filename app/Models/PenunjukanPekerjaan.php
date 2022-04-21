@@ -118,7 +118,7 @@ class PenunjukanPekerjaan extends Model
     public function getItemAttribute()
     {
         if ($this->hasPelaksanaanPekerjaan) {
-            return $this->hasPelaksanaanPekerjaan->hasItem;
+            return $this->hasPelaksanaanPekerjaan->hasItem();
         }
     }
     public function getFotoLokasiAttribute()
