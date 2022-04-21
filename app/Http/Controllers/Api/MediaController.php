@@ -83,7 +83,7 @@ class MediaController extends Controller
         $id = $request->id;
         $data = Media::find($id);
         Storage::disk('public')->delete('proses/' . $data->file);
-        $data->destroy();
+        $data->delete();
         $message = 'Data Media dihapus';
         return $this->sendResponse($data, $message, 200);
         try { } catch (\Throwable $th) {
