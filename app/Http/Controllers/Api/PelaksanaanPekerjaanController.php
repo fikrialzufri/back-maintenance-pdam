@@ -228,22 +228,6 @@ class PelaksanaanPekerjaanController extends Controller
             $data->tanggal_selesai = Carbon::now();
             $data->save();
 
-            if (isset($request->id_item)) {
-                $item = [];
-                $keterangan = [];
-                $listitem = [];
-                foreach ($request->qty as $index => $value) {
-                    $item[$index] = $request->id_item[$index];
-                    $keterangan[$index] = $request->keterangan[$index];
-                    $listitem[$index] = [
-                        'keterangan' => $keterangan[$index],
-                        'qty' => $value
-                    ];
-                }
-                $syncData  = array_combine($item, $listitem);
-                $data->hasItem()->sync($syncData);
-            }
-
             // $media = Media::where('modul',  'bahan_perkerjaan')->where('modul_id', $data->id)->get();
             // if (count($media) == 0) {
             //     if (isset($request->foto)) {
@@ -447,7 +431,7 @@ class PelaksanaanPekerjaanController extends Controller
             'qty' => $jumlah
         ];
 
-        $data->hasItem()->attach($listitem);
+        $data->hasItem()->sync($listitem);
 
         $message = 'Berhasil Menyimpan Item Pekerjaan';
         return $this->sendResponse($data, $message, 200);
