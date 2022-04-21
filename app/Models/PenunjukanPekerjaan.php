@@ -123,8 +123,8 @@ class PenunjukanPekerjaan extends Model
                 $item[$key] = [
                     'id' => $value->id,
                     'nama' => $value->nama,
-                    'jumlah' => $value->qty,
-                    'keterangan' => $value->keterangan,
+                    'jumlah' => $value->pivot->qty,
+                    'keterangan' => $value->pivot->keterangan,
                 ];
             }
         }
