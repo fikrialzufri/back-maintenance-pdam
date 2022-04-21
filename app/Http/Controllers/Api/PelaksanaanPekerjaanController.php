@@ -436,21 +436,14 @@ class PelaksanaanPekerjaanController extends Controller
             $item->satuan_id = $satuan->id;
             $item->jenis_id = $jenis->id;
             $item->save();
-            $item = $item->id;
-            $listitem = [
-                'keterangan' => $keterangan,
-                'harga' => 0,
-                'qty' => $jumlah
-            ];
         } else {
             $item = Item::find($id_barang);
-            $item = $item->id;
-            $listitem = [
-                'keterangan' => $keterangan,
-                'harga' => $item->harga,
-                'qty' => $jumlah
-            ];
         }
+        $listitem = [
+            'keterangan' => $keterangan,
+            'harga' => $item->harga,
+            'qty' => $jumlah
+        ];
 
         return $syncData  = array_combine($item->id, $listitem);
         $data->hasItem()->attach($syncData);
