@@ -119,7 +119,7 @@ class PenunjukanPekerjaan extends Model
     {
         $item = [];
         if ($this->hasPelaksanaanPekerjaan) {
-            foreach ($this->hasPelaksanaanPekerjaan->hasItem as $key => $value) {
+            foreach ($this->hasPelaksanaanPekerjaan->hasItem()->get() as $key => $value) {
                 $item[$key] = [
                     'id' => $value->id,
                     'nama' => $value->nama,
