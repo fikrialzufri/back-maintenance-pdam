@@ -424,6 +424,7 @@ class PelaksanaanPekerjaanController extends Controller
         $keterangan = $request->keterangan;
         $jumlah = $request->jumlah;
         $id_barang = $request->id_barang;
+        $listitem = [];
         DB::commit();
         $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $slug)->first();
         $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->with('hasItem')->first();
@@ -440,14 +441,13 @@ class PelaksanaanPekerjaanController extends Controller
         } else {
             $item = Item::find($id_barang);
         }
-        $listitem = [
+        $listitem[$item->id] = [
             'keterangan' => $keterangan,
             'harga' => $item->harga,
             'qty' => $jumlah
         ];
 
-        return $syncData  = array_combine([$item->id], $listitem);
-        $data->hasItem()->attach($syncData);
+        $data->hasItem()->attach($listitem);
 
         $message = 'Berhasil Menyimpan Item Pekerjaan';
         return $this->sendResponse($data, $message, 200);
