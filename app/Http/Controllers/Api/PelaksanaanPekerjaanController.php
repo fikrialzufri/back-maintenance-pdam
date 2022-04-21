@@ -440,7 +440,7 @@ class PelaksanaanPekerjaanController extends Controller
         } else {
             $item = Item::find($id_barang);
         }
-        return $listitem = [
+        $listitem = [
             'keterangan' => $keterangan,
             'harga' => $item->harga,
             'qty' => $jumlah
