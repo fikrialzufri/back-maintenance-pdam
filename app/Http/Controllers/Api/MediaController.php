@@ -31,19 +31,19 @@ class MediaController extends Controller
 
     public function store(Request $request)
     {
-        $image = $request->foto;
+        $image = $request->image;
         $slug = $request->slug;
         $nama = $request->nama;
-        $modul = $request->slug;
-        $modul_id = $request->modul_id;
-        $rekanan = $request->rekanan;
+        $modul = $request->modul;
+        $modul_id = $request->id;
+
         $user_id = auth()->user()->id;
         try {
             $media = new Media();
             if (preg_match('/^data:image\/(\w+);base64,/', $image)) {
                 $imagebase64 = substr($image, strpos($image, ',') + 1);
                 $imagebase64 = base64_decode($imagebase64);
-                $imageName = $rekanan . $slug . Str::random(5) . '.png';
+                $imageName =  $slug . Str::random(5) . '.png';
                 Storage::disk('public')->put('proses/' . $imageName, $imagebase64);
 
                 $media->nama = $nama;
@@ -75,7 +75,7 @@ class MediaController extends Controller
             $data = Media::find($id);
             Storage::disk('public')->delete('proses/' . $data->file);
             $data->destroy();
-            $message = 'Data Media Belum Ada';
+            $message = 'Data Media dihapus';
             return $this->sendResponse($data, $message, 200);
         } catch (\Throwable $th) {
             $message = 'Data Tidak bisa dihapus';

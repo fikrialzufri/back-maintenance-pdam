@@ -117,7 +117,37 @@ class PenunjukanPekerjaan extends Model
     }
     public function getFotoLokasiAttribute()
     {
-        $media = Media::where('modul',  'pelaksanan_kerja')->where('modul_id', $this->id_pelaksanaan_pekerjaan)->get();
+        $media = Media::where('modul',  'pelaksanaan_kerja')->where('modul_id', $this->id)->get();
+        $foto = [];
+        if ($media) {
+            foreach ($media as $key => $value) {
+                $foto[$key] = [
+                    'id' => $value->id,
+                    'url' => asset('storage/proses/' . rawurlencode($value->file)),
+                ];
+            }
+        }
+        return $foto;
+    }
+
+    public function getFotoBahanAttribute()
+    {
+        $media = Media::where('modul',  'bahan_perkerjaan')->where('modul_id', $this->id)->get();
+        $foto = [];
+        if ($media) {
+            foreach ($media as $key => $value) {
+                $foto[$key] = [
+                    'id' => $value->id,
+                    'url' => asset('storage/proses/' . rawurlencode($value->file)),
+                ];
+            }
+        }
+        return $foto;
+    }
+
+    public function getFotoPenyelesaianAttribute()
+    {
+        $media = Media::where('modul',  'penyelesaian_kerja')->where('modul_id', $this->id)->get();
         $foto = [];
         if ($media) {
             foreach ($media as $key => $value) {
