@@ -431,7 +431,7 @@ class PelaksanaanPekerjaanController extends Controller
             'qty' => $jumlah
         ];
 
-        $data->hasItem()->sync($listitem);
+        $data->hasItem()->attach($listitem);
 
         $message = 'Berhasil Menyimpan Item Pekerjaan';
         return $this->sendResponse($data, $message, 200);
