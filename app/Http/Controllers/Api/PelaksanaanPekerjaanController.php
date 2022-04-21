@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\PelaksanaanPekerjaan;
 use App\Models\PenunjukanPekerjaan;
+use App\Models\Satuan;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use DB;
@@ -226,16 +227,6 @@ class PelaksanaanPekerjaanController extends Controller
             $data->save();
 
             if (isset($request->id_item)) {
-                foreach ($request->item as $key => $value) {
-                    # code...
-                    $checkItem = Item::find($request->id_item);
-                    if (!$checkItem) {
-                        $checkItem->nama = $request->nama;
-                        $checkItem->save();
-                    }
-                    $idNewItem =  $checkItem->id;
-                }
-
                 $item = [];
                 $keterangan = [];
                 $listitem = [];
@@ -410,6 +401,55 @@ class PelaksanaanPekerjaanController extends Controller
             $data->hasUserMany()->sync($syncData);
 
             $message = 'Berhasil Mengubah Penunjukan Pekerjaan';
+            return $this->sendResponse($data, $message, 200);
+        } catch (\Throwable $th) {
+            DB::rollback();
+            $response = [
+                'success' => false,
+                'message' => $message,
+                'code' => '404'
+            ];
+            return $this->sendError($response, $th, 404);
+        }
+    }
+
+    public function item(Request $request)
+    {
+        DB::beginTransaction();
+        $message = 'Gagal Menyimpan Penunjukan Pekerjaan';
+        $slug = $request->slug;
+        $nama = $request->nama;
+        $keterangan = $request->keterangan;
+        $jumlah = $request->jumlah;
+        $id_barang = $request->id_barang;
+        try {
+            DB::commit();
+            $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $slug)->first();
+            $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->first();
+
+            if (!$id_barang) {
+                $satuan = Satuan::where('slug', 'pcs')->first();
+                $jenis = Jenis::where('slug', 'barang-baru')->first();
+                $item = new Item;
+                $item->nama = $nama;
+                $item->satuan_id = $satuan->id;
+                $item->jenis_id = $jenis->id;
+                $item->save();
+            } else {
+                $item = Item::find($id_barang);
+            }
+
+            if (isset($request->id_item)) {
+                $item = $item->id;
+                $listitem = [
+                    'keterangan' => $keterangan,
+                    'qty' => $jumlah
+                ];
+                $syncData  = array_combine($item, $listitem);
+                $data->hasItem()->attach($syncData);
+            }
+
+            $message = 'Berhasil Menyimpan Item Pekerjaan';
             return $this->sendResponse($data, $message, 200);
         } catch (\Throwable $th) {
             DB::rollback();
