@@ -44,7 +44,7 @@ class MediaController extends Controller
             $imageName =  $slug . Str::random(5) . '.png';
             Storage::disk('public')->put('proses/' . $imageName, $imagebase64);
 
-            $media->nama = $slug;
+            $media->nama = $slug . '-' . $modul;
             $media->modul = $modul;
             $media->file = $imageName;
             $media->modul_id = $modul_id;
