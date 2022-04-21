@@ -422,36 +422,35 @@ class PelaksanaanPekerjaanController extends Controller
         $keterangan = $request->keterangan;
         $jumlah = $request->jumlah;
         $id_barang = $request->id_barang;
-        try {
-            DB::commit();
-            $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $slug)->first();
-            $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->first();
+        DB::commit();
+        $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $slug)->first();
+        $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->first();
 
-            if (!$id_barang) {
-                $satuan = Satuan::where('slug', 'pcs')->first();
-                $jenis = Jenis::where('slug', 'barang-baru')->first();
-                $item = new Item;
-                $item->nama = $nama;
-                $item->satuan_id = $satuan->id;
-                $item->jenis_id = $jenis->id;
-                $item->save();
-            } else {
-                $item = Item::find($id_barang);
-            }
+        if (!$id_barang) {
+            $satuan = Satuan::where('slug', 'pcs')->first();
+            $jenis = Jenis::where('slug', 'barang-baru')->first();
+            $item = new Item;
+            $item->nama = $nama;
+            $item->satuan_id = $satuan->id;
+            $item->jenis_id = $jenis->id;
+            $item->save();
+        } else {
+            $item = Item::find($id_barang);
+        }
 
-            if (isset($request->id_item)) {
-                $item = $item->id;
-                $listitem = [
-                    'keterangan' => $keterangan,
-                    'qty' => $jumlah
-                ];
-                $syncData  = array_combine($item, $listitem);
-                $data->hasItem()->attach($syncData);
-            }
+        if (isset($request->id_barang)) {
+            $item = $item->id;
+            $listitem = [
+                'keterangan' => $keterangan,
+                'qty' => $jumlah
+            ];
+            $syncData  = array_combine($item, $listitem);
+            $data->hasItem()->attach($syncData);
+        }
 
-            $message = 'Berhasil Menyimpan Item Pekerjaan';
-            return $this->sendResponse($data, $message, 200);
-        } catch (\Throwable $th) {
+        $message = 'Berhasil Menyimpan Item Pekerjaan';
+        return $this->sendResponse($data, $message, 200);
+        try { } catch (\Throwable $th) {
             DB::rollback();
             $response = [
                 'success' => false,
