@@ -5,6 +5,7 @@ namespace  App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Media;
+use Storage;
 
 class MediaController extends Controller
 {
@@ -45,7 +46,7 @@ class MediaController extends Controller
                 $imagebase64 = substr($image, strpos($image, ',') + 1);
                 $imagebase64 = base64_decode($imagebase64);
                 $imageName =  $slug . Str::random(5) . '.png';
-                Storage::disk('public')->put('proses/' . $imageName, file_get_contents($imagebase64));
+                Storage::disk('public')->put('proses/' . $imageName, $imagebase64);
 
                 $media->nama = $slug . '-' . $modul;
                 $media->modul = $modul;
