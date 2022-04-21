@@ -440,15 +440,14 @@ class PelaksanaanPekerjaanController extends Controller
             $item = Item::find($id_barang);
         }
 
-        if (isset($request->id_barang)) {
-            $item = $item->id;
-            $listitem = [
-                'keterangan' => $keterangan,
-                'qty' => $jumlah
-            ];
-            $syncData  = array_combine($item, $listitem);
-            $data->hasItem()->attach($syncData);
-        }
+        $item = $item->id;
+        $listitem = [
+            'keterangan' => $keterangan,
+            'harga' => $item->harga,
+            'qty' => $jumlah
+        ];
+        $syncData  = array_combine($item, $listitem);
+        $data->hasItem()->attach($syncData);
 
         $message = 'Berhasil Menyimpan Item Pekerjaan';
         return $this->sendResponse($data, $message, 200);
