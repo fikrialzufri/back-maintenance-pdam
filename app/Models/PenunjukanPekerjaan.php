@@ -132,7 +132,7 @@ class PenunjukanPekerjaan extends Model
 
     public function getFotoBahanAttribute()
     {
-        $media = Media::where('modul',  'bahan_perkerjaan')->where('modul_id', $this->id)->orderBy('created_at', 'desc')->get();
+        $media = Media::where('modul',  'bahan_pekerjaan')->where('modul_id', $this->id)->orderBy('created_at', 'desc')->get();
         $foto = [];
         if ($media) {
             foreach ($media as $key => $value) {
