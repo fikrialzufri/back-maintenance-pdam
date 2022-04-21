@@ -44,7 +44,7 @@ class MediaController extends Controller
             if (preg_match('/^data:image\/(\w+);base64,/', $image)) {
 
                 $imagebase64 = substr($image, strpos($image, ',') + 1);
-                return $imagebase64 = base64_decode($imagebase64);
+                $imagebase64 = base64_decode($imagebase64);
                 $imageName = $slug . Str::random(5) . '.png';
                 Storage::disk('public')->put('proses/' . $imageName, $imagebase64);
 
