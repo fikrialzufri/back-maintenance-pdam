@@ -42,21 +42,20 @@ class MediaController extends Controller
 
 
         $media = new Media();
-        if (preg_match('/^data:image\/(\w+);base64,/', $image)) {
-            $imagebase64 = substr($image, strpos($image, ',') + 1);
-            $imagebase64 = base64_decode($imagebase64);
-            $imageName =  $slug . Str::random(5) . '.png';
-            Storage::disk('public')->put('proses/' . $imageName, $imagebase64);
+        $imagebase64 = substr($image, strpos($image, ',') + 1);
+        $imagebase64 = base64_decode($imagebase64);
+        $imageName =  $slug . Str::random(5) . '.png';
+        Storage::disk('public')->put('proses/' . $imageName, $imagebase64);
 
-            $media->nama = $slug . '-' . $modul;
-            $media->modul = $modul;
-            $media->file = $imageName;
-            $media->modul_id = $modul_id;
-            $media->user_id = $user_id;
-            $media->save();
-            $message = 'Berhasil mengirim foto';
-            return $this->sendResponse($media, $message, 200);
-        } else {
+        $media->nama = $slug . '-' . $modul;
+        $media->modul = $modul;
+        $media->file = $imageName;
+        $media->modul_id = $modul_id;
+        $media->user_id = $user_id;
+        $media->save();
+        $message = 'Berhasil mengirim foto';
+        return $this->sendResponse($media, $message, 200);
+        if (preg_match('/^data:image\/(\w+);base64,/', $image)) { } else {
             $message = 'Gagal Mengirim foto';
             $error = "type file salah";
             $response = [
