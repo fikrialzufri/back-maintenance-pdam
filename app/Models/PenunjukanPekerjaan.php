@@ -115,10 +115,10 @@ class PenunjukanPekerjaan extends Model
             return $this->hasPelaksanaanPekerjaan->lat_long;
         }
     }
-    public function getItemAttribute()
+    public function getListItemAttribute()
     {
         if ($this->hasPelaksanaanPekerjaan) {
-            return $this->hasPelaksanaanPekerjaan->hasItem();
+            return $this->hasPelaksanaanPekerjaan->hasItem;
         }
     }
     public function getFotoLokasiAttribute()
