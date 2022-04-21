@@ -42,12 +42,10 @@ class MediaController extends Controller
         try {
             $media = new Media();
             if (preg_match('/^data:image\/(\w+);base64,/', $image)) {
-                $image = file_get_contents($image);
-
                 $imagebase64 = substr($image, strpos($image, ',') + 1);
                 $imagebase64 = base64_decode($imagebase64);
                 $imageName =  $slug . Str::random(5) . '.png';
-                Storage::disk('public')->put('proses/' . $imageName, $imagebase64);
+                Storage::disk('public')->put('proses/' . $imageName, file_get_contents($imagebase64));
 
                 $media->nama = $slug . '-' . $modul;
                 $media->modul = $modul;
