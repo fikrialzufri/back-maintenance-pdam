@@ -435,6 +435,7 @@ class PelaksanaanPekerjaanController extends Controller
             $item->nama = $nama;
             $item->satuan_id = $satuan->id;
             $item->jenis_id = $jenis->id;
+            $item->harga = 0;
             $item->save();
         } else {
             $item = Item::find($id_barang);
