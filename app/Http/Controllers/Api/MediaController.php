@@ -58,7 +58,7 @@ class MediaController extends Controller
             $message = 'Berhasil mengirim foto';
             return $this->sendResponse($media, $message, 200);
         } catch (\Throwable $th) {
-            $message = 'Detail Media';
+            $message = 'Gagal Mengirim foto';
             $response = [
                 'success' => false,
                 'message' => $message,
