@@ -115,6 +115,12 @@ class PenunjukanPekerjaan extends Model
             return $this->hasPelaksanaanPekerjaan->lat_long;
         }
     }
+    public function getItemAttribute()
+    {
+        if ($this->hasPelaksanaanPekerjaan) {
+            return $this->hasPelaksanaanPekerjaan->hasItem;
+        }
+    }
     public function getFotoLokasiAttribute()
     {
         $media = Media::where('modul',  'pelaksanaan_kerja')->where('modul_id', $this->id)->orderBy('created_at', 'desc')->get();
@@ -160,17 +166,9 @@ class PenunjukanPekerjaan extends Model
         return $foto;
     }
 
-
-
-
     public function hasUser()
     {
         return $this->hasOne(User::class, 'id', 'user_id');
-    }
-
-    public function hasItem()
-    {
-        return $this->belongsToMany(Item::class, 'pelaksanaan_item')->withPivot('qty', 'harga')->withTimestamps();
     }
 
     public function hasUserMany()

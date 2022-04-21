@@ -50,6 +50,11 @@ class PelaksanaanPekerjaan extends Model
         return $this->hasOne(User::class, 'id', 'user_id');
     }
 
+    public function hasItem()
+    {
+        return $this->belongsToMany(Item::class, 'pelaksanaan_item')->withPivot('qty', 'harga')->withTimestamps();
+    }
+
     public function hasUserMany()
     {
         return $this->belongsToMany(User::class, 'pelaksanaan_user')->with('keterangan')->withTimestamps();
