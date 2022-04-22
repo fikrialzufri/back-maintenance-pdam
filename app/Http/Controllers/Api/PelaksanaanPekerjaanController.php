@@ -437,7 +437,6 @@ class PelaksanaanPekerjaanController extends Controller
             $gajian->keterangan = $keterangan;
             $gajian->user_id = $user_id;
             $gajian->pelaksanaan_pekerjaan_id = $data->id;
-            $gajian->harga = 0;
             $gajian->save();
 
             $result = [];
