@@ -19,7 +19,7 @@ class CreateGalianPekerjaansTable extends Migration
             $table->integer('panjang')->nullable();
             $table->integer('lebar')->nullable();
             $table->integer('dalam')->nullable();
-            $table->integer('bongkaran')->nullable();
+            $table->string('bongkaran')->nullable();
             $table->string('keterangan')->nullable();
 
             $table->string('user_id')->references('id')->on('users')->onDelete('cascade');

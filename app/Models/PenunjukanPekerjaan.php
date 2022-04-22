@@ -82,6 +82,12 @@ class PenunjukanPekerjaan extends Model
             return $this->hasPelaksanaanPekerjaan->hasMedia;
         }
     }
+    public function getGalianPekerjaanAttribute()
+    {
+        if ($this->hasPelaksanaanPekerjaan) {
+            return $this->hasPelaksanaanPekerjaan->hasGalianPekerjaan;
+        }
+    }
 
     public function hasPelaksanaanPekerjaan()
     {

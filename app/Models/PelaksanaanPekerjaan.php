@@ -45,6 +45,12 @@ class PelaksanaanPekerjaan extends Model
         return $this->hasOne(PenunjukanPekerjaan::class, 'id', 'penunjukan_pekerjaan_id');
     }
 
+    public function hasGalianPekerjaan()
+    {
+        return $this->hasMany(GalianPekerjaan::class);
+    }
+
+
     public function hasUser()
     {
         return $this->hasOne(User::class, 'id', 'user_id');
