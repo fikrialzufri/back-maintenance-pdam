@@ -403,39 +403,87 @@ class PelaksanaanPekerjaanController extends Controller
     {
         DB::beginTransaction();
         $message = 'Gagal Menyimpan Penunjukan Pekerjaan';
-        $slug = $request->slug;
-        $nama = $request->nama;
-        $keterangan = $request->keterangan;
-        $jumlah = $request->jumlah;
-        $id_barang = $request->id_barang;
-        $listitem = [];
-        DB::commit();
-        $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $slug)->first();
-        $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->with('hasItem')->first();
+        try {
+            $slug = $request->slug;
+            $nama = $request->nama;
+            $keterangan = $request->keterangan;
+            $jumlah = $request->jumlah;
+            $id_barang = $request->id_barang;
+            $listitem = [];
+            DB::commit();
+            $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $slug)->first();
+            $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->with('hasItem')->first();
 
-        if (!$id_barang) {
-            $satuan = Satuan::where('slug', 'pcs')->first();
-            $jenis = Jenis::where('slug', 'barang-baru')->first();
-            $item = new Item;
-            $item->nama = $nama;
-            $item->satuan_id = $satuan->id;
-            $item->jenis_id = $jenis->id;
-            $item->harga = 0;
-            $item->save();
-        } else {
-            $item = Item::find($id_barang);
+            if (!$id_barang) {
+                $satuan = Satuan::where('slug', 'pcs')->first();
+                $jenis = Jenis::where('slug', 'barang-baru')->first();
+                $item = new Item;
+                $item->nama = $nama;
+                $item->satuan_id = $satuan->id;
+                $item->jenis_id = $jenis->id;
+                $item->harga = 0;
+                $item->save();
+            } else {
+                $item = Item::find($id_barang);
+            }
+            $listitem[$item->id] = [
+                'keterangan' => $keterangan,
+                'harga' => $item->harga,
+                'qty' => $jumlah
+            ];
+
+            $data->hasItem()->attach($listitem);
+
+            $message = 'Berhasil Menyimpan Item Pekerjaan';
+            return $this->sendResponse($data, $message, 200);
+        } catch (\Throwable $th) {
+            DB::rollback();
+            $response = [
+                'success' => false,
+                'message' => $message,
+                'code' => '404'
+            ];
+            return $this->sendError($response, $th, 404);
         }
-        $listitem[$item->id] = [
-            'keterangan' => $keterangan,
-            'harga' => $item->harga,
-            'qty' => $jumlah
-        ];
+    }
 
-        $data->hasItem()->attach($listitem);
+    public function itemRemove(Request $request)
+    {
+        DB::beginTransaction();
 
-        $message = 'Berhasil Menyimpan Item Pekerjaan';
-        return $this->sendResponse($data, $message, 200);
-        try { } catch (\Throwable $th) {
+        try {
+            $message = 'Gagal Hapus Penunjukan Pekerjaan';
+
+            // request
+            $slug = $request->slug;
+            $id_barang = $request->id_barang;
+
+            DB::commit();
+            $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $slug)->first();
+            $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->with('hasItem')->first();
+
+            $jenis = Jenis::where('slug', 'barang-baru')->first();
+
+            $item = Item::find($id_barang);
+            if ($item) {
+                if ($item->jenis_id == $jenis->id) {
+                    $item->delete();
+                }
+
+                $data->hasItem()->detach($item->id);
+
+                $message = 'Berhasil Hapus Item Pekerjaan';
+                return $this->sendResponse($data, $message, 200);
+            } else {
+                $message = 'Id Item tidak ada';
+                $response = [
+                    'success' => false,
+                    'message' => $message,
+                    'code' => '404'
+                ];
+                return $this->sendError($response, [], 404);
+            }
+        } catch (\Throwable $th) {
             DB::rollback();
             $response = [
                 'success' => false,

@@ -65,6 +65,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     Route::post('item-pekerjaan', PelaksanaanPekerjaanController::class . '@item')->name('pelaksanaan.api.item');
 
+    Route::post('item-pekerjaan-remove', PelaksanaanPekerjaanController::class . '@itemRemove')->name('pelaksanaan.api.item.delete');
+
     Route::get('refresh', AuthController::class . '@refresh')->name('auth.refresh');
 
     // uplod pelaksanaan-pekerjaan
