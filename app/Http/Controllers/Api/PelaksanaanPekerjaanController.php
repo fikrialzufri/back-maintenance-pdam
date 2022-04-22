@@ -461,14 +461,14 @@ class PelaksanaanPekerjaanController extends Controller
             $message = 'Gagal Hapus Penunjukan Pekerjaan';
 
             $slug = $request->slug;
-            $id_barang = $request->id_barang;
+            $id_galian = $request->id_galian;
 
             DB::commit();
             $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $slug)->first();
             $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->with('hasItem')->first();
 
             if ($data) {
-                $GalianPekerjaan = GalianPekerjaan::find($id_barang);
+                $GalianPekerjaan = GalianPekerjaan::find($id_galian);
                 if ($GalianPekerjaan) {
 
                     $GalianPekerjaan->delete();
