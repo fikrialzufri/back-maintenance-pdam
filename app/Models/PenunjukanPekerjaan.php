@@ -108,6 +108,13 @@ class PenunjukanPekerjaan extends Model
         }
     }
 
+    public function getKeteranganPenyelesaianAttribute()
+    {
+        if ($this->hasPelaksanaanPekerjaan) {
+            return $this->hasPelaksanaanPekerjaan->keterangan;
+        }
+    }
+
     public function getNomorPelaksanaanPekerjaanAttribute()
     {
         if ($this->hasPelaksanaanPekerjaan) {

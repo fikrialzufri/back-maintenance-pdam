@@ -72,6 +72,7 @@ class PenunjukanPekerjaanController extends Controller
                         'item' =>  $data->list_item,
                         'sumber_informasi' =>  $data->sumber_informasi,
                         'keterangan_aduan' =>  $data->keterangan_aduan,
+                        'keterangan_penyelesaian' =>  $data->keterangan_aduan,
                         'created_at' =>  $data->created_at,
                         'status_mobile' =>  $data->status_mobile,
                     ];
