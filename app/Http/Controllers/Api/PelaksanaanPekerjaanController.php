@@ -225,6 +225,7 @@ class PelaksanaanPekerjaanController extends Controller
         $slug = $request->slug;
         $user_id = auth()->user()->id;
         $keterangan = $request->keterangan;
+        $user = [];
         try {
             DB::commit();
             $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $slug)->first();
@@ -245,22 +246,20 @@ class PelaksanaanPekerjaanController extends Controller
             $data->save();
 
             // update histori user
-            $keterangan = [
+            $user[$user_id] = [
                 'keterangan' => $status,
             ];
 
-            $syncData  = array_combine($data->id, $keterangan);
-
-            $data->hasUserMany()->sync($syncData);
+            $data->hasUserMany()->sync($user);
 
             $penunjukanPekerjaan->status = 'selesai';
             $penunjukanPekerjaan->save();
-            $penunjukanPekerjaan->hasUserMany()->sync($syncData);
+            $penunjukanPekerjaan->hasUserMany()->sync($user);
 
             $aduan = Aduan::find($data->id_aduan);
             $aduan->status = 'selesai';
             $aduan->save();
-            $aduan->hasUserMany()->sync($syncData);
+            $aduan->hasUserMany()->sync($user);
 
             $message = 'Berhasil Menyimpan Pelaksanaan Pekerjaan';
             return $this->sendResponse($data, $message, 200);
