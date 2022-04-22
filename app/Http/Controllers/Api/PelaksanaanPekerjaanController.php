@@ -63,8 +63,8 @@ class PelaksanaanPekerjaanController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
      *
+     * proses terima pekerjaan
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
@@ -125,8 +125,8 @@ class PelaksanaanPekerjaanController extends Controller
         }
     }
     /**
-     * Store a newly created resource in storage.
      *
+     * update tag lokasi pekerjaan
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
@@ -170,8 +170,8 @@ class PelaksanaanPekerjaanController extends Controller
         }
     }
     /**
-     * Store a newly created resource in storage.
      *
+     * proses update bahan pekerjaan
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
@@ -212,8 +212,8 @@ class PelaksanaanPekerjaanController extends Controller
         }
     }
     /**
-     * Store a newly created resource in storage.
      *
+     * proses selesai pekerjaan
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
@@ -411,6 +411,8 @@ class PelaksanaanPekerjaanController extends Controller
             return $this->sendError($response, $th, 404);
         }
     }
+
+
     public function galian(Request $request)
     {
         DB::beginTransaction();

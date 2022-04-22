@@ -50,13 +50,14 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     // pelaksanaan-pekerjaan
     Route::get('pelaksanaan-pekerjaan', PelaksanaanPekerjaanController::class . '@index')->name('pelaksanaan.api.index');
 
-    // proses pelaksanaan-pekerjaan
+    // proses terima pekerjaan
     Route::post('proses-pekerjaan', PelaksanaanPekerjaanController::class . '@store')->name('pelaksanaan.api.store');
-    // update pelaksanaan-pekerjaan
+
+    // update tag lokasi pekerjaan
     Route::post('update-pekerjaan', PelaksanaanPekerjaanController::class . '@proses')->name('pelaksanaan.api.proses');
 
-    // proses akhir pelaksanaan-pekerjaan
-    Route::post('bahan-pekerjaan', PelaksanaanPekerjaanController::class . '@prosesAkhir')->name('pelaksanaan.api.selesai');
+    // proses selesai pekerjaan
+    Route::post('bahan-pekerjaan', PelaksanaanPekerjaanController::class . '@prosesAkhir')->name('pelaksanaan.api.proses.akhir');
 
     // bahan dari pelaksanaan-pekerjaan
     Route::post('selesai-pekerjaan', PelaksanaanPekerjaanController::class . '@selesai')->name('pelaksanaan.api.selesai');
