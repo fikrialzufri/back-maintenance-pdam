@@ -453,7 +453,7 @@ class PelaksanaanPekerjaanController extends Controller
         }
     }
 
-    public function galianmRemove(Request $request)
+    public function galianRemove(Request $request)
     {
         DB::beginTransaction();
         $result = [];
