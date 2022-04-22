@@ -433,9 +433,9 @@ class PelaksanaanPekerjaanController extends Controller
             ];
 
             $data->hasItem()->attach($listitem);
-
+            $result = [];
             $message = 'Berhasil Menyimpan Item Pekerjaan';
-            return $this->sendResponse($data, $message, 200);
+            return $this->sendResponse($result, $message, 200);
         } catch (\Throwable $th) {
             DB::rollback();
             $response = [
@@ -472,8 +472,10 @@ class PelaksanaanPekerjaanController extends Controller
 
                 $data->hasItem()->detach($item->id);
 
+                $result = [];
+
                 $message = 'Berhasil Hapus Item Pekerjaan';
-                return $this->sendResponse($data, $message, 200);
+                return $this->sendResponse($result, $message, 200);
             } else {
                 $message = 'Id Item tidak ada';
                 $response = [
