@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\GalianPekerjaan;
 use App\Models\Item;
 use App\Models\Jenis;
 use App\Models\PelaksanaanPekerjaan;
@@ -156,34 +157,6 @@ class PelaksanaanPekerjaanController extends Controller
         $data->status = 'proses';
         $data->save();
 
-        // $media = Media::where('modul',  'pelaksanan_kerja')->where('modul_id', $data->id)->get();
-        // if (count($media) == 0) {
-        //     if (isset($request->foto)) {
-        //         $imageName = [];
-        //         if ($request->foto) {
-        //             foreach ($request->foto as $index => $image) {
-
-        //                 if (preg_match('/^data:image\/(\w+);base64,/', $image)) {
-        //                     $imagebase64 = substr($image, strpos($image, ',') + 1);
-        //                     $imagebase64 = base64_decode($imagebase64);
-        //                     $imageName = $data->rekanan . $penunjukanPekerjaan->slug . Str::random(5) . '.png';
-        //                     Storage::disk('public')->put('proses/' . $imageName, $imagebase64);
-
-
-
-        //                     $media = new Media();
-        //                     $media->nama = 'Proses Pelaksanan Kerja';
-        //                     $media->modul = 'pelaksanan_kerja';
-        //                     $media->file = $imageName;
-        //                     $media->modul_id = $data->id;
-        //                     $media->user_id = $user_id;
-        //                     $media->save();
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
-
         $message = 'Berhasil Menyimpan Pelaksanaan Pekerjaan';
         return $this->sendResponse($data, $message, 200);
         try { } catch (\Throwable $th) {
@@ -208,7 +181,6 @@ class PelaksanaanPekerjaanController extends Controller
         $message = 'Gagal Menyimpan Pelaksanaan Pekerjaan';
         $status = 'proses-akhir';
         $slug = $request->slug;
-        $user_id = auth()->user()->id;
         try {
             DB::commit();
             $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug',  $slug)->first();
@@ -227,32 +199,6 @@ class PelaksanaanPekerjaanController extends Controller
             $data->status = $status;
             $data->tanggal_selesai = Carbon::now();
             $data->save();
-
-            // $media = Media::where('modul',  'bahan_perkerjaan')->where('modul_id', $data->id)->get();
-            // if (count($media) == 0) {
-            //     if (isset($request->foto)) {
-            //         $imageName = [];
-            //         if ($request->foto) {
-            //             foreach ($request->foto as $index => $image) {
-            //                 if (preg_match('/^data:image\/(\w+);base64,/', $image)) {
-            //                     $imagebase64 = substr($image, strpos($image, ',') + 1);
-            //                     $imagebase64 = base64_decode($imagebase64);
-            //                     $imageName = $data->rekanan . $penunjukanPekerjaan->slug . Str::random(5) . '.png';
-            //                     Storage::disk('public')->put('proses/' . $imageName, $imagebase64);
-
-            //                     $media = new Media();
-            //                     $media->nama = 'Proses Akhir Pelaksanan Kerja';
-            //                     $media->modul = 'bahan_perkerjaan';
-            //                     $media->file = $imageName;
-            //                     $media->modul_id = $data->id;
-            //                     $media->user_id = $user_id;
-            //                     $media->save();
-            //                 }
-            //             }
-            //         }
-            //     }
-            // }
-
             $message = 'Berhasil Menyimpan Bahan Pelaksanaan Pekerjaan';
             return $this->sendResponse($data, $message, 200);
         } catch (\Throwable $th) {
@@ -298,36 +244,6 @@ class PelaksanaanPekerjaanController extends Controller
             $data->keterangan = $keterangan;
             $data->save();
 
-            // Todo
-            // simpan foto
-            // $media = Media::where('modul',  'penyelesaian_kerja')->where('modul_id', $data->id)->get();
-            // if (count($media) == 0) {
-            //     if (isset($request->foto)) {
-            //         $imageName = [];
-            //         if ($request->foto) {
-            //             foreach ($request->foto as $index => $image) {
-
-            //                 if (preg_match('/^data:image\/(\w+);base64,/', $image)) {
-            //                     $imagebase64 = substr($image, strpos($image, ',') + 1);
-            //                     $imagebase64 = base64_decode($imagebase64);
-            //                     $imageName = $data->rekanan . $penunjukanPekerjaan->slug . Str::random(5) . '.png';
-            //                     Storage::disk('public')->put('proses/' . $imageName, $imagebase64);
-
-
-
-            //                     $media = new Media();
-            //                     $media->nama = 'Proses Penyelesaian Pelaksanan Kerja';
-            //                     $media->modul = 'penyelesaian_kerja';
-            //                     $media->file = $imageName;
-            //                     $media->modul_id = $data->id;
-            //                     $media->user_id = $user_id;
-            //                     $media->save();
-            //                 }
-            //             }
-            //         }
-            //     }
-            // }
-
             // update histori user
             $keterangan = [
                 'keterangan' => $status,
@@ -336,6 +252,7 @@ class PelaksanaanPekerjaanController extends Controller
             $syncData  = array_combine($data->id, $keterangan);
 
             $data->hasUserMany()->sync($syncData);
+
             $penunjukanPekerjaan->status = 'selesai';
             $penunjukanPekerjaan->save();
             $penunjukanPekerjaan->hasUserMany()->sync($syncData);
@@ -368,7 +285,7 @@ class PelaksanaanPekerjaanController extends Controller
     public function update(Request $request)
     {
         DB::beginTransaction();
-        $message = 'Gagal Mengubah Penunjukan Pekerjaan';
+        $message = 'Gagal Mengubah Pekerjaan';
         $status = $request->status;
         $slug = $request->slug;
         $user_id = auth()->user()->id;
@@ -386,7 +303,7 @@ class PelaksanaanPekerjaanController extends Controller
             $syncData  = array_combine($user_id, $keterangan);
             $data->hasUserMany()->sync($syncData);
 
-            $message = 'Berhasil Mengubah Penunjukan Pekerjaan';
+            $message = 'Berhasil Mengubah Pekerjaan';
             return $this->sendResponse($data, $message, 200);
         } catch (\Throwable $th) {
             DB::rollback();
@@ -402,7 +319,7 @@ class PelaksanaanPekerjaanController extends Controller
     public function item(Request $request)
     {
         DB::beginTransaction();
-        $message = 'Gagal Menyimpan Penunjukan Pekerjaan';
+        $message = 'Gagal Menyimpan Item Pekerjaan';
         try {
             $slug = $request->slug;
             $nama = $request->nama;
@@ -481,7 +398,98 @@ class PelaksanaanPekerjaanController extends Controller
                 $response = [
                     'success' => false,
                     'message' => $message,
-                    'code' => '404'
+                    'code' => '400'
+                ];
+                return $this->sendError($response, [], 400);
+            }
+        } catch (\Throwable $th) {
+            DB::rollback();
+            $response = [
+                'success' => false,
+                'message' => $message,
+                'code' => '404'
+            ];
+            return $this->sendError($response, $th, 404);
+        }
+    }
+    public function galian(Request $request)
+    {
+        DB::beginTransaction();
+        $message = 'Gagal Menyimpan Galian Pekerjaan';
+        $user_id = auth()->user()->id;
+        try {
+            $slug = $request->slug;
+            $panjang = $request->panjang;
+            $lebar = $request->lebar;
+            $dalam = $request->dalam;
+            $bongkaran = $request->bongkaran;
+            $keterangan = $request->keterangan;
+            DB::commit();
+            $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $slug)->first();
+            $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->with('hasItem')->first();
+
+            $gajian = new GalianPekerjaan;
+            $gajian->panjang = $panjang;
+            $gajian->lebar = $lebar;
+            $gajian->dalam = $dalam;
+            $gajian->bongkaran = $bongkaran;
+            $gajian->keterangan = $keterangan;
+            $gajian->user_id = $user_id;
+            $gajian->pelaksanaan_pekerjaan_id = $data->id;
+            $gajian->harga = 0;
+            $gajian->save();
+
+            $result = [];
+            $message = 'Berhasil Menyimpan Galian Pekerjaan';
+            return $this->sendResponse($result, $message, 200);
+        } catch (\Throwable $th) {
+            DB::rollback();
+            $response = [
+                'success' => false,
+                'message' => $message,
+                'code' => '404'
+            ];
+            return $this->sendError($response, $th, 404);
+        }
+    }
+
+    public function galianmRemove(Request $request)
+    {
+        DB::beginTransaction();
+        $result = [];
+        try {
+            $message = 'Gagal Hapus Penunjukan Pekerjaan';
+
+            $slug = $request->slug;
+            $id_barang = $request->id_barang;
+
+            DB::commit();
+            $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $slug)->first();
+            $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->with('hasItem')->first();
+
+            if ($data) {
+                $GalianPekerjaan = GalianPekerjaan::find($id_barang);
+                if ($GalianPekerjaan) {
+
+                    $GalianPekerjaan->delete();
+
+                    $message = 'Berhasil Hapus Galian Pekerjaan';
+                    return $this->sendResponse($result, $message, 200);
+                } else {
+                    $message = 'Id Galian tidak ada';
+                    $response = [
+                        'success' => false,
+                        'message' => $message,
+                        'code' => '400'
+                    ];
+                    return $this->sendError($response, [], 400);
+                }
+            } else {
+                $message = 'Pekerjaan tidak ada';
+                $response = [
+                    'success' => false,
+                    'message' => $message,
+                    'code' => '400'
                 ];
                 return $this->sendError($response, [], 404);
             }
