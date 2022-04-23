@@ -249,7 +249,7 @@ class PelaksanaanPekerjaanController extends Controller
             return $this->sendError($response, $message, 409);
         }
 
-        $data->status = $status;
+        // $data->status = $status;
         $data->tanggal_selesai = Carbon::now();
         $data->keterangan = $keterangan;
         $data->save();
@@ -265,8 +265,8 @@ class PelaksanaanPekerjaanController extends Controller
         $penunjukanPekerjaan->save();
         $penunjukanPekerjaan->hasUserMany()->sync($user);
 
-        $aduan = Aduan::find($penunjukanPekerjaan->id_aduan);
-        $aduan->status = $status;
+        return $aduan = Aduan::find($penunjukanPekerjaan->id_aduan);
+        $aduan->status = 'selesai';
         $aduan->save();
 
         $message = 'Berhasil Menyimpan Pelaksanaan Pekerjaan';
