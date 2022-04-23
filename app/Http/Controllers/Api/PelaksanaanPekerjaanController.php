@@ -297,7 +297,7 @@ class PelaksanaanPekerjaanController extends Controller
         $status = 'disetujui';
         $slug = $request->slug;
         $user_id = auth()->user()->id;
-        $rekanan_id = auth()->user()->id_rekanan;
+
         DB::commit();
         $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $slug)->first();
         $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->first();
@@ -314,7 +314,7 @@ class PelaksanaanPekerjaanController extends Controller
 
         if (request()->user()->hasRole('staf-pengawas')) {
             $listRekanan = auth()->user()->karyawan_list_rekanan;
-            if (in_array($listRekanan, $rekanan_id)) {
+            if (in_array($listRekanan, $data->rekanan_id)) {
                 return 1;
                 $data->status = $status;
                 $data->save();
