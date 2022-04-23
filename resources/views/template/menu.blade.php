@@ -72,10 +72,26 @@
                     </div>
                 @endcan
                 @can('view-penunjukan-pekerjaan')
-                    <div class="nav-item {{ $segment1 == 'penunjukan_pekerjaan' ? 'active' : '' }}">
+                    <div class="nav-item {{ $segment1 == 'penunjukan-pekerjaan' ? 'active' : '' }}">
                         <a href="{{ route('penunjukan_pekerjaan.index') }}">
                             <i class="ik ik-voicemail"></i>
                             <span>{{ __('Penunjukan Pekerjaan') }}</span>
+                        </a>
+                    </div>
+                @endcan
+                {{-- @can('view-pelaksanaan-pekerjaan')
+                    <div class="nav-item {{ $segment1 == 'pelaksanaan-pekerjaan' ? 'active' : '' }}">
+                        <a href="{{ route('pelaksanaan-pekerjaan.index') }}">
+                            <i class="ik ik-voicemail"></i>
+                            <span>{{ __('Pelaksanaan Pekerjaan') }}</span>
+                        </a>
+                    </div>
+                @endcan --}}
+                @can('view-tagihan')
+                    <div class="nav-item {{ $segment1 == 'tagihan' ? 'active' : '' }}">
+                        <a href="{{ route('tagihan.index') }}">
+                            <i class="ik ik-voicemail"></i>
+                            <span>{{ __('Tagihan') }}</span>
                         </a>
                     </div>
                 @endcan

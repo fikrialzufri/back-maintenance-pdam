@@ -77,4 +77,20 @@ class User extends Authenticatable
             return $this->hasRekanan->id;
         }
     }
+
+    public function getIdKaryawanAttribute()
+    {
+        if ($this->karyawan) {
+            return $this->karyawan->id;
+        }
+    }
+
+    public function getKaryawanListRekananAttribute()
+    {
+        if ($this->karyawan) {
+            if ($this->karyawan->hasRekanan) {
+                return $this->karyawan->hasRekanan->pluck('id');
+            }
+        }
+    }
 }

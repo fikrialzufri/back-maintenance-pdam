@@ -55,6 +55,9 @@ trait CrudTrait
     //many to many
     private $oneToMany;
 
+    //btn-tambah
+    private $tambah = 'true';
+
     // validation rule harus pkai object
     // tentukan jumlah col-sm boostrap
     // ooption object label
@@ -91,6 +94,9 @@ trait CrudTrait
 
         //button
         $button = null;
+
+        //tambah data
+        $tambah = $this->tambah;
 
         $export = null;
 
@@ -150,6 +156,7 @@ trait CrudTrait
             'searches',
             'hasilSearch',
             'button',
+            'tambah',
             'search',
             'export',
             'configHeaders',

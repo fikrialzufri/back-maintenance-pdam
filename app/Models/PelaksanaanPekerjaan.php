@@ -45,6 +45,13 @@ class PelaksanaanPekerjaan extends Model
         return $this->hasOne(PenunjukanPekerjaan::class, 'id', 'penunjukan_pekerjaan_id');
     }
 
+    public function getNoSpkAttribute()
+    {
+        if ($this->hasRekanan) {
+            return $this->hasRekanan->nomor_pekerjaan;
+        }
+    }
+
     public function hasGalianPekerjaan()
     {
         return $this->hasMany(GalianPekerjaan::class);

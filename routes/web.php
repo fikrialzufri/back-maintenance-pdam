@@ -14,10 +14,12 @@ use App\Http\Controllers\DepartemenController;
 use App\Http\Controllers\DivisiController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\AduanController;
+use App\Http\Controllers\PelaksanaanPekerjaanController;
 use App\Http\Controllers\PenunjukanPekerjaanController;
 use App\Http\Controllers\RekananController;
 use App\Http\Controllers\WilayahController;
 use App\Http\Controllers\NotifikasiController;
+use App\Http\Controllers\TagihanController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -59,6 +61,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('aduan', AduanController::class)->except('show');
     Route::get('notifikasi/aduan/{id}', [AduanController::class, 'notifikasi'])->name('aduan.notification');
     Route::resource('penunjukan-pekerjaan', PenunjukanPekerjaanController::class, ['names' => 'penunjukan_pekerjaan'])->except('destroy');
+
+    Route::resource('pelaksanaan-pekerjaan', PelaksanaanPekerjaanController::class);
+    Route::resource('tagihan', TagihanController::class);
 
     // Karyawan
     Route::resource('departemen', DepartemenController::class);

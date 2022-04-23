@@ -47,6 +47,10 @@ class PenunjukanPekerjaanController extends Controller
             if (request()->user()->hasRole('rekanan')) {
                 $query = $query->where('rekanan_id',  $rekanan_id);
             }
+            if (request()->user()->hasRole('staf-pengawas')) {
+                $rekanan_id = auth()->user()->karyawan_list_rekanan;
+                $query = $query->whereIn('rekanan_id',  $rekanan_id);
+            }
 
             if ($slug) {
                 $data = $query->with('hasAduan')->orderBy('created_at')->first();
