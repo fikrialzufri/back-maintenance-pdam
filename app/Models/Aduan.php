@@ -53,6 +53,11 @@ class Aduan extends Model
         return $data;
     }
 
+    public function hasPenunjukanPekerjaan()
+    {
+        return $this->hasOne(PenunjukanPekerjaan::class, 'aduan_id', 'id');
+    }
+
     public function hasUser()
     {
         return $this->hasOne(User::class, 'id', 'user_id');
@@ -62,6 +67,18 @@ class Aduan extends Model
     {
         if ($this->hasUser) {
             return $this->hasUser->name;
+        }
+    }
+    public function getRekananAttribute()
+    {
+        if ($this->hasPenunjukanPekerjaan) {
+            return $this->hasPenunjukanPekerjaan->rekanan;
+        }
+    }
+    public function getNoSpkAttribute()
+    {
+        if ($this->hasPenunjukanPekerjaan) {
+            return $this->hasPenunjukanPekerjaan->nomor_pekerjaan;
         }
     }
 

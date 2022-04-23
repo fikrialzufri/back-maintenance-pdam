@@ -23,18 +23,21 @@
         <div class="row">
             <div class="col-12">
                 <div class="card">
-                    <div class="card-header">
-                        <div class="card-title">Pilih Rekanan</div>
-                    </div>
                     @if ($aduan->status == 'proses')
+                        <div class="card-header">
+                            <div class="card-title">Rekanan</div>
+                        </div>
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-12">
-                                    {{ $aduan->hasRekanan }}
+                                    <h5>{{ $aduan->rekanan }}</h5>
                                 </div>
                             </div>
                         </div>
                     @else
+                        <div class="card-header">
+                            <div class="card-title">Pilih Rekanan</div>
+                        </div>
                         <form action="{{ $action }}" method="post" role="form" enctype="multipart/form-data">
                             @csrf
                             <div class="card-body">

@@ -19,6 +19,7 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
+                                    <th>Nomor SPK</th>
                                     <th>Nomor Tiket</th>
                                     <th>Nomor Aduan</th>
                                     <th>Atas Nama</th>
@@ -35,8 +36,9 @@
                                 @forelse ($penunjukan as $index => $item)
                                     <tr>
                                         <td>{{ ++$no }}</td>
-                                        <td>{{ $item->no_ticket }}</td>
+                                        <td>{{ $item->no_spk }}</td>
                                         <td>{{ $item->no_aduan }}</td>
+                                        <td>{{ $item->no_ticket }}</td>
                                         <td>{{ $item->atas_nama }}</td>
                                         <td>{{ $item->sumber_informasi }}</td>
                                         <td>{{ tanggal_indonesia($item->created_at) }}</td>
@@ -47,7 +49,7 @@
 
                                         <td class="text-center">
                                             <a href="{{ route('penunjukan_pekerjaan.show', $item->slug) }}"
-                                                class="btn btn-sm btn-primary text-light">
+                                                class="btn btn-sm {{ $item->status == 'proses' ? 'btn-warning' : 'btn-primary' }} text-light">
                                                 @if ($item->status == 'proses')
                                                     <i class="nav-icon fa fa-search"></i> Detail
                                                 @else
