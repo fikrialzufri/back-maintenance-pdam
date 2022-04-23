@@ -61,8 +61,11 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     // bahan dari pelaksanaan-pekerjaan
     Route::post('selesai-pekerjaan', PelaksanaanPekerjaanController::class . '@selesai')->name('pelaksanaan.api.selesai');
-    // bahan dari pelaksanaan-pekerjaan
 
+    // update tag lokasi pekerjaan
+    Route::post('status-pekerjaan', PelaksanaanPekerjaanController::class . '@status')->name('pelaksanaan.api.status');
+
+    // bahan dari pelaksanaan-pekerjaan
     Route::post('item-pekerjaan', PelaksanaanPekerjaanController::class . '@item')->name('pelaksanaan.api.item');
 
     Route::post('item-pekerjaan-remove', PelaksanaanPekerjaanController::class . '@itemRemove')->name('pelaksanaan.api.item.delete');

@@ -294,20 +294,41 @@ class PelaksanaanPekerjaanController extends Controller
     {
         DB::beginTransaction();
         $message = 'Gagal Mengubah Pekerjaan';
-        $status = $request->status;
+        $status = 'disetujui';
         $slug = $request->slug;
         $user_id = auth()->user()->id;
         try {
             DB::commit();
             $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $slug)->first();
             $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->first();
+
+            if ($data->status == 'disetujui') {
+                $message = "Pekerjaan sudah disetujui";
+                $response = [
+                    'success' => false,
+                    'message' => $message,
+                    'code' => '409'
+                ];
+                return $this->sendError($response, $message, 409);
+            }
+
             $data->status = $status;
             $data->save();
+
 
             $user[$user_id] = [
                 'keterangan' => $status,
             ];
+
             $data->hasUserMany()->sync($user);
+
+            $penunjukanPekerjaan->status = $status;
+            $penunjukanPekerjaan->save();
+            $penunjukanPekerjaan->hasUserMany()->sync($user);
+
+            $aduan = Aduan::find($penunjukanPekerjaan->aduan_id);
+            $aduan->status = $status;
+            $aduan->save();
 
             $message = 'Berhasil Mengubah Pekerjaan';
             return $this->sendResponse($data, $message, 200);
