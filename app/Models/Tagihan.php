@@ -52,19 +52,30 @@ class Tagihan extends Model
     public function getStatusMobileAttribute()
     {
         switch ($this->status) {
-            case 'proses':
+            case 'step1':
                 return 1;
                 break;
-            case 'selesai':
+            case 'step2':
                 return 2;
                 break;
-            case 'disetujui':
+            case 'step3':
                 return 3;
+                break;
+            case 'step4':
+                return 4;
+                break;
+            case 'step5':
+                return 5;
+                break;
+            case 'disetujui':
+                return 6;
+                break;
+            case 'dibayar':
+                return 7;
                 break;
             default:
                 return 0;
                 break;
         }
-        return 's';
     }
 }
