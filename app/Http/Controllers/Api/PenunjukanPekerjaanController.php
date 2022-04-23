@@ -106,7 +106,7 @@ class PenunjukanPekerjaanController extends Controller
                     'lokasi_pekerjaan' =>  $value->lokasi_pekerjaan,
                     'status' =>  $value->status,
                     'created_at' =>  $value->created_at,
-                    'status_mobile' =>  $value->status_mobile,
+                    'status_mobile' =>  $value->hasPelaksanaanPekerjaan,
                 ];
             }
         }
