@@ -22,6 +22,7 @@
                                     <th>Nomor SPK</th>
                                     <th>Nomor Tiket</th>
                                     <th>Nomor Aduan</th>
+                                    <th>Rekanan</th>
                                     <th>Atas Nama</th>
                                     <th>Sumber Informasi</th>
                                     <th>Tanggal</th>
@@ -39,6 +40,7 @@
                                         <td>{{ $item->no_spk }}</td>
                                         <td>{{ $item->no_aduan }}</td>
                                         <td>{{ $item->no_ticket }}</td>
+                                        <td>{{ $item->rekanan }}</td>
                                         <td>{{ $item->atas_nama }}</td>
                                         <td>{{ $item->sumber_informasi }}</td>
                                         <td>{{ tanggal_indonesia($item->created_at) }}</td>
