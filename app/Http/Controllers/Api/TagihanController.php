@@ -58,24 +58,25 @@ class TagihanController extends Controller
             $query->whereBetween('created_at', [$start, $end]);
         }
 
-        $data = $query->orderBy('status', 'ASC')->orderBy('created_at')->get();
-        if (count($data) == 0) {
-            $message = 'Data List Tagihan Belum Ada';
-        }
-        foreach ($data as $key => $value) {
-            $result[$key] = [
-                'id' =>  $value->id,
-                'nomor_pekerjaan' =>  $value->nomor_pekerjaan,
-                'slug' =>  $value->slug,
-                'lokasi_aduan' =>  $value->lokasi,
-                'lokasi_pekerjaan' =>  $value->lokasi_pekerjaan,
-                'status' =>  $value->status,
-                'created_at' =>  $value->created_at,
-                'status_mobile' =>  $value->status_mobile,
-            ];
-        }
-        return $this->sendResponse($result, $message, 200);
-        try { } catch (\Throwable $th) {
+        try {
+            $data = $query->orderBy('status', 'ASC')->orderBy('created_at')->get();
+            if (count($data) == 0) {
+                $message = 'Data List Tagihan Belum Ada';
+            }
+            foreach ($data as $key => $value) {
+                $result[$key] = [
+                    'id' =>  $value->id,
+                    'nomor_pekerjaan' =>  $value->nomor_pekerjaan,
+                    'slug' =>  $value->slug,
+                    'lokasi_aduan' =>  $value->lokasi,
+                    'lokasi_pekerjaan' =>  $value->lokasi_pekerjaan,
+                    'status' =>  $value->status,
+                    'created_at' =>  $value->created_at,
+                    'status_mobile' =>  $value->status_mobile,
+                ];
+            }
+            return $this->sendResponse($result, $message, 200);
+        } catch (\Throwable $th) {
             $response = [
                 'success' => false,
                 'message' => $message,
@@ -105,18 +106,18 @@ class TagihanController extends Controller
         }
 
         DB::beginTransaction();
+        $data = $this->model();
+        $data->nomor_tagihan = $nomor_tagihan;
+        $data->aduan_id = $aduan_id;
+        $data->rekanan_id = $rekanan_id;
+        $data->user_id = auth()->user()->id;
+        $data->status = 'draft';
+        $data->save();
+
+        $message = 'Berhasil Menyimpan Tagihan';
+        return $this->sendResponse($data, $message, 200);
         try {
             DB::commit();
-            $data = $this->model();
-            $data->nomor_tagihan = $nomor_tagihan;
-            $data->aduan_id = $aduan_id;
-            $data->rekanan_id = $rekanan_id;
-            $data->user_id = auth()->user()->id;
-            $data->status = 'draft';
-            $data->save();
-
-            $message = 'Berhasil Menyimpan Tagihan';
-            return $this->sendResponse($data, $message, 200);
         } catch (\Throwable $th) {
             DB::rollback();
             $response = [
