@@ -66,7 +66,6 @@ class AduanController extends Controller
 
     public function store(Request $request)
     {
-        return $request;
         $messages = [
             'required' => ':attribute tidak boleh kosong',
         ];
@@ -107,11 +106,6 @@ class AduanController extends Controller
             $aduan->save();
             $aduan->hasJenisAduan()->sync($request->jenis_aduan_id);
             DB::commit();
-
-            // TODO:
-            // Notifikasi
-            // Masuk ke table notifikasi ->
-            // Masuk ke USER dengan JABATAN ADMIN ADMIN MANAGER DISTRIBUSI DAN MANAGER DISTRIBUSI (Di foreach dari karyawan dengan jabatan td)
 
             $title = "Aduan Baru";
             $body = "Aduan dengan nomor aduan " . $noAduan . " telah dikirim";

@@ -26,22 +26,23 @@ class AduanController extends Controller
         $wilayah_id = auth()->user()->id_wilayah;
         $message = 'Data Aduan';
 
-        $query = $this->model();
-        if ($no_aduan != '') {
-            $query = $query->where('no_aduan',  $no_aduan);
-        }
-        if ($wilayah_id != '') {
-            $query = $query->where('wilayah_id',  $wilayah_id);
-        }
-        if ($status != '') {
-            $query = $query->where('status',  $status);
-        }
-        $data = $query->orderBy('created_at')->get();
-        if (count($result) == 0) {
-            $message = 'Data Aduan Belum Ada';
-        }
-        return $this->sendResponse($data, $message, 200);
-        try { } catch (\Throwable $th) {
+        try {
+            $query = $this->model();
+            if ($no_aduan != '') {
+                $query = $query->where('no_aduan',  $no_aduan);
+            }
+            if ($wilayah_id != '') {
+                $query = $query->where('wilayah_id',  $wilayah_id);
+            }
+            if ($status != '') {
+                $query = $query->where('status',  $status);
+            }
+            $data = $query->orderBy('created_at')->get();
+            if (count($result) == 0) {
+                $message = 'Data Aduan Belum Ada';
+            }
+            $this->sendResponse($data, $message, 200);
+        } catch (\Throwable $th) {
             $response = [
                 'success' => false,
                 'message' => $message,
