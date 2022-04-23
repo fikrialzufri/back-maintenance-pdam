@@ -102,6 +102,7 @@ class TagihanController extends Controller
 
         DB::beginTransaction();
         try {
+            DB::commit();
             $data = $this->model();
             $data->nomor_tagihan = $nomor_tagihan;
             $data->rekanan_id = $rekanan_id;
@@ -111,7 +112,6 @@ class TagihanController extends Controller
 
             $message = 'Berhasil Menyimpan Tagihan';
             return $this->sendResponse($data, $message, 200);
-            DB::commit();
         } catch (\Throwable $th) {
             DB::rollback();
             $response = [
