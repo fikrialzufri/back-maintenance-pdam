@@ -53,7 +53,7 @@ class PenunjukanPekerjaanController extends Controller
             }
 
             if ($slug) {
-                $data = $query->with('hasAduan')->orderBy('created_at')->first();
+                $data = $query->with('hasAduan')->orderBy('status', 'ASC')->orderBy('created_at')->first();
                 if (!$data) {
                     $message = 'Data Penunjukan Pekerjaan Belum Ada';
                 } else {

@@ -49,7 +49,7 @@ class PelaksanaanPekerjaanController extends Controller
             if (request()->user()->hasRole('rekanan')) {
                 $query = $query->where('rekanan_id',  $rekanan_id);
             }
-            $data = $query->orderBy('created_at')->orderBy('status', 'ASC')->get();
+            $data = $query->orderBy('status', 'ASC')->orderBy('created_at')->get();
             if (count($result) == 0) {
                 $message = 'Data Pelaksanaan Pekerjaan Belum Ada';
             }
