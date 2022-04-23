@@ -313,7 +313,7 @@ class PelaksanaanPekerjaanController extends Controller
         }
 
         if (request()->user()->hasRole('staf-pengawas')) {
-            $listRekanan = auth()->user()->karyawan_list_rekanan;
+            $listRekanan = auth()->user()->karyawan_list_rekanan->toArray();
             $rekanan_id = $penunjukanPekerjaan->rekanan_id;
             if (in_array($rekanan_id, $listRekanan)) {
                 return 1;
