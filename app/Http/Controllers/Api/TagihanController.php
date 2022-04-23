@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Tagihan;
+use Illuminate\Http\Request;
+
 
 class TagihanController extends Controller
 {
