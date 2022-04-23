@@ -101,16 +101,16 @@ class TagihanController extends Controller
         }
 
         DB::beginTransaction();
-        $data = $this->model();
-        $data->nomor_tagihan = $nomor_tagihan;
-        $data->rekanan_id = $rekanan_id;
-        $data->user_id = auth()->user()->id;
-        $data->status = 'draft';
-        $data->save();
-
-        $message = 'Berhasil Menyimpan Tagihan';
-        return $this->sendResponse($data, $message, 200);
         try {
+            $data = $this->model();
+            $data->nomor_tagihan = $nomor_tagihan;
+            $data->rekanan_id = $rekanan_id;
+            $data->user_id = auth()->user()->id;
+            $data->status = 'draft';
+            $data->save();
+
+            $message = 'Berhasil Menyimpan Tagihan';
+            return $this->sendResponse($data, $message, 200);
             DB::commit();
         } catch (\Throwable $th) {
             DB::rollback();
