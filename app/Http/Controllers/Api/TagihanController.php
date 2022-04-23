@@ -62,10 +62,8 @@ class TagihanController extends Controller
             foreach ($data as $key => $value) {
                 $result[$key] = [
                     'id' =>  $value->id,
-                    'nomor_pekerjaan' =>  $value->nomor_pekerjaan,
+                    'nomor_tagihan' =>  $value->nomor_tagihan,
                     'slug' =>  $value->slug,
-                    'lokasi_aduan' =>  $value->lokasi,
-                    'lokasi_pekerjaan' =>  $value->lokasi_pekerjaan,
                     'status' =>  $value->status,
                     'created_at' =>  $value->created_at,
                     'status_mobile' =>  $value->status_mobile,
