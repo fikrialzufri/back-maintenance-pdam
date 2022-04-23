@@ -148,6 +148,11 @@ class UsersTableSeedeer extends Seeder
         $taskPelaksanaanPekerjaan->description = 'Manajemen Pelaksanaan Pekerjaan';
         $taskPelaksanaanPekerjaan->save();
 
+        $tagihan = new Task();
+        $tagihan->name = 'Tagihan';
+        $tagihan->description = 'Manajemen Tagihan';
+        $tagihan->save();
+
         $tasks = Task::all();
 
         foreach ($tasks as $task) {

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Tagihan;
 use App\Traits\CrudTrait;
+use Illuminate\Http\Request;
 
 class TagihanController extends Controller
 {
