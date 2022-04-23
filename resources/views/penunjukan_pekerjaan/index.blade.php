@@ -48,7 +48,11 @@
                                         <td class="text-center">
                                             <a href="{{ route('penunjukan_pekerjaan.show', $item->slug) }}"
                                                 class="btn btn-sm btn-primary text-light">
-                                                <i class="nav-icon fas fa-eye"></i> Proses
+                                                @if ($item->status == 'proses')
+                                                    <i class="nav-icon fa fa-search"></i> Detail
+                                                @else
+                                                    <i class="nav-icon fas fa-eye"></i> Proses
+                                                @endif
                                             </a>
                                         </td>
                                     </tr>

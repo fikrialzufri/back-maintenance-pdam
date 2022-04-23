@@ -17,6 +17,7 @@ class CreatePenunjukanPekerjaanUserTable extends Migration
             //FOREIGN KEY CONSTRAINTS
             $table->string('penunjukan_pekerjaan_id')->references('id')->on('penunjukan_pekerjaan')->onDelete('cascade');
             $table->string('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->string('keterangan')->nullable();
 
             //SETTING THE PRIMARY KEYS
             $table->primary(['penunjukan_pekerjaan_id', 'user_id']);

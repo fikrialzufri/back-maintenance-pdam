@@ -26,37 +26,48 @@
                     <div class="card-header">
                         <div class="card-title">Pilih Rekanan</div>
                     </div>
-                    <form action="{{ $action }}" method="post" role="form" enctype="multipart/form-data">
-                        @csrf
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="form-group">
-                                        <input type="hidden" name="slug" value="{{ $aduan->slug }}">
-                                        <div>
-                                            <select name="rekanan_id" class="selected2 form-control" id="rekanan" required>
-                                                <option value="">--Pilih Rekanan--</option>
-                                                @foreach ($rekanan as $item)
-                                                    <option value="{{ $item->id }}"
-                                                        {{ old('rekanan_id') == $item->id ? 'selected' : '' }}>
-                                                        {{ $item->nama }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                            @if ($errors->has('rekanan_id'))
-                                                <span class="text-danger">
-                                                    <strong id="textrule">{{ $errors->first('rekanan_id') }}</strong>
-                                                </span>
+                    @if ($aduan->status == 'proses')
+                        {{ $aduan->rekanan }}
+                    @else
+                        <form action="{{ $action }}" method="post" role="form" enctype="multipart/form-data">
+                            @csrf
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            @if ($item->status == 'proses')
+                                                <i class="nav-icon fa fa-search"></i> Detail
+                                            @else
+                                                <input type="hidden" name="slug" value="{{ $aduan->slug }}">
+                                                <div>
+                                                    <select name="rekanan_id" class="selected2 form-control" id="rekanan"
+                                                        required>
+                                                        <option value="">--Pilih Rekanan--</option>
+                                                        @foreach ($rekanan as $item)
+                                                            <option value="{{ $item->id }}"
+                                                                {{ old('rekanan_id') == $item->id ? 'selected' : '' }}>
+                                                                {{ $item->nama }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                    @if ($errors->has('rekanan_id'))
+                                                        <span class="text-danger">
+                                                            <strong
+                                                                id="textrule">{{ $errors->first('rekanan_id') }}</strong>
+                                                        </span>
+                                                    @endif
+                                                </div>
                                             @endif
+
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="card-footer clearfix">
-                            <button type="submit" class="btn btn-primary">Simpan</button>
-                        </div>
-                    </form>
+                            <div class="card-footer clearfix">
+                                <button type="submit" class="btn btn-primary">Simpan</button>
+                            </div>
+                        </form>
+                    @endif
                 </div>
             </div>
         </div>
