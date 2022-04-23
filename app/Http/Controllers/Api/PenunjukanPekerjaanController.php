@@ -30,6 +30,8 @@ class PenunjukanPekerjaanController extends Controller
             $result = [];
             $message = 'List Penunjukan Pekerjaan';
             $rekanan_id = auth()->user()->id_rekanan;
+            $start_date = $request->start_date;
+            $end_date = $request->end_date;
 
             $query = $this->model();
             if ($nomor_pekerjaan != '') {
@@ -51,6 +53,15 @@ class PenunjukanPekerjaanController extends Controller
                 $rekanan_id = auth()->user()->karyawan_list_rekanan;
                 $query = $query->whereIn('rekanan_id',  $rekanan_id);
             }
+
+            if ($start_date || $end_date) {
+                $start = Carbon::parse($start_date)->format('Y-m-d') . ' 00:00:01';
+                $end = Carbon::parse($end_date)->format('Y-m-d') . ' 23:59:59';
+                $query = $query->with(['hasPelaksanaanPekerjaan' => function ($query) use ($start, $end) {
+                    $query->whereBetween('tanggal_selesai', [$start, $end]);
+                }])->get();
+            }
+
 
             if ($slug) {
                 $data = $query->with('hasAduan')->orderBy('status', 'ASC')->orderBy('created_at')->first();

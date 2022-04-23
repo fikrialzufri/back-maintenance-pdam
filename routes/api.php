@@ -74,6 +74,10 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     Route::post('galian-pekerjaan-remove', PelaksanaanPekerjaanController::class . '@galianRemove')->name('pelaksanaan.api.galian.delete');
 
+    // modul tagihan
+    // list pekerjaan yang selesai
+    Route::get('list-pekerjaan-rekanan', PelaksanaanPekerjaanController::class . '@index')->name('pelaksanaan.api.index');
+
     Route::get('refresh', AuthController::class . '@refresh')->name('auth.refresh');
 
     // uplod pelaksanaan-pekerjaan
