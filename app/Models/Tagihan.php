@@ -40,12 +40,12 @@ class Tagihan extends Model
 
     public function hasPelaksanaanPekerjaan()
     {
-        return $this->belongsToMany(PelaksanaanPekerjaan::class,  'tagihan_pelaksanaan')->withPivot('total')->withTimestamps();;
+        return $this->belongsToMany(PelaksanaanPekerjaan::class,  'pelaksanaan_pekerjaan_id')->withPivot('total')->withTimestamps();;
     }
 
     public function hasUserMany()
     {
-        return $this->belongsToMany(User::class, 'penunjukan_user')->withTimestamps();
+        return $this->belongsToMany(User::class, 'tagihan_user')->withTimestamps();
     }
 
     public function getStatusMobileAttribute()
