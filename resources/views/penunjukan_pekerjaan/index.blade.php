@@ -44,13 +44,12 @@
                                         <td>{{ $item->wilayah }}</td>
                                         <td>{{ $item->lokasi }}</td>
                                         <td>{{ ucfirst($item->status) }}</td>
+
                                         <td class="text-center">
                                             <a href="{{ route('penunjukan_pekerjaan.show', $item->slug) }}"
                                                 class="btn btn-sm btn-primary text-light">
-                                                <i class="nav-icon fas fa-eye"></i> Detail</a>
-                                            <a href="{{ route('penunjukan_pekerjaan.edit', $item->slug) }}"
-                                                class="btn btn-sm btn-warning text-light">
-                                                <i class="nav-icon fas fa-edit"></i> Ubah</a>
+                                                <i class="nav-icon fas fa-eye"></i> Proses
+                                            </a>
                                         </td>
                                     </tr>
                                 @empty

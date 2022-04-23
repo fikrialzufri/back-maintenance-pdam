@@ -103,8 +103,6 @@ class PelaksanaanPekerjaanController extends Controller
             $data->rekanan_id = $rekanan_id;
             $data->aduan_id = $penunjukanPekerjaan->aduan_id;
             $data->user_id = $user_id;
-            $data->keterangan = $request->keterangan;
-
             $data->status = 'diterima';
             $data->save();
 
