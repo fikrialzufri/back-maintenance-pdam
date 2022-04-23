@@ -93,7 +93,7 @@ class PenunjukanPekerjaanController extends Controller
                 ];
             }
         } else {
-            $data = $query->orderBy('status', 'ASC')->orderBy('created_at')->get();
+            $data = $query->orderBy('status', 'ASC')->get();
             if (count($data) == 0) {
                 $message = 'Data Penunjukan Pekerjaan Belum Ada';
             }
