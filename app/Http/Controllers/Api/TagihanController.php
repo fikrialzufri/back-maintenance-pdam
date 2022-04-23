@@ -60,7 +60,7 @@ class TagihanController extends Controller
         try {
             $data = $query->orderBy('status', 'ASC')->orderBy('created_at')->get();
             if (count($data) == 0) {
-                $message = 'Data Penunjukan Pekerjaan Belum Ada';
+                $message = 'Data List Tagihan Belum Ada';
             }
             foreach ($data as $key => $value) {
                 $result[$key] = [
