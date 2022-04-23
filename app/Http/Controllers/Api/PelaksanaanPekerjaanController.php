@@ -301,7 +301,7 @@ class PelaksanaanPekerjaanController extends Controller
         DB::commit();
         $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $slug)->first();
         $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->first();
-
+        $listRekanan = [];
         if ($data->status == 'disetujui') {
             $message = "Pekerjaan sudah disetujui";
             $response = [
