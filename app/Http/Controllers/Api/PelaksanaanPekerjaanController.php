@@ -297,6 +297,7 @@ class PelaksanaanPekerjaanController extends Controller
         $status = 'disetujui';
         $slug = $request->slug;
         $user_id = auth()->user()->id;
+        $rekanan_id = auth()->user()->id_rekanan;
         try {
             DB::commit();
             $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $slug)->first();
@@ -312,25 +313,30 @@ class PelaksanaanPekerjaanController extends Controller
                 return $this->sendError($response, $message, 409);
             }
 
-            $data->status = $status;
-            $data->save();
+            if (request()->user()->hasRole('staf-pengawas')) {
+                $rekanan = auth()->user()->karyawan_list_rekanan;
+                if (in_array($rekanan_id, $rekanan)) {
+                    $data->status = $status;
+                    $data->save();
 
 
-            $user[$user_id] = [
-                'keterangan' => $status,
-            ];
+                    $user[$user_id] = [
+                        'keterangan' => $status,
+                    ];
 
-            $data->hasUserMany()->sync($user);
+                    $data->hasUserMany()->sync($user);
 
-            $penunjukanPekerjaan->status = $status;
-            $penunjukanPekerjaan->save();
-            $penunjukanPekerjaan->hasUserMany()->sync($user);
+                    $penunjukanPekerjaan->status = $status;
+                    $penunjukanPekerjaan->save();
+                    $penunjukanPekerjaan->hasUserMany()->sync($user);
 
-            $aduan = Aduan::find($penunjukanPekerjaan->aduan_id);
-            $aduan->status = $status;
-            $aduan->save();
+                    $aduan = Aduan::find($penunjukanPekerjaan->aduan_id);
+                    $aduan->status = $status;
+                    $aduan->save();
 
-            $message = 'Berhasil Mengubah Pekerjaan';
+                    $message = 'Berhasil Mengubah Pekerjaan';
+                }
+            }
             return $this->sendResponse($data, $message, 200);
         } catch (\Throwable $th) {
             DB::rollback();
