@@ -316,7 +316,6 @@ class PelaksanaanPekerjaanController extends Controller
             $listRekanan = auth()->user()->karyawan_list_rekanan->toArray();
             $rekanan_id = $penunjukanPekerjaan->rekanan_id;
             if (in_array($rekanan_id, $listRekanan)) {
-                return 1;
                 $data->status = $status;
                 $data->save();
 
