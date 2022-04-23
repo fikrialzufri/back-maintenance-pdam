@@ -59,7 +59,7 @@ class PenunjukanPekerjaanController extends Controller
             $end = Carbon::parse($end_date)->format('Y-m-d') . ' 23:59:59';
             $query = $query->with(['hasPelaksanaanPekerjaan' => function ($query) use ($start, $end) {
                 $query->whereBetween('tanggal_selesai', [$start, $end]);
-            }])->get();
+            }]);
         }
 
 
@@ -93,7 +93,7 @@ class PenunjukanPekerjaanController extends Controller
                 ];
             }
         } else {
-            $data = $query->orderBy('status', 'ASC')->get();
+            $data = $query->orderBy('status', 'ASC')->orderBy('created_at')->get();
             if (count($data) == 0) {
                 $message = 'Data Penunjukan Pekerjaan Belum Ada';
             }
