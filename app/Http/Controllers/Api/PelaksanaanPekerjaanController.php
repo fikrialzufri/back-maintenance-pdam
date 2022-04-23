@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Aduan;
 use App\Models\GalianPekerjaan;
 use App\Models\Item;
 use App\Models\Jenis;
@@ -233,45 +234,45 @@ class PelaksanaanPekerjaanController extends Controller
         $slug = $request->slug;
         $user_id = auth()->user()->id;
         $keterangan = $request->keterangan;
-        $user = [];
-        DB::commit();
-        $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $slug)->first();
-        $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->first();
+        try {
+            $user = [];
+            DB::commit();
+            $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $slug)->first();
+            $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->first();
 
-        if ($data->status == 'selesai') {
-            $message = "Pekerjaan sudah selesai";
-            $response = [
-                'success' => false,
-                'message' => $message,
-                'code' => '409'
+            if ($data->status == 'selesai') {
+                $message = "Pekerjaan sudah selesai";
+                $response = [
+                    'success' => false,
+                    'message' => $message,
+                    'code' => '409'
+                ];
+                return $this->sendError($response, $message, 409);
+            }
+
+            $data->status = $status;
+            $data->tanggal_selesai = Carbon::now();
+            $data->keterangan = $keterangan;
+            $data->save();
+
+            // update histori user
+            $user[$user_id] = [
+                'keterangan' => $status,
             ];
-            return $this->sendError($response, $message, 409);
-        }
 
-        $data->status = $status;
-        $data->tanggal_selesai = Carbon::now();
-        $data->keterangan = $keterangan;
-        $data->save();
+            $data->hasUserMany()->sync($user);
 
-        // update histori user
-        $user[$user_id] = [
-            'keterangan' => $status,
-        ];
+            $penunjukanPekerjaan->status = $status;
+            $penunjukanPekerjaan->save();
+            $penunjukanPekerjaan->hasUserMany()->sync($user);
 
-        $data->hasUserMany()->sync($user);
+            $aduan = Aduan::find($data->id_aduan);
+            $aduan->status = $status;
+            $aduan->save();
 
-        $penunjukanPekerjaan->status = $status;
-        $penunjukanPekerjaan->save();
-        $penunjukanPekerjaan->hasUserMany()->sync($user);
-
-        $aduan = Aduan::find($data->id_aduan);
-        $aduan->status = $status;
-        $aduan->save();
-        $aduan->hasUserMany()->sync($user);
-
-        $message = 'Berhasil Menyimpan Pelaksanaan Pekerjaan';
-        return $this->sendResponse($data, $message, 200);
-        try { } catch (\Throwable $th) {
+            $message = 'Berhasil Menyimpan Pelaksanaan Pekerjaan';
+            return $this->sendResponse($data, $message, 200);
+        } catch (\Throwable $th) {
             DB::rollback();
             $response = [
                 'success' => false,
