@@ -52,10 +52,10 @@
                                         <td class="text-center">
                                             <a href="{{ route('penunjukan_pekerjaan.show', $item->slug) }}"
                                                 class="btn btn-sm {{ $item->status == 'proses' ? 'btn-warning' : 'btn-primary' }} text-light">
-                                                @if ($item->status == 'proses')
-                                                    <i class="nav-icon fa fa-search"></i> Detail
-                                                @else
+                                                @if ($item->status == 'draft')
                                                     <i class="nav-icon fas fa-eye"></i> Proses
+                                                @else
+                                                    <i class="nav-icon fa fa-search"></i> Detail
                                                 @endif
                                             </a>
                                         </td>

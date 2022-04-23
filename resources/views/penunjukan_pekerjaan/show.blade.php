@@ -23,7 +23,7 @@
         <div class="row">
             <div class="col-12">
                 <div class="card">
-                    @if ($aduan->status == 'proses')
+                    @if ($aduan->status != 'draft')
                         <div class="card-header">
                             <div class="card-title">Rekanan</div>
                         </div>
