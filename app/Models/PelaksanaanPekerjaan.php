@@ -76,10 +76,10 @@ class PelaksanaanPekerjaan extends Model
                 return 3;
                 break;
             case 'selesai':
-                return 3;
+                return 4;
                 break;
             case 'disetujui':
-                return 4;
+                return 5;
                 break;
             default:
                 return 1;

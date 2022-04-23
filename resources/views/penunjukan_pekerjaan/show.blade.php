@@ -25,12 +25,15 @@
                 <div class="card">
                     @if ($aduan->status != 'draft')
                         <div class="card-header">
-                            <div class="card-title">Rekanan</div>
+                            <div class="card-title">Detail SPK</div>
                         </div>
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-12">
-                                    <h5>{{ $aduan->rekanan }}</h5>
+                                    <h5>No SPK : {{ $aduan->no_spk }}</h5>
+                                </div>
+                                <div class="col-12">
+                                    <h5>Nama Rekanan : {{ $aduan->rekanan }}</h5>
                                 </div>
                             </div>
                         </div>

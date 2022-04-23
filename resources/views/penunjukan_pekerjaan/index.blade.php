@@ -51,7 +51,7 @@
 
                                         <td class="text-center">
                                             <a href="{{ route('penunjukan_pekerjaan.show', $item->slug) }}"
-                                                class="btn btn-sm {{ $item->status == 'proses' ? 'btn-primary' : 'btn-warning' }} {{ $item->status == 'selesai' ? 'btn-success' : 'btn-warning' }}  text-light">
+                                                class="btn btn-sm {{ $item->status == 'draft' ? 'btn-primary' : 'btn-success' }} text-light">
                                                 @if ($item->status == 'draft')
                                                     <i class="nav-icon fas fa-eye"></i> Proses
                                                 @else
