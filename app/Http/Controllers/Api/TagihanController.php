@@ -24,7 +24,6 @@ class TagihanController extends Controller
         $nomor_tagihan = $request->nomor_tagihan;
         $status = $request->status;
         $slug = $request->slug;
-        $aduan_id = $request->aduan_id;
         $result = [];
         $message = 'List Tagihan';
         $rekanan_id = auth()->user()->id_rekanan;
@@ -40,9 +39,6 @@ class TagihanController extends Controller
         }
         if ($slug != '') {
             $query = $query->where('slug',  $slug);
-        }
-        if ($aduan_id != '') {
-            $query = $query->where('aduan_id',  $aduan_id);
         }
         if (request()->user()->hasRole('rekanan')) {
             $query = $query->where('rekanan_id',  $rekanan_id);
@@ -93,7 +89,6 @@ class TagihanController extends Controller
     public function store(Request $request)
     {
         $message = 'Gagal Menyimpan Menyimpan Tagihan';
-        $aduan_id = $request->aduan_id;
         $rekanan_id = auth()->user()->id_rekanan;
 
         $tagihan = $this->model()->count();
@@ -108,7 +103,6 @@ class TagihanController extends Controller
         DB::beginTransaction();
         $data = $this->model();
         $data->nomor_tagihan = $nomor_tagihan;
-        $data->aduan_id = $aduan_id;
         $data->rekanan_id = $rekanan_id;
         $data->user_id = auth()->user()->id;
         $data->status = 'draft';
