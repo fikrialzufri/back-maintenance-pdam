@@ -250,7 +250,7 @@ class PelaksanaanPekerjaanController extends Controller
                 return $this->sendError($response, $message, 409);
             }
 
-            // $data->status = $status;
+            $data->status = $status;
             $data->tanggal_selesai = Carbon::now();
             $data->keterangan = $keterangan;
             $data->save();
