@@ -57,7 +57,7 @@ class PenunjukanPekerjaanController extends Controller
         if ($start_date || $end_date) {
             $start = Carbon::parse($start_date)->format('Y-m-d') . ' 00:00:01';
             $end = Carbon::parse($end_date)->format('Y-m-d') . ' 23:59:59';
-            $query = $query->with(['hasPelaksanaanPekerjaan' => function ($query) use ($start, $end) {
+            $query = $query->whereHas(['hasPelaksanaanPekerjaan' => function ($query) use ($start, $end) {
                 $query->whereBetween('tanggal_selesai', [$start, $end]);
             }]);
         }
