@@ -93,6 +93,7 @@ class TagihanController extends Controller
     {
         $message = 'Gagal Menyimpan Menyimpan Tagihan';
         $aduan_id = $request->aduan_id;
+        $rekanan_id = auth()->user()->id_rekanan;
 
         $tagihan = $this->model()->count();
         if ($tagihan >= 1) {
@@ -109,7 +110,7 @@ class TagihanController extends Controller
             $data = $this->model();
             $data->nomor_tagihan = $nomor_tagihan;
             $data->aduan_id = $aduan_id;
-            $data->rekanan_id = $request->rekanan_id;
+            $data->rekanan_id = $rekanan_id;
             $data->user_id = auth()->user()->id;
             $data->status = 'draft';
             $data->save();
