@@ -202,7 +202,7 @@ class PenunjukanPekerjaan extends Model
     {
 
         if ($this->hasPelaksanaanPekerjaan) {
-            return $this->hasPelaksanaanPekerjaan;
+            return $this->hasPelaksanaanPekerjaan->status_mobile;
         } else {
             switch ($this->status) {
                 case 'proses':
