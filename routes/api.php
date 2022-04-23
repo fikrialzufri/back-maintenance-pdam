@@ -81,6 +81,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     Route::get('list-tagihan', TagihanController::class . '@index')->name('tagihan.api.index');
 
+    Route::post('simpan-tagihan', TagihanController::class . '@store')->name('tagihan.api.store');
+
     Route::get('refresh', AuthController::class . '@refresh')->name('auth.refresh');
 
     // uplod pelaksanaan-pekerjaan
