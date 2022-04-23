@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\MediaController;
 use App\Http\Controllers\Api\PenunjukanPekerjaanController;
 use App\Http\Controllers\Api\RekananController;
 use App\Http\Controllers\Api\PelaksanaanPekerjaanController;
+use App\Http\Controllers\Api\TagihanController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
 
@@ -77,6 +78,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     // modul tagihan
     // list pekerjaan yang selesai
     Route::get('list-pekerjaan-rekanan', PelaksanaanPekerjaanController::class . '@index')->name('pelaksanaan.api.index');
+
+    Route::get('list-tagihan', TagihanController::class . '@index')->name('tagihan.api.index');
 
     Route::get('refresh', AuthController::class . '@refresh')->name('auth.refresh');
 
