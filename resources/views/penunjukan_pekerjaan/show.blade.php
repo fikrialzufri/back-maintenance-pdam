@@ -30,7 +30,7 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-12">
-                                    {{ $aduan->rekanan }}
+                                    {{ $aduan->hasRekanan }}
                                 </div>
                             </div>
                         </div>

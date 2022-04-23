@@ -234,45 +234,44 @@ class PelaksanaanPekerjaanController extends Controller
         $user_id = auth()->user()->id;
         $keterangan = $request->keterangan;
         $user = [];
-        try {
-            DB::commit();
-            $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $slug)->first();
-            $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->first();
+        DB::commit();
+        $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $slug)->first();
+        $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->first();
 
-            if ($data->status == 'selesai') {
-                $message = "Pekerjaan sudah selesai";
-                $response = [
-                    'success' => false,
-                    'message' => $message,
-                    'code' => '409'
-                ];
-                return $this->sendError($response, $message, 409);
-            }
-
-            $data->status = $status;
-            $data->tanggal_selesai = Carbon::now();
-            $data->keterangan = $keterangan;
-            $data->save();
-
-            // update histori user
-            $user[$user_id] = [
-                'keterangan' => $status,
+        if ($data->status == 'selesai') {
+            $message = "Pekerjaan sudah selesai";
+            $response = [
+                'success' => false,
+                'message' => $message,
+                'code' => '409'
             ];
+            return $this->sendError($response, $message, 409);
+        }
 
-            $data->hasUserMany()->sync($user);
+        $data->status = $status;
+        $data->tanggal_selesai = Carbon::now();
+        $data->keterangan = $keterangan;
+        $data->save();
 
-            $penunjukanPekerjaan->status = $status;
-            $penunjukanPekerjaan->save();
-            $penunjukanPekerjaan->hasUserMany()->sync($user);
+        // update histori user
+        $user[$user_id] = [
+            'keterangan' => $status,
+        ];
 
-            $aduan = Aduan::find($data->id_aduan);
-            $aduan->status = $status;
-            $aduan->save();
-            $aduan->hasUserMany()->sync($user);
+        $data->hasUserMany()->sync($user);
 
-            $message = 'Berhasil Menyimpan Pelaksanaan Pekerjaan';
-            return $this->sendResponse($data, $message, 200);
-        } catch (\Throwable $th) {
+        $penunjukanPekerjaan->status = $status;
+        $penunjukanPekerjaan->save();
+        $penunjukanPekerjaan->hasUserMany()->sync($user);
+
+        $aduan = Aduan::find($data->id_aduan);
+        $aduan->status = $status;
+        $aduan->save();
+        $aduan->hasUserMany()->sync($user);
+
+        $message = 'Berhasil Menyimpan Pelaksanaan Pekerjaan';
+        return $this->sendResponse($data, $message, 200);
+        try { } catch (\Throwable $th) {
             DB::rollback();
             $response = [
                 'success' => false,
