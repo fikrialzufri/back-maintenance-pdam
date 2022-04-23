@@ -22,97 +22,96 @@ class PenunjukanPekerjaanController extends Controller
 
     public function index(Request $request)
     {
-        try {
-            $nomor_pekerjaan = $request->nomor_pekerjaan;
-            $status = $request->status;
-            $slug = $request->slug;
-            $aduan_id = $request->aduan_id;
-            $result = [];
-            $message = 'List Penunjukan Pekerjaan';
-            $rekanan_id = auth()->user()->id_rekanan;
-            $start_date = $request->start_date;
-            $end_date = $request->end_date;
+        $nomor_pekerjaan = $request->nomor_pekerjaan;
+        $status = $request->status;
+        $slug = $request->slug;
+        $aduan_id = $request->aduan_id;
+        $result = [];
+        $message = 'List Penunjukan Pekerjaan';
+        $rekanan_id = auth()->user()->id_rekanan;
+        $start_date = $request->start_date;
+        $end_date = $request->end_date;
 
-            $query = $this->model();
-            if ($nomor_pekerjaan != '') {
-                $query = $query->where('nomor_pekerjaan',  $nomor_pekerjaan);
-            }
-            if ($status != '') {
-                $query = $query->where('status',  $status);
-            }
-            if ($slug != '') {
-                $query = $query->where('slug',  $slug);
-            }
-            if ($aduan_id != '') {
-                $query = $query->where('aduan_id',  $aduan_id);
-            }
-            if (request()->user()->hasRole('rekanan')) {
-                $query = $query->where('rekanan_id',  $rekanan_id);
-            }
-            if (request()->user()->hasRole('staf-pengawas')) {
-                $rekanan_id = auth()->user()->karyawan_list_rekanan;
-                $query = $query->whereIn('rekanan_id',  $rekanan_id);
-            }
+        $query = $this->model();
+        if ($nomor_pekerjaan != '') {
+            $query = $query->where('nomor_pekerjaan',  $nomor_pekerjaan);
+        }
+        if ($status != '') {
+            $query = $query->where('status',  $status);
+        }
+        if ($slug != '') {
+            $query = $query->where('slug',  $slug);
+        }
+        if ($aduan_id != '') {
+            $query = $query->where('aduan_id',  $aduan_id);
+        }
+        if (request()->user()->hasRole('rekanan')) {
+            $query = $query->where('rekanan_id',  $rekanan_id);
+        }
+        if (request()->user()->hasRole('staf-pengawas')) {
+            $rekanan_id = auth()->user()->karyawan_list_rekanan;
+            $query = $query->whereIn('rekanan_id',  $rekanan_id);
+        }
 
-            if ($start_date || $end_date) {
-                $start = Carbon::parse($start_date)->format('Y-m-d') . ' 00:00:01';
-                $end = Carbon::parse($end_date)->format('Y-m-d') . ' 23:59:59';
-                $query = $query->with(['hasPelaksanaanPekerjaan' => function ($query) use ($start, $end) {
-                    $query->whereBetween('tanggal_selesai', [$start, $end]);
-                }])->get();
-            }
+        if ($start_date || $end_date) {
+            $start = Carbon::parse($start_date)->format('Y-m-d') . ' 00:00:01';
+            $end = Carbon::parse($end_date)->format('Y-m-d') . ' 23:59:59';
+            $query = $query->with(['hasPelaksanaanPekerjaan' => function ($query) use ($start, $end) {
+                $query->whereBetween('tanggal_selesai', [$start, $end]);
+            }])->get();
+        }
 
 
-            if ($slug) {
-                $data = $query->with('hasAduan')->orderBy('status', 'ASC')->orderBy('created_at')->first();
-                if (!$data) {
-                    $message = 'Data Penunjukan Pekerjaan Belum Ada';
-                } else {
-                    $result = [
-                        'id' =>  $data->id,
-                        'nomor_pekerjaan' =>  $data->nomor_pekerjaan,
-                        'nomor_pelaksaan_pekerjaan' =>  $data->nomor_pelaksanaan_pekerjaan,
-                        'slug' =>  $data->slug,
-                        'status' =>  $data->status,
-                        'lokasi_aduan' =>  $data->lokasi,
-                        'lokasi_pekerjaan' =>  $data->lokasi_pekerjaan,
-                        'lat_long' =>  $data->lat_long,
-                        'nama_rekanan' =>  $data->rekanan,
-                        'foto_lokasi' =>  $data->foto_lokasi,
-                        'foto_bahan' =>  $data->foto_bahan,
-                        'foto_penyelesaian' =>  $data->foto_penyelesaian,
-                        'galian_pekerjaan' =>  $data->galian_pekerjaan,
-                        'jenis_aduan' =>  $data->jenis_aduan,
-                        'atas_nama' =>  $data->atas_nama,
-                        'item' =>  $data->list_item,
-                        'sumber_informasi' =>  $data->sumber_informasi,
-                        'keterangan_aduan' =>  $data->keterangan_aduan,
-                        'keterangan_penyelesaian' =>  $data->keterangan_penyelesaian,
-                        'created_at' =>  $data->created_at,
-                        'status_mobile' =>  $data->status_mobile,
-                    ];
-                }
+        if ($slug) {
+            $data = $query->with('hasAduan')->orderBy('status', 'ASC')->orderBy('created_at')->first();
+            if (!$data) {
+                $message = 'Data Penunjukan Pekerjaan Belum Ada';
             } else {
-                $data = $query->orderBy('status', 'ASC')->orderBy('created_at')->get();
-                if (count($data) == 0) {
-                    $message = 'Data Penunjukan Pekerjaan Belum Ada';
-                }
-                foreach ($data as $key => $value) {
-                    $result[$key] = [
-                        'id' =>  $value->id,
-                        'nomor_pekerjaan' =>  $value->nomor_pekerjaan,
-                        'slug' =>  $value->slug,
-                        'lokasi_aduan' =>  $value->lokasi,
-                        'lokasi_pekerjaan' =>  $value->lokasi_pekerjaan,
-                        'status' =>  $value->status,
-                        'created_at' =>  $value->created_at,
-                        'status_mobile' =>  $value->status_mobile,
-                    ];
-                }
+                $result = [
+                    'id' =>  $data->id,
+                    'nomor_pekerjaan' =>  $data->nomor_pekerjaan,
+                    'nomor_pelaksaan_pekerjaan' =>  $data->nomor_pelaksanaan_pekerjaan,
+                    'slug' =>  $data->slug,
+                    'status' =>  $data->status,
+                    'lokasi_aduan' =>  $data->lokasi,
+                    'lokasi_pekerjaan' =>  $data->lokasi_pekerjaan,
+                    'lat_long' =>  $data->lat_long,
+                    'nama_rekanan' =>  $data->rekanan,
+                    'foto_lokasi' =>  $data->foto_lokasi,
+                    'foto_bahan' =>  $data->foto_bahan,
+                    'foto_penyelesaian' =>  $data->foto_penyelesaian,
+                    'galian_pekerjaan' =>  $data->galian_pekerjaan,
+                    'jenis_aduan' =>  $data->jenis_aduan,
+                    'atas_nama' =>  $data->atas_nama,
+                    'item' =>  $data->list_item,
+                    'sumber_informasi' =>  $data->sumber_informasi,
+                    'keterangan_aduan' =>  $data->keterangan_aduan,
+                    'keterangan_penyelesaian' =>  $data->keterangan_penyelesaian,
+                    'created_at' =>  $data->created_at,
+                    'status_mobile' =>  $data->status_mobile,
+                ];
             }
+        } else {
+            $data = $query->orderBy('status', 'ASC')->orderBy('created_at')->get();
+            if (count($data) == 0) {
+                $message = 'Data Penunjukan Pekerjaan Belum Ada';
+            }
+            foreach ($data as $key => $value) {
+                $result[$key] = [
+                    'id' =>  $value->id,
+                    'nomor_pekerjaan' =>  $value->nomor_pekerjaan,
+                    'slug' =>  $value->slug,
+                    'lokasi_aduan' =>  $value->lokasi,
+                    'lokasi_pekerjaan' =>  $value->lokasi_pekerjaan,
+                    'status' =>  $value->status,
+                    'created_at' =>  $value->created_at,
+                    'status_mobile' =>  $value->status_mobile,
+                ];
+            }
+        }
 
-            return $this->sendResponse($result, $message, 200);
-        } catch (\Throwable $th) {
+        return $this->sendResponse($result, $message, 200);
+        try { } catch (\Throwable $th) {
             $response = [
                 'success' => false,
                 'message' => $message,
