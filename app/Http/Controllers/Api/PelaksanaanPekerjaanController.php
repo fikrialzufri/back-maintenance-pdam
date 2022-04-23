@@ -265,8 +265,8 @@ class PelaksanaanPekerjaanController extends Controller
         $penunjukanPekerjaan->save();
         $penunjukanPekerjaan->hasUserMany()->sync($user);
 
-        return $aduan = Aduan::find($penunjukanPekerjaan->id_aduan);
-        $aduan->status = 'selesai';
+        $aduan = Aduan::find($penunjukanPekerjaan->aduan_id);
+        $aduan->status = $status;
         $aduan->save();
 
         $message = 'Berhasil Menyimpan Pelaksanaan Pekerjaan';
