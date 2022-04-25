@@ -41,7 +41,7 @@ class Tagihan extends Model
 
     public function hasPelaksanaanPekerjaan()
     {
-        return $this->belongsToMany(PelaksanaanPekerjaan::class,  'pelaksanaan_pekerjaan_id')->withPivot('total')->withTimestamps();;
+        return $this->belongsToMany(PelaksanaanPekerjaan::class,  'tagihan_pelaksanaan')->withPivot('total')->withTimestamps();;
     }
 
     public function hasUserMany()
