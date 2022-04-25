@@ -101,27 +101,29 @@ class TagihanController extends Controller
         }
 
         DB::beginTransaction();
-        $data = $this->model();
-        $data->nomor_tagihan = $nomor_tagihan;
-        $data->rekanan_id = $rekanan_id;
-        $data->user_id = auth()->user()->id;
-        $data->status = 'dikirim';
-        // $data->save();
+        try {
 
-        $slug = $request->slug;
-        $pekerjaan_id = [];
+            DB::commit();
+            $data = $this->model();
+            $data->nomor_tagihan = $nomor_tagihan;
+            $data->rekanan_id = $rekanan_id;
+            $data->user_id = auth()->user()->id;
+            $data->status = 'dikirim';
+            $data->save();
 
-        DB::commit();
-        foreach ($slug as $key => $value) {
-            $penunjukanPekerjaan[$key] = PenunjukanPekerjaan::where('slug', $value)->first();
-            $pekerjaan_id[$key] = $penunjukanPekerjaan[$key]->id;
-        }
+            $slug = $request->slug;
+            $pekerjaan_id = [];
 
-        $PelaksanaanPekerjaan = PelaksanaanPekerjaan::whereIn('penunjukan_pekerjaan_id', $pekerjaan_id)->pluck('id')->toArray();
-        $data->hasPelaksanaanPekerjaan()->sync($PelaksanaanPekerjaan);
-        $message = 'Berhasil Menyimpan Tagihan';
-        return $this->sendResponse($data, $message, 200);
-        try { } catch (\Throwable $th) {
+            foreach ($slug as $key => $value) {
+                $penunjukanPekerjaan[$key] = PenunjukanPekerjaan::where('slug', $value)->first();
+                $pekerjaan_id[$key] = $penunjukanPekerjaan[$key]->id;
+            }
+
+            $PelaksanaanPekerjaan = PelaksanaanPekerjaan::whereIn('penunjukan_pekerjaan_id', $pekerjaan_id)->pluck('id')->toArray();
+            $data->hasPelaksanaanPekerjaan()->sync($PelaksanaanPekerjaan);
+            $message = 'Berhasil Menyimpan Tagihan';
+            return $this->sendResponse($data, $message, 200);
+        } catch (\Throwable $th) {
             DB::rollback();
             $response = [
                 'success' => false,
