@@ -113,11 +113,13 @@ class TagihanController extends Controller
 
         DB::commit();
         foreach ($slug as $key => $value) {
-            $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $value)->first();
+            $penunjukanPekerjaan[$key] = PenunjukanPekerjaan::where('slug', $value)->first();
 
 
-            $pekerjaan_id[$key] = $penunjukanPekerjaan->id;
+            $pekerjaan_id[$key] = $penunjukanPekerjaan[$key]->id;
         }
+
+        return $pekerjaan_id;
         return $PelaksanaanPekerjaan = PelaksanaanPekerjaan::whereIn('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->get();
         // return $pekerjaan_id;
         // $data->hasPelaksanaanPekerjaan()->sync($PelaksanaanPekerjaan);
