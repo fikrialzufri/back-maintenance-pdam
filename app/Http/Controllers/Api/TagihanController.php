@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\PelaksanaanPekerjaan;
 use App\Models\Tagihan;
 use Illuminate\Http\Request;
 use DB;
@@ -107,6 +108,13 @@ class TagihanController extends Controller
             $data->user_id = auth()->user()->id;
             $data->status = 'draft';
             $data->save();
+
+            $slug = $request->slug;
+            $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $slug)->pluck('id')->toArray();
+            $PelaksanaanPekerjaan = PelaksanaanPekerjaan::whereIn('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->pluck('id')->toArray();
+
+            $data->hasPelaksanaanPekerjaan()->sync($PelaksanaanPekerjaan);
+
 
             $message = 'Berhasil Menyimpan Tagihan';
             return $this->sendResponse($data, $message, 200);

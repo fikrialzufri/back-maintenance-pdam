@@ -106,6 +106,7 @@ class PenunjukanPekerjaanController extends Controller
                     'lokasi_aduan' =>  $value->lokasi,
                     'lokasi_pekerjaan' =>  $value->lokasi_pekerjaan,
                     'status' =>  $value->status,
+                    'tanggal_selesai' =>  $value->tanggal_selesai,
                     'created_at' =>  $value->created_at,
                     'status_mobile' =>  $value->status_mobile,
                 ];
