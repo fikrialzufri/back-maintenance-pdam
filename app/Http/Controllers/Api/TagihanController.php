@@ -119,7 +119,7 @@ class TagihanController extends Controller
             $pekerjaan_id[$key] = $penunjukanPekerjaan[$key]->id;
         }
 
-        return $PelaksanaanPekerjaan = PelaksanaanPekerjaan::whereIn('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->get();
+        return $PelaksanaanPekerjaan = PelaksanaanPekerjaan::whereIn('penunjukan_pekerjaan_id', $pekerjaan_id)->pluck('id')->toArray();
         // return $pekerjaan_id;
         // $data->hasPelaksanaanPekerjaan()->sync($PelaksanaanPekerjaan);
         $message = 'Berhasil Menyimpan Tagihan';
