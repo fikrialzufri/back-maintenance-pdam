@@ -114,9 +114,9 @@ class TagihanController extends Controller
         foreach ($slug as $key => $value) {
             $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $value)->first();
 
-            $PelaksanaanPekerjaan = PelaksanaanPekerjaan::where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->pluck('id');
+            $PelaksanaanPekerjaan = PelaksanaanPekerjaan::where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->first();
 
-            $pekerjaan_id[$key] = $PelaksanaanPekerjaan;
+            $pekerjaan_id[$key] = $PelaksanaanPekerjaan->id;
         }
         return $pekerjaan_id;
         $data->hasPelaksanaanPekerjaan()->sync($PelaksanaanPekerjaan);
