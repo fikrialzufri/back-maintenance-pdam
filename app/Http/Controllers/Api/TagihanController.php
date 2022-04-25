@@ -111,20 +111,19 @@ class TagihanController extends Controller
         $slug = $request->slug;
         $pekerjaan_id = [];
 
-        try {
-            DB::commit();
-            foreach ($slug as $key => $value) {
-                $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $value)->first();
+        DB::commit();
+        foreach ($slug as $key => $value) {
+            $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $value)->first();
 
 
-                $pekerjaan_id[$key] = $penunjukanPekerjaan->id;
-            }
-            return $PelaksanaanPekerjaan = PelaksanaanPekerjaan::whereIn('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->get();
-            // return $pekerjaan_id;
-            $data->hasPelaksanaanPekerjaan()->sync($PelaksanaanPekerjaan);
-            $message = 'Berhasil Menyimpan Tagihan';
-            return $this->sendResponse($data, $message, 200);
-        } catch (\Throwable $th) {
+            $pekerjaan_id[$key] = $penunjukanPekerjaan->id;
+        }
+        return $PelaksanaanPekerjaan = PelaksanaanPekerjaan::whereIn('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->get();
+        // return $pekerjaan_id;
+        // $data->hasPelaksanaanPekerjaan()->sync($PelaksanaanPekerjaan);
+        $message = 'Berhasil Menyimpan Tagihan';
+        return $this->sendResponse($data, $message, 200);
+        try { } catch (\Throwable $th) {
             DB::rollback();
             $response = [
                 'success' => false,
