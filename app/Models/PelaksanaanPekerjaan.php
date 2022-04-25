@@ -19,6 +19,8 @@ class PelaksanaanPekerjaan extends Model
         'status',
         'aduan_id',
         'rekanan_id',
+        'tanggal_mulai',
+        'tanggal_selesai',
         'user_id'
     ];
 
