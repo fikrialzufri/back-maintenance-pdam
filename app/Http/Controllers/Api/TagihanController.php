@@ -112,8 +112,8 @@ class TagihanController extends Controller
         $pekerjaan_id = [];
 
         foreach ($slug as $key => $value) {
-            $penunjukanPekerjaan[$key] = PenunjukanPekerjaan::where('slug', $value)->pluck('id')->toArray();
-            $PelaksanaanPekerjaan[$key] = PelaksanaanPekerjaan::whereIn('penunjukan_pekerjaan_id', $penunjukanPekerjaan[$key]->id)->pluck('id')->toArray();
+            $penunjukanPekerjaan[$key] = PenunjukanPekerjaan::where('slug', $value)->pluck('id');
+            $PelaksanaanPekerjaan[$key] = PelaksanaanPekerjaan::whereIn('penunjukan_pekerjaan_id', $penunjukanPekerjaan[$key]->id)->pluck('id');
 
             $pekerjaan_id[$key] = $PelaksanaanPekerjaan;
         }
