@@ -118,7 +118,7 @@ class TagihanController extends Controller
 
             $pekerjaan_id[$key] = $PelaksanaanPekerjaan->id;
         }
-        return $pekerjaan_id;
+        // return $pekerjaan_id;
         $data->hasPelaksanaanPekerjaan()->sync($PelaksanaanPekerjaan);
         try {
             DB::commit();
