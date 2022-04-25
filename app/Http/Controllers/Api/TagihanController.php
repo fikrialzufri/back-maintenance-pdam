@@ -119,7 +119,6 @@ class TagihanController extends Controller
             $pekerjaan_id[$key] = $penunjukanPekerjaan[$key]->id;
         }
 
-        return $pekerjaan_id;
         return $PelaksanaanPekerjaan = PelaksanaanPekerjaan::whereIn('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->get();
         // return $pekerjaan_id;
         // $data->hasPelaksanaanPekerjaan()->sync($PelaksanaanPekerjaan);
