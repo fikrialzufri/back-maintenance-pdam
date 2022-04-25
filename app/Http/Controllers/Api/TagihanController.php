@@ -109,9 +109,15 @@ class TagihanController extends Controller
         $data->save();
 
         $slug = $request->slug;
-        $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $slug)->pluck('id')->toArray();
-        $PelaksanaanPekerjaan = PelaksanaanPekerjaan::whereIn('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->pluck('id')->toArray();
+        $pekerjaan_id = [];
 
+        foreach ($slug as $key => $value) {
+            $penunjukanPekerjaan[$key] = PenunjukanPekerjaan::where('slug', $value)->pluck('id')->toArray();
+            $PelaksanaanPekerjaan[$key] = PelaksanaanPekerjaan::whereIn('penunjukan_pekerjaan_id', $penunjukanPekerjaan[$key]->id)->pluck('id')->toArray();
+
+            $pekerjaan_id[$key] = $PelaksanaanPekerjaan;
+        }
+        return $pekerjaan_id;
         $data->hasPelaksanaanPekerjaan()->sync($PelaksanaanPekerjaan);
         try {
             DB::commit();
