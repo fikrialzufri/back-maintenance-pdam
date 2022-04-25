@@ -37,8 +37,10 @@ class PenunjukanPekerjaanController extends Controller
         if ($nomor_pekerjaan != '') {
             $query = $query->where('nomor_pekerjaan',  $nomor_pekerjaan);
         }
-        if ($status != '' || $status != 'disetujui') {
-            $query = $query->where('status',  $status);
+        if ($status != '') {
+            if ($status != 'disetujui') {
+                $query = $query->where('status',  $status);
+            }
         }
         if ($slug != '') {
             $query = $query->where('slug',  $slug);
