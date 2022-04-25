@@ -37,9 +37,9 @@ class PenunjukanPekerjaanController extends Controller
         if ($nomor_pekerjaan != '') {
             $query = $query->where('nomor_pekerjaan',  $nomor_pekerjaan);
         }
-        if ($status != '') {
-            $query = $query->where('status',  $status);
-        }
+        // if ($status != '') {
+        //     $query = $query->where('status',  $status);
+        // }
         if ($slug != '') {
             $query = $query->where('slug',  $slug);
         }
@@ -59,7 +59,11 @@ class PenunjukanPekerjaanController extends Controller
             $end = Carbon::parse($end_date)->format('Y-m-d');
             $query = $query->with('hasPelaksanaanPekerjaan')
                 ->whereHas('hasPelaksanaanPekerjaan', function ($query) use ($start, $end, $status) {
-                    $query->whereBetween('tanggal_selesai', [$start, $end])->where('status',  $status);
+                    $query->whereBetween('tanggal_selesai', [$start, $end]);
+                    // where('status',  $status);
+                    if ($status != '') {
+                        $query = $query->where('status',  $status);
+                    }
                 });
         }
 
