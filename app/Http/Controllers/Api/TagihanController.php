@@ -100,20 +100,20 @@ class TagihanController extends Controller
         }
 
         DB::beginTransaction();
+        $data = $this->model();
+        $data->nomor_tagihan = $nomor_tagihan;
+        $data->rekanan_id = $rekanan_id;
+        $data->user_id = auth()->user()->id;
+        $data->status = 'draft';
+        $data->save();
+
+        $slug = $request->slug;
+        $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $slug)->pluck('id')->toArray();
+        $PelaksanaanPekerjaan = PelaksanaanPekerjaan::whereIn('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->pluck('id')->toArray();
+
+        $data->hasPelaksanaanPekerjaan()->sync($PelaksanaanPekerjaan);
         try {
             DB::commit();
-            $data = $this->model();
-            $data->nomor_tagihan = $nomor_tagihan;
-            $data->rekanan_id = $rekanan_id;
-            $data->user_id = auth()->user()->id;
-            $data->status = 'draft';
-            $data->save();
-
-            $slug = $request->slug;
-            $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $slug)->pluck('id')->toArray();
-            $PelaksanaanPekerjaan = PelaksanaanPekerjaan::whereIn('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->pluck('id')->toArray();
-
-            $data->hasPelaksanaanPekerjaan()->sync($PelaksanaanPekerjaan);
 
 
             $message = 'Berhasil Menyimpan Tagihan';
