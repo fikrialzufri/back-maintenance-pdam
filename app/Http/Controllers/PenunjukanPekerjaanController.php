@@ -7,6 +7,7 @@ use App\Models\Aduan;
 use App\Models\PenunjukanPekerjaan;
 use App\Models\PelaksanaanPekerjaan;
 use App\Models\JenisAduan;
+use App\Models\Notifikasi;
 use App\Models\Rekanan;
 use DB;
 
