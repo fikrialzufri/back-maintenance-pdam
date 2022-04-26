@@ -27,6 +27,7 @@ class PenunjukanPekerjaanController extends Controller
         $status = $request->status;
         $slug = $request->slug;
         $aduan_id = $request->aduan_id;
+        $tagihan = $request->tagihan;
         $result = [];
         $message = 'List Penunjukan Pekerjaan';
         $rekanan_id = auth()->user()->id_rekanan;
@@ -47,6 +48,9 @@ class PenunjukanPekerjaanController extends Controller
         }
         if ($aduan_id != '') {
             $query = $query->where('aduan_id',  $aduan_id);
+        }
+        if ($tagihan != '') {
+            $query = $query->where('tagihan',  'tidak');
         }
         if (request()->user()->hasRole('rekanan')) {
             $query = $query->where('rekanan_id',  $rekanan_id);
