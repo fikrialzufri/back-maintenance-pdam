@@ -18,6 +18,7 @@ class CreatePenunjukanPekerjaanTable extends Migration
             $table->string('nomor_pekerjaan');
             $table->string('slug');
             $table->enum('status', ['draft', 'proses', 'selesai', 'disetujui'])->default('draft');
+            $table->enum('tagihan', ['tidak', 'ya'])->default('tidak');
             $table->foreignUuid('aduan_id')->references('id')->on('aduan');
             $table->foreignUuid('rekanan_id')->references('id')->on('rekanan');
             $table->foreignUuid('user_id')->references('id')->on('users');
