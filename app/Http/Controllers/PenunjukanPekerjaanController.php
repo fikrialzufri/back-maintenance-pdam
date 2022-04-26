@@ -14,6 +14,7 @@ class PenunjukanPekerjaanController extends Controller
 {
     public function __construct()
     {
+        $this->tambah = 'false';
         $this->route = 'penunjukan_pekerjaan';
         $this->middleware('permission:view-penunjukan-pekerjaan', ['only' => ['index', 'show']]);
         $this->middleware('permission:create-penunjukan-pekerjaan', ['only' => ['create', 'store']]);

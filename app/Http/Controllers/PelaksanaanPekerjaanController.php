@@ -11,6 +11,7 @@ class PelaksanaanPekerjaanController extends Controller
 
     public function __construct()
     {
+        $this->tambah = 'false';
         $this->route = 'pelaksanaan-pekerjaan';
         $this->middleware('permission:view-' . $this->route, ['only' => ['index', 'show']]);
         $this->middleware('permission:create-' . $this->route, ['only' => ['create', 'store']]);

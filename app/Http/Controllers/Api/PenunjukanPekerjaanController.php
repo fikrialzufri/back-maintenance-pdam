@@ -48,7 +48,7 @@ class PenunjukanPekerjaanController extends Controller
             $query = $query->where('aduan_id',  $aduan_id);
         }
         if ($tagihan != '') {
-            $query = $query->where('tagihan',  'tidak');
+            $query = $query->where('tagihan',  $tagihan);
         }
         if (request()->user()->hasRole('rekanan')) {
             $query = $query->where('rekanan_id',  $rekanan_id);
