@@ -338,6 +338,12 @@ class PelaksanaanPekerjaanController extends Controller
             $aduan->status = $status;
             $aduan->save();
 
+            foreach ($data->hasItem as $value) {
+                $item = Item::find($value->id);
+                $item->hapus = 'tidak';
+                $item->save();
+            }
+
             $message = 'Berhasil Menyimpan Pelaksanaan Pekerjaan';
             return $this->sendResponse($data, $message, 200);
         } catch (\Throwable $th) {
@@ -440,6 +446,7 @@ class PelaksanaanPekerjaanController extends Controller
                 $item->nama = $nama;
                 $item->satuan_id = $satuan->id;
                 $item->jenis_id = $jenis->id;
+                $item->hapus = 'ya';
                 $item->harga = 0;
                 $item->save();
             } else {
@@ -485,7 +492,7 @@ class PelaksanaanPekerjaanController extends Controller
 
             $item = Item::find($id_barang);
             if ($item) {
-                if ($item->jenis_id == $jenis->id) {
+                if ($item->jenis_id == $jenis->id && $item->hapus == 'ya') {
                     $item->delete();
                 }
 
