@@ -114,18 +114,21 @@ class TagihanController extends Controller
 
         foreach ($slug as $key => $value) {
             $penunjukanPekerjaan[$key] = PenunjukanPekerjaan::where('slug', $value)->first();
-            $penunjukanPekerjaan[$key]->tagihan = 'ya';
-            $penunjukanPekerjaan[$key]->save();
-
-            $pekerjaan_id[$key] = $penunjukanPekerjaan[$key]->id;
+            if ($penunjukanPekerjaan[$key]) {
+                $penunjukanPekerjaan[$key]->tagihan = 'ya';
+                $penunjukanPekerjaan[$key]->save();
+                $pekerjaan_id[$key] = $penunjukanPekerjaan[$key]->id;
+            }
         }
 
         foreach ($pekerjaan_id as $key => $value) {
             $PelaksanaanPekerjaan[$key] = PelaksanaanPekerjaan::where('penunjukan_pekerjaan_id', $value)->first();
-            $PelaksanaanPekerjaan[$key]->tagihan = 'ya';
-            $PelaksanaanPekerjaan[$key]->save();
+            if ($PelaksanaanPekerjaan[$key]) {
+                $PelaksanaanPekerjaan[$key]->tagihan = 'ya';
+                $PelaksanaanPekerjaan[$key]->save();
 
-            $pelaksanaan_id[$key] = $PelaksanaanPekerjaan[$key]->id;
+                $pelaksanaan_id[$key] = $PelaksanaanPekerjaan[$key]->id;
+            }
         }
 
         if ($pelaksanaan_id) {
