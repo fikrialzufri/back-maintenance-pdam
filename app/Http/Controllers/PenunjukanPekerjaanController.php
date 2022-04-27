@@ -135,8 +135,7 @@ class PenunjukanPekerjaanController extends Controller
         $notifikasi->save();
 
         $aduan = Aduan::where('id', $id)->first();
-        $penunjukanPekerjaan = PenunjukanPekerjaan::where('aduan_id', $aduan->id)->first();
 
-        return redirect()->route('penunjukan_pekerjaan.show', $penunjukanPekerjaan->slug);
+        return redirect()->route('penunjukan_pekerjaan.show', $aduan->slug);
     }
 }

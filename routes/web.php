@@ -59,7 +59,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     // Aduan
     Route::resource('aduan', AduanController::class)->except('show');
-    Route::get('notifikasi/aduan/{id}', [AduanController::class, 'notifikasi'])->name('aduan.notification');
+    Route::get('notifikasi/aduan/{id}', [PenunjukanPekerjaanController::class, 'notifikasi'])->name('penunjukan_pekerjaan.notification');
     Route::resource('penunjukan-pekerjaan', PenunjukanPekerjaanController::class, ['names' => 'penunjukan_pekerjaan'])->except('destroy');
 
     Route::resource('pelaksanaan-pekerjaan', PelaksanaanPekerjaanController::class);

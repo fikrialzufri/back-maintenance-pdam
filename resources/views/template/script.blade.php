@@ -48,7 +48,8 @@
                     $.each(data, function(i, val) {
                         let id = val.id;
                         let lenght = $('#modul_' + id).length;
-                        let url = '{{ route('aduan.notification', ':id') }}';
+                        let url =
+                            '{{ route('penunjukan_pekerjaan.notification', ':id') }}';
                         url = url.replace(':id', val.modul_id);
 
                         content = `<a href="${url}" class="media"  id="modul_${val.id}">
@@ -65,7 +66,8 @@
                             let title = val.title;
                             let modul_id = val.modul_id;
 
-                            let url = '{{ route('aduan.notification', ':id') }}';
+                            let url =
+                                '{{ route('penunjukan_pekerjaan.notification', ':id') }}';
                             url = url.replace(':id', val.modul_id);
 
                             console.log(lenght);

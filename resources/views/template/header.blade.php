@@ -28,22 +28,7 @@
                     <div class="dropdown-menu dropdown-menu-right notification-dropdown" aria-labelledby="notiDropdown">
                         <h4 class="header">{{ __('Notifications') }}</h4>
                         <div class="notifications-wrap" id="notifikasi">
-                            {{-- @foreach (App\Models\Notifikasi::where('to_user_id', auth()->user()->id)->where('status', 'belum')->get()
-    as $item) --}}
-                            {{-- <form class="media" action="{{ route('aduan.notification', $item->id) }}" method="POST">
-                                @csrf
-                                @method('put') --}}
-                            {{-- <a href="{{ route('aduan.notification', $item->hasAduan->id) }}" class="media">
-                                    <span class="d-flex">
-                                        <i class="ik ik-bell"></i>
-                                    </span>
-                                    <span class="media-body">
-                                        <span class="heading-font-family media-heading">{{ $item->title }}</span>
-                                        <span class="media-content">{{ $item->body }}</span>
-                                    </span>
-                                </a>
-                            {{-- </form> --}}
-                            {{-- @endforeach --}}
+
                         </div>
                         <div class="footer"><a href="javascript:void(0);">{{ __('See all activity') }}</a>
                         </div>
