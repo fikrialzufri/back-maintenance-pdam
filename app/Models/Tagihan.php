@@ -41,6 +41,13 @@ class Tagihan extends Model
         }
     }
 
+    public function getTanggalAttribute()
+    {
+        if ($this->created_at) {
+            return tanggal_indonesia($this->created_at);
+        }
+    }
+
     public function hasUser()
     {
         return $this->hasOne(User::class, 'id', 'user_id');
