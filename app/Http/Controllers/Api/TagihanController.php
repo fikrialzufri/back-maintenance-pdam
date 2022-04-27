@@ -113,7 +113,7 @@ class TagihanController extends Controller
         $pelaksanaan_id = [];
 
         foreach ($slug as $key => $value) {
-            $penunjukanPekerjaan[$key] = PenunjukanPekerjaan::where('slug', $value)->first();
+            $penunjukanPekerjaan[$key] = PenunjukanPekerjaan::where('slug', $value)->where('tagihan', 'tidak')->first();
             if ($penunjukanPekerjaan[$key]) {
                 $penunjukanPekerjaan[$key]->tagihan = 'ya';
                 $penunjukanPekerjaan[$key]->save();
@@ -122,7 +122,7 @@ class TagihanController extends Controller
         }
 
         foreach ($pekerjaan_id as $key => $value) {
-            $PelaksanaanPekerjaan[$key] = PelaksanaanPekerjaan::where('penunjukan_pekerjaan_id', $value)->first();
+            $PelaksanaanPekerjaan[$key] = PelaksanaanPekerjaan::where('penunjukan_pekerjaan_id', $value)->where('tagihan', 'tidak')->first();
             if ($PelaksanaanPekerjaan[$key]) {
                 $PelaksanaanPekerjaan[$key]->tagihan = 'ya';
                 $PelaksanaanPekerjaan[$key]->save();
