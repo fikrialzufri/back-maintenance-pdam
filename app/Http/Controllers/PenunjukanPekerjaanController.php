@@ -61,7 +61,7 @@ class PenunjukanPekerjaanController extends Controller
         $penunjukan = PenunjukanPekerjaan::where('aduan_id', $aduan->id)->first();
         $jenisAduan = $aduan->hasJenisAduan->toArray();
         $jenis_aduan = JenisAduan::orderBy('nama')->get();
-        $rekanan = Rekanan::orderBy('nama')->get();
+        // $rekanan = Rekanan::orderBy('nama')->get();
 
         $notifikasi = Notifikasi::where('modul_id', $aduan->id)->where('to_user_id', auth()->user()->id)->first();
         $notifikasi->status = 'baca';
@@ -73,6 +73,38 @@ class PenunjukanPekerjaanController extends Controller
         if ($aduan == null) {
             return redirect()->route('penunjukan_pekerjaan.index')->with('message', 'Data Aduan tidak ditemukan')->with('Class', 'primary');
         }
+        $rekanan = Rekanan::find($penunjukan->rekanan_id);
+
+        $title = "Penunjukan Pekerjaan Baru";
+        $body = "SPK " . $penunjukan->nomor_pekerjaan . " telah diterbitkan";
+        $modul = "penunjukan-pekerjaan";
+
+        $SERVER_API_KEY = env('FCM_KEY');
+
+        $data = [
+            "to" => "/topics/" . $rekanan->hasUser->id,
+            "data" => [
+                "title" => $title,
+                "body" => $body,
+            ]
+        ];
+        $dataString = json_encode($data);
+
+        $headers = [
+            'Authorization: key=' . $SERVER_API_KEY,
+            'Content-Type: application/json',
+        ];
+
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
+
+        return $response = curl_exec($ch);
 
         return view('penunjukan_pekerjaan.show', compact(
             'aduan',

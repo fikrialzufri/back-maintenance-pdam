@@ -87,7 +87,7 @@ class Controller extends BaseController
         $notification->modul_id = $modul_id;
         $notification->title = $title;
         $notification->body = $body;
-        $notification->modul = env('FCM_KEY');
+        $notification->modul = $modul;
         $notification->status = 'belum';
         $notification->from_user_id = $from_user_id;
         $notification->to_user_id = $to_user_id;
