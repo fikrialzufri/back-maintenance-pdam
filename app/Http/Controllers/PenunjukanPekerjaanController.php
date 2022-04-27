@@ -83,10 +83,10 @@ class PenunjukanPekerjaanController extends Controller
 
         $data = [
             'to'  => '/topics/6665231b-bf61-4620-9b32-274995025589',
-            "data" => [
-                "title" => $title,
+            "notification" => [
                 "body" => $body,
-            ]
+                "title" => $title,
+            ],
         ];
         $dataString = json_encode($data);
 
