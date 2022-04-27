@@ -60,10 +60,10 @@ class Controller extends BaseController
 
         $data = [
             "to" => "/topics/" . $to_user_id,
-            "data" => [
-                "title" => $title,
+            "notification" => [
                 "body" => $body,
-            ]
+                "title" => $title,
+            ],
         ];
         $dataString = json_encode($data);
 
