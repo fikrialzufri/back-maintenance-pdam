@@ -39,23 +39,24 @@
                 </div>
                 <div class="dropdown">
                     <a class="dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false"><img class="avatar"
-                            src="{{ asset('img/user.jpg') }}" alt=""></a>
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                        <a class="dropdown-item" href="{{ route('user.ubah') }}"><i
-                                class="ik ik-user dropdown-icon"></i>
-                            {{ __('Profile') }}</a>
-                        {{-- <a class="dropdown-item" href="#"><i class="ik ik-navigation dropdown-icon"></i>
+                        aria-haspopup="true" aria-expanded="false">
+                        <i class="ik ik-user"></i>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                            <a class="dropdown-item" href="{{ route('user.ubah') }}"><i
+                                    class="ik ik-user dropdown-icon"></i>
+                                {{ __('Profile') }}</a>
+                            {{-- <a class="dropdown-item" href="#"><i class="ik ik-navigation dropdown-icon"></i>
                             {{ __('Message') }}</a> --}}
-                        <a class="dropdown-item" href="{{ route('logout') }}"
-                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                            <i class="ik ik-power dropdown-icon"></i>
-                            {{ __('Logout') }}
-                        </a>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                            {{ csrf_field() }}
-                        </form>
-                    </div>
+                            <a class="dropdown-item" href="{{ route('logout') }}"
+                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                <i class="ik ik-power dropdown-icon"></i>
+                                {{ __('Logout') }}
+                            </a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                style="display: none;">
+                                {{ csrf_field() }}
+                            </form>
+                        </div>
                 </div>
 
             </div>

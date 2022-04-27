@@ -138,6 +138,11 @@ class UsersTableSeedeer extends Seeder
         $taskAduan->description = 'Manajemen Aduan';
         $taskAduan->save();
 
+        $taskSetting = new Task();
+        $taskSetting->name = 'Setting';
+        $taskSetting->description = 'Manajemen Setting';
+        $taskSetting->save();
+
         $taskPenunjukanPekerjaan = new Task();
         $taskPenunjukanPekerjaan->name = 'Penunjukan Pekerjaan';
         $taskPenunjukanPekerjaan->description = 'Manajemen Penunjukan Pekerjaan';

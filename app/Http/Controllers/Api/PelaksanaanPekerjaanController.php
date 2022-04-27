@@ -10,6 +10,7 @@ use App\Models\Jenis;
 use App\Models\PelaksanaanPekerjaan;
 use App\Models\PenunjukanPekerjaan;
 use App\Models\Satuan;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use DB;
@@ -533,18 +534,22 @@ class PelaksanaanPekerjaanController extends Controller
             $panjang = $request->panjang;
             $lebar = $request->lebar;
             $dalam = $request->dalam;
+            $setting = Setting::first();
+            $total = ($panjang * $lebar * $dalam) * $setting->galian;
             $bongkaran = $request->bongkaran;
             $keterangan = $request->keterangan;
-            DB::commit();
+
             $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $slug)->first();
             $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->with('hasItem')->first();
 
+            DB::commit();
             $gajian = new GalianPekerjaan;
             $gajian->panjang = $panjang;
             $gajian->lebar = $lebar;
             $gajian->dalam = $dalam;
             $gajian->bongkaran = $bongkaran;
             $gajian->keterangan = $keterangan;
+            $gajian->total = $total;
             $gajian->user_id = $user_id;
             $gajian->pelaksanaan_pekerjaan_id = $data->id;
             $gajian->save();

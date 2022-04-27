@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Tagihan;
 use App\Traits\CrudTrait;
-use Illuminate\Http\Request;
 
 class TagihanController extends Controller
 {
@@ -27,10 +26,6 @@ class TagihanController extends Controller
                 'name'    => 'no_spk',
                 'alias'    => 'Nomor SPK',
             ],
-            // [
-            //     'name'    => 'nomor_pelaksanaan_pekerjaan',
-            //     'alias'    => 'Nomor Pekerjaan',
-            // ],
             [
                 'name'    => 'rekanan',
                 'alias'    => 'Nama Rekanan',
@@ -41,9 +36,9 @@ class TagihanController extends Controller
     {
         return [
             [
-                'name'    => 'nomor_pelaksanaan_pekerjaan',
+                'name'    => 'no_spk',
                 'input'    => 'text',
-                'alias'    => 'Nama Divisi',
+                'alias'    => 'Nomor SPK',
                 'value'    => null
             ],
         ];

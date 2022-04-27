@@ -19,6 +19,7 @@ use App\Http\Controllers\PenunjukanPekerjaanController;
 use App\Http\Controllers\RekananController;
 use App\Http\Controllers\WilayahController;
 use App\Http\Controllers\NotifikasiController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\TagihanController;
 use Illuminate\Support\Facades\Route;
 
@@ -77,4 +78,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     // Notifikasi
     Route::get('notification', [NotifikasiController::class, 'index'])->name('notification');
+
+    // Setting
+    Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
+    Route::post('/setting', [SettingController::class, 'store'])->name('setting.store');
 });

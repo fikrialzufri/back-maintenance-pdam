@@ -64,8 +64,10 @@ class PenunjukanPekerjaanController extends Controller
         $rekanan = Rekanan::orderBy('nama')->get();
 
         $notifikasi = Notifikasi::where('modul_id', $aduan->id)->where('to_user_id', auth()->user()->id)->first();
-        $notifikasi->status = 'baca';
-        $notifikasi->save();
+        if ($notifikasi) {
+            $notifikasi->status = 'baca';
+            $notifikasi->save();
+        }
 
         $title = 'Detail Aduan';
         $action = route('penunjukan_pekerjaan.store');
