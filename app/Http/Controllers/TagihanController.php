@@ -13,22 +13,28 @@ class TagihanController extends Controller
     {
         $this->route = 'tagihan';
         $this->tambah = 'false';
+        $this->index = 'tagihan';
         $this->middleware('permission:view-' . $this->route, ['only' => ['index', 'show']]);
         $this->middleware('permission:create-' . $this->route, ['only' => ['create', 'store']]);
         $this->middleware('permission:edit-' . $this->route, ['only' => ['edit', 'update']]);
         $this->middleware('permission:delete-' . $this->route, ['only' => ['delete']]);
     }
 
+
     public function configHeaders()
     {
         return [
             [
-                'name'    => 'no_spk',
-                'alias'    => 'Nomor SPK',
+                'name'    => 'nomor_tagihan',
+                'alias'    => 'Nomor Tagihan',
             ],
             [
                 'name'    => 'rekanan',
                 'alias'    => 'Nama Rekanan',
+            ],
+            [
+                'name'    => 'status',
+                'alias'    => 'Status',
             ],
         ];
     }
@@ -36,17 +42,35 @@ class TagihanController extends Controller
     {
         return [
             [
-                'name'    => 'no_spk',
+                'name'    => 'nomor_tagihan',
                 'input'    => 'text',
-                'alias'    => 'Nomor SPK',
+                'alias'    => 'Nomor Tagihan',
                 'value'    => null
             ],
         ];
     }
     public function configForm()
     {
-
         return [];
+    }
+
+    public function show($slug)
+    {
+        $tagihan = Tagihan::whereSlug($slug)->with(['hasPelaksanaanPekerjaan' => function ($q) {
+            $q->orderBy('created_at', 'asc');
+        }])->first();
+        $title =  "Proses Tagihan Nomor :" . $tagihan->nomor_tagihan;
+        $action = route('tagihan.store', $tagihan->id);
+        return view('tagihan.show', compact(
+            'action',
+            'title',
+            'tagihan'
+        ));
+    }
+
+    public function store(Request $request)
+    {
+        return 1;
     }
 
     public function model()

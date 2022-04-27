@@ -34,6 +34,13 @@ class Tagihan extends Model
         return $this->hasOne(Rekanan::class, 'id', 'rekanan_id');
     }
 
+    public function getRekananAttribute()
+    {
+        if ($this->hasRekanan) {
+            return $this->hasRekanan->nama;
+        }
+    }
+
     public function hasUser()
     {
         return $this->hasOne(User::class, 'id', 'user_id');

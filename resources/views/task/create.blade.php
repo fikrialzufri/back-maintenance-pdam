@@ -59,20 +59,21 @@
             <!-- Main row -->
             <!-- /.row (main row) -->
         </div><!-- /.container-fluid -->
+    </div><!-- /.container-fluid -->
 
-    @stop
+@stop
 
-    @push('script')
-        <script>
-            $(function() {
-                $("#nama").keypress(function() {
-                    $("#nama").removeClass("is-invalid");
-                    $("#textNama").html("");
-                });
-                $("#description").keypress(function() {
-                    $("#description").removeClass("is-invalid");
-                    $("#textDescription").html("");
-                });
+@push('script')
+    <script>
+        $(function() {
+            $("#nama").keypress(function() {
+                $("#nama").removeClass("is-invalid");
+                $("#textNama").html("");
             });
-        </script>
-    @endpush
+            $("#description").keypress(function() {
+                $("#description").removeClass("is-invalid");
+                $("#textDescription").html("");
+            });
+        });
+    </script>
+@endpush

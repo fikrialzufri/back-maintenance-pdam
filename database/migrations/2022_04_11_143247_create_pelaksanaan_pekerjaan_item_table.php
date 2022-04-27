@@ -15,8 +15,8 @@ class CreatePelaksanaanPekerjaanItemTable extends Migration
     {
         Schema::create('pelaksanaan_item', function (Blueprint $table) {
             //FOREIGN KEY CONSTRAINTS
-            $table->string('pelaksanaan_pekerjaan_id')->references('id')->on('pelaksanaan_pekerjaan')->onDelete('cascade');
-            $table->string('item_id')->references('id')->on('item')->onDelete('cascade');
+            $table->foreignUuid('pelaksanaan_pekerjaan_id')->references('id')->on('pelaksanaan_pekerjaan')->onDelete('cascade');
+            $table->foreignUuid('item_id')->references('id')->on('item')->onDelete('cascade');
             $table->integer('qty');
             $table->integer('harga');
             $table->string('keterangan')->nullable();

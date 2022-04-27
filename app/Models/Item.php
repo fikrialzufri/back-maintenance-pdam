@@ -16,6 +16,7 @@ class Item extends Model
     {
         $this->attributes['nama'] = $value;
         $this->attributes['slug'] = Str::slug($value);
+        $this->attributes['hapus'] = 'tidak';
     }
 
     public function hasJenis()

@@ -15,8 +15,8 @@ class CreatePelaksanaanPekerjaanUserTable extends Migration
     {
         Schema::create('pelaksanaan_user', function (Blueprint $table) {
             //FOREIGN KEY CONSTRAINTS
-            $table->string('pelaksanaan_pekerjaan_id')->references('id')->on('pelaksanaan_pekerjaan')->onDelete('cascade');
-            $table->string('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreignUuid('pelaksanaan_pekerjaan_id')->references('id')->on('pelaksanaan_pekerjaan')->onDelete('cascade');
+            $table->foreignUuid('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('keterangan')->nullable();
             //SETTING THE PRIMARY KEYS
             $table->primary(['pelaksanaan_pekerjaan_id', 'user_id']);

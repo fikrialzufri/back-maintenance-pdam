@@ -64,7 +64,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('penunjukan-pekerjaan', PenunjukanPekerjaanController::class, ['names' => 'penunjukan_pekerjaan'])->except('destroy');
 
     Route::resource('pelaksanaan-pekerjaan', PelaksanaanPekerjaanController::class);
-    Route::resource('tagihan', TagihanController::class);
+    //
+    Route::get('/tagihan', [TagihanController::class, 'index'])->name('tagihan.index');
+    Route::get('/tagihan/{slug}', [TagihanController::class, 'show'])->name('tagihan.show');
+    Route::post('/tagihan', [TagihanController::class, 'store'])->name('tagihan.store');
 
     // Karyawan
     Route::resource('departemen', DepartemenController::class);

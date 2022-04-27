@@ -21,6 +21,7 @@ class CreateTagihansTable extends Migration
             $table->string('kode_vocher')->nullable();
             $table->enum('status', [
                 'dikirim',
+                'proses',
                 'step1',
                 'step2',
                 'step3',
