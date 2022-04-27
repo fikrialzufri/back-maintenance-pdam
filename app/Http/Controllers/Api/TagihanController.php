@@ -101,44 +101,44 @@ class TagihanController extends Controller
         }
 
         DB::beginTransaction();
-        $data = $this->model();
-        $data->nomor_tagihan = $nomor_tagihan;
-        $data->rekanan_id = $rekanan_id;
-        $data->user_id = auth()->user()->id;
-        $data->status = 'dikirim';
-        $data->save();
-
-        $slug = $request->slug;
-        $pekerjaan_id = [];
-        $pelaksanaan_id = [];
-
-        foreach ($slug as $key => $value) {
-            $penunjukanPekerjaan[$key] = PenunjukanPekerjaan::where('slug', $value)->where('tagihan', 'tidak')->first();
-            if ($penunjukanPekerjaan[$key]) {
-                $penunjukanPekerjaan[$key]->tagihan = 'ya';
-                $penunjukanPekerjaan[$key]->save();
-                $pekerjaan_id[$key] = $penunjukanPekerjaan[$key]->id;
-            }
-        }
-
-        foreach ($pekerjaan_id as $key => $value) {
-            $PelaksanaanPekerjaan[$key] = PelaksanaanPekerjaan::where('penunjukan_pekerjaan_id', $value)->where('tagihan', 'tidak')->first();
-            if ($PelaksanaanPekerjaan[$key]) {
-                $PelaksanaanPekerjaan[$key]->tagihan = 'ya';
-                $PelaksanaanPekerjaan[$key]->save();
-
-                $pelaksanaan_id[$key] = $PelaksanaanPekerjaan[$key]->id;
-            }
-        }
-
-        if ($pelaksanaan_id) {
-            $data->hasPelaksanaanPekerjaan()->sync($pelaksanaan_id);
-        }
-        $message = 'Berhasil Menyimpan Tagihan';
-        return $this->sendResponse($data, $message, 200);
         try {
 
             DB::commit();
+            $data = $this->model();
+            $data->nomor_tagihan = $nomor_tagihan;
+            $data->rekanan_id = $rekanan_id;
+            $data->user_id = auth()->user()->id;
+            $data->status = 'dikirim';
+            $data->save();
+
+            $slug = $request->slug;
+            $pekerjaan_id = [];
+            $pelaksanaan_id = [];
+
+            foreach ($slug as $key => $value) {
+                $penunjukanPekerjaan[$key] = PenunjukanPekerjaan::where('slug', $value)->where('tagihan', 'tidak')->first();
+                if ($penunjukanPekerjaan[$key]) {
+                    $penunjukanPekerjaan[$key]->tagihan = 'ya';
+                    $penunjukanPekerjaan[$key]->save();
+                    $pekerjaan_id[$key] = $penunjukanPekerjaan[$key]->id;
+                }
+            }
+
+            foreach ($pekerjaan_id as $key => $value) {
+                $PelaksanaanPekerjaan[$key] = PelaksanaanPekerjaan::where('penunjukan_pekerjaan_id', $value)->where('tagihan', 'tidak')->first();
+                if ($PelaksanaanPekerjaan[$key]) {
+                    $PelaksanaanPekerjaan[$key]->tagihan = 'ya';
+                    $PelaksanaanPekerjaan[$key]->save();
+
+                    $pelaksanaan_id[$key] = $PelaksanaanPekerjaan[$key]->id;
+                }
+            }
+
+            if ($pelaksanaan_id) {
+                $data->hasPelaksanaanPekerjaan()->sync($pelaksanaan_id);
+            }
+            $message = 'Berhasil Menyimpan Tagihan';
+            return $this->sendResponse($data, $message, 200);
         } catch (\Throwable $th) {
             DB::rollback();
             $response = [
