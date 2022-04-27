@@ -82,7 +82,7 @@ class PenunjukanPekerjaanController extends Controller
         $SERVER_API_KEY = env('FCM_KEY');
 
         $data = [
-            "to" => "/topics/" . $rekanan->hasUser->id,
+            'to'  => '/topics/6665231b-bf61-4620-9b32-274995025589',
             "data" => [
                 "title" => $title,
                 "body" => $body,
