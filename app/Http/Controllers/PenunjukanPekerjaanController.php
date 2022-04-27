@@ -107,6 +107,9 @@ class PenunjukanPekerjaanController extends Controller
         if ($penunjukanPekerjaan) {
             return redirect()->route('penunjukan_pekerjaan.index')->with('message', 'Aduan sudah dikerjakan')->with('Class', 'danger');
         }
+
+        $rekanan = Rekanan::find($rekanan_id);
+
         try {
             DB::commit();
             $data = new PenunjukanPekerjaan;
@@ -119,6 +122,12 @@ class PenunjukanPekerjaanController extends Controller
 
             $aduan->status = 'proses';
             $aduan->save();
+
+            $title = "Penunjukan Pekerjaan Baru";
+            $body = "SPK " . $nomor_pekerjaan . " telah diterbitkan";
+            $modul = "penunjukan-pekerjaan";
+
+            $this->notification($aduan->id, $title, $body, $modul, auth()->user()->id, $rekanan->hasUser->id);
 
             $message = 'Berhasil Menyimpan Pelaksanaan Pekerjaan';
             return redirect()->route('penunjukan_pekerjaan.index')->with('message', 'Penunjukan pekerjaan berhasil ditambah')->with('Class', 'primary');

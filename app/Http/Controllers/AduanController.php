@@ -109,7 +109,7 @@ class AduanController extends Controller
 
             $title = "Aduan Baru";
             $body = "Aduan dengan nomor aduan " . $noAduan . " telah dikirim";
-            $modul = "Tambah aduan";
+            $modul = "aduan";
 
             $jabatan = Jabatan::where('wilayah_id', $id_wilayah)->where('nama', 'like', "%Asisten Manager%")->pluck('id');
             $karyawan = Karyawan::whereIn('jabatan_id', $jabatan)->get();
