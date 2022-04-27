@@ -183,15 +183,4 @@ class AduanController extends Controller
 
         return redirect()->route('aduan.index')->with('message', 'Aduan berhasil dihapus')->with('Class', 'primary');
     }
-
-    public function notifikasi($id)
-    {
-        $notifikasi = Notifikasi::where('modul_id', $id)->where('to_user_id', auth()->user()->id)->first();
-        $notifikasi->status = 'baca';
-        $notifikasi->save();
-
-        $penunjukan = Aduan::where('id', $id)->first();
-
-        return redirect()->route('penunjukan_pekerjaan.show', $penunjukan->slug);
-    }
 }

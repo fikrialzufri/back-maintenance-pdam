@@ -92,6 +92,7 @@ class PenunjukanPekerjaanController extends Controller
         $user_id = auth()->user()->id;
         $rekanan_id = $request->rekanan_id;
         $slug = $request->slug;
+
         $aduan = Aduan::where('slug', $slug)->first();
         $dataPenunjukanPerkerjaan = PenunjukanPekerjaan::count();
         if ($dataPenunjukanPerkerjaan >= 1) {
@@ -125,5 +126,17 @@ class PenunjukanPekerjaanController extends Controller
             DB::rollback();
             return redirect()->route('penunjukan_pekerjaan.index')->with('message', 'Penunjukan pekerjaan gagal ditambah')->with('Class', 'danger');
         }
+    }
+
+    public function notifikasi($id)
+    {
+        $notifikasi = Notifikasi::where('modul_id', $id)->where('to_user_id', auth()->user()->id)->first();
+        $notifikasi->status = 'baca';
+        $notifikasi->save();
+
+        $aduan = Aduan::where('id', $id)->first();
+        $penunjukanPekerjaan = PenunjukanPekerjaan::where('aduan_id', $aduan->id)->first();
+
+        return redirect()->route('penunjukan_pekerjaan.show', $penunjukanPekerjaan->slug);
     }
 }
