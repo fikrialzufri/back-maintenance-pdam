@@ -105,10 +105,8 @@ class PenunjukanPekerjaanController extends Controller
         curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
 
         $response = curl_exec($ch);
-        return [
-            $response,
-            $rekanan->hasUser->id
-        ];
+
+        return response()->json(['send message successfully.' . $response]);
 
         return view('penunjukan_pekerjaan.show', compact(
             'aduan',
