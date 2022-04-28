@@ -13,7 +13,7 @@ class PelaksanaanPekerjaan extends Model
 
     protected $table = 'pelaksanaan_pekerjaan';
     protected $guarded = ['id'];
-    protected $appends = ['status_mobile', 'galian'];
+    protected $appends = ['status_mobile'];
     protected $fillable = [
         'nomor_pelaksanaan_pekerjaan',
         'status',
@@ -49,8 +49,8 @@ class PelaksanaanPekerjaan extends Model
 
     public function getNoSpkAttribute()
     {
-        if ($this->hasRekanan) {
-            return $this->hasRekanan->nomor_pekerjaan;
+        if ($this->hasPenunjukanPekerjaan) {
+            return $this->hasPenunjukanPekerjaan->nomor_pekerjaan;
         }
     }
 

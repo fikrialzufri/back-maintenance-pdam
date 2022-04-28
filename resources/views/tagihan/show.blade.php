@@ -53,11 +53,13 @@
                             </div>
                             @foreach ($tagihan->hasPelaksanaanPekerjaan as $key => $item)
                                 <div>
-                                    <label for="rekanan" class=" form-control-label">Pekerjaan :
-                                        {{ $item->nomor_pelaksanaan_pekerjaan }}</label>
+                                    <label for="rekanan" class=" form-control-label">
+                                        <h3>Pekerjaan :
+                                            {{ $item->No_Spk }}</h3>
+                                    </label>
                                 </div>
                                 <div class="row">
-                                    <div class="col-6">
+                                    <div class="col-7">
                                         <div>
                                             <span>Daftar Item</span>
                                             <table class="table table-bordered " width="100%">
@@ -65,24 +67,34 @@
                                                     <tr>
                                                         <th width="5">#</th>
                                                         <th>Nama</th>
+                                                        <th>Jenis barang</th>
                                                         <th width="10">Jumlah</th>
                                                         <th>Harga</th>
                                                         <th>Total Harga</th>
+                                                        <th class="text-center" width="10">Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    @forelse ($item->hasItem as $index => $item)
-                                                        <tr>
-                                                            <td>{{ $index + 1 }}
+                                                    @forelse ($item->hasItem as $nomor => $barang)
+                                                        <tr class="{{ $barang->pivot->harga == 0 ? 'bg-danger' : '' }}">
+                                                            <td>{{ $nomor + 1 }}
                                                             </td>
-                                                            <td>{{ $item->nama }}</td>
-                                                            <td>{{ $item->jenis }}</td>
-                                                            <td>{{ $item->pivot->qty }}</td>
-                                                            <td>Rp. {{ format_uang($item->pivot->harga) }}</td>
+                                                            <td>{{ $barang->nama }}</td>
+                                                            <td>{{ $barang->jenis }}</td>
+                                                            <td>{{ $barang->pivot->qty }}</td>
+                                                            <td>Rp. {{ format_uang($barang->pivot->harga) }}</td>
                                                             <td>Rp.
-                                                                {{ format_uang($item->pivot->harga * $item->pivot->qty) }}
+                                                                {{ format_uang($barang->pivot->harga * $barang->pivot->qty) }}
                                                             </td>
-
+                                                            <td class="text-center">
+                                                                @if ($barang->pivot->harga == 0)
+                                                                    <button class="btn btn-warning btn-sm"
+                                                                        data-toggle="tooltip" data-placement="top"
+                                                                        title="Ubah">
+                                                                        <i class="nav-icon fas fa-edit"></i> Ubah
+                                                                    </button>
+                                                                @endif
+                                                            </td>
                                                         </tr>
                                                     @empty
                                                         <tr>
@@ -90,10 +102,21 @@
                                                         </tr>
                                                     @endforelse
                                                 </tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <th colspan="3">Gran Total
+                                                        </th>
+                                                        <th>{{ $item->hasItem->sum('pivot.qty') }}</th>
+                                                        <th>{{ format_uang($item->hasItem->sum('pivot.harga')) }}</th>
+                                                        <th>{{ format_uang($item->hasItem->sum('pivot.harga') * $item->hasItem->sum('pivot.harga')) }}
+                                                        </th>
+                                                    </tr>
+                                                </tfoot>
+
                                             </table>
                                         </div>
                                     </div>
-                                    <div class="col-6">
+                                    <div class="col-5">
                                         <div>
                                             <span>Daftar Galian</span>
                                             <table class="table table-bordered " width="100%">
@@ -109,23 +132,23 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {{-- @forelse ($galianPekerjaan as $index => $item)
+                                                    @forelse ($item->hasGalianPekerjaan as $key => $value)
                                                         <tr>
-                                                            <td>{{ $index + 1 }}
+                                                            <td>{{ $key + 1 }}
                                                             </td>
-                                                            <td>{{ $item->panjang }}</td>
-                                                            <td>{{ $item->lebar }}</td>
-                                                            <td>{{ $item->dalam }}</td>
-                                                            <td>Rp. {{ format_uang($item->total) }}</td>
-                                                            <td>{{ $item->bongkaran }}</td>
-                                                            <td>{{ $item->keterangan }}</td>
+                                                            <td>{{ $value->panjang }} m</td>
+                                                            <td>{{ $value->lebar }} m</td>
+                                                            <td>{{ $value->dalam }} m</td>
+                                                            <td>Rp. {{ format_uang($value->total) }}</td>
+                                                            <td>{{ $value->bongkaran }}</td>
+                                                            <td>{{ $value->keterangan }}</td>
 
                                                         </tr>
                                                     @empty
                                                         <tr>
                                                             <td colspan="10">Data Item Galian ada</td>
                                                         </tr>
-                                                    @endforelse --}}
+                                                    @endforelse
                                                 </tbody>
                                             </table>
                                         </div>
