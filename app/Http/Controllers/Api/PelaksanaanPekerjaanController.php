@@ -440,7 +440,8 @@ class PelaksanaanPekerjaanController extends Controller
             $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $slug)->first();
             $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->with('hasItem')->first();
 
-            if (!$id_barang) {
+            if ($id_barang == '') {
+
                 $satuan = Satuan::where('slug', 'pcs')->first();
                 $jenis = Jenis::where('slug', 'barang-baru')->first();
                 $item = new Item;
@@ -450,9 +451,7 @@ class PelaksanaanPekerjaanController extends Controller
                 $item->hapus = 'ya';
                 $item->harga = 0;
                 $item->save();
-            } else {
-                $item = Item::find($id_barang);
-            }
+            } else { }
             $listitem[$item->id] = [
                 'keterangan' => $keterangan,
                 'harga' => $item->harga,
