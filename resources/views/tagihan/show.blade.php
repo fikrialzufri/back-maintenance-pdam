@@ -52,43 +52,82 @@
 
                             </div>
                             @foreach ($tagihan->hasPelaksanaanPekerjaan as $item)
-                                <div class="col-12">
-                                    <div>
-                                        <label for="rekanan" class=" form-control-label">Pekerjaan :
-                                            {{ $item->nomor_pelaksanaan_pekerjaan }}</label>
-                                    </div>
-                                    <div>
-                                        <span>Daftar Item</span>
-                                        <table class="table table-bordered " width="100%">
-                                            <thead>
-                                                <tr>
-                                                    <th width="5">#</th>
-                                                    <th>Nama</th>
-                                                    <th width="10">Jumlah</th>
-                                                    <th>Harga</th>
-                                                    <th>Total Harga</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @forelse ($item->hasItem as $index => $item)
+                                <div>
+                                    <label for="rekanan" class=" form-control-label">Pekerjaan :
+                                        {{ $item->nomor_pelaksanaan_pekerjaan }}</label>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div>
+                                            <span>Daftar Item</span>
+                                            <table class="table table-bordered " width="100%">
+                                                <thead>
                                                     <tr>
-                                                        <td>{{ $index + 1 }}
-                                                        </td>
-                                                        <td>{{ $item->nama }}</td>
-                                                        <td>{{ $item->pivot->qty }}</td>
-                                                        <td>Rp. {{ format_uang($item->pivot->harga) }}</td>
-                                                        <td>Rp.
-                                                            {{ format_uang($item->pivot->harga * $item->pivot->qty) }}
-                                                        </td>
+                                                        <th width="5">#</th>
+                                                        <th>Nama</th>
+                                                        <th width="10">Jumlah</th>
+                                                        <th>Harga</th>
+                                                        <th>Total Harga</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @forelse ($item->hasItem as $index => $item)
+                                                        <tr>
+                                                            <td>{{ $index + 1 }}
+                                                            </td>
+                                                            <td>{{ $item->nama }}</td>
+                                                            <td>{{ $item->pivot->qty }}</td>
+                                                            <td>Rp. {{ format_uang($item->pivot->harga) }}</td>
+                                                            <td>Rp.
+                                                                {{ format_uang($item->pivot->harga * $item->pivot->qty) }}
+                                                            </td>
 
-                                                    </tr>
-                                                @empty
+                                                        </tr>
+                                                    @empty
+                                                        <tr>
+                                                            <td colspan="10">Data Item tidak ada</td>
+                                                        </tr>
+                                                    @endforelse
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div>
+                                            <span>Daftar Galian</span>
+                                            <table class="table table-bordered " width="100%">
+                                                <thead>
                                                     <tr>
-                                                        <td colspan="10">Data Item tidak ada</td>
+                                                        <th width="5">#</th>
+                                                        <th width="10">Panjang</th>
+                                                        <th width="10">Lebar</th>
+                                                        <th width="10">Dalam</th>
+                                                        <th>Total Harga</th>
+                                                        <th>Bongkaran</th>
+                                                        <th>Keterangan</th>
                                                     </tr>
-                                                @endforelse
-                                            </tbody>
-                                        </table>
+                                                </thead>
+                                                <tbody>
+                                                    @forelse ($galianPekerjaan as $index => $item)
+                                                        <tr>
+                                                            <td>{{ $index + 1 }}
+                                                            </td>
+                                                            <td>{{ $item->panjang }}</td>
+                                                            <td>{{ $item->lebar }}</td>
+                                                            <td>{{ $item->dalam }}</td>
+                                                            <td>Rp. {{ format_uang(total) }}</td>
+                                                            <td>{{ $item->bongkaran }}</td>
+                                                            <td>{{ $item->keterangan }}</td>
+
+                                                        </tr>
+                                                    @empty
+                                                        <tr>
+                                                            <td colspan="10">Data Item Galian ada</td>
+                                                        </tr>
+                                                    @endforelse
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             @endforeach
