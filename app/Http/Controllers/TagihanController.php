@@ -66,18 +66,29 @@ class TagihanController extends Controller
     public function show($slug)
     {
         $query =  Tagihan::whereSlug($slug);
-        $tagihan = $query->with(['hasPelaksanaanPekerjaan' => function ($q) {
-            $q->orderBy('created_at', 'asc');
+        return $tagihan = $query->with(['hasPelaksanaanPekerjaan' => function ($q) {
+            $q->with('hasGalianPekerjaan')->orderBy('created_at', 'asc');
         }])->first();
-        $pelaksanaan = $tagihan->hasPelaksanaanPekerjaan()->pluck('id')->toArray();
         $title =  "Proses Tagihan Nomor :" . $tagihan->nomor_tagihan;
         $action = route('tagihan.store', $tagihan->id);
-        $galianPekerjaan = GalianPekerjaan::whereIn('pelaksanaan_pekerjaan_id', $pelaksanaan)->get();
+        $galianPekerjaan = [];
+
+        foreach ($tagihan as $key => $value) {
+            $galianPekerjaan[$key] = [
+                'id' => $value->hasGalianPekerjaan->panjang,
+                'id' => $value->hasGalianPekerjaan->lebar,
+                'id' => $value->hasGalianPekerjaan->dalam,
+                'id' => format_uang($value->hasGalianPekerjaan->total),
+                'id' => $value->hasGalianPekerjaan->bongkaran,
+                'id' => $value->hasGalianPekerjaan->keterangan,
+            ];
+        }
+
+        return $galianPekerjaan;
 
         return view('tagihan.show', compact(
             'action',
             'title',
-            'galianPekerjaan',
             'tagihan'
         ));
     }

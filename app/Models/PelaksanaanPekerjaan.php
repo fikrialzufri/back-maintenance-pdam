@@ -13,7 +13,7 @@ class PelaksanaanPekerjaan extends Model
 
     protected $table = 'pelaksanaan_pekerjaan';
     protected $guarded = ['id'];
-    protected $appends = ['status_mobile'];
+    protected $appends = ['status_mobile', 'galian'];
     protected $fillable = [
         'nomor_pelaksanaan_pekerjaan',
         'status',
@@ -54,9 +54,16 @@ class PelaksanaanPekerjaan extends Model
         }
     }
 
+    public function getGalianAttribute()
+    {
+        if ($this->hasGalianPekerjaan) {
+            return $this->hasGalianPekerjaan;
+        }
+    }
+
     public function hasGalianPekerjaan()
     {
-        return $this->hasMany(GalianPekerjaan::class);
+        return $this->hasMany(GalianPekerjaan::class, 'pelaksanaan_pekerjaan_id');
     }
 
 

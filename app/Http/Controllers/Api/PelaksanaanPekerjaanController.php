@@ -460,7 +460,7 @@ class PelaksanaanPekerjaanController extends Controller
             ];
 
             $data->hasItem()->attach($listitem);
-            $result = [];
+            $result = [$listitem];
             $message = 'Berhasil Menyimpan Item Pekerjaan';
             return $this->sendResponse($result, $message, 200);
         } catch (\Throwable $th) {

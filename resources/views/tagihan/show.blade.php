@@ -51,7 +51,7 @@
 
 
                             </div>
-                            @foreach ($tagihan->hasPelaksanaanPekerjaan as $item)
+                            @foreach ($tagihan->hasPelaksanaanPekerjaan as $key => $item)
                                 <div>
                                     <label for="rekanan" class=" form-control-label">Pekerjaan :
                                         {{ $item->nomor_pelaksanaan_pekerjaan }}</label>
@@ -76,6 +76,7 @@
                                                             <td>{{ $index + 1 }}
                                                             </td>
                                                             <td>{{ $item->nama }}</td>
+                                                            <td>{{ $item->jenis }}</td>
                                                             <td>{{ $item->pivot->qty }}</td>
                                                             <td>Rp. {{ format_uang($item->pivot->harga) }}</td>
                                                             <td>Rp.
@@ -108,14 +109,14 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    @forelse ($galianPekerjaan as $index => $item)
+                                                    {{-- @forelse ($galianPekerjaan as $index => $item)
                                                         <tr>
                                                             <td>{{ $index + 1 }}
                                                             </td>
                                                             <td>{{ $item->panjang }}</td>
                                                             <td>{{ $item->lebar }}</td>
                                                             <td>{{ $item->dalam }}</td>
-                                                            <td>Rp. {{ format_uang(total) }}</td>
+                                                            <td>Rp. {{ format_uang($item->total) }}</td>
                                                             <td>{{ $item->bongkaran }}</td>
                                                             <td>{{ $item->keterangan }}</td>
 
@@ -124,7 +125,7 @@
                                                         <tr>
                                                             <td colspan="10">Data Item Galian ada</td>
                                                         </tr>
-                                                    @endforelse
+                                                    @endforelse --}}
                                                 </tbody>
                                             </table>
                                         </div>
