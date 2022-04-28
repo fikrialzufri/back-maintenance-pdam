@@ -120,12 +120,12 @@ class TagihanController extends Controller
                 if ($penunjukanPekerjaan) {
                     $penunjukanPekerjaan->tagihan = 'ya';
                     $penunjukanPekerjaan->save();
-                    $pekerjaan_id[$key] = $penunjukanPekerjaan->id;
                 }
+                $pekerjaan_id[$key] = $penunjukanPekerjaan->id;
             }
 
             foreach ($pekerjaan_id as $key => $value) {
-                $PelaksanaanPekerjaan[$key] = PelaksanaanPekerjaan::where('penunjukan_pekerjaan_id', $value)
+                $PelaksanaanPekerjaan = PelaksanaanPekerjaan::where('penunjukan_pekerjaan_id', $value)
                     ->where('tagihan', 'tidak')
                     ->where(
                         'rekanan_id',
@@ -135,9 +135,8 @@ class TagihanController extends Controller
                 if ($PelaksanaanPekerjaan) {
                     $PelaksanaanPekerjaan->tagihan = 'ya';
                     $PelaksanaanPekerjaan->save();
-
-                    $pelaksanaan_id[$key] = $PelaksanaanPekerjaan->id;
                 }
+                $pelaksanaan_id[$key] = $PelaksanaanPekerjaan->id;
             }
 
             $data->hasPelaksanaanPekerjaan()->sync($pelaksanaan_id);
