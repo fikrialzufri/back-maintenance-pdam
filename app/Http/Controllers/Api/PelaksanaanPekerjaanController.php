@@ -429,41 +429,41 @@ class PelaksanaanPekerjaanController extends Controller
     {
         DB::beginTransaction();
         $message = 'Gagal Menyimpan Item Pekerjaan';
-
-        $slug = $request->slug;
-        $nama = $request->nama;
-        $keterangan = $request->keterangan;
-        $jumlah = $request->jumlah;
-        $id_barang = $request->id_barang;
-        $listitem = [];
-        $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $slug)->first();
-        $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->with('hasItem')->first();
-
-        if ($id_barang != '') {
-            $item = Item::find($id_barang);
-        } else {
-            $satuan = Satuan::where('slug', 'pcs')->first();
-            $jenis = Jenis::where('slug', 'barang-baru')->first();
-            $item = new Item;
-            $item->nama = $nama;
-            $item->satuan_id = $satuan->id;
-            $item->jenis_id = $jenis->id;
-            $item->hapus = 'ya';
-            $item->harga = 0;
-            $item->save();
-        }
-        $listitem[$item->id] = [
-            'keterangan' => $keterangan,
-            'harga' => $item->harga,
-            'qty' => $jumlah
-        ];
-
-        $data->hasItem()->attach($listitem);
-        $result = [];
-        $message = 'Berhasil Menyimpan Item Pekerjaan';
-        return $this->sendResponse($result, $message, 200);
         try {
             DB::commit();
+
+            $slug = $request->slug;
+            $nama = $request->nama;
+            $keterangan = $request->keterangan;
+            $jumlah = $request->jumlah;
+            $id_barang = $request->id_barang;
+            $listitem = [];
+            $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $slug)->first();
+            $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->with('hasItem')->first();
+
+            if ($id_barang != '') {
+                $item = Item::find($id_barang);
+            } else {
+                $satuan = Satuan::where('slug', 'pcs')->first();
+                $jenis = Jenis::where('slug', 'barang-baru')->first();
+                $item = new Item;
+                $item->nama = $nama;
+                $item->satuan_id = $satuan->id;
+                $item->jenis_id = $jenis->id;
+                $item->hapus = 'ya';
+                $item->harga = 0;
+                $item->save();
+            }
+            $listitem[$item->id] = [
+                'keterangan' => $keterangan,
+                'harga' => $item->harga,
+                'qty' => $jumlah
+            ];
+
+            $data->hasItem()->attach($listitem);
+            $result = [];
+            $message = 'Berhasil Menyimpan Item Pekerjaan';
+            return $this->sendResponse($result, $message, 200);
         } catch (\Throwable $th) {
             DB::rollback();
             $response = [
