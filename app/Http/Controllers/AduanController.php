@@ -114,7 +114,7 @@ class AduanController extends Controller
             $jabatan = Jabatan::where('wilayah_id', $id_wilayah)->where('nama', 'like', "%Asisten Manager%")->pluck('id');
             $karyawan = Karyawan::whereIn('jabatan_id', $jabatan)->get();
             foreach ($karyawan as $item) {
-                $this->notification($aduan->id, $title, $body, $modul, auth()->user()->id, $item->user_id);
+                $this->notification($aduan->id, $aduan->slug, $title, $body, $modul, auth()->user()->id, $item->user_id);
             }
 
             return redirect()->route('aduan.index')->with('message', 'Aduan berhasil ditambah')->with('Class', 'primary');
