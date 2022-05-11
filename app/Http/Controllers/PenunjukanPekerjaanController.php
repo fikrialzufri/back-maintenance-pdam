@@ -63,7 +63,7 @@ class PenunjukanPekerjaanController extends Controller
         $jenis_aduan = JenisAduan::orderBy('nama')->get();
         $rekanan = Rekanan::orderBy('nama')->get();
 
-        $notifikasi = Notifikasi::where('modul_id', $aduan->id)->where('to_user_id', auth()->user()->id)->first();
+        $notifikasi = Notifikasi::where('modul_id', $aduan->id)->first();
         if ($notifikasi) {
             $notifikasi->status = 'baca';
             $notifikasi->save();
@@ -129,7 +129,7 @@ class PenunjukanPekerjaanController extends Controller
             $body = "SPK " . $nomor_pekerjaan . " telah diterbitkan";
             $modul = "penunjukan-pekerjaan";
 
-            $this->notification($aduan->id, $title, $body, $modul, auth()->user()->id, $rekanan->hasUser->id);
+            $this->notification($aduan->id, $aduan->slug, $title, $body, $modul, auth()->user()->id, $rekanan->hasUser->id);
 
             $message = 'Berhasil Menyimpan Pelaksanaan Pekerjaan';
             return redirect()->route('penunjukan_pekerjaan.index')->with('message', 'Penunjukan pekerjaan berhasil ditambah')->with('Class', 'primary');

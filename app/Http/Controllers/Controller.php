@@ -54,7 +54,7 @@ class Controller extends BaseController
         return response()->json($response, $code);
     }
 
-    public function notification($modul_id, $title, $body, $modul, $from_user_id, $to_user_id)
+    public function notification($modul_id, $slug, $title, $body, $modul, $from_user_id, $to_user_id)
     {
         $SERVER_API_KEY = env('FCM_KEY');
 
@@ -63,6 +63,10 @@ class Controller extends BaseController
             "notification" => [
                 "body" => $body,
                 "title" => $title,
+
+            ],
+            "data" => [
+                'slug' => $slug,
             ],
         ];
         $dataString = json_encode($data);

@@ -16,7 +16,7 @@
                         <div class="card-body">
                             <div class="form-group">
                                 <div>
-                                    <label for="usernam" class=" form-control-label">Username (NIK)</label>
+                                    <label for="usernam" class=" form-control-label">Username </label>
                                 </div>
                                 <div>
                                     <input type="text" name="username" placeholder="username (NIK)"

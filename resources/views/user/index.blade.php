@@ -19,7 +19,7 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Username (NIK)</th>
+                                    <th>Username</th>
                                     <th>Nama</th>
                                     <th>Email</th>
                                     <th class="text-center" width="20%">Aksi</th>
