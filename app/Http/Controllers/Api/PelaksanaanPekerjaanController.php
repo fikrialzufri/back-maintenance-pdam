@@ -250,7 +250,7 @@ class PelaksanaanPekerjaanController extends Controller
     }
     /**
      *
-     * proses update bahan pekerjaan
+     * proses update modul bahan pekerjaan
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
@@ -344,6 +344,18 @@ class PelaksanaanPekerjaanController extends Controller
                 $item->hapus = 'tidak';
                 $item->save();
             }
+
+            $stafPengawas = Auth::user()->hasRekanan->hasKaryawan;
+
+
+            $title = "Pengerjaan Telah selesai";
+            $body = "Dengan nomor SPK : " . $data->nomor_pekerjaan . " telah selesai";
+            $modul = "pelaksaan-pekerjaan";
+
+            foreach ($stafPengawas as $item) {
+                $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $item->user_id);
+            }
+
 
             $message = 'Berhasil Menyimpan Pelaksanaan Pekerjaan';
             return $this->sendResponse($data, $message, 200);

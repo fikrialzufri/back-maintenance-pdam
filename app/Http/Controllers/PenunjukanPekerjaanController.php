@@ -129,7 +129,7 @@ class PenunjukanPekerjaanController extends Controller
             $body = "SPK " . $nomor_pekerjaan . " telah diterbitkan";
             $modul = "penunjukan-pekerjaan";
 
-            $this->notification($aduan->id, $data->slug, $title, $body, $modul, auth()->user()->id, $rekanan->hasUser->id);
+            $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $rekanan->hasUser->id);
 
             $message = 'Berhasil Menyimpan Pelaksanaan Pekerjaan';
             return redirect()->route('penunjukan_pekerjaan.index')->with('message', 'Penunjukan pekerjaan berhasil ditambah')->with('Class', 'primary');
