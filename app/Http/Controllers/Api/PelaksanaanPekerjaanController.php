@@ -423,6 +423,13 @@ class PelaksanaanPekerjaanController extends Controller
                     $aduan->status = $status;
                     $aduan->save();
 
+                    $title = "Pengerjaan Telah Disetujui pengawas";
+                    $body = "Dengan nomor SPK : " . $data->nomor_pekerjaan . " telah Disetujui";
+                    $modul = "pelaksaan-pekerjaan";
+
+                    $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $data->user_id);
+
+
                     $message = 'Berhasil Mengubah Pekerjaan';
                 }
             }
