@@ -350,7 +350,7 @@ class PelaksanaanPekerjaanController extends Controller
 
 
             $title = "Pengerjaan Telah selesai";
-            $body = "Dengan nomor SPK : " . $data->nomor_pekerjaan . " telah selesai";
+            $body = "Dengan nomor SPK : " . $penunjukanPekerjaan->nomor_pekerjaan . " telah selesai";
             $modul = "pelaksaan-pekerjaan";
 
             foreach ($stafPengawas as $pengawas) {
