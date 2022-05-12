@@ -352,8 +352,8 @@ class PelaksanaanPekerjaanController extends Controller
             $body = "Dengan nomor SPK : " . $data->nomor_pekerjaan . " telah selesai";
             $modul = "pelaksaan-pekerjaan";
 
-            foreach ($stafPengawas as $item) {
-                $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $item->user_id);
+            foreach ($stafPengawas as $pengawas) {
+                $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $pengawas->user_id);
             }
 
 
