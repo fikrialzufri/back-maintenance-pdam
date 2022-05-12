@@ -304,61 +304,61 @@ class PelaksanaanPekerjaanController extends Controller
         $user_id = auth()->user()->id;
         $keterangan = $request->keterangan;
         $user = [];
+        $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $slug)->first();
+        $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->first();
+
+        if ($data->status == 'selesai') {
+            $message = "Pekerjaan sudah selesai";
+            $response = [
+                'success' => false,
+                'message' => $message,
+                'code' => '409'
+            ];
+            return $this->sendError($response, $message, 409);
+        }
+
+        $data->status = $status;
+        $data->tanggal_selesai = Carbon::now();
+        $data->keterangan = $keterangan;
+        $data->save();
+
+        // update histori user
+        $user[$user_id] = [
+            'keterangan' => $status,
+        ];
+
+        $data->hasUserMany()->sync($user);
+
+        $penunjukanPekerjaan->status = $status;
+        $penunjukanPekerjaan->save();
+        $penunjukanPekerjaan->hasUserMany()->sync($user);
+
+        $aduan = Aduan::find($penunjukanPekerjaan->aduan_id);
+        $aduan->status = $status;
+        $aduan->save();
+
+        foreach ($data->hasItem as $value) {
+            $item = Item::find($value->id);
+            $item->hapus = 'tidak';
+            $item->save();
+        }
+
+        $stafPengawas = Auth::user()->hasRekanan->hasKaryawan;
+
+
+        $title = "Pengerjaan Telah selesai";
+        $body = "Dengan nomor SPK : " . $data->nomor_pekerjaan . " telah selesai";
+        $modul = "pelaksaan-pekerjaan";
+
+        foreach ($stafPengawas as $pengawas) {
+            $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $pengawas->user_id);
+        }
+
+
+        $message = 'Berhasil Menyimpan Pelaksanaan Pekerjaan';
+        return $this->sendResponse($data, $message, 200);
         try {
             DB::commit();
-            $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $slug)->first();
-            $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->first();
-
-            if ($data->status == 'selesai') {
-                $message = "Pekerjaan sudah selesai";
-                $response = [
-                    'success' => false,
-                    'message' => $message,
-                    'code' => '409'
-                ];
-                return $this->sendError($response, $message, 409);
-            }
-
-            $data->status = $status;
-            $data->tanggal_selesai = Carbon::now();
-            $data->keterangan = $keterangan;
-            $data->save();
-
-            // update histori user
-            $user[$user_id] = [
-                'keterangan' => $status,
-            ];
-
-            $data->hasUserMany()->sync($user);
-
-            $penunjukanPekerjaan->status = $status;
-            $penunjukanPekerjaan->save();
-            $penunjukanPekerjaan->hasUserMany()->sync($user);
-
-            $aduan = Aduan::find($penunjukanPekerjaan->aduan_id);
-            $aduan->status = $status;
-            $aduan->save();
-
-            foreach ($data->hasItem as $value) {
-                $item = Item::find($value->id);
-                $item->hapus = 'tidak';
-                $item->save();
-            }
-
-            $stafPengawas = Auth::user()->hasRekanan->hasKaryawan;
-
-
-            $title = "Pengerjaan Telah selesai";
-            $body = "Dengan nomor SPK : " . $data->nomor_pekerjaan . " telah selesai";
-            $modul = "pelaksaan-pekerjaan";
-
-            foreach ($stafPengawas as $pengawas) {
-                $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $pengawas->user_id);
-            }
-
-
-            $message = 'Berhasil Menyimpan Pelaksanaan Pekerjaan';
-            return $this->sendResponse($data, $message, 200);
         } catch (\Throwable $th) {
             DB::rollback();
             $response = [
