@@ -354,7 +354,7 @@ class PelaksanaanPekerjaanController extends Controller
             $modul = "pelaksaan-pekerjaan";
 
             foreach ($stafPengawas as $pengawas) {
-                $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $pengawas->user_id);
+                $this->notification($penunjukanPekerjaan->id, $penunjukanPekerjaan->slug, $title, $body, $modul, auth()->user()->id, $pengawas->user_id);
             }
 
 
@@ -427,7 +427,7 @@ class PelaksanaanPekerjaanController extends Controller
                     $body = "Dengan nomor SPK : " . $penunjukanPekerjaan->nomor_pekerjaan->nomor_pekerjaan . " telah Disetujui";
                     $modul = "pelaksaan-pekerjaan";
 
-                    $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $data->user_id);
+                    $this->notification($penunjukanPekerjaan->id, $penunjukanPekerjaan->slug, $title, $body, $modul, auth()->user()->id, $data->user_id);
 
 
                     $message = 'Berhasil Mengubah Pekerjaan';
