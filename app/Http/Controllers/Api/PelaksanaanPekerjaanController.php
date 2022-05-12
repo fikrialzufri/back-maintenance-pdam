@@ -424,7 +424,7 @@ class PelaksanaanPekerjaanController extends Controller
                     $aduan->save();
 
                     $title = "Pengerjaan Telah Disetujui pengawas";
-                    $body = "Dengan nomor SPK : " . $penunjukanPekerjaan->nomor_pekerjaan->nomor_pekerjaan . " telah Disetujui";
+                    $body = "Dengan nomor SPK : " . $penunjukanPekerjaan->nomor_pekerjaan . " telah Disetujui";
                     $modul = "pelaksaan-pekerjaan";
 
                     $this->notification($penunjukanPekerjaan->id, $penunjukanPekerjaan->slug, $title, $body, $modul, auth()->user()->id, $data->user_id);
