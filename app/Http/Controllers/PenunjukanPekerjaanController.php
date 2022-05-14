@@ -30,7 +30,7 @@ class PenunjukanPekerjaanController extends Controller
         $search = request()->search;
         $limit = request()->limit ?? 30;
 
-        $query = Aduan::query();
+        $query = Aduan::query()->orderBy('status', 'asc');
         if ($search) {
             $query = $query->where('no_ticket', 'like', "%" . $search . "%")->orWhere('no_aduan', 'like', "%" . $search . "%");
         }
