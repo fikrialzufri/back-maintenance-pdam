@@ -23,14 +23,11 @@
                                     <th>Nomor Tiket</th>
                                     <th>Nomor Aduan</th>
                                     <th>Rekanan</th>
-                                    <th>Atas Nama</th>
-                                    <th>Sumber Informasi</th>
                                     <th>Tanggal</th>
-                                    <th>Admin Wilayah</th>
-                                    <th>Wilayah</th>
+                                    <th>Admin</th>
                                     <th>Lokasi</th>
                                     <th>Status</th>
-                                    <th class="text-center" width="20%">Aksi</th>
+                                    <th class="text-center" width="10%">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -41,11 +38,8 @@
                                         <td>{{ $item->no_aduan }}</td>
                                         <td>{{ $item->no_ticket }}</td>
                                         <td>{{ $item->rekanan }}</td>
-                                        <td>{{ $item->atas_nama }}</td>
-                                        <td>{{ $item->sumber_informasi }}</td>
                                         <td>{{ tanggal_indonesia($item->created_at) }}</td>
                                         <td>{{ ucfirst($item->user) }}</td>
-                                        <td>{{ $item->wilayah }}</td>
                                         <td>{{ $item->lokasi }}</td>
                                         <td>{{ ucfirst($item->status) }}</td>
 
