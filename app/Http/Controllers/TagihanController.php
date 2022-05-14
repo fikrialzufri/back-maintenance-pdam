@@ -38,10 +38,6 @@ class TagihanController extends Controller
                 'alias'    => 'Tanggal',
             ],
             [
-                'name'    => 'rekanan',
-                'alias'    => 'Nama Rekanan',
-            ],
-            [
                 'name'    => 'status',
                 'alias'    => 'Status',
             ],
