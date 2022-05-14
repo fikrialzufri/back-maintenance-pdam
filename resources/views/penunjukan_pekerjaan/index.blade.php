@@ -24,8 +24,9 @@
                                     <th>Nomor Aduan</th>
                                     <th>Rekanan</th>
                                     <th>Tanggal</th>
+                                    <th>Pelapor</th>
                                     <th>Admin</th>
-                                    <th>Lokasi</th>
+                                    <th width="20%">Lokasi</th>
                                     <th>Status</th>
                                     <th class="text-center" width="10%">Aksi</th>
                                 </tr>
@@ -39,6 +40,7 @@
                                         <td>{{ $item->no_ticket }}</td>
                                         <td>{{ $item->rekanan }}</td>
                                         <td>{{ tanggal_indonesia($item->created_at) }}</td>
+                                        <td>{{ $item->atas_nama }}</td>
                                         <td>{{ ucfirst($item->user) }}</td>
                                         <td>{{ $item->lokasi }}</td>
                                         <td>{{ ucfirst($item->status) }}</td>

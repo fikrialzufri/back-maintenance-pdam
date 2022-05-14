@@ -96,6 +96,13 @@ class PenunjukanPekerjaanController extends Controller
         $slug = $request->slug;
 
         $aduan = Aduan::where('slug', $slug)->first();
+
+        $notifikasi = Notifikasi::where('modul_id', $aduan->id)->first();
+        if ($notifikasi) {
+            $notifikasi->status = 'baca';
+            $notifikasi->save();
+        }
+
         $dataPenunjukanPerkerjaan = PenunjukanPekerjaan::count();
         if ($dataPenunjukanPerkerjaan >= 1) {
             $no = str_pad($dataPenunjukanPerkerjaan + 1, 4, "0", STR_PAD_LEFT);
