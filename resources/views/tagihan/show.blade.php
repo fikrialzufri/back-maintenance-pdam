@@ -12,7 +12,7 @@
                         {{ csrf_field() }}
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-3">
+                                <div class="col-2">
                                     <div class="form-group">
                                         <div>
                                             <label for="NoTagihan" class=" form-control-label">Nomor Tagihan </label>
@@ -23,7 +23,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-3">
+                                <div class="col-2">
                                     <div class="form-group">
                                         <div>
                                             <label for="NoTagihan" class=" form-control-label">Tanggal Tagihan</label>
@@ -35,7 +35,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-3">
+                                <div class="col-2">
                                     <div class="form-group">
                                         <div>
                                             <label for="rekanan" class=" form-control-label">Rekanan</label>
@@ -46,10 +46,10 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-3">
+                                <div class="col-2">
                                     <div class="form-group">
                                         <div>
-                                            <label for="tagihan" class=" form-control-label">Total Tagihan</label>
+                                            <label for="tagihan" class=" form-control-label">Total Tagihan Item</label>
                                         </div>
                                         <div class="input-group mb-2 mr-sm-2">
                                             <div class="input-group-prepend">
@@ -58,6 +58,36 @@
                                             <input type="text" name="tagihan" id="tagihan" placeholder=""
                                                 class="form-control" readonly
                                                 value="{{ format_uang($tagihan->tagihan) }}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-2">
+                                    <div class="form-group">
+                                        <div>
+                                            <label for="tagihan" class=" form-control-label">Total Tagihan Galian</label>
+                                        </div>
+                                        <div class="input-group mb-2 mr-sm-2">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">Rp.</div>
+                                            </div>
+                                            <input type="text" name="tagihan" id="tagihan" placeholder=""
+                                                class="form-control" readonly
+                                                value="{{ format_uang($tagihan->galian) }}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-2">
+                                    <div class="form-group">
+                                        <div>
+                                            <label for="tagihan" class=" form-control-label">Grand Total Tagihan</label>
+                                        </div>
+                                        <div class="input-group mb-2 mr-sm-2">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">Rp.</div>
+                                            </div>
+                                            <input type="text" name="tagihan" id="tagihan" placeholder=""
+                                                class="form-control" readonly
+                                                value="{{ format_uang($tagihan->tagihan + $tagihan->galian) }}">
                                         </div>
                                     </div>
                                 </div>

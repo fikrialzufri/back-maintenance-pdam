@@ -90,6 +90,18 @@ class Tagihan extends Model
         return $total;
     }
 
+    public function getGalianAttribute()
+    {
+        $total = 0;
+        if ($this->hasPelaksanaanPekerjaan) {
+            foreach ($this->hasPelaksanaanPekerjaan as $key => $value) {
+
+                $total += $value->hasGalianPekerjaan->sum('total');
+            }
+        }
+        return $total;
+    }
+
 
     public function hasUserMany()
     {
