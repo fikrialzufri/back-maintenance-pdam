@@ -61,6 +61,7 @@ class Tagihan extends Model
     public function getHargaItemAttribute()
     {
         $harga = [];
+        $danger = '';
         if ($this->hasPelaksanaanPekerjaan) {
             foreach ($this->hasPelaksanaanPekerjaan as $key => $value) {
                 foreach ($value->hasItem as $i => $item) {
