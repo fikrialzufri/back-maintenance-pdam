@@ -28,7 +28,8 @@
                                     <th>Wilayah</th>
                                     <th>Lokasi</th>
                                     <th>Status</th>
-                                    <th class="text-center" width="20%">Aksi</th>
+
+                                    <th class="text-center" width="5%">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
