@@ -34,7 +34,7 @@ class AduanController extends Controller
             $query = $query->where('no_ticket', 'like', "%" . $search . "%")->orWhere('no_aduan', 'like', "%" . $search . "%");
         }
 
-        $aduan = $query->orderBy('created_at', 'desc')->paginate($limit);
+        $aduan = $query->orderBy('status', 'asc')->orderBy('created_at', 'desc')->paginate($limit);
         $count_aduan = $query->count();
         $no = $limit * ($aduan->currentPage() - 1);
 
