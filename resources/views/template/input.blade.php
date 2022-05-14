@@ -155,19 +155,18 @@
 @endpush
 
 @push('scriptdinamis')
-    <script script src="{{ asset('plugins/select2/dist/js/select2.min.js') }}">
-    </script>
+    <script script src="{{ asset('plugins/select2/dist/js/select2.min.js') }}"></script>
     <script type="text/javascript">
         $(function() {
             @if (isset($item['input']))
                 @if ($item['input'] == 'combo')
                     $("#cmb{{ $item['name'] }}").select2({
-                    placeholder: '--- Pilih ' + "{{ $item['alias'] }}" + ' ---',
-                    width: '100%'
+                        placeholder: '--- Pilih ' + "{{ $item['alias'] }}" + ' ---',
+                        width: '100%'
                     });
                     $("#cmb{{ $item['name'] }}").on("change", function(e) {
-                    $("#{{ $item['name'] }}").removeClass("is-invalid");
-                    $("#text{{ $item['name'] }}").html("");
+                        $("#{{ $item['name'] }}").removeClass("is-invalid");
+                        $("#text{{ $item['name'] }}").html("");
                     });
                 @endif
             @endif
@@ -176,26 +175,26 @@
                     let rupiah = document.getElementsByClassName('rupiah');
                     $('#{{ $item['name'] }}').on("input", function() {
 
-                    let val = formatRupiah(this.value, '');
-                    $('#{{ $item['name'] }}').val(val);
+                        let val = formatRupiah(this.value, '');
+                        $('#{{ $item['name'] }}').val(val);
                     });
 
                     /* Fungsi formatRupiah */
-                    function formatRupiah(angka, prefix){
-                    var number_string = angka.replace(/[^,\d]/g, '').toString(),
-                    split = number_string.split(','),
-                    sisa = split[0].length % 3,
-                    rupiah = split[0].substr(0, sisa),
-                    ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+                    function formatRupiah(angka, prefix) {
+                        var number_string = angka.replace(/[^,\d]/g, '').toString(),
+                            split = number_string.split(','),
+                            sisa = split[0].length % 3,
+                            rupiah = split[0].substr(0, sisa),
+                            ribuan = split[0].substr(sisa).match(/\d{3}/gi);
 
-                    // tambahkan titik jika yang di input sudah menjadi angka ribuan
-                    if(ribuan){
-                    separator = sisa ? '.' : '';
-                    rupiah += separator + ribuan.join('.');
-                    }
+                        // tambahkan titik jika yang di input sudah menjadi angka ribuan
+                        if (ribuan) {
+                            separator = sisa ? '.' : '';
+                            rupiah += separator + ribuan.join('.');
+                        }
 
-                    rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
-                    return prefix == undefined ? rupiah : (rupiah ? rupiah : '');
+                        rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+                        return prefix == undefined ? rupiah : (rupiah ? rupiah : '');
                     }
                 @endif
             @endif
@@ -211,9 +210,9 @@
             });
             @if (isset($item['input']))
                 @if ($item['input'] == 'radio')
-                    if($("input:radio[name='{{ $item['name'] }}']").is(":checked")) {
-                    $("#{{ $item['name'] }}").removeClass("is-invalid");
-                    $("#text{{ $item['name'] }}").html("");
+                    if ($("input:radio[name='{{ $item['name'] }}']").is(":checked")) {
+                        $("#{{ $item['name'] }}").removeClass("is-invalid");
+                        $("#text{{ $item['name'] }}").html("");
                     }
                 @endif
             @endif

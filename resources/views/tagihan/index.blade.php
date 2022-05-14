@@ -61,7 +61,7 @@
                             <tbody>
                                 @forelse ($data as $index => $item)
 
-                                    <tr>
+                                    <tr class="{{ $item->harga_item == 'salah' ? 'bg-danger' : '' }}">
                                         <td>{{ $index + 1 + ($data->CurrentPage() - 1) * $data->PerPage() }}</td>
                                         @foreach ($configHeaders as $key => $header)
                                             @if (isset($header['input']))
@@ -121,8 +121,7 @@
 @endpush
 @push('script')
     <!-- DataTables -->
-    <script src="{{ asset('plugins/DataTables/datatables.js') }}">
-    </script>
+    <script src="{{ asset('plugins/DataTables/datatables.js') }}"></script>
     <script>
         // $('#example').DataTable({
         //   "paging": true,

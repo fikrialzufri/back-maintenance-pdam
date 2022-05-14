@@ -45,22 +45,7 @@
 
                                                 Pilih Semua
                                             </th>
-                                            <th scope="col" class="text-center">
-
-                                                Tambah
-                                            </th>
-                                            <th scope="col" class="text-center">
-
-                                                Hapus
-                                            </th>
-                                            <th scope="col" class="text-center">
-
-                                                Edit
-                                            </th>
-                                            <th scope="col" class="text-center">
-
-                                                Lihat
-                                            </th>
+                                            <th scope="col" colspan="5" class="text-center">Modul</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -81,7 +66,7 @@
                                                                 class="check{{ $task->slug }} hakakses"
                                                                 id="{{ $permission->slug }}"
                                                                 {{ in_array($permission->name, $izin) ? 'checked' : '' }} />
-
+                                                            {{ $permission->slug }}
                                                         </div>
                                                     </td>
                                                 @endforeach

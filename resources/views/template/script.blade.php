@@ -85,7 +85,7 @@
                                     } else if (permission === "default") {
                                         requestAndShowPermission(body, title, url);
                                     } else {
-                                        alert("Use normal alert");
+                                        alert("Mohon allow notification");
                                     }
 
                                     function showNotification(body, title, url) {

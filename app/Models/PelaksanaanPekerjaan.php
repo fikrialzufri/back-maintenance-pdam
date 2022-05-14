@@ -77,6 +77,33 @@ class PelaksanaanPekerjaan extends Model
         return $this->belongsToMany(Item::class, 'pelaksanaan_item')->withPivot('qty', 'harga', 'keterangan')->withTimestamps();
     }
 
+    public function getTotalHargaAttribute()
+    {
+        $total = 0;
+        if ($this->hasItem) {
+            foreach ($this->hasItem as $value) {
+                $total += $value->pivot->harga * $value->pivot->qty;
+            }
+        }
+
+        return $total;
+    }
+
+    public function getHargaItemAttribute()
+    {
+        $harga = 0;
+        if ($this->hasItem) {
+            foreach ($this->hasItem as $value) {
+                if ($value->pivot->harga == 0) {
+                    $harga = 0;
+                }
+            }
+        }
+
+        return $harga;
+    }
+
+
     public function hasUserMany()
     {
         return $this->belongsToMany(User::class, 'pelaksanaan_user')->withPivot('keterangan')->withTimestamps();

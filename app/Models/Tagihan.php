@@ -58,6 +58,25 @@ class Tagihan extends Model
         return $this->belongsToMany(PelaksanaanPekerjaan::class,  'tagihan_pelaksanaan')->withPivot('total')->withTimestamps();;
     }
 
+    public function getHargaItemAttribute()
+    {
+        $harga = [];
+        if ($this->hasPelaksanaanPekerjaan) {
+            foreach ($this->hasPelaksanaanPekerjaan as $key => $value) {
+                foreach ($value->hasItem as $i => $item) {
+
+                    $harga[$key][$i] = $item->pivot->harga;
+                    if ($item->pivot->harga == 0) {
+                        $danger = 'salah';
+                        break;
+                    }
+                }
+            }
+        }
+        return $danger;
+    }
+
+
     public function hasUserMany()
     {
         return $this->belongsToMany(User::class, 'tagihan_user')->withTimestamps();

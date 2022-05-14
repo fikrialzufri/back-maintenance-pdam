@@ -386,21 +386,21 @@ class PelaksanaanPekerjaanController extends Controller
         $slug = $request->slug;
         $user_id = auth()->user()->id;
 
-        DB::commit();
-        $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $slug)->first();
-        $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->first();
-        $listRekanan = [];
-        if ($data->status == 'disetujui') {
-            $message = "Pekerjaan sudah disetujui";
-            $response = [
-                'success' => false,
-                'message' => $message,
-                'code' => '409'
-            ];
-            return $this->sendError($response, $message, 409);
-        }
 
         try {
+            DB::commit();
+            $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $slug)->first();
+            $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->first();
+            $listRekanan = [];
+            if ($data->status == 'disetujui') {
+                $message = "Pekerjaan sudah disetujui";
+                $response = [
+                    'success' => false,
+                    'message' => $message,
+                    'code' => '409'
+                ];
+                return $this->sendError($response, $message, 409);
+            }
             if (request()->user()->hasRole('staf-pengawas')) {
                 $listRekanan = auth()->user()->karyawan_list_rekanan->toArray();
                 $rekanan_id = $penunjukanPekerjaan->rekanan_id;
