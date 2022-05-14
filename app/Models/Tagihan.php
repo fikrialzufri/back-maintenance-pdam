@@ -77,6 +77,19 @@ class Tagihan extends Model
         return $danger;
     }
 
+    public function getTagihanAttribute()
+    {
+        $total = 0;
+        if ($this->hasPelaksanaanPekerjaan) {
+            foreach ($this->hasPelaksanaanPekerjaan as $key => $value) {
+                foreach ($value->hasItem as $i => $item) {
+                    $total += $item->pivot->harga * $item->pivot->qty;
+                }
+            }
+        }
+        return $total;
+    }
+
 
     public function hasUserMany()
     {

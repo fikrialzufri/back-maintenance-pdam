@@ -46,6 +46,21 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-3">
+                                    <div class="form-group">
+                                        <div>
+                                            <label for="tagihan" class=" form-control-label">Total Tagihan</label>
+                                        </div>
+                                        <div class="input-group mb-2 mr-sm-2">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">Rp.</div>
+                                            </div>
+                                            <input type="text" name="tagihan" id="tagihan" placeholder=""
+                                                class="form-control" readonly
+                                                value="{{ format_uang($tagihan->tagihan) }}">
+                                        </div>
+                                    </div>
+                                </div>
 
 
 
@@ -147,8 +162,9 @@
                                                         <th colspan="3">Grand Total
                                                         </th>
                                                         <th>{{ $item->hasItem->sum('pivot.qty') }}</th>
-                                                        <th>{{ format_uang($item->hasItem->sum('pivot.harga')) }}</th>
-                                                        <th>{{ format_uang($item->total_harga) }}
+                                                        <th>Rp. {{ format_uang($item->hasItem->sum('pivot.harga')) }}
+                                                        </th>
+                                                        <th>Rp. {{ format_uang($item->total_harga) }}
 
                                                     </tr>
                                                 </tfoot>
