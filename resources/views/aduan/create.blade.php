@@ -341,7 +341,7 @@
                 //     .bindPopup('<b>Kota Samarinda</b>').openPopup();
 
 
-                map.setView(new L.LatLng(-0.47529, 117.146515), 100).addLayer(osm);
+                // map.setView(new L.LatLng(-0.47529, 117.146515), 100).addLayer(osm);
                 // var map = L.map('map').setView([-0.47529, 117.146515], 13);
                 map.on('click', onMapClick);
             }
