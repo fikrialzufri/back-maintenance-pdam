@@ -361,9 +361,8 @@
 
         map.setView(new L.LatLng(lat_long), 100).addLayer(osm);
 
-        L.marker(lat_long).addTo(map)
-            .bindPopup("Anda memilih koordinat: " + e.latlng.toString() + " Dengan alamat: " + result
-                .address.LongLabel).openPopup();
+        L.marker([lat_long]).addTo(map)
+            .bindPopup(lokasi).openPopup();
         // map = L.map('map').setView([-0.47529, 117.146515], 100);
         map.on('click', onMapClick);
 
