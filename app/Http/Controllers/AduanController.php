@@ -95,6 +95,7 @@ class AduanController extends Controller
             $aduan->no_ticket = $request->no_ticket;
             $aduan->no_aduan = $noAduan;
             $aduan->no_pelanggan = $request->no_pelanggan;
+            $aduan->detail_lokasi = $request->detail_lokasi;
             $aduan->no_hp = $request->no_hp;
             $aduan->mps = $request->mps;
             $aduan->atas_nama = $request->atas_nama;
@@ -165,6 +166,7 @@ class AduanController extends Controller
         $aduan = Aduan::where('slug', $slug)->first();
         $aduan->no_ticket = $request->no_ticket;
         $aduan->mps = $request->mps;
+        $aduan->detail_lokasi = $request->detail_lokasi;
         $aduan->no_pelanggan = $request->no_pelanggan;
         $aduan->no_hp = $request->no_hp;
         $aduan->atas_nama = $request->atas_nama;
