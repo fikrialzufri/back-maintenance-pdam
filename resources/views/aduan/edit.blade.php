@@ -234,7 +234,6 @@
                                     <div>
                                         <textarea class="{{ $errors->has('detail_lokasi') ? 'form-control is-invalid' : 'form-control' }}"
                                             name="detail_lokasi" id="detail_lokasi" rows="10"
-                                            placeholder="detail_lokasi"
                                             required>{{ $aduan->detail_lokasi }}</textarea>
                                     </div>
                                     @if ($errors->has('detail_lokasi'))
@@ -360,8 +359,22 @@
                 attribution: osmAttribution
             });
 
-        marker = L.marker([lat_long]).addTo(map)
-            .bindPopup("Anda sedang di koordinat: " + lat_long.toString()).openPopup();
+        document.getElementById('lat_long').value = e.latlng.toString();
+
+        map.removeLayer(marker);
+
+        geocodeService.reverse().latlng(e.latlng).run(function(error, result) {
+            if (newMarker != undefined) {
+                map.removeLayer(newMarker);
+            }
+
+            newMarker = L.marker(e.latlng).addTo(map)
+                .bindPopup("Anda memilih koordinat: " + e.latlng.toString() + " Dengan alamat: " + result
+                    .address.LongLabel).openPopup();
+
+            // Auto Fill form lokasi
+            document.getElementById('lokasi').value = result.address.LongLabel.toString()
+        });
 
 
         map.setView(new L.LatLng(lat_long, lokasi), 100).addLayer(osm);
