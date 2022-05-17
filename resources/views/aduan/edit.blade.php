@@ -342,12 +342,13 @@
     {{-- <script src="{{ asset('leaflet/leaflet.js') }}"></script> --}}
     <script src="{{ asset('leaflet/jquery-1.8.2.min.js') }}"></script>
     <script>
-        var lat_long = "{{ $aduan->lat_long }}";
+        var lat_long = document.getElementById('lat_long').value;
         var lokasi = "{{ $aduan->lokasi }}";
         var map;
         var feature;
         var newMarker = {};
         console.log(lat_long);
+
         map = new L.Map('map', {
             zoomControl: true
         });
@@ -358,6 +359,7 @@
                 maxZoom: 18,
                 attribution: osmAttribution
             });
+
 
         map.setView(new L.LatLng([lat_long]), 100).addLayer(osm);
 
