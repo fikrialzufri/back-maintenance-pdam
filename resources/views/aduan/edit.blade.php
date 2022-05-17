@@ -361,7 +361,7 @@
             });
 
 
-        // map.setView(new L.LatLng(lat_long), 100).addLayer(osm);
+        map.setView(new L.LatLng(lat_long.split(",")), 100).addLayer(osm);
 
         marker = L.marker(lat_long.split(",")).addTo(map)
             .bindPopup('<b>' + lokasi + '</b>').openPopup();
