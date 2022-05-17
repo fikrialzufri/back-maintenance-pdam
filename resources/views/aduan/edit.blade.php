@@ -361,7 +361,7 @@
             });
 
 
-        map.setView(new L.LatLng([lat_long]), 100).addLayer(osm);
+        map.setView(new L.LatLng(lat_long), 100).addLayer(osm);
 
         var marker = L.marker([-0.47529, 117.146515]).addTo(map)
             .bindPopup('<b>Kota Samarinda</b>').openPopup();
