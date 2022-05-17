@@ -347,7 +347,7 @@
         var map;
         var feature;
         var newMarker = {};
-
+        console.log(lat_long);
         map = new L.Map('map', {
             zoomControl: true
         });
@@ -359,7 +359,11 @@
                 attribution: osmAttribution
             });
 
-        map.setView(new L.LatLng(lat_long, lokasi), 100).addLayer(osm);
+        map.setView(new L.LatLng(lat_long), 100).addLayer(osm);
+
+        L.marker(lat_long).addTo(map)
+            .bindPopup("Anda memilih koordinat: " + e.latlng.toString() + " Dengan alamat: " + result
+                .address.LongLabel).openPopup();
         // map = L.map('map').setView([-0.47529, 117.146515], 100);
         map.on('click', onMapClick);
 
@@ -414,30 +418,6 @@
                 document.getElementById('lokasi').value = result.address.LongLabel.toString()
             });
         }
-
-        mapker(lokasi);
-
-        function mapker(e) {
-            // Auto Fill form lat_long
-            document.getElementById('lat_long').value = e.latlng.toString();
-
-            map.removeLayer(marker);
-
-            geocodeService.reverse().latlng(e.latlng).run(function(error, result) {
-                if (newMarker != undefined) {
-                    map.removeLayer(newMarker);
-                }
-
-                newMarker = L.marker(e.latlng).addTo(map)
-                    .bindPopup("Anda memilih koordinat: " + e.latlng.toString() + " Dengan alamat: " + result
-                        .address.LongLabel).openPopup();
-
-                // Auto Fill form lokasi
-                document.getElementById('lokasi').value = result.address.LongLabel.toString()
-            });
-        }
-
-
 
         function addr_search() {
             var inp = document.getElementById("addr");
