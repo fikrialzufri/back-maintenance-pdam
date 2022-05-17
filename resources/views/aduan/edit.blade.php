@@ -263,7 +263,18 @@
                         </div>
                         <div class="row">
                             <div class="col-12">
-                                <div id="map"></div>
+                                <div class="form-group">
+                                    <div>
+                                        <label for="lat_long" class=" form-control-label">Cari Alamat</label>
+                                    </div>
+                                    <div id="search">
+                                        <input type="text" name="addr" class="form-control" value="" id="addr"
+                                            size="10" />
+                                        <button type="button" onclick="addr_search();">Cari</button>
+                                        <div id="results" />
+                                    </div>
+                                    <div id="map"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
