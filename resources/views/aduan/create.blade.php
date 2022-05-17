@@ -321,30 +321,30 @@
         <script>
             var map;
             var feature;
+            var marker;
             var newMarker = {};
 
 
 
-            function load_map() {
-                map = new L.Map('map', {
-                    zoomControl: true
+            map = new L.Map('map', {
+                zoomControl: true
+            });
+
+            var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                osmAttribution = 'Map data &copy; 2012 <a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
+                osm = new L.TileLayer(osmUrl, {
+                    maxZoom: 18,
+                    attribution: osmAttribution
                 });
 
-                var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                    osmAttribution = 'Map data &copy; 2012 <a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
-                    osm = new L.TileLayer(osmUrl, {
-                        maxZoom: 18,
-                        attribution: osmAttribution
-                    });
-
-                // var marker = L.marker([-0.47529, 117.146515]).addTo(map)
-                //     .bindPopup('<b>Kota Samarinda</b>').openPopup();
+            marker = L.marker([-0.47529, 117.146515]).addTo(map)
+                .bindPopup('<b>Kota Samarinda</b>').openPopup();
 
 
-                map.setView(new L.LatLng(-0.47529, 117.146515), 100).addLayer(osm);
-                // map = L.map('map').setView([-0.47529, 117.146515], 100);
-                map.on('click', onMapClick);
-            }
+            map.setView(new L.LatLng(-0.47529, 117.146515), 100).addLayer(osm);
+            // map = L.map('map').setView([-0.47529, 117.146515], 100);
+            map.on('click', onMapClick);
+
 
             var geocodeService = L.esri.Geocoding.geocodeService({
                 apikey: "AAPK8176d782dece458a826c6ad408eeadf1rNg3Erse47Uah_Ij6q4nyG-WI3ryr5IBT8nb3hRNh2TfpyCkl0wVQjdk3nzJbBFo" // replace with your api key - https://developers.arcgis.com
@@ -378,9 +378,7 @@
 
             function onMapClick(e) {
                 // Auto Fill form lat_long
-                document.getElementById('lat_long').value = e.latlng.toString()
-                var marker = L.marker([-0.47529, 117.146515]).addTo(map)
-                    .bindPopup('<b>Kota Samarinda</b>').openPopup();
+                document.getElementById('lat_long').value = e.latlng.toString();
 
                 map.removeLayer(marker);
 
