@@ -16,6 +16,8 @@ class CreateAduanTable extends Migration
         Schema::create('aduan', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('no_ticket');
+            $table->string('no_hp')->nullable();
+            $table->string('no_pelanggan')->nullable();
             $table->string('no_aduan');
             $table->string('mps');
             $table->string('atas_nama');
