@@ -344,8 +344,6 @@
             map.setView(new L.LatLng(-0.47529, 117.146515), 100).addLayer(osm);
             // map = L.map('map').setView([-0.47529, 117.146515], 100);
             map.on('click', onMapClick);
-
-
             var geocodeService = L.esri.Geocoding.geocodeService({
                 apikey: "AAPK8176d782dece458a826c6ad408eeadf1rNg3Erse47Uah_Ij6q4nyG-WI3ryr5IBT8nb3hRNh2TfpyCkl0wVQjdk3nzJbBFo" // replace with your api key - https://developers.arcgis.com
             });
