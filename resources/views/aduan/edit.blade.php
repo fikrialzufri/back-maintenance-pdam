@@ -190,8 +190,8 @@
                                         </div>
                                         <div>
                                             <textarea class="{{ $errors->has('keterangan') ? 'form-control is-invalid' : 'form-control' }}" name="keterangan"
-                                                id="keterangan" rows="10" placeholder="Keterangan"
-                                                required>{{ $aduan->keterangan }}</textarea>
+                                                id="keterangan" rows="10"
+                                                placeholder="Keterangan">{{ $aduan->keterangan }}</textarea>
                                         </div>
                                         @if ($errors->has('keterangan'))
                                             Keterangan
@@ -222,6 +222,27 @@
                                             class="{{ $errors->has('lokasi') ? 'form-control is-invalid' : 'form-control' }}"
                                             value="{{ $aduan->lokasi }}" required id="lokasi">
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <div>
+                                        <label for="detail_lokasi" class=" form-control-label">Detail Lokasi</label>
+                                    </div>
+                                    <div>
+                                        <textarea class="{{ $errors->has('detail_lokasi') ? 'form-control is-invalid' : 'form-control' }}"
+                                            name="detail_lokasi" id="detail_lokasi" rows="10"
+                                            placeholder="detail_lokasi"
+                                            required>{{ $aduan->detail_lokasi }}</textarea>
+                                    </div>
+                                    @if ($errors->has('detail_lokasi'))
+                                        detail_lokasi
+                                        <span class="text-danger">
+                                            <strong id="textkk">Detail Lokasi wajib diisi!</strong>
+                                        </span>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -311,40 +332,30 @@
     {{-- <script src="{{ asset('leaflet/leaflet.js') }}"></script> --}}
     <script src="{{ asset('leaflet/jquery-1.8.2.min.js') }}"></script>
     <script>
+        var lat_long = "{{ $aduan->lat_long }}";
+        var lokasi = "{{ $aduan->lokasi }}";
         var map;
         var feature;
         var newMarker = {};
 
+        map = new L.Map('map', {
+            zoomControl: true
+        });
 
-
-        function load_map() {
-
-            var lat_long = "{{ $aduan->lat_long }}";
-            var lokasi = "{{ $aduan->lokasi }}";
-
-            map = new L.Map('map', {
-                zoomControl: true
+        var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            osmAttribution = 'Map data &copy; 2012 <a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
+            osm = new L.TileLayer(osmUrl, {
+                maxZoom: 18,
+                attribution: osmAttribution
             });
 
-            var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                osmAttribution = 'Map data &copy; 2012 <a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
-                osm = new L.TileLayer(osmUrl, {
-                    maxZoom: 18,
-                    attribution: osmAttribution
-                });
-
-            // var marker = L.marker([-0.47529, 117.146515]).addTo(map)
-            //     .bindPopup('<b>Kota Samarinda</b>').openPopup();
-
-            var marker = L.marker(lat_long.split(",")).addTo(map)
-                .bindPopup('<b>' + lokasi + '</b>').openPopup();
+        marker = map.marker([lat_long, lokasi]).addTo(map)
+            .bindPopup('<b>Kota Samarinda</b>').openPopup();
 
 
-            // map.setView(new L.LatLng(-0.47529, 117.146515), 100).addLayer(osm);
-            // var map = L.map('map').setView([-0.47529, 117.146515], 13);
-            map.on('click', onMapClick);
-        }
-
+        map.setView(new L.LatLng(lat_long, lokasi), 100).addLayer(osm);
+        // map = L.map('map').setView([-0.47529, 117.146515], 100);
+        map.on('click', onMapClick);
         var geocodeService = L.esri.Geocoding.geocodeService({
             apikey: "AAPK8176d782dece458a826c6ad408eeadf1rNg3Erse47Uah_Ij6q4nyG-WI3ryr5IBT8nb3hRNh2TfpyCkl0wVQjdk3nzJbBFo" // replace with your api key - https://developers.arcgis.com
         });
@@ -377,13 +388,9 @@
 
         function onMapClick(e) {
             // Auto Fill form lat_long
-            document.getElementById('lat_long').value = e.latlng.toString()
-            var marker = L.marker([-0.47529, 117.146515]).addTo(map)
-                .bindPopup('<b>Kota Samarinda</b>').openPopup();
+            document.getElementById('lat_long').value = e.latlng.toString();
 
             map.removeLayer(marker);
-
-
 
             geocodeService.reverse().latlng(e.latlng).run(function(error, result) {
                 if (newMarker != undefined) {
@@ -432,7 +439,5 @@
                     }
                 });
         }
-
-        window.onload = load_map;
     </script>
 @endpush

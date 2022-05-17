@@ -188,8 +188,8 @@
                                         </div>
                                         <div>
                                             <textarea class="{{ $errors->has('keterangan') ? 'form-control is-invalid' : 'form-control' }}" name="keterangan"
-                                                id="keterangan" rows="10" placeholder="Keterangan"
-                                                required>{{ old('keterangan') }}</textarea>
+                                                id="keterangan" rows="10"
+                                                placeholder="Keterangan">{{ old('keterangan') }}</textarea>
                                         </div>
                                         @if ($errors->has('keterangan'))
                                             Keterangan
@@ -227,6 +227,27 @@
                             <div class="col-12">
                                 <div class="form-group">
                                     <div>
+                                        <label for="detail_lokasi" class=" form-control-label">Detail Lokasi</label>
+                                    </div>
+                                    <div>
+                                        <textarea class="{{ $errors->has('detail_lokasi') ? 'form-control is-invalid' : 'form-control' }}"
+                                            name="detail_lokasi" id="detail_lokasi" rows="10"
+                                            placeholder="detail_lokasi"
+                                            required>{{ old('detail_lokasi') }}</textarea>
+                                    </div>
+                                    @if ($errors->has('detail_lokasi'))
+                                        detail_lokasi
+                                        <span class="text-danger">
+                                            <strong id="textkk">Detail Lokasi wajib diisi!</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <div>
                                         <label for="lat_long" class=" form-control-label">Koordinat (Latitude,
                                             Longitude)</label>
                                     </div>
@@ -247,7 +268,7 @@
                                     <div id="search">
                                         <input type="text" name="addr" class="form-control" value="" id="addr"
                                             size="10" />
-                                        <button type="button" onclick="addr_search();">Search</button>
+                                        <button type="button" onclick="addr_search();">Cari</button>
                                         <div id="results" />
                                     </div>
                                     <div id="map"></div>
@@ -323,8 +344,6 @@
             var feature;
             var marker;
             var newMarker = {};
-
-
 
             map = new L.Map('map', {
                 zoomControl: true
@@ -427,7 +446,5 @@
                         }
                     });
             }
-
-            window.onload = load_map;
         </script>
     @endpush
