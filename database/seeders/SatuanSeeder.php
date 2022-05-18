@@ -42,5 +42,9 @@ class SatuanSeeder extends Seeder
         $satuanMl = new Satuan();
         $satuanMl->nama = 'Ml';
         $satuanMl->save();
+
+        $satuanLs = new Satuan();
+        $satuanLs->nama = 'LS';
+        $satuanLs->save();
     }
 }

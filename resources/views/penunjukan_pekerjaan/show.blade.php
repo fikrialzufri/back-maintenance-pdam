@@ -108,20 +108,33 @@
         @if ($aduan->status != 'draft')
             <div class="row">
                 <div class="col-12">
+
                     <div class="card">
-                        <div class="card-header">
+                        <div class="card-header  justify-content-between">
                             <div class="card-title">Daftar Pekerjaan</div>
+
                         </div>
                         <div class="card-body">
-
+                            <div class="form-group">
+                                <select class="form-control select2" id="cmbPekerjaan">
+                                    <option selected="selected" value="">Pilih Pekerjaan
+                                    </option>
+                                    @foreach ($listPekerjaan as $i => $pekerjaan)
+                                        <option value="{{ $pekerjaan->id }}" id="pekerjaan_{{ $pekerjaan->id }}">
+                                            {{ $pekerjaan->nama }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
                             <table class="table table-bordered " width="100%">
                                 <thead>
                                     <tr>
                                         <th width="5">#</th>
+                                        <th width="250">Pekerjaan</th>
                                         <th width="10">Panjang</th>
                                         <th width="10">Lebar</th>
-                                        <th width="10">Dalam</th>
-                                        <th>Total Harga</th>
+                                        <th width="100">Dalam</th>
+                                        <th width="200">Total Harga</th>
                                         <th>Keterangan</th>
                                     </tr>
                                 </thead>
@@ -132,6 +145,7 @@
                                             <tr>
                                                 <td>{{ $key + 1 }}
                                                 </td>
+                                                <td>{{ $value->pekerjaan }}</td>
                                                 <td>{{ $value->panjang }} m</td>
                                                 <td>{{ $value->lebar }} m</td>
                                                 <td>{{ $value->dalam }} m</td>
@@ -153,7 +167,7 @@
                                 <tfoot>
                                     @if (isset($pekerjaan->hasGalianPekerjaan))
                                         <tr>
-                                            <th colspan="4" class="text-right">Grand Total
+                                            <th colspan="5" class="text-right">Grand Total
                                             </th>
                                             <th>Rp. {{ format_uang($pekerjaan->total_galian) }}
 
@@ -173,7 +187,17 @@
                             <div class="card-title">Daftar Bahan</div>
                         </div>
                         <div class="card-body">
-
+                            <div class="form-group">
+                                <select class="form-control select2" id="cmbBarang">
+                                    <option selected="selected" value="">Pilih Bahan
+                                    </option>
+                                    @foreach ($listBahan as $i => $bahan)
+                                        <option value="{{ $bahan->id }}" id="bahan_{{ $bahan->id }}">
+                                            {{ $bahan->nama }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
                             <table class="table table-bordered " width="100%">
                                 <thead>
                                     <tr>
@@ -242,7 +266,17 @@
                             <div class="card-title">Alat Bantu</div>
                         </div>
                         <div class="card-body">
-
+                            <div class="form-group">
+                                <select class="form-control select2" id="cmbAlatBantu">
+                                    <option selected="selected" value="">Pilih Alat Bantu
+                                    </option>
+                                    @foreach ($listAlatBantu as $i => $AlatBantu)
+                                        <option value="{{ $AlatBantu->id }}" id="AlatBantu_{{ $AlatBantu->id }}">
+                                            {{ $AlatBantu->nama }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
                             <table class="table table-bordered " width="100%">
                                 <thead>
                                     <tr>
@@ -311,7 +345,18 @@
                             <div class="card-title">Transportasi</div>
                         </div>
                         <div class="card-body">
-
+                            <div class="form-group">
+                                <select class="form-control select2" id="cmbTransportasi">
+                                    <option selected="selected" value="">Pilih Transportasi
+                                    </option>
+                                    @foreach ($listTransportasi as $i => $Transportasi)
+                                        <option value="{{ $Transportasi->id }}"
+                                            id="Transportasi_{{ $Transportasi->id }}">
+                                            {{ $Transportasi->nama }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
                             <table class="table table-bordered " width="100%">
                                 <thead>
                                     <tr>
@@ -514,11 +559,23 @@
     <script script src="{{ asset('plugins/select2/dist/js/select2.min.js') }}"></script>
     <script>
         $(function() {
-            $('#rekanan').select2({
-                placeholder: '--- Pilih Rekanan ---',
+
+            $('#cmbPekerjaan').select2({
+                placeholder: '--- Pilih Pekerjaan ---',
                 width: '100%'
             });
-
+            $('#cmbBarang').select2({
+                placeholder: '--- Pilih Barang ---',
+                width: '100%'
+            });
+            $('#cmbAlatBantu').select2({
+                placeholder: '--- Pilih Alat Bantu ---',
+                width: '100%'
+            });
+            $('#cmbTransportasi').select2({
+                placeholder: '--- Pilih Transportasi ---',
+                width: '100%'
+            });
         });
     </script>
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"

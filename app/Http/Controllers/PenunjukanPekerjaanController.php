@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Aduan;
+use App\Models\Item;
 use App\Models\Jenis;
 use App\Models\PenunjukanPekerjaan;
 use App\Models\PelaksanaanPekerjaan;
@@ -62,36 +63,45 @@ class PenunjukanPekerjaanController extends Controller
         $aduan = Aduan::where('slug', $slug)->first();
         $penunjukan = PenunjukanPekerjaan::where('aduan_id', $aduan->id)->first();
         $jenisPekerjaan = [];
-        $jenisBarang = [];
+        $jenisBahan = [];
         $jenisBajenisAlatBanturang = [];
         $jenisTransportasi = [];
+
+        $listPekerjaan = [];
+        $listBahan = [];
+        $listAlatBantu = [];
+        $listTransportasi = [];
 
         $kategoriPekerjaan = Kategori::whereSlug('pekerjaan')->first();
         if ($kategoriPekerjaan) {
             $jenisPekerjaan = Jenis::where('kategori_id', $kategoriPekerjaan->id)->get()->pluck('id');
+            $listPekerjaan = Item::whereIn('jenis_id', $jenisPekerjaan)->get();
         }
 
         $kategoriBahan = Kategori::whereSlug('bahan')->first();
         if ($kategoriBahan) {
-            $jenisBarang = Jenis::where('kategori_id', $kategoriBahan->id)->get()->pluck('id');
+            $jenisBahan = Jenis::where('kategori_id', $kategoriBahan->id)->get()->pluck('id');
+            $listBahan = Item::whereIn('jenis_id', $jenisBahan)->get();
         }
 
         $kategoriAlatBantu = Kategori::whereSlug('alat-bantu')->first();
         if ($kategoriAlatBantu) {
-            $jenisAlatBantu = Jenis::where('kategori_id', $kategoriAlatBantu->id)->get()->pluck('id');
+            $jenisAlatBantu = Jenis::where('kategori_id', $kategoriAlatBantu->id)->get();
+            $listAlatBantu = Item::whereIn('jenis_id', $jenisAlatBantu)->get();
         }
 
         $kategoriTransportasi = Kategori::whereSlug('transportasi')->first();
-        if ($kategoriTransportasi) {
+        if ($jenisTransportasi) {
             $jenisTransportasi = Jenis::where('kategori_id', $kategoriTransportasi->id)->get()->pluck('id');
+            $listTransportasi = Item::whereIn('jenis_id', $jenisTransportasi)->get();
         }
 
         $pekerjaan = PelaksanaanPekerjaan::where('penunjukan_pekerjaan_id', $penunjukan->id)->with(["hasItem" => function ($q) use ($jenisPekerjaan) {
             $q->whereIn('item.jenis_id', $jenisPekerjaan);
         }])->first();
 
-        $daftarBarang = PelaksanaanPekerjaan::where('penunjukan_pekerjaan_id', $penunjukan->id)->with(["hasItem" => function ($q) use ($jenisBarang) {
-            $q->whereIn('item.jenis_id', $jenisBarang);
+        $daftarBahan = PelaksanaanPekerjaan::where('penunjukan_pekerjaan_id', $penunjukan->id)->with(["hasItem" => function ($q) use ($jenisBahan) {
+            $q->whereIn('item.jenis_id', $jenisBahan);
         }])->first();
 
         $daftarAlatBantu = PelaksanaanPekerjaan::where('penunjukan_pekerjaan_id', $penunjukan->id)->with(["hasItem" => function ($q) use ($jenisAlatBantu) {
@@ -112,7 +122,7 @@ class PenunjukanPekerjaanController extends Controller
             $notifikasi->save();
         }
 
-        $title = 'Detail Aduan';
+        $title = 'Detail Aduan ' . $aduan->nomor_pekerjaan;
         $action = route('penunjukan_pekerjaan.store');
 
         if ($aduan == null) {
@@ -123,13 +133,17 @@ class PenunjukanPekerjaanController extends Controller
             'aduan',
             'penunjukan',
             'pekerjaan',
-            'daftarBarang',
+            'daftarBahan',
             'daftarAlatBantu',
             'daftarTransportasi',
             'jenisAduan',
             'jenis_aduan',
             'rekanan',
             'title',
+            'listPekerjaan',
+            'listBahan',
+            'listAlatBantu',
+            'listTransportasi',
             'action'
         ));
     }

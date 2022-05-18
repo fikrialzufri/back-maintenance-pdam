@@ -15,4 +15,16 @@ class GalianPekerjaan extends Model
     {
         return $this->belongsTo(PelaksanaanPekerjaan::class, 'penunjukan_pekerjaan_id', 'id');
     }
+
+    public function hasItem()
+    {
+        return $this->hasOne(Item::class, 'id', 'item_id');
+    }
+
+    public function getPekerjaanAttribute()
+    {
+        if ($this->hasItem) {
+            return $this->hasItem->nama;
+        }
+    }
 }
