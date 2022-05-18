@@ -476,7 +476,6 @@ trait CrudTrait
         // $this->model()->transaction();
         foreach ($form as $index => $item) {
 
-
             if (preg_match("/-image/i", $index)) {
                 $route =  $this->route;
                 $file =  str_replace("-image", "", $index);
@@ -527,6 +526,8 @@ trait CrudTrait
                     continue;
                 }
             }
+
+            $data->$index = $item;
         }
 
         if (isset($relation)) {

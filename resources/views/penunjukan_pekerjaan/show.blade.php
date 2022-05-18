@@ -25,17 +25,43 @@
                 <div class="card">
                     @if ($aduan->status != 'draft')
                         <div class="card-header">
-                            <div class="card-title">Detail SPK</div>
+                            <div class="card-title">Detail Pekerjaan</div>
                         </div>
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-12">
-                                    <h5>No SPK : {{ $aduan->no_spk }}</h5>
+                                    <div class="form-group">
+                                        <div>
+                                            <label for="no_ticket" class=" form-control-label">No SPK : </label>
+                                        </div>
+                                        <div>
+                                            <strong>{{ $aduan->no_spk }}</strong>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="col-12">
-                                    <h5>Nama Rekanan : {{ $aduan->rekanan }}</h5>
+                                    <div class="form-group">
+                                        <div>
+                                            <label for="no_ticket" class=" form-control-label">Nama Rekanan :</label>
+                                        </div>
+                                        <div>
+                                            <strong>{{ $aduan->rekanan }}</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <div>
+                                            <label for="no_ticket" class=" form-control-label">Keterangan Penambahan
+                                                Item</label>
+                                        </div>
+                                        <div>
+                                            <strong>{{ $aduan->keterangan_barang }}</strong>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+
                         </div>
                     @else
                         <div class="card-header">
@@ -68,6 +94,7 @@
 
                                         </div>
                                     </div>
+
                                 </div>
                             </div>
                             <div class="card-footer clearfix">
@@ -78,6 +105,240 @@
                 </div>
             </div>
         </div>
+        @if ($aduan->status != 'draft')
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">Daftar Pekerjaan</div>
+                        </div>
+                        <div class="card-body">
+
+                            <table class="table table-bordered " width="100%">
+                                <thead>
+                                    <tr>
+                                        <th width="5">#</th>
+                                        <th width="10">Panjang</th>
+                                        <th width="10">Lebar</th>
+                                        <th width="10">Dalam</th>
+                                        <th>Total Harga</th>
+                                        <th>Keterangan</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse ($pekerjaan->hasGalianPekerjaan as $key => $value)
+                                        <tr>
+                                            <td>{{ $key + 1 }}
+                                            </td>
+                                            <td>{{ $value->panjang }} m</td>
+                                            <td>{{ $value->lebar }} m</td>
+                                            <td>{{ $value->dalam }} m</td>
+                                            <td>Rp. {{ format_uang($value->total) }}</td>
+                                            <td>{{ $value->keterangan }}</td>
+
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="10">Data Item Galian ada</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th colspan="4" class="text-right">Grand Total
+                                        </th>
+                                        <th>Rp. {{ format_uang($pekerjaan->total_galian) }}
+
+                                    </tr>
+                                </tfoot>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">Daftar Bahan</div>
+                        </div>
+                        <div class="card-body">
+
+                            <table class="table table-bordered " width="100%">
+                                <thead>
+                                    <tr>
+                                        <th width="5">#</th>
+                                        <th>Nama</th>
+                                        <th>Jenis barang</th>
+                                        <th>Satuan barang</th>
+                                        <th width="10">Jumlah</th>
+                                        <th width="150">Harga</th>
+                                        <th width="150">Total Harga</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse ($daftarBarang->hasItem as $nomor => $barang)
+                                        <tr id="{{ $barang->slug }}_{{ $aduan->id }}">
+                                            <td>{{ $nomor + 1 }}
+                                            </td>
+                                            <td>{{ $barang->nama }}</td>
+                                            <td>{{ $barang->jenis }}</td>
+                                            <td>{{ $barang->satuan }}</td>
+                                            <td class="text-center">
+                                                {{ $barang->pivot->qty }}</td>
+                                            <td>
+                                                Rp. {{ format_uang($barang->pivot->harga) }}
+                                            </td>
+                                            <td>
+                                                Rp. {{ format_uang($barang->pivot->harga * $barang->pivot->qty) }}
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="10">Data Item tidak ada</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th colspan="4" class="text-right">Grand Total
+                                        </th>
+                                        <th class="text-center">{{ $daftarBarang->hasItem->sum('pivot.qty') }}</th>
+                                        <th>Rp. {{ format_uang($daftarBarang->hasItem->sum('pivot.harga')) }}
+                                        </th>
+                                        <th>Rp. {{ format_uang($daftarBarang->total_harga) }}
+
+                                    </tr>
+                                </tfoot>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">Alat Bantu</div>
+                        </div>
+                        <div class="card-body">
+
+                            <table class="table table-bordered " width="100%">
+                                <thead>
+                                    <tr>
+                                        <th width="5">#</th>
+                                        <th>Nama</th>
+                                        <th>Jenis barang</th>
+                                        <th>Satuan barang</th>
+                                        <th width="10">Jumlah</th>
+                                        <th width="150">Harga</th>
+                                        <th width="150">Total Harga</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse ($daftarAlatBantu->hasItem as $nomor => $barang)
+                                        <tr id="{{ $barang->slug }}_{{ $aduan->id }}">
+                                            <td>{{ $nomor + 1 }}
+                                            </td>
+                                            <td>{{ $barang->nama }}</td>
+                                            <td>{{ $barang->jenis }}</td>
+                                            <td>{{ $barang->satuan }}</td>
+                                            <td class="text-center">
+                                                {{ $barang->pivot->qty }}</td>
+                                            <td>
+                                                Rp. {{ format_uang($barang->pivot->harga) }}
+                                            </td>
+                                            <td>
+                                                Rp. {{ format_uang($barang->pivot->harga * $barang->pivot->qty) }}
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="10">Data Item tidak ada</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th colspan="4" class="text-right">Grand Total
+                                        </th>
+                                        <th class="text-center">{{ $daftarAlatBantu->hasItem->sum('pivot.qty') }}</th>
+                                        <th>Rp. {{ format_uang($daftarAlatBantu->hasItem->sum('pivot.harga')) }}
+                                        </th>
+                                        <th>Rp. {{ format_uang($daftarAlatBantu->total_harga) }}
+
+                                    </tr>
+                                </tfoot>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">Transportasi</div>
+                        </div>
+                        <div class="card-body">
+
+                            <table class="table table-bordered " width="100%">
+                                <thead>
+                                    <tr>
+                                        <th width="5">#</th>
+                                        <th>Nama</th>
+                                        <th>Jenis barang</th>
+                                        <th>Satuan barang</th>
+                                        <th width="10">Jumlah</th>
+                                        <th width="150">Harga</th>
+                                        <th width="150">Total Harga</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse ($daftarAlatBantu->hasItem as $nomor => $barang)
+                                        <tr id="{{ $barang->slug }}_{{ $aduan->id }}">
+                                            <td>{{ $nomor + 1 }}
+                                            </td>
+                                            <td>{{ $barang->nama }}</td>
+                                            <td>{{ $barang->jenis }}</td>
+                                            <td>{{ $barang->satuan }}</td>
+                                            <td class="text-center">
+                                                {{ $barang->pivot->qty }}</td>
+                                            <td>
+                                                Rp. {{ format_uang($barang->pivot->harga) }}
+                                            </td>
+                                            <td>
+                                                Rp. {{ format_uang($barang->pivot->harga * $barang->pivot->qty) }}
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="10">Data Item tidak ada</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th colspan="4" class="text-right">Grand Total
+                                        </th>
+                                        <th class="text-center">{{ $daftarTransportasi->hasItem->sum('pivot.qty') }}
+                                        </th>
+                                        <th>Rp. {{ format_uang($daftarTransportasi->hasItem->sum('pivot.harga')) }}
+                                        </th>
+                                        <th>Rp. {{ format_uang($daftarTransportasi->total_harga) }}
+
+                                    </tr>
+                                </tfoot>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
         <div class="row">
             <div class="col-6">
                 <div class="card">

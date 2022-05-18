@@ -82,6 +82,18 @@ class Aduan extends Model
         }
     }
 
+    public function getKeteranganBarangAttribute()
+    {
+        if ($this->hasPenunjukanPekerjaan) {
+            $hasPelaksanaanPekerjaan = $this->hasPenunjukanPekerjaan->hasPelaksanaanPekerjaan;
+            if ($hasPelaksanaanPekerjaan) {
+                if ($hasPelaksanaanPekerjaan->keterangan_barang != null) {
+                    return $hasPelaksanaanPekerjaan->keterangan_barang;
+                }
+            }
+        }
+    }
+
     public function hasWilayah()
     {
         return $this->hasOne(Wilayah::class, 'id', 'wilayah_id');

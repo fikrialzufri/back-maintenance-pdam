@@ -60,6 +60,12 @@ class PelaksanaanPekerjaan extends Model
             return $this->hasGalianPekerjaan;
         }
     }
+    public function getTotalGalianAttribute()
+    {
+        if ($this->hasGalianPekerjaan) {
+            return $this->hasGalianPekerjaan->sum('total');
+        }
+    }
 
     public function hasGalianPekerjaan()
     {

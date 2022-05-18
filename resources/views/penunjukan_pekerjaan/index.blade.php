@@ -33,7 +33,7 @@
                             </thead>
                             <tbody>
                                 @forelse ($penunjukan as $index => $item)
-                                    <tr>
+                                    <tr class="{{ $item->keterangan_barang != null ? 'bg-danger' : '' }}">
                                         <td>{{ ++$no }}</td>
                                         <td>{{ $item->no_spk }}</td>
                                         <td>{{ $item->no_aduan }}</td>
