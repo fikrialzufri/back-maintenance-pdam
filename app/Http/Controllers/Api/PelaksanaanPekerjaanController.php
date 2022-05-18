@@ -456,6 +456,7 @@ class PelaksanaanPekerjaanController extends Controller
             $nama = $request->nama;
             $keterangan = $request->keterangan;
             $jumlah = $request->jumlah;
+
             $id_barang = $request->id_barang;
             $listitem = [];
             $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $slug)->first();
@@ -463,27 +464,21 @@ class PelaksanaanPekerjaanController extends Controller
 
             if ($id_barang != '') {
                 $item = Item::find($id_barang);
-            } else {
-                $satuan = Satuan::where('slug', 'pcs')->first();
-                $jenis = Jenis::where('slug', 'barang-baru')->first();
-                $item = new Item;
-                $item->nama = $nama;
-                $item->satuan_id = $satuan->id;
-                $item->jenis_id = $jenis->id;
-                $item->hapus = 'ya';
-                $item->harga = 0;
-                $item->save();
-            }
-            $listitem[$item->id] = [
-                'keterangan' => $keterangan,
-                'harga' => $item->harga,
-                'qty' => $jumlah
-            ];
 
-            $data->hasItem()->attach($listitem);
-            $result = [];
-            $message = 'Berhasil Menyimpan Item Pekerjaan';
-            return $this->sendResponse($result, $message, 200);
+                $total = $jumlah * $item->harga;
+
+                $listitem[$item->id] = [
+                    'keterangan' => $keterangan,
+                    'harga' => $item->harga,
+                    'qty' => $jumlah,
+                    'total' => $total,
+                ];
+
+                $data->hasItem()->attach($listitem);
+                $result = [];
+                $message = 'Berhasil Menyimpan Item Pekerjaan';
+                return $this->sendResponse($result, $message, 200);
+            }
         } catch (\Throwable $th) {
             DB::rollback();
             $response = [

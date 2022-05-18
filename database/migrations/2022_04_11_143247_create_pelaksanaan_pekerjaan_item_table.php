@@ -19,6 +19,7 @@ class CreatePelaksanaanPekerjaanItemTable extends Migration
             $table->foreignUuid('item_id')->references('id')->on('item')->onDelete('cascade');
             $table->integer('qty');
             $table->integer('harga');
+            $table->integer('total')->default(0);
             $table->string('keterangan')->nullable();
             //SETTING THE PRIMARY KEYS
             $table->primary(['pelaksanaan_pekerjaan_id', 'item_id']);
