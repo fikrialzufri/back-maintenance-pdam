@@ -110,9 +110,24 @@
     @endif
     @if ($item['input'] == 'date')
         <input type="{{ $item['input'] }}" name="{{ $item['name'] }}" id="{{ $item['name'] }}"
-            @if ($item['input'] == 'password') autocomplete="on" @else placeholder="{{ $item['alias'] }}" @endif
+            placeholder="{{ $item['alias'] }}"
             class="form-control {{ $errors->has($item['name']) ? 'is-invalid' : '' }}"
             @if ($store == 'update') value="{{ $data[$item['name']] }}" @else value="{{ old($item['name']) }}" @endif>
+    @endif
+    @if ($item['input'] == 'image')
+        <input type="file" value="{{ old($item['name']) }}" name="{{ $item['name'] }}"
+            placeholder="{{ $item['alias'] }}" id="{{ $item['name'] }}" class="form-control"
+            @if ($store == 'update') value="{{ $data[$item['name']] }}" @else value="{{ old($item['name']) }}" @endif>
+
+        <br>
+        <div class="preview"></div>
+        @if ($store == 'update')
+            <img class="img-profile img-responsive" width="20%"
+                @if ($data[$item['name']] == null) src="{{ asset('img/default-icon.png') }}"
+                        @else
+                        src="{{ asset('storage/' . $route . '/thumbnail/' . $data[$item['name']]) }}" @endif>
+
+        @endif
     @endif
     @if ($item['input'] == 'textarea')
         <textarea class="form-control" rows="3" placeholder="{{ $item['alias'] }}" name="{{ $item['name'] }}">
@@ -257,6 +272,31 @@
                     })
                 </script>
             @endif
+        @endif
+        @if ($item['input'] == 'image')
+            <script>
+                function readURL(input) {
+                    if (input.files && input.files[0]) {
+                        var reader = new FileReader();
+
+                        reader.onload = function(e) {
+                            $(".preview").html("<img src='" + e.target.result +
+                                "' width='310' id='image_{{ $item['name'] }}'>");
+                        }
+
+                        reader.readAsDataURL(input.files[0]);
+                    }
+                }
+
+                $("#{{ $item['name'] }}").change(function() {
+                    readURL(this);
+                    $('.img-responsive').remove();
+                });
+
+                $('.close').on('click', function() {
+                    $('#image_{{ $item['name'] }}').remove();
+                });
+            </script>
         @endif
     @endif
 @endpush

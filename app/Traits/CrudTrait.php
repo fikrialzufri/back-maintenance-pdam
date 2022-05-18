@@ -6,7 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Auth;
-use Illuminate\Support\Facades\DB;
+use Storage;
+use DB;
+use Intervention\Image\Facades\Image;
 
 trait CrudTrait
 {
@@ -58,6 +60,9 @@ trait CrudTrait
     //btn-tambah
     private $tambah = 'true';
 
+    //btn-upload
+    private $upload = 'false';
+
     // validation rule harus pkai object
     // tentukan jumlah col-sm boostrap
     // ooption object label
@@ -97,6 +102,9 @@ trait CrudTrait
 
         //tambah data
         $tambah = $this->tambah;
+
+        //tambah data
+        $upload = $this->upload;
 
         $export = null;
 
@@ -157,6 +165,7 @@ trait CrudTrait
             'hasilSearch',
             'button',
             'tambah',
+            'upload',
             'search',
             'export',
             'configHeaders',
@@ -229,84 +238,118 @@ trait CrudTrait
             $validation,
             $messages
         );
-
-        //open model
-        $data = $this->model();
-        if (isset($relation)) {
-            $firstColumn = [];
-            $manyToMany  = null;
-            $manyRelation  = null;
-            $valueMany  = null;
-            foreach ($relation as $key => $value) {
-                try { //
-                    $relationModels = '\\App\Models\\' . ucfirst($key);
-                    $relationModels = new $relationModels;
-                    foreach ($value as $colom => $val) {
-                        if ($colom === "password") {
-                            $val = bcrypt($val);
+        $relationModels = '';
+        DB::beginTransaction();
+        try {
+            //open model
+            DB::commit();
+            $data = $this->model();
+            if (isset($relation)) {
+                $firstColumn = [];
+                $manyToMany  = null;
+                $manyRelation  = null;
+                $valueMany  = null;
+                foreach ($relation as $key => $value) {
+                    try { //
+                        $relationModels = '\\App\Models\\' . ucfirst($key);
+                        $relationModels = new $relationModels;
+                        foreach ($value as $colom => $val) {
+                            if ($colom === "password") {
+                                $val = bcrypt($val);
+                            }
+                            if (in_array(str_replace('_id', '', $colom), $this->manyToMany)) {
+                                $manyToMany = str_replace('_id', '', $colom);
+                                $valueMany[$manyToMany] = $val;
+                                continue;
+                            }
+                            $relationModels->$colom = $val;
                         }
-                        if (in_array(str_replace('_id', '', $colom), $this->manyToMany)) {
-                            $manyToMany = str_replace('_id', '', $colom);
-                            $valueMany[$manyToMany] = $val;
-                            break;
+                        $relationModels->save();
+                        if (isset($manyToMany)) {
+                            $relationModels->$manyToMany()->attach($valueMany);
                         }
-                        $relationModels->$colom = $val;
-                    }
-                    $relationModels->save();
-                    if (isset($manyToMany)) {
-                        $relationModels->$manyToMany()->attach($valueMany);
-                    }
-                    $relationsFields = $key . '_id';
+                        $relationsFields = $key . '_id';
 
-                    $data->$relationsFields = $relationModels->id;
-                } catch (\Throwable $th) { }
+                        $data->$relationsFields = $relationModels->id;
+                    } catch (\Throwable $th) { }
+                }
             }
-        }
 
-        //post ke model
+            //post ke model
 
-        foreach ($form as $index => $item) {
+            foreach ($form as $index => $item) {
+                if (isset($this->manyToMany)) {
+                    if (in_array($index, $this->manyToMany)) {
+                        continue;
+                    }
+                }
+                if ($this->oneToMany) {
+                    if (in_array(str_replace('_id', '', $index), $this->oneToMany)) {
+                        $oneToMany = str_replace('_id', '', $index);
+                        continue;
+                    }
+                }
+                if (preg_match("/-image/i", $index)) {
+                    $route =  $this->route;
+                    $file =  str_replace("-image", "", $index);
+                    if ($request->hasFile($file)) {
+                        # code...
+                        $nama_gambar = Str::slug($route) . '-' . Str::Random(15) . '.' . $request->file($file)->getClientOriginalExtension();
+
+                        if (!Storage::disk('public')->exists($route)) {
+                            Storage::disk('public')->makeDirectory($route);
+                        }
+                        if (!Storage::disk('public')->exists($route . '/thumbnail')) {
+                            Storage::disk('public')->makeDirectory($route . '/thumbnail');
+                        }
+
+                        $path = public_path('storage/' . $route . '/' . $nama_gambar);
+
+                        $gambar_original = Image::make($request->file($file))->save($path);
+                        Storage::disk('public')->put($route . '/' . $nama_gambar, $gambar_original);
+
+
+                        $thumbnail = Image::make($request->file($file))->resize(360, 360)->save($path);
+                        Storage::disk('public')->put($route . '/thumbnail' . '/' . $nama_gambar, $thumbnail);
+
+                        $data->$file = $nama_gambar;
+                        continue;
+                    }
+                }
+                if ($index === "password") {
+                    $item = bcrypt($item);
+                }
+                $data->$index = $item;
+            }
+            if ($this->user && !isset($this->extraFrom)) {
+                // return Auth::user()->id;
+                $data->user_id = Auth::user()->id;
+            }
+            $data->save();
+
             if (isset($this->manyToMany)) {
-                if (in_array($index, $this->manyToMany)) {
-                    break;
+                if (!isset($this->extraFrom)) {
+                    return $this->manyToMany;
+                    foreach ($this->manyToMany as  $value) {
+                        $hasRalation = 'has' . ucfirst($value);
+                        $valueField = $data->$hasRalation()->attach($form[$value]);
+                    }
                 }
             }
-            if ($this->oneToMany) {
-                if (in_array(str_replace('_id', '', $index), $this->oneToMany)) {
-                    $oneToMany = str_replace('_id', '', $index);
-                    break;
-                }
-            }
-            if ($index === "password") {
-                $item = bcrypt($item);
-            }
-            $data->$index = $item;
-        }
-        if ($this->user && !isset($this->extraFrom)) {
-            // return Auth::user()->id;
-            $data->user_id = Auth::user()->id;
-        }
-        $data->save();
-
-        if (isset($this->manyToMany)) {
-            if (!isset($this->extraFrom)) {
-                return $this->manyToMany;
-                foreach ($this->manyToMany as  $value) {
+            if (isset($this->oneToMany)) {
+                foreach ($this->oneToMany as $index => $value) {
                     $hasRalation = 'has' . ucfirst($value);
-                    $valueField = $data->$hasRalation()->attach($form[$value]);
+                    $idRelation = $value . '_id';
+                    $valueField = $data->$hasRalation()->attach($form[$idRelation]);
                 }
             }
+            // $hasRalation;
+            //redirect
+            return redirect()->route($this->route . '.index')->with('message', ucwords(str_replace('-', ' ', $this->route)) . ' Berhasil Ditambahkan')->with('Class', 'success');
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return redirect()->route($this->route . '.index')->with('message', ucwords(str_replace('-', ' ', $this->route)) . ' gagal Ditambahkan')->with('Class', 'success');
         }
-        if (isset($this->oneToMany)) {
-            foreach ($this->oneToMany as $index => $value) {
-                $hasRalation = 'has' . ucfirst($value);
-                $idRelation = $value . '_id';
-                $valueField = $data->$hasRalation()->attach($form[$idRelation]);
-            }
-        }
-        // $hasRalation;
-        //redirect
-        return redirect()->route($this->route . '.index')->with('message', ucwords(str_replace('-', ' ', $this->route)) . ' Berhasil Ditambahkan')->with('Class', 'success');
     }
 
     /**
@@ -432,6 +475,42 @@ trait CrudTrait
         //post ke model
         // $this->model()->transaction();
         foreach ($form as $index => $item) {
+
+
+            if (preg_match("/-image/i", $index)) {
+                $route =  $this->route;
+                $file =  str_replace("-image", "", $index);
+                if ($request->hasFile($file)) {
+                    $nama_gambar = Str::slug($route) . '-' . Str::Random(15) . '.' . $request->file($file)->getClientOriginalExtension();
+
+                    $path = public_path('storage/' . $route . '/' . $nama_gambar);
+
+                    if (!Storage::disk('public')->exists($route)) {
+                        Storage::disk('public')->makeDirectory($route);
+                    }
+                    if (!Storage::disk('public')->exists($route . '/thumbnail')) {
+                        Storage::disk('public')->makeDirectory($route . '/thumbnail');
+                    }
+
+                    // delete gambar original
+                    if (Storage::disk('public')->exists($route . '/' . $data->$file)) {
+                        Storage::disk('public')->delete($route . '/' . $data->$file);
+                    }
+
+                    $gambar_original = Image::make($request->file($file))->save($path);
+                    Storage::disk('public')->put($route . '/' . $nama_gambar, $gambar_original);
+
+                    // delete gambar thumbnail
+                    if (Storage::disk('public')->exists($route . '/thumbnail' . '/' . $data->$file)) {
+                        Storage::disk('public')->delete($route . '/thumbnail' . '/' . $data->$file);
+                    }
+                    $thumbnail = Image::make($request->file($file))->resize(720, 720)->save($path);
+                    Storage::disk('public')->put($route . '/thumbnail' . '/' . $nama_gambar, $thumbnail);
+
+                    $data->$file = $nama_gambar;
+                    continue;
+                }
+            }
             if ($index === "password") {
                 $item = bcrypt($item);
             }
@@ -439,16 +518,15 @@ trait CrudTrait
                 # code...
                 if (in_array(str_replace('_id', '', $index), $this->manyToMany)) {
                     $manyToMany = str_replace('_id', '', $index);
-                    break;
+                    continue;
                 }
             }
             if ($this->oneToMany) {
                 if (in_array(str_replace('_id', '', $index), $this->oneToMany)) {
                     $oneToMany = str_replace('_id', '', $index);
-                    break;
+                    continue;
                 }
             }
-            $data->$index = $item;
         }
 
         if (isset($relation)) {
@@ -468,7 +546,7 @@ trait CrudTrait
                             if (in_array(str_replace('_id', '', $colom), $this->manyToMany)) {
                                 $manyToMany = str_replace('_id', '', $colom);
                                 $valueMany[$manyToMany] = $val;
-                                break;
+                                continue;
                             }
                             $relationModels->$colom = $val;
                         }
@@ -477,8 +555,6 @@ trait CrudTrait
                             $relationModels->$manyToMany()->sync($valueMany);
                         }
                     }
-                    try { //
-                    } catch (\Throwable $th) { }
                 }
             }
         }
@@ -604,6 +680,9 @@ trait CrudTrait
                 if (isset($value['input'])) {
                     if ($value['input'] === "rupiah") {
                         $form[$value['name']] = str_replace(".", "", $request->input($value['name']));
+                    }
+                    if ($value['input'] === "image") {
+                        $form[$value['name'] . '-image'] = 'image';
                     } else {
 
                         $form[$value['name']] = $request->input($value['name']);

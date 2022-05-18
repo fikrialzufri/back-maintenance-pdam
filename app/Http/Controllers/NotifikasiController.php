@@ -10,7 +10,7 @@ class NotifikasiController extends Controller
     public function index()
     {
         // $user_id = array();
-        $notifikasi = Notifikasi::where('to_user_id', auth()->user()->id)->where('status', 'belum')->get();
+        $notifikasi = Notifikasi::where('to_user_id', auth()->user()->id)->where('status', 'belum')->limit(15)->get();
 
         // $data = [
         //     'modul_id' => $notifikasi->modul_id,

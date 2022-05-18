@@ -25,7 +25,7 @@ class PenunjukanPekerjaanController extends Controller
 
     public function index()
     {
-        $title = 'List Penunjukan Pekerjaan';
+        $title = 'List Pekerjaan';
         $route = 'penunjukan_pekerjaan';
         $search = request()->search;
         $limit = request()->limit ?? 30;

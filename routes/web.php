@@ -56,6 +56,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('kategori', KategoriController::class);
     Route::resource('jenis', JenisController::class);
     Route::resource('item', ItemController::class);
+    Route::get('upload/item', [ItemController::class, 'upload'])->name('item.upload');
+    Route::post('upload/item', [ItemController::class, 'uploaddata'])->name('item.uploaddata');
+
     Route::resource('jenis-aduan', JenisAduanController::class, ['names' => 'jenis_aduan']);
 
     // Aduan

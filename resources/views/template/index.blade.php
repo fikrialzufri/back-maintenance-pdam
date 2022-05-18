@@ -11,12 +11,20 @@
                         <h3 class="card-title">Daftar {{ ucwords(str_replace([':', '_', '-', '*'], ' ', $title)) }}
                         </h3>
                         {{ $data->appends(request()->input())->links() }}
-                        @if ($tambah == 'true')
-                            <a href="{{ route($route . '.create') }}"
-                                class="btn btn-sm btn-primary float-right text-light">
-                                <i class="fa fa-plus"></i> Tambah Data
-                            </a>
-                        @endif
+                        <div class="">
+                            @if ($tambah == 'true')
+                                <a href="{{ route($route . '.create') }}"
+                                    class="btn btn-sm btn-primary float-right text-light">
+                                    <i class="fa fa-plus"></i> Tambah Data
+                                </a>
+                            @endif
+                            @if ($upload == 'true')
+                                <a href="{{ route($route . '.upload') }}"
+                                    class="btn btn-sm btn-warning float-right text-light">
+                                    <i class="fa fa-file"></i> Upload
+                                </a>
+                            @endif
+                        </div>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
@@ -129,8 +137,7 @@
 @endpush
 @push('script')
     <!-- DataTables -->
-    <script src="{{ asset('plugins/DataTables/datatables.js') }}">
-    </script>
+    <script src="{{ asset('plugins/DataTables/datatables.js') }}"></script>
     <script>
         // $('#example').DataTable({
         //   "paging": true,

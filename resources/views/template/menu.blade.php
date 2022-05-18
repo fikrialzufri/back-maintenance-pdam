@@ -26,7 +26,7 @@
                 @canany('view-satuan', 'view-kategori', 'view-jenis', 'view-item')
                     <div class="nav-lavel">{{ __('Master Data') }} </div>
                     <div
-                        class="nav-item {{ $segment1 == 'satuan' ||$segment1 == 'jenis-aduan' ||$segment1 == 'item' ||$segment1 == 'kategori' ||$segment1 == 'jenis'? 'active open': '' }} has-sub">
+                        class="nav-item {{ $segment1 == 'satuan' || $segment1 == 'jenis-aduan' || $segment1 == 'item' || $segment1 == 'kategori' || $segment1 == 'jenis' ? 'active open' : '' }} has-sub">
                         <a href="#"><i class="ik ik-box"></i><span>{{ __('Item') }}</span></a>
                         <div class="submenu-content">
                             @can('view-item')
@@ -75,7 +75,7 @@
                     <div class="nav-item {{ $segment1 == 'penunjukan-pekerjaan' ? 'active' : '' }}">
                         <a href="{{ route('penunjukan_pekerjaan.index') }}">
                             <i class="ik ik-voicemail"></i>
-                            <span>{{ __('Penunjukan Pekerjaan') }}</span>
+                            <span>{{ __('Pekerjaan') }}</span>
                         </a>
                     </div>
                 @endcan
@@ -98,7 +98,7 @@
                 @canany(['view-karyawan', 'view-jabatan', 'view-divisi', 'view-wilayah', 'view-departemen'])
                     <div class="nav-lavel">{{ __('Karyawan') }} </div>
                     <div
-                        class="nav-item {{ $segment1 == 'jabatan' ||$segment1 == 'karyawan' ||$segment1 == 'divisi' ||$segment1 == 'wilayah' ||$segment1 == 'departemen' ||$segment1 == 'divisi'? 'active open': '' }} has-sub">
+                        class="nav-item {{ $segment1 == 'jabatan' || $segment1 == 'karyawan' || $segment1 == 'divisi' || $segment1 == 'wilayah' || $segment1 == 'departemen' || $segment1 == 'divisi' ? 'active open' : '' }} has-sub">
                         <a href="#"><i class="fa fa-users dropdown-icon"></i><span>{{ __('Karyawan') }}</span></a>
                         <div class="submenu-content">
 

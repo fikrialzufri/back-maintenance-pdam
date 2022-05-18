@@ -141,6 +141,12 @@ class KaryawanController extends Controller
                 'extraForm' => 'user',
                 'hasMany'    => ['role'],
             ],
+            [
+                'name'    => 'tdd',
+                'input'    => 'image',
+                'alias'    => 'Tanda Tangan',
+                'validasi'    => ['mimes:jpeg,bmp,png,jpg'],
+            ],
         ];
     }
 

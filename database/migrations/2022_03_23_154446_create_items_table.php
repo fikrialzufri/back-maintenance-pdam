@@ -18,6 +18,7 @@ class CreateItemsTable extends Migration
             $table->string('nama');
             $table->string('slug');
             $table->integer('harga')->default(0)->nullable();
+            $table->integer('harga_malam')->default(0)->nullable();
             $table->enum('hapus', ['tidak', 'ya'])->default('tidak');
             $table->string('jenis_id')->references('id')->on('jenis');
             $table->string('satuan_id')->references('id')->on('satuan');
