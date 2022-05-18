@@ -151,12 +151,14 @@
                                     @endif
                                 </tbody>
                                 <tfoot>
-                                    <tr>
-                                        <th colspan="4" class="text-right">Grand Total
-                                        </th>
-                                        <th>Rp. {{ format_uang($pekerjaan->total_galian) }}
+                                    @if (isset($pekerjaan->hasGalianPekerjaan))
+                                        <tr>
+                                            <th colspan="4" class="text-right">Grand Total
+                                            </th>
+                                            <th>Rp. {{ format_uang($pekerjaan->total_galian) }}
 
-                                    </tr>
+                                        </tr>
+                                    @endif
                                 </tfoot>
 
                             </table>
