@@ -61,18 +61,30 @@ class PenunjukanPekerjaanController extends Controller
     {
         $aduan = Aduan::where('slug', $slug)->first();
         $penunjukan = PenunjukanPekerjaan::where('aduan_id', $aduan->id)->first();
+        $jenisPekerjaan = [];
+        $jenisBarang = [];
+        $jenisBajenisAlatBanturang = [];
+        $jenisTransportasi = [];
 
         $kategoriPekerjaan = Kategori::whereSlug('pekerjaan')->first();
-        $jenisPekerjaan = Jenis::where('kategori_id', $kategoriPekerjaan->id)->get()->pluck('id');
+        if ($kategoriPekerjaan) {
+            $jenisPekerjaan = Jenis::where('kategori_id', $kategoriPekerjaan->id)->get()->pluck('id');
+        }
 
         $kategoriBahan = Kategori::whereSlug('bahan')->first();
-        $jenisBarang = Jenis::where('kategori_id', $kategoriBahan->id)->get()->pluck('id');
+        if ($kategoriBahan) {
+            $jenisBarang = Jenis::where('kategori_id', $kategoriBahan->id)->get()->pluck('id');
+        }
 
         $kategoriAlatBantu = Kategori::whereSlug('alat-bantu')->first();
-        $jenisAlatBantu = Jenis::where('kategori_id', $kategoriAlatBantu->id)->get()->pluck('id');
+        if ($kategoriAlatBantu) {
+            $jenisAlatBantu = Jenis::where('kategori_id', $kategoriAlatBantu->id)->get()->pluck('id');
+        }
 
         $kategoriTransportasi = Kategori::whereSlug('transportasi')->first();
-        $jenisTransportasi = Jenis::where('kategori_id', $kategoriTransportasi->id)->get()->pluck('id');
+        if ($kategoriTransportasi) {
+            $jenisTransportasi = Jenis::where('kategori_id', $kategoriTransportasi->id)->get()->pluck('id');
+        }
 
         $pekerjaan = PelaksanaanPekerjaan::where('penunjukan_pekerjaan_id', $penunjukan->id)->with(["hasItem" => function ($q) use ($jenisPekerjaan) {
             $q->whereIn('item.jenis_id', $jenisPekerjaan);

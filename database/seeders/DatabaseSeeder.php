@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             UsersTableSeedeer::class,
             SatuanSeeder::class,
             PerusahaanSeeder::class,
+            KategoriJenisSeeder::class,
             JenisAduanSeeder::class
         ]);
     }
