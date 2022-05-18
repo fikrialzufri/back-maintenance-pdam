@@ -187,38 +187,47 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse ($daftarBarang->hasItem as $nomor => $barang)
-                                        <tr id="{{ $barang->slug }}_{{ $aduan->id }}">
-                                            <td>{{ $nomor + 1 }}
-                                            </td>
-                                            <td>{{ $barang->nama }}</td>
-                                            <td>{{ $barang->jenis }}</td>
-                                            <td>{{ $barang->satuan }}</td>
-                                            <td class="text-center">
-                                                {{ $barang->pivot->qty }}</td>
-                                            <td>
-                                                Rp. {{ format_uang($barang->pivot->harga) }}
-                                            </td>
-                                            <td>
-                                                Rp. {{ format_uang($barang->pivot->harga * $barang->pivot->qty) }}
-                                            </td>
-                                        </tr>
-                                    @empty
+                                    @if (isset($daftarBarang->hasItem))
+                                        @forelse ($daftarBarang->hasItem as $nomor => $barang)
+                                            <tr id="{{ $barang->slug }}_{{ $aduan->id }}">
+                                                <td>{{ $nomor + 1 }}
+                                                </td>
+                                                <td>{{ $barang->nama }}</td>
+                                                <td>{{ $barang->jenis }}</td>
+                                                <td>{{ $barang->satuan }}</td>
+                                                <td class="text-center">
+                                                    {{ $barang->pivot->qty }}</td>
+                                                <td>
+                                                    Rp. {{ format_uang($barang->pivot->harga) }}
+                                                </td>
+                                                <td>
+                                                    Rp. {{ format_uang($barang->pivot->harga * $barang->pivot->qty) }}
+                                                </td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="10">Data Item tidak ada</td>
+                                            </tr>
+                                        @endforelse
+                                    @else
                                         <tr>
                                             <td colspan="10">Data Item tidak ada</td>
                                         </tr>
-                                    @endforelse
+                                    @endif
                                 </tbody>
                                 <tfoot>
-                                    <tr>
-                                        <th colspan="4" class="text-right">Grand Total
-                                        </th>
-                                        <th class="text-center">{{ $daftarBarang->hasItem->sum('pivot.qty') }}</th>
-                                        <th>Rp. {{ format_uang($daftarBarang->hasItem->sum('pivot.harga')) }}
-                                        </th>
-                                        <th>Rp. {{ format_uang($daftarBarang->total_harga) }}
+                                    @if (isset($daftarBarang->hasItem))
+                                        <tr>
+                                            <th colspan="4" class="text-right">Grand Total
+                                            </th>
+                                            <th class="text-center">{{ $daftarBarang->hasItem->sum('pivot.qty') }}
+                                            </th>
+                                            <th>Rp. {{ format_uang($daftarBarang->hasItem->sum('pivot.harga')) }}
+                                            </th>
+                                            <th>Rp. {{ format_uang($daftarBarang->total_harga) }}
 
-                                    </tr>
+                                        </tr>
+                                    @endif
                                 </tfoot>
 
                             </table>
@@ -247,38 +256,47 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse ($daftarAlatBantu->hasItem as $nomor => $barang)
-                                        <tr id="{{ $barang->slug }}_{{ $aduan->id }}">
-                                            <td>{{ $nomor + 1 }}
-                                            </td>
-                                            <td>{{ $barang->nama }}</td>
-                                            <td>{{ $barang->jenis }}</td>
-                                            <td>{{ $barang->satuan }}</td>
-                                            <td class="text-center">
-                                                {{ $barang->pivot->qty }}</td>
-                                            <td>
-                                                Rp. {{ format_uang($barang->pivot->harga) }}
-                                            </td>
-                                            <td>
-                                                Rp. {{ format_uang($barang->pivot->harga * $barang->pivot->qty) }}
-                                            </td>
-                                        </tr>
-                                    @empty
+                                    @if (isset($daftarBarang->hasItem))
+                                        @forelse ($daftarAlatBantu->hasItem as $nomor => $barang)
+                                            <tr id="{{ $barang->slug }}_{{ $aduan->id }}">
+                                                <td>{{ $nomor + 1 }}
+                                                </td>
+                                                <td>{{ $barang->nama }}</td>
+                                                <td>{{ $barang->jenis }}</td>
+                                                <td>{{ $barang->satuan }}</td>
+                                                <td class="text-center">
+                                                    {{ $barang->pivot->qty }}</td>
+                                                <td>
+                                                    Rp. {{ format_uang($barang->pivot->harga) }}
+                                                </td>
+                                                <td>
+                                                    Rp. {{ format_uang($barang->pivot->harga * $barang->pivot->qty) }}
+                                                </td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="10">Data Item tidak ada</td>
+                                            </tr>
+                                        @endforelse
+                                    @else
                                         <tr>
                                             <td colspan="10">Data Item tidak ada</td>
                                         </tr>
-                                    @endforelse
+                                    @endif
                                 </tbody>
                                 <tfoot>
-                                    <tr>
-                                        <th colspan="4" class="text-right">Grand Total
-                                        </th>
-                                        <th class="text-center">{{ $daftarAlatBantu->hasItem->sum('pivot.qty') }}</th>
-                                        <th>Rp. {{ format_uang($daftarAlatBantu->hasItem->sum('pivot.harga')) }}
-                                        </th>
-                                        <th>Rp. {{ format_uang($daftarAlatBantu->total_harga) }}
+                                    @if (isset($daftarAlatBantu->hasItem))
+                                        <tr>
+                                            <th colspan="4" class="text-right">Grand Total
+                                            </th>
+                                            <th class="text-center">{{ $daftarAlatBantu->hasItem->sum('pivot.qty') }}
+                                            </th>
+                                            <th>Rp. {{ format_uang($daftarAlatBantu->hasItem->sum('pivot.harga')) }}
+                                            </th>
+                                            <th>Rp. {{ format_uang($daftarAlatBantu->total_harga) }}
 
-                                    </tr>
+                                        </tr>
+                                    @endif
                                 </tfoot>
 
                             </table>
@@ -307,39 +325,48 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse ($daftarAlatBantu->hasItem as $nomor => $barang)
-                                        <tr id="{{ $barang->slug }}_{{ $aduan->id }}">
-                                            <td>{{ $nomor + 1 }}
-                                            </td>
-                                            <td>{{ $barang->nama }}</td>
-                                            <td>{{ $barang->jenis }}</td>
-                                            <td>{{ $barang->satuan }}</td>
-                                            <td class="text-center">
-                                                {{ $barang->pivot->qty }}</td>
-                                            <td>
-                                                Rp. {{ format_uang($barang->pivot->harga) }}
-                                            </td>
-                                            <td>
-                                                Rp. {{ format_uang($barang->pivot->harga * $barang->pivot->qty) }}
-                                            </td>
-                                        </tr>
-                                    @empty
+                                    @if (isset($daftarTransportasi->hasItem))
+                                        @forelse ($daftarTransportasi->hasItem as $nomor => $barang)
+                                            <tr id="{{ $barang->slug }}_{{ $aduan->id }}">
+                                                <td>{{ $nomor + 1 }}
+                                                </td>
+                                                <td>{{ $barang->nama }}</td>
+                                                <td>{{ $barang->jenis }}</td>
+                                                <td>{{ $barang->satuan }}</td>
+                                                <td class="text-center">
+                                                    {{ $barang->pivot->qty }}</td>
+                                                <td>
+                                                    Rp. {{ format_uang($barang->pivot->harga) }}
+                                                </td>
+                                                <td>
+                                                    Rp. {{ format_uang($barang->pivot->harga * $barang->pivot->qty) }}
+                                                </td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="10">Data Item tidak ada</td>
+                                            </tr>
+                                        @endforelse
+                                    @else
                                         <tr>
                                             <td colspan="10">Data Item tidak ada</td>
                                         </tr>
-                                    @endforelse
+                                    @endif
                                 </tbody>
                                 <tfoot>
-                                    <tr>
-                                        <th colspan="4" class="text-right">Grand Total
-                                        </th>
-                                        <th class="text-center">{{ $daftarTransportasi->hasItem->sum('pivot.qty') }}
-                                        </th>
-                                        <th>Rp. {{ format_uang($daftarTransportasi->hasItem->sum('pivot.harga')) }}
-                                        </th>
-                                        <th>Rp. {{ format_uang($daftarTransportasi->total_harga) }}
+                                    @if (isset($daftarTransportasi->hasItem))
+                                        <tr>
+                                            <th colspan="4" class="text-right">Grand Total
+                                            </th>
+                                            <th class="text-center">
+                                                {{ $daftarTransportasi->hasItem->sum('pivot.qty') }}
+                                            </th>
+                                            <th>Rp. {{ format_uang($daftarTransportasi->hasItem->sum('pivot.harga')) }}
+                                            </th>
+                                            <th>Rp. {{ format_uang($daftarTransportasi->total_harga) }}
 
-                                    </tr>
+                                        </tr>
+                                    @endif
                                 </tfoot>
 
                             </table>
