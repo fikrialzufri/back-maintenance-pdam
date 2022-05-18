@@ -126,22 +126,29 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse ($pekerjaan->hasGalianPekerjaan as $key => $value)
-                                        <tr>
-                                            <td>{{ $key + 1 }}
-                                            </td>
-                                            <td>{{ $value->panjang }} m</td>
-                                            <td>{{ $value->lebar }} m</td>
-                                            <td>{{ $value->dalam }} m</td>
-                                            <td>Rp. {{ format_uang($value->total) }}</td>
-                                            <td>{{ $value->keterangan }}</td>
+                                    @if (isset($pekerjaan->hasGalianPekerjaan))
 
-                                        </tr>
-                                    @empty
+                                        @forelse ($pekerjaan->hasGalianPekerjaan as $key => $value)
+                                            <tr>
+                                                <td>{{ $key + 1 }}
+                                                </td>
+                                                <td>{{ $value->panjang }} m</td>
+                                                <td>{{ $value->lebar }} m</td>
+                                                <td>{{ $value->dalam }} m</td>
+                                                <td>Rp. {{ format_uang($value->total) }}</td>
+                                                <td>{{ $value->keterangan }}</td>
+
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="10">Data Item Galian ada</td>
+                                            </tr>
+                                        @endforelse
+                                    @else
                                         <tr>
                                             <td colspan="10">Data Item Galian ada</td>
                                         </tr>
-                                    @endforelse
+                                    @endif
                                 </tbody>
                                 <tfoot>
                                     <tr>
