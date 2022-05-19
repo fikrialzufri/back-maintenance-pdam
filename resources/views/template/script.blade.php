@@ -1,5 +1,7 @@
 <script src="{{ asset('js/swall.js') }}"></script>
 <script src="{{ asset('all.js') }}"></script>
+<script src="{{ asset('plugins/jquery-toast-plugin/dist/jquery.toast.min.js') }}"></script>
+
 <!-- Stack array for including inline js or scripts -->
 <script>
     $("#success-alert").fadeTo(2000, 500).slideUp(500, function() {

@@ -105,17 +105,17 @@ class PenunjukanPekerjaanController extends Controller
 
         $query = PelaksanaanPekerjaan::where('penunjukan_pekerjaan_id', $penunjukan->id);
 
-        $pekerjaan = $query->first();
+        $pekerjaanUtama = $query->first();
 
         $daftarPekerjaan = $query->with(["hasItem" => function ($q) use ($listPekerjaan) {
-            $q->whereIn('item.jenis_id', $listPekerjaan);
+            $q->whereIn('item.id', $listPekerjaan->pluck('id'));
         }])->first();
 
         $daftarBahan = $query->with(["hasItem" => function ($q) use ($jenisBahan) {
             $q->whereIn('item.jenis_id', $jenisBahan);
         }])->first();
 
-        $daftarGalian = GalianPekerjaan::where('pelaksanaan_pekerjaan_id', $pekerjaan->id)->get();
+        $daftarGalian = GalianPekerjaan::where('pelaksanaan_pekerjaan_id', $pekerjaanUtama->id)->get();
 
         $daftarAlatBantu = $query->with(["hasItem" => function ($q) use ($jenisAlatBantu) {
             $q->whereIn('item.jenis_id', $jenisAlatBantu);
@@ -145,7 +145,7 @@ class PenunjukanPekerjaanController extends Controller
         return view('penunjukan_pekerjaan.show', compact(
             'aduan',
             'penunjukan',
-            'pekerjaan',
+            'pekerjaanUtama',
             'daftarPekerjaan',
             'daftarGalian',
             'daftarBahan',

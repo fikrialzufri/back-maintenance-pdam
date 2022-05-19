@@ -75,7 +75,7 @@ class PelaksanaanPekerjaanController extends Controller
         return new PelaksanaanPekerjaan();
     }
 
-    public function item(Request $request)
+    public function galian(Request $request)
     {
         $messages = [
             'required' => ':attribute tidak boleh kosong',
@@ -88,31 +88,30 @@ class PelaksanaanPekerjaanController extends Controller
             'item' => 'required',
         ], $messages);
 
-        $message = 'Data Pekerjaan';
-        $id = $request->id;
-        $panjang = $request->panjang;
-        $lebar = $request->lebar;
-        $dalam = $request->dalam;
-        $item = $request->item;
-        $harga = $request->harga;
-        $keterangan = $request->keterangan;
-        $user_id = auth()->user()->id;
-
-        $dataItem = Item::find($item);
-        $harga_item = $dataItem->harga;
-
-        if ($harga === 'malam') {
-            $harga_item = $dataItem->harga_malam;
-        }
-
-        $total = ($panjang * $lebar * $dalam) * $harga_item;
-        $item_id = $dataItem->id;
-
-        $data = $this->model()->find($id);
-
         try {
+            $message = 'Data Galian';
+            $id = $request->id;
+            $panjang = $request->panjang;
+            $lebar = $request->lebar;
+            $dalam = $request->dalam;
+            $item = $request->item;
+            $harga = $request->harga;
+            $keterangan = $request->keterangan;
+            $user_id = auth()->user()->id;
+
+            $dataItem = Item::find($item);
+            $harga_item = $dataItem->harga;
+
+            if ($harga === 'malam') {
+                $harga_item = $dataItem->harga_malam;
+            }
+
+            $total = ($panjang * $lebar * $dalam) * $harga_item;
+            $item_id = $dataItem->id;
+
+            $data = $this->model()->find($id);
+
             if ($data) {
-                # code...
                 $dataGalian = GalianPekerjaan::where('item_id', $item_id)->first();
 
                 if (empty($dataGalian)) {
@@ -141,7 +140,100 @@ class PelaksanaanPekerjaanController extends Controller
                 return $this->sendResponse($result, $message, 200);
             }
         } catch (\Throwable $th) {
-            $message = 'Detail Jenis Aduan';
+            $message = 'Gagal Menyimpan Pekerjaan';
+            $response = [
+                'success' => false,
+                'message' => $message,
+                'code' => '404'
+            ];
+            return $this->sendError($response, $th, 404);
+        }
+    }
+
+    public function item(Request $request)
+    {
+        $messages = [
+            'required' => ':attribute tidak boleh kosong',
+        ];
+
+        $this->validate(request(), [
+            'jumlah' => 'required|string|min:1',
+            'item' => 'required',
+        ], $messages);
+
+        try {
+            $message = 'Data Pekerjaan';
+            $id = $request->id;
+            $jumlah = $request->jumlah;
+            $item = $request->item;
+            $harga = $request->harga;
+            $keterangan = $request->keterangan;
+            $dataItem = Item::find($item);
+            $harga_item = $dataItem->harga;
+
+            if ($harga === 'malam') {
+                $harga_item = $dataItem->harga_malam;
+            }
+
+            $total = $jumlah * $harga_item;
+            $data = $this->model()->find($id);
+
+            if ($dataItem) {
+                $item_id = $dataItem->id;
+                $total = $jumlah * $harga_item;
+
+                $existItem = $data->hasItem()->find($item_id);
+                if ($existItem) {
+                    $existItem->pivot->qty = $jumlah;
+                    $existItem->pivot->harga = $harga_item;
+                    $existItem->pivot->total = $total;
+                    $existItem->pivot->keterangan = $keterangan;
+                    $existItem->pivot->save();
+                } else {
+                    $listitem[$item_id] = [
+                        'keterangan' => $keterangan,
+                        'harga' => $harga_item,
+                        'qty' => $jumlah,
+                        'total' => $total,
+                    ];
+                    $data->hasItem()->attach($listitem);
+                    $existItem = $data->hasItem()->find($item_id);
+                }
+
+                $result = [
+                    'jumlah' => $existItem->pivot->qty,
+                    'total' => format_uang($existItem->pivot->total),
+                    'keterangan' => $existItem->pivot->keterangan,
+                    'pekerjaan' => $dataItem->nama,
+                    'item_id' => $item_id,
+                ];
+
+                $message = 'Berhasil Menyimpan Pekerjaan';
+                return $this->sendResponse($result, $message, 200);
+            }
+        } catch (\Throwable $th) {
+            $message = 'Gagal Menyimpan Pekerjaan';
+            $response = [
+                'success' => false,
+                'message' => $message,
+                'code' => '404'
+            ];
+            return $this->sendError($response, $th, 404);
+        }
+    }
+
+    public function hapusitem(Request $request)
+    {
+        $id = $request->id;
+        $modul = $request->modul;
+        $item = $request->item;
+        $data = $this->model()->find($id);
+        $data->hasItem()->detach($item);
+
+        $message = 'Berhasil menghapus ' . $modul;
+        return $this->sendResponse([], $message, 200);
+        try { } catch (\Throwable $th) {
+            $message = 'Gagal Menyimpan Pekerjaan';
             $response = [
                 'success' => false,
                 'message' => $message,

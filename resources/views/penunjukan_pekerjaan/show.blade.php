@@ -63,6 +63,8 @@
                                         <div>
                                             <strong>{{ $aduan->keterangan_barang }}</strong>
                                         </div>
+                                        <input type="hidden" name="id_pekerjaan" id="idPekerjaan"
+                                            value="{{ $pekerjaanUtama->id }}">
                                     </div>
                                 </div>
                             </div>
@@ -121,7 +123,7 @@
                         </div>
                         <div class="card-body">
                             <form action="" id="formPekerjaan">
-                                <input type="hidden" name="id_Pekerjaan" id="idPekerjaan" value="{{ $pekerjaan->id }}">
+
                                 <div class="row">
                                     <div class="col-2">
                                         <h5 class="sub-title">Pilih Pekerjaan</h5>
@@ -142,7 +144,7 @@
                                         <h5 class="sub-title">Jumlah</h5>
                                         <div class="form-group">
                                             <div class="input-group mb-2 mr-sm-2">
-                                                <input type="text" name="jumlah_Pekerjaan" id="jumlah_Pekerjaan"
+                                                <input type="text" name="jumlah_pekerjaan" id="jumlah_pekerjaan"
                                                     placeholder="jumlah" class="form-control">
                                             </div>
                                         </div>
@@ -153,14 +155,14 @@
                                             <form>
                                                 <div class="radio radiofill radio-inline">
                                                     <label>
-                                                        <input type="radio" class="harga_Pekerjaan" name="harga_Pekerjaan"
+                                                        <input type="radio" class="harga_pekerjaan" name="harga_pekerjaan"
                                                             value="siang" checked="checked">
                                                         <i class="helper"></i>Harga Siang
                                                     </label>
                                                 </div>
                                                 <div class="radio radiofill radio-inline">
                                                     <label>
-                                                        <input type="radio" class="harga_Pekerjaan" name="harga_Pekerjaan"
+                                                        <input type="radio" class="harga_pekerjaan" name="harga_pekerjaan"
                                                             value="malam">
                                                         <i class="helper"></i>Harga Malam
                                                     </label>
@@ -170,7 +172,7 @@
                                     </div>
                                     <div class="col">
                                         <div class="">
-                                            <button type="submit" id="btn_Pekerjaan" class="btn btn-primary">Update
+                                            <button type="submit" id="btn_pekerjaan" class="btn btn-primary">Update
                                                 Pekerjaan</button>
                                         </div>
                                     </div>
@@ -189,43 +191,42 @@
                                 </thead>
                                 <tbody>
                                     @if (isset($daftarPekerjaan->hasItem))
-
                                         @forelse ($daftarPekerjaan->hasItem as $key => $pekerjaan)
-                                            <tr id="listPekerjaan_{{ $pekerjaan->item_id }}"
-                                                class="list_table_Pekerjaan">
-                                                <td class="text-center nomor_Pekerjaan" data-index="{{ $key + 1 }}">
+                                            <tr id="listPekerjaan_{{ $pekerjaan->id }}" class="list_table_pekerjaan">
+                                                <td class="text-center nomor_pekerjaan" data-index="{{ $key + 1 }}">
                                                     {{ $key + 1 }}
                                                 </td>
                                                 <td>
                                                     {{ $pekerjaan->nama }}
-
                                                 </td>
                                                 <td>
                                                     <span
-                                                        id="jumlah_pekerjaan_{{ $pekerjaan->item_id }}">{{ $pekerjaan->panjang }}
-                                                        M</span>
+                                                        id="jumlah_pekerjaan_{{ $pekerjaan->id }}">{{ $pekerjaan->pivot->qty }}
+                                                    </span>
 
-                                                    <input type="hidden"
-                                                        id="jumlah_pekerjaan_value_{{ $pekerjaan->item_id }}"
-                                                        name="panjang" value="{{ $pekerjaan->panjang }}">
+                                                    <input type="hidden" id="jumlah_pekerjaan_value_{{ $pekerjaan->id }}"
+                                                        name="jumlah_pekerjaan" value="{{ $pekerjaan->pivot->qty }}">
                                                 </td>
-                                                <td id="total_Pekerjaan_{{ $pekerjaan->item_id }}">Rp.
-                                                    {{ format_uang($pekerjaan->pivit->total) }}</td>
+                                                <td id="total_pekerjaan_{{ $pekerjaan->id }}">Rp.
+                                                    {{ format_uang($pekerjaan->pivot->total) }}</td>
                                                 <td>
-                                                    <span id="keterangan_Pekerjaan_{{ $pekerjaan->item_id }}">
+                                                    <span id="keterangan_pekerjaan_{{ $pekerjaan->id }}">
                                                         {{ $pekerjaan->keterangan }}</span>
 
-                                                    <input type="hidden" id="keterangan_value_{{ $pekerjaan->item_id }}"
-                                                        name="keterangan" value="{{ $pekerjaan->keterangan }}">
+                                                    <input type="hidden"
+                                                        id="keterangan_pekerjaan_value_{{ $pekerjaan->id }}"
+                                                        name="keterangan_pekerjaan" value="{{ $pekerjaan->keterangan }}">
                                                 </td>
                                                 <td>
                                                     <button class="btn btn-sm btn-warning text-light"
-                                                        onclick="editPekerjaan('{{ $pekerjaan->item_id }}')">
+                                                        onclick="editPekerjaan('{{ $pekerjaan->id }}')">
                                                         <i class="nav-icon fas fa-edit"></i>
                                                         Ubah
                                                     </button>
-                                                    <button type="button" class="btn btn-danger btn-xs text-center"
-                                                        onclick="hapusPekerjaan('{{ $pekerjaan->item_id }}')">
+                                                    <button type="button"
+                                                        class="btn btn-danger btn-xs text-center btn-hapus"
+                                                        data-pekerjaanutama="{{ $pekerjaanUtama->id }}"
+                                                        data-modul="pekerjaan" data-item="{{ $pekerjaan->id }}">
                                                         <i class="fa fa-trash"></i>
                                                         Hapus
                                                     </button>
@@ -268,7 +269,6 @@
                         </div>
                         <div class="card-body">
                             <form action="" id="formGalian">
-                                <input type="hidden" name="id_galian" id="idGalian" value="{{ $pekerjaan->id }}">
                                 <div class="row">
                                     <div class="col-2">
                                         <h5 class="sub-title">Pilih Galian</h5>
@@ -276,10 +276,9 @@
                                             <select class="form-control select2" id="cmbGalian">
                                                 <option selected="selected" value="">Pilih Galian
                                                 </option>
-                                                @foreach ($listGalian as $i => $pekerjaan)
-                                                    <option value="{{ $pekerjaan->id }}"
-                                                        id="galian_{{ $pekerjaan->id }}">
-                                                        {{ $pekerjaan->nama }}
+                                                @foreach ($listGalian as $i => $galian)
+                                                    <option value="{{ $galian->id }}" id="galian_{{ $galian->id }}">
+                                                        {{ $galian->nama }}
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -829,6 +828,7 @@
 @push('script')
     <script script src="{{ asset('plugins/select2/dist/js/select2.min.js') }}"></script>
     <script>
+        // -- galian
         function editgalian(id) {
             console.log(id);
             $('#cmbGalian').val(id).trigger('change');
@@ -847,7 +847,6 @@
         function hapusgalian(id) {
             let content = '';
             let item = $('#listgalian_' + id).length;
-            console.log(item);
             if (item > 0) {
                 $('#listgalian_' + id).remove();
 
@@ -859,12 +858,21 @@
                 }
             });
         }
+        // -- end galian
         $(document).ready(function() {
+            function toast(text) {
+                $.toast({
+                    heading: 'Success',
+                    text: text,
+                    showHideTransition: 'slide',
+                    icon: 'success',
+                    loaderBg: '#f2a654',
+                    position: 'top-right'
+                })
+            }
 
-            $('#cmbGalian').select2({
-                placeholder: '--- Pilih Galian ---',
-                width: '100%'
-            });
+            let id = $('#idPekerjaan').val();
+
             $('#cmbBarang').select2({
                 placeholder: '--- Pilih Barang ---',
                 width: '100%'
@@ -878,6 +886,197 @@
                 width: '100%'
             });
 
+            // ----- Pekerjaan
+            $('#cmbPekerjaan').select2({
+                placeholder: '--- Pilih Pekerjaan ---',
+                width: '100%'
+            });
+
+            $('#jumlah_pekerjaan').keypress(function(event) {
+                if (event.which < 46 ||
+                    event.which > 59) {
+                    event.preventDefault();
+                } // prevent if not number/dot
+
+                if (event.which == 46 &&
+                    $(this).val().indexOf('.') != -1) {
+                    event.preventDefault();
+                } // prevent if already dot
+                $(this).removeClass("is-invalid");
+            })
+
+            $("#cmbPekerjaan").on("change", function(e) {
+                $('#cmbPekerjaan').parent().removeClass('is-invalid')
+            });
+
+            function capitalizeFirstLetter(string) {
+                return string.replace(/^./, string[0].toUpperCase());
+            }
+
+            $(".btn-hapus").on("click", function(e) {
+
+                let id = $(this).data('pekerjaanutama');
+                let modul = $(this).data('modul');
+                let item = $(this).data('item');
+
+                console.log(id);
+                console.log(modul);
+                let content = '';
+                let modulLowcasse = capitalizeFirstLetter(modul);
+
+                let itemLength = $('#list' + modulLowcasse + '_' + item).length;
+
+                if (itemLength > 0) {
+                    $('#list' + modulLowcasse + '_' + item).remove();
+
+                    $('#table' + modulLowcasse).append(content);
+                }
+                $('.nomor_' + modul).each(function(index, val) {
+                    if (parseInt($(val).data('index')) > 2) {
+                        $(val).text(index + 1);
+                    }
+                });
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ route('pelaksanaan-pekerjaan.hapus.item') }}",
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        id,
+                        modul,
+                        item,
+                    },
+                    success: function(data) {
+                        toast('success mengubah galian')
+                    },
+                    error: function(data) {
+                        console.log(data);
+                        Swal.fire({
+                            title: 'Oops...',
+                            text: "gagal Mengahapus " + modul,
+                            footer: '<a href="">terdapat data yang kosong</a>'
+                        })
+                    }
+                });
+
+            });
+
+            function elementPekerjaan(id, nomor, pekerjaan, jumlah, total, keterangan) {
+                return `<tr id="listPekerjaan_${id}" class="list_table_pekerjaan">
+                    <td class="text-center nomor_pekerjaan" data-index="${nomor}">${nomor}
+                    </td>
+                    <td>${pekerjaan}</td>
+                    <td>
+                        <span id="jumlah_pekerjaan_${id}">${jumlah}</span>
+                        <input type="hidden" name="jumlah" id="jumlah_pekerjaan_value_${id}" value="${jumlah}">
+                    </td>
+                    <td id="total_pekerjaan_${id}">
+                        Rp. ${total}
+                    </td>
+                    <td>
+                        <span id="keterangan_pekerjaan_${id}">${keterangan === null ? '' : keterangan}</span>
+                        <input type="hidden" name="keterangan" id="keterangan_pekerjaan_value_${id}" value="${keterangan === null ? '' : keterangan}">
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-warning text-light">
+                            <i class="nav-icon fas fa-edit"  onclick="ubahpekerjaan('${id}')"></i> Ubah</button>
+                        <button class="btn btn-sm btn-danger text-light btn-hapus-pekerjaan"
+                            onclick="hapuspekerjaan('${id}')">
+                            <i class="nav-icon fas fa-trash"></i> Hapus</button>
+                    </td>
+                </tr>`;
+
+            }
+
+            $('#formPekerjaan').on('submit', function(e) {
+                e.preventDefault();
+
+
+                let item = $('#cmbPekerjaan').val();
+                let jumlah = $('#jumlah_pekerjaan').val();
+                let harga = $("input[name='harga_pekerjaan']:checked").val();
+
+                if (item === "") {
+                    $('#cmbPekerjaan').parent().addClass('is-invalid')
+                }
+                if (jumlah === "") {
+                    $('#jumlah_pekerjaan').addClass("is-invalid");
+                }
+
+                if (item !== "" && jumlah !== "") {
+                    $('.pekerjaanTidakAda').remove();
+                    $.ajax({
+                        type: 'POST',
+                        url: "{{ route('pelaksanaan-pekerjaan.item') }}",
+                        data: {
+                            "_token": "{{ csrf_token() }}",
+                            id,
+                            item,
+                            jumlah,
+                            harga,
+                        },
+                        success: function(data) {
+                            console.log(data);
+                            const {
+                                id,
+                                item_id,
+                                jumlah,
+                                pekerjaan,
+                                keterangan,
+                                total
+                            } = data.data;
+
+                            let lengthPekerjaan = $('#listPekerjaan_' + item_id).length;
+                            let tableCount = $('#tablePekerjaan  > tbody > tr').length;
+                            let nomor = tableCount + 1;
+
+                            if (lengthPekerjaan !== 0) {
+                                $('#jumlah_pekerjaan_' + item_id).text(jumlah);
+                                $('#total_pekerjaan_' + item_id).text('Rp.' + total);
+                                $('#keterangan_pekerjaan_' + item_id).text(keterangan);
+
+                                $('#jumlah_pekerjaan_value_' + item_id).val(jumlah);
+                                $('#keterangan_pekerjaan_value_' + item_id).val(keterangan);
+                                toast('success mengubah Pekerjaan')
+                            } else {
+                                $('.pekerjaanTidakAda').remove();
+                                let content = elementPekerjaan(
+                                    item_id,
+                                    nomor,
+                                    pekerjaan,
+                                    jumlah,
+                                    total,
+                                    keterangan);
+                                $('#tablePekerjaan').append(content);
+                                toast('success menambah Pekerjaan')
+                            }
+                            $('#cmbPekerjaan').val(null).trigger('change');
+                            $('#jumlah_pekerjaan').val('');
+                        },
+                        error: function(data) {
+                            Swal.fire({
+                                title: 'Oops...',
+                                text: "Isi dengan lengkap",
+                                footer: '<a href="">terdapat data yang kosong</a>'
+                            })
+                            console.log(data);
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Oops...',
+                        text: "Isi data dengan lengkap",
+                        footer: '<a href="">terdapat data yang kosong</a>'
+                    })
+                }
+
+            });
+            // ------ End Pekerjaan
+
+            // ----- Galian
+            $('#cmbGalian').select2({
+                placeholder: '--- Pilih Galian ---',
+                width: '100%'
+            });
             $('#lebar_galian').keypress(function(event) {
                 if (event.which < 46 ||
                     event.which > 59) {
@@ -953,12 +1152,8 @@
                 $('#cmbGalian').parent().removeClass('is-invalid')
             });
 
-
-
             $('#formGalian').on('submit', function(e) {
                 e.preventDefault();
-
-                let id = $('#idGalian').val();
                 let item = $('#cmbGalian').val();
                 let lebar = $('#lebar_galian').val();
                 let dalam = $('#dalam_galian').val();
@@ -981,10 +1176,9 @@
 
 
                 if (item !== "" && panjang !== "" && lebar !== "" && dalam !== "") {
-                    $('.galianTidakAda').remove();
                     $.ajax({
                         type: 'POST',
-                        url: "{{ route('pelaksanaan-pekerjaan.item') }}",
+                        url: "{{ route('pelaksanaan-pekerjaan.galian') }}",
                         data: {
                             "_token": "{{ csrf_token() }}",
                             id,
@@ -996,7 +1190,7 @@
                             harga,
                         },
                         success: function(data) {
-
+                            console.log(data);
                             const {
                                 id,
                                 item_id,
@@ -1030,12 +1224,14 @@
                                 $('#lebar_value_' + item_id).val(lebar);
                                 $('#dalam_value_' + item_id).val(dalam);
                                 $('#keterangan_value_' + item_id).val(keterangan);
-
+                                toast('success mengubah galian')
                             } else {
+                                $('.galianTidakAda').remove();
                                 let content = elementGalian(
                                     item_id, nomor, pekerjaan, lebar, panjang, dalam,
                                     total, keterangan);
                                 $('#tableGalian').append(content);
+                                toast('success mengubah galian')
 
                             }
                             $("#cmbGalian").select2("val", "");
@@ -1045,12 +1241,12 @@
 
                         },
                         error: function(data) {
+                            console.log(data);
                             Swal.fire({
                                 title: 'Oops...',
                                 text: "Isi dengan lengkap",
                                 footer: '<a href="">terdapat data yang kosong</a>'
                             })
-                            console.log(data);
                         }
                     });
                 } else {
@@ -1060,10 +1256,11 @@
                         text: "Isi dengan lengkap",
                         footer: '<a href="">terdapat data yang kosong</a>'
                     })
-                    console.log(data);
 
                 }
             });
+
+            // --- End Galian
         });
     </script>
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
