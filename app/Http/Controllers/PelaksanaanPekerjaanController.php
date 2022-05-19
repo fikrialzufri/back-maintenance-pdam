@@ -161,13 +161,15 @@ class PelaksanaanPekerjaanController extends Controller
             'item' => 'required',
         ], $messages);
 
+        $keterangan = $request->keterangan;
+
         try {
             $message = 'Data Pekerjaan';
             $id = $request->id;
             $jumlah = $request->jumlah;
             $item = $request->item;
             $harga = $request->harga;
-            $keterangan = $request->keterangan;
+
             $dataItem = Item::find($item);
             $harga_item = $dataItem->harga;
 
@@ -183,7 +185,7 @@ class PelaksanaanPekerjaanController extends Controller
                 $total = $jumlah * $harga_item;
 
                 $existItem = $data->hasItem()->find($item_id);
-                if ($existItem) {
+                if (!empty($existItem)) {
                     $existItem->pivot->qty = $jumlah;
                     $existItem->pivot->harga = $harga_item;
                     $existItem->pivot->total = $total;

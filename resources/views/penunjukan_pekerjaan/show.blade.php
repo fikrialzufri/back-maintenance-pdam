@@ -221,11 +221,12 @@
                                                     {{ format_uang($pekerjaan->pivot->total) }}</td>
                                                 <td>
                                                     <span id="keterangan_pekerjaan_{{ $pekerjaan->id }}">
-                                                        {{ $pekerjaan->keterangan }}</span>
+                                                        {{ $pekerjaan->pivot->keterangan }}</span>
 
                                                     <input type="hidden"
                                                         id="keterangan_pekerjaan_value_{{ $pekerjaan->id }}"
-                                                        name="keterangan_pekerjaan" value="{{ $pekerjaan->keterangan }}">
+                                                        name="keterangan_pekerjaan"
+                                                        value="{{ $pekerjaan->pivot->keterangan }}">
                                                 </td>
                                                 <td>
                                                     <button class="btn btn-sm btn-warning text-light btn-edit"
@@ -244,12 +245,12 @@
                                                 </td>
                                             </tr>
                                         @empty
-                                            <tr class="PekerjaanTidakAda">
+                                            <tr class="pekerjaanTidakAda">
                                                 <td colspan="10">Data Pekerjaan tidak ada</td>
                                             </tr>
                                         @endforelse
                                     @else
-                                        <tr class="PekerjaanTidakAda">
+                                        <tr class="pekerjaanTidakAda">
                                             <td colspan="10">Data Pekerjaan tidak ada</td>
                                         </tr>
                                     @endif
@@ -257,7 +258,7 @@
                                 <tfoot>
                                     @if (isset($daftarPekerjaan->hasItem))
                                         <tr>
-                                            <th colspan="5" class="text-right">Grand Total
+                                            <th colspan="3" class="text-right">Grand Total
                                             </th>
                                             <th>Rp. {{ format_uang($daftarPekerjaan->hasItem->sum('pivot.total')) }}
 
@@ -463,73 +464,148 @@
             </div>
             <div class="row">
                 <div class="col-12">
+
                     <div class="card">
-                        <div class="card-header">
-                            <div class="card-title">Daftar Bahan</div>
+                        <div class="card-header  justify-content-between">
+                            <div class="card-title">Daftar bahan</div>
+
                         </div>
                         <div class="card-body">
-                            <div class="form-group">
-                                <select class="form-control select2" id="cmbBarang">
-                                    <option selected="selected" value="">Pilih Bahan
-                                    </option>
-                                    @foreach ($listBahan as $i => $bahan)
-                                        <option value="{{ $bahan->id }}" id="bahan_{{ $bahan->id }}">
-                                            {{ $bahan->nama }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <table class="table table-bordered " width="100%">
+                            <form action="" id="formBahan">
+
+                                <div class="row">
+                                    <div class="col-2">
+                                        <h5 class="sub-title">Pilih Bahan</h5>
+                                        <div class="form-group">
+                                            <select class="form-control select2" id="cmbBahan">
+                                                <option selected="selected" value="">Pilih Bahan
+                                                </option>
+                                                @foreach ($listBahan as $i => $bahan)
+                                                    <option value="{{ $bahan->id }}" id="bahan_{{ $bahan->id }}">
+                                                        {{ $bahan->nama }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <h5 class="sub-title">Jumlah</h5>
+                                        <div class="form-group">
+                                            <div class="input-group mb-2 mr-sm-2">
+                                                <input type="text" name="jumlah_bahan" id="jumlah_bahan"
+                                                    placeholder="jumlah" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <h5 class="sub-title">keterangan</h5>
+                                        <div class="form-group">
+                                            <div class="input-group mb-2 mr-sm-2">
+                                                <input type="text" name="input_keterangan_bahan" id="input_keterangan_bahan"
+                                                    placeholder="Keterangan bahan" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <h5 class="sub-title">Pilih Harga</h5>
+                                        <div class="form-radio">
+                                            <form>
+                                                <div class="radio radiofill radio-inline">
+                                                    <label>
+                                                        <input type="radio" class="harga_bahan" name="harga_bahan"
+                                                            value="siang" checked="checked">
+                                                        <i class="helper"></i>Harga Siang
+                                                    </label>
+                                                </div>
+                                                <div class="radio radiofill radio-inline">
+                                                    <label>
+                                                        <input type="radio" class="harga_bahan" name="harga_bahan"
+                                                            value="malam">
+                                                        <i class="helper"></i>Harga Malam
+                                                    </label>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="">
+                                            <button type="submit" id="btn_bahan" class="btn btn-primary">Update
+                                                bahan</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <table class="table table-bordered " width="100%" id="tableBahan">
                                 <thead>
                                     <tr>
                                         <th width="5">#</th>
-                                        <th>Nama</th>
-                                        <th>Jenis</th>
-                                        <th>Satuan</th>
+                                        <th width="250">bahan</th>
                                         <th width="10">Jumlah</th>
-                                        <th width="150">Harga</th>
-                                        <th width="150">Total Harga</th>
+                                        <th width="200">Total Harga</th>
+                                        <th width="150">Keterangan</th>
+                                        <th width="5%" class="text-center">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @if (isset($daftarBarang->hasItem))
-                                        @forelse ($daftarBarang->hasItem as $nomor => $barang)
-                                            <tr id="{{ $barang->slug }}_{{ $aduan->id }}">
-                                                <td>{{ $nomor + 1 }}
-                                                </td>
-                                                <td>{{ $barang->nama }}</td>
-                                                <td>{{ $barang->jenis }}</td>
-                                                <td>{{ $barang->satuan }}</td>
-                                                <td class="text-center">
-                                                    {{ $barang->pivot->qty }}</td>
-                                                <td>
-                                                    Rp. {{ format_uang($barang->pivot->harga) }}
+                                    @if (isset($daftarBahan->hasItem))
+                                        @forelse ($daftarBahan->hasItem as $key => $bahan)
+                                            <tr id="listBahan_{{ $bahan->id }}" class="list_table_bahan">
+                                                <td class="text-center nomor_bahan" data-index="{{ $key + 1 }}">
+                                                    {{ $key + 1 }}
                                                 </td>
                                                 <td>
-                                                    Rp. {{ format_uang($barang->pivot->harga * $barang->pivot->qty) }}
+                                                    {{ $bahan->nama }}
+                                                </td>
+                                                <td>
+                                                    <span
+                                                        id="jumlah_bahan_tampil_{{ $bahan->id }}">{{ $bahan->pivot->qty }}
+                                                    </span>
+
+                                                    <input type="hidden" id="jumlah_bahan_value_{{ $bahan->id }}"
+                                                        name="jumlah_bahan" value="{{ $bahan->pivot->qty }}">
+                                                </td>
+                                                <td id="total_bahan_{{ $bahan->id }}">Rp.
+                                                    {{ format_uang($bahan->pivot->total) }}</td>
+                                                <td>
+                                                    <span id="keterangan_bahan_{{ $bahan->id }}">
+                                                        {{ $bahan->pivot->keterangan }}</span>
+
+                                                    <input type="hidden" id="keterangan_bahan_value_{{ $bahan->id }}"
+                                                        name="keterangan_bahan" value="{{ $bahan->pivot->keterangan }}">
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-warning text-light btn-edit"
+                                                        data-pekerjaanutama="{{ $pekerjaanUtama->id }}"
+                                                        data-modul="bahan" data-item="{{ $bahan->id }}">
+                                                        <i class="nav-icon fas fa-edit"></i>
+                                                        Ubah
+                                                    </button>
+                                                    <button type="button"
+                                                        class="btn btn-danger btn-xs text-center btn-hapus"
+                                                        data-pekerjaanutama="{{ $pekerjaanUtama->id }}"
+                                                        data-modul="bahan" data-item="{{ $bahan->id }}">
+                                                        <i class="fa fa-trash"></i>
+                                                        Hapus
+                                                    </button>
                                                 </td>
                                             </tr>
                                         @empty
-                                            <tr>
+                                            <tr class="bahanTidakAda">
                                                 <td colspan="10">Data Bahan tidak ada</td>
                                             </tr>
                                         @endforelse
                                     @else
-                                        <tr>
+                                        <tr class="bahanTidakAda">
                                             <td colspan="10">Data Bahan tidak ada</td>
                                         </tr>
                                     @endif
                                 </tbody>
                                 <tfoot>
-                                    @if (isset($daftarBarang->hasItem))
+                                    @if (isset($daftarBahan->hasItem))
                                         <tr>
-                                            <th colspan="4" class="text-right">Grand Total
+                                            <th colspan="3" class="text-right">Grand Total
                                             </th>
-                                            <th class="text-center">{{ $daftarBarang->hasItem->sum('pivot.qty') }}
-                                            </th>
-                                            <th>Rp. {{ format_uang($daftarBarang->hasItem->sum('pivot.harga')) }}
-                                            </th>
-                                            <th>Rp. {{ format_uang($daftarBarang->total_harga) }}
+                                            <th>Rp. {{ format_uang($daftarBahan->hasItem->sum('pivot.total')) }}
 
                                         </tr>
                                     @endif
@@ -540,61 +616,146 @@
                     </div>
                 </div>
             </div>
+
             <div class="row">
                 <div class="col-12">
+
                     <div class="card">
-                        <div class="card-header">
-                            <div class="card-title">Alat Bantu</div>
+                        <div class="card-header  justify-content-between">
+                            <div class="card-title">Daftar Alat Bantu</div>
+
                         </div>
                         <div class="card-body">
-                            <div class="form-group">
-                                <select class="form-control select2" id="cmbAlatBantu">
-                                    <option selected="selected" value="">Pilih Alat Bantu
-                                    </option>
-                                    @foreach ($listAlatBantu as $i => $AlatBantu)
-                                        <option value="{{ $AlatBantu->id }}" id="AlatBantu_{{ $AlatBantu->id }}">
-                                            {{ $AlatBantu->nama }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <table class="table table-bordered " width="100%">
+                            <form action="" id="formAlatBantu">
+
+                                <div class="row">
+                                    <div class="col-2">
+                                        <h5 class="sub-title">Pilih Alat Bantu</h5>
+                                        <div class="form-group">
+                                            <select class="form-control select2" id="cmbAlat_bantu">
+                                                <option selected="selected" value="">Pilih Alat Bantu
+                                                </option>
+                                                @foreach ($listAlatBantu as $i => $AlatBantu)
+                                                    <option value="{{ $AlatBantu->id }}"
+                                                        id="alat_bantu_{{ $AlatBantu->id }}">
+                                                        {{ $AlatBantu->nama }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <h5 class="sub-title">Jumlah</h5>
+                                        <div class="form-group">
+                                            <div class="input-group mb-2 mr-sm-2">
+                                                <input type="text" name="jumlah_alat_bantu" id="jumlah_alat_bantu"
+                                                    placeholder="jumlah" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <h5 class="sub-title">keterangan</h5>
+                                        <div class="form-group">
+                                            <div class="input-group mb-2 mr-sm-2">
+                                                <input type="text" name="input_keterangan_alat_bantu"
+                                                    id="input_keterangan_alat_bantu" placeholder="Keterangan alat bantu"
+                                                    class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <h5 class="sub-title">Pilih Harga</h5>
+                                        <div class="form-radio">
+                                            <form>
+                                                <div class="radio radiofill radio-inline">
+                                                    <label>
+                                                        <input type="radio" class="harga_alat_bantu"
+                                                            name="harga_alat_bantu" value="siang" checked="checked">
+                                                        <i class="helper"></i>Harga Siang
+                                                    </label>
+                                                </div>
+                                                <div class="radio radiofill radio-inline">
+                                                    <label>
+                                                        <input type="radio" class="harga_alat_bantu"
+                                                            name="harga_alat_bantu" value="malam">
+                                                        <i class="helper"></i>Harga Malam
+                                                    </label>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="">
+                                            <button type="submit" id="btn_alat_bantu" class="btn btn-primary">Update
+                                                Alat Bantu</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <table class="table table-bordered " width="100%" id="tableAlat_bantu">
                                 <thead>
                                     <tr>
                                         <th width="5">#</th>
-                                        <th>Nama</th>
-                                        <th>Jenis</th>
-                                        <th>Satuan</th>
+                                        <th width="250">Alat Bantu</th>
                                         <th width="10">Jumlah</th>
-                                        <th width="150">Harga</th>
-                                        <th width="150">Total Harga</th>
+                                        <th width="200">Total Harga</th>
+                                        <th width="150">Keterangan</th>
+                                        <th width="5%" class="text-center">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @if (isset($daftarAlatBantu->hasItem))
-                                        @forelse ($daftarAlatBantu->hasItem as $nomor => $barang)
-                                            <tr id="{{ $barang->slug }}_{{ $aduan->id }}">
-                                                <td>{{ $nomor + 1 }}
-                                                </td>
-                                                <td>{{ $barang->nama }}</td>
-                                                <td>{{ $barang->jenis }}</td>
-                                                <td>{{ $barang->satuan }}</td>
-                                                <td class="text-center">
-                                                    {{ $barang->pivot->qty }}</td>
-                                                <td>
-                                                    Rp. {{ format_uang($barang->pivot->harga) }}
+                                        @forelse ($daftarAlatBantu->hasItem as $key => $alatbantu)
+                                            <tr id="listAlat_bantu_{{ $alatbantu->id }}" class="list_table_alat_bantu">
+                                                <td class="text-center nomor_alat_bantu" data-index="{{ $key + 1 }}">
+                                                    {{ $key + 1 }}
                                                 </td>
                                                 <td>
-                                                    Rp. {{ format_uang($barang->pivot->harga * $barang->pivot->qty) }}
+                                                    {{ $alatbantu->nama }}
+                                                </td>
+                                                <td>
+                                                    <span
+                                                        id="jumlah_alat_bantu_tampil_{{ $alatbantu->id }}">{{ $alatbantu->pivot->qty }}
+                                                    </span>
+
+                                                    <input type="hidden"
+                                                        id="jumlah_alat_bantu_value_{{ $alatbantu->id }}"
+                                                        name="jumlah_alat_bantu" value="{{ $alatbantu->pivot->qty }}">
+                                                </td>
+                                                <td id="total_alat_bantu_{{ $alatbantu->id }}">Rp.
+                                                    {{ format_uang($alatbantu->pivot->total) }}</td>
+                                                <td>
+                                                    <span id="keterangan_alat_bantu_{{ $alatbantu->id }}">
+                                                        {{ $alatbantu->pivot->keterangan }}</span>
+
+                                                    <input type="hidden"
+                                                        id="keterangan_alat_bantu_value_{{ $alatbantu->id }}"
+                                                        name="keterangan_alat_bantu"
+                                                        value="{{ $alatbantu->pivot->keterangan }}">
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-warning text-light btn-edit"
+                                                        data-pekerjaanutama="{{ $pekerjaanUtama->id }}"
+                                                        data-modul="alat_bantu" data-item="{{ $alatbantu->id }}">
+                                                        <i class="nav-icon fas fa-edit"></i>
+                                                        Ubah
+                                                    </button>
+                                                    <button type="button"
+                                                        class="btn btn-danger btn-xs text-center btn-hapus"
+                                                        data-pekerjaanutama="{{ $pekerjaanUtama->id }}"
+                                                        data-modul="alat_bantu" data-item="{{ $alatbantu->id }}">
+                                                        <i class="fa fa-trash"></i>
+                                                        Hapus
+                                                    </button>
                                                 </td>
                                             </tr>
                                         @empty
-                                            <tr>
+                                            <tr class="alat_bantuTidakAda">
                                                 <td colspan="10">Data alat bantu tidak ada</td>
                                             </tr>
                                         @endforelse
                                     @else
-                                        <tr>
+                                        <tr class="alat_bantuTidakAda">
                                             <td colspan="10">Data alat bantu tidak ada</td>
                                         </tr>
                                     @endif
@@ -602,13 +763,9 @@
                                 <tfoot>
                                     @if (isset($daftarAlatBantu->hasItem))
                                         <tr>
-                                            <th colspan="4" class="text-right">Grand Total
+                                            <th colspan="3" class="text-right">Grand Total
                                             </th>
-                                            <th class="text-center">{{ $daftarAlatBantu->hasItem->sum('pivot.qty') }}
-                                            </th>
-                                            <th>Rp. {{ format_uang($daftarAlatBantu->hasItem->sum('pivot.harga')) }}
-                                            </th>
-                                            <th>Rp. {{ format_uang($daftarAlatBantu->total_harga) }}
+                                            <th>Rp. {{ format_uang($daftarAlatBantu->hasItem->sum('pivot.total')) }}
 
                                         </tr>
                                     @endif
@@ -621,75 +778,156 @@
             </div>
             <div class="row">
                 <div class="col-12">
+
                     <div class="card">
-                        <div class="card-header">
-                            <div class="card-title">Transportasi</div>
+                        <div class="card-header  justify-content-between">
+                            <div class="card-title">Daftar Transportasi</div>
+
                         </div>
                         <div class="card-body">
-                            <div class="form-group">
-                                <select class="form-control select2" id="cmbTransportasi">
-                                    <option selected="selected" value="">Pilih Transportasi
-                                    </option>
-                                    @foreach ($listTransportasi as $i => $Transportasi)
-                                        <option value="{{ $Transportasi->id }}"
-                                            id="Transportasi_{{ $Transportasi->id }}">
-                                            {{ $Transportasi->nama }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <table class="table table-bordered " width="100%">
+                            <form action="" id="formTransportasi">
+
+                                <div class="row">
+                                    <div class="col-2">
+                                        <h5 class="sub-title">Pilih Transportasi</h5>
+                                        <div class="form-group">
+                                            <select class="form-control select2" id="cmbTransportasi">
+                                                <option selected="selected" value="">Pilih Transportasi
+                                                </option>
+                                                @foreach ($listTransportasi as $i => $Transportasi)
+                                                    <option value="{{ $Transportasi->id }}"
+                                                        id="transportasi_{{ $Transportasi->id }}">
+                                                        {{ $Transportasi->nama }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <h5 class="sub-title">Jumlah</h5>
+                                        <div class="form-group">
+                                            <div class="input-group mb-2 mr-sm-2">
+                                                <input type="text" name="jumlah_transportasi" id="jumlah_transportasi"
+                                                    placeholder="jumlah" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <h5 class="sub-title">keterangan</h5>
+                                        <div class="form-group">
+                                            <div class="input-group mb-2 mr-sm-2">
+                                                <input type="text" name="input_keterangan_transportasi"
+                                                    id="input_keterangan_transportasi" placeholder="Keterangan Transportasi"
+                                                    class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <h5 class="sub-title">Pilih Harga</h5>
+                                        <div class="form-radio">
+                                            <form>
+                                                <div class="radio radiofill radio-inline">
+                                                    <label>
+                                                        <input type="radio" class="harga_transportasi"
+                                                            name="harga_transportasi" value="siang" checked="checked">
+                                                        <i class="helper"></i>Harga Siang
+                                                    </label>
+                                                </div>
+                                                <div class="radio radiofill radio-inline">
+                                                    <label>
+                                                        <input type="radio" class="harga_transportasi"
+                                                            name="harga_transportasi" value="malam">
+                                                        <i class="helper"></i>Harga Malam
+                                                    </label>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="">
+                                            <button type="submit" id="btn_transportasi" class="btn btn-primary">Update
+                                                Transportasi</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <table class="table table-bordered " width="100%" id="tableTransportasi">
                                 <thead>
                                     <tr>
                                         <th width="5">#</th>
-                                        <th>Nama</th>
-                                        <th>Jenis</th>
-                                        <th>Satuan</th>
+                                        <th width="250">Transportasi</th>
                                         <th width="10">Jumlah</th>
-                                        <th width="150">Harga</th>
-                                        <th width="150">Total Harga</th>
+                                        <th width="200">Total Harga</th>
+                                        <th width="150">Keterangan</th>
+                                        <th width="5%" class="text-center">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @if (isset($daftarTransportasi->hasItem))
-                                        @forelse ($daftarTransportasi->hasItem as $nomor => $barang)
-                                            <tr id="{{ $barang->slug }}_{{ $aduan->id }}">
-                                                <td>{{ $nomor + 1 }}
-                                                </td>
-                                                <td>{{ $barang->nama }}</td>
-                                                <td>{{ $barang->jenis }}</td>
-                                                <td>{{ $barang->satuan }}</td>
-                                                <td class="text-center">
-                                                    {{ $barang->pivot->qty }}</td>
-                                                <td>
-                                                    Rp. {{ format_uang($barang->pivot->harga) }}
+                                        @forelse ($daftarTransportasi->hasItem as $key => $Transportasi)
+                                            <tr id="listTransportasi_{{ $Transportasi->id }}"
+                                                class="list_table_transportasi">
+                                                <td class="text-center nomor_transportasi"
+                                                    data-index="{{ $key + 1 }}">
+                                                    {{ $key + 1 }}
                                                 </td>
                                                 <td>
-                                                    Rp. {{ format_uang($barang->pivot->harga * $barang->pivot->qty) }}
+                                                    {{ $Transportasi->nama }}
+                                                </td>
+                                                <td>
+                                                    <span
+                                                        id="jumlah_transportasi_tampil_{{ $Transportasi->id }}">{{ $Transportasi->pivot->qty }}
+                                                    </span>
+
+                                                    <input type="hidden"
+                                                        id="jumlah_transportasi_value_{{ $Transportasi->id }}"
+                                                        name="jumlah_transportasi"
+                                                        value="{{ $Transportasi->pivot->qty }}">
+                                                </td>
+                                                <td id="total_transportasi_{{ $Transportasi->id }}">Rp.
+                                                    {{ format_uang($Transportasi->pivot->total) }}</td>
+                                                <td>
+                                                    <span id="keterangan_transportasi_{{ $Transportasi->id }}">
+                                                        {{ $Transportasi->pivot->keterangan }}</span>
+
+                                                    <input type="hidden"
+                                                        id="keterangan_transportasi_value_{{ $Transportasi->id }}"
+                                                        name="keterangan_transportasi"
+                                                        value="{{ $Transportasi->pivot->keterangan }}">
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-warning text-light btn-edit"
+                                                        data-pekerjaanutama="{{ $pekerjaanUtama->id }}"
+                                                        data-modul="transportasi" data-item="{{ $Transportasi->id }}">
+                                                        <i class="nav-icon fas fa-edit"></i>
+                                                        Ubah
+                                                    </button>
+                                                    <button type="button"
+                                                        class="btn btn-danger btn-xs text-center btn-hapus"
+                                                        data-pekerjaanutama="{{ $pekerjaanUtama->id }}"
+                                                        data-modul="transportasi" data-item="{{ $Transportasi->id }}">
+                                                        <i class="fa fa-trash"></i>
+                                                        Hapus
+                                                    </button>
                                                 </td>
                                             </tr>
                                         @empty
-                                            <tr class="trasnportasiTidakAda">
-                                                <td colspan="10">Data transportasi tidak ada</td>
+                                            <tr class="transportasiTidakAda">
+                                                <td colspan="10">Data Transportasi tidak ada</td>
                                             </tr>
                                         @endforelse
                                     @else
-                                        <tr class="trasnportasiTidakAda">
-                                            <td colspan="10">Data transportasi tidak ada</td>
+                                        <tr class="transportasiTidakAda">
+                                            <td colspan="10">Data Transportasi tidak ada</td>
                                         </tr>
                                     @endif
                                 </tbody>
                                 <tfoot>
                                     @if (isset($daftarTransportasi->hasItem))
                                         <tr>
-                                            <th colspan="4" class="text-right">Grand Total
+                                            <th colspan="3" class="text-right">Grand Total
                                             </th>
-                                            <th class="text-center">
-                                                {{ $daftarTransportasi->hasItem->sum('pivot.qty') }}
-                                            </th>
-                                            <th>Rp. {{ format_uang($daftarTransportasi->hasItem->sum('pivot.harga')) }}
-                                            </th>
-                                            <th>Rp. {{ format_uang($daftarTransportasi->total_harga) }}
+                                            <th>Rp. {{ format_uang($daftarTransportasi->hasItem->sum('pivot.total')) }}
 
                                         </tr>
                                     @endif
@@ -700,6 +938,7 @@
                     </div>
                 </div>
             </div>
+
         @endif
         <div class="row">
             <div class="col-6">
@@ -841,7 +1080,6 @@
     <script>
         // -- galian
         function editgalian(id) {
-            console.log(id);
             $('#cmbGalian').val(id).trigger('change');
             let getpanjangan = $('#panjang_value_' + id).val();
             let getlebar = $('#lebar_value_' + id).val();
@@ -884,11 +1122,11 @@
 
             let id = $('#idPekerjaan').val();
 
-            $('#cmbBarang').select2({
-                placeholder: '--- Pilih Barang ---',
+            $('#cmbBahan').select2({
+                placeholder: '--- Pilih Bahan ---',
                 width: '100%'
             });
-            $('#cmbAlatBantu').select2({
+            $('#cmbAlat_bantu').select2({
                 placeholder: '--- Pilih Alat Bantu ---',
                 width: '100%'
             });
@@ -904,6 +1142,30 @@
             });
 
             $('#jumlah_pekerjaan').keypress(function(event) {
+                if (event.which < 46 ||
+                    event.which > 59) {
+                    event.preventDefault();
+                } // prevent if not number/dot
+
+                if (event.which == 46 &&
+                    $(this).val().indexOf('.') != -1) {
+                    event.preventDefault();
+                } // prevent if already dot
+                $(this).removeClass("is-invalid");
+            })
+            $('#jumlah_bahan').keypress(function(event) {
+                if (event.which < 46 ||
+                    event.which > 59) {
+                    event.preventDefault();
+                } // prevent if not number/dot
+
+                if (event.which == 46 &&
+                    $(this).val().indexOf('.') != -1) {
+                    event.preventDefault();
+                } // prevent if already dot
+                $(this).removeClass("is-invalid");
+            })
+            $('#jumlah_alat_bantu').keypress(function(event) {
                 if (event.which < 46 ||
                     event.which > 59) {
                     event.preventDefault();
@@ -936,10 +1198,11 @@
 
                     $('#table' + modulLowcasse).append(content);
                 }
-                $('.nomor_' + modul).each(function(index, val) {
-                    if (parseInt($(val).data('index')) > 2) {
-                        $(val).text(index + 1);
-                    }
+                let n = 1;
+                $('.nomor_' + modul).each(function(index, item) {
+                    let number = n++;
+                    $(item).text(number);
+                    $(this).attr('data-index', number);
                 });
                 $.ajax({
                     type: 'POST',
@@ -951,7 +1214,7 @@
                         item,
                     },
                     success: function(data) {
-                        toast('success mengubah galian')
+                        toast('success mengubah ' + modul)
                     },
                     error: function(data) {
                         console.log(data);
@@ -977,50 +1240,60 @@
                 $('#keterangan_' + modul).val(getketerangan);
             });
 
-            function elementPekerjaan(id, nomor, pekerjaan, jumlah, total, keterangan) {
-                return `<tr id="listPekerjaan_${id}" class="list_table_pekerjaan">
-                    <td class="text-center nomor_pekerjaan" data-index="${nomor}">${nomor}
+            function elementPekerjaan(id, nomor, pekerjaan, jumlah, total, keterangan, modul) {
+                let modulLowcasse = capitalizeFirstLetter(modul);
+                let pekerjaanUtama = $('#idPekerjaan').val();
+                return `<tr id="list${modulLowcasse}_${id}" class="list_table_${modul}">
+                    <td class="text-center nomor_${modul}" data-index="${nomor}">${nomor}
                     </td>
                     <td>${pekerjaan}</td>
                     <td>
-                        <span id="jumlah_pekerjaan_tampil_${id}">${jumlah}</span>
-                        <input type="hidden" name="jumlah" id="jumlah_pekerjaan_value_${id}" value="${jumlah}">
+                        <span id="jumlah_${modul}_tampil_${id}">${jumlah}</span>
+                        <input type="hidden" name="jumlah" id="jumlah_${modul}_value_${id}" value="${jumlah}">
                     </td>
-                    <td id="total_pekerjaan_${id}">
+                    <td id="total_${modul}_${id}">
                         Rp. ${total}
                     </td>
                     <td>
-                        <span id="keterangan_pekerjaan_${id}">${keterangan === null ? '' : keterangan}</span>
-                        <input type="hidden" name="keterangan" id="keterangan_pekerjaan_value_${id}" value="${keterangan === null ? '' : keterangan}">
+                        <span id="keterangan_${modul}_${id}">${keterangan === null ? '' : keterangan}</span>
+                        <input type="hidden" name="keterangan" id="keterangan_${modul}_value_${id}" value="${keterangan === null ? '' : keterangan}">
                     </td>
                     <td>
-                        <button class="btn btn-sm btn-warning text-light">
-                            <i class="nav-icon fas fa-edit"  onclick="ubahpekerjaan('${id}')"></i> Ubah</button>
-                        <button class="btn btn-sm btn-danger text-light btn-hapus-pekerjaan"
-                            onclick="hapuspekerjaan('${id}')">
-                            <i class="nav-icon fas fa-trash"></i> Hapus</button>
+                            <button class="btn btn-sm btn-warning text-light btn-edit"
+                                data-pekerjaanutama="${pekerjaanUtama}"
+                                data-modul="${modul}" data-item="${id}">
+                                <i class="nav-icon fas fa-edit"></i>
+                                Ubah
+                            </button>
+                            <button type="button"
+                                class="btn btn-danger btn-xs text-center btn-hapus"
+                                data-pekerjaanutama="${pekerjaanUtama}"
+                                data-modul="${modul}" data-item="${id}">
+                                <i class="fa fa-trash"></i>
+                                Hapus
+                            </button>
                     </td>
                 </tr>`;
 
             }
 
-            $('#formPekerjaan').on('submit', function(e) {
-                e.preventDefault();
+            function saveform(modul) {
 
+                let modulLowcasse = capitalizeFirstLetter(modul);
+                let item = $('#cmb' + modulLowcasse).val();
+                let jumlah = $('#jumlah_' + modul).val();
+                let keterangan = $('#input_keterangan_' + modul).val();
 
-                let item = $('#cmbPekerjaan').val();
-                let jumlah = $('#jumlah_pekerjaan').val();
-                let harga = $("input[name='harga_pekerjaan']:checked").val();
-
+                let harga = $("input[name='harga_" + modul + "']:checked").val();
                 if (item === "") {
-                    $('#cmbPekerjaan').parent().addClass('is-invalid')
+                    $('#cmb' + modulLowcasse).parent().addClass('is-invalid')
                 }
                 if (jumlah === "") {
-                    $('#jumlah_pekerjaan').addClass("is-invalid");
+                    $('#jumlah_' + modul).addClass("is-invalid");
                 }
 
                 if (item !== "" && jumlah !== "") {
-                    $('.pekerjaanTidakAda').remove();
+                    $('.' + modul + 'TidakAda').remove();
                     $.ajax({
                         type: 'POST',
                         url: "{{ route('pelaksanaan-pekerjaan.item') }}",
@@ -1030,6 +1303,7 @@
                             item,
                             jumlah,
                             harga,
+                            keterangan
                         },
                         success: function(data) {
                             console.log(data);
@@ -1042,32 +1316,97 @@
                                 total
                             } = data.data;
 
-                            let lengthPekerjaan = $('#listPekerjaan_' + item_id).length;
-                            let tableCount = $('#tablePekerjaan  > tbody > tr').length;
+                            let lengthPekerjaan = $('#list' + modulLowcasse + '_' + item_id)
+                                .length;
+                            let tableCount = $('#table' + modulLowcasse + '  > tbody > tr')
+                                .length;
                             let nomor = tableCount + 1;
 
                             if (lengthPekerjaan !== 0) {
-                                $('#jumlah_pekerjaan_tampil_' + item_id).text(jumlah);
-                                $('#total_pekerjaan_' + item_id).text('Rp.' + total);
-                                $('#keterangan_pekerjaan_' + item_id).text(keterangan);
+                                $('#jumlah_' + modul + '_tampil_' + item_id).text(jumlah);
+                                $('#total_' + modul + '_' + item_id).text('Rp.' + total);
+                                $('#keterangan_' + modul + '_' + item_id).text(keterangan);
 
-                                $('#jumlah_pekerjaan_value_' + item_id).val(jumlah);
-                                $('#keterangan_pekerjaan_value_' + item_id).val(keterangan);
-                                toast('success mengubah Pekerjaan')
+                                $('#jumlah_' + modul + '_value_' + item_id).val(jumlah);
+                                $('#keterangan_' + modul + '_value_' + item_id).val(keterangan);
+
+                                toast('success mengubah ' + modul + '')
                             } else {
-                                $('.pekerjaanTidakAda').remove();
+                                $('.' + modul + 'TidakAda').remove();
                                 let content = elementPekerjaan(
                                     item_id,
                                     nomor,
                                     pekerjaan,
                                     jumlah,
                                     total,
-                                    keterangan);
-                                $('#tablePekerjaan').append(content);
-                                toast('success menambah Pekerjaan')
+                                    keterangan,
+                                    modul
+                                );
+                                $('#table' + modulLowcasse).append(content);
+                                toast('success menambah ' + modulLowcasse)
                             }
-                            $('#cmbPekerjaan').val(null).trigger('change');
-                            $('#jumlah_pekerjaan').val('');
+                            $('#cmb' + modulLowcasse).val(null).trigger('change');
+                            $('#jumlah_' + modul).val('');
+                            $('#input_keterangan_' + modul).val('');
+
+                            $(".btn-edit").on("click", function(e) {
+                                let id = $(this).data('pekerjaanutama');
+                                let modul = $(this).data('modul');
+                                let item = $(this).data('item');
+                                let modulLowcasse = capitalizeFirstLetter(modul);
+                                $('#cmb' + modulLowcasse).val(item).trigger('change');
+                                let getjumlah = $('#jumlah_' + modul + '_value_' + item).val();
+                                let getketerangan = $('#keterangan_' + modul + '_value_' + item)
+                                    .val();
+                                $('#jumlah_' + modul + '_tampil').val(getjumlah);
+                                $('#jumlah_' + modul).val(getjumlah);
+                                $('#keterangan_' + modul).val(getketerangan);
+                            });
+
+                            $(".btn-hapus").on("click", function(e) {
+                                let id = $(this).data('pekerjaanutama');
+                                let modul = $(this).data('modul');
+                                let item = $(this).data('item');
+                                let content = '';
+                                let modulLowcasse = capitalizeFirstLetter(modul);
+                                let itemLength = $('#list' + modulLowcasse + '_' + item).length;
+                                if (itemLength > 0) {
+                                    $('#list' + modulLowcasse + '_' + item).remove();
+
+                                    $('#table' + modulLowcasse).append(content);
+                                }
+                                let n = 1;
+                                $('.nomor_' + modul).each(function(index, item) {
+                                    let number = n++;
+                                    $(item).text(number);
+                                    $(this).attr('data-index', number);
+                                });
+                                $.ajax({
+                                    type: 'POST',
+                                    url: "{{ route('pelaksanaan-pekerjaan.hapus.item') }}",
+                                    data: {
+                                        "_token": "{{ csrf_token() }}",
+                                        id,
+                                        modul,
+                                        item,
+                                    },
+                                    success: function(data) {
+                                        toast('success hapus ' + modul)
+                                    },
+                                    error: function(data) {
+                                        console.log(data);
+                                        Swal.fire({
+                                            title: 'Oops...',
+                                            text: "gagal Mengahapus " +
+                                                modul,
+                                            footer: '<a href="">terdapat data yang kosong</a>'
+                                        })
+                                    }
+                                });
+
+                            });
+
+
                         },
                         error: function(data) {
                             Swal.fire({
@@ -1085,7 +1424,27 @@
                         footer: '<a href="">terdapat data yang kosong</a>'
                     })
                 }
+            }
+            $('#formPekerjaan').on('submit', function(e) {
+                e.preventDefault();
+                let modul = 'pekerjaan';
+                saveform(modul);
+            });
+            $('#formAlatBantu').on('submit', function(e) {
+                e.preventDefault();
+                let modul = 'alat_bantu';
+                saveform(modul);
+            });
 
+            $('#formBahan').on('submit', function(e) {
+                e.preventDefault();
+                let modul = 'bahan';
+                saveform(modul);
+            });
+            $('#formTransportasi').on('submit', function(e) {
+                e.preventDefault();
+                let modul = 'transportasi';
+                saveform(modul);
             });
             // ------ End Pekerjaan
 
