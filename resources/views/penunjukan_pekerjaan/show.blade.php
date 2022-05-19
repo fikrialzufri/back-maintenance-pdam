@@ -150,6 +150,16 @@
                                         </div>
                                     </div>
                                     <div class="col">
+                                        <h5 class="sub-title">keterangan</h5>
+                                        <div class="form-group">
+                                            <div class="input-group mb-2 mr-sm-2">
+                                                <input type="text" name="input_keterangan_pekerjaan"
+                                                    id="input_keterangan_pekerjaan" placeholder="Keterangan Pekerjaan"
+                                                    class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
                                         <h5 class="sub-title">Pilih Harga</h5>
                                         <div class="form-radio">
                                             <form>
@@ -201,7 +211,7 @@
                                                 </td>
                                                 <td>
                                                     <span
-                                                        id="jumlah_pekerjaan_{{ $pekerjaan->id }}">{{ $pekerjaan->pivot->qty }}
+                                                        id="jumlah_pekerjaan_tampil_{{ $pekerjaan->id }}">{{ $pekerjaan->pivot->qty }}
                                                     </span>
 
                                                     <input type="hidden" id="jumlah_pekerjaan_value_{{ $pekerjaan->id }}"
@@ -218,8 +228,9 @@
                                                         name="keterangan_pekerjaan" value="{{ $pekerjaan->keterangan }}">
                                                 </td>
                                                 <td>
-                                                    <button class="btn btn-sm btn-warning text-light"
-                                                        onclick="editPekerjaan('{{ $pekerjaan->id }}')">
+                                                    <button class="btn btn-sm btn-warning text-light btn-edit"
+                                                        data-pekerjaanutama="{{ $pekerjaanUtama->id }}"
+                                                        data-modul="pekerjaan" data-item="{{ $pekerjaan->id }}">
                                                         <i class="nav-icon fas fa-edit"></i>
                                                         Ubah
                                                     </button>
@@ -914,18 +925,12 @@
             }
 
             $(".btn-hapus").on("click", function(e) {
-
                 let id = $(this).data('pekerjaanutama');
                 let modul = $(this).data('modul');
                 let item = $(this).data('item');
-
-                console.log(id);
-                console.log(modul);
                 let content = '';
                 let modulLowcasse = capitalizeFirstLetter(modul);
-
                 let itemLength = $('#list' + modulLowcasse + '_' + item).length;
-
                 if (itemLength > 0) {
                     $('#list' + modulLowcasse + '_' + item).remove();
 
@@ -959,6 +964,18 @@
                 });
 
             });
+            $(".btn-edit").on("click", function(e) {
+                let id = $(this).data('pekerjaanutama');
+                let modul = $(this).data('modul');
+                let item = $(this).data('item');
+                let modulLowcasse = capitalizeFirstLetter(modul);
+                $('#cmb' + modulLowcasse).val(item).trigger('change');
+                let getjumlah = $('#jumlah_' + modul + '_value_' + item).val();
+                let getketerangan = $('#keterangan_' + modul + '_value_' + item).val();
+                $('#jumlah_' + modul + '_tampil').val(getjumlah);
+                $('#jumlah_' + modul).val(getjumlah);
+                $('#keterangan_' + modul).val(getketerangan);
+            });
 
             function elementPekerjaan(id, nomor, pekerjaan, jumlah, total, keterangan) {
                 return `<tr id="listPekerjaan_${id}" class="list_table_pekerjaan">
@@ -966,7 +983,7 @@
                     </td>
                     <td>${pekerjaan}</td>
                     <td>
-                        <span id="jumlah_pekerjaan_${id}">${jumlah}</span>
+                        <span id="jumlah_pekerjaan_tampil_${id}">${jumlah}</span>
                         <input type="hidden" name="jumlah" id="jumlah_pekerjaan_value_${id}" value="${jumlah}">
                     </td>
                     <td id="total_pekerjaan_${id}">
@@ -1030,7 +1047,7 @@
                             let nomor = tableCount + 1;
 
                             if (lengthPekerjaan !== 0) {
-                                $('#jumlah_pekerjaan_' + item_id).text(jumlah);
+                                $('#jumlah_pekerjaan_tampil_' + item_id).text(jumlah);
                                 $('#total_pekerjaan_' + item_id).text('Rp.' + total);
                                 $('#keterangan_pekerjaan_' + item_id).text(keterangan);
 
