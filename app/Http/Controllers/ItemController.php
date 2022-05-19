@@ -50,6 +50,25 @@ class ItemController extends Controller
                 'alias'    => 'Nama Item',
                 'value'    => null
             ],
+            [
+                'name'    => 'jenis_id',
+                'input'    => 'combo',
+                'alias'    => 'Jenis / Kategori',
+                'value' => $this->combobox(
+                    'Jenis',
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    $hasRelation = 'kategori',
+                    $hasColom = 'nama_kategori'
+                )
+            ],
         ];
     }
     public function configForm()

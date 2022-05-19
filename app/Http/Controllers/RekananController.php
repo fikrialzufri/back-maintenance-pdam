@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Rekanan;
 use App\Traits\CrudTrait;
-use Illuminate\Http\Request;
+
 
 class RekananController extends Controller
 {

@@ -455,7 +455,6 @@ class PelaksanaanPekerjaanController extends Controller
             DB::commit();
 
             $slug = $request->slug;
-            $nama = $request->nama;
             $keterangan = $request->keterangan;
             $jumlah = $request->jumlah;
 
@@ -552,9 +551,12 @@ class PelaksanaanPekerjaanController extends Controller
             $panjang = $request->panjang;
             $lebar = $request->lebar;
             $dalam = $request->dalam;
-            $setting = Setting::first();
-            $total = ($panjang * $lebar * $dalam) * $setting->galian;
-            $bongkaran = $request->bongkaran;
+            $item = $request->item;
+
+            $dataItem = Item::find($item);
+            $harga_item = $dataItem->harga;
+
+            $total = ($panjang * $lebar * $dalam) * $harga_item;
             $keterangan = $request->keterangan;
 
             $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $slug)->first();
@@ -565,7 +567,6 @@ class PelaksanaanPekerjaanController extends Controller
             $gajian->panjang = $panjang;
             $gajian->lebar = $lebar;
             $gajian->dalam = $dalam;
-            $gajian->bongkaran = $bongkaran;
             $gajian->keterangan = $keterangan;
             $gajian->total = $total;
             $gajian->user_id = $user_id;

@@ -16,14 +16,14 @@ class KategoriJenisSeeder extends Seeder
      */
     public function run()
     {
-        $listKagetoi = [
+        $listKategori = [
             ['nama' => 'Galian'],
             ['nama' => 'Bahan'],
             ['nama' => 'Alat Bantu'],
             ['nama' => 'Transportasi'],
         ];
 
-        foreach ($listKagetoi as $key => $value) {
+        foreach ($listKategori as $key => $value) {
             $nama = $value['nama'];
 
             $kategoriGalian[$key] = Kategori::whereSlug(Str::slug($nama))->first();

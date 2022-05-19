@@ -681,8 +681,7 @@ trait CrudTrait
                 if (isset($value['input'])) {
                     if ($value['input'] === "rupiah") {
                         $form[$value['name']] = str_replace(".", "", $request->input($value['name']));
-                    }
-                    if ($value['input'] === "image") {
+                    } else if ($value['input'] === "image") {
                         $form[$value['name'] . '-image'] = 'image';
                     } else {
 

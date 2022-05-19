@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Aduan;
+use App\Models\GalianPekerjaan;
 use App\Models\Item;
 use App\Models\Jenis;
 use App\Models\PenunjukanPekerjaan;
@@ -78,6 +79,12 @@ class PenunjukanPekerjaanController extends Controller
             $listPekerjaan = Item::whereIn('jenis_id', $jenisPekerjaan)->get();
         }
 
+        $kategoriGalian = Kategori::whereSlug('galian')->first();
+        if ($kategoriGalian) {
+            $jenisGalian = Jenis::where('kategori_id', $kategoriGalian->id)->get()->pluck('id');
+            $listGalian = Item::whereIn('jenis_id', $jenisGalian)->get();
+        }
+
         $kategoriBahan = Kategori::whereSlug('bahan')->first();
         if ($kategoriBahan) {
             $jenisBahan = Jenis::where('kategori_id', $kategoriBahan->id)->get()->pluck('id');
@@ -96,19 +103,20 @@ class PenunjukanPekerjaanController extends Controller
             $listTransportasi = Item::whereIn('jenis_id', $jenisTransportasi)->get();
         }
 
-        $pekerjaan = PelaksanaanPekerjaan::where('penunjukan_pekerjaan_id', $penunjukan->id)->with(["hasItem" => function ($q) use ($jenisPekerjaan) {
-            $q->whereIn('item.jenis_id', $jenisPekerjaan);
-        }])->first();
+        $query = PelaksanaanPekerjaan::where('penunjukan_pekerjaan_id', $penunjukan->id);
 
-        $daftarBahan = PelaksanaanPekerjaan::where('penunjukan_pekerjaan_id', $penunjukan->id)->with(["hasItem" => function ($q) use ($jenisBahan) {
+        $pekerjaan = $query->first();
+        $daftarBahan = $query->with(["hasItem" => function ($q) use ($jenisBahan) {
             $q->whereIn('item.jenis_id', $jenisBahan);
         }])->first();
 
-        $daftarAlatBantu = PelaksanaanPekerjaan::where('penunjukan_pekerjaan_id', $penunjukan->id)->with(["hasItem" => function ($q) use ($jenisAlatBantu) {
+        $daftarGalian = GalianPekerjaan::where('pelaksanaan_pekerjaan_id', $pekerjaan->id)->get();
+
+        $daftarAlatBantu = $query->with(["hasItem" => function ($q) use ($jenisAlatBantu) {
             $q->whereIn('item.jenis_id', $jenisAlatBantu);
         }])->first();
 
-        $daftarTransportasi = PelaksanaanPekerjaan::where('penunjukan_pekerjaan_id', $penunjukan->id)->with(["hasItem" => function ($q) use ($jenisTransportasi) {
+        $daftarTransportasi = $query->with(["hasItem" => function ($q) use ($jenisTransportasi) {
             $q->whereIn('item.jenis_id', $jenisTransportasi);
         }])->first();
 
@@ -133,6 +141,7 @@ class PenunjukanPekerjaanController extends Controller
             'aduan',
             'penunjukan',
             'pekerjaan',
+            'daftarGalian',
             'daftarBahan',
             'daftarAlatBantu',
             'daftarTransportasi',
@@ -141,6 +150,7 @@ class PenunjukanPekerjaanController extends Controller
             'rekanan',
             'title',
             'listPekerjaan',
+            'listGalian',
             'listBahan',
             'listAlatBantu',
             'listTransportasi',

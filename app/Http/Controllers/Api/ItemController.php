@@ -21,7 +21,7 @@ class ItemController extends Controller
     public function index(Request $request)
     {
         $nama = $request->nama;
-        $jenis = $request->jenis;
+        $kategori = $request->kategori;
         $result = [];
 
         try {
@@ -29,9 +29,12 @@ class ItemController extends Controller
 
             $query = $this->model();
             $query = $query->where('nama', 'like', '%' . $nama . '%');
-            if ($jenis) {
-                $listjenis = Jenis::where('nama', 'like', '%' . $jenis . '%')->first();
-                $query = $query->where('jenis_id', $listjenis->id);
+            if ($kategori) {
+                $kategori = Kategori::where('nama', 'like', '%' . $nama . '%')->first();
+                if ($kategori) {
+                    $jenis = Jenis::where('kategori_id', $kategori->id)->get();
+                    $query = $query->whereIn('jenis_id', $jenis->pluck('id'));
+                }
             }
 
             $data = $query->get();
