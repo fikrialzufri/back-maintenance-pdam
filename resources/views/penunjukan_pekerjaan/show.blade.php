@@ -116,6 +116,153 @@
 
                     <div class="card">
                         <div class="card-header  justify-content-between">
+                            <div class="card-title">Daftar Pekerjaan</div>
+
+                        </div>
+                        <div class="card-body">
+                            <form action="" id="formPekerjaan">
+                                <input type="hidden" name="id_Pekerjaan" id="idPekerjaan" value="{{ $pekerjaan->id }}">
+                                <div class="row">
+                                    <div class="col-2">
+                                        <h5 class="sub-title">Pilih Pekerjaan</h5>
+                                        <div class="form-group">
+                                            <select class="form-control select2" id="cmbPekerjaan">
+                                                <option selected="selected" value="">Pilih Pekerjaan
+                                                </option>
+                                                @foreach ($listPekerjaan as $i => $pekerjaan)
+                                                    <option value="{{ $pekerjaan->id }}"
+                                                        id="Pekerjaan_{{ $pekerjaan->id }}">
+                                                        {{ $pekerjaan->nama }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <h5 class="sub-title">Jumlah</h5>
+                                        <div class="form-group">
+                                            <div class="input-group mb-2 mr-sm-2">
+                                                <input type="text" name="jumlah_Pekerjaan" id="jumlah_Pekerjaan"
+                                                    placeholder="jumlah" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <h5 class="sub-title">Pilih Harga</h5>
+                                        <div class="form-radio">
+                                            <form>
+                                                <div class="radio radiofill radio-inline">
+                                                    <label>
+                                                        <input type="radio" class="harga_Pekerjaan" name="harga_Pekerjaan"
+                                                            value="siang" checked="checked">
+                                                        <i class="helper"></i>Harga Siang
+                                                    </label>
+                                                </div>
+                                                <div class="radio radiofill radio-inline">
+                                                    <label>
+                                                        <input type="radio" class="harga_Pekerjaan" name="harga_Pekerjaan"
+                                                            value="malam">
+                                                        <i class="helper"></i>Harga Malam
+                                                    </label>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="">
+                                            <button type="submit" id="btn_Pekerjaan" class="btn btn-primary">Update
+                                                Pekerjaan</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <table class="table table-bordered " width="100%" id="tablePekerjaan">
+                                <thead>
+                                    <tr>
+                                        <th width="5">#</th>
+                                        <th width="250">Pekerjaan</th>
+                                        <th width="10">Jumlah</th>
+                                        <th width="200">Total Harga</th>
+                                        <th width="150">Keterangan</th>
+                                        <th width="5%" class="text-center">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (isset($daftarPekerjaan->hasItem))
+
+                                        @forelse ($daftarPekerjaan->hasItem as $key => $pekerjaan)
+                                            <tr id="listPekerjaan_{{ $pekerjaan->item_id }}"
+                                                class="list_table_Pekerjaan">
+                                                <td class="text-center nomor_Pekerjaan" data-index="{{ $key + 1 }}">
+                                                    {{ $key + 1 }}
+                                                </td>
+                                                <td>
+                                                    {{ $pekerjaan->nama }}
+
+                                                </td>
+                                                <td>
+                                                    <span
+                                                        id="jumlah_pekerjaan_{{ $pekerjaan->item_id }}">{{ $pekerjaan->panjang }}
+                                                        M</span>
+
+                                                    <input type="hidden"
+                                                        id="jumlah_pekerjaan_value_{{ $pekerjaan->item_id }}"
+                                                        name="panjang" value="{{ $pekerjaan->panjang }}">
+                                                </td>
+                                                <td id="total_Pekerjaan_{{ $pekerjaan->item_id }}">Rp.
+                                                    {{ format_uang($pekerjaan->pivit->total) }}</td>
+                                                <td>
+                                                    <span id="keterangan_Pekerjaan_{{ $pekerjaan->item_id }}">
+                                                        {{ $pekerjaan->keterangan }}</span>
+
+                                                    <input type="hidden" id="keterangan_value_{{ $pekerjaan->item_id }}"
+                                                        name="keterangan" value="{{ $pekerjaan->keterangan }}">
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-warning text-light"
+                                                        onclick="editPekerjaan('{{ $pekerjaan->item_id }}')">
+                                                        <i class="nav-icon fas fa-edit"></i>
+                                                        Ubah
+                                                    </button>
+                                                    <button type="button" class="btn btn-danger btn-xs text-center"
+                                                        onclick="hapusPekerjaan('{{ $pekerjaan->item_id }}')">
+                                                        <i class="fa fa-trash"></i>
+                                                        Hapus
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        @empty
+                                            <tr class="PekerjaanTidakAda">
+                                                <td colspan="10">Data Pekerjaan tidak ada</td>
+                                            </tr>
+                                        @endforelse
+                                    @else
+                                        <tr class="PekerjaanTidakAda">
+                                            <td colspan="10">Data Pekerjaan tidak ada</td>
+                                        </tr>
+                                    @endif
+                                </tbody>
+                                <tfoot>
+                                    @if (isset($daftarPekerjaan->hasItem))
+                                        <tr>
+                                            <th colspan="5" class="text-right">Grand Total
+                                            </th>
+                                            <th>Rp. {{ format_uang($daftarPekerjaan->hasItem->sum('pivot.total')) }}
+
+                                        </tr>
+                                    @endif
+                                </tfoot>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+
+                    <div class="card">
+                        <div class="card-header  justify-content-between">
                             <div class="card-title">Daftar Galian</div>
 
                         </div>

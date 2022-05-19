@@ -106,6 +106,11 @@ class PenunjukanPekerjaanController extends Controller
         $query = PelaksanaanPekerjaan::where('penunjukan_pekerjaan_id', $penunjukan->id);
 
         $pekerjaan = $query->first();
+
+        $daftarPekerjaan = $query->with(["hasItem" => function ($q) use ($listPekerjaan) {
+            $q->whereIn('item.jenis_id', $listPekerjaan);
+        }])->first();
+
         $daftarBahan = $query->with(["hasItem" => function ($q) use ($jenisBahan) {
             $q->whereIn('item.jenis_id', $jenisBahan);
         }])->first();
@@ -141,6 +146,7 @@ class PenunjukanPekerjaanController extends Controller
             'aduan',
             'penunjukan',
             'pekerjaan',
+            'daftarPekerjaan',
             'daftarGalian',
             'daftarBahan',
             'daftarAlatBantu',

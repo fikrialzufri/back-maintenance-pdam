@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Item;
 use App\Models\Jenis;
+use App\Models\Kategori;
 
 class ItemController extends Controller
 {
@@ -24,9 +25,9 @@ class ItemController extends Controller
         $kategori = $request->kategori;
         $result = [];
 
-        try {
-            $message = 'Data Item';
+        $message = 'Data Item';
 
+        try {
             $query = $this->model();
             $query = $query->where('nama', 'like', '%' . $nama . '%');
             if ($kategori) {
