@@ -20,6 +20,7 @@ class KategoriJenisSeeder extends Seeder
             ['nama' => 'Galian'],
             ['nama' => 'Bahan'],
             ['nama' => 'Alat Bantu'],
+            ['nama' => 'Pekerjaan'],
             ['nama' => 'Transportasi'],
         ];
 

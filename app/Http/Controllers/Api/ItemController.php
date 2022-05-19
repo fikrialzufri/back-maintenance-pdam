@@ -31,7 +31,7 @@ class ItemController extends Controller
             $query = $this->model();
             $query = $query->where('nama', 'like', '%' . $nama . '%');
             if ($kategori) {
-                $kategori = Kategori::where('nama', 'like', '%' . $nama . '%')->first();
+                $kategori = Kategori::where('nama', 'like', '%' . $kategori . '%')->first();
                 if ($kategori) {
                     $jenis = Jenis::where('kategori_id', $kategori->id)->get();
                     $query = $query->whereIn('jenis_id', $jenis->pluck('id'));
