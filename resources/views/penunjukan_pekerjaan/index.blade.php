@@ -9,9 +9,18 @@
                 <div class="card">
                     <div class="card-header justify-content-between">
                         <h3 class="card-title">Daftar {{ $title }}</h3>
-                        <a href="{{ route($route . '.create') }}" class="btn btn-sm btn-primary float-right text-light">
-                            <i class="fa fa-plus"></i>Tambah Data
-                        </a>
+
+                        <div>
+
+                            <a href="{{ route($route . '.create') }}"
+                                class="btn btn-sm btn-primary float-right text-light">
+                                <i class="fa fa-plus"></i>Tambah Data
+                            </a>
+                            <a href="{{ route($route . '.upload') }}"
+                                class="btn btn-sm btn-warning float-right text-light">
+                                <i class="fa fa-file"></i> Upload
+                            </a>
+                        </div>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">

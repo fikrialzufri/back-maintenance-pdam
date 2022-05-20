@@ -65,7 +65,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('aduan', AduanController::class)->except('show');
 
     Route::get('notifikasi/aduan/{id}', [PenunjukanPekerjaanController::class, 'notifikasi'])->name('penunjukan_pekerjaan.notification');
+
     Route::resource('penunjukan-pekerjaan', PenunjukanPekerjaanController::class, ['names' => 'penunjukan_pekerjaan'])->except('destroy');
+
+    Route::get('upload/penunjukan-pekerjaan', [PenunjukanPekerjaanController::class, 'upload'])->name('penunjukan_pekerjaan.upload');
+
+    Route::post('upload/penunjukan-pekerjaan', [PenunjukanPekerjaanController::class, 'uploaddata'])->name('penunjukan_pekerjaan.uploaddata');
 
     Route::post('tambah-galian', [PelaksanaanPekerjaanController::class, 'galian'])->name('pelaksanaan-pekerjaan.galian');
     Route::post('hapus-galian', [PelaksanaanPekerjaanController::class, 'hapusgalian'])->name('pelaksanaan-pekerjaan.galian.hapus');

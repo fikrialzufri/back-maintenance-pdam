@@ -255,11 +255,11 @@ class PenunjukanPekerjaanController extends Controller
      */
     public function upload()
     {
-        $title =  "Upload Data rekanan";
-        $route = $this->route;
-        $action = route('rekanan.upload');
+        $title =  "Upload Data Pekerjaan";
+        $route = "$this->route";
+        $action = route('penunjukan_pekerjaan.upload');
 
-        return view('rekanan.upload', compact(
+        return view('penunjukan_pekerjaan.upload', compact(
             "title",
             "route",
             "action",
