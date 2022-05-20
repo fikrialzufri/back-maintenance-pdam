@@ -84,9 +84,23 @@ class PenunjukanPekerjaan extends Model
     }
     public function getGalianPekerjaanAttribute()
     {
+        $result = [];
         if ($this->hasPelaksanaanPekerjaan) {
-            return $this->hasPelaksanaanPekerjaan->hasGalianPekerjaan;
+
+            if (isset($this->hasPelaksanaanPekerjaan->hasGalianPekerjaan)) {
+                foreach ($this->hasPelaksanaanPekerjaan->hasGalianPekerjaan as $key => $value) {
+                    $result[$key] = [
+                        'id' => $value->id,
+                        'pekerjaan' => $value->pekerjaan,
+                        'panjang' => $value->panjang,
+                        'lebar' => $value->lebar,
+                        'dalam' => $value->dalam,
+                        'keterangan' => $value->keterangan,
+                    ];
+                }
+            }
         }
+        return $result;
     }
 
     public function hasPelaksanaanPekerjaan()
@@ -135,17 +149,99 @@ class PenunjukanPekerjaan extends Model
             return $this->hasPelaksanaanPekerjaan->lat_long;
         }
     }
-    public function getListItemAttribute()
+
+    public function getListBahanAttribute()
     {
+        $kategoriBahan = Kategori::whereSlug('bahan')->first();
+        if ($kategoriBahan) {
+            $jenisBahan = Jenis::where('kategori_id', $kategoriBahan->id)->get()->pluck('id');
+            $listBahan = Item::whereIn('jenis_id', $jenisBahan)->get()->pluck('id')->toArray();
+        }
+
         $item = [];
+        $index = 0;
         if ($this->hasPelaksanaanPekerjaan) {
             foreach ($this->hasPelaksanaanPekerjaan->hasItem as $key => $value) {
-                $item[$key] = [
-                    'id' => $value->id,
-                    'nama' => $value->nama,
-                    'jumlah' => $value->pivot->qty,
-                    'keterangan' => $value->pivot->keterangan,
-                ];
+                if (in_array($value->id, $listBahan)) {
+                    $item[$index++] = [
+                        'id' => $value->id,
+                        'nama' => $value->nama,
+                        'jumlah' => $value->pivot->qty,
+                        'keterangan' => $value->pivot->keterangan,
+                    ];
+                }
+            }
+        }
+        return $item;
+    }
+    public function getListPekerjaanAttribute()
+    {
+        $kategoriBahan = Kategori::whereSlug('pekerjaan')->first();
+        if ($kategoriBahan) {
+            $jenisBahan = Jenis::where('kategori_id', $kategoriBahan->id)->get()->pluck('id');
+            $listBahan = Item::whereIn('jenis_id', $jenisBahan)->get()->pluck('id')->toArray();
+        }
+
+        $item = [];
+        $index = 0;
+        if ($this->hasPelaksanaanPekerjaan) {
+            foreach ($this->hasPelaksanaanPekerjaan->hasItem as $key => $value) {
+                if (in_array($value->id, $listBahan)) {
+                    $item[$index++] = [
+                        'id' => $value->id,
+                        'nama' => $value->nama,
+                        'jumlah' => $value->pivot->qty,
+                        'keterangan' => $value->pivot->keterangan,
+                    ];
+                }
+            }
+        }
+        return $item;
+    }
+    public function getListAlatBantuAttribute()
+    {
+        $kategoriBahan = Kategori::whereSlug('alat-bantu')->first();
+        if ($kategoriBahan) {
+            $jenisBahan = Jenis::where('kategori_id', $kategoriBahan->id)->get()->pluck('id');
+            $listBahan = Item::whereIn('jenis_id', $jenisBahan)->get()->pluck('id')->toArray();
+        }
+
+        $item = [];
+        $index = 0;
+        if ($this->hasPelaksanaanPekerjaan) {
+            foreach ($this->hasPelaksanaanPekerjaan->hasItem as $key => $value) {
+                if (in_array($value->id, $listBahan)) {
+                    $item[$index++] = [
+                        'id' => $value->id,
+                        'nama' => $value->nama,
+                        'jumlah' => $value->pivot->qty,
+                        'keterangan' => $value->pivot->keterangan,
+                    ];
+                }
+            }
+        }
+        return $item;
+    }
+    public function getListTransportasiAttribute()
+    {
+        $kategoriBahan = Kategori::whereSlug('transportasi')->first();
+        if ($kategoriBahan) {
+            $jenisBahan = Jenis::where('kategori_id', $kategoriBahan->id)->get()->pluck('id');
+            $listBahan = Item::whereIn('jenis_id', $jenisBahan)->get()->pluck('id')->toArray();
+        }
+
+        $item = [];
+        $index = 0;
+        if ($this->hasPelaksanaanPekerjaan) {
+            foreach ($this->hasPelaksanaanPekerjaan->hasItem as $key => $value) {
+                if (in_array($value->id, $listBahan)) {
+                    $item[$index++] = [
+                        'id' => $value->id,
+                        'nama' => $value->nama,
+                        'jumlah' => $value->pivot->qty,
+                        'keterangan' => $value->pivot->keterangan,
+                    ];
+                }
             }
         }
         return $item;

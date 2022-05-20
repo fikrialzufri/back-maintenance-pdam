@@ -72,6 +72,7 @@ class PenunjukanPekerjaanController extends Controller
         }
 
 
+
         if ($slug) {
             $data = $query->with('hasAduan')->orderBy('status', 'ASC')->orderBy('created_at')->first();
             if (!$data) {
@@ -93,7 +94,12 @@ class PenunjukanPekerjaanController extends Controller
                     'galian_pekerjaan' =>  $data->galian_pekerjaan,
                     'jenis_aduan' =>  $data->jenis_aduan,
                     'atas_nama' =>  $data->atas_nama,
-                    'item' =>  $data->list_item,
+                    'no_hp' =>  $data->no_hp,
+                    'no_pelanggan' =>  $data->no_pelanggan,
+                    'item_pekerjaan' =>  $data->list_pekerjaan,
+                    'item_bahan' =>  $data->list_bahan,
+                    'item_alat_bantu' =>  $data->list_alat_bantu,
+                    'item_transportasi' =>  $data->list_transportasi,
                     'sumber_informasi' =>  $data->sumber_informasi,
                     'keterangan_aduan' =>  $data->keterangan_aduan,
                     'keterangan_penyelesaian' =>  $data->keterangan_penyelesaian,
