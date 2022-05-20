@@ -17,6 +17,7 @@ class RekananController extends Controller
         $this->route = 'rekanan';
         $this->sort = 'nama';
         $this->plural = 'true';
+        $this->upload = 'true';
         $this->manyToMany = ['role'];
         $this->relations = ['user'];
         $this->extraFrom = ['user'];
@@ -170,9 +171,9 @@ class RekananController extends Controller
         $dataEmail = [];
         $itemExist = [];
 
+        $file = $request->hasFile('file');
+        $total = 0;
         try {
-            $file = $request->hasFile('file');
-            $total = 0;
             if ($file) {
                 $item = Excel::toArray('', request()->file('file'), null, null);
                 foreach ($item[0] as $k => $val) {
@@ -189,51 +190,29 @@ class RekananController extends Controller
                     $dataEmail[$index] = $item[8];
 
                     if ($index > 2) {
-                        $dataUser[$index] = Rekanan::where('username', 'LIKE', '%' .  $dataUserName[$index] . "%")->first();
-                        if ($dataUser) {
+                        $dataUser[$index] = User::where('username', 'LIKE', '%' .  $dataCV[$index] . "%")->first();
+                        if (!$dataUser[$index]) {
                             $dataUser[$index] = new User;
-                            $dataUser[$index]->nama =  $dataUserName[$index];
+                            $dataUser[$index]->name =  $dataUserName[$index];
                             $dataUser[$index]->username =  $dataUserName[$index];
+                            $dataUser[$index]->password =  bcrypt($dataPassword[$index]);
                             $dataUser[$index]->email =  $dataEmail[$index];
                             $dataUser[$index]->save();
                         }
-                        $dataRekanan[$index] = Rekanan::where('nama', 'LIKE', '%' . $dataCV . "%")->first();
+                        $dataRekanan[$index] = Rekanan::where('nama', 'LIKE', '%' . $dataCV[$index] . "%")->first();
                         if (!$dataRekanan[$index]) {
                             if ($dataNama[$index] != null) {
                                 $Rekanan = new Rekanan;
                                 $Rekanan->nama =  $dataCV[$index];
                                 $Rekanan->nama_penangung_jawab =  $dataNama[$index];
-                                $Rekanan->nik =  $dataNoHp[$index];
+                                $Rekanan->nik =  $dataKtp[$index];
+                                $Rekanan->no_hp =  $dataNoHp[$index];
                                 $Rekanan->alamat =  $dataAlamat[$index];
                                 $Rekanan->user_id =  $dataUser[$index]->id;
                                 $Rekanan->save();
                                 $total = ++$index;
                             }
                         }
-                        // $dataSatuan[$index] = Satuan::where('nama', 'LIKE', '%' . $item[3] . "%")->first();
-
-                        // if (!$dataRekanan[$index]) {
-                        //     return redirect()->route($this->route . '.index')->with('message', ' Rekanan Tidak ada')->with('Class', 'danger');
-                        // }
-                        // if (!$dataSatuan[$index]) {
-                        //     return redirect()->route($this->route . '.index')->with('message', ' Satuan Item tidak')->with('Class', 'danger');
-                        // }
-                        // $dataNama[$index] = $item[1];
-                        // $dataHargaSiang[$index] = str_replace(".", "", $item[4]);
-                        // $dataHargaMalam[$index] = str_replace(".", "", $item[5]);
-
-                        // $itemExist[$index] = Item::where('nama', 'LIKE', '%' . $item[3] . "%")->first();
-
-                        // if (!$itemExist[$index]) {
-
-
-                        //     if ($dataNama[$index] != null) {
-                        //         $item = new item;
-                        //         $item->nama =  $dataNama[$index];
-                        //         $item->save();
-                        //         $total = ++$index;
-                        //     }
-                        // }
                     }
                 }
                 return redirect()->route($this->route . '.index')->with('message', ucwords(str_replace('-', ' ', $this->route)) . ' berhasil diupload dengan total item :' . $total)->with('Class', 'success');

@@ -189,11 +189,8 @@ class ItemController extends Controller
                         $dataHargaSiang[$index] = str_replace(".", "", $item[4]);
                         $dataHargaMalam[$index] = str_replace(".", "", $item[5]);
 
-                        $itemExist[$index] = Item::where('nama', 'LIKE', '%' . $item[3] . "%")->first();
-
-                        if (!$itemExist[$index]) {
-
-
+                        $itemExist[$index] = Item::where('nama', 'LIKE', '%' . $dataNama[$index]  . "%")->first();
+                        if ($itemExist[$index] == null) {
                             if ($dataNama[$index] != null) {
                                 $item = new item;
                                 $item->nama =  $dataNama[$index];
@@ -207,7 +204,7 @@ class ItemController extends Controller
                         }
                     }
                 }
-                return redirect()->route($this->route . '.index')->with('message', ucwords(str_replace('-', ' ', $this->route)) . ' berhasil diupload dengan total item :' . $total)->with('Class', 'success');
+                return redirect()->route($this->route . '.index')->with('message', ucwords(str_replace('-', ' ', $this->route)) . ' berhasil diupload dengan total item : ' . $total)->with('Class', 'success');
             }
         } catch (\Throwable $th) {
             //throw $th;
