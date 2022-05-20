@@ -88,6 +88,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     // Rekanan
     Route::resource('rekanan', RekananController::class);
+    Route::get('upload/rekanan', [RekananController::class, 'upload'])->name('rekanan.upload');
+    Route::post('upload/rekanan', [RekananController::class, 'uploaddata'])->name('rekanan.uploaddata');
 
     // Notifikasi
     Route::get('notification', [NotifikasiController::class, 'index'])->name('notification');

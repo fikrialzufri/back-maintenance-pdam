@@ -20,36 +20,36 @@ class GalianSeeder extends Seeder
         $listGalian = [
             [
                 'nama' => 'Tanah Keras',
-                'harga' => 300000,
-                'harga_malam' => 350000
+                'harga' => 111125,
+                'harga_malam' => 111125
             ],
             [
                 'nama' => 'Tanah Cor',
-                'harga' => 300000,
-                'harga_malam' => 350000
+                'harga' => 120000,
+                'harga_malam' => 120000
             ],
             [
                 'nama' => 'Gorong',
-                'harga' => 300000,
-                'harga_malam' => 350000
-
+                'harga' => 640000,
+                'harga_malam' => 640000
             ],
             [
                 'nama' => 'Aspal',
-                'harga' => 300000,
-                'harga_malam' => 350000
+                'harga' => 130000,
+                'harga_malam' => 130000
             ],
             [
                 'nama' => 'Pengembalian Galian',
-                'harga' => 300000,
-                'harga_malam' => 350000
+                'harga' => 50000,
+                'harga_malam' => 50000
             ],
             [
                 'nama' => 'Tanah Biasa',
-                'harga' => 300000,
-                'harga_malam' => 350000
+                'harga' => 75000,
+                'harga_malam' => 75000
             ],
         ];
+
         $JenisGalian = Jenis::whereSlug('galian')->first();
         $satuan = Satuan::whereSlug('meter')->first();
 

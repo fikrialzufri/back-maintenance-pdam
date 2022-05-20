@@ -165,51 +165,53 @@ class ItemController extends Controller
 
         $itemExist = [];
 
-        $file = $request->hasFile('file');
-        $total = 0;
-        if ($file) {
-            $item = Excel::toArray('', request()->file('file'), null, null);
-            foreach ($item[0] as $k => $val) {
-                $dataItem[$k] = $val;
-            }
-            foreach ($dataItem as $index => $item) {
-                if ($index > 2) {
-                    $dataJenis[$index] = Jenis::where('nama', 'LIKE', '%' . $item[2] . "%")->first();
+        try {
+            $file = $request->hasFile('file');
+            $total = 0;
+            if ($file) {
+                $item = Excel::toArray('', request()->file('file'), null, null);
+                foreach ($item[0] as $k => $val) {
+                    $dataItem[$k] = $val;
+                }
+                foreach ($dataItem as $index => $item) {
+                    if ($index > 2) {
+                        $dataJenis[$index] = Jenis::where('nama', 'LIKE', '%' . $item[2] . "%")->first();
 
-                    $dataSatuan[$index] = Satuan::where('nama', 'LIKE', '%' . $item[3] . "%")->first();
+                        $dataSatuan[$index] = Satuan::where('nama', 'LIKE', '%' . $item[3] . "%")->first();
 
-                    if (!$dataJenis[$index]) {
-                        return redirect()->route($this->route . '.index')->with('message', ' Jenis Item Tidak ada')->with('Class', 'danger');
-                    }
-                    if (!$dataSatuan[$index]) {
-                        return redirect()->route($this->route . '.index')->with('message', ' Satuan Item tidak')->with('Class', 'danger');
-                    }
-                    $dataNama[$index] = $item[1];
-                    $dataHargaSiang[$index] = $item[4];
-                    $dataHargaMalam[$index] = $item[5];
+                        if (!$dataJenis[$index]) {
+                            return redirect()->route($this->route . '.index')->with('message', ' Jenis Item Tidak ada')->with('Class', 'danger');
+                        }
+                        if (!$dataSatuan[$index]) {
+                            return redirect()->route($this->route . '.index')->with('message', ' Satuan Item tidak')->with('Class', 'danger');
+                        }
+                        $dataNama[$index] = $item[1];
+                        $dataHargaSiang[$index] = str_replace(".", "", $item[4]);
+                        $dataHargaMalam[$index] = str_replace(".", "", $item[5]);
 
-                    $itemExist[$index] = Item::where('nama', 'LIKE', '%' . $item[3] . "%")->first();
+                        $itemExist[$index] = Item::where('nama', 'LIKE', '%' . $item[3] . "%")->first();
 
-                    if (!$itemExist[$index]) {
+                        if (!$itemExist[$index]) {
 
 
-                        if ($dataNama[$index] != null) {
-                            $item = new item;
-                            $item->nama =  $dataNama[$index];
-                            $item->jenis_id =  $dataJenis[$index]->id;
-                            $item->satuan_id =  $dataSatuan[$index]->id;
-                            $item->harga =  $dataHargaSiang[$index];
-                            $item->harga_malam =  $dataHargaMalam[$index];
-                            $item->save();
-                            $total = ++$index;
+                            if ($dataNama[$index] != null) {
+                                $item = new item;
+                                $item->nama =  $dataNama[$index];
+                                $item->jenis_id =  $dataJenis[$index]->id;
+                                $item->satuan_id =  $dataSatuan[$index]->id;
+                                $item->harga =  $dataHargaSiang[$index];
+                                $item->harga_malam =  $dataHargaMalam[$index];
+                                $item->save();
+                                $total = ++$index;
+                            }
                         }
                     }
                 }
+                return redirect()->route($this->route . '.index')->with('message', ucwords(str_replace('-', ' ', $this->route)) . ' berhasil diupload dengan total item :' . $total)->with('Class', 'success');
             }
-            return redirect()->route($this->route . '.index')->with('message', ucwords(str_replace('-', ' ', $this->route)) . ' berhasil diupload dengan total item :' . $total)->with('Class', 'success');
-        }
-        try { } catch (\Throwable $th) {
+        } catch (\Throwable $th) {
             //throw $th;
+            return redirect()->route($this->route . '.index')->with('message', ucwords(str_replace('-', ' ', $this->route)) . ' gagal diupload')->with('Class', 'success');
         }
     }
 

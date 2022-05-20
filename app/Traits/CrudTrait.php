@@ -36,6 +36,9 @@ trait CrudTrait
     //sort
     protected $sort;
 
+    //desc
+    protected $desc;
+
     //relasi table
     protected $relations;
 
@@ -142,7 +145,11 @@ trait CrudTrait
             }
         }
         if ($this->sort) {
-            $data = $query->orderBy($this->sort);
+            if ($this->desc) {
+                $data = $query->orderBy($this->sort, $this->desc);
+            } else {
+                $data = $query->orderBy($this->sort);
+            }
         }
         //mendapilkan data model setelah query pencarian
         if ($paginate) {
@@ -313,8 +320,8 @@ trait CrudTrait
                         Storage::disk('public')->put($route . '/thumbnail' . '/' . $nama_gambar, $thumbnail);
 
                         $data->$file = $nama_gambar;
-                        continue;
                     }
+                    continue;
                 }
                 if ($index === "password") {
                     $item = bcrypt($item);
@@ -348,6 +355,22 @@ trait CrudTrait
             return redirect()->route($this->route . '.index')->with('message', ucwords(str_replace('-', ' ', $this->route)) . ' Berhasil Ditambahkan')->with('Class', 'success');
         } catch (\Throwable $th) {
             DB::rollback();
+            if (isset($this->manyToMany)) {
+                if (!isset($this->extraFrom)) {
+                    return $this->manyToMany;
+                    foreach ($this->manyToMany as  $value) {
+                        $hasRalation = 'has' . ucfirst($value);
+                        $valueField = $data->$hasRalation()->detach($form[$value]);
+                    }
+                }
+            }
+            if (isset($this->oneToMany)) {
+                foreach ($this->oneToMany as $index => $value) {
+                    $hasRalation = 'has' . ucfirst($value);
+                    $idRelation = $value . '_id';
+                    $valueField = $data->$hasRalation()->detach($form[$idRelation]);
+                }
+            }
             return redirect()->route($this->route . '.index')->with('message', ucwords(str_replace('-', ' ', $this->route)) . ' gagal Ditambahkan')->with('Class', 'success');
         }
     }
@@ -507,8 +530,8 @@ trait CrudTrait
                     Storage::disk('public')->put($route . '/thumbnail' . '/' . $nama_gambar, $thumbnail);
 
                     $data->$file = $nama_gambar;
-                    continue;
                 }
+                continue;
             }
             if ($index === "password") {
                 $item = bcrypt($item);

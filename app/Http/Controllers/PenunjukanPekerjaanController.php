@@ -62,7 +62,7 @@ class PenunjukanPekerjaanController extends Controller
     public function show($slug)
     {
         $aduan = Aduan::where('slug', $slug)->first();
-        $penunjukan = PenunjukanPekerjaan::where('aduan_id', $aduan->id)->first();
+
         $jenisPekerjaan = [];
         $jenisBahan = [];
         $jenisBajenisAlatBanturang = [];
@@ -72,6 +72,13 @@ class PenunjukanPekerjaanController extends Controller
         $listBahan = [];
         $listAlatBantu = [];
         $listTransportasi = [];
+        $penunjukan = [];
+        $pekerjaanUtama = [];
+        $daftarPekerjaan = [];
+        $daftarGalian = [];
+        $daftarBahan = [];
+        $daftarAlatBantu = [];
+        $daftarTransportasi = [];
 
         $kategoriPekerjaan = Kategori::whereSlug('pekerjaan')->first();
         if ($kategoriPekerjaan) {
@@ -102,28 +109,35 @@ class PenunjukanPekerjaanController extends Controller
             $jenisTransportasi = Jenis::where('kategori_id', $kategoriTransportasi->id)->get()->pluck('id');
             $listTransportasi = Item::whereIn('jenis_id', $jenisTransportasi)->get();
         }
+        if ($aduan->status !== 'draft') {
+            $penunjukan = PenunjukanPekerjaan::where('aduan_id', $aduan->id)->first();
 
-        $query = PelaksanaanPekerjaan::where('penunjukan_pekerjaan_id', $penunjukan->id);
+            $query = PelaksanaanPekerjaan::where('penunjukan_pekerjaan_id', $penunjukan->id);
 
-        $pekerjaanUtama = $query->first();
+            $pekerjaanUtama = $query->first();
 
-        $daftarPekerjaan = $query->with(["hasItem" => function ($q) use ($listPekerjaan) {
-            $q->whereIn('item.id', $listPekerjaan->pluck('id'));
-        }])->first();
+            if ($pekerjaanUtama) {
 
-        $daftarBahan = $query->with(["hasItem" => function ($q) use ($listBahan) {
-            $q->whereIn('item.id', $listBahan->pluck('id'));
-        }])->first();
+                $daftarPekerjaan = $query->with(["hasItem" => function ($q) use ($listPekerjaan) {
+                    $q->whereIn('item.id', $listPekerjaan->pluck('id'));
+                }])->first();
 
-        $daftarGalian = GalianPekerjaan::where('pelaksanaan_pekerjaan_id', $pekerjaanUtama->id)->get();
+                $daftarBahan = $query->with(["hasItem" => function ($q) use ($listBahan) {
+                    $q->whereIn('item.id', $listBahan->pluck('id'));
+                }])->first();
 
-        $daftarAlatBantu = $query->with(["hasItem" => function ($q) use ($listAlatBantu) {
-            $q->whereIn('item.id', $listAlatBantu->pluck('id'));
-        }])->first();
+                $daftarGalian = GalianPekerjaan::where('pelaksanaan_pekerjaan_id', $pekerjaanUtama->id)->get();
 
-        $daftarTransportasi = $query->with(["hasItem" => function ($q) use ($listTransportasi) {
-            $q->whereIn('item.id', $listTransportasi->pluck('id'));
-        }])->first();
+                $daftarAlatBantu = $query->with(["hasItem" => function ($q) use ($listAlatBantu) {
+                    $q->whereIn('item.id', $listAlatBantu->pluck('id'));
+                }])->first();
+
+                $daftarTransportasi = $query->with(["hasItem" => function ($q) use ($listTransportasi) {
+                    $q->whereIn('item.id', $listTransportasi->pluck('id'));
+                }])->first();
+            }
+        }
+
 
         $jenisAduan = $aduan->hasJenisAduan->toArray();
         $jenis_aduan = JenisAduan::orderBy('nama')->get();

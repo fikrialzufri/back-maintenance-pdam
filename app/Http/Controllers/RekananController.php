@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Rekanan;
+use App\Models\User;
 use App\Traits\CrudTrait;
-
+use Illuminate\Http\Request;
+use Excel;
 
 class RekananController extends Controller
 {
@@ -125,6 +127,121 @@ class RekananController extends Controller
                 'hasMany'    => ['role'],
             ],
         ];
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function upload()
+    {
+        $title =  "Upload Data rekanan";
+        $route = $this->route;
+        $action = route('rekanan.upload');
+
+        return view('rekanan.upload', compact(
+            "title",
+            "route",
+            "action",
+        ));
+    }
+    /**
+     * upload data
+     *
+     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request
+     */
+    public function uploaddata(Request $request)
+    {
+        $this->validate($request, [
+            'file' => 'required|mimes:csv,xls,xlsx'
+        ]);
+
+        $dataRekanan = [];
+        $dataCV = [];
+        $dataNama = [];
+        $dataKtp = [];
+        $dataNoHp = [];
+        $dataAlamat = [];
+        $dataUser = [];
+        $dataUserName = [];
+        $dataPassword = [];
+        $dataEmail = [];
+        $itemExist = [];
+
+        try {
+            $file = $request->hasFile('file');
+            $total = 0;
+            if ($file) {
+                $item = Excel::toArray('', request()->file('file'), null, null);
+                foreach ($item[0] as $k => $val) {
+                    $dataItem[$k] = $val;
+                }
+                foreach ($dataItem as $index => $item) {
+                    $dataCV[$index] = $item[1];
+                    $dataNama[$index] = $item[2];
+                    $dataKtp[$index] = $item[3];
+                    $dataNoHp[$index] = $item[4];
+                    $dataAlamat[$index] = $item[5];
+                    $dataUserName[$index] = $item[6];
+                    $dataPassword[$index] = $item[7];
+                    $dataEmail[$index] = $item[8];
+
+                    if ($index > 2) {
+                        $dataUser[$index] = Rekanan::where('username', 'LIKE', '%' .  $dataUserName[$index] . "%")->first();
+                        if ($dataUser) {
+                            $dataUser[$index] = new User;
+                            $dataUser[$index]->nama =  $dataUserName[$index];
+                            $dataUser[$index]->username =  $dataUserName[$index];
+                            $dataUser[$index]->email =  $dataEmail[$index];
+                            $dataUser[$index]->save();
+                        }
+                        $dataRekanan[$index] = Rekanan::where('nama', 'LIKE', '%' . $dataCV . "%")->first();
+                        if (!$dataRekanan[$index]) {
+                            if ($dataNama[$index] != null) {
+                                $Rekanan = new Rekanan;
+                                $Rekanan->nama =  $dataCV[$index];
+                                $Rekanan->nama_penangung_jawab =  $dataNama[$index];
+                                $Rekanan->nik =  $dataNoHp[$index];
+                                $Rekanan->alamat =  $dataAlamat[$index];
+                                $Rekanan->user_id =  $dataUser[$index]->id;
+                                $Rekanan->save();
+                                $total = ++$index;
+                            }
+                        }
+                        // $dataSatuan[$index] = Satuan::where('nama', 'LIKE', '%' . $item[3] . "%")->first();
+
+                        // if (!$dataRekanan[$index]) {
+                        //     return redirect()->route($this->route . '.index')->with('message', ' Rekanan Tidak ada')->with('Class', 'danger');
+                        // }
+                        // if (!$dataSatuan[$index]) {
+                        //     return redirect()->route($this->route . '.index')->with('message', ' Satuan Item tidak')->with('Class', 'danger');
+                        // }
+                        // $dataNama[$index] = $item[1];
+                        // $dataHargaSiang[$index] = str_replace(".", "", $item[4]);
+                        // $dataHargaMalam[$index] = str_replace(".", "", $item[5]);
+
+                        // $itemExist[$index] = Item::where('nama', 'LIKE', '%' . $item[3] . "%")->first();
+
+                        // if (!$itemExist[$index]) {
+
+
+                        //     if ($dataNama[$index] != null) {
+                        //         $item = new item;
+                        //         $item->nama =  $dataNama[$index];
+                        //         $item->save();
+                        //         $total = ++$index;
+                        //     }
+                        // }
+                    }
+                }
+                return redirect()->route($this->route . '.index')->with('message', ucwords(str_replace('-', ' ', $this->route)) . ' berhasil diupload dengan total item :' . $total)->with('Class', 'success');
+            }
+        } catch (\Throwable $th) {
+            //throw $th;
+            return redirect()->route($this->route . '.index')->with('message', ucwords(str_replace('-', ' ', $this->route)) . ' gagal diupload')->with('Class', 'success');
+        }
     }
 
     public function model()

@@ -46,6 +46,7 @@ class ItemController extends Controller
                     'slug' =>  $value->slug,
                     'satuan' =>  $value->satuan,
                     'jenis' =>  $value->jenis,
+                    'kategori' =>  $value->hasJenis->nama_kategori,
                 ];
             }
             if (count($result) == 0) {

@@ -63,8 +63,7 @@
                                         <div>
                                             <strong>{{ $aduan->keterangan_barang }}</strong>
                                         </div>
-                                        <input type="hidden" name="id_pekerjaan" id="idPekerjaan"
-                                            value="{{ $pekerjaanUtama->id }}">
+
                                     </div>
                                 </div>
                             </div>
@@ -82,8 +81,7 @@
                                         <div class="form-group">
                                             <input type="hidden" name="slug" value="{{ $aduan->slug }}">
                                             <div>
-                                                <select name="rekanan_id" class="selected2 form-control" id="rekanan"
-                                                    required>
+                                                <select name="rekanan_id" class="selected2 form-control" id="cmbRekanan">
                                                     <option value="">--Pilih Rekanan--</option>
                                                     @foreach ($rekanan as $item)
                                                         <option value="{{ $item->id }}"
@@ -113,912 +111,914 @@
             </div>
         </div>
         @if ($aduan->status != 'draft')
-            <div class="row">
-                <div class="col-12">
+            @isset($pekerjaanUtama)
+                <input type="hidden" name="id_pekerjaan" id="idPekerjaan" value="{{ $pekerjaanUtama->id }}">
+                <div class="row">
+                    <div class="col-12">
 
-                    <div class="card">
-                        <div class="card-header  justify-content-between">
-                            <div class="card-title">Daftar Pekerjaan</div>
+                        <div class="card">
+                            <div class="card-header  justify-content-between">
+                                <div class="card-title">Daftar Pekerjaan</div>
 
-                        </div>
-                        <div class="card-body">
-                            <form action="" id="formPekerjaan">
+                            </div>
+                            <div class="card-body">
+                                <form action="" id="formPekerjaan">
 
-                                <div class="row">
-                                    <div class="col-2">
-                                        <h5 class="sub-title">Pilih Pekerjaan</h5>
-                                        <div class="form-group">
-                                            <select class="form-control select2" id="cmbPekerjaan">
-                                                <option selected="selected" value="">Pilih Pekerjaan
-                                                </option>
-                                                @foreach ($listPekerjaan as $i => $pekerjaan)
-                                                    <option value="{{ $pekerjaan->id }}"
-                                                        id="Pekerjaan_{{ $pekerjaan->id }}">
-                                                        {{ $pekerjaan->nama }}
+                                    <div class="row">
+                                        <div class="col-2">
+                                            <h5 class="sub-title">Pilih Pekerjaan</h5>
+                                            <div class="form-group">
+                                                <select class="form-control select2" id="cmbPekerjaan">
+                                                    <option selected="selected" value="">Pilih Pekerjaan
                                                     </option>
-                                                @endforeach
-                                            </select>
+                                                    @foreach ($listPekerjaan as $i => $pekerjaan)
+                                                        <option value="{{ $pekerjaan->id }}"
+                                                            id="Pekerjaan_{{ $pekerjaan->id }}">
+                                                            {{ $pekerjaan->nama }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col">
-                                        <h5 class="sub-title">Jumlah</h5>
-                                        <div class="form-group">
-                                            <div class="input-group mb-2 mr-sm-2">
-                                                <input type="text" name="jumlah_pekerjaan" id="jumlah_pekerjaan"
-                                                    placeholder="jumlah" class="form-control">
+                                        <div class="col">
+                                            <h5 class="sub-title">Jumlah</h5>
+                                            <div class="form-group">
+                                                <div class="input-group mb-2 mr-sm-2">
+                                                    <input type="text" name="jumlah_pekerjaan" id="jumlah_pekerjaan"
+                                                        placeholder="jumlah" class="form-control">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <h5 class="sub-title">keterangan</h5>
+                                            <div class="form-group">
+                                                <div class="input-group mb-2 mr-sm-2">
+                                                    <input type="text" name="input_keterangan_pekerjaan"
+                                                        id="input_keterangan_pekerjaan" placeholder="Keterangan Pekerjaan"
+                                                        class="form-control">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <h5 class="sub-title">Pilih Harga</h5>
+                                            <div class="form-radio">
+                                                <form>
+                                                    <div class="radio radiofill radio-inline">
+                                                        <label>
+                                                            <input type="radio" class="harga_pekerjaan" name="harga_pekerjaan"
+                                                                value="siang" checked="checked">
+                                                            <i class="helper"></i>Harga Siang
+                                                        </label>
+                                                    </div>
+                                                    <div class="radio radiofill radio-inline">
+                                                        <label>
+                                                            <input type="radio" class="harga_pekerjaan" name="harga_pekerjaan"
+                                                                value="malam">
+                                                            <i class="helper"></i>Harga Malam
+                                                        </label>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="">
+                                                <button type="submit" id="btn_pekerjaan" class="btn btn-primary">Update
+                                                    Pekerjaan</button>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col">
-                                        <h5 class="sub-title">keterangan</h5>
-                                        <div class="form-group">
-                                            <div class="input-group mb-2 mr-sm-2">
-                                                <input type="text" name="input_keterangan_pekerjaan"
-                                                    id="input_keterangan_pekerjaan" placeholder="Keterangan Pekerjaan"
-                                                    class="form-control">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col">
-                                        <h5 class="sub-title">Pilih Harga</h5>
-                                        <div class="form-radio">
-                                            <form>
-                                                <div class="radio radiofill radio-inline">
-                                                    <label>
-                                                        <input type="radio" class="harga_pekerjaan" name="harga_pekerjaan"
-                                                            value="siang" checked="checked">
-                                                        <i class="helper"></i>Harga Siang
-                                                    </label>
-                                                </div>
-                                                <div class="radio radiofill radio-inline">
-                                                    <label>
-                                                        <input type="radio" class="harga_pekerjaan" name="harga_pekerjaan"
-                                                            value="malam">
-                                                        <i class="helper"></i>Harga Malam
-                                                    </label>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                    <div class="col">
-                                        <div class="">
-                                            <button type="submit" id="btn_pekerjaan" class="btn btn-primary">Update
-                                                Pekerjaan</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                            <table class="table table-bordered " width="100%" id="tablePekerjaan">
-                                <thead>
-                                    <tr>
-                                        <th width="5">#</th>
-                                        <th width="250">Pekerjaan</th>
-                                        <th width="10">Jumlah</th>
-                                        <th width="200">Total Harga</th>
-                                        <th width="150">Keterangan</th>
-                                        <th width="5%" class="text-center">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @if (isset($daftarPekerjaan->hasItem))
-                                        @forelse ($daftarPekerjaan->hasItem as $key => $pekerjaan)
-                                            <tr id="listPekerjaan_{{ $pekerjaan->id }}" class="list_table_pekerjaan">
-                                                <td class="text-center nomor_pekerjaan" data-index="{{ $key + 1 }}">
-                                                    {{ $key + 1 }}
-                                                </td>
-                                                <td>
-                                                    {{ $pekerjaan->nama }}
-                                                </td>
-                                                <td>
-                                                    <span
-                                                        id="jumlah_pekerjaan_tampil_{{ $pekerjaan->id }}">{{ $pekerjaan->pivot->qty }}
-                                                    </span>
+                                </form>
+                                <table class="table table-bordered " width="100%" id="tablePekerjaan">
+                                    <thead>
+                                        <tr>
+                                            <th width="5">#</th>
+                                            <th width="250">Pekerjaan</th>
+                                            <th width="10">Jumlah</th>
+                                            <th width="200">Total Harga</th>
+                                            <th width="150">Keterangan</th>
+                                            <th width="5%" class="text-center">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (isset($daftarPekerjaan->hasItem))
+                                            @forelse ($daftarPekerjaan->hasItem as $key => $pekerjaan)
+                                                <tr id="listPekerjaan_{{ $pekerjaan->id }}" class="list_table_pekerjaan">
+                                                    <td class="text-center nomor_pekerjaan" data-index="{{ $key + 1 }}">
+                                                        {{ $key + 1 }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $pekerjaan->nama }}
+                                                    </td>
+                                                    <td>
+                                                        <span
+                                                            id="jumlah_pekerjaan_tampil_{{ $pekerjaan->id }}">{{ $pekerjaan->pivot->qty }}
+                                                        </span>
 
-                                                    <input type="hidden" id="jumlah_pekerjaan_value_{{ $pekerjaan->id }}"
-                                                        name="jumlah_pekerjaan" value="{{ $pekerjaan->pivot->qty }}">
-                                                </td>
-                                                <td>
-                                                    <span id="total_pekerjaan_tampil_{{ $pekerjaan->id }}">
-                                                        Rp.
-                                                        {{ format_uang($pekerjaan->pivot->total) }}
-                                                    </span>
-                                                    <input type="hidden" id="total_pekerjaan_value_{{ $pekerjaan->id }}"
-                                                        name="total_pekerjaan" value="{{ $pekerjaan->pivot->total }}"
-                                                        class="total_pekerjaan">
-                                                </td>
-                                                <td>
-                                                    </span>
-                                                    <span id="keterangan_pekerjaan_{{ $pekerjaan->id }}">
-                                                        {{ $pekerjaan->pivot->keterangan }}</span>
+                                                        <input type="hidden" id="jumlah_pekerjaan_value_{{ $pekerjaan->id }}"
+                                                            name="jumlah_pekerjaan" value="{{ $pekerjaan->pivot->qty }}">
+                                                    </td>
+                                                    <td>
+                                                        <span id="total_pekerjaan_tampil_{{ $pekerjaan->id }}">
+                                                            Rp.
+                                                            {{ format_uang($pekerjaan->pivot->total) }}
+                                                        </span>
+                                                        <input type="hidden" id="total_pekerjaan_value_{{ $pekerjaan->id }}"
+                                                            name="total_pekerjaan" value="{{ $pekerjaan->pivot->total }}"
+                                                            class="total_pekerjaan">
+                                                    </td>
+                                                    <td>
+                                                        </span>
+                                                        <span id="keterangan_pekerjaan_{{ $pekerjaan->id }}">
+                                                            {{ $pekerjaan->pivot->keterangan }}</span>
 
-                                                    <input type="hidden"
-                                                        id="keterangan_pekerjaan_value_{{ $pekerjaan->id }}"
-                                                        name="keterangan_pekerjaan"
-                                                        value="{{ $pekerjaan->pivot->keterangan }}">
-                                                </td>
-                                                <td>
-                                                    <button class="btn btn-sm btn-warning text-light btn-edit"
-                                                        data-pekerjaanutama="{{ $pekerjaanUtama->id }}"
-                                                        data-modul="pekerjaan" data-item="{{ $pekerjaan->id }}">
-                                                        <i class="nav-icon fas fa-edit"></i>
-                                                        Ubah
-                                                    </button>
-                                                    <button type="button"
-                                                        class="btn btn-danger btn-xs text-center btn-hapus"
-                                                        data-pekerjaanutama="{{ $pekerjaanUtama->id }}"
-                                                        data-modul="pekerjaan" data-item="{{ $pekerjaan->id }}">
-                                                        <i class="fa fa-trash"></i>
-                                                        Hapus
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        @empty
+                                                        <input type="hidden"
+                                                            id="keterangan_pekerjaan_value_{{ $pekerjaan->id }}"
+                                                            name="keterangan_pekerjaan"
+                                                            value="{{ $pekerjaan->pivot->keterangan }}">
+                                                    </td>
+                                                    <td>
+                                                        <button class="btn btn-sm btn-warning text-light btn-edit"
+                                                            data-pekerjaanutama="{{ $pekerjaanUtama->id }}"
+                                                            data-modul="pekerjaan" data-item="{{ $pekerjaan->id }}">
+                                                            <i class="nav-icon fas fa-edit"></i>
+                                                            Ubah
+                                                        </button>
+                                                        <button type="button"
+                                                            class="btn btn-danger btn-xs text-center btn-hapus"
+                                                            data-pekerjaanutama="{{ $pekerjaanUtama->id }}"
+                                                            data-modul="pekerjaan" data-item="{{ $pekerjaan->id }}">
+                                                            <i class="fa fa-trash"></i>
+                                                            Hapus
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            @empty
+                                                <tr class="pekerjaanTidakAda">
+                                                    <td colspan="10">Data Pekerjaan tidak ada</td>
+                                                </tr>
+                                            @endforelse
+                                        @else
                                             <tr class="pekerjaanTidakAda">
                                                 <td colspan="10">Data Pekerjaan tidak ada</td>
                                             </tr>
-                                        @endforelse
-                                    @else
-                                        <tr class="pekerjaanTidakAda">
-                                            <td colspan="10">Data Pekerjaan tidak ada</td>
-                                        </tr>
-                                    @endif
-                                </tbody>
-                                <tfoot>
-                                    @if (isset($daftarPekerjaan->hasItem))
-                                        <tr>
-                                            <th colspan="3" class="text-right">Grand Total
-                                            </th>
-                                            <th>
-                                                <span id="grand_total_pekerjaan_tampil">
-                                                    Rp.
-                                                    {{ format_uang($daftarPekerjaan->hasItem->sum('pivot.total')) }}
-                                                </span>
-                                                <input type="hidden" id="grand_total_pekerjaan_value"
-                                                    name="grand_total_pekerjaan"
-                                                    value="{{ $daftarPekerjaan->hasItem->sum('pivot.total') }}"
-                                                    class="grand_total_pekerjaan">
-                                            </th>
+                                        @endif
+                                    </tbody>
+                                    <tfoot>
+                                        @if (isset($daftarPekerjaan->hasItem))
+                                            <tr>
+                                                <th colspan="3" class="text-right">Grand Total
+                                                </th>
+                                                <th>
+                                                    <span id="grand_total_pekerjaan_tampil">
+                                                        Rp.
+                                                        {{ format_uang($daftarPekerjaan->hasItem->sum('pivot.total')) }}
+                                                    </span>
+                                                    <input type="hidden" id="grand_total_pekerjaan_value"
+                                                        name="grand_total_pekerjaan"
+                                                        value="{{ $daftarPekerjaan->hasItem->sum('pivot.total') }}"
+                                                        class="grand_total_pekerjaan">
+                                                </th>
 
-                                        </tr>
-                                    @endif
-                                </tfoot>
+                                            </tr>
+                                        @endif
+                                    </tfoot>
 
-                            </table>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-12">
+                <div class="row">
+                    <div class="col-12">
 
-                    <div class="card">
-                        <div class="card-header  justify-content-between">
-                            <div class="card-title">Daftar Galian</div>
+                        <div class="card">
+                            <div class="card-header  justify-content-between">
+                                <div class="card-title">Daftar Galian</div>
 
-                        </div>
-                        <div class="card-body">
-                            <form action="" id="formGalian">
-                                <div class="row">
-                                    <div class="col-2">
-                                        <h5 class="sub-title">Pilih Galian</h5>
-                                        <div class="form-group">
-                                            <select class="form-control select2" id="cmbGalian">
-                                                <option selected="selected" value="">Pilih Galian
-                                                </option>
-                                                @foreach ($listGalian as $i => $galian)
-                                                    <option value="{{ $galian->id }}" id="galian_{{ $galian->id }}">
-                                                        {{ $galian->nama }}
+                            </div>
+                            <div class="card-body">
+                                <form action="" id="formGalian">
+                                    <div class="row">
+                                        <div class="col-2">
+                                            <h5 class="sub-title">Pilih Galian</h5>
+                                            <div class="form-group">
+                                                <select class="form-control select2" id="cmbGalian">
+                                                    <option selected="selected" value="">Pilih Galian
                                                     </option>
-                                                @endforeach
-                                            </select>
+                                                    @foreach ($listGalian as $i => $galian)
+                                                        <option value="{{ $galian->id }}" id="galian_{{ $galian->id }}">
+                                                            {{ $galian->nama }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col">
-                                        <h5 class="sub-title">Panjang</h5>
-                                        <div class="form-group">
-                                            <div class="input-group mb-2 mr-sm-2">
-                                                <input type="text" name="panjang_galian" id="panjang_galian"
-                                                    placeholder="Panjang" class="form-control">
-                                                <div class="input-group-prepend">
-                                                    <div class="input-group-text">M</div>
+                                        <div class="col">
+                                            <h5 class="sub-title">Panjang</h5>
+                                            <div class="form-group">
+                                                <div class="input-group mb-2 mr-sm-2">
+                                                    <input type="text" name="panjang_galian" id="panjang_galian"
+                                                        placeholder="Panjang" class="form-control">
+                                                    <div class="input-group-prepend">
+                                                        <div class="input-group-text">M</div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col">
-                                        <h5 class="sub-title">Lebar</h5>
-                                        <div class="form-group">
-                                            <div class="input-group mb-2 mr-sm-2">
-                                                <input type="text" name="lebar_galian" id="lebar_galian" placeholder="Lebar"
-                                                    class="form-control">
-                                                <div class="input-group-prepend">
-                                                    <div class="input-group-text">M</div>
+                                        <div class="col">
+                                            <h5 class="sub-title">Lebar</h5>
+                                            <div class="form-group">
+                                                <div class="input-group mb-2 mr-sm-2">
+                                                    <input type="text" name="lebar_galian" id="lebar_galian" placeholder="Lebar"
+                                                        class="form-control">
+                                                    <div class="input-group-prepend">
+                                                        <div class="input-group-text">M</div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col">
-                                        <h5 class="sub-title">Dalam</h5>
-                                        <div class="form-group">
-                                            <div class="input-group mb-2 mr-sm-2">
-                                                <input type="text" name="dalam_galian" id="dalam_galian" placeholder="Dalam"
-                                                    class="form-control">
-                                                <div class="input-group-prepend">
-                                                    <div class="input-group-text">M</div>
+                                        <div class="col">
+                                            <h5 class="sub-title">Dalam</h5>
+                                            <div class="form-group">
+                                                <div class="input-group mb-2 mr-sm-2">
+                                                    <input type="text" name="dalam_galian" id="dalam_galian" placeholder="Dalam"
+                                                        class="form-control">
+                                                    <div class="input-group-prepend">
+                                                        <div class="input-group-text">M</div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col">
-                                        <h5 class="sub-title">Keterangan</h5>
-                                        <div class="form-group">
-                                            <textarea name="keterangan_galian" class="form-control" id="keterangan_galian" cols="30"></textarea>
+                                        <div class="col">
+                                            <h5 class="sub-title">Keterangan</h5>
+                                            <div class="form-group">
+                                                <textarea name="keterangan_galian" class="form-control" id="keterangan_galian" cols="30"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <h5 class="sub-title">Pilih Harga</h5>
+                                            <div class="form-radio">
+                                                <form>
+                                                    <div class="radio radiofill radio-inline">
+                                                        <label>
+                                                            <input type="radio" class="harga_galian" name="harga_galian"
+                                                                value="siang" checked="checked">
+                                                            <i class="helper"></i>Harga Siang
+                                                        </label>
+                                                    </div>
+                                                    <div class="radio radiofill radio-inline">
+                                                        <label>
+                                                            <input type="radio" class="harga_galian" name="harga_galian"
+                                                                value="malam">
+                                                            <i class="helper"></i>Harga Malam
+                                                        </label>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="">
+                                                <button type="submit" id="btn_galian" class="btn btn-primary">Update
+                                                    Galian</button>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col">
-                                        <h5 class="sub-title">Pilih Harga</h5>
-                                        <div class="form-radio">
-                                            <form>
-                                                <div class="radio radiofill radio-inline">
-                                                    <label>
-                                                        <input type="radio" class="harga_galian" name="harga_galian"
-                                                            value="siang" checked="checked">
-                                                        <i class="helper"></i>Harga Siang
-                                                    </label>
-                                                </div>
-                                                <div class="radio radiofill radio-inline">
-                                                    <label>
-                                                        <input type="radio" class="harga_galian" name="harga_galian"
-                                                            value="malam">
-                                                        <i class="helper"></i>Harga Malam
-                                                    </label>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                    <div class="col">
-                                        <div class="">
-                                            <button type="submit" id="btn_galian" class="btn btn-primary">Update
-                                                Galian</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                            <table class="table table-bordered " width="100%" id="tableGalian">
-                                <thead>
-                                    <tr>
-                                        <th width="5">#</th>
-                                        <th width="250">Galian</th>
-                                        <th width="10">Panjang</th>
-                                        <th width="10">Lebar</th>
-                                        <th width="100">Dalam</th>
-                                        <th width="200">Total Harga</th>
-                                        <th width="150">Keterangan</th>
-                                        <th width="5%" class="text-center">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @if (isset($daftarGalian))
+                                </form>
+                                <table class="table table-bordered " width="100%" id="tableGalian">
+                                    <thead>
+                                        <tr>
+                                            <th width="5">#</th>
+                                            <th width="250">Galian</th>
+                                            <th width="10">Panjang</th>
+                                            <th width="10">Lebar</th>
+                                            <th width="100">Dalam</th>
+                                            <th width="200">Total Harga</th>
+                                            <th width="150">Keterangan</th>
+                                            <th width="5%" class="text-center">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (isset($daftarGalian))
+                                            @forelse ($daftarGalian as $key => $galian)
+                                                <tr id="listgalian_{{ $galian->item_id }}" class="list_table_galian">
+                                                    <td class="text-center nomor_galian" data-index="{{ $key + 1 }}">
+                                                        {{ $key + 1 }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $galian->pekerjaan }}
+                                                    </td>
+                                                    <td>
+                                                        <span
+                                                            id="panjang_galian_{{ $galian->item_id }}">{{ $galian->panjang }}
+                                                            M</span>
 
-                                        @forelse ($daftarGalian as $key => $galian)
-                                            <tr id="listgalian_{{ $galian->item_id }}" class="list_table_galian">
-                                                <td class="text-center nomor_galian" data-index="{{ $key + 1 }}">
-                                                    {{ $key + 1 }}
-                                                </td>
-                                                <td>
-                                                    {{ $galian->pekerjaan }}
-                                                </td>
-                                                <td>
-                                                    <span
-                                                        id="panjang_galian_{{ $galian->item_id }}">{{ $galian->panjang }}
-                                                        M</span>
+                                                        <input type="hidden" id="panjang_value_{{ $galian->item_id }}"
+                                                            name="panjang" value="{{ $galian->panjang }}">
+                                                    </td>
+                                                    <td>
+                                                        <span
+                                                            id="lebar_galian_{{ $galian->item_id }}">{{ $galian->lebar }}
+                                                            M</span>
+                                                        <input type="hidden" id="lebar_value_{{ $galian->item_id }}"
+                                                            name="lebar" value="{{ $galian->lebar }}">
+                                                    </td>
+                                                    <td>
+                                                        <span id="dalam_galian_{{ $galian->item_id }}">
+                                                            {{ $galian->dalam }} M</span>
+                                                        <input type="hidden" id="dalam_value_{{ $galian->item_id }}"
+                                                            name="lebar" value="{{ $galian->dalam }}">
+                                                    </td>
 
-                                                    <input type="hidden" id="panjang_value_{{ $galian->item_id }}"
-                                                        name="panjang" value="{{ $galian->panjang }}">
-                                                </td>
-                                                <td>
-                                                    <span
-                                                        id="lebar_galian_{{ $galian->item_id }}">{{ $galian->lebar }}
-                                                        M</span>
-                                                    <input type="hidden" id="lebar_value_{{ $galian->item_id }}"
-                                                        name="lebar" value="{{ $galian->lebar }}">
-                                                </td>
-                                                <td>
-                                                    <span id="dalam_galian_{{ $galian->item_id }}">
-                                                        {{ $galian->dalam }} M</span>
-                                                    <input type="hidden" id="dalam_value_{{ $galian->item_id }}"
-                                                        name="lebar" value="{{ $galian->dalam }}">
-                                                </td>
+                                                    <td>
+                                                        <span id="total_galian_tampil_{{ $galian->id }}">
+                                                            Rp.
+                                                            {{ format_uang($galian->total) }}
+                                                        </span>
+                                                        <input type="hidden" id="total_galian_value_{{ $galian->id }}"
+                                                            name="total_galian" value="{{ $galian->total }}"
+                                                            class="total_galian">
+                                                    </td>
+                                                    <td>
+                                                        <span id="keterangan_galian_{{ $galian->item_id }}">
+                                                            {{ $galian->keterangan }}</span>
 
-                                                <td>
-                                                    <span id="total_galian_tampil_{{ $galian->id }}">
-                                                        Rp.
-                                                        {{ format_uang($galian->total) }}
-                                                    </span>
-                                                    <input type="hidden" id="total_galian_value_{{ $galian->id }}"
-                                                        name="total_galian" value="{{ $galian->total }}"
-                                                        class="total_galian">
-                                                </td>
-                                                <td>
-                                                    <span id="keterangan_galian_{{ $galian->item_id }}">
-                                                        {{ $galian->keterangan }}</span>
-
-                                                    <input type="hidden" id="keterangan_value_{{ $galian->item_id }}"
-                                                        name="keterangan" value="{{ $galian->keterangan }}">
-                                                </td>
-                                                <td>
-                                                    <button class="btn btn-sm btn-warning text-light"
-                                                        onclick="editgalian('{{ $galian->item_id }}')">
-                                                        <i class="nav-icon fas fa-edit"></i>
-                                                        Ubah
-                                                    </button>
-                                                    <button type="button" class="btn btn-danger btn-xs text-center"
-                                                        onclick="hapusgalian('{{ $galian->item_id }}')">
-                                                        <i class="fa fa-trash"></i>
-                                                        Hapus
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        @empty
+                                                        <input type="hidden" id="keterangan_value_{{ $galian->item_id }}"
+                                                            name="keterangan" value="{{ $galian->keterangan }}">
+                                                    </td>
+                                                    <td>
+                                                        <button class="btn btn-sm btn-warning text-light"
+                                                            onclick="editgalian('{{ $galian->item_id }}')">
+                                                            <i class="nav-icon fas fa-edit"></i>
+                                                            Ubah
+                                                        </button>
+                                                        <button type="button" class="btn btn-danger btn-xs text-center"
+                                                            onclick="hapusgalian('{{ $galian->item_id }}')">
+                                                            <i class="fa fa-trash"></i>
+                                                            Hapus
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            @empty
+                                                <tr class="galianTidakAda">
+                                                    <td colspan="10">Data galian tidak ada</td>
+                                                </tr>
+                                            @endforelse
+                                        @else
                                             <tr class="galianTidakAda">
                                                 <td colspan="10">Data galian tidak ada</td>
                                             </tr>
-                                        @endforelse
-                                    @else
-                                        <tr class="galianTidakAda">
-                                            <td colspan="10">Data galian tidak ada</td>
-                                        </tr>
-                                    @endif
-                                </tbody>
-                                <tfoot>
-                                    @if (isset($daftarGalian))
-                                        <tr>
-                                            <th colspan="5" class="text-right">Grand Total
-                                            </th>
-                                            <th>
-                                                <span id="grand_total_galian_tampil">
-                                                    Rp.
-                                                    {{ format_uang($daftarGalian->sum('total')) }}
-                                                </span>
-                                                <input type="hidden" id="grand_total_galian_value" name="grand_total_galian"
-                                                    value="{{ $daftarGalian->sum('total') }}"
-                                                    class="grand_total_galian">
-                                            </th>
-                                        </tr>
-                                    @endif
-                                </tfoot>
+                                        @endif
+                                    </tbody>
+                                    <tfoot>
+                                        @if (isset($daftarGalian))
+                                            <tr>
+                                                <th colspan="5" class="text-right">Grand Total
+                                                </th>
+                                                <th>
+                                                    <span id="grand_total_galian_tampil">
+                                                        Rp.
+                                                        {{ format_uang($daftarGalian->sum('total')) }}
+                                                    </span>
+                                                    <input type="hidden" id="grand_total_galian_value" name="grand_total_galian"
+                                                        value="{{ $daftarGalian->sum('total') }}"
+                                                        class="grand_total_galian">
+                                                </th>
+                                            </tr>
+                                        @endif
+                                    </tfoot>
 
-                            </table>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-12">
+                <div class="row">
+                    <div class="col-12">
 
-                    <div class="card">
-                        <div class="card-header  justify-content-between">
-                            <div class="card-title">Daftar bahan</div>
+                        <div class="card">
+                            <div class="card-header  justify-content-between">
+                                <div class="card-title">Daftar bahan</div>
 
-                        </div>
-                        <div class="card-body">
-                            <form action="" id="formBahan">
+                            </div>
+                            <div class="card-body">
+                                <form action="" id="formBahan">
 
-                                <div class="row">
-                                    <div class="col-2">
-                                        <h5 class="sub-title">Pilih Bahan</h5>
-                                        <div class="form-group">
-                                            <select class="form-control select2" id="cmbBahan">
-                                                <option selected="selected" value="">Pilih Bahan
-                                                </option>
-                                                @foreach ($listBahan as $i => $bahan)
-                                                    <option value="{{ $bahan->id }}" id="bahan_{{ $bahan->id }}">
-                                                        {{ $bahan->nama }}
+                                    <div class="row">
+                                        <div class="col-2">
+                                            <h5 class="sub-title">Pilih Bahan</h5>
+                                            <div class="form-group">
+                                                <select class="form-control select2" id="cmbBahan">
+                                                    <option selected="selected" value="">Pilih Bahan
                                                     </option>
-                                                @endforeach
-                                            </select>
+                                                    @foreach ($listBahan as $i => $bahan)
+                                                        <option value="{{ $bahan->id }}" id="bahan_{{ $bahan->id }}">
+                                                            {{ $bahan->nama }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col">
-                                        <h5 class="sub-title">Jumlah</h5>
-                                        <div class="form-group">
-                                            <div class="input-group mb-2 mr-sm-2">
-                                                <input type="text" name="jumlah_bahan" id="jumlah_bahan"
-                                                    placeholder="jumlah" class="form-control">
+                                        <div class="col">
+                                            <h5 class="sub-title">Jumlah</h5>
+                                            <div class="form-group">
+                                                <div class="input-group mb-2 mr-sm-2">
+                                                    <input type="text" name="jumlah_bahan" id="jumlah_bahan"
+                                                        placeholder="jumlah" class="form-control">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <h5 class="sub-title">keterangan</h5>
+                                            <div class="form-group">
+                                                <div class="input-group mb-2 mr-sm-2">
+                                                    <input type="text" name="input_keterangan_bahan" id="input_keterangan_bahan"
+                                                        placeholder="Keterangan bahan" class="form-control">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <h5 class="sub-title">Pilih Harga</h5>
+                                            <div class="form-radio">
+                                                <form>
+                                                    <div class="radio radiofill radio-inline">
+                                                        <label>
+                                                            <input type="radio" class="harga_bahan" name="harga_bahan"
+                                                                value="siang" checked="checked">
+                                                            <i class="helper"></i>Harga Siang
+                                                        </label>
+                                                    </div>
+                                                    <div class="radio radiofill radio-inline">
+                                                        <label>
+                                                            <input type="radio" class="harga_bahan" name="harga_bahan"
+                                                                value="malam">
+                                                            <i class="helper"></i>Harga Malam
+                                                        </label>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="">
+                                                <button type="submit" id="btn_bahan" class="btn btn-primary">Update
+                                                    bahan</button>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col">
-                                        <h5 class="sub-title">keterangan</h5>
-                                        <div class="form-group">
-                                            <div class="input-group mb-2 mr-sm-2">
-                                                <input type="text" name="input_keterangan_bahan" id="input_keterangan_bahan"
-                                                    placeholder="Keterangan bahan" class="form-control">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col">
-                                        <h5 class="sub-title">Pilih Harga</h5>
-                                        <div class="form-radio">
-                                            <form>
-                                                <div class="radio radiofill radio-inline">
-                                                    <label>
-                                                        <input type="radio" class="harga_bahan" name="harga_bahan"
-                                                            value="siang" checked="checked">
-                                                        <i class="helper"></i>Harga Siang
-                                                    </label>
-                                                </div>
-                                                <div class="radio radiofill radio-inline">
-                                                    <label>
-                                                        <input type="radio" class="harga_bahan" name="harga_bahan"
-                                                            value="malam">
-                                                        <i class="helper"></i>Harga Malam
-                                                    </label>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                    <div class="col">
-                                        <div class="">
-                                            <button type="submit" id="btn_bahan" class="btn btn-primary">Update
-                                                bahan</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                            <table class="table table-bordered " width="100%" id="tableBahan">
-                                <thead>
-                                    <tr>
-                                        <th width="5">#</th>
-                                        <th width="250">bahan</th>
-                                        <th width="10">Jumlah</th>
-                                        <th width="200">Total Harga</th>
-                                        <th width="150">Keterangan</th>
-                                        <th width="5%" class="text-center">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @if (isset($daftarBahan->hasItem))
-                                        @forelse ($daftarBahan->hasItem as $key => $bahan)
-                                            <tr id="listBahan_{{ $bahan->id }}" class="list_table_bahan">
-                                                <td class="text-center nomor_bahan" data-index="{{ $key + 1 }}">
-                                                    {{ $key + 1 }}
-                                                </td>
-                                                <td>
-                                                    {{ $bahan->nama }}
-                                                </td>
-                                                <td>
-                                                    <span
-                                                        id="jumlah_bahan_tampil_{{ $bahan->id }}">{{ $bahan->pivot->qty }}
-                                                    </span>
+                                </form>
+                                <table class="table table-bordered " width="100%" id="tableBahan">
+                                    <thead>
+                                        <tr>
+                                            <th width="5">#</th>
+                                            <th width="250">bahan</th>
+                                            <th width="10">Jumlah</th>
+                                            <th width="200">Total Harga</th>
+                                            <th width="150">Keterangan</th>
+                                            <th width="5%" class="text-center">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (isset($daftarBahan->hasItem))
+                                            @forelse ($daftarBahan->hasItem as $key => $bahan)
+                                                <tr id="listBahan_{{ $bahan->id }}" class="list_table_bahan">
+                                                    <td class="text-center nomor_bahan" data-index="{{ $key + 1 }}">
+                                                        {{ $key + 1 }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $bahan->nama }}
+                                                    </td>
+                                                    <td>
+                                                        <span
+                                                            id="jumlah_bahan_tampil_{{ $bahan->id }}">{{ $bahan->pivot->qty }}
+                                                        </span>
 
-                                                    <input type="hidden" id="jumlah_bahan_value_{{ $bahan->id }}"
-                                                        name="jumlah_bahan" value="{{ $bahan->pivot->qty }}">
-                                                </td>
-                                                <td>
-                                                    <span id="total_bahan_tampil_{{ $bahan->id }}">
-                                                        Rp.
-                                                        {{ format_uang($bahan->pivot->total) }}
-                                                    </span>
-                                                    <input type="hidden" id="total_bahan_value_{{ $bahan->id }}"
-                                                        name="total_bahan" value="{{ $bahan->pivot->total }}"
-                                                        class="total_bahan">
-                                                </td>
-                                                <td>
-                                                    <span id="keterangan_bahan_{{ $bahan->id }}">
-                                                        {{ $bahan->pivot->keterangan }}</span>
+                                                        <input type="hidden" id="jumlah_bahan_value_{{ $bahan->id }}"
+                                                            name="jumlah_bahan" value="{{ $bahan->pivot->qty }}">
+                                                    </td>
+                                                    <td>
+                                                        <span id="total_bahan_tampil_{{ $bahan->id }}">
+                                                            Rp.
+                                                            {{ format_uang($bahan->pivot->total) }}
+                                                        </span>
+                                                        <input type="hidden" id="total_bahan_value_{{ $bahan->id }}"
+                                                            name="total_bahan" value="{{ $bahan->pivot->total }}"
+                                                            class="total_bahan">
+                                                    </td>
+                                                    <td>
+                                                        <span id="keterangan_bahan_{{ $bahan->id }}">
+                                                            {{ $bahan->pivot->keterangan }}</span>
 
-                                                    <input type="hidden" id="keterangan_bahan_value_{{ $bahan->id }}"
-                                                        name="keterangan_bahan" value="{{ $bahan->pivot->keterangan }}">
-                                                </td>
-                                                <td>
-                                                    <button class="btn btn-sm btn-warning text-light btn-edit"
-                                                        data-pekerjaanutama="{{ $pekerjaanUtama->id }}"
-                                                        data-modul="bahan" data-item="{{ $bahan->id }}">
-                                                        <i class="nav-icon fas fa-edit"></i>
-                                                        Ubah
-                                                    </button>
-                                                    <button type="button"
-                                                        class="btn btn-danger btn-xs text-center btn-hapus"
-                                                        data-pekerjaanutama="{{ $pekerjaanUtama->id }}"
-                                                        data-modul="bahan" data-item="{{ $bahan->id }}">
-                                                        <i class="fa fa-trash"></i>
-                                                        Hapus
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        @empty
+                                                        <input type="hidden" id="keterangan_bahan_value_{{ $bahan->id }}"
+                                                            name="keterangan_bahan" value="{{ $bahan->pivot->keterangan }}">
+                                                    </td>
+                                                    <td>
+                                                        <button class="btn btn-sm btn-warning text-light btn-edit"
+                                                            data-pekerjaanutama="{{ $pekerjaanUtama->id }}"
+                                                            data-modul="bahan" data-item="{{ $bahan->id }}">
+                                                            <i class="nav-icon fas fa-edit"></i>
+                                                            Ubah
+                                                        </button>
+                                                        <button type="button"
+                                                            class="btn btn-danger btn-xs text-center btn-hapus"
+                                                            data-pekerjaanutama="{{ $pekerjaanUtama->id }}"
+                                                            data-modul="bahan" data-item="{{ $bahan->id }}">
+                                                            <i class="fa fa-trash"></i>
+                                                            Hapus
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            @empty
+                                                <tr class="bahanTidakAda">
+                                                    <td colspan="10">Data Bahan tidak ada</td>
+                                                </tr>
+                                            @endforelse
+                                        @else
                                             <tr class="bahanTidakAda">
                                                 <td colspan="10">Data Bahan tidak ada</td>
                                             </tr>
-                                        @endforelse
-                                    @else
-                                        <tr class="bahanTidakAda">
-                                            <td colspan="10">Data Bahan tidak ada</td>
-                                        </tr>
-                                    @endif
-                                </tbody>
-                                <tfoot>
-                                    @if (isset($daftarBahan->hasItem))
-                                        <tr>
-                                            <th colspan="3" class="text-right">Grand Total
-                                            </th>
-                                            <th>
-                                                <span id="grand_total_bahan_tampil">
-                                                    Rp.
-                                                    {{ format_uang($daftarBahan->hasItem->sum('pivot.total')) }}
-                                                </span>
-                                                <input type="hidden" id="grand_total_bahan_value" name="grand_total_bahan"
-                                                    value="{{ $daftarBahan->hasItem->sum('pivot.total') }}"
-                                                    class="grand_total_bahan">
-                                            </th>
-                                        </tr>
-                                    @endif
-                                </tfoot>
+                                        @endif
+                                    </tbody>
+                                    <tfoot>
+                                        @if (isset($daftarBahan->hasItem))
+                                            <tr>
+                                                <th colspan="3" class="text-right">Grand Total
+                                                </th>
+                                                <th>
+                                                    <span id="grand_total_bahan_tampil">
+                                                        Rp.
+                                                        {{ format_uang($daftarBahan->hasItem->sum('pivot.total')) }}
+                                                    </span>
+                                                    <input type="hidden" id="grand_total_bahan_value" name="grand_total_bahan"
+                                                        value="{{ $daftarBahan->hasItem->sum('pivot.total') }}"
+                                                        class="grand_total_bahan">
+                                                </th>
+                                            </tr>
+                                        @endif
+                                    </tfoot>
 
-                            </table>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="row">
-                <div class="col-12">
+                <div class="row">
+                    <div class="col-12">
 
-                    <div class="card">
-                        <div class="card-header  justify-content-between">
-                            <div class="card-title">Daftar Alat Bantu</div>
+                        <div class="card">
+                            <div class="card-header  justify-content-between">
+                                <div class="card-title">Daftar Alat Bantu</div>
 
-                        </div>
-                        <div class="card-body">
-                            <form action="" id="formAlatBantu">
+                            </div>
+                            <div class="card-body">
+                                <form action="" id="formAlatBantu">
 
-                                <div class="row">
-                                    <div class="col-2">
-                                        <h5 class="sub-title">Pilih Alat Bantu</h5>
-                                        <div class="form-group">
-                                            <select class="form-control select2" id="cmbAlat_bantu">
-                                                <option selected="selected" value="">Pilih Alat Bantu
-                                                </option>
-                                                @foreach ($listAlatBantu as $i => $AlatBantu)
-                                                    <option value="{{ $AlatBantu->id }}"
-                                                        id="alat_bantu_{{ $AlatBantu->id }}">
-                                                        {{ $AlatBantu->nama }}
+                                    <div class="row">
+                                        <div class="col-2">
+                                            <h5 class="sub-title">Pilih Alat Bantu</h5>
+                                            <div class="form-group">
+                                                <select class="form-control select2" id="cmbAlat_bantu">
+                                                    <option selected="selected" value="">Pilih Alat Bantu
                                                     </option>
-                                                @endforeach
-                                            </select>
+                                                    @foreach ($listAlatBantu as $i => $AlatBantu)
+                                                        <option value="{{ $AlatBantu->id }}"
+                                                            id="alat_bantu_{{ $AlatBantu->id }}">
+                                                            {{ $AlatBantu->nama }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col">
-                                        <h5 class="sub-title">Jumlah</h5>
-                                        <div class="form-group">
-                                            <div class="input-group mb-2 mr-sm-2">
-                                                <input type="text" name="jumlah_alat_bantu" id="jumlah_alat_bantu"
-                                                    placeholder="jumlah" class="form-control">
+                                        <div class="col">
+                                            <h5 class="sub-title">Jumlah</h5>
+                                            <div class="form-group">
+                                                <div class="input-group mb-2 mr-sm-2">
+                                                    <input type="text" name="jumlah_alat_bantu" id="jumlah_alat_bantu"
+                                                        placeholder="jumlah" class="form-control">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <h5 class="sub-title">keterangan</h5>
+                                            <div class="form-group">
+                                                <div class="input-group mb-2 mr-sm-2">
+                                                    <input type="text" name="input_keterangan_alat_bantu"
+                                                        id="input_keterangan_alat_bantu" placeholder="Keterangan alat bantu"
+                                                        class="form-control">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <h5 class="sub-title">Pilih Harga</h5>
+                                            <div class="form-radio">
+                                                <form>
+                                                    <div class="radio radiofill radio-inline">
+                                                        <label>
+                                                            <input type="radio" class="harga_alat_bantu"
+                                                                name="harga_alat_bantu" value="siang" checked="checked">
+                                                            <i class="helper"></i>Harga Siang
+                                                        </label>
+                                                    </div>
+                                                    <div class="radio radiofill radio-inline">
+                                                        <label>
+                                                            <input type="radio" class="harga_alat_bantu"
+                                                                name="harga_alat_bantu" value="malam">
+                                                            <i class="helper"></i>Harga Malam
+                                                        </label>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="">
+                                                <button type="submit" id="btn_alat_bantu" class="btn btn-primary">Update
+                                                    Alat Bantu</button>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col">
-                                        <h5 class="sub-title">keterangan</h5>
-                                        <div class="form-group">
-                                            <div class="input-group mb-2 mr-sm-2">
-                                                <input type="text" name="input_keterangan_alat_bantu"
-                                                    id="input_keterangan_alat_bantu" placeholder="Keterangan alat bantu"
-                                                    class="form-control">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col">
-                                        <h5 class="sub-title">Pilih Harga</h5>
-                                        <div class="form-radio">
-                                            <form>
-                                                <div class="radio radiofill radio-inline">
-                                                    <label>
-                                                        <input type="radio" class="harga_alat_bantu"
-                                                            name="harga_alat_bantu" value="siang" checked="checked">
-                                                        <i class="helper"></i>Harga Siang
-                                                    </label>
-                                                </div>
-                                                <div class="radio radiofill radio-inline">
-                                                    <label>
-                                                        <input type="radio" class="harga_alat_bantu"
-                                                            name="harga_alat_bantu" value="malam">
-                                                        <i class="helper"></i>Harga Malam
-                                                    </label>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                    <div class="col">
-                                        <div class="">
-                                            <button type="submit" id="btn_alat_bantu" class="btn btn-primary">Update
-                                                Alat Bantu</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                            <table class="table table-bordered " width="100%" id="tableAlat_bantu">
-                                <thead>
-                                    <tr>
-                                        <th width="5">#</th>
-                                        <th width="250">Alat Bantu</th>
-                                        <th width="10">Jumlah</th>
-                                        <th width="200">Total Harga</th>
-                                        <th width="150">Keterangan</th>
-                                        <th width="5%" class="text-center">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @if (isset($daftarAlatBantu->hasItem))
-                                        @forelse ($daftarAlatBantu->hasItem as $key => $alatbantu)
-                                            <tr id="listAlat_bantu_{{ $alatbantu->id }}" class="list_table_alat_bantu">
-                                                <td class="text-center nomor_alat_bantu" data-index="{{ $key + 1 }}">
-                                                    {{ $key + 1 }}
-                                                </td>
-                                                <td>
-                                                    {{ $alatbantu->nama }}
-                                                </td>
-                                                <td>
-                                                    <span
-                                                        id="jumlah_alat_bantu_tampil_{{ $alatbantu->id }}">{{ $alatbantu->pivot->qty }}
-                                                    </span>
+                                </form>
+                                <table class="table table-bordered " width="100%" id="tableAlat_bantu">
+                                    <thead>
+                                        <tr>
+                                            <th width="5">#</th>
+                                            <th width="250">Alat Bantu</th>
+                                            <th width="10">Jumlah</th>
+                                            <th width="200">Total Harga</th>
+                                            <th width="150">Keterangan</th>
+                                            <th width="5%" class="text-center">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (isset($daftarAlatBantu->hasItem))
+                                            @forelse ($daftarAlatBantu->hasItem as $key => $alatbantu)
+                                                <tr id="listAlat_bantu_{{ $alatbantu->id }}" class="list_table_alat_bantu">
+                                                    <td class="text-center nomor_alat_bantu" data-index="{{ $key + 1 }}">
+                                                        {{ $key + 1 }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $alatbantu->nama }}
+                                                    </td>
+                                                    <td>
+                                                        <span
+                                                            id="jumlah_alat_bantu_tampil_{{ $alatbantu->id }}">{{ $alatbantu->pivot->qty }}
+                                                        </span>
 
-                                                    <input type="hidden"
-                                                        id="jumlah_alat_bantu_value_{{ $alatbantu->id }}"
-                                                        name="jumlah_alat_bantu" value="{{ $alatbantu->pivot->qty }}">
-                                                </td>
-                                                <td>
-                                                    <span id="total_alat_bantu_tampil_{{ $alatbantu->id }}">
-                                                        Rp.
-                                                        {{ format_uang($alatbantu->pivot->total) }}
-                                                    </span>
-                                                    <input type="hidden"
-                                                        id="total_alat_bantu_value_{{ $alatbantu->id }}"
-                                                        name="total_alat_bantu" value="{{ $alatbantu->pivot->total }}"
-                                                        class="total_alat_bantu">
-                                                </td>
-                                                <td>
-                                                    <span id="keterangan_alat_bantu_{{ $alatbantu->id }}">
-                                                        {{ $alatbantu->pivot->keterangan }}</span>
+                                                        <input type="hidden"
+                                                            id="jumlah_alat_bantu_value_{{ $alatbantu->id }}"
+                                                            name="jumlah_alat_bantu" value="{{ $alatbantu->pivot->qty }}">
+                                                    </td>
+                                                    <td>
+                                                        <span id="total_alat_bantu_tampil_{{ $alatbantu->id }}">
+                                                            Rp.
+                                                            {{ format_uang($alatbantu->pivot->total) }}
+                                                        </span>
+                                                        <input type="hidden"
+                                                            id="total_alat_bantu_value_{{ $alatbantu->id }}"
+                                                            name="total_alat_bantu" value="{{ $alatbantu->pivot->total }}"
+                                                            class="total_alat_bantu">
+                                                    </td>
+                                                    <td>
+                                                        <span id="keterangan_alat_bantu_{{ $alatbantu->id }}">
+                                                            {{ $alatbantu->pivot->keterangan }}</span>
 
-                                                    <input type="hidden"
-                                                        id="keterangan_alat_bantu_value_{{ $alatbantu->id }}"
-                                                        name="keterangan_alat_bantu"
-                                                        value="{{ $alatbantu->pivot->keterangan }}">
-                                                </td>
-                                                <td>
-                                                    <button class="btn btn-sm btn-warning text-light btn-edit"
-                                                        data-pekerjaanutama="{{ $pekerjaanUtama->id }}"
-                                                        data-modul="alat_bantu" data-item="{{ $alatbantu->id }}">
-                                                        <i class="nav-icon fas fa-edit"></i>
-                                                        Ubah
-                                                    </button>
-                                                    <button type="button"
-                                                        class="btn btn-danger btn-xs text-center btn-hapus"
-                                                        data-pekerjaanutama="{{ $pekerjaanUtama->id }}"
-                                                        data-modul="alat_bantu" data-item="{{ $alatbantu->id }}">
-                                                        <i class="fa fa-trash"></i>
-                                                        Hapus
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        @empty
+                                                        <input type="hidden"
+                                                            id="keterangan_alat_bantu_value_{{ $alatbantu->id }}"
+                                                            name="keterangan_alat_bantu"
+                                                            value="{{ $alatbantu->pivot->keterangan }}">
+                                                    </td>
+                                                    <td>
+                                                        <button class="btn btn-sm btn-warning text-light btn-edit"
+                                                            data-pekerjaanutama="{{ $pekerjaanUtama->id }}"
+                                                            data-modul="alat_bantu" data-item="{{ $alatbantu->id }}">
+                                                            <i class="nav-icon fas fa-edit"></i>
+                                                            Ubah
+                                                        </button>
+                                                        <button type="button"
+                                                            class="btn btn-danger btn-xs text-center btn-hapus"
+                                                            data-pekerjaanutama="{{ $pekerjaanUtama->id }}"
+                                                            data-modul="alat_bantu" data-item="{{ $alatbantu->id }}">
+                                                            <i class="fa fa-trash"></i>
+                                                            Hapus
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            @empty
+                                                <tr class="alat_bantuTidakAda">
+                                                    <td colspan="10">Data alat bantu tidak ada</td>
+                                                </tr>
+                                            @endforelse
+                                        @else
                                             <tr class="alat_bantuTidakAda">
                                                 <td colspan="10">Data alat bantu tidak ada</td>
                                             </tr>
-                                        @endforelse
-                                    @else
-                                        <tr class="alat_bantuTidakAda">
-                                            <td colspan="10">Data alat bantu tidak ada</td>
-                                        </tr>
-                                    @endif
-                                </tbody>
-                                <tfoot>
-                                    @if (isset($daftarAlatBantu->hasItem))
-                                        <tr>
-                                            <th colspan="3" class="text-right">Grand Total
-                                            </th>
-                                            {{-- <th id="grand_total_alat_bantu">Rp.
+                                        @endif
+                                    </tbody>
+                                    <tfoot>
+                                        @if (isset($daftarAlatBantu->hasItem))
+                                            <tr>
+                                                <th colspan="3" class="text-right">Grand Total
+                                                </th>
+                                                {{-- <th id="grand_total_alat_bantu">Rp.
                                                 {{ format_uang($daftarAlatBantu->hasItem->sum('pivot.total')) }} --}}
-                                            <th>
-                                                <span id="grand_total_alat_bantu_tampil">
-                                                    Rp.
-                                                    {{ format_uang($daftarAlatBantu->hasItem->sum('pivot.total')) }}
-                                                </span>
-                                                <input type="hidden" id="grand_total_alat_bantu_value"
-                                                    name="grand_total_alat_bantu"
-                                                    value="{{ $daftarAlatBantu->hasItem->sum('pivot.total') }}"
-                                                    class="grand_total_alat_bantu">
-                                            </th>
-                                        </tr>
-                                    @endif
-                                </tfoot>
+                                                <th>
+                                                    <span id="grand_total_alat_bantu_tampil">
+                                                        Rp.
+                                                        {{ format_uang($daftarAlatBantu->hasItem->sum('pivot.total')) }}
+                                                    </span>
+                                                    <input type="hidden" id="grand_total_alat_bantu_value"
+                                                        name="grand_total_alat_bantu"
+                                                        value="{{ $daftarAlatBantu->hasItem->sum('pivot.total') }}"
+                                                        class="grand_total_alat_bantu">
+                                                </th>
+                                            </tr>
+                                        @endif
+                                    </tfoot>
 
-                            </table>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-12">
+                <div class="row">
+                    <div class="col-12">
 
-                    <div class="card">
-                        <div class="card-header  justify-content-between">
-                            <div class="card-title">Daftar Transportasi</div>
+                        <div class="card">
+                            <div class="card-header  justify-content-between">
+                                <div class="card-title">Daftar Transportasi</div>
 
-                        </div>
-                        <div class="card-body">
-                            <form action="" id="formTransportasi">
+                            </div>
+                            <div class="card-body">
+                                <form action="" id="formTransportasi">
 
-                                <div class="row">
-                                    <div class="col-2">
-                                        <h5 class="sub-title">Pilih Transportasi</h5>
-                                        <div class="form-group">
-                                            <select class="form-control select2" id="cmbTransportasi">
-                                                <option selected="selected" value="">Pilih Transportasi
-                                                </option>
-                                                @foreach ($listTransportasi as $i => $Transportasi)
-                                                    <option value="{{ $Transportasi->id }}"
-                                                        id="transportasi_{{ $Transportasi->id }}">
-                                                        {{ $Transportasi->nama }}
+                                    <div class="row">
+                                        <div class="col-2">
+                                            <h5 class="sub-title">Pilih Transportasi</h5>
+                                            <div class="form-group">
+                                                <select class="form-control select2" id="cmbTransportasi">
+                                                    <option selected="selected" value="">Pilih Transportasi
                                                     </option>
-                                                @endforeach
-                                            </select>
+                                                    @foreach ($listTransportasi as $i => $Transportasi)
+                                                        <option value="{{ $Transportasi->id }}"
+                                                            id="transportasi_{{ $Transportasi->id }}">
+                                                            {{ $Transportasi->nama }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col">
-                                        <h5 class="sub-title">Jumlah</h5>
-                                        <div class="form-group">
-                                            <div class="input-group mb-2 mr-sm-2">
-                                                <input type="text" name="jumlah_transportasi" id="jumlah_transportasi"
-                                                    placeholder="jumlah" class="form-control">
+                                        <div class="col">
+                                            <h5 class="sub-title">Jumlah</h5>
+                                            <div class="form-group">
+                                                <div class="input-group mb-2 mr-sm-2">
+                                                    <input type="text" name="jumlah_transportasi" id="jumlah_transportasi"
+                                                        placeholder="jumlah" class="form-control">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <h5 class="sub-title">keterangan</h5>
+                                            <div class="form-group">
+                                                <div class="input-group mb-2 mr-sm-2">
+                                                    <input type="text" name="input_keterangan_transportasi"
+                                                        id="input_keterangan_transportasi" placeholder="Keterangan Transportasi"
+                                                        class="form-control">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <h5 class="sub-title">Pilih Harga</h5>
+                                            <div class="form-radio">
+                                                <form>
+                                                    <div class="radio radiofill radio-inline">
+                                                        <label>
+                                                            <input type="radio" class="harga_transportasi"
+                                                                name="harga_transportasi" value="siang" checked="checked">
+                                                            <i class="helper"></i>Harga Siang
+                                                        </label>
+                                                    </div>
+                                                    <div class="radio radiofill radio-inline">
+                                                        <label>
+                                                            <input type="radio" class="harga_transportasi"
+                                                                name="harga_transportasi" value="malam">
+                                                            <i class="helper"></i>Harga Malam
+                                                        </label>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="">
+                                                <button type="submit" id="btn_transportasi" class="btn btn-primary">Update
+                                                    Transportasi</button>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col">
-                                        <h5 class="sub-title">keterangan</h5>
-                                        <div class="form-group">
-                                            <div class="input-group mb-2 mr-sm-2">
-                                                <input type="text" name="input_keterangan_transportasi"
-                                                    id="input_keterangan_transportasi" placeholder="Keterangan Transportasi"
-                                                    class="form-control">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col">
-                                        <h5 class="sub-title">Pilih Harga</h5>
-                                        <div class="form-radio">
-                                            <form>
-                                                <div class="radio radiofill radio-inline">
-                                                    <label>
-                                                        <input type="radio" class="harga_transportasi"
-                                                            name="harga_transportasi" value="siang" checked="checked">
-                                                        <i class="helper"></i>Harga Siang
-                                                    </label>
-                                                </div>
-                                                <div class="radio radiofill radio-inline">
-                                                    <label>
-                                                        <input type="radio" class="harga_transportasi"
-                                                            name="harga_transportasi" value="malam">
-                                                        <i class="helper"></i>Harga Malam
-                                                    </label>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                    <div class="col">
-                                        <div class="">
-                                            <button type="submit" id="btn_transportasi" class="btn btn-primary">Update
-                                                Transportasi</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                            <table class="table table-bordered " width="100%" id="tableTransportasi">
-                                <thead>
-                                    <tr>
-                                        <th width="5">#</th>
-                                        <th width="250">Transportasi</th>
-                                        <th width="10">Jumlah</th>
-                                        <th width="200">Total Harga</th>
-                                        <th width="150">Keterangan</th>
-                                        <th width="5%" class="text-center">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @if (isset($daftarTransportasi->hasItem))
-                                        @forelse ($daftarTransportasi->hasItem as $key => $Transportasi)
-                                            <tr id="listTransportasi_{{ $Transportasi->id }}"
-                                                class="list_table_transportasi">
-                                                <td class="text-center nomor_transportasi"
-                                                    data-index="{{ $key + 1 }}">
-                                                    {{ $key + 1 }}
-                                                </td>
-                                                <td>
-                                                    {{ $Transportasi->nama }}
-                                                </td>
-                                                <td>
-                                                    <span
-                                                        id="jumlah_transportasi_tampil_{{ $Transportasi->id }}">{{ $Transportasi->pivot->qty }}
-                                                    </span>
+                                </form>
+                                <table class="table table-bordered " width="100%" id="tableTransportasi">
+                                    <thead>
+                                        <tr>
+                                            <th width="5">#</th>
+                                            <th width="250">Transportasi</th>
+                                            <th width="10">Jumlah</th>
+                                            <th width="200">Total Harga</th>
+                                            <th width="150">Keterangan</th>
+                                            <th width="5%" class="text-center">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (isset($daftarTransportasi->hasItem))
+                                            @forelse ($daftarTransportasi->hasItem as $key => $Transportasi)
+                                                <tr id="listTransportasi_{{ $Transportasi->id }}"
+                                                    class="list_table_transportasi">
+                                                    <td class="text-center nomor_transportasi"
+                                                        data-index="{{ $key + 1 }}">
+                                                        {{ $key + 1 }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $Transportasi->nama }}
+                                                    </td>
+                                                    <td>
+                                                        <span
+                                                            id="jumlah_transportasi_tampil_{{ $Transportasi->id }}">{{ $Transportasi->pivot->qty }}
+                                                        </span>
 
-                                                    <input type="hidden"
-                                                        id="jumlah_transportasi_value_{{ $Transportasi->id }}"
-                                                        name="jumlah_transportasi"
-                                                        value="{{ $Transportasi->pivot->qty }}">
-                                                </td>
-                                                <td>
-                                                    <span id="total_transportasi_tampil_{{ $Transportasi->id }}">
-                                                        Rp.
-                                                        {{ format_uang($Transportasi->pivot->total) }}
-                                                    </span>
-                                                    <input type="hidden"
-                                                        id="total_transportasi_value_{{ $Transportasi->id }}"
-                                                        name="total_transportasi"
-                                                        value="{{ $Transportasi->pivot->total }}"
-                                                        class="total_transportasi">
-                                                </td>
-                                                <td>
-                                                    <span id="keterangan_transportasi_{{ $Transportasi->id }}">
-                                                        {{ $Transportasi->pivot->keterangan }}</span>
+                                                        <input type="hidden"
+                                                            id="jumlah_transportasi_value_{{ $Transportasi->id }}"
+                                                            name="jumlah_transportasi"
+                                                            value="{{ $Transportasi->pivot->qty }}">
+                                                    </td>
+                                                    <td>
+                                                        <span id="total_transportasi_tampil_{{ $Transportasi->id }}">
+                                                            Rp.
+                                                            {{ format_uang($Transportasi->pivot->total) }}
+                                                        </span>
+                                                        <input type="hidden"
+                                                            id="total_transportasi_value_{{ $Transportasi->id }}"
+                                                            name="total_transportasi"
+                                                            value="{{ $Transportasi->pivot->total }}"
+                                                            class="total_transportasi">
+                                                    </td>
+                                                    <td>
+                                                        <span id="keterangan_transportasi_{{ $Transportasi->id }}">
+                                                            {{ $Transportasi->pivot->keterangan }}</span>
 
-                                                    <input type="hidden"
-                                                        id="keterangan_transportasi_value_{{ $Transportasi->id }}"
-                                                        name="keterangan_transportasi"
-                                                        value="{{ $Transportasi->pivot->keterangan }}">
-                                                </td>
-                                                <td>
-                                                    <button class="btn btn-sm btn-warning text-light btn-edit"
-                                                        data-pekerjaanutama="{{ $pekerjaanUtama->id }}"
-                                                        data-modul="transportasi" data-item="{{ $Transportasi->id }}">
-                                                        <i class="nav-icon fas fa-edit"></i>
-                                                        Ubah
-                                                    </button>
-                                                    <button type="button"
-                                                        class="btn btn-danger btn-xs text-center btn-hapus"
-                                                        data-pekerjaanutama="{{ $pekerjaanUtama->id }}"
-                                                        data-modul="transportasi" data-item="{{ $Transportasi->id }}">
-                                                        <i class="fa fa-trash"></i>
-                                                        Hapus
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        @empty
+                                                        <input type="hidden"
+                                                            id="keterangan_transportasi_value_{{ $Transportasi->id }}"
+                                                            name="keterangan_transportasi"
+                                                            value="{{ $Transportasi->pivot->keterangan }}">
+                                                    </td>
+                                                    <td>
+                                                        <button class="btn btn-sm btn-warning text-light btn-edit"
+                                                            data-pekerjaanutama="{{ $pekerjaanUtama->id }}"
+                                                            data-modul="transportasi" data-item="{{ $Transportasi->id }}">
+                                                            <i class="nav-icon fas fa-edit"></i>
+                                                            Ubah
+                                                        </button>
+                                                        <button type="button"
+                                                            class="btn btn-danger btn-xs text-center btn-hapus"
+                                                            data-pekerjaanutama="{{ $pekerjaanUtama->id }}"
+                                                            data-modul="transportasi" data-item="{{ $Transportasi->id }}">
+                                                            <i class="fa fa-trash"></i>
+                                                            Hapus
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            @empty
+                                                <tr class="transportasiTidakAda">
+                                                    <td colspan="10">Data Transportasi tidak ada</td>
+                                                </tr>
+                                            @endforelse
+                                        @else
                                             <tr class="transportasiTidakAda">
                                                 <td colspan="10">Data Transportasi tidak ada</td>
                                             </tr>
-                                        @endforelse
-                                    @else
-                                        <tr class="transportasiTidakAda">
-                                            <td colspan="10">Data Transportasi tidak ada</td>
-                                        </tr>
-                                    @endif
-                                </tbody>
-                                <tfoot>
-                                    @if (isset($daftarTransportasi->hasItem))
-                                        <tr>
-                                            <th colspan="3" class="text-right">Grand Total
-                                            </th>
-                                            <th>
-                                                <span id="grand_total_transportasi_tampil">
-                                                    Rp.
-                                                    {{ format_uang($daftarTransportasi->hasItem->sum('pivot.total')) }}
-                                                </span>
-                                                <input type="hidden" id="grand_total_transportasi_value"
-                                                    name="grand_total_transportasi"
-                                                    value="{{ $daftarTransportasi->hasItem->sum('pivot.total') }}"
-                                                    class="grand_total_transportasi">
-                                            </th>
+                                        @endif
+                                    </tbody>
+                                    <tfoot>
+                                        @if (isset($daftarTransportasi->hasItem))
+                                            <tr>
+                                                <th colspan="3" class="text-right">Grand Total
+                                                </th>
+                                                <th>
+                                                    <span id="grand_total_transportasi_tampil">
+                                                        Rp.
+                                                        {{ format_uang($daftarTransportasi->hasItem->sum('pivot.total')) }}
+                                                    </span>
+                                                    <input type="hidden" id="grand_total_transportasi_value"
+                                                        name="grand_total_transportasi"
+                                                        value="{{ $daftarTransportasi->hasItem->sum('pivot.total') }}"
+                                                        class="grand_total_transportasi">
+                                                </th>
 
-                                        </tr>
-                                    @endif
-                                </tfoot>
+                                            </tr>
+                                        @endif
+                                    </tfoot>
 
-                            </table>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            @endisset
 
         @endif
         <div class="row">
@@ -1328,10 +1328,10 @@
 
         // -- end galian
         $(document).ready(function() {
-
-
-
-
+            $('#cmbRekanan').select2({
+                placeholder: '--- Pilih Rekanan ---',
+                width: '100%'
+            });
             $('#cmbBahan').select2({
                 placeholder: '--- Pilih Bahan ---',
                 width: '100%'

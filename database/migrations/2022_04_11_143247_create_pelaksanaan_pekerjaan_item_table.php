@@ -20,7 +20,6 @@ class CreatePelaksanaanPekerjaanItemTable extends Migration
             $table->integer('qty');
             $table->integer('harga');
             $table->integer('total')->default(0);
-            $table->enum('harga', ['siang', 'malam'])->default('siang');
             $table->string('keterangan')->nullable();
             //SETTING THE PRIMARY KEYS
             $table->primary(['pelaksanaan_pekerjaan_id', 'item_id']);

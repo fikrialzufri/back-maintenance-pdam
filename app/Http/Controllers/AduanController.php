@@ -91,6 +91,7 @@ class AduanController extends Controller
         DB::beginTransaction();
 
         try {
+            DB::commit();
             $aduan = new Aduan();
             $aduan->no_ticket = $request->no_ticket;
             $aduan->no_aduan = $noAduan;
@@ -108,7 +109,6 @@ class AduanController extends Controller
             $aduan->user_id = auth()->user()->id;
             $aduan->save();
             $aduan->hasJenisAduan()->sync($request->jenis_aduan_id);
-            DB::commit();
 
             $title = "Aduan Baru";
             $body = "Aduan dengan nomor aduan " . $noAduan . " telah dikirim";

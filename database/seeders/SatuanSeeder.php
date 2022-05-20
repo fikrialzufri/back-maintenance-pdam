@@ -22,7 +22,6 @@ class SatuanSeeder extends Seeder
         $satuanLusin->nama = 'Lusin';
         $satuanLusin->save();
 
-
         $satuanMeter = new Satuan();
         $satuanMeter->nama = 'Meter';
         $satuanMeter->save();
@@ -39,12 +38,20 @@ class SatuanSeeder extends Seeder
         $satuanLiter->nama = 'Liter';
         $satuanLiter->save();
 
-        $satuanMl = new Satuan();
-        $satuanMl->nama = 'Ml';
-        $satuanMl->save();
+        $satuanTitik = new Satuan();
+        $satuanTitik->nama = 'Titik';
+        $satuanTitik->save();
 
         $satuanLs = new Satuan();
         $satuanLs->nama = 'LS';
+        $satuanLs->save();
+
+        $satuanBuah = new Satuan();
+        $satuanBuah->nama = 'Buah';
+        $satuanBuah->save();
+
+        $satuanLs = new Satuan();
+        $satuanLs->nama = '121';
         $satuanLs->save();
     }
 }

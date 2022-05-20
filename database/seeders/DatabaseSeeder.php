@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             SatuanSeeder::class,
             PerusahaanSeeder::class,
             KategoriJenisSeeder::class,
+            GalianSeeder::class,
             JenisAduanSeeder::class
         ]);
     }
