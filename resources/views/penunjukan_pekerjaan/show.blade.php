@@ -66,6 +66,20 @@
 
                                     </div>
                                 </div>
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <div>
+                                            <label for="no_ticket" class=" form-control-label">Total Tagihan
+                                                Pekerjaan</label>
+                                        </div>
+                                        <div>
+                                            <h3 id="total_tagihan_pekerjaan">
+                                                <strong>Rp. {{ format_uang($totalPekerjaan) }}</strong>
+                                            </h3>
+                                        </div>
+
+                                    </div>
+                                </div>
                             </div>
 
                         </div>
@@ -110,6 +124,7 @@
                 </div>
             </div>
         </div>
+
         @if ($aduan->status != 'draft')
             @isset($pekerjaanUtama)
                 <input type="hidden" name="id_pekerjaan" id="idPekerjaan" value="{{ $pekerjaanUtama->id }}">
@@ -1018,6 +1033,186 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-12">
+
+                        <div class="card">
+                            <div class="card-header  justify-content-between">
+                                <div class="card-title">Daftar Dokumentasi</div>
+
+                            </div>
+                            <div class="card-body">
+                                <form action="" id="formDokumentasi">
+
+                                    <div class="row">
+                                        <div class="col-2">
+                                            <h5 class="sub-title">Pilih Dokumentasi</h5>
+                                            <div class="form-group">
+                                                <select class="form-control select2" id="cmbDokumentasi">
+                                                    <option selected="selected" value="">Pilih Dokumentasi
+                                                    </option>
+                                                    @foreach ($listDokumentasi as $i => $Dokumentasi)
+                                                        <option value="{{ $Dokumentasi->id }}"
+                                                            id="dokumentasi_{{ $Dokumentasi->id }}">
+                                                            {{ $Dokumentasi->nama }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <h5 class="sub-title">Jumlah</h5>
+                                            <div class="form-group">
+                                                <div class="input-group mb-2 mr-sm-2">
+                                                    <input type="text" name="jumlah_dokumentasi" id="jumlah_dokumentasi"
+                                                        placeholder="jumlah" class="form-control">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <h5 class="sub-title">keterangan</h5>
+                                            <div class="form-group">
+                                                <div class="input-group mb-2 mr-sm-2">
+                                                    <input type="text" name="input_keterangan_dokumentasi"
+                                                        id="input_keterangan_dokumentasi" placeholder="Keterangan Dokumentasi"
+                                                        class="form-control">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <h5 class="sub-title">Pilih Harga</h5>
+                                            <div class="form-radio">
+                                                <form>
+                                                    <div class="radio radiofill radio-inline">
+                                                        <label>
+                                                            <input type="radio" class="harga_dokumentasi"
+                                                                name="harga_dokumentasi" value="siang" checked="checked">
+                                                            <i class="helper"></i>Harga Siang
+                                                        </label>
+                                                    </div>
+                                                    <div class="radio radiofill radio-inline">
+                                                        <label>
+                                                            <input type="radio" class="harga_dokumentasi"
+                                                                name="harga_dokumentasi" value="malam">
+                                                            <i class="helper"></i>Harga Malam
+                                                        </label>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="">
+                                                <button type="submit" id="btn_dokumentasi" class="btn btn-primary">Update
+                                                    Dokumentasi</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                                <table class="table table-bordered " width="100%" id="tableDokumentasi">
+                                    <thead>
+                                        <tr>
+                                            <th width="5">#</th>
+                                            <th width="250">Dokumentasi</th>
+                                            <th width="10">Jumlah</th>
+                                            <th width="200">Total Harga</th>
+                                            <th width="150">Keterangan</th>
+                                            <th width="5%" class="text-center">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (isset($daftarDokumentasi->hasItem))
+                                            @forelse ($daftarDokumentasi->hasItem as $key => $Dokumentasi)
+                                                <tr id="listDokumentasi_{{ $Dokumentasi->id }}"
+                                                    class="list_table_dokumentasi">
+                                                    <td class="text-center nomor_dokumentasi"
+                                                        data-index="{{ $key + 1 }}">
+                                                        {{ $key + 1 }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $Dokumentasi->nama }}
+                                                    </td>
+                                                    <td>
+                                                        <span
+                                                            id="jumlah_dokumentasi_tampil_{{ $Dokumentasi->id }}">{{ $Dokumentasi->pivot->qty }}
+                                                        </span>
+
+                                                        <input type="hidden"
+                                                            id="jumlah_dokumentasi_value_{{ $Dokumentasi->id }}"
+                                                            name="jumlah_dokumentasi"
+                                                            value="{{ $Dokumentasi->pivot->qty }}">
+                                                    </td>
+                                                    <td>
+                                                        <span id="total_dokumentasi_tampil_{{ $Dokumentasi->id }}">
+                                                            Rp.
+                                                            {{ format_uang($Dokumentasi->pivot->total) }}
+                                                        </span>
+                                                        <input type="hidden"
+                                                            id="total_dokumentasi_value_{{ $Dokumentasi->id }}"
+                                                            name="total_dokumentasi"
+                                                            value="{{ $Dokumentasi->pivot->total }}"
+                                                            class="total_dokumentasi">
+                                                    </td>
+                                                    <td>
+                                                        <span id="keterangan_dokumentasi_{{ $Dokumentasi->id }}">
+                                                            {{ $Dokumentasi->pivot->keterangan }}</span>
+
+                                                        <input type="hidden"
+                                                            id="keterangan_dokumentasi_value_{{ $Dokumentasi->id }}"
+                                                            name="keterangan_dokumentasi"
+                                                            value="{{ $Dokumentasi->pivot->keterangan }}">
+                                                    </td>
+                                                    <td>
+                                                        <button class="btn btn-sm btn-warning text-light btn-edit"
+                                                            data-pekerjaanutama="{{ $pekerjaanUtama->id }}"
+                                                            data-modul="dokumentasi" data-item="{{ $Dokumentasi->id }}">
+                                                            <i class="nav-icon fas fa-edit"></i>
+                                                            Ubah
+                                                        </button>
+                                                        <button type="button"
+                                                            class="btn btn-danger btn-xs text-center btn-hapus"
+                                                            data-pekerjaanutama="{{ $pekerjaanUtama->id }}"
+                                                            data-modul="dokumentasi" data-item="{{ $Dokumentasi->id }}">
+                                                            <i class="fa fa-trash"></i>
+                                                            Hapus
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            @empty
+                                                <tr class="dokumentasiTidakAda">
+                                                    <td colspan="10">Data Dokumentasi tidak ada</td>
+                                                </tr>
+                                            @endforelse
+                                        @else
+                                            <tr class="dokumentasiTidakAda">
+                                                <td colspan="10">Data Dokumentasi tidak ada</td>
+                                            </tr>
+                                        @endif
+                                    </tbody>
+                                    <tfoot>
+                                        @if (isset($daftarDokumentasi->hasItem))
+                                            <tr>
+                                                <th colspan="3" class="text-right">Grand Total
+                                                </th>
+                                                <th>
+                                                    <span id="grand_total_dokumentasi_tampil">
+                                                        Rp.
+                                                        {{ format_uang($daftarDokumentasi->hasItem->sum('pivot.total')) }}
+                                                    </span>
+                                                    <input type="hidden" id="grand_total_dokumentasi_value"
+                                                        name="grand_total_dokumentasi"
+                                                        value="{{ $daftarDokumentasi->hasItem->sum('pivot.total') }}"
+                                                        class="grand_total_dokumentasi">
+                                                </th>
+
+                                            </tr>
+                                        @endif
+                                    </tfoot>
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             @endisset
 
         @endif
@@ -1350,6 +1545,10 @@
                 placeholder: '--- Pilih Pekerjaan ---',
                 width: '100%'
             });
+            $('#cmbDokumentasi').select2({
+                placeholder: '--- Pilih Dokumentasi ---',
+                width: '100%'
+            });
 
             $('#jumlah_pekerjaan').keypress(function(event) {
                 if (event.which < 46 ||
@@ -1376,6 +1575,18 @@
                 $(this).removeClass("is-invalid");
             })
             $('#jumlah_alat_bantu').keypress(function(event) {
+                if (event.which < 46 ||
+                    event.which > 59) {
+                    event.preventDefault();
+                } // prevent if not number/dot
+
+                if (event.which == 46 &&
+                    $(this).val().indexOf('.') != -1) {
+                    event.preventDefault();
+                } // prevent if already dot
+                $(this).removeClass("is-invalid");
+            })
+            $('#jumlah_dokumentasi').keypress(function(event) {
                 if (event.which < 46 ||
                     event.which > 59) {
                     event.preventDefault();
@@ -1553,6 +1764,11 @@
             $('#formTransportasi').on('submit', function(e) {
                 e.preventDefault();
                 let modul = 'transportasi';
+                saveform(modul);
+            });
+            $('#formDokumentasi').on('submit', function(e) {
+                e.preventDefault();
+                let modul = 'dokumentasi';
                 saveform(modul);
             });
             // ------ End Pekerjaan

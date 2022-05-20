@@ -13,7 +13,12 @@ use App\Models\JenisAduan;
 use App\Models\Kategori;
 use App\Models\Notifikasi;
 use App\Models\Rekanan;
+use App\Models\Tagihan;
+use App\Models\Wilayah;
 use DB;
+use Excel;
+use Str;
+use Carbon\Carbon;
 
 class PenunjukanPekerjaanController extends Controller
 {
@@ -79,6 +84,9 @@ class PenunjukanPekerjaanController extends Controller
         $daftarBahan = [];
         $daftarAlatBantu = [];
         $daftarTransportasi = [];
+        $listDokumentasi = [];
+
+        $totalPekerjaan = 0;
 
         $kategoriPekerjaan = Kategori::whereSlug('pekerjaan')->first();
         if ($kategoriPekerjaan) {
@@ -109,6 +117,13 @@ class PenunjukanPekerjaanController extends Controller
             $jenisTransportasi = Jenis::where('kategori_id', $kategoriTransportasi->id)->get()->pluck('id');
             $listTransportasi = Item::whereIn('jenis_id', $jenisTransportasi)->get();
         }
+
+        $kategoriDokumentasi = Kategori::whereSlug('dokumentasi')->first();
+        if ($kategoriDokumentasi) {
+            $jenisDokumentasi = Jenis::where('kategori_id', $kategoriDokumentasi->id)->get()->pluck('id');
+            $listDokumentasi = Item::whereIn('jenis_id', $jenisDokumentasi)->get();
+        }
+
         if ($aduan->status !== 'draft') {
             $penunjukan = PenunjukanPekerjaan::where('aduan_id', $aduan->id)->first();
 
@@ -135,9 +150,14 @@ class PenunjukanPekerjaanController extends Controller
                 $daftarTransportasi = $query->with(["hasItem" => function ($q) use ($listTransportasi) {
                     $q->whereIn('item.id', $listTransportasi->pluck('id'));
                 }])->first();
+
+                $daftarDokumentasi = $query->with(["hasItem" => function ($q) use ($listDokumentasi) {
+                    $q->whereIn('item.id', $listDokumentasi->pluck('id'));
+                }])->first();
+
+                $totalPekerjaan = $daftarPekerjaan->hasItem->sum('pivot.total') + $daftarBahan->hasItem->sum('pivot.total') + $daftarAlatBantu->hasItem->sum('pivot.total') + $daftarTransportasi->hasItem->sum('pivot.total') + $daftarDokumentasi->hasItem->sum('pivot.total') + $daftarGalian->sum('pivot.total');
             }
         }
-
 
         $jenisAduan = $aduan->hasJenisAduan->toArray();
         $jenis_aduan = JenisAduan::orderBy('nama')->get();
@@ -165,6 +185,7 @@ class PenunjukanPekerjaanController extends Controller
             'daftarBahan',
             'daftarAlatBantu',
             'daftarTransportasi',
+            'daftarDokumentasi',
             'jenisAduan',
             'jenis_aduan',
             'rekanan',
@@ -174,6 +195,8 @@ class PenunjukanPekerjaanController extends Controller
             'listBahan',
             'listAlatBantu',
             'listTransportasi',
+            'listDokumentasi',
+            'totalPekerjaan',
             'action'
         ));
     }
@@ -277,67 +300,186 @@ class PenunjukanPekerjaanController extends Controller
             'file' => 'required|mimes:csv,xls,xlsx'
         ]);
 
+        $dataNoTagihan = [];
+        $dataTanggalTagihan = [];
+        $dataCv = [];
+        $dataSpk = [];
+        $dataLokasi = [];
+        $dataJamMulai = [];
+        $dataJamSelesai = [];
+        $dataTanggalMulai = [];
+        $dataTanggalSelesai = [];
+        $dataJenisPekerjaan = [];
+        $dataNamaPekerjaan = [];
+        $dataJumlahPekerjaan = [];
+        $dataPanjangGalian = [];
+        $dataLebarGalian = [];
+        $dataDalamGalian = [];
+        $dataPekerjaan = [];
+        $dataAduan = [];
         $dataRekanan = [];
-        $dataCV = [];
-        $dataNama = [];
-        $dataKtp = [];
-        $dataNoHp = [];
-        $dataAlamat = [];
-        $dataUser = [];
-        $dataUserName = [];
-        $dataPassword = [];
-        $dataEmail = [];
-        $itemExist = [];
+        $PelaksanaanPekerjaan = [];
+        $listitem = [];
+        $tagihan = [];
+
+        $wilayah = Wilayah::first();
 
         $file = $request->hasFile('file');
         $total = 0;
-        try {
-            if ($file) {
-                $item = Excel::toArray('', request()->file('file'), null, null);
-                foreach ($item[0] as $k => $val) {
-                    $dataItem[$k] = $val;
-                }
-                foreach ($dataItem as $index => $item) {
-                    $dataCV[$index] = $item[1];
-                    $dataNama[$index] = $item[2];
-                    $dataKtp[$index] = $item[3];
-                    $dataNoHp[$index] = $item[4];
-                    $dataAlamat[$index] = $item[5];
-                    $dataUserName[$index] = $item[6];
-                    $dataPassword[$index] = $item[7];
-                    $dataEmail[$index] = $item[8];
+        if ($file) {
+            $item = Excel::toArray('', request()->file('file'), null, null);
+            foreach ($item[0] as $k => $val) {
+                $dataItem[$k] = $val;
+            }
+            foreach ($dataItem as $index => $item) {
+                if ($index > 2) {
 
-                    if ($index > 2) {
-                        $dataUser[$index] = User::where('username', 'LIKE', '%' .  $dataCV[$index] . "%")->first();
-                        if (!$dataUser[$index]) {
-                            $dataUser[$index] = new User;
-                            $dataUser[$index]->name =  $dataUserName[$index];
-                            $dataUser[$index]->username =  $dataUserName[$index];
-                            $dataUser[$index]->password =  bcrypt($dataPassword[$index]);
-                            $dataUser[$index]->email =  $dataEmail[$index];
-                            $dataUser[$index]->save();
-                        }
-                        $dataRekanan[$index] = Rekanan::where('nama', 'LIKE', '%' . $dataCV[$index] . "%")->first();
-                        if (!$dataRekanan[$index]) {
-                            if ($dataNama[$index] != null) {
-                                $Rekanan = new Rekanan;
-                                $Rekanan->nama =  $dataCV[$index];
-                                $Rekanan->nama_penangung_jawab =  $dataNama[$index];
-                                $Rekanan->nik =  $dataKtp[$index];
-                                $Rekanan->no_hp =  $dataNoHp[$index];
-                                $Rekanan->alamat =  $dataAlamat[$index];
-                                $Rekanan->user_id =  $dataUser[$index]->id;
-                                $Rekanan->save();
-                                $total = ++$index;
+                    $dataNoTagihan[$index] = $item[1];
+                    $dataTanggalTagihan[$index] = $item[2];
+                    $dataCv[$index] = $item[3];
+                    $dataSpk[$index] = $item[4];
+                    $dataLokasi[$index] = $item[5];
+                    $dataJamMulai[$index] = $item[6];
+                    $dataJamSelesai[$index] = $item[7];
+                    $dataTanggalMulai[$index] = $item[8];
+                    $dataTanggalSelesai[$index] = $item[9];
+                    $dataJenisPekerjaan[$index] = $item[10];
+                    $dataNamaPekerjaan[$index] = $item[11];
+                    $dataJumlahPekerjaan[$index] = (float) $item[12];
+                    $dataPanjangGalian[$index] = $item[13];
+                    $dataLebarGalian[$index] = $item[14];
+                    $dataDalamGalian[$index] = $item[15];
+
+                    if (
+                        $dataNoTagihan[$index] != null &&
+                        $dataTanggalTagihan[$index] != null &&
+                        $dataCv[$index] != null &&
+                        $dataSpk[$index] != null &&
+                        $dataLokasi[$index] != null &&
+                        $dataJamMulai[$index] != null &&
+                        $dataJamSelesai[$index] != null &&
+                        $dataTanggalMulai[$index] != null &&
+                        $dataTanggalSelesai[$index] != null &&
+                        $dataJenisPekerjaan[$index] != null &&
+                        $dataNamaPekerjaan[$index] != null &&
+                        $dataJumlahPekerjaan[$index] != null &&
+                        $dataPanjangGalian[$index] != null &&
+                        $dataLebarGalian[$index] != null &&
+                        $dataDalamGalian[$index] != null
+                    ) {
+                        # code...
+                        $dataRekanan[$index] = Rekanan::where('nama', 'like', '%' . $dataCv[$index] . '%')->first();
+
+                        if ($dataRekanan[$index]) {
+                            $dataPekerjaan[$index] = PenunjukanPekerjaan::where('nomor_pekerjaan', $dataSpk[$index])->where('rekanan_id', $dataRekanan[$index]->id)->first();
+
+                            if (empty($dataPekerjaan[$index])) {
+                                $dataAduan[$index] = new Aduan();
+                                $dataAduan[$index]->no_ticket = $dataSpk[$index];
+                                $dataAduan[$index]->no_aduan = $dataSpk[$index];
+                                $dataAduan[$index]->no_pelanggan = $dataCv[$index];
+                                $dataAduan[$index]->detail_lokasi = $dataLokasi[$index];
+                                $dataAduan[$index]->no_hp = $dataRekanan[$index]->no_hp;
+                                $dataAduan[$index]->mps = $dataSpk[$index];
+                                $dataAduan[$index]->atas_nama = $dataRekanan[$index]->nama;
+                                $dataAduan[$index]->sumber_informasi = $dataRekanan[$index]->nama;
+                                $dataAduan[$index]->lokasi =  $dataLokasi[$index];
+                                $dataAduan[$index]->keterangan =  "Aduan dari internal";
+                                $dataAduan[$index]->lat_long = '-0.475303, 117.14647';
+                                $dataAduan[$index]->status = "selesai";
+                                $dataAduan[$index]->wilayah_id =  $wilayah->id;
+                                $dataAduan[$index]->user_id = auth()->user()->id;
+                                $dataAduan[$index]->save();
+
+                                $dataPekerjaan[$index] = new PenunjukanPekerjaan;
+                                $dataPekerjaan[$index]->nomor_pekerjaan = $dataSpk[$index];
+                                $dataPekerjaan[$index]->rekanan_id = $dataRekanan[$index]->id;
+                                $dataPekerjaan[$index]->aduan_id = $dataAduan[$index]->id;
+                                $dataPekerjaan[$index]->tagihan = 'ya';
+                                $dataPekerjaan[$index]->user_id = auth()->user()->id;
+                                $dataPekerjaan[$index]->status = 'selesai';
+                                $dataPekerjaan[$index]->save();
                             }
+
+                            $PelaksanaanPekerjaan[$index] = PelaksanaanPekerjaan::where('penunjukan_pekerjaan_id', $dataPekerjaan[$index]->id)->where('rekanan_id', $dataRekanan[$index]->id)->first();
+
+                            if (empty($PelaksanaanPekerjaan[$index])) {
+                                $PelaksanaanPekerjaan[$index] = new PelaksanaanPekerjaan;
+                                $PelaksanaanPekerjaan[$index]->nomor_pelaksanaan_pekerjaan =  $dataSpk[$index];
+                                $PelaksanaanPekerjaan[$index]->penunjukan_pekerjaan_id = $dataPekerjaan[$index]->id;
+                                $PelaksanaanPekerjaan[$index]->rekanan_id =  $dataRekanan[$index]->id;
+                                $PelaksanaanPekerjaan[$index]->aduan_id = $dataPekerjaan[$index]->aduan_id;
+                                $PelaksanaanPekerjaan[$index]->lokasi = $dataLokasi[$index];
+                                $PelaksanaanPekerjaan[$index]->lat_long =  '-0.475303, 117.14647';
+                                $PelaksanaanPekerjaan[$index]->user_id = auth()->user()->id;
+                                $PelaksanaanPekerjaan[$index]->tanggal_mulai = Carbon::parse($dataTanggalMulai[$index])->format('Y-m-d');
+                                $PelaksanaanPekerjaan[$index]->tanggal_selesai =  Carbon::parse($dataTanggalSelesai[$index])->format('Y-m-d');
+                                $PelaksanaanPekerjaan[$index]->status = 'selesai';
+                                $PelaksanaanPekerjaan[$index]->save();
+                            }
+
+                            $dataItem[$index] = Item::where('nama', 'like', '%' . $dataNamaPekerjaan[$index] . '%')->first();
+                            if ($dataItem[$index]) {
+                                $harga_item[$index] = $dataItem[$index]->harga;
+                                if ($dataJenisPekerjaan[$index] !== 'Galian') {
+                                    if ($dataJumlahPekerjaan != '') {
+
+                                        $listitem[$dataItem[$index]->id] = [
+                                            'keterangan' => '',
+                                            'harga' => $harga_item[$index],
+                                            'qty' => $dataJumlahPekerjaan[$index],
+                                            'total' => $dataJumlahPekerjaan[$index] * $harga_item[$index],
+                                        ];
+                                        $PelaksanaanPekerjaan[$index]->hasItem()->sync($listitem);
+                                    }
+                                } else {
+                                    $dataGalian[$index] = GalianPekerjaan::where('item_id', $item)->where('pelaksanaan_pekerjaan_id', $PelaksanaanPekerjaan[$index]->id)->first();
+
+                                    if (empty($dataGalian[$index])) {
+                                        $dataGalian[$index] = new GalianPekerjaan;
+                                    }
+                                    $dataGalian[$index]->panjang = $dataPanjangGalian[$index];
+                                    $dataGalian[$index]->lebar = $dataLebarGalian[$index];
+                                    $dataGalian[$index]->dalam = $dataDalamGalian[$index];
+                                    $dataGalian[$index]->harga = 'siang';
+                                    $dataGalian[$index]->total = 0;
+                                    $dataGalian[$index]->item_id = $dataItem[$index]->id;
+                                    $dataGalian[$index]->user_id = auth()->user()->id;
+                                    $dataGalian[$index]->pelaksanaan_pekerjaan_id = $PelaksanaanPekerjaan[$index]->id;
+                                    $dataGalian[$index]->save();
+                                }
+                            }
+
+                            // $tagihan[$index] = Tagihan::where('nomor_tagihan', $dataNoTagihan[$index])->where('rekanan_id', $dataRekanan[$index]->id)->first();
+                            // if (empty($tagihan[$index])) {
+                            //     $tagihan[$index] = new Tagihan();
+                            //     $tagihan[$index]->nomor_tagihan = $dataNoTagihan[$index];
+                            //     $tagihan[$index]->rekanan_id = $dataRekanan[$index]->id;
+                            //     $tagihan[$index]->user_id = auth()->user()->id;
+                            //     $tagihan[$index]->status = 'selesai';
+                            //     $tagihan[$index]->save();
+                            // }
                         }
                     }
                 }
-                return redirect()->route($this->route . '.index')->with('message', ucwords(str_replace('-', ' ', $this->route)) . ' berhasil diupload dengan total item :' . $total)->with('Class', 'success');
             }
-        } catch (\Throwable $th) {
-            //throw $th;
-            return redirect()->route($this->route . '.index')->with('message', ucwords(str_replace('-', ' ', $this->route)) . ' gagal diupload')->with('Class', 'success');
+
+            // $listRekananPelakasaan = [];
+
+            // foreach ($PelaksanaanPekerjaan as $key => $kerjaan) {
+            //     $listRekananPelakasaan[$kerjaan->id] = [
+            //         'total' => $total,
+            //     ];
+            // }
+            // foreach ($tagihan as $key => $value) {
+            //     // $tagihan[$index]->hasPelaksanaanPekerjaan()->sync($pelaksanaan_id);
+            // }
+
+            return redirect()->route($this->route . '.index')->with('message', ucwords(str_replace('-', ' ', $this->route)) . ' berhasil diupload dengan total item :' . $total)->with('Class', 'success');
         }
+        // try { } catch (\Throwable $th) {
+        //     //throw $th;
+        //     return redirect()->route($this->route . '.index')->with('message', ucwords(str_replace('-', ' ', $this->route)) . ' gagal diupload')->with('Class', 'success');
+        // }
     }
 }

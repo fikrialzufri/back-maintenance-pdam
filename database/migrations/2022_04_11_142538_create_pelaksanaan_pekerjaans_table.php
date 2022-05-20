@@ -17,8 +17,8 @@ class CreatePelaksanaanPekerjaansTable extends Migration
             $table->uuid('id')->primary();
             $table->string('nomor_pelaksanaan_pekerjaan');
             $table->string('slug');
-            $table->date('tanggal_mulai')->nullable();
-            $table->date('tanggal_selesai')->nullable();
+            $table->dateTime('tanggal_mulai')->nullable();
+            $table->dateTime('tanggal_selesai')->nullable();
             $table->longText('keterangan')->nullable();
             $table->longText('keterangan_barang')->nullable();
             $table->longText('lokasi')->nullable();
