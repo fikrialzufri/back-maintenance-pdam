@@ -68,6 +68,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('penunjukan-pekerjaan', PenunjukanPekerjaanController::class, ['names' => 'penunjukan_pekerjaan'])->except('destroy');
 
     Route::post('tambah-galian', [PelaksanaanPekerjaanController::class, 'galian'])->name('pelaksanaan-pekerjaan.galian');
+    Route::post('hapus-galian', [PelaksanaanPekerjaanController::class, 'hapusgalian'])->name('pelaksanaan-pekerjaan.galian.hapus');
 
     Route::post('tambah-item', [PelaksanaanPekerjaanController::class, 'item'])->name('pelaksanaan-pekerjaan.item');
     Route::post('hapus-item', [PelaksanaanPekerjaanController::class, 'hapusitem'])->name('pelaksanaan-pekerjaan.hapus.item');

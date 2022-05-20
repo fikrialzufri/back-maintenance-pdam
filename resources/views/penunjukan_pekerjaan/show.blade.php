@@ -217,9 +217,17 @@
                                                     <input type="hidden" id="jumlah_pekerjaan_value_{{ $pekerjaan->id }}"
                                                         name="jumlah_pekerjaan" value="{{ $pekerjaan->pivot->qty }}">
                                                 </td>
-                                                <td id="total_pekerjaan_{{ $pekerjaan->id }}">Rp.
-                                                    {{ format_uang($pekerjaan->pivot->total) }}</td>
                                                 <td>
+                                                    <span id="total_pekerjaan_tampil_{{ $pekerjaan->id }}">
+                                                        Rp.
+                                                        {{ format_uang($pekerjaan->pivot->total) }}
+                                                    </span>
+                                                    <input type="hidden" id="total_pekerjaan_value_{{ $pekerjaan->id }}"
+                                                        name="total_pekerjaan" value="{{ $pekerjaan->pivot->total }}"
+                                                        class="total_pekerjaan">
+                                                </td>
+                                                <td>
+                                                    </span>
                                                     <span id="keterangan_pekerjaan_{{ $pekerjaan->id }}">
                                                         {{ $pekerjaan->pivot->keterangan }}</span>
 
@@ -260,7 +268,16 @@
                                         <tr>
                                             <th colspan="3" class="text-right">Grand Total
                                             </th>
-                                            <th>Rp. {{ format_uang($daftarPekerjaan->hasItem->sum('pivot.total')) }}
+                                            <th>
+                                                <span id="grand_total_pekerjaan_tampil">
+                                                    Rp.
+                                                    {{ format_uang($daftarPekerjaan->hasItem->sum('pivot.total')) }}
+                                                </span>
+                                                <input type="hidden" id="grand_total_pekerjaan_value"
+                                                    name="grand_total_pekerjaan"
+                                                    value="{{ $daftarPekerjaan->hasItem->sum('pivot.total') }}"
+                                                    class="grand_total_pekerjaan">
+                                            </th>
 
                                         </tr>
                                     @endif
@@ -390,7 +407,6 @@
                                                 </td>
                                                 <td>
                                                     {{ $galian->pekerjaan }}
-
                                                 </td>
                                                 <td>
                                                     <span
@@ -413,8 +429,16 @@
                                                     <input type="hidden" id="dalam_value_{{ $galian->item_id }}"
                                                         name="lebar" value="{{ $galian->dalam }}">
                                                 </td>
-                                                <td id="total_galian_{{ $galian->item_id }}">Rp.
-                                                    {{ format_uang($galian->total) }}</td>
+
+                                                <td>
+                                                    <span id="total_galian_tampil_{{ $galian->id }}">
+                                                        Rp.
+                                                        {{ format_uang($galian->total) }}
+                                                    </span>
+                                                    <input type="hidden" id="total_galian_value_{{ $galian->id }}"
+                                                        name="total_galian" value="{{ $galian->total }}"
+                                                        class="total_galian">
+                                                </td>
                                                 <td>
                                                     <span id="keterangan_galian_{{ $galian->item_id }}">
                                                         {{ $galian->keterangan }}</span>
@@ -451,8 +475,15 @@
                                         <tr>
                                             <th colspan="5" class="text-right">Grand Total
                                             </th>
-                                            <th>Rp. {{ format_uang($daftarGalian->sum('total')) }}
-
+                                            <th>
+                                                <span id="grand_total_galian_tampil">
+                                                    Rp.
+                                                    {{ format_uang($daftarGalian->sum('total')) }}
+                                                </span>
+                                                <input type="hidden" id="grand_total_galian_value" name="grand_total_galian"
+                                                    value="{{ $daftarGalian->sum('total') }}"
+                                                    class="grand_total_galian">
+                                            </th>
                                         </tr>
                                     @endif
                                 </tfoot>
@@ -564,8 +595,15 @@
                                                     <input type="hidden" id="jumlah_bahan_value_{{ $bahan->id }}"
                                                         name="jumlah_bahan" value="{{ $bahan->pivot->qty }}">
                                                 </td>
-                                                <td id="total_bahan_{{ $bahan->id }}">Rp.
-                                                    {{ format_uang($bahan->pivot->total) }}</td>
+                                                <td>
+                                                    <span id="total_bahan_tampil_{{ $bahan->id }}">
+                                                        Rp.
+                                                        {{ format_uang($bahan->pivot->total) }}
+                                                    </span>
+                                                    <input type="hidden" id="total_bahan_value_{{ $bahan->id }}"
+                                                        name="total_bahan" value="{{ $bahan->pivot->total }}"
+                                                        class="total_bahan">
+                                                </td>
                                                 <td>
                                                     <span id="keterangan_bahan_{{ $bahan->id }}">
                                                         {{ $bahan->pivot->keterangan }}</span>
@@ -605,8 +643,15 @@
                                         <tr>
                                             <th colspan="3" class="text-right">Grand Total
                                             </th>
-                                            <th>Rp. {{ format_uang($daftarBahan->hasItem->sum('pivot.total')) }}
-
+                                            <th>
+                                                <span id="grand_total_bahan_tampil">
+                                                    Rp.
+                                                    {{ format_uang($daftarBahan->hasItem->sum('pivot.total')) }}
+                                                </span>
+                                                <input type="hidden" id="grand_total_bahan_value" name="grand_total_bahan"
+                                                    value="{{ $daftarBahan->hasItem->sum('pivot.total') }}"
+                                                    class="grand_total_bahan">
+                                            </th>
                                         </tr>
                                     @endif
                                 </tfoot>
@@ -722,8 +767,16 @@
                                                         id="jumlah_alat_bantu_value_{{ $alatbantu->id }}"
                                                         name="jumlah_alat_bantu" value="{{ $alatbantu->pivot->qty }}">
                                                 </td>
-                                                <td id="total_alat_bantu_{{ $alatbantu->id }}">Rp.
-                                                    {{ format_uang($alatbantu->pivot->total) }}</td>
+                                                <td>
+                                                    <span id="total_alat_bantu_tampil_{{ $alatbantu->id }}">
+                                                        Rp.
+                                                        {{ format_uang($alatbantu->pivot->total) }}
+                                                    </span>
+                                                    <input type="hidden"
+                                                        id="total_alat_bantu_value_{{ $alatbantu->id }}"
+                                                        name="total_alat_bantu" value="{{ $alatbantu->pivot->total }}"
+                                                        class="total_alat_bantu">
+                                                </td>
                                                 <td>
                                                     <span id="keterangan_alat_bantu_{{ $alatbantu->id }}">
                                                         {{ $alatbantu->pivot->keterangan }}</span>
@@ -765,8 +818,18 @@
                                         <tr>
                                             <th colspan="3" class="text-right">Grand Total
                                             </th>
-                                            <th>Rp. {{ format_uang($daftarAlatBantu->hasItem->sum('pivot.total')) }}
-
+                                            {{-- <th id="grand_total_alat_bantu">Rp.
+                                                {{ format_uang($daftarAlatBantu->hasItem->sum('pivot.total')) }} --}}
+                                            <th>
+                                                <span id="grand_total_alat_bantu_tampil">
+                                                    Rp.
+                                                    {{ format_uang($daftarAlatBantu->hasItem->sum('pivot.total')) }}
+                                                </span>
+                                                <input type="hidden" id="grand_total_alat_bantu_value"
+                                                    name="grand_total_alat_bantu"
+                                                    value="{{ $daftarAlatBantu->hasItem->sum('pivot.total') }}"
+                                                    class="grand_total_alat_bantu">
+                                            </th>
                                         </tr>
                                     @endif
                                 </tfoot>
@@ -884,8 +947,17 @@
                                                         name="jumlah_transportasi"
                                                         value="{{ $Transportasi->pivot->qty }}">
                                                 </td>
-                                                <td id="total_transportasi_{{ $Transportasi->id }}">Rp.
-                                                    {{ format_uang($Transportasi->pivot->total) }}</td>
+                                                <td>
+                                                    <span id="total_transportasi_tampil_{{ $Transportasi->id }}">
+                                                        Rp.
+                                                        {{ format_uang($Transportasi->pivot->total) }}
+                                                    </span>
+                                                    <input type="hidden"
+                                                        id="total_transportasi_value_{{ $Transportasi->id }}"
+                                                        name="total_transportasi"
+                                                        value="{{ $Transportasi->pivot->total }}"
+                                                        class="total_transportasi">
+                                                </td>
                                                 <td>
                                                     <span id="keterangan_transportasi_{{ $Transportasi->id }}">
                                                         {{ $Transportasi->pivot->keterangan }}</span>
@@ -927,7 +999,16 @@
                                         <tr>
                                             <th colspan="3" class="text-right">Grand Total
                                             </th>
-                                            <th>Rp. {{ format_uang($daftarTransportasi->hasItem->sum('pivot.total')) }}
+                                            <th>
+                                                <span id="grand_total_transportasi_tampil">
+                                                    Rp.
+                                                    {{ format_uang($daftarTransportasi->hasItem->sum('pivot.total')) }}
+                                                </span>
+                                                <input type="hidden" id="grand_total_transportasi_value"
+                                                    name="grand_total_transportasi"
+                                                    value="{{ $daftarTransportasi->hasItem->sum('pivot.total') }}"
+                                                    class="grand_total_transportasi">
+                                            </th>
 
                                         </tr>
                                     @endif
@@ -1078,6 +1159,28 @@
 @push('script')
     <script script src="{{ asset('plugins/select2/dist/js/select2.min.js') }}"></script>
     <script>
+        let id = $('#idPekerjaan').val();
+
+        function capitalizeFirstLetter(string) {
+            return string.replace(/^./, string[0].toUpperCase());
+        }
+
+        function formatRupiah(angka, prefix) {
+            let number_string = angka.replace(/[^,\d]/g, '').toString(),
+                split = number_string.split(','),
+                sisa = split[0].length % 3,
+                rupiah = split[0].substr(0, sisa),
+                ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+            // tambahkan titik jika yang di input sudah menjadi angka ribuan
+            if (ribuan) {
+                separator = sisa ? '.' : '';
+                rupiah += separator + ribuan.join('.');
+            }
+
+            rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+            return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+        }
         // -- galian
         function editgalian(id) {
             $('#cmbGalian').val(id).trigger('change');
@@ -1093,34 +1196,141 @@
 
         }
 
-        function hapusgalian(id) {
+        function toast(text) {
+            $.toast({
+                heading: 'Success',
+                text: text,
+                showHideTransition: 'slide',
+                icon: 'success',
+                loaderBg: '#f2a654',
+                position: 'top-right'
+            })
+        }
+
+        function totalHarga(modul) {
+            let sumTotal = 0;
+            $('.total_' + modul).each(function() {
+                sumTotal += parseFloat($(this)
+                    .val());
+            });
+
+            $('#grand_total_' + modul + '_value').val(sumTotal);
+            $('#grand_total_' + modul + '_tampil').text(formatRupiah(Math.floor(
+                sumTotal).toString(), 'Rp. '));
+        }
+
+
+        function hapusgalian(item_id) {
             let content = '';
-            let item = $('#listgalian_' + id).length;
+            let modul = 'galian';
+            let item = $('#listgalian_' + item_id).length;
             if (item > 0) {
-                $('#listgalian_' + id).remove();
+                $('#listgalian_' + item_id).remove();
 
                 $('#tableGalian').append(content);
             }
-            $('.nomor_galian').each(function(index, item) {
-                if (parseInt($(item).data('index')) > 2) {
-                    $(item).text(index + 1);
+
+            let n = 1;
+            $('.nomor_' + modul).each(function(index, item) {
+                let number = n++;
+                $(item).text(number);
+                $(this).attr('data-index', number);
+            });
+
+
+            $.when($.ajax({
+                type: 'POST',
+                url: "{{ route('pelaksanaan-pekerjaan.galian.hapus') }}",
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    id,
+                    item_id,
+                },
+                success: function(data) {
+                    console.log(data);
+                    toast('success hapus ' + modul)
+                },
+                error: function(data) {
+                    console.log(data);
+                    Swal.fire({
+                        title: 'Oops...',
+                        text: "gagal Mengahapus " +
+                            modul,
+                        footer: '<a href="">terdapat data yang kosong</a>'
+                    })
                 }
+            })).then(function(data, textStatus, jqXHR) {
+                totalHarga(modul)
             });
         }
+
+        function tombol() {
+
+            $(".btn-hapus").on("click", function(e) {
+                let id = $(this).data('pekerjaanutama');
+                let modul = $(this).data('modul');
+                let item = $(this).data('item');
+                let content = '';
+                let modulLowcasse = capitalizeFirstLetter(modul);
+                let itemLength = $('#list' + modulLowcasse + '_' + item).length;
+                if (itemLength > 0) {
+                    $('#list' + modulLowcasse + '_' + item).remove();
+
+                    $('#table' + modulLowcasse).append(content);
+                }
+                let n = 1;
+                $('.nomor_' + modul).each(function(index, item) {
+                    let number = n++;
+                    $(item).text(number);
+                    $(this).attr('data-index', number);
+                });
+                $.when($.ajax({
+                    type: 'POST',
+                    url: "{{ route('pelaksanaan-pekerjaan.hapus.item') }}",
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        id,
+                        modul,
+                        item,
+                    },
+                    success: function(data) {
+                        toast('success hapus ' + modul)
+                    },
+                    error: function(data) {
+                        console.log(data);
+                        Swal.fire({
+                            title: 'Oops...',
+                            text: "gagal Mengahapus " +
+                                modul,
+                            footer: '<a href="">terdapat data yang kosong</a>'
+                        })
+                    }
+                })).then(function(data, textStatus, jqXHR) {
+                    totalHarga(modul)
+                });
+
+            });
+            $(".btn-edit").on("click", function(e) {
+                let id = $(this).data('pekerjaanutama');
+                let modul = $(this).data('modul');
+                let item = $(this).data('item');
+                let modulLowcasse = capitalizeFirstLetter(modul);
+                $('#cmb' + modulLowcasse).val(item).trigger('change');
+                let getjumlah = $('#jumlah_' + modul + '_value_' + item).val();
+                let getketerangan = $('#keterangan_' + modul + '_value_' + item).val();
+                $('#jumlah_' + modul + '_tampil').val(getjumlah);
+                $('#jumlah_' + modul).val(getjumlah);
+                $('#keterangan_' + modul).val(getketerangan);
+            });
+        }
+
+        tombol()
+
         // -- end galian
         $(document).ready(function() {
-            function toast(text) {
-                $.toast({
-                    heading: 'Success',
-                    text: text,
-                    showHideTransition: 'slide',
-                    icon: 'success',
-                    loaderBg: '#f2a654',
-                    position: 'top-right'
-                })
-            }
 
-            let id = $('#idPekerjaan').val();
+
+
 
             $('#cmbBahan').select2({
                 placeholder: '--- Pilih Bahan ---',
@@ -1182,64 +1392,6 @@
                 $('#cmbPekerjaan').parent().removeClass('is-invalid')
             });
 
-            function capitalizeFirstLetter(string) {
-                return string.replace(/^./, string[0].toUpperCase());
-            }
-
-            $(".btn-hapus").on("click", function(e) {
-                let id = $(this).data('pekerjaanutama');
-                let modul = $(this).data('modul');
-                let item = $(this).data('item');
-                let content = '';
-                let modulLowcasse = capitalizeFirstLetter(modul);
-                let itemLength = $('#list' + modulLowcasse + '_' + item).length;
-                if (itemLength > 0) {
-                    $('#list' + modulLowcasse + '_' + item).remove();
-
-                    $('#table' + modulLowcasse).append(content);
-                }
-                let n = 1;
-                $('.nomor_' + modul).each(function(index, item) {
-                    let number = n++;
-                    $(item).text(number);
-                    $(this).attr('data-index', number);
-                });
-                $.ajax({
-                    type: 'POST',
-                    url: "{{ route('pelaksanaan-pekerjaan.hapus.item') }}",
-                    data: {
-                        "_token": "{{ csrf_token() }}",
-                        id,
-                        modul,
-                        item,
-                    },
-                    success: function(data) {
-                        toast('success mengubah ' + modul)
-                    },
-                    error: function(data) {
-                        console.log(data);
-                        Swal.fire({
-                            title: 'Oops...',
-                            text: "gagal Mengahapus " + modul,
-                            footer: '<a href="">terdapat data yang kosong</a>'
-                        })
-                    }
-                });
-
-            });
-            $(".btn-edit").on("click", function(e) {
-                let id = $(this).data('pekerjaanutama');
-                let modul = $(this).data('modul');
-                let item = $(this).data('item');
-                let modulLowcasse = capitalizeFirstLetter(modul);
-                $('#cmb' + modulLowcasse).val(item).trigger('change');
-                let getjumlah = $('#jumlah_' + modul + '_value_' + item).val();
-                let getketerangan = $('#keterangan_' + modul + '_value_' + item).val();
-                $('#jumlah_' + modul + '_tampil').val(getjumlah);
-                $('#jumlah_' + modul).val(getjumlah);
-                $('#keterangan_' + modul).val(getketerangan);
-            });
-
             function elementPekerjaan(id, nomor, pekerjaan, jumlah, total, keterangan, modul) {
                 let modulLowcasse = capitalizeFirstLetter(modul);
                 let pekerjaanUtama = $('#idPekerjaan').val();
@@ -1251,8 +1403,13 @@
                         <span id="jumlah_${modul}_tampil_${id}">${jumlah}</span>
                         <input type="hidden" name="jumlah" id="jumlah_${modul}_value_${id}" value="${jumlah}">
                     </td>
-                    <td id="total_${modul}_${id}">
-                        Rp. ${total}
+                    <td>
+                        <span id="total_${modul}_tampil_${id}">
+                            ${formatRupiah(Math.floor(total).toString(), 'Rp. ')}
+
+                        </span>
+                        <input type="hidden" id="total_${modul}_value_${id}"
+                            name="total_${modul}" value="${total}" class="total_${modul}">
                     </td>
                     <td>
                         <span id="keterangan_${modul}_${id}">${keterangan === null ? '' : keterangan}</span>
@@ -1294,7 +1451,7 @@
 
                 if (item !== "" && jumlah !== "") {
                     $('.' + modul + 'TidakAda').remove();
-                    $.ajax({
+                    $.when($.ajax({
                         type: 'POST',
                         url: "{{ route('pelaksanaan-pekerjaan.item') }}",
                         data: {
@@ -1306,7 +1463,6 @@
                             keterangan
                         },
                         success: function(data) {
-                            console.log(data);
                             const {
                                 id,
                                 item_id,
@@ -1318,13 +1474,18 @@
 
                             let lengthPekerjaan = $('#list' + modulLowcasse + '_' + item_id)
                                 .length;
+
                             let tableCount = $('#table' + modulLowcasse + '  > tbody > tr')
                                 .length;
                             let nomor = tableCount + 1;
 
                             if (lengthPekerjaan !== 0) {
                                 $('#jumlah_' + modul + '_tampil_' + item_id).text(jumlah);
-                                $('#total_' + modul + '_' + item_id).text('Rp.' + total);
+
+                                $('#total_' + modul + '_tampil_' + item_id).text(formatRupiah(Math
+                                    .floor(total).toString(), 'Rp. '));
+                                $('#total_' + modul + '_value_' + item_id).val(total);
+
                                 $('#keterangan_' + modul + '_' + item_id).text(keterangan);
 
                                 $('#jumlah_' + modul + '_value_' + item_id).val(jumlah);
@@ -1348,66 +1509,9 @@
                             $('#cmb' + modulLowcasse).val(null).trigger('change');
                             $('#jumlah_' + modul).val('');
                             $('#input_keterangan_' + modul).val('');
-
-                            $(".btn-edit").on("click", function(e) {
-                                let id = $(this).data('pekerjaanutama');
-                                let modul = $(this).data('modul');
-                                let item = $(this).data('item');
-                                let modulLowcasse = capitalizeFirstLetter(modul);
-                                $('#cmb' + modulLowcasse).val(item).trigger('change');
-                                let getjumlah = $('#jumlah_' + modul + '_value_' + item).val();
-                                let getketerangan = $('#keterangan_' + modul + '_value_' + item)
-                                    .val();
-                                $('#jumlah_' + modul + '_tampil').val(getjumlah);
-                                $('#jumlah_' + modul).val(getjumlah);
-                                $('#keterangan_' + modul).val(getketerangan);
-                            });
-
-                            $(".btn-hapus").on("click", function(e) {
-                                let id = $(this).data('pekerjaanutama');
-                                let modul = $(this).data('modul');
-                                let item = $(this).data('item');
-                                let content = '';
-                                let modulLowcasse = capitalizeFirstLetter(modul);
-                                let itemLength = $('#list' + modulLowcasse + '_' + item).length;
-                                if (itemLength > 0) {
-                                    $('#list' + modulLowcasse + '_' + item).remove();
-
-                                    $('#table' + modulLowcasse).append(content);
-                                }
-                                let n = 1;
-                                $('.nomor_' + modul).each(function(index, item) {
-                                    let number = n++;
-                                    $(item).text(number);
-                                    $(this).attr('data-index', number);
-                                });
-                                $.ajax({
-                                    type: 'POST',
-                                    url: "{{ route('pelaksanaan-pekerjaan.hapus.item') }}",
-                                    data: {
-                                        "_token": "{{ csrf_token() }}",
-                                        id,
-                                        modul,
-                                        item,
-                                    },
-                                    success: function(data) {
-                                        toast('success hapus ' + modul)
-                                    },
-                                    error: function(data) {
-                                        console.log(data);
-                                        Swal.fire({
-                                            title: 'Oops...',
-                                            text: "gagal Mengahapus " +
-                                                modul,
-                                            footer: '<a href="">terdapat data yang kosong</a>'
-                                        })
-                                    }
-                                });
-
-                            });
-
-
+                            tombol();
                         },
+
                         error: function(data) {
                             Swal.fire({
                                 title: 'Oops...',
@@ -1416,6 +1520,8 @@
                             })
                             console.log(data);
                         }
+                    })).then(function(data, textStatus, jqXHR) {
+                        totalHarga(modul);
                     });
                 } else {
                     Swal.fire({
@@ -1424,7 +1530,10 @@
                         footer: '<a href="">terdapat data yang kosong</a>'
                     })
                 }
+
             }
+
+
             $('#formPekerjaan').on('submit', function(e) {
                 e.preventDefault();
                 let modul = 'pekerjaan';
@@ -1490,33 +1599,37 @@
                 $(this).removeClass("is-invalid");
             })
 
-            function elementGalian(id, nomor, pekerjaan, lebar, panjang, dalam, total, keterangan) {
-                return `<tr id="listgalian_${id}" class="list_table_galian">
+            function elementGalian(id, nomor, pekerjaan, lebar, panjang, dalam, total, keterangan, item_id) {
+                return `<tr id="listgalian_${item_id}" class="list_table_galian">
                     <td class="text-center nomor_galian" data-index="${nomor}">${nomor}
                     </td>
                     <td>${pekerjaan}</td>
                     <td>
-                        <span id="panjang_galian_${id}">${panjang} M</span>
-                        <input type="hidden" name="panjang" id="panjang_value_${id}" value="${panjang}">
+                        <span id="panjang_galian_${item_id}">${panjang} M</span>
+                        <input type="hidden" name="panjang" id="panjang_value_${item_id}" value="${panjang}">
                     </td>
                     <td>
-                        <span id="lebar_galian_${id}">${lebar} M</span>
-                        <input type="hidden" name="lebar" id="lebar_value_${id}" value="${lebar}">
+                        <span id="lebar_galian_${item_id}">${lebar} M</span>
+                        <input type="hidden" name="lebar" id="lebar_value_${item_id}" value="${lebar}">
                     </td>
                     <td>
-                        <span id="dalam_galian_${id}">${dalam} M</span>
-                        <input type="hidden" name="dalam" id="dalam_value_${id}"  value="${dalam}">
-                    </td>
-                    <td id="total_galian_${id}">
-                        Rp. ${total}
+                        <span id="dalam_galian_${item_id}">${dalam} M</span>
+                        <input type="hidden" name="dalam" id="dalam_value_${item_id}"  value="${dalam}">
                     </td>
                     <td>
-                        <span id="keterangan_galian_${id}">${keterangan} M</span>
-                        <input type="hidden" name="keterangan" id="keterangan_value_${id}" value="${keterangan}">
+                        <span id="total_galian_tampil_${item_id}">
+                            Rp. ${total}
+                        </span>
+                        <input type="hidden" id="total_galian_value_${item_id}"
+                            name="total_galian" value="${total}" class="total_galian">
+                    </td>
+                    <td>
+                        <span id="keterangan_galian_${item_id}">${keterangan} M</span>
+                        <input type="hidden" name="keterangan" id="keterangan_value_${item_id}" value="${keterangan}">
                     </td>
                     <td>
                         <button class="btn btn-sm btn-warning text-light">
-                            <i class="nav-icon fas fa-edit"  onclick="ubahgalian('${id}')"></i> Ubah</button>
+                            <i class="nav-icon fas fa-edit"  onclick="ubahgalian('${item_id}')"></i> Ubah</button>
                         <button class="btn btn-sm btn-danger text-light btn-hapus-pekerjaan"
                             onclick="hapusgalian('${id}')">
                             <i class="nav-icon fas fa-trash"></i> Hapus</button>
@@ -1549,10 +1662,12 @@
                 if (dalam === "") {
                     $('#dalam_galian').addClass("is-invalid");
                 }
-
+                console.log();
 
                 if (item !== "" && panjang !== "" && lebar !== "" && dalam !== "") {
-                    $.ajax({
+
+
+                    $.when($.ajax({
                         type: 'POST',
                         url: "{{ route('pelaksanaan-pekerjaan.galian') }}",
                         data: {
@@ -1593,7 +1708,12 @@
 
                                 $('#lebar_galian_' + item_id).text(lebar + ' M');
                                 $('#dalam_galian_' + item_id).text(dalam + ' M');
-                                $('#total_galian_' + item_id).text('Rp.' + total);
+
+                                $('#total_galian_tampil_' + item_id).text(
+                                    formatRupiah(Math
+                                        .floor(total).toString(), 'Rp. '));
+                                $('#total_galian_value_' + item_id).val(total);
+
                                 $('#keterangan_galian_' + item_id).text(keterangan);
 
                                 $('#panjang_value_' + item_id).val(panjang);
@@ -1604,8 +1724,8 @@
                             } else {
                                 $('.galianTidakAda').remove();
                                 let content = elementGalian(
-                                    item_id, nomor, pekerjaan, lebar, panjang, dalam,
-                                    total, keterangan);
+                                    id, nomor, pekerjaan, lebar, panjang, dalam,
+                                    total, keterangan, item_id);
                                 $('#tableGalian').append(content);
                                 toast('success mengubah galian')
 
@@ -1624,6 +1744,8 @@
                                 footer: '<a href="">terdapat data yang kosong</a>'
                             })
                         }
+                    })).then(function(data, textStatus, jqXHR) {
+                        totalHarga('galian')
                     });
                 } else {
 

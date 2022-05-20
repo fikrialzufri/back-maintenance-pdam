@@ -13,7 +13,7 @@ class GalianPekerjaan extends Model
 
     public function hasPelaksanaanPekerjaan()
     {
-        return $this->belongsTo(PelaksanaanPekerjaan::class, 'penunjukan_pekerjaan_id', 'id');
+        return $this->belongsTo(PelaksanaanPekerjaan::class, 'pelaksanaan_pekerjaan_id', 'id');
     }
 
     public function hasItem()

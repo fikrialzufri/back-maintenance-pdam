@@ -112,7 +112,7 @@ class PelaksanaanPekerjaanController extends Controller
             $data = $this->model()->find($id);
 
             if ($data) {
-                $dataGalian = GalianPekerjaan::where('item_id', $item_id)->first();
+                $dataGalian = GalianPekerjaan::where('item_id', $item)->where('pelaksanaan_pekerjaan_id', $id)->first();
 
                 if (empty($dataGalian)) {
                     $dataGalian = new GalianPekerjaan;
@@ -132,12 +132,36 @@ class PelaksanaanPekerjaanController extends Controller
                     'panjang' => $dataGalian->panjang,
                     'lebar' => $dataGalian->lebar,
                     'dalam' => $dataGalian->dalam,
-                    'total' => format_uang($dataGalian->total),
+                    'total' => $dataGalian->total,
                     'keterangan' => $dataGalian->keterangan,
                     'pekerjaan' => $dataGalian->pekerjaan,
                     'item_id' => $dataGalian->item_id,
                 ];
                 return $this->sendResponse($result, $message, 200);
+            }
+        } catch (\Throwable $th) {
+            $message = 'Gagal Menyimpan Pekerjaan';
+            $response = [
+                'success' => false,
+                'message' => $message,
+                'code' => '404'
+            ];
+            return $this->sendError($response, $th, 404);
+        }
+    }
+
+    public function hapusgalian(Request $request)
+    {
+        $id = $request->id;
+        $item_id = $request->item_id;
+        try {
+            $dataGalian = GalianPekerjaan::where('item_id', $item_id)->where('pelaksanaan_pekerjaan_id', $id)->first();
+            if ($dataGalian) {
+
+                $dataGalian->delete();
+
+                $message = 'Berhasil Hapus Galian Pekerjaan';
+                return $this->sendResponse([], $message, 200);
             }
         } catch (\Throwable $th) {
             $message = 'Gagal Menyimpan Pekerjaan';
@@ -204,7 +228,7 @@ class PelaksanaanPekerjaanController extends Controller
 
                 $result = [
                     'jumlah' => $existItem->pivot->qty,
-                    'total' => format_uang($existItem->pivot->total),
+                    'total' => $existItem->pivot->total,
                     'keterangan' => $existItem->pivot->keterangan,
                     'pekerjaan' => $dataItem->nama,
                     'item_id' => $item_id,
@@ -227,14 +251,15 @@ class PelaksanaanPekerjaanController extends Controller
     public function hapusitem(Request $request)
     {
         $id = $request->id;
-        $modul = $request->modul;
-        $item = $request->item;
-        $data = $this->model()->find($id);
-        $data->hasItem()->detach($item);
+        try {
+            $modul = $request->modul;
+            $item = $request->item;
+            $data = $this->model()->find($id);
+            $data->hasItem()->detach($item);
 
-        $message = 'Berhasil menghapus ' . $modul;
-        return $this->sendResponse([], $message, 200);
-        try { } catch (\Throwable $th) {
+            $message = 'Berhasil menghapus ' . $modul;
+            return $this->sendResponse([], $message, 200);
+        } catch (\Throwable $th) {
             $message = 'Gagal Menyimpan Pekerjaan';
             $response = [
                 'success' => false,
