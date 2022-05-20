@@ -100,7 +100,7 @@ class PenunjukanPekerjaanController extends Controller
 
         $kategoriAlatBantu = Kategori::whereSlug('alat-bantu')->first();
         if ($kategoriAlatBantu) {
-            $jenisAlatBantu = Jenis::where('kategori_id', $kategoriAlatBantu->id)->get()->get()->pluck('id');
+            $jenisAlatBantu = Jenis::where('kategori_id', $kategoriAlatBantu->id)->get()->pluck('id');
             $listAlatBantu = Item::whereIn('jenis_id', $jenisAlatBantu)->get();
         }
 
