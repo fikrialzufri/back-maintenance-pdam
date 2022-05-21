@@ -546,41 +546,40 @@ class PelaksanaanPekerjaanController extends Controller
         DB::beginTransaction();
         $message = 'Gagal Menyimpan Galian Pekerjaan';
         $user_id = auth()->user()->id;
-        try {
-            $slug = $request->slug;
-            $panjang = $request->panjang;
-            $lebar = $request->lebar;
-            $dalam = $request->dalam;
-            $item = $request->id_item;
+        $slug = $request->slug;
+        $panjang = $request->panjang;
+        $lebar = $request->lebar;
+        $dalam = $request->dalam;
+        $item = $request->id_item;
 
-            $dataItem = Item::find($item);
-            $harga_item = $dataItem->harga;
+        $dataItem = Item::find($item);
+        $harga_item = $dataItem->harga;
 
-            $total = ($panjang * $lebar * $dalam) * $harga_item;
-            $keterangan = $request->keterangan;
+        $total = ($panjang * $lebar * $dalam) * $harga_item;
+        $keterangan = $request->keterangan;
 
-            $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $slug)->first();
-            $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->with('hasItem')->first();
+        $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $slug)->first();
+        $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->with('hasItem')->first();
 
-            DB::commit();
-            $gajian = GalianPekerjaan::where('pelaksanaan_pekerjaan_id', $data->id)->where('item_id',  $item)->first();
-            if (empty($gajian)) {
-                $gajian = new GalianPekerjaan;
-            }
-            $gajian->panjang = $panjang;
-            $gajian->lebar = $lebar;
-            $gajian->dalam = $dalam;
-            $gajian->keterangan = $keterangan;
-            $gajian->id_item = $item;
-            $gajian->total = $total;
-            $gajian->user_id = $user_id;
-            $gajian->pelaksanaan_pekerjaan_id = $data->id;
-            $gajian->save();
+        DB::commit();
+        $gajian = GalianPekerjaan::where('pelaksanaan_pekerjaan_id', $data->id)->where('item_id',  $item)->first();
+        if (empty($gajian)) {
+            $gajian = new GalianPekerjaan;
+        }
+        $gajian->panjang = $panjang;
+        $gajian->lebar = $lebar;
+        $gajian->dalam = $dalam;
+        $gajian->keterangan = $keterangan;
+        $gajian->id_item = $item;
+        $gajian->total = $total;
+        $gajian->user_id = $user_id;
+        $gajian->pelaksanaan_pekerjaan_id = $data->id;
+        $gajian->save();
 
-            $result = [];
-            $message = 'Berhasil Menyimpan Galian Pekerjaan';
-            return $this->sendResponse($result, $message, 200);
-        } catch (\Throwable $th) {
+        $result = [];
+        $message = 'Berhasil Menyimpan Galian Pekerjaan';
+        return $this->sendResponse($result, $message, 200);
+        try { } catch (\Throwable $th) {
             DB::rollback();
             $response = [
                 'success' => false,
