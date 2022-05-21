@@ -80,9 +80,11 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::resource('pelaksanaan-pekerjaan', PelaksanaanPekerjaanController::class);
     //
-    Route::get('/tagihan', [TagihanController::class, 'index'])->name('tagihan.index');
-    Route::get('/tagihan/{slug}', [TagihanController::class, 'show'])->name('tagihan.show');
-    Route::post('/tagihan', [TagihanController::class, 'store'])->name('tagihan.store');
+
+    // tagihan
+    Route::resource('/tagihan', TagihanController::class);
+    Route::get('upload/tagihan', [TagihanController::class, 'upload'])->name('tagihan.upload');
+    Route::post('upload/tagihan', [TagihanController::class, 'uploaddata'])->name('tagihan.uploaddata');
 
     // Karyawan
     Route::resource('departemen', DepartemenController::class);

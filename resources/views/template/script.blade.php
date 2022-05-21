@@ -4,11 +4,11 @@
 
 <!-- Stack array for including inline js or scripts -->
 <script>
-    $("#success-alert").fadeTo(2000, 500).slideUp(500, function() {
-        $("#success-alert").slideUp(500);
+    $("#success-alert").fadeTo(15000, 500).slideUp(15000, function() {
+        $("#success-alert").slideUp(15000);
     });
-    $(".alert").fadeTo(2000, 500).slideUp(500, function() {
-        $(".alert").slideUp(6000);
+    $(".alert").fadeTo(15000, 500).slideUp(500, function() {
+        $(".alert").slideUp(15000);
     });
 </script>
 

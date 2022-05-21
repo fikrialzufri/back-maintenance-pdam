@@ -252,6 +252,84 @@
                 </div>
                 <!-- ./col -->
             </div>
+            @if (isset($tagihanItem))
+                <div class="col-md-12">
+                    <div class="card">
+                        <!-- /.card-header -->
+                        <table class="table table-bordered " width="100%" id="tableDokumentasi">
+                            <thead>
+                                <tr>
+                                    <th width="5">#</th>
+                                    <th width="250">Uraian Rekanan</th>
+                                    <th width="250">Master Pekerjaan</th>
+                                    <th width="200">Harga Rekanan</th>
+                                    <th width="200">Harga Master</th>
+                                    <th width="10" class="text-center">Jumlah</th>
+                                    <th width="150">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (isset($tagihanItem))
+                                    @forelse ($tagihanItem as $key => $tagihan)
+                                        <tr id="listtagihan_{{ $tagihan->id }}" class="list_table_tagihan">
+                                            <td class="text-center nomor_tagihan" data-index="{{ $key + 1 }}">
+                                                {{ $key + 1 }}
+                                            </td>
+                                            <td>
+                                                {{ $tagihan->uraian }}
+                                            </td>
+                                            <td>
+                                                {{ $tagihan->master }}
+                                            </td>
+                                            <td>
+                                                Rp. {{ format_uang($tagihan->harga_uraian) }}
+                                            </td>
+                                            <td>
+                                                Rp. {{ format_uang($tagihan->harga_master) }}
+                                            </td>
+                                            <td>
+                                                {{ $tagihan->jumlah }}
+                                            </td>
+                                            <td>
+                                                Rp. {{ format_uang($tagihan->grand_total) }}
+                                            </td>
+
+                                        </tr>
+                                    @empty
+                                        <tr class="tagihanTidakAda">
+                                            <td colspan="10">Data tagihan tidak ada</td>
+                                        </tr>
+                                    @endforelse
+                                @else
+                                    <tr class="tagihanTidakAda">
+                                        <td colspan="10">Data tagihan tidak ada</td>
+                                    </tr>
+                                @endif
+                            </tbody>
+                            <tfoot>
+                                @if (isset($tagihanItem))
+                                    <tr>
+                                        <th colspan="6" class="text-right">Grand Total
+                                        </th>
+                                        <th>
+                                            <span id="grand_total_tagihan_tampil">
+                                                Rp.
+                                                {{ format_uang($tagihanItem->sum('grand_total')) }}
+                                            </span>
+                                            <input type="hidden" id="grand_total_tagihan_value" name="grand_total_tagihan"
+                                                value="{{ $tagihanItem->sum('grand_total') }}"
+                                                class="grand_total_tagihan">
+                                        </th>
+
+                                    </tr>
+                                @endif
+                            </tfoot>
+
+                        </table>
+                    </div>
+                    <!-- ./col -->
+                </div>
+            @endif
             <!-- /.row -->
             <!-- Main row -->
             <!-- /.row (main row) -->

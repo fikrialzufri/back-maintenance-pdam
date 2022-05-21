@@ -117,22 +117,51 @@ trait CrudTrait
         //mulai pencarian --------------------------------
         $searches = $this->configSearch();
         $searchValues = [];
+        $n = 0;
+        $countAll = 0;
+        $queryArray = [];
 
         foreach ($searches as $key => $val) {
             $search[$key] = request()->input($val['name']);
             $hasilSearch[$val['name']] = $search[$key];
+
             if ($search[$key]) {
                 // split on 1+ whitespace & ignore empty (eg. trailing space)
                 $searchValues[$key] = preg_split('/\s+/', $search[$key], -1, PREG_SPLIT_NO_EMPTY);
+                // return count($searchValues[$key]);
 
-                $query = $query->where(function ($q) use ($searchValues, $key, $val) {
-                    foreach ($searchValues[$key] as $value) {
-                        $q->where($val['name'], 'like', "%{$value}%");
+                if (count($searchValues[$key]) == 1) {
+                    foreach ($searchValues[$key] as $index => $value) {
+                        $query->where($val['name'], 'like', "%{$value}%");
+                        // return 1;
                     }
-                });
+                } else {
+                    foreach ($searchValues[$key] as $index => $value) {
+                        $count =  $this->model()->where($val['name'], 'like', "%{$value}%")->count();
+                        if ($count > 0) {
+                            $countAll = $countAll + 1;
+                            $colom[$key] = [$val['name'], 'like', '%' . $value . '%'];
+                            $queryArray[$index] = array_merge($colom[$key]);
+                        } else {
+                            continue;
+                        }
+                    }
+                }
+
+                // return $queryArray;
+
+                if (count($queryArray) > 0) {
+                    $query->where($queryArray);
+                }
+
+                if ($countAll == 0 && count($searchValues[$key]) > 1) {
+                    $query->where('id',  "");
+                }
             }
             $export .= $val['name'] . '=' . $search[$key] . '&';
         }
+
+        // return $query->get();
 
         // return
         if (request()->input('from') && request()->input('to')) {

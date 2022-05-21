@@ -11,12 +11,17 @@
                         <h3 class="card-title">Daftar {{ ucwords(str_replace([':', '_', '-', '*'], ' ', $title)) }}
                         </h3>
                         {{ $data->appends(request()->input())->links() }}
-                        @if ($tambah == 'true')
+                        <div>
                             <a href="{{ route($route . '.create') }}"
                                 class="btn btn-sm btn-primary float-right text-light">
-                                <i class="fa fa-plus"></i> Tambah Data
+                                <i class="fa fa-plus"></i>Tambah Data
                             </a>
-                        @endif
+                            <a href="{{ route($route . '.upload') }}"
+                                class="btn btn-sm btn-warning float-right text-light mr-5">
+                                <i class="fa fa-file"></i> Upload
+                            </a>
+                        </div>
+
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">

@@ -55,7 +55,22 @@ class Tagihan extends Model
 
     public function hasPelaksanaanPekerjaan()
     {
-        return $this->belongsToMany(PelaksanaanPekerjaan::class,  'tagihan_pelaksanaan')->withPivot('total')->withTimestamps();;
+        return $this->belongsToMany(PelaksanaanPekerjaan::class,  'tagihan_pelaksanaan')->withPivot('total')->withTimestamps();
+    }
+
+    public function hasItem()
+    {
+        return $this->belongsToMany(Item::class,  'tagihan_item')
+            ->withPivot(
+                'uraian',
+                'master',
+                'harga_uraian',
+                'harga_master',
+                'jumlah',
+                'total_uraian',
+                'total_master'
+            )
+            ->withTimestamps();
     }
 
     public function getHargaItemAttribute()
