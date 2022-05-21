@@ -185,102 +185,132 @@ class TagihanController extends Controller
                 $dataItem[$k] = $val;
             }
             $nomor = 0;
+            $countAll = 0;
+            $count = 0;
+
+            $queryArray = [];
+            $dataTotalHargaIaran = [];
+
             foreach ($dataItem as $index => $item) {
                 if ($index > 3) {
 
                     $dataNama[$index] = $item[1]  == null ? '' : $item[1];
                     $dataJumlah[$index] = $item[3]  == null ? 0 : $item[3];
-                    $dataHarga[$index] = $item[4] == null ? 0 : $item[4];
                     $dataJenisHarga[$index] = $item[2]  == null ? '' : $item[2];
 
-                    $ListItem[$nomor] = [
-                        'uraian' =>  $dataNama[$index],
-                        // 'master' =>  $dataMaster[$index],
-                        'harga_uraian' =>  $dataHarga[$index],
-                        // 'harga_master' =>  $itemExist[$index]->harga,
-                        'jumlah' =>  number_format($dataJumlah[$index], 2),
-                        'jenis_harga' =>  $dataJenisHarga[$index]
-                        // 'total_master' =>  $item[2] * $hargaItem[$index],
-                    ];
+                    $searchValues[$index] = preg_split('/\s+/', $dataNama[$index], -1, PREG_SPLIT_NO_EMPTY);
+
+                    $dataListItem[$nomor] = Item::query();
+                    if (count($searchValues[$index]) == 1) {
+                        foreach ($searchValues[$index] as $index => $kword) {
+                            $dataListItem[$nomor]->where('nama', 'like', "%{$keyword}%");
+                            // return 1;
+                        }
+                    } else {
+                        foreach ($searchValues[$index] as $i => $word) {
+                            if (preg_match("/^[a-zA-Z0-9]+$/", $word) == 1) {
+
+                                if (Item::where('nama', 'like', "%{$word}%")->count() > 1) {
+                                    $queryArray[$nomor] = $dataListItem[$nomor]->where('nama', 'like', "%{$word}%");
+                                    continue;
+                                }
+                            }
+                        }
+                    }
+
+                    $dataListItem[$nomor] =  $dataListItem[$nomor]->first();
+
+                    if ($dataListItem[$nomor]) {
+                        # code...
+                        if (isset($item[2]) && $item[2]  == 'malam') {
+                            $dataHarga[$nomor] = $dataListItem[$nomor]->harga;
+                            $dataTotalHargaMaster[$nomor] = $dataListItem[$nomor]->harga * $item[3]  == null ? 0 : number_format($item[3]);
+                        } else {
+                            $dataHarga[$nomor] = $dataListItem[$nomor]->harga_malam;
+
+                            $dataTotalHargaMaster[$nomor] = $dataListItem[$nomor]->harga_malam * number_format($item[3]);
+                        }
+
+                        $dataTotalHargaIura[$nomor] =  $item[3]  == null ? 0 : number_format($item[3]) * $item[4];
+
+                        if ($dataTotalHargaIura[$nomor] > $dataTotalHargaMaster[$nomor]) {
+                            $dataGrandTotal[$nomor] = $dataTotalHargaMaster[$nomor];
+                        } else {
+                            $dataGrandTotal[$nomor] = $dataTotalHargaIura[$nomor];
+                        }
+
+                        $ListItem[$nomor] = [
+                            'uraian' =>  $item[1],
+                            'master' =>   $dataListItem[$nomor]->nama,
+                            'harga_uraian' =>  $item[4] == null ? 0 : $item[4],
+                            'harga_master' =>  $dataHarga[$nomor],
+                            'jumlah' =>   $item[3]  == null ? 0 : number_format($item[3]),
+                            'total_uraian' => $dataTotalHargaIura[$nomor],
+                            'total_master' =>   $dataTotalHargaMaster[$nomor],
+                            'grand_total' =>    $dataGrandTotal[$nomor],
+                        ];
+                        $total_master++;
+                    } else {
+                        $ListItem[$nomor] = [
+                            'uraian' =>  $item[1],
+                            'master' =>   '',
+                            'harga_uraian' =>  $item[4] == null ? 0 : $item[4],
+                            'harga_master' =>  0,
+                            'jumlah' =>   $item[3]  == null ? 0 : number_format($item[3]),
+                            'total_uraian' =>  $item[3]  == null ? 0 : number_format($item[3]) * $item[4],
+                            'total_master' =>  0,
+                            'grand_total' =>   0,
+                        ];
+
+                        $total_uraian++;
+                    }
+
+                    // if ($dataListItem[$nomor]) {
+                    //     # code...
+                    //     $ListItem[$nomor] = [
+                    //         'uraian' => $item[1],
+                    //         'master' =>  $dataListItem[$nomor]->nama,
+                    //         'harga_uraian' =>  $dataHarga[$index],
+                    //         // 'harga_master' =>  $dataListItem[$index],
+                    //         'jumlah' =>  number_format($dataJumlah[$index], 2),
+                    //         'jenis_harga' =>  $dataJenisHarga[$index],
+                    //         // 'total_master' =>  $item[2] * $hargaItem[$index],
+                    //     ];
+                    // } else {
+                    //     $ListItem[$nomor] = [
+                    //         'uraian' =>  $dataNama[$nomor],
+                    //         'master' =>  "",
+                    //         'harga_uraian' =>  $dataHarga[$nomor],
+                    //         // 'harga_master' =>  $dataListItem[$index],
+                    //         'jumlah' =>  number_format($dataJumlah[$index], 2),
+                    //         'jenis_harga' =>  $dataJenisHarga[$index],
+                    //         // 'total_master' =>  $item[2] * $hargaItem[$index],
+                    //     ];
+                    // }
+
                     $nomor++;
                 }
             }
 
-            // return  $ListItem;
-            $countAll = 0;
+            foreach ($ListItem as $l => $list) {
+                $tagihanItem[$k] = TagihanItem::where('tagihan_id', $tagihan->id)->where('item_id', $itemExist[$k]->id)->where('urutan', $k + 1)->first();
 
-            foreach ($ListItem as $key => $value) {
-                $searchValues[$key] = preg_split('/\s+/', $value['uraian'], -1, PREG_SPLIT_NO_EMPTY);
-
-                $itemExist[$key] = Item::query();
-
-                if (count($searchValues[$key]) == 1) {
-                    foreach ($searchValues[$key] as $j => $itemse) {
-                        $itemExist[$key]->where('nama', 'like', "%{$itemse}%");
-                    }
-                } else {
-                    foreach ($searchValues[$key] as $i => $val) {
-                        if (Item::where('nama', 'like', "%{$val}%")->count() > 0) {
-                            $itemExist[$key]->where('nama', 'like', "%{$val}%");
-                            $countAll = $countAll + 1;
-                        } else {
-                            continue;
-                        }
-                    }
-                    if ($countAll == 0 && count($searchValues[$key]) > 1) {
-                        $itemExist[$key]->where('id',  "");
-                    }
+                if (empty($tagihanItem[$k])) {
+                    $tagihanItem[$k] = new TagihanItem;
                 }
 
-                $itemExist[$key] =  $itemExist[$key]->first();
-
-                if (!empty($itemExist[$key])) {
-                    if ($value['jenis_harga'] === 'malam') {
-                        $hargaItem[$key] =  $itemExist[$key]->harga_malam;
-                    } else {
-                        $hargaItem[$key] =  $itemExist[$key]->harga;
-                    }
-                    $dataMaster[$key] = $itemExist[$key]->nama;
-                    $total_master++;
-                } else {
-                    $itemExist[$key] =  new Item;
-                    $itemExist[$key]->nama = $value['uraian'];
-                    $itemExist[$key]->harga = 0;
-                    $itemExist[$key]->harga_malam = 0;
-                    $itemExist[$key]->satuan_id = $satuan->id;
-                    $itemExist[$key]->jenis_id = $dataJenisItem->id;
-                    $itemExist[$key]->save();
-                    $dataMaster[$key] = '';
-                    $total_uraian++;
-                }
-
-                $tagihanItem[$key] = TagihanItem::where('tagihan_id', $tagihan->id)->where('item_id', $itemExist[$key]->id)->where('urutan', $key + 1)->first();
-
-                if (empty($tagihanItem[$key])) {
-                    $tagihanItem[$key] = new TagihanItem;
-                }
-
-                $tagihanItem[$key]->uraian = $value['uraian'];
-                $tagihanItem[$key]->master = $dataMaster[$key];
-                $tagihanItem[$key]->jumlah =  $value['jumlah'];
-                $tagihanItem[$key]->harga_uraian =  $value['harga_uraian'];
-                $tagihanItem[$key]->harga_master = $itemExist[$key]->harga;
-                $tagihanItem[$key]->total_uraian =  $value['harga_uraian'] *  $value['jumlah'];
-                $tagihanItem[$key]->total_master = $itemExist[$key]->harga *  $value['jumlah'];
-
-                if ($value['harga_uraian'] > $itemExist[$key]->harga) {
-                    $tagihanItem[$key]->grand_total  =  $itemExist[$key]->harga *  $value['jumlah'];
-                } else {
-                    $tagihanItem[$key]->grand_total   =  $value['harga_uraian'] *  $value['jumlah'];
-                }
-
-                $tagihanItem[$key]->urutan = $key + 1;
-                $tagihanItem[$key]->item_id = $itemExist[$key]->id;
-                $tagihanItem[$key]->tagihan_id = $tagihan->id;
-                $tagihanItem[$key]->save();
+                $tagihanItem[$k]->uraian = $value['uraian'];
+                $tagihanItem[$k]->master = $dataMaster[$k];
+                $tagihanItem[$k]->jumlah =  $value['jumlah'];
+                $tagihanItem[$k]->harga_uraian =  $value['harga_uraian'];
+                $tagihanItem[$k]->harga_master = $itemExist[$k]->harga;
+                $tagihanItem[$k]->total_uraian =  $value['harga_uraian'] *
+                    $tagihanItem[$k]->urutan = $k + 1;
+                $tagihanItem[$k]->item_id = $itemExist[$k]->id;
+                $tagihanItem[$k]->tagihan_id = $tagihan->id;
+                $tagihanItem[$k]->save();
+                # code...
             }
-
-            // return $nomor;
             // return $dataListItem;
             return redirect()->route($this->route . '.show', $tagihan->slug)->with('message', ucwords(str_replace('-', ' ', $this->route)) . ' berhasil diupload dengan total item dari kamus data sebanyak : ' . $total_master . ' dan data yang baru sebanyak : ' . $total_uraian)->with('Class', 'success');
         }

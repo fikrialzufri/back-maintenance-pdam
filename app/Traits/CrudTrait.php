@@ -121,6 +121,8 @@ trait CrudTrait
         $countAll = 0;
         $queryArray = [];
 
+        $queryRaw = '';
+
         foreach ($searches as $key => $val) {
             $search[$key] = request()->input($val['name']);
             $hasilSearch[$val['name']] = $search[$key];
@@ -136,20 +138,77 @@ trait CrudTrait
                         // return 1;
                     }
                 } else {
-                    foreach ($searchValues[$key] as $index => $value) {
-                        $count =  $this->model()->where($val['name'], 'like', "%{$value}%")->count();
-                        if ($count > 0) {
-                            $countAll = $countAll + 1;
-                            $colom[$key] = [$val['name'], 'like', '%' . $value . '%'];
-                            $queryArray[$index] = array_merge($colom[$key]);
-                        } else {
-                            continue;
+                    // foreach ($searchValues[$key] as $index => $value) {
+                    //     $count =  $this->model()->where($val['name'], 'like', "%{$value}%")->count();
+                    //     if ($count > 0) {
+                    //         $countAll = $countAll + 1;
+                    //         $colom[$key] = [$val['name'], 'like', '%' . $value . '%'];
+                    //         $queryArray[$index] = array_merge($colom[$key]);
+
+                    //         // $query->whereIn($val['name'], 'like', [$value]);
+                    //     } else {
+                    //         break;
+                    //     }
+                    // }
+                    $lastquery = '';
+
+                    foreach ($searchValues[$key] as $index => $word) {
+                        if (preg_match("/^[a-zA-Z0-9]+$/", $word) == 1) {
+
+                            if ($queryRaw) {
+                                $count =  $this->model()->whereRaw(rtrim($queryRaw, " and"))->count();
+                                // return "masuk pertama";
+                                // continue;
+                                if ($count > 0) {
+                                    $countAll = $countAll + 1;
+                                    // $colom[$key] = [$val['name'], 'like', '%' . $word . '%'];
+                                    // $queryArray[$index] = array_merge($colom[$key]);
+                                    $lastquery = $queryRaw;
+
+                                    $queryRaw .= $val['name'] . ' LIKE "%' . $word . '%" and ';
+                                    // $query->whereIn($val['name'], 'like', [$value]);
+                                    if ($this->model()->whereRaw(rtrim($queryRaw, " and"))->count() == 0) {
+                                        # code...
+                                        $queryRaw = $lastquery;
+                                    }
+                                }
+                            } else {
+                                // return "masuk kedua";
+                                // return $queryRaw;
+                                $count =  $this->model()->where($val['name'], 'like', "%{$word}%")->count();
+                                if ($count > 0) {
+                                    $countAll = $countAll + 1;
+                                    // $colom[$key] = [$val['name'], 'like', '%' . $word . '%'];
+                                    // $queryArray[$index] = array_merge($colom[$key]);
+
+                                    $queryRaw .= $val['name'] . ' LIKE "%' . $word . '%" and ';
+                                    // $query->whereIn($val['name'], 'like', [$value]);
+                                    continue;
+                                }
+                            }
                         }
                     }
+
+                    // return $val;
+
+                    // $query->where(function ($q) use ($searchValues, $val, $key, $countAll) {
+                    //     foreach ($searchValues[$key] as $word) {
+                    //         $q->where($val['name'], 'like', "%{$word}%");
+                    //     }
+                    // });
+                    // foreach ($searchValues[$key] as $keywords) {
+                    //     $queryRaw .= ' nama LIKE "%?%"';
+                    // }
+                    // $query->selectRaw("MATCH (nama)
+                    //     against (? in boolean mode)
+                    // ", [$searchValues[$key]])->whereRaw("MATCH (nama) against (? in boolean mode)", [$searchValues[$key]]);
                 }
 
-                // return $queryArray;
+                // return $countAll;
 
+                if ($queryRaw) {
+                    $query->whereRaw(rtrim($queryRaw, " and "));
+                }
                 if (count($queryArray) > 0) {
                     $query->where($queryArray);
                 }
@@ -157,6 +216,7 @@ trait CrudTrait
                 if ($countAll == 0 && count($searchValues[$key]) > 1) {
                     $query->where('id',  "");
                 }
+                // return $query->toSql();
             }
             $export .= $val['name'] . '=' . $search[$key] . '&';
         }
