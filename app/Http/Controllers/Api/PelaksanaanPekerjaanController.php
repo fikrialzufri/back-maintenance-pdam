@@ -558,28 +558,29 @@ class PelaksanaanPekerjaanController extends Controller
         $total = ($panjang * $lebar * $dalam) * $harga_item;
         $keterangan = $request->keterangan;
 
-        $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $slug)->first();
-        $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->with('hasItem')->first();
+        try {
+            $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $slug)->first();
+            $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->with('hasItem')->first();
 
-        DB::commit();
-        $gajian = GalianPekerjaan::where('pelaksanaan_pekerjaan_id', $data->id)->where('item_id',  $item)->first();
-        if (empty($gajian)) {
-            $gajian = new GalianPekerjaan;
-        }
-        $gajian->panjang = $panjang;
-        $gajian->lebar = $lebar;
-        $gajian->dalam = $dalam;
-        $gajian->keterangan = $keterangan;
-        $gajian->id_item = $item;
-        $gajian->total = $total;
-        $gajian->user_id = $user_id;
-        $gajian->pelaksanaan_pekerjaan_id = $data->id;
-        $gajian->save();
+            DB::commit();
+            $gajian = GalianPekerjaan::where('pelaksanaan_pekerjaan_id', $data->id)->where('item_id',  $item)->first();
+            if (empty($gajian)) {
+                $gajian = new GalianPekerjaan;
+            }
+            $gajian->panjang = $panjang;
+            $gajian->lebar = $lebar;
+            $gajian->dalam = $dalam;
+            $gajian->keterangan = $keterangan;
+            $gajian->item_id = $item;
+            $gajian->total = $total;
+            $gajian->user_id = $user_id;
+            $gajian->pelaksanaan_pekerjaan_id = $data->id;
+            $gajian->save();
 
-        $result = [];
-        $message = 'Berhasil Menyimpan Galian Pekerjaan';
-        return $this->sendResponse($result, $message, 200);
-        try { } catch (\Throwable $th) {
+            $result = [];
+            $message = 'Berhasil Menyimpan Galian Pekerjaan';
+            return $this->sendResponse($result, $message, 200);
+        } catch (\Throwable $th) {
             DB::rollback();
             $response = [
                 'success' => false,
