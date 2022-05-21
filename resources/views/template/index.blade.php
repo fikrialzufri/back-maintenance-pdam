@@ -20,7 +20,7 @@
                             @endif
                             @if ($upload == 'true')
                                 <a href="{{ route($route . '.upload') }}"
-                                    class="btn btn-sm btn-warning float-right text-light">
+                                    class="btn btn-sm btn-warning float-right text-light mr-5">
                                     <i class="fa fa-file"></i> Upload
                                 </a>
                             @endif
