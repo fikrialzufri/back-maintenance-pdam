@@ -203,7 +203,7 @@ class TagihanController extends Controller
                     $dataListItem[$nomor] = Item::query();
                     if (count($searchValues[$index]) == 1) {
                         foreach ($searchValues[$index] as $index => $kword) {
-                            $dataListItem[$nomor]->where('nama', 'like', "%{$keyword}%");
+                            $dataListItem[$nomor]->where('nama', 'like', "%{$kword}%");
                             // return 1;
                         }
                     } else {
@@ -292,25 +292,25 @@ class TagihanController extends Controller
                 }
             }
 
-            foreach ($ListItem as $l => $list) {
-                $tagihanItem[$k] = TagihanItem::where('tagihan_id', $tagihan->id)->where('item_id', $itemExist[$k]->id)->where('urutan', $k + 1)->first();
+            // foreach ($ListItem as $l => $list) {
+            //     $tagihanItem[$k] = TagihanItem::where('tagihan_id', $tagihan->id)->where('item_id', $itemExist[$k]->id)->where('urutan', $k + 1)->first();
 
-                if (empty($tagihanItem[$k])) {
-                    $tagihanItem[$k] = new TagihanItem;
-                }
+            //     if (empty($tagihanItem[$k])) {
+            //         $tagihanItem[$k] = new TagihanItem;
+            //     }
 
-                $tagihanItem[$k]->uraian = $value['uraian'];
-                $tagihanItem[$k]->master = $dataMaster[$k];
-                $tagihanItem[$k]->jumlah =  $value['jumlah'];
-                $tagihanItem[$k]->harga_uraian =  $value['harga_uraian'];
-                $tagihanItem[$k]->harga_master = $itemExist[$k]->harga;
-                $tagihanItem[$k]->total_uraian =  $value['harga_uraian'] *
-                    $tagihanItem[$k]->urutan = $k + 1;
-                $tagihanItem[$k]->item_id = $itemExist[$k]->id;
-                $tagihanItem[$k]->tagihan_id = $tagihan->id;
-                $tagihanItem[$k]->save();
-                # code...
-            }
+            //     $tagihanItem[$k]->uraian = $value['uraian'];
+            //     $tagihanItem[$k]->master = $dataMaster[$k];
+            //     $tagihanItem[$k]->jumlah =  $value['jumlah'];
+            //     $tagihanItem[$k]->harga_uraian =  $value['harga_uraian'];
+            //     $tagihanItem[$k]->harga_master = $itemExist[$k]->harga;
+            //     $tagihanItem[$k]->total_uraian =  $value['harga_uraian'] *
+            //         $tagihanItem[$k]->urutan = $k + 1;
+            //     $tagihanItem[$k]->item_id = $itemExist[$k]->id;
+            //     $tagihanItem[$k]->tagihan_id = $tagihan->id;
+            //     $tagihanItem[$k]->save();
+            //     # code...
+            // }
             // return $dataListItem;
             return redirect()->route($this->route . '.show', $tagihan->slug)->with('message', ucwords(str_replace('-', ' ', $this->route)) . ' berhasil diupload dengan total item dari kamus data sebanyak : ' . $total_master . ' dan data yang baru sebanyak : ' . $total_uraian)->with('Class', 'success');
         }
