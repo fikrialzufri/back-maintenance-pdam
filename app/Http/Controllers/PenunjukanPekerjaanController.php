@@ -300,7 +300,7 @@ class PenunjukanPekerjaanController extends Controller
             'file' => 'required|mimes:csv,xls,xlsx'
         ]);
 
-        $dataNoTagihan = [];
+        $dataNoTagihan = '';
         $dataTanggalTagihan = [];
         $dataCv = [];
         $dataSpk = [];
@@ -334,7 +334,7 @@ class PenunjukanPekerjaanController extends Controller
             foreach ($dataItem as $index => $item) {
                 if ($index > 2) {
 
-                    $dataNoTagihan[$index] = $item[1];
+                    $dataNoTagihan = $item[1];
                     $dataTanggalTagihan[$index] = $item[2];
                     $dataCv[$index] = $item[3];
                     $dataSpk[$index] = $item[4];
@@ -449,31 +449,11 @@ class PenunjukanPekerjaanController extends Controller
                                     $dataGalian[$index]->save();
                                 }
                             }
-
-                            // $tagihan[$index] = Tagihan::where('nomor_tagihan', $dataNoTagihan[$index])->where('rekanan_id', $dataRekanan[$index]->id)->first();
-                            // if (empty($tagihan[$index])) {
-                            //     $tagihan[$index] = new Tagihan();
-                            //     $tagihan[$index]->nomor_tagihan = $dataNoTagihan[$index];
-                            //     $tagihan[$index]->rekanan_id = $dataRekanan[$index]->id;
-                            //     $tagihan[$index]->user_id = auth()->user()->id;
-                            //     $tagihan[$index]->status = 'selesai';
-                            //     $tagihan[$index]->save();
-                            // }
                         }
                     }
                 }
             }
 
-            // $listRekananPelakasaan = [];
-
-            // foreach ($PelaksanaanPekerjaan as $key => $kerjaan) {
-            //     $listRekananPelakasaan[$kerjaan->id] = [
-            //         'total' => $total,
-            //     ];
-            // }
-            // foreach ($tagihan as $key => $value) {
-            //     // $tagihan[$index]->hasPelaksanaanPekerjaan()->sync($pelaksanaan_id);
-            // }
 
             return redirect()->route($this->route . '.index')->with('message', ucwords(str_replace('-', ' ', $this->route)) . ' berhasil diupload dengan total item :' . $total)->with('Class', 'success');
         }

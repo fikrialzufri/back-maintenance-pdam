@@ -551,7 +551,7 @@ class PelaksanaanPekerjaanController extends Controller
             $panjang = $request->panjang;
             $lebar = $request->lebar;
             $dalam = $request->dalam;
-            $item = $request->item;
+            $item = $request->id_item;
 
             $dataItem = Item::find($item);
             $harga_item = $dataItem->harga;
@@ -563,7 +563,10 @@ class PelaksanaanPekerjaanController extends Controller
             $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->with('hasItem')->first();
 
             DB::commit();
-            $gajian = new GalianPekerjaan;
+            $gajian = GalianPekerjaan::where('pelaksanaan_pekerjaan_id', $data->id)->where('item_id',  $item)->first();
+            if (empty($gajian)) {
+                $gajian = new GalianPekerjaan;
+            }
             $gajian->panjang = $panjang;
             $gajian->lebar = $lebar;
             $gajian->dalam = $dalam;
