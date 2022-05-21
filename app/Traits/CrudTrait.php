@@ -116,12 +116,20 @@ trait CrudTrait
         }
         //mulai pencarian --------------------------------
         $searches = $this->configSearch();
+        $searchValues = [];
 
         foreach ($searches as $key => $val) {
             $search[$key] = request()->input($val['name']);
             $hasilSearch[$val['name']] = $search[$key];
             if ($search[$key]) {
-                $query = $query->where($val['name'], 'like', '%' . $search[$key] . '%');
+                // split on 1+ whitespace & ignore empty (eg. trailing space)
+                $searchValues[$key] = preg_split('/\s+/', $search[$key], -1, PREG_SPLIT_NO_EMPTY);
+
+                $query = $query->where(function ($q) use ($searchValues, $key, $val) {
+                    foreach ($searchValues[$key] as $value) {
+                        $q->where($val['name'], 'like', "%{$value}%");
+                    }
+                });
             }
             $export .= $val['name'] . '=' . $search[$key] . '&';
         }
