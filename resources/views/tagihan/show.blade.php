@@ -31,7 +31,7 @@
                                         <div>
                                             <input type="text" name="no_tagihan" id="No Tagihan" placeholder="No Tagihan "
                                                 class="form-control" readonly
-                                                value="{{ tanggal_indonesia($tagihan->created_at) }}">
+                                                value="{{ tanggal_indonesia($tagihan->tanggal_tagihan) }}">
                                         </div>
                                     </div>
                                 </div>
@@ -49,19 +49,18 @@
                                 <div class="col-2">
                                     <div class="form-group">
                                         <div>
-                                            <label for="tagihan" class=" form-control-label">Total Tagihan Item</label>
+                                            <label for="tagihan" class=" form-control-label">Total Tagihan</label>
                                         </div>
                                         <div class="input-group mb-2 mr-sm-2">
                                             <div class="input-group-prepend">
                                                 <div class="input-group-text">Rp.</div>
                                             </div>
                                             <input type="text" name="tagihan" id="tagihan" placeholder=""
-                                                class="form-control" readonly
-                                                value="{{ format_uang($tagihan->tagihan) }}">
+                                                class="form-control" readonly value=" {{ format_uang($total) }}">
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-2">
+                                {{-- <div class="col-2">
                                     <div class="form-group">
                                         <div>
                                             <label for="tagihan" class=" form-control-label">Total Tagihan Galian</label>
@@ -90,7 +89,7 @@
                                                 value="{{ format_uang($tagihan->tagihan + $tagihan->galian) }}">
                                         </div>
                                     </div>
-                                </div>
+                                </div> --}}
 
 
 
@@ -256,17 +255,22 @@
                 <div class="col-md-12">
                     <div class="card">
                         <!-- /.card-header -->
-                        <table class="table table-bordered " width="100%" id="tableDokumentasi">
+                        <table class="table table-bordered table-responsive" width="100%" id="tableDokumentasi">
                             <thead>
                                 <tr>
                                     <th width="5">#</th>
+                                    <th width="5">No Pekerjaan</th>
                                     <th width="150">Uraian Rekanan</th>
-                                    <th width="150">Master Pekerjaan</th>
+                                    <th width="10%">Master Uraian</th>
+                                    <th width="10">Jenis Pekerjaan</th>
+                                    {{-- <th width="150">Master Pekerjaan</th> --}}
+                                    <th width="5">Jenis Harga</th>
                                     <th width="200">Harga Rekanan</th>
                                     <th width="200">Harga Master</th>
-                                    <th width="10" class="text-center">Jumlah</th>
-                                    <th width="150">Total</th>
-                                    <th width="150">Harga Adjust</th>
+                                    <th width="5" class="text-center">Jumlah</th>
+                                    <th width="5">Total</th>
+                                    <th width="300">Harga Adjust</th>
+                                    <th width="10">Tanggal Adjust</th>
                                     <th width="10">Aksi</th>
                                 </tr>
                             </thead>
@@ -274,15 +278,65 @@
                                 @if (isset($tagihanItem))
                                     @forelse ($tagihanItem as $key => $tagihan)
                                         <tr class="{{ $tagihan->selisih == 'ya' ? 'bg-danger' : '' }}"
-                                            id="listtagihan_{{ $tagihan->id }}" class="list_table_tagihan">
+                                            id="listtagihan_{{ $tagihan->id }}" data-tagihan_id="{{ $tagihan->id }}"
+                                            data-master="{{ $tagihan->master }}"
+                                            data-jenis_harga="{{ $tagihan->jenis_harga }}"
+                                            data-jumlah="{{ $tagihan->jumlah }}" class="list_table_tagihan">
                                             <td class="text-center nomor_tagihan" data-index="{{ $key + 1 }}">
                                                 {{ $key + 1 }}
+                                            </td>
+                                            <td>
+                                                {{ $tagihan->no_pekerjaan }}
                                             </td>
                                             <td>
                                                 {{ $tagihan->uraian }}
                                             </td>
                                             <td>
-                                                {{ $tagihan->master }}
+                                                <span class="ubah_pekerjaan" data-tagihan_id="{{ $tagihan->id }}"
+                                                    data-master="{{ $tagihan->master }}"
+                                                    data-jenis_harga="{{ $tagihan->jenis_harga }}"
+                                                    data-item_id="{{ $tagihan->jenis_harga }}"
+                                                    data-jumlah="{{ $tagihan->jumlah }}" role="button"
+                                                    id="nama_master_tagihan_{{ $tagihan->id }}">
+
+                                                    {{ $tagihan->master }}
+                                                </span>
+
+                                                {{-- <a title="{{ $tagihan->master }}" data-event="click"
+                                                    data-tagihan_id="{{ $tagihan->id }}"
+                                                    data-jenis_harga="{{ $tagihan->jenis_harga }}"
+                                                    data-jumlah="{{ $tagihan->jumlah }}" class="ubah_pekerjaan">
+                                                    <span class="ubah_pekerjaan"> {{ $tagihan->master }}</span>
+                                                </a> --}}
+                                                {{-- <select class="form-control select2 cmbItem"
+                                                    id="cmbItem_{{ $tagihan->id }}"
+                                                    data-tagihan_id="{{ $tagihan->id }}"
+                                                    data-jenis_harga="{{ $tagihan->jenis_harga }}"
+                                                    data-jumlah="{{ $tagihan->jumlah }}">
+                                                    <option selected="selected" value="">Pilih Item
+                                                    </option>
+                                                    @foreach ($dataitem as $i => $data)
+                                                        <option value="{{ $data->id }}"
+                                                            {{ $tagihan->item_id == $data->id ? 'selected' : '' }}>
+                                                            {{ $data->nama }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                                @push('script')
+                                                    <script>
+                                                        $('#cmbItem_{{ $tagihan->id }}').select2({
+                                                            placeholder: '--- Pilih Item ---',
+                                                            width: '100%'
+                                                        });
+                                                    </script>
+                                                @endpush --}}
+                                            </td>
+
+                                            <td id="jenis_{{ $tagihan->id }}">
+                                                {{ $tagihan->item_jenis }}
+                                            </td>
+                                            <td>
+                                                {{ $tagihan->jenis_harga }}
                                             </td>
                                             <td>
                                                 Rp. {{ format_uang($tagihan->harga_uraian) }}
@@ -290,11 +344,16 @@
                                             <td>
                                                 Rp. {{ format_uang($tagihan->harga_master) }}
                                             </td>
-                                            <td>
+                                            <td id="jumlah_{{ $tagihan->id }}">
                                                 {{ $tagihan->jumlah }}
                                             </td>
-                                            <td>
+                                            <td id="total_tagihan_{{ $tagihan->id }}">
                                                 Rp. {{ format_uang($tagihan->grand_total) }}
+                                            </td>
+                                            <td id="tanggal_adjust_{{ $tagihan->id }}">
+
+                                                {{ $tagihan->tanggal_adjust_indo }}
+
                                             </td>
                                             <td>
 
@@ -302,7 +361,8 @@
                                                     <div class="input-group mb-2 mr-sm-2">
                                                         <input type="text" name="harga_adjust"
                                                             id="harga_adjus_{{ $tagihan->id }}" placeholder="Harga"
-                                                            value="{{ $tagihan->total_adjust }}" class="form-control">
+                                                            value="{{ format_uang($tagihan->total_adjust) }}"
+                                                            class="form-control">
                                                     </div>
                                                 </div>
                                                 @push('script')
@@ -317,8 +377,11 @@
                                                 @endpush
                                             </td>
                                             <td>
-                                                <button type="submit" id="btn_pekerjaan"
-                                                    class="btn btn-primary">Ubah</button>
+                                                <button type="buttom" id="btn_adjust_{{ $tagihan->id }}"
+                                                    data-tagihan_id="{{ $tagihan->id }}"
+                                                    data-item_id="{{ $tagihan->item_id }}"
+                                                    data-jumlah="{{ $tagihan->jumlah }}"
+                                                    class="btn btn-primary btn_adjust">Ubah</button>
                                             </td>
 
                                         </tr>
@@ -341,7 +404,7 @@
                                         <th>
                                             <span id="grand_total_tagihan_tampil">
                                                 Rp.
-                                                {{ format_uang($tagihanItem->sum('grand_total')) }}
+                                                {{ format_uang($tagihanItem->sum('total_adjust')) }}
                                             </span>
                                             <input type="hidden" id="grand_total_tagihan_value" name="grand_total_tagihan"
                                                 value="{{ $tagihanItem->sum('grand_total') }}"
@@ -358,13 +421,72 @@
                 </div>
             @endif
             <!-- /.row -->
-            <!-- Main row -->
+            <!-- Main row  dataitem-->
             <!-- /.row (main row) -->
         </div><!-- /.container-fluid -->
     </div><!-- /.container-fluid -->
+    <div class="modal fade" id="list_item_modal" role="dialog" aria-labelledby="pekerjaan_label" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="pekerjaan_label">Ganti Pekerjaan</span>
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">×</span></button>
+                </div>
+                <form id="formPembayaran" enctype="multipart/form-data">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <div class="input-group mb-2 mr-sm-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">Cari : </div>
+                                </div>
+                                <input type="text" class="form-control" id="search" placeholder="Cari">
+                            </div>
+                        </div>
+                        <table class="table-responsive table table-head-fixed  table-bordered " id="tableItem"
+                            style="height:700px">
+                            <thead>
+                                <tr>
+                                    <th class="">Nama</th>
+                                    <th class="">Jenis</th>
+                                    <th class="">Harga Siang</th>
+                                    <th class="">Harga Malam</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($dataitem as $nor => $item)
+                                    <tr>
+                                        <td>
+                                            <span class="ganti_pekerjaan" data-item="{{ $item->id }}" data-tagihan="">
+                                                {{ $item->nama }}
+                                            </span>
 
+                                        </td>
+                                        <td>{{ $item->jenis }}</td>
+                                        <td>{{ format_uang($item->harga) }}</td>
+                                        <td>{{ format_uang($item->harga_malam) }}</td>
+                                    </tr>
+                                @endforeach
+
+                            </tbody>
+
+                        </table>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 @stop
 
+@push('script')
+    <style>
+        [role=button] {
+            cursor: pointer;
+        }
+
+    </style>
+@endpush
 @push('script')
     <script>
         $(function() {
@@ -375,6 +497,224 @@
             $("#description").keypress(function() {
                 $("#description").removeClass("is-invalid");
                 $("#textdescription").html("");
+            });
+
+            var $rows = $('#tableItem tr');
+            $('#search').keyup(function() {
+                var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+
+                $rows.show().filter(function() {
+                    var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+                    return !~text.indexOf(val);
+                }).hide();
+            });
+
+            $("#tableDokumentasi tr td").click(function() {
+                //get <td> element values here!!??
+            });
+            $(".ubah_pekerjaan").click(function() {
+                // let item_id = $(this).val();
+                let item_id = $(this).data('item_id');
+                let id = $(this).data('tagihan_id');
+                let jumlah = $(this).data('jumlah');
+                let master = $(this).data('master');
+                let jenis_harga = $(this).data('jenis_harga');
+
+                let harga = $('#harga_adjus_' + id).val();
+                $('#master_nama').text($(this).data('master'));
+
+                $('#list_item_modal').modal('toggle');
+                $('#tagihan_id_ganti').val(id);
+                $('#pekerjaan_label').val(master);
+
+                $(".ganti_pekerjaan").attr('data-tagihan', id);
+                $(".ganti_pekerjaan").attr('data-item_id', item_id);
+                $(".ganti_pekerjaan").attr('data-jumlah', jumlah);
+                $(".ganti_pekerjaan").attr('data-jenis_harga',
+                    jenis_harga);
+
+            });
+
+            $(".btn_adjust").on("click", function(e) {
+                let item_id = $(this).data('item_id');;
+                let id = $(this).data('tagihan_id');
+                let jumlah = $(this).data('jumlah');
+                let jenis_harga = $(this).data('jenis_harga');
+                let harga = $('#harga_adjus_' + id).val();
+
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ route('tagihan.adjust') }}",
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        id,
+                        item_id,
+                        jumlah,
+
+                        harga,
+                    },
+                    success: function(data) {
+                        console.log(data);
+
+                        const {
+                            tanggal
+                        } = data.data;
+
+                        $.toast({
+                            heading: 'Success',
+                            text: "Mengubahan pekerjaan",
+                            showHideTransition: 'slide',
+                            icon: 'success',
+                            loaderBg: '#f2a654',
+                            position: 'top-right'
+                        })
+
+                        $('#listtagihan_' + id).removeClass('bg-danger');
+
+
+                        $("#tanggal_adjust_" + id).text(tanggal);
+                    },
+                    error: function(data) {
+                        console.log(data);
+                        Swal.fire({
+                            title: 'Oops...',
+                            text: "gagal mengubah tagihan ",
+                            footer: '<a href="">terdapat data yang kosong</a>'
+                        })
+                    }
+                });
+
+            });
+
+            $(".ganti_pekerjaan").on("click", function(e) {
+                e.stopPropagation();
+                let id = $(this).data('item');
+                let master = $(this).data('master');
+                let tagihan_id = $(this).data('tagihan');
+                let jumlah = $(this).data('jumlah');
+                let jenis_harga = $(this).data('jenis_harga');
+
+                $.when($.ajax({
+                    type: 'GET',
+                    url: "{{ route('item.detail') }}",
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        id,
+                        jenis_harga,
+                    },
+                    success: function(data) {
+
+                        const {
+                            id,
+                            nama,
+                            harga,
+                            harga_malam,
+                        } = data.data;
+                        $totalharga = 0;
+                        if (jenis_harga == 'malam') {
+                            $("#harga_adjus_" + tagihan_id).val(formatRupiah(harga_malam
+                                .toString(),
+                                ' '));
+
+                            $totalharga = jumlah * harga_malam;
+                        } else {
+                            $("#harga_adjus_" + tagihan_id).val(formatRupiah(harga
+                                .toString(),
+                                ' '));
+
+                            $totalharga = jumlah * harga;
+                        }
+
+                        $("#total_tagihan_" + tagihan_id).text("Rp. " + formatRupiah(
+                            $totalharga
+                            .toString(),
+                            ' '));
+
+                        $("#tagihan_master_" + tagihan_id).attr('data-tagihan', tagihan_id);
+                        $("#tagihan_master_" + tagihan_id).attr('data-jumlah', jumlah);
+                        $("#tagihan_master_" + tagihan_id).attr('data-item_id', id);
+                        $("#tagihan_master_" + tagihan_id).attr('data-jenis_harga',
+                            jenis_harga);
+
+                        $("#btn_adjust_" + tagihan_id).attr('data-tagihan', tagihan_id);
+                        $("#btn_adjust_" + tagihan_id).attr('data-jumlah', jumlah);
+                        $("#btn_adjust_" + tagihan_id).attr('data-item_id', id);
+                        $("#btn_adjust_" + tagihan_id).attr('data-jenis_harga',
+                            jenis_harga);
+
+
+
+                    },
+                    error: function(data) {
+                        console.log(data);
+                        Swal.fire({
+                            title: 'Oops...',
+                            text: "gagal Mengahapus " +
+                                modul,
+                            footer: '<a href="">terdapat data yang kosong</a>'
+                        })
+                    }
+                })).then(function(data, textStatus, jqXHR) {
+                    // totalHarga(modul)
+                    const {
+                        nama,
+                        harga,
+                        harga_malam,
+                    } = data.data;
+                    $('#nama_master_tagihan_' + tagihan_id).text(nama);
+                    $('#list_item_modal').modal('toggle');
+                });
+
+            });
+
+            // $('.prevSpan').on('click', function() {
+            //     $(".prevSpan").text("«");
+            // });
+            $(".cmbItem").on("change", function(e) {
+                let item_id = $(this).val();
+                let tagihan_id = $(this).data('tagihan_id');
+                let jenis_harga = $(this).data('jenis_harga');
+                let getharga = 0;
+                let total_harga = 0;
+                $.when($.ajax({
+                    type: 'GET',
+                    url: "{{ route('item.detail') }}",
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        id: item_id,
+                        jenis_harga,
+                    },
+                    success: function(data) {
+
+                        const {
+                            harga,
+                            harga_malam,
+                        } = data.data;
+
+                        if (jenis_harga == 'malam') {
+                            console.log(harga_malam);
+                            $("#harga_adjus_" + tagihan_id).val(formatRupiah(harga_malam
+                                .toString(),
+                                ' '));
+                        } else {
+                            $("#harga_adjus_" + tagihan_id).val(formatRupiah(harga
+                                .toString(),
+                                ' '));
+                        }
+
+                    },
+                    error: function(data) {
+                        console.log(data);
+                        Swal.fire({
+                            title: 'Oops...',
+                            text: "gagal Mengahapus " +
+                                modul,
+                            footer: '<a href="">terdapat data yang kosong</a>'
+                        })
+                    }
+                })).then(function(data, textStatus, jqXHR) {
+                    // totalHarga(modul)
+                });
             });
         });
     </script>

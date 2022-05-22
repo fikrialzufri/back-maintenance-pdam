@@ -18,6 +18,7 @@ class CreateTagihanItemTable extends Migration
             $table->uuid('id')->primary();
             $table->string('item_id')->references('id')->on('item')->onDelete('cascade');
             $table->string('tagihan_id')->references('id')->on('tagihan')->onDelete('cascade');
+            $table->string('no_pekerjaan')->null();
             $table->string('uraian')->null();
             $table->string('master')->null();
             $table->bigInteger('harga_uraian')->default(0);
@@ -30,6 +31,7 @@ class CreateTagihanItemTable extends Migration
             $table->bigInteger('total_adjust')->default(0);
             $table->bigInteger('grand_total_adjust')->default(0);
             $table->enum('selisih', ['tidak', 'ya'])->default('tidak');
+            $table->dateTime('tanggal_adjust')->nullable();
             //SETTING THE PRIMARY KEYS
             $table->timestamps();
         });

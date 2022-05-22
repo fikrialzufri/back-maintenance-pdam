@@ -77,11 +77,17 @@ class TagihanController extends Controller
         $pelaksanaan = $tagihan->hasPelaksanaanPekerjaan()->pluck('id')->toArray();
         $title =  "Proses Tagihan Nomor :" . $tagihan->nomor_tagihan;
 
-        $tagihanItem = TagihanItem::where('tagihan_id', $tagihan->id)->get();
+        $tagihanItem = TagihanItem::where('tagihan_id', $tagihan->id)->orderBy('urutan')->get();
         $action = route('tagihan.store', $tagihan->id);
+        $dataitem = Item::all();
+
+        $total = $tagihanItem->sum('total_adjust');
+
         return view('tagihan.show', compact(
             'action',
             'title',
+            'dataitem',
+            'total',
             'tagihanItem',
             'tagihan'
         ));
@@ -196,12 +202,14 @@ class TagihanController extends Controller
             foreach ($dataItem as $index => $item) {
                 if ($index > 3) {
 
-                    $dataNama[$index] = $item[1]  == null ? '' : $item[1];
-                    $dataJumlah[$index] = $item[3]  == null ? 0 : $item[3];
-                    $dataHarga[$index] = $item[4] == null ? 0 : $item[4];
-                    $dataJenisHarga[$index] = $item[2]  == null ? '' : $item[2];
+                    $dataNoPekerjaan[$index] = $item[1]  == null ? '' : $item[1];
+                    $dataNama[$index] = $item[2]  == null ? '' : $item[2];
+                    $dataJenisHarga[$index] = $item[3];
+                    $dataJumlah[$index] = $item[4]  == null ? 0 : $item[4];
+                    $dataHarga[$index] = $item[5] == null ? 0 : $item[5];
 
                     $ListItem[$nomor] = [
+                        'no_pekerjaan' =>  $dataNoPekerjaan[$index],
                         'uraian' =>  $dataNama[$index],
                         // 'master' =>  $dataMaster[$index],
                         'harga_uraian' =>  $dataHarga[$index],
@@ -214,6 +222,7 @@ class TagihanController extends Controller
                 }
             }
 
+            // return $ListItem;
 
             $countAll = [];
             foreach ($ListItem as $key => $val) {
@@ -293,10 +302,10 @@ class TagihanController extends Controller
                         'master' =>  $itemExist[$key]->nama,
                         'harga_uraian' =>  $val['harga_uraian'],
                         'harga_master' =>  $itemExist[$key]->harga,
-                        'jumlah' =>  number_format($dataJumlah[$index], 2),
-                        'jenis_harga' =>  $dataJenisHarga[$index],
+                        'jumlah' =>   $val['jumlah'],
+                        'jenis_harga' =>  $val['jenis_harga'],
                         // 'total_master' =>  $item[2] * $hargaItem[$index],
-                        'grand_total' =>  $item[2] *  $itemExist[$key]->harga,
+                        'grand_total' =>  $itemExist[$key]->harga * $val['jumlah'],
                     ];
                     $total_master++;
                 } else {
@@ -306,8 +315,8 @@ class TagihanController extends Controller
                         'master' =>  '',
                         'harga_uraian' => $val['harga_uraian'],
                         'harga_master' =>  0,
-                        'jumlah' =>  number_format($val['jumlah'], 2),
-                        'jenis_harga' =>  $dataJenisHarga[$index],
+                        'jumlah' =>   $val['jumlah'],
+                        'jenis_harga' =>  $val['jenis_harga'],
                         'grand_total' =>  0,
                     ];
                     $itemExist[$key] =  new Item;
@@ -330,12 +339,18 @@ class TagihanController extends Controller
                 }
 
                 $tagihanItem[$key]->uraian = $val['uraian'];
+                $tagihanItem[$key]->no_pekerjaan = $val['no_pekerjaan'];
                 $tagihanItem[$key]->master = $dataMaster[$key];
                 $tagihanItem[$key]->jumlah =  $val['jumlah'];
                 $tagihanItem[$key]->harga_uraian =  $val['harga_uraian'];
                 $tagihanItem[$key]->harga_master = $itemExist[$key]->harga;
                 $tagihanItem[$key]->total_uraian =  $val['harga_uraian'] *  $val['jumlah'];
                 $tagihanItem[$key]->total_master = $itemExist[$key]->harga *  $val['jumlah'];
+                $tagihanItem[$key]->jenis_harga = 'malam';
+
+                if ($val['jenis_harga'] === 'malam') { } else {
+                    $tagihanItem[$key]->jenis_harga = 'siang';
+                }
 
                 if ($val['harga_uraian'] >= $itemExist[$key]->harga) {
                     $tagihanItem[$key]->grand_total  =  $itemExist[$key]->harga *  $val['jumlah'];
@@ -379,6 +394,45 @@ class TagihanController extends Controller
             return redirect()->route($this->route . '.index')->with('message', ucwords(str_replace('-', ' ', $this->route)) . ' gagal diupload')->with('Class', 'success');
         }
     }
+
+    public function adjust(Request $request)
+    {
+        $id = $request->id;
+        $harga = $request->harga;
+        $jumlah = $request->jumlah;
+
+        $grand_total = $jumlah + str_replace(".", "", $harga);
+        $item_id = $request->item_id;
+
+        $itemData = Item::find($item_id);
+        // return $id;
+        try {
+            $now = Carbon::now()->format('Y-m-d');
+            $query = TagihanItem::find($id);
+            $query->total_adjust = str_replace(".", "", $harga);
+            $query->tanggal_adjust =  date('Y-m-d H:i:s');
+            $query->selisih =  'tidak';
+            $query->item_id =  $item_id;
+            $query->grand_total =  $grand_total;
+            $query->master =    $itemData->nama;
+            $query->save();
+
+            $result = [
+                'tanggal' => $query->tanggal_adjust_indo
+            ];
+            $message = 'Data Tagihan berhasil diubah';
+            return $this->sendResponse($result, $message, 200);
+        } catch (\Throwable $th) {
+            $message = 'Data tidak Tagihan ada';
+            $response = [
+                'success' => false,
+                'message' => $message,
+                'code' => '404'
+            ];
+            return $this->sendError($response, $th, 404);
+        }
+    }
+
 
     public function model()
     {

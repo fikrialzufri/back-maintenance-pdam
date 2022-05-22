@@ -57,6 +57,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('jenis', JenisController::class);
     Route::resource('item', ItemController::class);
     Route::get('upload/item', [ItemController::class, 'upload'])->name('item.upload');
+    Route::get('itemdetail', [ItemController::class, 'getdetail'])->name('item.detail');
     Route::post('upload/item', [ItemController::class, 'uploaddata'])->name('item.uploaddata');
 
     Route::resource('jenis-aduan', JenisAduanController::class, ['names' => 'jenis_aduan']);
@@ -85,6 +86,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('/tagihan', TagihanController::class);
     Route::get('upload/tagihan', [TagihanController::class, 'upload'])->name('tagihan.upload');
     Route::post('upload/tagihan', [TagihanController::class, 'uploaddata'])->name('tagihan.uploaddata');
+    Route::post('adjusttagihan', [TagihanController::class, 'adjust'])->name('tagihan.adjust');
 
     // Karyawan
     Route::resource('departemen', DepartemenController::class);

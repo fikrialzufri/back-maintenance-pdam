@@ -192,15 +192,15 @@ class ItemController extends Controller
                         $itemExist[$index] = Item::where('nama', 'LIKE', '%' . $dataNama[$index]  . "%")->first();
                         if ($itemExist[$index] == null) {
                             if ($dataNama[$index] != null) {
-                                $item = new item;
-                                $item->nama =  $dataNama[$index];
-                                $item->jenis_id =  $dataJenis[$index]->id;
-                                $item->satuan_id =  $dataSatuan[$index]->id;
-                                $item->harga =  $dataHargaSiang[$index];
-                                $item->harga_malam =  $dataHargaMalam[$index];
-                                $item->save();
-                                $total = ++$index;
+                                $itemExist[$index]  = new item;
                             }
+                            $itemExist[$index]->nama =  $dataNama[$index];
+                            $itemExist[$index]->jenis_id =  $dataJenis[$index]->id;
+                            $itemExist[$index]->satuan_id =  $dataSatuan[$index]->id;
+                            $itemExist[$index]->harga =  $dataHargaSiang[$index];
+                            $itemExist[$index]->harga_malam =  $dataHargaMalam[$index];
+                            $itemExist[$index]->save();
+                            $total = ++$index;
                         }
                     }
                 }
@@ -209,6 +209,31 @@ class ItemController extends Controller
         } catch (\Throwable $th) {
             //throw $th;
             return redirect()->route($this->route . '.index')->with('message', ucwords(str_replace('-', ' ', $this->route)) . ' gagal diupload')->with('Class', 'success');
+        }
+    }
+
+    public function getdetail(Request $request)
+    {
+        $id = $request->id;
+        try {
+            $message = 'Data Item ada';
+            $item = $this->model()->find($id);
+            $result = [
+                'id' => $item->id,
+                'nama' => $item->nama,
+                'harga' => $item->harga,
+                'harga_malam' => $item->harga_malam,
+                'pekerjaan' => $item->pekerjaan,
+            ];
+            return $this->sendResponse($result, $message, 200);
+        } catch (\Throwable $th) {
+            $message = 'Data tidak Item ada';
+            $response = [
+                'success' => false,
+                'message' => $message,
+                'code' => '404'
+            ];
+            return $this->sendError($response, $th, 404);
         }
     }
 

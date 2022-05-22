@@ -1,7 +1,6 @@
 <script src="{{ asset('js/swall.js') }}"></script>
 <script src="{{ asset('all.js') }}"></script>
 <script src="{{ asset('plugins/jquery-toast-plugin/dist/jquery.toast.min.js') }}"></script>
-
 <!-- Stack array for including inline js or scripts -->
 <script>
     $("#success-alert").fadeTo(15000, 500).slideUp(15000, function() {
@@ -25,7 +24,7 @@
         }
 
         rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
-        return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+        return prefix == undefined ? rupiah : (rupiah ? '' + rupiah : '');
     }
 </script>
 
@@ -149,6 +148,8 @@
         }, 5000);
     });
 </script>
+<script script src="{{ asset('plugins/select2/dist/js/select2.min.js') }}"></script>
+
 @stack('script')
 
 @stack('form')

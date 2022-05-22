@@ -12,6 +12,7 @@ class TagihanItem extends Model
 
     protected $table = 'tagihan_item';
     protected $guarded = ['id'];
+    protected $append = ['tanggal_adjust_indo'];
     protected $fillable = [
         'nomor_tagihan',
         'nomor_bap',
@@ -21,4 +22,23 @@ class TagihanItem extends Model
         'penunjukan_pekerjaan_id',
         'user_id'
     ];
+
+    public function hasItem()
+    {
+        return $this->belongsTo(Item::class, 'item_id');
+    }
+
+    public function getItemJenisAttribute()
+    {
+        if ($this->hasItem) {
+            return $this->hasItem->jenis;
+        }
+    }
+
+    public function getTanggalAdjustIndoAttribute()
+    {
+        if ($this->tanggal_adjust) {
+            return date('d-m-Y', strtotime($this->tanggal_adjust));
+        }
+    }
 }
