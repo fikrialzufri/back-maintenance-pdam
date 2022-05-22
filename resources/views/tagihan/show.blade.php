@@ -260,12 +260,15 @@
                             <thead>
                                 <tr>
                                     <th width="5">#</th>
-                                    <th width="250">Uraian Rekanan</th>
-                                    <th width="250">Master Pekerjaan</th>
+                                    <th width="150">Uraian Rekanan</th>
+                                    <th width="150">Master Pekerjaan</th>
                                     <th width="200">Harga Rekanan</th>
                                     <th width="200">Harga Master</th>
                                     <th width="10" class="text-center">Jumlah</th>
                                     <th width="150">Total</th>
+                                    <th width="150">Jumlah Adjust</th>
+                                    <th width="150">Harga Adjust</th>
+                                    <th width="10">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -292,6 +295,40 @@
                                             </td>
                                             <td>
                                                 Rp. {{ format_uang($tagihan->grand_total) }}
+                                            </td>
+                                            <td>
+
+                                                <div class="form-group">
+                                                    <div class="input-group mb-2 mr-sm-2">
+                                                        <input type="text" name="harga_adjus_"
+                                                            id="jumlah_adjus_{{ $tagihan->id }}" placeholder="Harga"
+                                                            class="form-control">
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+
+                                                <div class="form-group">
+                                                    <div class="input-group mb-2 mr-sm-2">
+                                                        <input type="text" name="harga_adjust"
+                                                            id="harga_adjus_{{ $tagihan->id }}" placeholder="Harga"
+                                                            class="form-control">
+                                                    </div>
+                                                </div>
+                                                @push('script')
+                                                    <script>
+                                                        $('#harga_adjus_' + '{{ $tagihan->id }}').on("input keyup paste", function() {
+                                                            harga = this.value.split('.').join('');
+                                                            $('#harga_adjus_' + '{{ $tagihan->id }}').val(harga);
+                                                            let val = formatRupiah(this.value, ' ');
+                                                            $('#harga_adjus_' + '{{ $tagihan->id }}').val(val);
+                                                        });
+                                                    </script>
+                                                @endpush
+                                            </td>
+                                            <td>
+                                                <button type="submit" id="btn_pekerjaan"
+                                                    class="btn btn-primary">Ubah</button>
                                             </td>
 
                                         </tr>
@@ -349,9 +386,6 @@
                 $("#description").removeClass("is-invalid");
                 $("#textdescription").html("");
             });
-
-
-
         });
     </script>
 @endpush
