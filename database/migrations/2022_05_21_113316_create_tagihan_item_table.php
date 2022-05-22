@@ -27,6 +27,8 @@ class CreateTagihanItemTable extends Migration
             $table->bigInteger('total_uraian')->default(0);
             $table->bigInteger('total_master')->default(0);
             $table->bigInteger('grand_total')->default(0);
+            $table->bigInteger('total_adjust')->default(0);
+            $table->bigInteger('jumlah_adjust')->default(0);
             //SETTING THE PRIMARY KEYS
             $table->timestamps();
         });
