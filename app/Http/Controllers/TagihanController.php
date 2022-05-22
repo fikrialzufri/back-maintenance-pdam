@@ -343,6 +343,26 @@ class TagihanController extends Controller
                     $tagihanItem[$key]->grand_total  =  $val['harga_uraian'] *  $val['jumlah'];
                 }
 
+                if ($val['harga_uraian'] != $itemExist[$key]->harga) {
+                    $tagihanItem[$key]->selisih  = 'ya';
+                    if ($val['harga_uraian'] >= $itemExist[$key]->harga) {
+                        $tagihanItem[$key]->grand_total_adjust  =  $itemExist[$key]->harga *  $val['jumlah'];
+                        $tagihanItem[$key]->total_adjust  = $itemExist[$key]->harga;
+                    } elseif ($val['harga_uraian'] <= $itemExist[$key]->harga) {
+                        $tagihanItem[$key]->grand_total_adjust  =  $val['harga_uraian'] *  $val['jumlah'];
+                        $tagihanItem[$key]->total_adjust  = $val['harga_uraian'];
+                    }
+                } else {
+                    $tagihanItem[$key]->selisih  = 'tidak';
+                    if ($val['harga_uraian'] >= $itemExist[$key]->harga) {
+                        $tagihanItem[$key]->grand_total_adjust  =  $itemExist[$key]->harga *  $val['jumlah'];
+                        $tagihanItem[$key]->total_adjust  = $itemExist[$key]->harga;
+                    } elseif ($val['harga_uraian'] <= $itemExist[$key]->harga) {
+                        $tagihanItem[$key]->grand_total_adjust  =  $val['harga_uraian'] *  $val['jumlah'];
+                        $tagihanItem[$key]->total_adjust  = $val['harga_uraian'];
+                    }
+                }
+
                 $tagihanItem[$key]->urutan =  $urutan;
                 $tagihanItem[$key]->item_id = $itemExist[$key]->id;
                 $tagihanItem[$key]->tagihan_id = $tagihan->id;
