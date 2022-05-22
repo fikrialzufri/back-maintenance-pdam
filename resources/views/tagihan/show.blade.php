@@ -266,7 +266,7 @@
                                     <th width="200">Harga Master</th>
                                     <th width="10" class="text-center">Jumlah</th>
                                     <th width="150">Total</th>
-                                    <th width="150">Jumlah Adjust</th>
+                                    <th width="10">Jumlah Adjust</th>
                                     <th width="150">Harga Adjust</th>
                                     <th width="10">Aksi</th>
                                 </tr>
@@ -301,7 +301,7 @@
                                                 <div class="form-group">
                                                     <div class="input-group mb-2 mr-sm-2">
                                                         <input type="text" name="harga_adjus_"
-                                                            id="jumlah_adjus_{{ $tagihan->id }}" placeholder="Harga"
+                                                            id="jumlah_adjus_{{ $tagihan->id }}" placeholder="Jumlah"
                                                             class="form-control">
                                                     </div>
                                                 </div>
