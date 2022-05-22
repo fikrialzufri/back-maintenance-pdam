@@ -339,8 +339,8 @@ class TagihanController extends Controller
 
                 if ($val['harga_uraian'] > $itemExist[$key]->harga) {
                     $tagihanItem[$key]->grand_total  =  $itemExist[$key]->harga *  $val['jumlah'];
-                } else {
-                    $tagihanItem[$key]->grand_total   =  $val['harga_uraian'] *  $val['jumlah'];
+                } elseif ($val['harga_uraian'] < $itemExist[$key]->harga) {
+                    $tagihanItem[$key]->grand_total  =  $val['harga_uraian'] *  $val['jumlah'];
                 }
 
                 $tagihanItem[$key]->urutan =  $urutan;
