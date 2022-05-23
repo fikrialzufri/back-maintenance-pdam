@@ -87,6 +87,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('upload/tagihan', [TagihanController::class, 'upload'])->name('tagihan.upload');
     Route::post('upload/tagihan', [TagihanController::class, 'uploaddata'])->name('tagihan.uploaddata');
     Route::post('adjusttagihan', [TagihanController::class, 'adjust'])->name('tagihan.adjust');
+    Route::get('exxceltagihan', [TagihanController::class, 'exxceltagihan'])->name('tagihan.excel');
 
     // Karyawan
     Route::resource('departemen', DepartemenController::class);

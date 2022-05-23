@@ -224,6 +224,7 @@ class ItemController extends Controller
                 'harga' => $item->harga,
                 'harga_malam' => $item->harga_malam,
                 'pekerjaan' => $item->pekerjaan,
+                'jenis' => $item->jenis,
             ];
             return $this->sendResponse($result, $message, 200);
         } catch (\Throwable $th) {

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ExportTagihan;
 use App\Models\Item;
 use App\Models\Jenis;
 use App\Models\Rekanan;
@@ -81,7 +82,7 @@ class TagihanController extends Controller
         $action = route('tagihan.store', $tagihan->id);
         $dataitem = Item::all();
 
-        $total = $tagihanItem->sum('total_adjust');
+        $total = $tagihanItem->sum('grand_total');
 
         return view('tagihan.show', compact(
             'action',
@@ -431,6 +432,13 @@ class TagihanController extends Controller
             ];
             return $this->sendError($response, $th, 404);
         }
+    }
+
+    public function exxceltagihan()
+    {
+        $id = request()->get('id') ?: "";
+        $tagihan = Tagihan::find($id);
+        return Excel::download(new ExportTagihan($id), 'Export Tagihan ' . $tagihan->nomor_tagihan . ' - Rekanan ' . $tagihan->rekanan . '.xlsx');
     }
 
 
