@@ -98,6 +98,20 @@ class Tagihan extends Model
         }
         return $danger;
     }
+    public function getBelumAdjustAttribute()
+    {
+        $harga = [];
+        $danger = '';
+        if ($this->hasTagihanItem) {
+            foreach ($this->hasTagihanItem as $key => $value) {
+                if ($value->selisih == 'ya') {
+                    $danger .= 'ya';
+                    break;
+                }
+            }
+        }
+        return $danger;
+    }
 
     public function getTagihanAttribute()
     {
@@ -128,6 +142,11 @@ class Tagihan extends Model
     public function hasUserMany()
     {
         return $this->belongsToMany(User::class, 'tagihan_user')->withTimestamps();
+    }
+
+    public function hasTagihanItem()
+    {
+        return $this->hasMany(TagihanItem::class);
     }
 
     public function getStatusMobileAttribute()

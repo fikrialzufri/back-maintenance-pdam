@@ -221,13 +221,8 @@
 @stop
 
 @push('scriptdinamis')
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script
-        src="https://www.jqueryscript.net/demo/Export-Html-To-Word-Document-With-Images-Using-jQuery-Word-Export-Plugin/FileSaver.js">
-    </script>
-    <script
-        src="https://www.jqueryscript.net/demo/Export-Html-To-Word-Document-With-Images-Using-jQuery-Word-Export-Plugin/jquery.wordexport.js">
-    </script>
+    <script src="{{ asset('js/FileSaver.js') }}"></script>
+    <script src="{{ asset('js/jquery.wordexport.js') }}"></script>
 
     <script type="text/javascript">
         let title = "{{ $filename }}";

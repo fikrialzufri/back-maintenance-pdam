@@ -66,7 +66,7 @@
                             <tbody>
                                 @forelse ($data as $index => $item)
 
-                                    <tr class="{{ $item->harga_item == 'salah' ? 'bg-danger' : '' }}">
+                                    <tr class="{{ $item->belum_adjust == 'ya' ? 'bg-danger' : '' }}">
                                         <td>{{ $index + 1 + ($data->CurrentPage() - 1) * $data->PerPage() }}</td>
                                         @foreach ($configHeaders as $key => $header)
                                             @if (isset($header['input']))
@@ -83,6 +83,9 @@
                                                 <td>{{ $item[$header['name']] }}</td>
                                             @endif
                                         @endforeach
+                                        <td>
+                                            {{ $item->belum_adjust }}
+                                        </td>
                                         <td class="text-center">
                                             @if (isset($button))
                                                 @foreach ($button as $key => $val)

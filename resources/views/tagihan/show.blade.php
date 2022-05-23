@@ -49,6 +49,17 @@
                                 <div class="col-2">
                                     <div class="form-group">
                                         <div>
+                                            <label for="rekanan" class=" form-control-label">Rekanan</label>
+                                        </div>
+                                        <div>
+                                            <input type="text" name="rekanan" id="rekanan" placeholder="Rekanan "
+                                                class="form-control" readonly value="{{ $tagihan->hasTagihanItem }}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-2">
+                                    <div class="form-group">
+                                        <div>
                                             <label for="total_tagihan" class=" form-control-label">Total Tagihan</label>
                                         </div>
                                         <div class="input-group mb-2 mr-sm-2">
