@@ -49,14 +49,14 @@
                                 <div class="col-2">
                                     <div class="form-group">
                                         <div>
-                                            <label for="tagihan" class=" form-control-label">Total Tagihan</label>
+                                            <label for="total_tagihan" class=" form-control-label">Total Tagihan</label>
                                         </div>
                                         <div class="input-group mb-2 mr-sm-2">
                                             <div class="input-group-prepend">
                                                 <div class="input-group-text">Rp.</div>
                                             </div>
-                                            <input type="text" name="tagihan" id="tagihan" placeholder=""
-                                                class="form-control" readonly value=" {{ format_uang($total) }}">
+                                            <input type="text" name="total_tagihan" id="total_tagihan_all" placeholder=""
+                                                class="form-control" readonly value="{{ format_uang($total) }}">
                                         </div>
                                     </div>
                                 </div>
@@ -194,7 +194,7 @@
                                                         <th>Rp. {{ format_uang($item->hasItem->sum('pivot.harga')) }}
                                                         </th>
                                                         <th>Rp. {{ format_uang($item->total_harga) }}
-
+                                                        </th>
                                                     </tr>
                                                 </tfoot>
 
@@ -319,8 +319,15 @@
                                                 <td id="jumlah_{{ $tagihanItem->id }}" class="text-center">
                                                     {{ $tagihanItem->jumlah }}
                                                 </td>
-                                                <td id="total_tagihan_{{ $tagihanItem->id }}">
-                                                    Rp. {{ format_uang($tagihanItem->grand_total) }}
+                                                <td>
+                                                    <span id="total_tagihan_{{ $tagihanItem->id }}">
+                                                        Rp. {{ format_uang($tagihanItem->grand_total) }}
+                                                    </span>
+
+                                                    <input type="hidden" name="total_tagihan_value_"
+                                                        class="total_tagihan_value"
+                                                        value="{{ $tagihanItem->grand_total }}"
+                                                        id="total_tagihan_value_{{ $tagihanItem->id }}">
                                                 </td>
                                                 <td id="tanggal_adjust_{{ $tagihanItem->id }}">
 
@@ -380,11 +387,10 @@
                                             <th>
                                                 <span id="grand_total_tagihan_tampil">
                                                     Rp.
-                                                    {{ format_uang($tagihanItem->sum('grand_total')) }}
+                                                    {{ format_uang($total) }}
                                                 </span>
                                                 <input type="hidden" id="grand_total_tagihan_value"
-                                                    name="grand_total_tagihan"
-                                                    value="{{ $tagihanItem->sum('grand_total') }}"
+                                                    name="grand_total_tagihan" value="{{ $total }}"
                                                     class="grand_total_tagihan">
                                             </th>
 
@@ -396,7 +402,11 @@
                         </div>
                         <div class="card-footer clearfix">
                             <a href="{{ route('tagihan.excel') }}?id={{ $tagihan->id }}" class="btn btn-success"><span
-                                    class="nav-icon fa fa-file-excel" aria-hidden="true"></span> Export Tagihan</a>
+                                    class="nav-icon fa fa-file-excel" aria-hidden="true"></span> Export Excel Tagihan</a>
+
+                            <a href="{{ route('tagihan.word') }}?id={{ $tagihan->id }}" target="_blank"
+                                class="btn btn-danger"><span class="nav-icon fa fa-file-word" aria-hidden="true"></span>
+                                Privew Tagihan</a>
                         </div>
                     </div>
                     <!-- ./col -->
@@ -524,7 +534,8 @@
                 let jenis_harga = $(this).data('jenis_harga');
                 let harga = $('#harga_adjus_' + id).val();
 
-                $.ajax({
+
+                $.when($.ajax({
                     type: 'POST',
                     url: "{{ route('tagihan.adjust') }}",
                     data: {
@@ -532,14 +543,19 @@
                         id,
                         item_id,
                         jumlah,
-
+                        jenis_harga,
                         harga,
                     },
                     success: function(data) {
                         console.log(data);
 
                         const {
-                            tanggal
+                            id,
+                            nama,
+                            harga,
+                            harga_malam,
+                            tanggal,
+                            grand_total
                         } = data.data;
 
                         $.toast({
@@ -551,10 +567,16 @@
                             position: 'top-right'
                         })
 
+                        console.log(data);
+
                         $('#listtagihan_' + id).removeClass('bg-danger');
-
-
                         $("#tanggal_adjust_" + id).text(tanggal);
+
+                        $("#total_tagihan_" + id).text("Rp. " + formatRupiah(
+                            grand_total.toString(),
+                            ' '));
+
+                        $("#total_tagihan_value_" + id).val(grand_total);
                     },
                     error: function(data) {
                         console.log(data);
@@ -564,8 +586,39 @@
                             footer: '<a href="">terdapat data yang kosong</a>'
                         })
                     }
-                });
+                })).then(function(data, textStatus, jqXHR) {
+                    // totalHarga(modul)
+                    const {
+                        id,
+                        nama,
+                        harga,
+                        harga_malam,
+                    } = data.data;
+                    $('#nama_master_tagihan_' + id).text(nama);
 
+                    let sumTotal = 0;
+
+                    $('.total_tagihan_value').each(function() {
+                        sumTotal += parseFloat($(this)
+                            .val());
+                    });
+                    $('#grand_total_tagihan_value_' + id).val(sumTotal);
+                    $('#grand_total_tagihan_tampil_' + id).text(formatRupiah(
+                        Math
+                        .floor(
+                            sumTotal).toString(), 'Rp. '));
+
+                    $('#total_tagihan_all').val(formatRupiah(
+                        Math
+                        .floor(
+                            sumTotal).toString(), 'Rp. '));
+
+                    $('#grand_total_tagihan_tampil').text('Rp. ' + formatRupiah(
+                        Math
+                        .floor(
+                            sumTotal).toString(), 'Rp. '));
+                    $('#grand_total_tagihan_value').val(sumTotal);
+                });
             });
 
             $(".ganti_pekerjaan").on("click", function(e) {
@@ -575,7 +628,7 @@
                 let tagihan_id = $(this).data('tagihan');
                 let jumlah = $(this).data('jumlah');
                 let jenis_harga = $(this).data('jenis_harga');
-
+                let totalharga = 0;
                 $.when($.ajax({
                     type: 'GET',
                     url: "{{ route('item.detail') }}",
@@ -593,25 +646,27 @@
                             jenis,
                             harga_malam,
                         } = data.data;
-                        $totalharga = 0;
+
                         if (jenis_harga == 'malam') {
                             $("#harga_adjus_" + tagihan_id).val(formatRupiah(harga_malam
                                 .toString(),
                                 ' '));
 
-                            $totalharga = jumlah * harga_malam;
+                            totalharga = jumlah * harga_malam;
                         } else {
                             $("#harga_adjus_" + tagihan_id).val(formatRupiah(harga
                                 .toString(),
                                 ' '));
 
-                            $totalharga = jumlah * harga;
+                            totalharga = jumlah * harga;
                         }
 
                         $("#total_tagihan_" + tagihan_id).text("Rp. " + formatRupiah(
-                            $totalharga
+                            totalharga
                             .toString(),
                             ' '));
+
+                        $("#total_tagihan_value_" + tagihan_id).val(totalharga);
 
                         $("#tagihan_master_" + tagihan_id).attr('data-tagihan', tagihan_id);
                         $("#tagihan_master_" + tagihan_id).attr('data-jumlah', jumlah);
@@ -641,15 +696,64 @@
                 })).then(function(data, textStatus, jqXHR) {
                     // totalHarga(modul)
                     const {
+                        id,
                         nama,
                         harga,
                         harga_malam,
                     } = data.data;
                     $('#nama_master_tagihan_' + tagihan_id).text(nama);
                     $('#list_item_modal').modal('toggle');
+
+                    let sumTotal = 0;
+
+                    $('.total_tagihan_value').each(function() {
+                        sumTotal += parseFloat($(this)
+                            .val());
+                    });
+                    $('#grand_total_tagihan_value_' + tagihan_id).val(sumTotal);
+                    $('#grand_total_tagihan_tampil_' + tagihan_id).text(formatRupiah(
+                        Math
+                        .floor(
+                            sumTotal).toString(), 'Rp. '));
+
+                    $('#total_tagihan_all').val(formatRupiah(
+                        Math
+                        .floor(
+                            sumTotal).toString(), 'Rp. '));
+
+                    $('#grand_total_tagihan_tampil').text('Rp. ' + formatRupiah(
+                        Math
+                        .floor(
+                            sumTotal).toString(), 'Rp. '));
+                    $('#grand_total_tagihan_value').val(sumTotal);
                 });
 
             });
+
+            function totalharga(tagihan_id) {
+                let sumTotal = 0;
+
+                $('.total_tagihan_value').each(function() {
+                    sumTotal += parseFloat($(this)
+                        .val());
+                });
+                $('#grand_total_tagihan_value_' + tagihan_id).val(sumTotal);
+                $('#grand_total_tagihan_tampil_' + tagihan_id).text(formatRupiah(
+                    Math
+                    .floor(
+                        sumTotal).toString(), 'Rp. '));
+
+                $('#total_tagihan_all').val(formatRupiah(
+                    Math
+                    .floor(
+                        sumTotal).toString(), 'Rp. '));
+
+                $('#grand_total_tagihan_tampil').text(formatRupiah(
+                    Math
+                    .floor(
+                        sumTotal).toString(), 'Rp. '));
+                $('#grand_total_tagihan_value').val(sumTotal);
+            }
 
             // $('.prevSpan').on('click', function() {
             //     $(".prevSpan").text("«");

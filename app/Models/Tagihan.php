@@ -41,6 +41,13 @@ class Tagihan extends Model
         }
     }
 
+    public function getDirekturAttribute()
+    {
+        if ($this->hasRekanan) {
+            return $this->hasRekanan->nama_penangung_jawab;
+        }
+    }
+
     public function getTanggalAttribute()
     {
         if ($this->created_at) {

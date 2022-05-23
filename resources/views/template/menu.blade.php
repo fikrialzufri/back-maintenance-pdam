@@ -144,14 +144,14 @@
                         </a>
                     </div>
                 @endcan
-                @can('view-setting')
+                {{-- @can('view-setting')
                     <div class="nav-item  {{ $segment1 == 'setting' ? 'active' : '' }}">
                         <a href="{{ route('setting.index') }}">
                             <i class="fa fa-cog dropdown-icon"></i>
                             <span>Setting</span>
                         </a>
                     </div>
-                @endcan
+                @endcan --}}
                 @canany(['view-user', 'view-roles'])
                     <div class="nav-lavel">{{ __('User') }} </div>
                     <div

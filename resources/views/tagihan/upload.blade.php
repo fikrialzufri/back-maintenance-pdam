@@ -50,6 +50,21 @@
 
                             </div>
                             <div class="form-group">
+                                <div>
+                                    <label for="total_lokasi" class=" form-control-label">Total Lokasi</label>
+                                </div>
+                                <div>
+                                    <input type="text" name="total_lokasi" placeholder="Total Lokasi" id="total_lokasi"
+                                        class="form-control  {{ $errors->has('total_lokasi') ? 'form-control is-invalid' : 'form-control' }}"
+                                        value="{{ old('total_lokasi') }}" required>
+                                </div>
+                                @if ($errors->has('total_lokasi'))
+                                    <span class="text-danger">
+                                        <strong id="textNo">{{ $errors->first('total_lokasi') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                            <div class="form-group">
                                 <label for="exampleInputFile">Pilih Bulan</label>
                                 <select class="form-control select2" id="cmbBulan" name="bulan">
                                     <option selected="selected" value="">Pilih Bulan

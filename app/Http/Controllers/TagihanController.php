@@ -77,6 +77,7 @@ class TagihanController extends Controller
         }])->first();
         $pelaksanaan = $tagihan->hasPelaksanaanPekerjaan()->pluck('id')->toArray();
         $title =  "Proses Tagihan Nomor :" . $tagihan->nomor_tagihan;
+        $filename =  "Tagihan Nomor :" . $tagihan->nomor_tagihan;
 
         $tagihanItem = TagihanItem::where('tagihan_id', $tagihan->id)->orderBy('urutan')->get();
         $action = route('tagihan.store', $tagihan->id);
@@ -89,6 +90,7 @@ class TagihanController extends Controller
             'title',
             'dataitem',
             'total',
+            'filename',
             'tagihanItem',
             'tagihan'
         ));
@@ -135,8 +137,11 @@ class TagihanController extends Controller
         ];
 
         $nomor_tagihan = $request->nomor_tagihan;
+        $total_lokasi = $request->total_lokasi;
+        $rekanan_id = $request->rekanan_id;
 
         $this->validate(request(), [
+            'nomor_tagihan' => 'required', 'unique:tagihan,nomor_tagihan,' . $nomor_tagihan . ',NULL,id,rekanan_id,' . $rekanan_id,
             'nomor_tagihan' => 'required',
             'rekanan_id' => 'required',
             'bulan' => 'required',
@@ -148,7 +153,7 @@ class TagihanController extends Controller
 
         $tanggal_tagihan = Carbon::parse($tahun . '-' . $bulan . "-"  . $tanggal)->format('Y-m-d');
 
-        $rekanan_id = $request->rekanan_id;
+
 
         $dataJenisItem = Jenis::where('nama', 'LIKE', "%baru%")->first();
         $satuan = Satuan::where('nama', 'LIKE', "%pcs%")->first();
@@ -182,6 +187,7 @@ class TagihanController extends Controller
             }
             $tagihan->nomor_tagihan = $nomor_tagihan;
             $tagihan->rekanan_id = $rekanan_id;
+            $tagihan->total_lokasi = $total_lokasi;
             $tagihan->tanggal_tagihan = $tanggal_tagihan;
             $tagihan->user_id = auth()->user()->id;
             $tagihan->status = 'dikirim';
@@ -402,13 +408,12 @@ class TagihanController extends Controller
         $harga = $request->harga;
         $jumlah = $request->jumlah;
 
-        $grand_total = $jumlah + str_replace(".", "", $harga);
+        $grand_total = $jumlah * str_replace(".", "", $harga);
         $item_id = $request->item_id;
 
         $itemData = Item::find($item_id);
         // return $id;
         try {
-            $now = Carbon::now()->format('Y-m-d');
             $query = TagihanItem::find($id);
             $query->total_adjust = str_replace(".", "", $harga);
             $query->tanggal_adjust =  date('Y-m-d H:i:s');
@@ -419,7 +424,9 @@ class TagihanController extends Controller
             $query->save();
 
             $result = [
-                'tanggal' => $query->tanggal_adjust_indo
+                'tanggal' => $query->tanggal_adjust_indo,
+                'id' => $query->id,
+                'grand_total' => $query->grand_total,
             ];
             $message = 'Data Tagihan berhasil diubah';
             return $this->sendResponse($result, $message, 200);
@@ -439,6 +446,27 @@ class TagihanController extends Controller
         $id = request()->get('id') ?: "";
         $tagihan = Tagihan::find($id);
         return Excel::download(new ExportTagihan($id), 'Export Tagihan ' . $tagihan->nomor_tagihan . ' - Rekanan ' . $tagihan->rekanan . '.xlsx');
+    }
+
+    public function wordtagihan()
+    {
+        $id = request()->get('id') ?: "";
+        $tagihan = Tagihan::find($id);
+        $total_tagihan = TagihanItem::where('tagihan_id', $tagihan->id)->sum('grand_total');
+        $filename =  "Tagihan Rekenan " . $tagihan->rekanan . " Nomor " . $tagihan->nomor_tagihan;
+        $title =  "Priview Tagihan : " . $tagihan->nomor_tagihan;
+        $bulan = bulan_indonesia(Carbon::parse($tagihan->tanggal_adjust));
+        $tanggal = tanggal_indonesia(Carbon::parse($tagihan->tanggal_adjust));
+        $now = tanggal_indonesia(Carbon::now(), false);
+        return view('tagihan.word', compact(
+            "title",
+            "total_tagihan",
+            "filename",
+            "bulan",
+            "now",
+            "tanggal",
+            "tagihan"
+        ));
     }
 
 

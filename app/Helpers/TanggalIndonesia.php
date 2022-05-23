@@ -18,3 +18,13 @@ function tanggal_indonesia($tgl, $tampil_hari = true)
     $text .= $tanggal . " " . $bulan . " " . $tahun;
     return $text;
 }
+function bulan_indonesia($tgl)
+{
+    $nama_bulan = array(
+        1 => "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus",
+        "September", "Oktober", "November", "Desember"
+    );
+    $bulan = $nama_bulan[(int) substr($tgl, 5, 2)];
+
+    return $bulan;
+}
