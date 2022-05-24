@@ -113,16 +113,6 @@
                     $("#textNama").html("");
                 });
 
-                // $('.checkAll').on('click', function() {
-                //     console.log(this.value);
-                //     if (this.value) {
-
-                //         $(".check" + this.value).prop('checked', true);
-                //     } else {
-                //         $(".check" + this.value).prop('checked', false);
-
-                //     }
-                // });
 
                 $(".checkAll").on('change', function() {
                     if ($(this).is(':checked')) {

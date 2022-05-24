@@ -226,7 +226,6 @@
 
     <script type="text/javascript">
         let title = "{{ $filename }}";
-        console.log(title);
         $("#word-export").click(function(event) {
             $("#exportContent").wordExport(title);
         });

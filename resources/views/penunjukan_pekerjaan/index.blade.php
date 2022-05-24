@@ -11,15 +11,16 @@
                         <h3 class="card-title">Daftar {{ $title }}</h3>
 
                         <div>
-
-                            <a href="{{ route($route . '.create') }}"
-                                class="btn btn-sm btn-primary float-right text-light">
-                                <i class="fa fa-plus"></i>Tambah Data
-                            </a>
-                            <a href="{{ route($route . '.upload') }}"
-                                class="btn btn-sm btn-warning float-right text-light mr-5">
-                                <i class="fa fa-file"></i> Upload
-                            </a>
+                            {{-- @if ($rekanan_id == null)
+                                <a href="{{ route($route . '.create') }}"
+                                    class="btn btn-sm btn-primary float-right text-light">
+                                    <i class="fa fa-plus"></i>Tambah Data
+                                </a>
+                                <a href="{{ route($route . '.upload') }}"
+                                    class="btn btn-sm btn-warning float-right text-light mr-5">
+                                    <i class="fa fa-file"></i> Upload
+                                </a>
+                            @endif --}}
                         </div>
                     </div>
                     <!-- /.card-header -->
@@ -43,7 +44,8 @@
                             <tbody>
                                 @forelse ($penunjukan as $index => $item)
                                     <tr class="{{ $item->keterangan_barang != null ? 'bg-danger' : '' }}">
-                                        <td>{{ ++$no }}</td>
+                                        <td>{{ $index + 1 + ($penunjukan->CurrentPage() - 1) * $penunjukan->PerPage() }}
+                                        </td>
                                         <td>{{ $item->no_spk }}</td>
                                         <td>{{ $item->no_aduan }}</td>
                                         <td>{{ $item->no_ticket }}</td>

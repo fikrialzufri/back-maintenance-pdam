@@ -163,7 +163,6 @@
                                                                             let qty = parseInt($('#qty_{{ $barang->slug }}_{{ $item->id }}').text());
                                                                             let totalHarga = val.replace(".", "") * qty;
 
-                                                                            console.log(totalHarga);
                                                                             $('#total_harga_{{ $barang->slug }}_{{ $item->id }}').text("Rp. " + formatRupiah(totalHarga
                                                                                 .toString(), ''));
 
@@ -558,7 +557,6 @@
                         harga,
                     },
                     success: function(data) {
-                        console.log(data);
 
                         const {
                             id,
@@ -578,7 +576,6 @@
                             position: 'top-right'
                         })
 
-                        console.log(data);
 
                         $('#listtagihan_' + id).removeClass('bg-danger');
                         $("#tanggal_adjust_" + id).text(tanggal);
@@ -590,7 +587,6 @@
                         $("#total_tagihan_value_" + id).val(grand_total);
                     },
                     error: function(data) {
-                        console.log(data);
                         Swal.fire({
                             title: 'Oops...',
                             text: "gagal mengubah tagihan ",
@@ -696,7 +692,6 @@
 
                     },
                     error: function(data) {
-                        console.log(data);
                         Swal.fire({
                             title: 'Oops...',
                             text: "gagal Mengahapus " +
@@ -791,7 +786,6 @@
                         } = data.data;
 
                         if (jenis_harga == 'malam') {
-                            console.log(harga_malam);
                             $("#harga_adjus_" + tagihan_id).val(formatRupiah(harga_malam
                                 .toString(),
                                 ' '));
@@ -803,7 +797,6 @@
 
                     },
                     error: function(data) {
-                        console.log(data);
                         Swal.fire({
                             title: 'Oops...',
                             text: "gagal Mengahapus " +

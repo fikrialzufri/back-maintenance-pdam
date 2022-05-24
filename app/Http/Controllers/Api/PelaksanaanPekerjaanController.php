@@ -173,6 +173,7 @@ class PelaksanaanPekerjaanController extends Controller
             $data->penunjukan_pekerjaan_id = $penunjukanPekerjaan->id;
             $data->rekanan_id = $rekanan_id;
             $data->aduan_id = $penunjukanPekerjaan->aduan_id;
+            $data->tanggal_mulai = Carbon::now();
             $data->user_id = $user_id;
             $data->status = 'diterima';
             $data->save();
@@ -353,10 +354,10 @@ class PelaksanaanPekerjaanController extends Controller
 
             $title = "Pengerjaan Telah selesai";
             $body = "Dengan nomor SPK : " . $penunjukanPekerjaan->nomor_pekerjaan . " telah selesai";
-            $modul = "pelaksaan-pekerjaan";
+            $modul = "pelaksanaan-pekerjaan";
 
             foreach ($stafPengawas as $pengawas) {
-                $this->notification($penunjukanPekerjaan->id, $penunjukanPekerjaan->slug, $title, $body, $modul, auth()->user()->id, $pengawas->user_id);
+                $this->notification($aduan->id, $penunjukanPekerjaan->slug, $title, $body, $modul, auth()->user()->id, $pengawas->user_id);
             }
 
 

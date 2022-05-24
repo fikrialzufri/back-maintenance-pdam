@@ -347,7 +347,6 @@
         var map;
         var feature;
         var newMarker = {};
-        console.log(lat_long);
 
         map = new L.Map('map', {
             zoomControl: true

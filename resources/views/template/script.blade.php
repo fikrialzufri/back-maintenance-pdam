@@ -88,7 +88,6 @@
                                 '{{ route('penunjukan_pekerjaan.notification', ':id') }}';
                             url = url.replace(':id', val.modul_id);
 
-                            console.log(lenght);
                             if (lenght === 0) {
                                 $('#notifikasi').append(content);
 

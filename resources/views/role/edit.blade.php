@@ -137,7 +137,6 @@
 
                     var parentClass = $('.' + value).closest('td').attr('class');
                     if (countChecked == 4) {
-                        console.log(parentClass);
 
                         $(".checkAll" + parentClass).prop('checked', true);
                     }

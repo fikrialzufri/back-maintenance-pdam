@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Rekanan;
+use App\Models\Role;
 use App\Models\User;
 use App\Traits\CrudTrait;
 use Illuminate\Http\Request;
@@ -170,7 +171,7 @@ class RekananController extends Controller
         $dataPassword = [];
         $dataEmail = [];
         $itemExist = [];
-
+        $roles = Role::whereSlug('rekanan')->first();
         $file = $request->hasFile('file');
         $total = 0;
         try {
@@ -198,6 +199,9 @@ class RekananController extends Controller
                             $dataUser[$index]->password =  bcrypt($dataPassword[$index]);
                             $dataUser[$index]->email =  $dataEmail[$index];
                             $dataUser[$index]->save();
+                            if ($roles) {
+                                $dataUser[$index]->role()->attach($roles->id);
+                            }
                         }
                         $dataRekanan[$index] = Rekanan::where('nama', 'LIKE', '%' . $dataCV[$index] . "%")->first();
                         if (!$dataRekanan[$index]) {

@@ -131,6 +131,7 @@ class UserController extends Controller
         ];
 
         $this->validate(request(), [
+            'username' => 'required|unique:users,username,' . $id,
             'name' => 'required|unique:users,name,' . $id,
             'email' => 'required|unique:users,email,' . $id
         ], $messages);
@@ -142,6 +143,7 @@ class UserController extends Controller
             $pass = bcrypt(request()->input('passwordNew'));
             $user->password = $pass;
             $this->validate(request(), [
+                'username' => 'required|unique:users,username,' . $id,
                 'name' => 'required|unique:users,name,' . $id,
                 'email' => 'required|unique:users,email,' . $id,
                 'passwordNew' => 'required|min:6',

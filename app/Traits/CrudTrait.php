@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use Auth;
 use Storage;
 use DB;
+use Carbon\Carbon;
 use Intervention\Image\Facades\Image;
 
 trait CrudTrait
@@ -128,111 +129,70 @@ trait CrudTrait
             $hasilSearch[$val['name']] = $search[$key];
 
             if ($search[$key]) {
-                // split on 1+ whitespace & ignore empty (eg. trailing space)
-                $searchValues[$key] = preg_split('/\s+/', $search[$key], -1, PREG_SPLIT_NO_EMPTY);
-                // return count($searchValues[$key]);
+                if ($val['input'] != 'daterange') {
+                    # code...
+                    $searchValues[$key] = preg_split('/\s+/', $search[$key], -1, PREG_SPLIT_NO_EMPTY);
 
-                if (count($searchValues[$key]) == 1) {
-                    foreach ($searchValues[$key] as $index => $value) {
-                        $query->where($val['name'], 'like', "%{$value}%");
-                        // return 1;
-                    }
-                } else {
-                    // foreach ($searchValues[$key] as $index => $value) {
-                    //     $count =  $this->model()->where($val['name'], 'like', "%{$value}%")->count();
-                    //     if ($count > 0) {
-                    //         $countAll = $countAll + 1;
-                    //         $colom[$key] = [$val['name'], 'like', '%' . $value . '%'];
-                    //         $queryArray[$index] = array_merge($colom[$key]);
+                    if (count($searchValues[$key]) == 1) {
+                        foreach ($searchValues[$key] as $index => $value) {
+                            $query->where($val['name'], 'like', "%{$value}%");
+                            $countAll = $countAll + 1;
+                        }
+                    } else {
+                        $lastquery = '';
 
-                    //         // $query->whereIn($val['name'], 'like', [$value]);
-                    //     } else {
-                    //         break;
-                    //     }
-                    // }
-                    $lastquery = '';
+                        foreach ($searchValues[$key] as $index => $word) {
+                            if (preg_match("/^[a-zA-Z0-9]+$/", $word) == 1) {
 
-                    foreach ($searchValues[$key] as $index => $word) {
-                        if (preg_match("/^[a-zA-Z0-9]+$/", $word) == 1) {
+                                if ($queryRaw) {
+                                    $count =  $this->model()->whereRaw(rtrim($queryRaw, " and"))->count();
+                                    if ($count > 0) {
+                                        $countAll = $countAll + 1;
+                                        $lastquery = $queryRaw;
 
-                            if ($queryRaw) {
-                                $count =  $this->model()->whereRaw(rtrim($queryRaw, " and"))->count();
-                                // return "masuk pertama";
-                                // continue;
-                                if ($count > 0) {
-                                    $countAll = $countAll + 1;
-                                    // $colom[$key] = [$val['name'], 'like', '%' . $word . '%'];
-                                    // $queryArray[$index] = array_merge($colom[$key]);
-                                    $lastquery = $queryRaw;
-
-                                    $queryRaw .= $val['name'] . ' LIKE "%' . $word . '%" and ';
-                                    // $query->whereIn($val['name'], 'like', [$value]);
-                                    if ($this->model()->whereRaw(rtrim($queryRaw, " and"))->count() == 0) {
-                                        # code...
-                                        $queryRaw = $lastquery;
+                                        $queryRaw .= $val['name'] . ' LIKE "%' . $word . '%" and ';
+                                        if ($this->model()->whereRaw(rtrim($queryRaw, " and"))->count() == 0) {
+                                            $queryRaw = $lastquery;
+                                        }
                                     }
-                                }
-                            } else {
-                                // return "masuk kedua";
-                                // return $queryRaw;
-                                $count =  $this->model()->where($val['name'], 'like', "%{$word}%")->count();
-                                if ($count > 0) {
-                                    $countAll = $countAll + 1;
-                                    // $colom[$key] = [$val['name'], 'like', '%' . $word . '%'];
-                                    // $queryArray[$index] = array_merge($colom[$key]);
+                                } else {
+                                    $count =  $this->model()->where($val['name'], 'like', "%{$word}%")->count();
+                                    if ($count > 0) {
+                                        $countAll = $countAll + 1;
 
-                                    $queryRaw .= $val['name'] . ' LIKE "%' . $word . '%" and ';
-                                    // $query->whereIn($val['name'], 'like', [$value]);
-                                    continue;
+                                        $queryRaw .= $val['name'] . ' LIKE "%' . $word . '%" and ';
+                                        continue;
+                                    }
                                 }
                             }
                         }
                     }
 
-                    // return $val;
+                    if ($queryRaw) {
+                        $query->whereRaw(rtrim($queryRaw, " and "));
+                    }
+                    if (count($queryArray) > 0) {
+                        $query->where($queryArray);
+                    }
+                } else {
+                    $date = explode(' - ', request()->input($val['name']));
+                    $start = Carbon::parse($date[0])->format('Y-m-d') . ' 00:00:01';
+                    $end = Carbon::parse($date[1])->format('Y-m-d') . ' 23:59:59';
+                    $query = $query->whereBetween(DB::raw('DATE(' . $val['name'] . ')'), array($start, $end));
 
-                    // $query->where(function ($q) use ($searchValues, $val, $key, $countAll) {
-                    //     foreach ($searchValues[$key] as $word) {
-                    //         $q->where($val['name'], 'like', "%{$word}%");
-                    //     }
-                    // });
-                    // foreach ($searchValues[$key] as $keywords) {
-                    //     $queryRaw .= ' nama LIKE "%?%"';
-                    // }
-                    // $query->selectRaw("MATCH (nama)
-                    //     against (? in boolean mode)
-                    // ", [$searchValues[$key]])->whereRaw("MATCH (nama) against (? in boolean mode)", [$searchValues[$key]]);
+                    $export .= 'from=' . $start . '&to=' . $end;
+                    $countAll = $countAll + 1;
                 }
 
-                // return $countAll;
-
-                if ($queryRaw) {
-                    $query->whereRaw(rtrim($queryRaw, " and "));
-                }
-                if (count($queryArray) > 0) {
-                    $query->where($queryArray);
-                }
-
-                if ($countAll == 0 && count($searchValues[$key]) > 1) {
+                if ($countAll == 0) {
                     $query->where('id',  "");
                 }
-                // return $query->toSql();
             }
             $export .= $val['name'] . '=' . $search[$key] . '&';
         }
 
-        // return $query->get();
+        // return $ayam;
 
-        // return
-        if (request()->input('from') && request()->input('to')) {
-            $from =   request()->input('from') ?: '';
-            $to = request()->input('to') ?: '';
-
-            // return $from;
-            // $query = $query->whereDate('tgl', '<=', $from);
-            $query = $query->whereBetween(DB::raw('DATE(tgl)'), array($from, $to));
-            $export .= 'from=' . $from . '&to=' . $to;
-        }
         //akhir pencarian --------------------------------
         // relatio
         // sort by

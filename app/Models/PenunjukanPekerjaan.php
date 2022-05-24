@@ -92,9 +92,9 @@ class PenunjukanPekerjaan extends Model
                     $result[$key] = [
                         'id' => $value->id,
                         'pekerjaan' => $value->pekerjaan,
-                        'panjang' => $value->panjang,
-                        'lebar' => $value->lebar,
-                        'dalam' => $value->dalam,
+                        'panjang' => (string) $value->panjang,
+                        'lebar' => (string) $value->lebar,
+                        'dalam' => (string) $value->dalam,
                         'keterangan' => $value->keterangan,
                     ];
                 }
@@ -166,7 +166,7 @@ class PenunjukanPekerjaan extends Model
                     $item[$index++] = [
                         'id' => $value->id,
                         'nama' => $value->nama,
-                        'jumlah' => $value->pivot->qty,
+                        'jumlah' => (string) $value->pivot->qty,
                         'keterangan' => $value->pivot->keterangan,
                     ];
                 }
@@ -190,7 +190,7 @@ class PenunjukanPekerjaan extends Model
                     $item[$index++] = [
                         'id' => $value->id,
                         'nama' => $value->nama,
-                        'jumlah' => $value->pivot->qty,
+                        'jumlah' => (string) $value->pivot->qty,
                         'keterangan' => $value->pivot->keterangan,
                     ];
                 }
@@ -214,7 +214,7 @@ class PenunjukanPekerjaan extends Model
                     $item[$index++] = [
                         'id' => $value->id,
                         'nama' => $value->nama,
-                        'jumlah' => $value->pivot->qty,
+                        'jumlah' => (string) $value->pivot->qty,
                         'keterangan' => $value->pivot->keterangan,
                     ];
                 }
@@ -238,7 +238,7 @@ class PenunjukanPekerjaan extends Model
                     $item[$index++] = [
                         'id' => $value->id,
                         'nama' => $value->nama,
-                        'jumlah' => $value->pivot->qty,
+                        'jumlah' => (string) $value->pivot->qty,
                         'keterangan' => $value->pivot->keterangan,
                     ];
                 }

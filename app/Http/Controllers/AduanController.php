@@ -34,6 +34,16 @@ class AduanController extends Controller
             $query = $query->where('no_ticket', 'like', "%" . $search . "%")->orWhere('no_aduan', 'like', "%" . $search . "%");
         }
 
+        if (!auth()->user()->hasRole('superadmin')) {
+            if (!auth()->user()->hasRole('rekanan')) {
+                $query->where('wilayah_id', auth()->user()->karyawan->id_wilayah);
+            } else {
+                $rekanan_id = auth()->user()->id_rekanan;
+                $penunjukanAduan = PenunjukanPekerjaan::where('rekanan_id', $rekanan_id)->get()->pluck('aduan_id')->toArray();
+                $query->whereIn('id', $penunjukanAduan);
+            }
+        }
+
         $aduan = $query->orderBy('status', 'asc')->orderBy('created_at', 'desc')->paginate($limit);
         $count_aduan = $query->count();
         $no = $limit * ($aduan->currentPage() - 1);

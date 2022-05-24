@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\ExportTagihan;
 use App\Models\Item;
 use App\Models\Jenis;
+use App\Models\PelaksanaanPekerjaan;
 use App\Models\Rekanan;
 use App\Models\Satuan;
 use App\Models\Tagihan;
@@ -62,6 +63,12 @@ class TagihanController extends Controller
                 'alias'    => 'Nomor Tagihan',
                 'value'    => null
             ],
+            [
+                'name'    => 'created_at',
+                'input'    => 'daterange',
+                'alias'    => 'Tanggal',
+                'value'    => null
+            ],
         ];
     }
     public function configForm()
@@ -69,9 +76,201 @@ class TagihanController extends Controller
         return [];
     }
 
+    public function index()
+    {
+        //nama title
+        if (!isset($this->title)) {
+            $title =  ucwords($this->route);
+        } else {
+            $title =  ucwords($this->title);
+        }
+
+        //nama route
+        $route =  $this->route;
+
+        //nama relation
+        $relations =  $this->relations;
+
+        //nama jumlah pagination
+        $paginate =  $this->paginate;
+
+        //declare nilai serch pertama
+        $search = null;
+
+        //memanggil configHeaders
+        $configHeaders = $this->configHeaders();
+
+        //memangil model peratama
+        $query = $this->model()::query();
+
+        //button
+        $button = null;
+
+        //tambah data
+        $tambah = $this->tambah;
+
+        //tambah data
+        $upload = $this->upload;
+
+        $export = null;
+
+        if ($this->configButton()) {
+            $button = $this->configButton();
+        }
+        //mulai pencarian --------------------------------
+        $searches = $this->configSearch();
+        $searchValues = [];
+        $n = 0;
+        $countAll = 0;
+        $queryArray = [];
+
+        $queryRaw = '';
+
+        foreach ($searches as $key => $val) {
+            $search[$key] = request()->input($val['name']);
+            $hasilSearch[$val['name']] = $search[$key];
+
+            if ($search[$key]) {
+                if ($val['input'] != 'daterange') {
+                    # code...
+                    $searchValues[$key] = preg_split('/\s+/', $search[$key], -1, PREG_SPLIT_NO_EMPTY);
+
+                    if (count($searchValues[$key]) == 1) {
+                        foreach ($searchValues[$key] as $index => $value) {
+                            $query->where($val['name'], 'like', "%{$value}%");
+                            $countAll = $countAll + 1;
+                        }
+                    } else {
+                        $lastquery = '';
+
+                        foreach ($searchValues[$key] as $index => $word) {
+                            if (preg_match("/^[a-zA-Z0-9]+$/", $word) == 1) {
+
+                                if ($queryRaw) {
+                                    $count =  $this->model()->whereRaw(rtrim($queryRaw, " and"))->count();
+                                    if ($count > 0) {
+                                        $countAll = $countAll + 1;
+                                        $lastquery = $queryRaw;
+
+                                        $queryRaw .= $val['name'] . ' LIKE "%' . $word . '%" and ';
+                                        if ($this->model()->whereRaw(rtrim($queryRaw, " and"))->count() == 0) {
+                                            $queryRaw = $lastquery;
+                                        }
+                                    }
+                                } else {
+                                    $count =  $this->model()->where($val['name'], 'like', "%{$word}%")->count();
+                                    if ($count > 0) {
+                                        $countAll = $countAll + 1;
+
+                                        $queryRaw .= $val['name'] . ' LIKE "%' . $word . '%" and ';
+                                        continue;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if ($queryRaw) {
+                        $query->whereRaw(rtrim($queryRaw, " and "));
+                    }
+                    if (count($queryArray) > 0) {
+                        $query->where($queryArray);
+                    }
+                } else {
+                    $date = explode(' - ', request()->input($val['name']));
+                    $start = Carbon::parse($date[0])->format('Y-m-d') . ' 00:00:01';
+                    $end = Carbon::parse($date[1])->format('Y-m-d') . ' 23:59:59';
+                    $query = $query->whereBetween(DB::raw('DATE(' . $val['name'] . ')'), array($start, $end));
+
+                    $export .= 'from=' . $start . '&to=' . $end;
+                    $countAll = $countAll + 1;
+                }
+
+                if ($countAll == 0) {
+                    $query->where('id',  "");
+                }
+            }
+            $export .= $val['name'] . '=' . $search[$key] . '&';
+        }
+
+        // return $ayam;
+
+        //akhir pencarian --------------------------------
+        // relatio
+        // sort by
+        if ($this->user) {
+            if (!Auth::user()->hasRole('superadmin') && !Auth::user()->hasRole('admin')) {
+                $query->where('user_id', Auth::user()->id);
+            }
+        }
+        if ($this->sort) {
+            if ($this->desc) {
+                $data = $query->orderBy($this->sort, $this->desc);
+            } else {
+                $data = $query->orderBy($this->sort);
+            }
+        }
+
+        if (!auth()->user()->hasRole('superadmin')) {
+            if (!auth()->user()->hasRole('rekanan')) {
+                $list_rekanan_id = auth()->user()->karyawan->hasRekanan->pluck('id');
+                if ($list_rekanan_id) {
+                    $query->whereIn('rekanan_id', $list_rekanan_id);
+                } else {
+                    $query->where('wilayah_id', auth()->user()->karyawan->id_wilayah);
+                }
+            } else {
+                $rekanan_id = auth()->user()->id_rekanan;
+                $query->where('rekanan_id', $rekanan_id);
+            }
+        }
+        //mendapilkan data model setelah query pencarian
+        if ($paginate) {
+            $data = $query->paginate($paginate);
+        } else {
+            $data = $query->get();
+        }
+
+        // return $button;
+        $template = 'template.index';
+        if ($this->index) {
+            $template = $this->index . '.index';
+        }
+        // return  $export;
+
+        return view($template,  compact(
+            "title",
+            "data",
+            'searches',
+            'hasilSearch',
+            'button',
+            'tambah',
+            'upload',
+            'search',
+            'export',
+            'configHeaders',
+            'route'
+        ));
+    }
+
     public function show($slug)
     {
         $query =  Tagihan::whereSlug($slug);
+
+        if (!auth()->user()->hasRole('superadmin')) {
+            if (!auth()->user()->hasRole('rekanan')) {
+                $list_rekanan_id = auth()->user()->karyawan->hasRekanan->pluck('id');
+                if ($list_rekanan_id) {
+                    $query->whereIn('rekanan_id', $list_rekanan_id);
+                } else {
+                    $query->where('wilayah_id', auth()->user()->karyawan->id_wilayah);
+                }
+            } else {
+                $rekanan_id = auth()->user()->id_rekanan;
+                $query->where('rekanan_id', $rekanan_id);
+            }
+        }
+
         $tagihan = $query->with(['hasPelaksanaanPekerjaan' => function ($q) {
             $q->with('hasGalianPekerjaan')->orderBy('created_at', 'asc');
         }])->first();
@@ -96,6 +295,89 @@ class TagihanController extends Controller
         ));
     }
 
+    public function create()
+    {
+        //nama title
+        if (!isset($this->title)) {
+            $title =  "Tambah " . ucwords($this->route);
+        } else {
+            $title =  "Tambah " . ucwords($this->title);
+        }
+
+        //nama route dan action route
+        $route =  $this->route;
+        $store =  "store";
+
+        //memanggil config form
+        $form = $this->configform();
+
+        $count = count($form);
+
+        $colomField = $this->colomField($count);
+
+        $countColom = $this->countColom($count);
+        $countColomFooter = $this->countColomFooter($count);
+
+        $rekanan_id = auth()->user()->id_rekanan;
+
+        $query =  PelaksanaanPekerjaan::query();
+        if (!auth()->user()->hasRole('superadmin')) {
+            if (!auth()->user()->hasRole('rekanan')) {
+                $list_rekanan_id = auth()->user()->karyawan->hasRekanan->pluck('id');
+                if ($list_rekanan_id) {
+                    $query->whereIn('rekanan_id', $list_rekanan_id);
+                } else {
+                    $query->where('wilayah_id', auth()->user()->karyawan->id_wilayah);
+                }
+            } else {
+                $rekanan_id = auth()->user()->id_rekanan;
+                $query->where('rekanan_id', $rekanan_id);
+            }
+        }
+
+        // $hasValue = $this->hasValue;
+        $start = Carbon::now()->subMonths(2)->startOfMonth()->format('Y-m-d') . ' 00:00:01';
+        $end =  Carbon::now()->endOfMonth()->format('Y-m-d') . ' 23:59:59';
+        $query->whereBetween(DB::raw('DATE(tanggal_selesai)'), array($start, $end));
+        $penunjukan =  $query->get();
+
+        return view('tagihan.form', compact(
+            'title',
+            'form',
+            'countColom',
+            'colomField',
+            'penunjukan',
+            'countColomFooter',
+            'store',
+            'route'
+            // 'hasValue'
+        ));
+    }
+
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        // return $request;
+
+        DB::beginTransaction();
+        try {
+            //open model
+            DB::commit();
+            // $hasRalation;
+            //redirect
+            return redirect()->route($this->route . '.index')->with('message', ucwords(str_replace('-', ' ', $this->route)) . ' Berhasil Ditambahkan')->with('Class', 'success');
+        } catch (\Throwable $th) {
+            DB::rollback();
+
+            return redirect()->route($this->route . '.index')->with('message', ucwords(str_replace('-', ' ', $this->route)) . ' gagal Ditambahkan')->with('Class', 'success');
+        }
+    }
     /**
      * Show the form for creating a new resource.
      *

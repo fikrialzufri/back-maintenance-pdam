@@ -232,7 +232,7 @@
                                     <div>
                                         <textarea class="{{ $errors->has('detail_lokasi') ? 'form-control is-invalid' : 'form-control' }}"
                                             name="detail_lokasi" id="detail_lokasi" rows="10"
-                                            placeholder="detail_lokasi"
+                                            placeholder="Detail Lokasi"
                                             required>{{ old('detail_lokasi') }}</textarea>
                                     </div>
                                     @if ($errors->has('detail_lokasi'))

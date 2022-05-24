@@ -9,9 +9,11 @@
                 <div class="card">
                     <div class="card-header justify-content-between">
                         <h3 class="card-title">Daftar {{ $title }}</h3>
-                        <a href="{{ route($route . '.create') }}" class="btn btn-sm btn-primary float-right text-light">
-                            <i class="fa fa-plus"></i>Tambah Data
-                        </a>
+                        @can('create-aduan')
+                            <a href="{{ route($route . '.create') }}" class="btn btn-sm btn-primary float-right text-light">
+                                <i class="fa fa-plus"></i>Tambah Data
+                            </a>
+                        @endcan
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
@@ -28,8 +30,9 @@
                                     <th>Wilayah</th>
                                     <th>Lokasi</th>
                                     <th>Status</th>
-
-                                    <th class="text-center" width="5%">Aksi</th>
+                                    @canany(['create-aduan', 'delete-aduan'])
+                                        <th class="text-center" width="5%">Aksi</th>
+                                    @endcan
                                 </tr>
                             </thead>
                             <tbody>
@@ -46,22 +49,29 @@
                                         <td>{{ $item->lokasi }}</td>
                                         <td>{{ ucfirst($item->status) }}</td>
                                         @if ($item->status == 'draft')
-                                            <td class="text-center">
-                                                <a href="{{ route('aduan.edit', $item->slug) }}"
-                                                    class="btn btn-sm btn-warning text-light">
-                                                    <i class="nav-icon fas fa-edit"></i> Ubah</a>
-                                                <form id="form-{{ $item->slug }}"
-                                                    action="{{ route('aduan.destroy', $item->slug) }}" method="POST"
-                                                    style="display: none;">
-                                                    {{ csrf_field() }}
-                                                    {{ method_field('DELETE') }}
-                                                </form>
-                                                <button class="btn btn-danger btn-sm" data-toggle="tooltip"
-                                                    data-placement="top" title="Hapus"
-                                                    onclick=deleteconf("{{ $item->slug }}")>
-                                                    <i class="fa fa-trash"></i> Hapus
-                                                </button>
-                                            </td>
+                                            @canany(['create-aduan', 'delete-aduan'])
+                                                <td class="text-center">
+                                                    @can('create-aduan')
+                                                        <a href="{{ route('aduan.edit', $item->slug) }}"
+                                                            class="btn btn-sm btn-warning text-light">
+                                                            <i class="nav-icon fas fa-edit"></i> Ubah
+                                                        </a>
+                                                    @endcan
+                                                    @can('delete-aduan')
+                                                        <form id="form-{{ $item->slug }}"
+                                                            action="{{ route('aduan.destroy', $item->slug) }}" method="POST"
+                                                            style="display: none;">
+                                                            {{ csrf_field() }}
+                                                            {{ method_field('DELETE') }}
+                                                        </form>
+                                                        <button class="btn btn-danger btn-sm" data-toggle="tooltip"
+                                                            data-placement="top" title="Hapus"
+                                                            onclick=deleteconf("{{ $item->slug }}")>
+                                                            <i class="fa fa-trash"></i> Hapus
+                                                        </button>
+                                                    @endcan
+                                                </td>
+                                            @endcan
                                         @endif
                                     </tr>
                                 @empty
