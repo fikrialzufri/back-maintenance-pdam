@@ -46,18 +46,23 @@ class PenunjukanPekerjaanController extends Controller
         }
 
         if (!auth()->user()->hasRole('superadmin')) {
-            if (!auth()->user()->hasRole('rekanan')) {
-                $list_rekanan_id = auth()->user()->karyawan->hasRekanan->pluck('id');
-                if ($list_rekanan_id) {
-                    $penunjukanAduan = PenunjukanPekerjaan::whereIn('rekanan_id', $list_rekanan_id)->get()->pluck('aduan_id');
-                    $query->whereIn('id', $penunjukanAduan);
-                } else {
-                    $query->where('wilayah_id', auth()->user()->karyawan->id_wilayah);
-                }
-            } else {
+            if (auth()->user()->hasRole('rekanan')) {
                 $rekanan_id = auth()->user()->id_rekanan;
                 $penunjukanAduan = PenunjukanPekerjaan::where('rekanan_id', $rekanan_id)->get()->pluck('aduan_id')->toArray();
                 $query->whereIn('id', $penunjukanAduan);
+            } else {
+                $list_rekanan_id = auth()->user()->karyawan->hasRekanan->pluck('id');
+                if (count($list_rekanan_id) > 0) {
+                    $penunjukanAduan = PenunjukanPekerjaan::whereIn('rekanan_id', $list_rekanan_id)->get()->pluck('aduan_id');
+                    $query->whereIn('id', $penunjukanAduan);
+                } else {
+                    $id_wilayah = auth()->user()->karyawan->id_wilayah;
+                    $wilayah = Wilayah::find($id_wilayah);
+                    if ($wilayah->nama !== 'Wilayah Samarinda') {
+                        $query->where('wilayah_id', auth()->user()->karyawan->id_wilayah);
+                        return 1;
+                    }
+                }
             }
         }
 
@@ -134,40 +139,64 @@ class PenunjukanPekerjaanController extends Controller
             $listDokumentasi = Item::whereIn('jenis_id', $jenisDokumentasi)->get();
         }
 
-        $penunjukan = PenunjukanPekerjaan::where('aduan_id', $aduan->id)->first();
-        $query = PelaksanaanPekerjaan::where('penunjukan_pekerjaan_id', $penunjukan->id);
-        $pekerjaanUtama = $query->first();
+        $action = route('penunjukan_pekerjaan.store');
+        $rekanan_id  = null;
         $fotoBahan = [];
         $fotoPekerjaan = [];
         $fotoPenyelesaian = [];
-        if ($pekerjaanUtama) {
-            $fotoBahan = (object) $penunjukan->foto_bahan;
-            $fotoPekerjaan = (object) $penunjukan->foto_lokasi;
-            $fotoPenyelesaian = (object) $penunjukan->foto_penyelesaian;
+        $tombolEdit = '';
+        $pekerjaanUtama = [];
+        if ($aduan->status != 'draft') {
+            # code...
+            $penunjukan = PenunjukanPekerjaan::where('aduan_id', $aduan->id)->first();
+            $query = PelaksanaanPekerjaan::where('penunjukan_pekerjaan_id', $penunjukan->id);
+            $pekerjaanUtama = $query->first();
+            if ($pekerjaanUtama) {
+                $fotoBahan = (object) $penunjukan->foto_bahan;
+                $fotoPekerjaan = (object) $penunjukan->foto_lokasi;
+                $fotoPenyelesaian = (object) $penunjukan->foto_penyelesaian;
 
-            $daftarPekerjaan = $query->with(["hasItem" => function ($q) use ($listPekerjaan) {
-                $q->whereIn('item.id', $listPekerjaan->pluck('id'));
-            }])->first();
+                $daftarPekerjaan = $query->with(["hasItem" => function ($q) use ($listPekerjaan) {
+                    $q->whereIn('item.id', $listPekerjaan->pluck('id'));
+                }])->first();
 
-            $daftarBahan = $query->with(["hasItem" => function ($q) use ($listBahan) {
-                $q->whereIn('item.id', $listBahan->pluck('id'));
-            }])->first();
+                $daftarBahan = $query->with(["hasItem" => function ($q) use ($listBahan) {
+                    $q->whereIn('item.id', $listBahan->pluck('id'));
+                }])->first();
 
-            $daftarGalian = GalianPekerjaan::where('pelaksanaan_pekerjaan_id', $pekerjaanUtama->id)->get();
+                $daftarGalian = GalianPekerjaan::where('pelaksanaan_pekerjaan_id', $pekerjaanUtama->id)->get();
 
-            $daftarAlatBantu = $query->with(["hasItem" => function ($q) use ($listAlatBantu) {
-                $q->whereIn('item.id', $listAlatBantu->pluck('id'));
-            }])->first();
+                $daftarAlatBantu = $query->with(["hasItem" => function ($q) use ($listAlatBantu) {
+                    $q->whereIn('item.id', $listAlatBantu->pluck('id'));
+                }])->first();
 
-            $daftarTransportasi = $query->with(["hasItem" => function ($q) use ($listTransportasi) {
-                $q->whereIn('item.id', $listTransportasi->pluck('id'));
-            }])->first();
+                $daftarTransportasi = $query->with(["hasItem" => function ($q) use ($listTransportasi) {
+                    $q->whereIn('item.id', $listTransportasi->pluck('id'));
+                }])->first();
 
-            $daftarDokumentasi = $query->with(["hasItem" => function ($q) use ($listDokumentasi) {
-                $q->whereIn('item.id', $listDokumentasi->pluck('id'));
-            }])->first();
+                $daftarDokumentasi = $query->with(["hasItem" => function ($q) use ($listDokumentasi) {
+                    $q->whereIn('item.id', $listDokumentasi->pluck('id'));
+                }])->first();
 
-            $totalPekerjaan = $daftarPekerjaan->hasItem->sum('pivot.total') + $daftarBahan->hasItem->sum('pivot.total') + $daftarAlatBantu->hasItem->sum('pivot.total') + $daftarTransportasi->hasItem->sum('pivot.total') + $daftarDokumentasi->hasItem->sum('pivot.total') + $daftarGalian->sum('total');
+                $totalPekerjaan = $daftarPekerjaan->hasItem->sum('pivot.total') + $daftarBahan->hasItem->sum('pivot.total') + $daftarAlatBantu->hasItem->sum('pivot.total') + $daftarTransportasi->hasItem->sum('pivot.total') + $daftarDokumentasi->hasItem->sum('pivot.total') + $daftarGalian->sum('total');
+                // $action = route('penunjukan_pekerjaan.update');
+                $action = route('penunjukan_pekerjaan.update', $pekerjaanUtama->id);
+
+                if (auth()->user()->hasRole('staf-pengawas')) {
+                    if ($pekerjaanUtama->status !== 'dikoreksi' && $pekerjaanUtama->status  === 'selesi') {
+                        $tombolEdit = 'bisa';
+                    }
+                } else {
+                    if ($pekerjaanUtama->status !== 'selesai koreksi') {
+                        $tombolEdit = 'bisa';
+                    }
+                }
+            }
+
+
+            if (auth()->user()->hasRole('rekanan')) {
+                $rekanan_id = auth()->user()->id_rekanan;
+            }
         }
 
 
@@ -182,22 +211,17 @@ class PenunjukanPekerjaanController extends Controller
         }
 
         $title = 'Detail Aduan ' . $aduan->nomor_pekerjaan;
-        $action = route('penunjukan_pekerjaan.store');
+
 
         if ($aduan == null) {
             return redirect()->route('penunjukan_pekerjaan.index')->with('message', 'Data Aduan tidak ditemukan')->with('Class', 'primary');
         }
 
-        $rekanan_id  = null;
 
-        if (auth()->user()->hasRole('rekanan')) {
-            $rekanan_id = auth()->user()->id_rekanan;
-        }
-
-        // return $rekanan_id;
 
         return view('penunjukan_pekerjaan.show', compact(
             'aduan',
+            'action',
             'penunjukan',
             'pekerjaanUtama',
             'daftarPekerjaan',
@@ -221,6 +245,7 @@ class PenunjukanPekerjaanController extends Controller
             'fotoPekerjaan',
             'fotoPenyelesaian',
             'fotoBahan',
+            'tombolEdit',
             'action'
         ));
     }
@@ -284,6 +309,47 @@ class PenunjukanPekerjaanController extends Controller
         }
     }
 
+    public function update(Request $request, $id)
+    {
+        $status = 'dikoreksi';
+        $user = auth()->user()->id;
+        DB::beginTransaction();
+
+        $PelaksanaanPekerjaan  = PelaksanaanPekerjaan::find($id);
+
+
+        try {
+            DB::commit();
+            if ($PelaksanaanPekerjaan) {
+                $PelaksanaanPekerjaan->status = $status;
+                $PelaksanaanPekerjaan->save();
+                $PelaksanaanPekerjaan->hasUserMany()->sync($user);
+
+                $penunjukanPekerjaan = PenunjukanPekerjaan::find($PelaksanaanPekerjaan->penunjukan_pekerjaan_id);
+
+                if ($penunjukanPekerjaan) {
+                    $nomor_pekerjaan = $penunjukanPekerjaan->nomor_pekerjaan;
+                    $penunjukanPekerjaan->status = $status;
+                    $penunjukanPekerjaan->save();
+
+                    $penunjukanPekerjaan->hasUserMany()->sync($user);
+                    $rekanan = Rekanan::find($PelaksanaanPekerjaan->rekanan_id)->first();
+                    $title = "Pekerjaan Telah dikoreksi Pekerjaan Baru";
+                    $body = "SPK " . $nomor_pekerjaan . " telah dikoreksi";
+                    $modul = "penunjukan-pekerjaan";
+
+                    $this->notification($penunjukanPekerjaan->aduan_id, $penunjukanPekerjaan->slug, $title, $body, $modul, auth()->user()->id, $rekanan->hasUser->id);
+
+                    // return  $penunjukanPekerjaan;
+                    $message = 'Berhasil Mengoreksi Pelaksanaan Pekerjaan';
+                    return redirect()->route('penunjukan_pekerjaan.index')->with('message', $message)->with('Class', 'primary');
+                }
+            }
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return redirect()->route('penunjukan_pekerjaan.index')->with('message', 'Penunjukan pekerjaan gagal ditambah')->with('Class', 'danger');
+        }
+    }
     public function notifikasi($id)
     {
         $notifikasi = Notifikasi::where('modul_id', $id)->where('to_user_id', auth()->user()->id)->first();

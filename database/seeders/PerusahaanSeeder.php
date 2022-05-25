@@ -78,6 +78,11 @@ class PerusahaanSeeder extends Seeder
         $divisiDistribusi->departemen_id = $departemenTeknik->id;
         $divisiDistribusi->save();
 
+        $divisiPerencanaan = new Divisi();
+        $divisiPerencanaan->nama = 'Perencanaan';
+        $divisiPerencanaan->departemen_id = $departemenTeknik->id;
+        $divisiPerencanaan->save();
+
         $jabatanWilayahSatu = new Jabatan();
         $jabatanWilayahSatu->nama = 'Admin Wilayah Satu';
         $jabatanWilayahSatu->divisi_id = $divisiDistribusi->id;
@@ -107,6 +112,12 @@ class PerusahaanSeeder extends Seeder
         $jabatanManagerDistribusi->divisi_id = $divisiDistribusi->id;
         $jabatanManagerDistribusi->wilayah_id = $WilayahSamarinda->id;
         $jabatanManagerDistribusi->save();
+
+        $jabatanStafPerencanaan = new Jabatan();
+        $jabatanStafPerencanaan->nama = 'Staf Perencanaan';
+        $jabatanStafPerencanaan->divisi_id = $divisiPerencanaan->id;
+        $jabatanStafPerencanaan->wilayah_id = $WilayahSamarinda->id;
+        $jabatanStafPerencanaan->save();
 
         $jabatanAsistenManagerDistribusi = new Jabatan();
         $jabatanAsistenManagerDistribusi->nama = 'Asisten Manager Distribusi';

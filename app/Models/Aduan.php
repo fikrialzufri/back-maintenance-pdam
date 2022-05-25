@@ -106,6 +106,15 @@ class Aduan extends Model
         }
     }
 
+    public function getStatusAduanAttribute()
+    {
+        $status = $this->status;
+        if ($this->hasPenunjukanPekerjaan) {
+            $status = $this->hasPenunjukanPekerjaan->status;
+        }
+        return $status;
+    }
+
     public function getStatusMobileAttribute()
     {
         switch ($this->status) {

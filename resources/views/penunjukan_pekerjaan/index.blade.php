@@ -54,7 +54,7 @@
                                         <td>{{ $item->atas_nama }}</td>
                                         <td>{{ ucfirst($item->user) }}</td>
                                         <td>{{ $item->lokasi }}</td>
-                                        <td>{{ ucfirst($item->status) }}</td>
+                                        <td>{{ ucfirst($item->status_aduan) }}</td>
 
                                         <td class="text-center">
                                             <a href="{{ route('penunjukan_pekerjaan.show', $item->slug) }}"
