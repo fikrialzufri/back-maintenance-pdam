@@ -11,6 +11,7 @@ use App\Models\Rekanan;
 use App\Models\Satuan;
 use App\Models\Tagihan;
 use App\Models\TagihanItem;
+use App\Models\Wilayah;
 use App\Traits\CrudTrait;
 use Illuminate\Http\Request;
 use Excel;
@@ -52,6 +53,15 @@ class TagihanController extends Controller
             [
                 'name'    => 'status',
                 'alias'    => 'Status',
+            ],
+            [
+                'name'    => 'total_lokasi_pekerjaan',
+                'alias'    => 'Total Lokasi',
+            ],
+            [
+                'name'    => 'total_tagihan',
+                'input' => 'rupiah',
+                'alias'    => 'Total Lokasi',
             ],
         ];
     }
@@ -211,18 +221,23 @@ class TagihanController extends Controller
                 $data = $query->orderBy($this->sort);
             }
         }
-
         if (!auth()->user()->hasRole('superadmin')) {
-            if (!auth()->user()->hasRole('rekanan')) {
-                $list_rekanan_id = auth()->user()->karyawan->hasRekanan->pluck('id');
-                if ($list_rekanan_id) {
-                    $query->whereIn('rekanan_id', $list_rekanan_id);
-                } else {
-                    $query->where('wilayah_id', auth()->user()->karyawan->id_wilayah);
-                }
-            } else {
+            if (auth()->user()->hasRole('rekanan')) {
                 $rekanan_id = auth()->user()->id_rekanan;
-                $query->where('rekanan_id', $rekanan_id);
+                $penunjukanAduan = PenunjukanPekerjaan::where('rekanan_id', $rekanan_id)->get()->pluck('aduan_id')->toArray();
+                $query->whereIn('id', $penunjukanAduan);
+            } else {
+                $list_rekanan_id = auth()->user()->karyawan->hasRekanan->pluck('id');
+                if (count($list_rekanan_id) > 0) {
+                    $penunjukanAduan = PenunjukanPekerjaan::whereIn('rekanan_id', $list_rekanan_id)->get()->pluck('aduan_id');
+                    $query->whereIn('id', $penunjukanAduan);
+                } else {
+                    $id_wilayah = auth()->user()->karyawan->id_wilayah;
+                    $wilayah = Wilayah::find($id_wilayah);
+                    if ($wilayah->nama !== 'Wilayah Samarinda') {
+                        $query->where('wilayah_id', auth()->user()->karyawan->id_wilayah);
+                    }
+                }
             }
         }
         //mendapilkan data model setelah query pencarian
@@ -258,45 +273,53 @@ class TagihanController extends Controller
     {
         $query =  Tagihan::whereSlug($slug);
 
-        if (!auth()->user()->hasRole('superadmin')) {
-            if (!auth()->user()->hasRole('rekanan')) {
-                $list_rekanan_id = auth()->user()->karyawan->hasRekanan->pluck('id');
-                if ($list_rekanan_id) {
-                    $query->whereIn('rekanan_id', $list_rekanan_id);
-                } else {
-                    $query->where('wilayah_id', auth()->user()->karyawan->id_wilayah);
-                }
-            } else {
-                $rekanan_id = auth()->user()->id_rekanan;
-                $query->where('rekanan_id', $rekanan_id);
-            }
-        }
-
+        $nomor_tagihan = '';
+        $rekanan = '';
+        $tanggal_tagihan = '';
+        $total = 0;
+        $total_lokasi = 0;
+        $tagihanItem = [];
         $tagihan = $query->with(['hasPelaksanaanPekerjaan' => function ($q) {
             $q->with('hasGalianPekerjaan')->orderBy('created_at', 'asc');
         }])->first();
+        if ($tagihan) {
 
-        $pelaksanaan = $tagihan->hasPelaksanaanPekerjaan()->pluck('id')->toArray();
-        $title =  "Proses Tagihan Nomor :" . $tagihan->nomor_tagihan;
-        $filename =  "Tagihan Nomor :" . $tagihan->nomor_tagihan;
+            if (isset($tagihan->hasPelaksanaanPekerjaan)) {
+                $PelaksanaanPekerjaan = $tagihan->hasPelaksanaanPekerjaan();
+                if ($PelaksanaanPekerjaan) {
+                    $pelaksanaan = $PelaksanaanPekerjaan->pluck('id')->toArray();
+                }
+            }
+            $nomor_tagihan = $tagihan->nomor_tagihan;
+            $tagihanItem = TagihanItem::where('tagihan_id', $tagihan->id)->orderBy('urutan')->get();
+            $action = route('tagihan.store', $tagihan->id);
+            $total = $tagihanItem->sum('grand_total');
+            $total_lokasi = $tagihan->total_lokasi;
+            if (count($tagihanItem) === 0) {
+                $total = $tagihan->tagihan + $tagihan->galian;
+                $total_lokasi = $tagihan->total_lokasi_pekerjaan;
+            }
+            $tanggal_tagihan = tanggal_indonesia($tagihan->tanggal_tagihan);
+            $rekanan = $tagihan->rekanan;
+        }
+        $action = route('tagihan.store');
+        $title =  "Proses Tagihan Nomor :" .  $nomor_tagihan;
+        $filename =  "Tagihan Nomor :" .  $nomor_tagihan;
 
-        $tagihanItem = TagihanItem::where('tagihan_id', $tagihan->id)->orderBy('urutan')->get();
-        $action = route('tagihan.store', $tagihan->id);
         $dataitem = Item::all();
 
-        $total = $tagihanItem->sum('grand_total');
-
-        if (count($tagihanItem) === 0) {
-            $total = $tagihan->tagihan + $tagihan->galian;
-        }
 
         return view('tagihan.show', compact(
             'action',
             'title',
             'dataitem',
             'total',
+            'rekanan',
             'filename',
+            'total_lokasi',
+            'nomor_tagihan',
             'tagihanItem',
+            'tanggal_tagihan',
             'tagihan'
         ));
     }
@@ -328,16 +351,22 @@ class TagihanController extends Controller
 
         $query =  PelaksanaanPekerjaan::query();
         if (!auth()->user()->hasRole('superadmin')) {
-            if (!auth()->user()->hasRole('rekanan')) {
-                $list_rekanan_id = auth()->user()->karyawan->hasRekanan->pluck('id');
-                if ($list_rekanan_id) {
-                    $query->whereIn('rekanan_id', $list_rekanan_id);
-                } else {
-                    $query->where('wilayah_id', auth()->user()->karyawan->id_wilayah);
-                }
-            } else {
+            if (auth()->user()->hasRole('rekanan')) {
                 $rekanan_id = auth()->user()->id_rekanan;
-                $query->where('rekanan_id', $rekanan_id);
+                $penunjukanAduan = PenunjukanPekerjaan::where('rekanan_id', $rekanan_id)->get()->pluck('aduan_id')->toArray();
+                $query->whereIn('id', $penunjukanAduan);
+            } else {
+                $list_rekanan_id = auth()->user()->karyawan->hasRekanan->pluck('id');
+                if (count($list_rekanan_id) > 0) {
+                    $penunjukanAduan = PenunjukanPekerjaan::whereIn('rekanan_id', $list_rekanan_id)->get()->pluck('aduan_id');
+                    $query->whereIn('id', $penunjukanAduan);
+                } else {
+                    $id_wilayah = auth()->user()->karyawan->id_wilayah;
+                    $wilayah = Wilayah::find($id_wilayah);
+                    if ($wilayah->nama !== 'Wilayah Samarinda') {
+                        $query->where('wilayah_id', auth()->user()->karyawan->id_wilayah);
+                    }
+                }
             }
         }
 
@@ -370,7 +399,6 @@ class TagihanController extends Controller
     public function store(Request $request)
     {
         // return $request;
-        $rekanan_id = auth()->user()->id_rekanan;
         $pelaksanaan = $request->pelaksanaan;
         $tanggal_tagihan = Carbon::now();
         $tagihan = $this->model()->count();
@@ -383,7 +411,15 @@ class TagihanController extends Controller
             $nomor_tagihan =  $no . "/" . "BAPP-KJB/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
         }
 
-
+        if (!auth()->user()->hasRole('superadmin')) {
+            if (auth()->user()->hasRole('rekanan')) {
+                $rekanan_id = auth()->user()->id_rekanan;
+            } else {
+                $PelaksanaanPekerjaan = PelaksanaanPekerjaan::whereIn('id', $pelaksanaan)
+                    ->where('tagihan', 'tidak')->first();
+                $rekanan_id =  $PelaksanaanPekerjaan->rekanan_id;
+            }
+        }
         DB::beginTransaction();
         try {
             DB::commit();

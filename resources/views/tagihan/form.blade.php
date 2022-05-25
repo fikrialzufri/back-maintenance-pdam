@@ -30,7 +30,6 @@
                                         <th>Tanggal Mulai</th>
                                         <th>Tanggal Selesai</th>
                                         <th>Lokasi</th>
-                                        <th class="text-center" width="10%">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -51,16 +50,7 @@
                                             </td>
                                             <td>{{ $item->lokasi }}</td>
 
-                                            <td class="text-center">
-                                                <a href="{{ route('penunjukan_pekerjaan.show', $item->slug) }}"
-                                                    class="btn btn-sm {{ $item->status == 'draft' ? 'btn-primary' : 'btn-success' }} text-light">
-                                                    @if ($item->status == 'draft')
-                                                        <i class="nav-icon fas fa-eye"></i> Proses
-                                                    @else
-                                                        <i class="nav-icon fa fa-search"></i> Detail
-                                                    @endif
-                                                </a>
-                                            </td>
+
                                         </tr>
                                     @empty
                                         <tr>

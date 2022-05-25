@@ -60,7 +60,6 @@ class PenunjukanPekerjaanController extends Controller
                     $wilayah = Wilayah::find($id_wilayah);
                     if ($wilayah->nama !== 'Wilayah Samarinda') {
                         $query->where('wilayah_id', auth()->user()->karyawan->id_wilayah);
-                        return 1;
                     }
                 }
             }
@@ -183,16 +182,15 @@ class PenunjukanPekerjaanController extends Controller
                 $action = route('penunjukan_pekerjaan.update', $pekerjaanUtama->id);
 
                 if (auth()->user()->hasRole('staf-pengawas')) {
-                    if ($pekerjaanUtama->status !== 'dikoreksi' && $pekerjaanUtama->status  === 'selesi') {
+                    if ($pekerjaanUtama->status  === 'selesai') {
                         $tombolEdit = 'bisa';
                     }
                 } else {
-                    if ($pekerjaanUtama->status !== 'selesai koreksi') {
+                    if ($pekerjaanUtama->status === 'dikoreksi') {
                         $tombolEdit = 'bisa';
                     }
                 }
             }
-
 
             if (auth()->user()->hasRole('rekanan')) {
                 $rekanan_id = auth()->user()->id_rekanan;
@@ -311,11 +309,18 @@ class PenunjukanPekerjaanController extends Controller
 
     public function update(Request $request, $id)
     {
-        $status = 'dikoreksi';
         $user = auth()->user()->id;
         DB::beginTransaction();
-
         $PelaksanaanPekerjaan  = PelaksanaanPekerjaan::find($id);
+        if (auth()->user()->hasRole('staf-pengawas')) {
+
+            $status = 'dikoreksi';
+        } else {
+            if ($PelaksanaanPekerjaan->status === 'dikoreksi') {
+                $status = 'selesai koreksi';
+                $PelaksanaanPekerjaan->keterangan_barang = '';
+            }
+        }
 
 
         try {

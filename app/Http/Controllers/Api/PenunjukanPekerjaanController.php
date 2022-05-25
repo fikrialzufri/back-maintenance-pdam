@@ -66,7 +66,7 @@ class PenunjukanPekerjaanController extends Controller
                     $query->whereBetween('tanggal_selesai', [$start, $end]);
                     // where('status',  $status);
                     if ($status != '') {
-                        $query = $query->where('status',  $status);
+                        $x = $query->where('status',  $status);
                     }
                 });
         }
@@ -74,7 +74,7 @@ class PenunjukanPekerjaanController extends Controller
 
 
         if ($slug) {
-            $data = $query->with('hasAduan')->orderBy('status', 'ASC')->orderBy('created_at')->first();
+            $data = $query->with('hasAduan')->orderBy('status', 'ASC')->orderBy('created_at', 'desc')->first();
             if (!$data) {
                 $message = 'Data Penunjukan Pekerjaan Belum Ada';
             } else {
@@ -102,13 +102,14 @@ class PenunjukanPekerjaanController extends Controller
                     'item_transportasi' =>  $data->list_transportasi,
                     'sumber_informasi' =>  $data->sumber_informasi,
                     'keterangan_aduan' =>  $data->keterangan_aduan,
+                    'keterangan_barang' =>  $data->keterangan_barang,
                     'keterangan_penyelesaian' =>  $data->keterangan_penyelesaian,
                     'created_at' =>  $data->created_at,
                     'status_mobile' =>  $data->status_mobile,
                 ];
             }
         } else {
-            $data = $query->orderBy('status', 'ASC')->orderBy('created_at')->get();
+            $data = $query->orderBy('status', 'ASC')->orderBy('created_at', 'desc')->get();
             if (count($data) == 0) {
                 $message = 'Data Penunjukan Pekerjaan Belum Ada';
             }

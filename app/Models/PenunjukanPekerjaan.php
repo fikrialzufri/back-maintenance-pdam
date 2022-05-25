@@ -129,6 +129,13 @@ class PenunjukanPekerjaan extends Model
         }
     }
 
+    public function getKeteranganBarangAttribute()
+    {
+        if ($this->hasPelaksanaanPekerjaan) {
+            return $this->hasPelaksanaanPekerjaan->keterangan_barang;
+        }
+    }
+
     public function getTanggalSelesaiAttribute()
     {
         if ($this->hasPelaksanaanPekerjaan) {

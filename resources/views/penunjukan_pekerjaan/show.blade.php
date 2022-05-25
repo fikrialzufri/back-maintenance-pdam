@@ -279,7 +279,6 @@
                                         </form>
                                     @endif
                                 @endif
-                                {{ $pekerjaanUtama->status }}
                                 <table class="table table-bordered " width="100%" id="tablePekerjaan">
                                     <thead>
                                         <tr>
@@ -886,8 +885,7 @@
                                         @if (isset($daftarAlatBantu->hasItem))
                                             @forelse ($daftarAlatBantu->hasItem as $key => $alatbantu)
                                                 <tr id="listAlat_bantu_{{ $alatbantu->id }}" class="list_table_alat_bantu">
-                                                    <td class="text-center nomor_alat_bantu"
-                                                        data-index="{{ $key + 1 }}">
+                                                    <td class="text-center nomor_alat_bantu" data-index="{{ $key + 1 }}">
                                                         {{ $key + 1 }}
                                                     </td>
                                                     <td>

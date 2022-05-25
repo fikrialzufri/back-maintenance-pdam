@@ -7,6 +7,7 @@ use App\Models\Aduan;
 use App\Models\GalianPekerjaan;
 use App\Models\Item;
 use App\Models\Jenis;
+use App\Models\Kategori;
 use App\Models\PelaksanaanPekerjaan;
 use App\Models\PenunjukanPekerjaan;
 use App\Models\Satuan;
@@ -280,6 +281,7 @@ class PelaksanaanPekerjaanController extends Controller
             }
 
             $data->status = $status;
+            $data->keterangan_barang = $request->keterangan;
             $data->save();
             $message = 'Berhasil Menyimpan Bahan Pelaksanaan Pekerjaan';
             return $this->sendResponse($data, $message, 200);
@@ -308,21 +310,21 @@ class PelaksanaanPekerjaanController extends Controller
         $user_id = auth()->user()->id;
         $keterangan = $request->keterangan;
         $user = [];
+        $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $slug)->first();
+        $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->first();
+
+        if ($data->status == 'selesai') {
+            $message = "Pekerjaan sudah selesai";
+            $response = [
+                'success' => false,
+                'message' => $message,
+                'code' => '409'
+            ];
+            return $this->sendError($response, $message, 409);
+        }
+
         try {
             DB::commit();
-            $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $slug)->first();
-            $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->first();
-
-            if ($data->status == 'selesai') {
-                $message = "Pekerjaan sudah selesai";
-                $response = [
-                    'success' => false,
-                    'message' => $message,
-                    'code' => '409'
-                ];
-                return $this->sendError($response, $message, 409);
-            }
-
             $data->status = $status;
             $data->tanggal_selesai = Carbon::now();
             $data->keterangan = $keterangan;
@@ -349,8 +351,34 @@ class PelaksanaanPekerjaanController extends Controller
                 $item->save();
             }
 
-            $stafPengawas = Auth::user()->hasRekanan->hasKaryawan;
 
+            $stafPengawas = Auth::user()->hasRekanan->hasKaryawan;
+            $fotolokasi = $penunjukanPekerjaan->foto_lokasi;
+
+
+            $kategoriDokumentasi = Kategori::whereSlug('dokumentasi')->first();
+            if ($kategoriDokumentasi) {
+                $jenisDokumentasi = Jenis::where('kategori_id', $kategoriDokumentasi->id)->get()->pluck('id');
+                $listDokumentasi = Item::whereIn('jenis_id', $jenisDokumentasi)->first();
+                if (count($fotolokasi) > 0) {
+
+                    if (now()->format('H:i') >= '18:01') {
+                        $harga = $item->harga_malam;
+                    } else {
+                        $harga = $item->harga;
+                    }
+                    $total = 1 * $harga;
+
+                    $listitem[$listDokumentasi->id] = [
+                        'keterangan' => $keterangan,
+                        'harga' => $harga,
+                        'qty' => 1,
+                        'total' => $total,
+                    ];
+
+                    $data->hasItem()->attach($listitem);
+                }
+            }
 
             $title = "Pengerjaan Telah selesai";
             $body = "Dengan nomor SPK : " . $penunjukanPekerjaan->nomor_pekerjaan . " telah selesai";
@@ -463,23 +491,25 @@ class PelaksanaanPekerjaanController extends Controller
             $listitem = [];
             $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $slug)->first();
             $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->with('hasItem')->first();
-
+            $harga = 0;
             if ($id_barang != '') {
                 $item = Item::find($id_barang);
-
-                $total = $jumlah * $item->harga;
-
+                if (now()->format('H:i') >= '18:01') {
+                    $harga = $item->harga;
+                } else {
+                    $harga = $item->harga_malam;
+                }
+                $total = $jumlah * $harga;
                 $listitem[$item->id] = [
                     'keterangan' => $keterangan,
-                    'harga' => $item->harga,
+                    'harga' => $harga,
                     'qty' => $jumlah,
                     'total' => $total,
                 ];
 
                 $data->hasItem()->attach($listitem);
-                $result = [];
                 $message = 'Berhasil Menyimpan Item Pekerjaan';
-                return $this->sendResponse($result, $message, 200);
+                return $this->sendResponse($data, $message, 200);
             }
         } catch (\Throwable $th) {
             DB::rollback();
@@ -554,7 +584,15 @@ class PelaksanaanPekerjaanController extends Controller
         $item = $request->id_item;
 
         $dataItem = Item::find($item);
-        $harga_item = $dataItem->harga;
+
+        if (now()->format('H:i') >= '18:01') {
+            $harga_item = $dataItem->harga_malam;
+            $harga = 'malam';
+        } else {
+            $harga = 'siang';
+            $harga_item = $dataItem->harga;
+        }
+
 
         $total = ($panjang * $lebar * $dalam) * $harga_item;
         $keterangan = $request->keterangan;
@@ -572,6 +610,7 @@ class PelaksanaanPekerjaanController extends Controller
             $gajian->lebar = $lebar;
             $gajian->dalam = $dalam;
             $gajian->keterangan = $keterangan;
+            $gajian->harga = $harga;
             $gajian->item_id = $item;
             $gajian->total = $total;
             $gajian->user_id = $user_id;

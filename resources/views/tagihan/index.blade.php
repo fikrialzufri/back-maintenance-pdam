@@ -12,14 +12,16 @@
                         </h3>
                         {{ $data->appends(request()->input())->links() }}
                         <div>
-                            <a href="{{ route($route . '.create') }}"
-                                class="btn btn-sm btn-primary float-right text-light">
-                                <i class="fa fa-plus"></i>Tambah Data
-                            </a>
-                            <a href="{{ route($route . '.upload') }}"
-                                class="btn btn-sm btn-warning float-right text-light mr-5">
-                                <i class="fa fa-file"></i> Upload
-                            </a>
+                            @can('create-tagihan')
+                                <a href="{{ route($route . '.create') }}"
+                                    class="btn btn-sm btn-primary float-right text-light">
+                                    <i class="fa fa-plus"></i>Tambah Data
+                                </a>
+                                <a href="{{ route($route . '.upload') }}"
+                                    class="btn btn-sm btn-warning float-right text-light mr-5">
+                                    <i class="fa fa-file"></i> Upload
+                                </a>
+                            @endcan
                         </div>
 
                     </div>
@@ -60,6 +62,7 @@
                                             <th>{{ ucfirst($header['name']) }}</th>
                                         @endif
                                     @endforeach
+
                                     <th class="text-center">Aksi</th>
                                 </tr>
                             </thead>
