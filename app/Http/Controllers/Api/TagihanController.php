@@ -193,6 +193,36 @@ class TagihanController extends Controller
         }
     }
 
+    public function show()
+    {
+        $slug = request()->slug;
+        $data = $this->model()->whereSlug($slug)->first();
+        $result = [
+            'id' =>  $data->id,
+            'nomor_tagihan' =>  $data->nomor_tagihan,
+            'rekanan' =>  $data->rekanan,
+            'total' =>  $data->total_tagihan,
+            'tanggal_tagihan' =>  isset($data->tanggal_tagihan) ?  tanggal_indonesia($data->tanggal_tagihan) : '',
+            'slug' =>  $data->slug,
+            'list_pekerjaan' =>  $data->list_pekerjaan,
+            'total_lokasi' =>  $data->total_lokasi_pekerjaan,
+            'list_persetujuhan' =>  $data->hasUserMany,
+            'status' =>  $data->status,
+            'status_mobile' =>  $data->status_mobile,
+        ];
+        $message = 'Pekerjaan ada';
+        return $this->sendResponse($result, $message, 200);
+        try { } catch (\Throwable $th) {
+            $message = 'Pekerjaan tidak ada';
+            $response = [
+                'success' => false,
+                'message' => $message,
+                'code' => '404'
+            ];
+            return $this->sendError($response, $th, 404);
+        }
+    }
+
 
     public function model()
     {

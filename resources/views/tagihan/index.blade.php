@@ -83,19 +83,16 @@
                                                 <td>{{ $item[$header['name']] }}</td>
                                             @endif
                                         @endforeach
-                                        <td>
-                                            {{ $item->belum_adjust }}
-                                        </td>
                                         <td class="text-center">
-                                            @if (isset($button))
-                                                @foreach ($button as $key => $val)
-                                                    @include('template.button')
-                                                @endforeach
-                                            @endif
                                             <a href="{{ route($route . '.show', $item->slug) }}"
                                                 class="btn btn-sm btn-primary text-light" data-toggle="tooltip"
                                                 data-placement="top" title="Proses">
-                                                <i class="nav-icon fas fa-edit"></i> Proses
+                                                <i class="nav-icon fas fa-edit"></i>
+                                                @if (!auth()->user()->hasRole('rekanan'))
+                                                    Proses
+                                                @else
+                                                    Rician
+                                                @endif
                                             </a>
 
                                         </td>

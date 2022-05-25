@@ -90,9 +90,13 @@
                                     Kencana
                                     Samarinda
                                     Periode bulan, {{ $bulan }} {{ date('Y') }} di wilayah I,II,III sebanyak
-                                    {{ $tagihan->total_lokasi }}
+                                    {{ $total_lokasi }}
                                     Lokasi, kami mengajukan Permohonan
                                     Pembayaran atas pekerjaan tersebut senilai Rp. {{ format_uang($total_tagihan) }}.
+                                    <i>
+
+                                        ({{ strtoupper(terbilang($total_tagihan)) }} RUPIAH)
+                                    </i>
                                     Demikian
                                     Permohonan
                                     ini
@@ -115,88 +119,80 @@
                                 <span
                                     style='font-size:16px;line-height:107%;font-family:"Times New Roman",serif;'>&nbsp;</span>
                             </p>
-                            <table style="border-collapse:collapse;border:none;">
+                            <table style="border: none;width:98.44%;border-collapse:collapse;">
                                 <tbody>
                                     <tr>
-                                        <td style="width: 48.472%; border: none; padding: 0cm 5.4pt; vertical-align: top;">
-                                            <p
-                                                style='margin-right:0cm;margin-left:  0cm;font-size:16px;font-family:"Times New Roman",serif;margin:0cm;margin-top:0cm;margin-bottom:8.0pt;line-height:106%;'>
-                                            </p>
-                                        </td>
+                                        <td style="width: 58.48%;padding: 0cm 5.4pt;vertical-align: top;"><br></td>
                                         <td
-                                            style="width: 51.2957%; border-top: none; border-right: none; border-bottom: none; border-image: initial; border-left: none; padding: 0cm 5.4pt; vertical-align: top;">
+                                            style="width: 41.52%;padding: 0cm 5.4pt;border-image: initial;vertical-align: top;">
                                             <p
-                                                style='margin-right:0cm;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;margin:0cm;margin-top:0cm;margin-bottom:8.0pt;text-align:center;line-height:106%;'>
+                                                style='margin-right:0cm;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;margin:0cm;margin-top:0cm;margin-bottom:8.0pt;text-align:center;line-height:105%;'>
                                                 Hormat Kami,</p>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td
-                                            style="width: 48.472%; border-right: none; border-bottom: none; border-left: none; border-image: initial; border-top: none; padding: 0cm 5.4pt; vertical-align: top;">
+                                            style="width: 58.48%;padding: 0cm 5.4pt;border-image: initial;vertical-align: top;">
                                             <p
-                                                style='margin-right:0cm;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;margin:0cm;margin-top:0cm;margin-bottom:8.0pt;text-align:center;line-height:106%;'>
+                                                style='margin-right:0cm;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;margin:0cm;margin-top:0cm;margin-bottom:8.0pt;text-align:center;line-height:105%;'>
                                                 &nbsp;</p>
                                         </td>
-                                        <td
-                                            style="width: 51.2957%; border-top: none; border-left: none; border-bottom: none; border-right: none; padding: 0cm 5.4pt; vertical-align: top;">
+                                        <td style="width: 41.52%;padding: 0cm 5.4pt;vertical-align: top;">
                                             <p
-                                                style='margin-right:0cm;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;margin:0cm;margin-top:0cm;margin-bottom:8.0pt;text-align:center;line-height:106%;'>
-                                                Samarinda, {{ $now }}</p>
+                                                style='margin-right:0cm;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;margin:0cm;margin-top:0cm;margin-bottom:8.0pt;text-align:center;line-height:105%;'>
+                                                Samarinda,{{ $now }}</p>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td
-                                            style="width: 48.472%; border-right: none; border-bottom: none; border-left: none; border-image: initial; border-top: none; padding: 0cm 5.4pt; vertical-align: top;">
+                                            style="width: 58.48%;padding: 0cm 5.4pt;border-image: initial;vertical-align: top;">
                                             <p
-                                                style='margin-right:0cm;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;margin:0cm;margin-top:0cm;margin-bottom:8.0pt;text-align:center;line-height:106%;'>
+                                                style='margin-right:0cm;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;margin:0cm;margin-top:0cm;margin-bottom:8.0pt;text-align:center;line-height:105%;'>
                                                 &nbsp;</p>
                                         </td>
-                                        <td
-                                            style="width: 51.2957%; border-top: none; border-left: none; border-bottom: none; border-right: none; padding: 0cm 5.4pt; vertical-align: top;">
+                                        <td style="width: 41.52%;padding: 0cm 5.4pt;vertical-align: top;">
                                             <p
-                                                style='margin-right:0cm;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;margin:0cm;margin-top:0cm;margin-bottom:8.0pt;text-align:center;line-height:106%;'>
-                                                &nbsp;</p>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td
-                                            style="width: 48.472%; border-right: none; border-bottom: none; border-left: none; border-image: initial; border-top: none; padding: 0cm 5.4pt; vertical-align: top;">
-                                            <p
-                                                style='margin-right:0cm;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;margin:0cm;margin-top:0cm;margin-bottom:8.0pt;text-align:center;line-height:106%;'>
-                                                &nbsp;</p>
-                                        </td>
-                                        <td
-                                            style="width: 51.2957%; border-top: none; border-left: none; border-bottom: none; border-right: none; padding: 0cm 5.4pt; vertical-align: top;">
-                                            <p
-                                                style='margin-right:0cm;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;margin:0cm;margin-top:0cm;margin-bottom:8.0pt;text-align:center;line-height:106%;'>
+                                                style='margin-right:0cm;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;margin:0cm;margin-top:0cm;margin-bottom:8.0pt;text-align:center;line-height:105%;'>
                                                 &nbsp;</p>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td style="width: 48.472%; border: none; padding: 0cm 5.4pt; vertical-align: top;">
+                                        <td
+                                            style="width: 58.48%;padding: 0cm 5.4pt;border-image: initial;vertical-align: top;">
                                             <p
-                                                style='margin-right:0cm;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;margin:0cm;margin-top:0cm;margin-bottom:8.0pt;text-align:center;line-height:106%;'>
+                                                style='margin-right:0cm;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;margin:0cm;margin-top:0cm;margin-bottom:8.0pt;text-align:center;line-height:105%;'>
                                                 &nbsp;</p>
                                         </td>
-                                        <td style="width: 51.4119%; border: none; padding: 0cm 5.4pt; vertical-align: top;">
+                                        <td style="width: 41.52%;padding: 0cm 5.4pt;vertical-align: top;">
                                             <p
-                                                style='margin-right:0cm;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;margin:0cm;margin-top:0cm;margin-bottom:8.0pt;text-align:center;line-height:106%;'>
+                                                style='margin-right:0cm;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;margin:0cm;margin-top:0cm;margin-bottom:8.0pt;text-align:center;line-height:105%;'>
+                                                &nbsp;</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 58.48%;padding: 0cm 5.4pt;vertical-align: top;">
+                                            <p
+                                                style='margin-right:0cm;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;margin:0cm;margin-top:0cm;margin-bottom:8.0pt;text-align:center;line-height:105%;'>
+                                                &nbsp;</p>
+                                        </td>
+                                        <td style="width: 41.52%;padding: 0cm 5.4pt;vertical-align: top;">
+                                            <p
+                                                style='margin-right:0cm;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;margin:0cm;margin-top:0cm;margin-bottom:8.0pt;text-align:center;line-height:105%;'>
                                                 Direktur</p>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td style="width: 48.472%; border: none; padding: 0cm 5.4pt; vertical-align: top;">
+                                        <td style="width: 58.48%;padding: 0cm 5.4pt;vertical-align: top;">
                                             <p
-                                                style='margin-right:0cm;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;margin:0cm;margin-top:0cm;margin-bottom:8.0pt;text-align:center;line-height:106%;'>
+                                                style='margin-right:0cm;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;margin:0cm;margin-top:0cm;margin-bottom:8.0pt;text-align:center;line-height:105%;'>
                                                 &nbsp;</p>
                                         </td>
-                                        <td style="width: 51.4119%; border: none; padding: 0cm 5.4pt; vertical-align: top;">
+                                        <td style="width: 41.52%;padding: 0cm 5.4pt;vertical-align: top;">
                                             <p
                                                 style='margin-right:0cm;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;margin:0cm;text-align:center;'>
-                                                <span>{{ $tagihan->direktur }}</span>
-                                            </p>
+                                                {{ $tagihan->direktur }}</p>
                                             <p
-                                                style='margin-right:0cm;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;margin:0cm;margin-top:0cm;margin-bottom:8.0pt;text-align:center;line-height:106%;'>
+                                                style='margin-right:0cm;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;margin:0cm;margin-top:0cm;margin-bottom:8.0pt;text-align:center;line-height:105%;'>
                                                 &nbsp;</p>
                                         </td>
                                     </tr>
@@ -205,7 +201,7 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                        <a href="#" class="btn btn-primary" id="word-export"><span class="nav-icon fa fa-file-word"
+                        <a href="" class="btn btn-primary" id="word-export"><span class="nav-icon fa fa-file-word"
                                 aria-hidden="true"></span>
                             Export Tagihan</a>
                     </div>

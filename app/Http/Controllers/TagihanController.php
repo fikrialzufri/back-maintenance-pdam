@@ -6,6 +6,7 @@ use App\Exports\ExportTagihan;
 use App\Models\Item;
 use App\Models\Jenis;
 use App\Models\PelaksanaanPekerjaan;
+use App\Models\PenunjukanPekerjaan;
 use App\Models\Rekanan;
 use App\Models\Satuan;
 use App\Models\Tagihan;
@@ -274,6 +275,7 @@ class TagihanController extends Controller
         $tagihan = $query->with(['hasPelaksanaanPekerjaan' => function ($q) {
             $q->with('hasGalianPekerjaan')->orderBy('created_at', 'asc');
         }])->first();
+
         $pelaksanaan = $tagihan->hasPelaksanaanPekerjaan()->pluck('id')->toArray();
         $title =  "Proses Tagihan Nomor :" . $tagihan->nomor_tagihan;
         $filename =  "Tagihan Nomor :" . $tagihan->nomor_tagihan;
@@ -283,6 +285,10 @@ class TagihanController extends Controller
         $dataitem = Item::all();
 
         $total = $tagihanItem->sum('grand_total');
+
+        if (count($tagihanItem) === 0) {
+            $total = $tagihan->tagihan + $tagihan->galian;
+        }
 
         return view('tagihan.show', compact(
             'action',
@@ -338,7 +344,7 @@ class TagihanController extends Controller
         // $hasValue = $this->hasValue;
         $start = Carbon::now()->subMonths(2)->startOfMonth()->format('Y-m-d') . ' 00:00:01';
         $end =  Carbon::now()->endOfMonth()->format('Y-m-d') . ' 23:59:59';
-        $query->whereBetween(DB::raw('DATE(tanggal_selesai)'), array($start, $end));
+        $query->where('tagihan', 'tidak')->whereBetween(DB::raw('DATE(tanggal_selesai)'), array($start, $end));
         $penunjukan =  $query->get();
 
         return view('tagihan.form', compact(
@@ -364,13 +370,52 @@ class TagihanController extends Controller
     public function store(Request $request)
     {
         // return $request;
+        $rekanan_id = auth()->user()->id_rekanan;
+        $pelaksanaan = $request->pelaksanaan;
+        $tanggal_tagihan = Carbon::now();
+        $tagihan = $this->model()->count();
+
+        if ($tagihan >= 1) {
+            $no = str_pad($tagihan + 1, 4, "0", STR_PAD_LEFT);
+            $nomor_tagihan =  $no . "/" . "BAPP-KJB/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
+        } else {
+            $no = str_pad(1, 4, "0", STR_PAD_LEFT);
+            $nomor_tagihan =  $no . "/" . "BAPP-KJB/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
+        }
+
 
         DB::beginTransaction();
         try {
-            //open model
             DB::commit();
-            // $hasRalation;
-            //redirect
+            $data = $this->model();
+            $data->nomor_tagihan = $nomor_tagihan;
+            $data->tanggal_tagihan = $tanggal_tagihan;
+            $data->rekanan_id = $rekanan_id;
+            $data->user_id = auth()->user()->id;
+            $data->status = 'dikirim';
+            $data->save();
+
+            foreach ($pelaksanaan as $value) {
+                $PelaksanaanPekerjaan = PelaksanaanPekerjaan::where('id', $value)
+                    ->where('tagihan', 'tidak')
+                    ->where(
+                        'rekanan_id',
+                        $rekanan_id
+                    )->first();
+
+                if ($PelaksanaanPekerjaan) {
+                    $PelaksanaanPekerjaan->tagihan = 'ya';
+                    $PelaksanaanPekerjaan->save();
+                }
+                $penunjukanPekerjaan = PenunjukanPekerjaan::where('id', $PelaksanaanPekerjaan->penunjukan_pekerjaan)->where('tagihan', 'tidak')->first();
+                if ($penunjukanPekerjaan) {
+                    $penunjukanPekerjaan->tagihan = 'ya';
+                    $penunjukanPekerjaan->save();
+                }
+            }
+
+            $data->hasPelaksanaanPekerjaan()->sync($pelaksanaan);
+
             return redirect()->route($this->route . '.index')->with('message', ucwords(str_replace('-', ' ', $this->route)) . ' Berhasil Ditambahkan')->with('Class', 'success');
         } catch (\Throwable $th) {
             DB::rollback();
@@ -734,15 +779,26 @@ class TagihanController extends Controller
     {
         $id = request()->get('id') ?: "";
         $tagihan = Tagihan::find($id);
-        $total_tagihan = TagihanItem::where('tagihan_id', $tagihan->id)->sum('grand_total');
+        $TagihanItem = TagihanItem::where('tagihan_id', $tagihan->id)->get();
+
         $filename =  "Tagihan Rekenan " . $tagihan->rekanan . " Nomor " . $tagihan->nomor_tagihan;
         $title =  "Priview Tagihan : " . $tagihan->nomor_tagihan;
         $bulan = bulan_indonesia(Carbon::parse($tagihan->tanggal_adjust));
         $tanggal = tanggal_indonesia(Carbon::parse($tagihan->tanggal_adjust));
         $now = tanggal_indonesia(Carbon::now(), false);
+
+        if (count($TagihanItem) == 0) {
+            $total_lokasi = $tagihan->total_lokasi_pekerjaan;
+            $total_tagihan = $tagihan->total_tagihan;
+        } else {
+            $total_lokasi = $tagihan->total_lokasi;
+            $total_tagihan = $TagihanItem->sum('grand_total');
+        }
+
         return view('tagihan.word', compact(
             "title",
             "total_tagihan",
+            "total_lokasi",
             "filename",
             "bulan",
             "now",

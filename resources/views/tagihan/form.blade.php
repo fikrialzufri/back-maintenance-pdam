@@ -12,8 +12,8 @@
                 {{ csrf_field() }}
                 @if ($store == 'update')
                     {{ method_field('PUT') }}
+                    <input type="text" name="tagihan_id" value="{{ $data->id }}">
                 @endif
-
                 <div class="col-md-12">
                     <div class="card">
                         <!-- /.card-header -->
@@ -22,7 +22,8 @@
                             <table class="table table-bordered table-responsive" width="100%">
                                 <thead>
                                     <tr>
-                                        <th>#</th>
+                                        <th>Centang Semua <input type="checkbox" name="pelaksanaan_all" id="pelaksanaan_all"
+                                                class="checkAll" value=""></th>
                                         <th>No.</th>
                                         <th>Nomor SPK</th>
                                         <th>Rekanan</th>
@@ -34,10 +35,11 @@
                                 </thead>
                                 <tbody>
                                     @forelse ($penunjukan as $index => $item)
-                                        <tr class="{{ $item->keterangan_barang != null ? 'bg-danger' : '' }}">
-                                            <td>
-                                                <input type="checkbox" name="pelaksanaan" id="pelaksanaan"
-                                                    value="{{ $item->id }}">
+                                        <tr
+                                            class="{{ $item->keterangan_barang != null ? 'bg-danger' : '' }} list_pelaksanaan">
+                                            <td class="text-center">
+                                                <input type="checkbox" name="pelaksanaan[]" id="pelaksanaan"
+                                                    class="check" value="{{ $item->id }}">
                                             </td>
                                             <td>{{ $index + 1 }}
                                             </td>
@@ -92,5 +94,25 @@
 @endsection
 
 @push('script')
-    <script></script>
+    <script>
+        $(".checkAll").on('change', function() {
+            if ($(this).is(':checked')) {
+                $(".check" + this.value).prop('checked', true);
+            } else {
+                $(".check" + this.value).prop('checked', false);
+            }
+        });
+
+        $(".check").on('click', function() {
+            var header = $(this).attr('class');
+            var classParent = header.replace(" check", "");
+            var countChecked = $('.' + classParent + ':checked').length;
+            var countList = $('.list_pelaksanaan').length;
+            if (countList == countChecked) {
+                $(".checkAll").prop('checked', true);
+            } else {
+                $(".checkAll").prop('checked', false);
+            }
+        });
+    </script>
 @endpush

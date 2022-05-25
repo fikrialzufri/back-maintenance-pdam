@@ -121,9 +121,7 @@ trait CrudTrait
         $n = 0;
         $countAll = 0;
         $queryArray = [];
-
         $queryRaw = '';
-
         foreach ($searches as $key => $val) {
             $search[$key] = request()->input($val['name']);
             $hasilSearch[$val['name']] = $search[$key];

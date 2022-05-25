@@ -26,6 +26,17 @@
                                 <div class="col-2">
                                     <div class="form-group">
                                         <div>
+                                            <label for="NoTagihan" class=" form-control-label">Total Lokasi</label>
+                                        </div>
+                                        <div>
+                                            <input type="text" name="no_tagihan" id="No Tagihan" placeholder="No Tagihan "
+                                                class="form-control" readonly value="{{ $tagihan->total_lokasi }}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-2">
+                                    <div class="form-group">
+                                        <div>
                                             <label for="NoTagihan" class=" form-control-label">Tanggal Tagihan</label>
                                         </div>
                                         <div>
@@ -49,17 +60,6 @@
                                 <div class="col-2">
                                     <div class="form-group">
                                         <div>
-                                            <label for="rekanan" class=" form-control-label">Rekanan</label>
-                                        </div>
-                                        <div>
-                                            <input type="text" name="rekanan" id="rekanan" placeholder="Rekanan "
-                                                class="form-control" readonly value="{{ $tagihan->hasTagihanItem }}">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-2">
-                                    <div class="form-group">
-                                        <div>
                                             <label for="total_tagihan" class=" form-control-label">Total Tagihan</label>
                                         </div>
                                         <div class="input-group mb-2 mr-sm-2">
@@ -71,62 +71,33 @@
                                         </div>
                                     </div>
                                 </div>
-                                {{-- <div class="col-2">
-                                    <div class="form-group">
-                                        <div>
-                                            <label for="tagihan" class=" form-control-label">Total Tagihan Galian</label>
-                                        </div>
-                                        <div class="input-group mb-2 mr-sm-2">
-                                            <div class="input-group-prepend">
-                                                <div class="input-group-text">Rp.</div>
-                                            </div>
-                                            <input type="text" name="tagihan" id="tagihan" placeholder=""
-                                                class="form-control" readonly
-                                                value="{{ format_uang($tagihan->galian) }}">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-2">
-                                    <div class="form-group">
-                                        <div>
-                                            <label for="tagihan" class=" form-control-label">Grand Total Tagihan</label>
-                                        </div>
-                                        <div class="input-group mb-2 mr-sm-2">
-                                            <div class="input-group-prepend">
-                                                <div class="input-group-text">Rp.</div>
-                                            </div>
-                                            <input type="text" name="tagihan" id="tagihan" placeholder=""
-                                                class="form-control" readonly
-                                                value="{{ format_uang($tagihan->tagihan + $tagihan->galian) }}">
-                                        </div>
-                                    </div>
-                                </div> --}}
-
 
 
 
                             </div>
                             @foreach ($tagihan->hasPelaksanaanPekerjaan as $key => $item)
                                 <div>
+                                    <hr>
+                                    <hr>
                                     <label for="rekanan" class=" form-control-label">
                                         <h3>Pekerjaan :
-                                            {{ $item->No_Spk }}</h3>
+                                            {{ $item->No_Spk }} </h3>
                                     </label>
+
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-7">
+                                    <div class="col-md-12">
                                         <div>
-                                            <span>Daftar Item</span>
+                                            <span>Daftar Pekerjaan</span>
                                             <table class="table table-bordered " width="100%">
                                                 <thead>
                                                     <tr>
                                                         <th width="5">#</th>
                                                         <th>Nama</th>
-                                                        <th>Jenis barang</th>
+                                                        <th>Jenis Pekerjaan</th>
                                                         <th width="10">Jumlah</th>
                                                         <th>Harga</th>
                                                         <th>Total Harga</th>
-                                                        <th class="text-center" width="10">Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -180,15 +151,6 @@
                                                                 </td>
                                                             @endif
 
-                                                            <td class="text-center">
-                                                                @if ($barang->pivot->harga == 0)
-                                                                    <button class="btn btn-warning btn-sm"
-                                                                        data-toggle="tooltip" data-placement="top"
-                                                                        title="Ubah">
-                                                                        <i class="nav-icon fas fa-edit"></i> Ubah
-                                                                    </button>
-                                                                @endif
-                                                            </td>
                                                         </tr>
                                                     @empty
                                                         <tr>
@@ -198,10 +160,10 @@
                                                 </tbody>
                                                 <tfoot>
                                                     <tr>
-                                                        <th colspan="3">Grand Total
+                                                        <th colspan="3">Total
                                                         </th>
                                                         <th>{{ $item->hasItem->sum('pivot.qty') }}</th>
-                                                        <th>Rp. {{ format_uang($item->hasItem->sum('pivot.harga')) }}
+                                                        <th>
                                                         </th>
                                                         <th>Rp. {{ format_uang($item->total_harga) }}
                                                         </th>
@@ -211,33 +173,42 @@
                                             </table>
                                         </div>
                                     </div>
-                                    <div class="col-md-5">
+                                    <div class="col-md-12">
                                         <div>
-                                            <span>Daftar Galian</span>
+                                            <span>Daftar Pekerjaan Galian</span>
                                             <table class="table table-bordered " width="100%">
                                                 <thead>
                                                     <tr>
                                                         <th width="5">#</th>
+                                                        <th>Pekerjaan</th>
                                                         <th width="10">Panjang</th>
                                                         <th width="10">Lebar</th>
                                                         <th width="10">Dalam</th>
+                                                        <th width="10">Volume</th>
                                                         <th>Total Harga</th>
-                                                        <th>Bongkaran</th>
-                                                        <th>Keterangan</th>
+
                                                     </tr>
                                                 </thead>
                                                 <tbody>
+
                                                     @forelse ($item->hasGalianPekerjaan as $key => $value)
+                                                        @php
+                                                            $sum = 0;
+                                                        @endphp
                                                         <tr>
                                                             <td>{{ $key + 1 }}
                                                             </td>
+                                                            <td>{{ $value->pekerjaan }}</td>
                                                             <td>{{ $value->panjang }} m</td>
                                                             <td>{{ $value->lebar }} m</td>
                                                             <td>{{ $value->dalam }} m</td>
+                                                            <td>{{ $value->panjang * $value->lebar * $value->dalam }}
+                                                                m<sup>2</sup>
+                                                            </td>
                                                             <td>Rp. {{ format_uang($value->total) }}</td>
-                                                            <td>{{ $value->bongkaran }}</td>
-                                                            <td>{{ $value->keterangan }}</td>
-
+                                                            @php
+                                                                $sum += $value->panjang * $value->lebar * $value->dalam;
+                                                            @endphp
                                                         </tr>
                                                     @empty
                                                         <tr>
@@ -245,171 +216,39 @@
                                                         </tr>
                                                     @endforelse
                                                 </tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <th colspan="5"> Total
+                                                        </th>
+                                                        <th>
+                                                            {{ $item->luas_galian }} m<sup>2</sup>
+                                                        </th>
+                                                        <th>Rp.
+                                                            {{ format_uang($item->hasGalianPekerjaan->sum('total')) }}
+                                                        </th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th colspan="6"> Grand Total
+                                                        </th>
+                                                        <th>Rp.
+                                                            {{ format_uang($item->total_pekerjaan) }}
+                                                        </th>
+                                                    </tr>
+                                                </tfoot>
+
                                             </table>
                                         </div>
                                     </div>
                                 </div>
                             @endforeach
-
                         </div>
 
                         <!-- /.card-body -->
-                        <div class="card-footer clearfix">
-                            <button type="submit" class="btn btn-primary">Simpan</button>
-                        </div>
-                    </form>
-                </div>
-                <!-- ./col -->
-            </div>
-            @if (isset($tagihanItem))
-                <div class="col-md-12">
-                    <div class="card">
-                        <!-- /.card-header -->
-                        <div class="card-body">
-                            <table class="table table-bordered table-responsive" width="100%" id="tableDokumentasi">
-                                <thead>
-                                    <tr>
-                                        <th width="5">#</th>
-                                        <th width="5">No Pekerjaan</th>
-                                        <th width="150">Uraian Rekanan</th>
-                                        <th width="10%">Master Uraian</th>
-                                        <th width="10">Jenis Pekerjaan</th>
-                                        <th width="5">Jenis Harga</th>
-                                        <th width="120">Harga Rekanan</th>
-                                        <th width="120">Harga Master</th>
-                                        <th width="5" class="text-center">Jumlah</th>
-                                        <th width="120">Total</th>
-                                        <th width="100">Tanggal Adjust</th>
-                                        <th width="120">Harga Adjust</th>
-                                        <th width="10">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @if (isset($tagihanItem))
-                                        @forelse ($tagihanItem as $key => $tagihanItem)
-                                            <tr class="{{ $tagihanItem->selisih == 'ya' ? 'bg-danger' : '' }}"
-                                                id="listtagihan_{{ $tagihanItem->id }}"
-                                                data-tagihan_id="{{ $tagihanItem->id }}"
-                                                data-master="{{ $tagihanItem->master }}"
-                                                data-jenis_harga="{{ $tagihanItem->jenis_harga }}"
-                                                data-jumlah="{{ $tagihanItem->jumlah }}" class="list_table_tagihan">
-                                                <td class="text-center nomor_tagihan" data-index="{{ $key + 1 }}">
-                                                    {{ $key + 1 }}
-                                                </td>
-                                                <td>
-                                                    {{ $tagihanItem->no_pekerjaan }}
-                                                </td>
-                                                <td>
-                                                    {{ $tagihanItem->uraian }}
-                                                </td>
-                                                <td>
-                                                    <span class="ubah_pekerjaan" data-tagihan_id="{{ $tagihanItem->id }}"
-                                                        data-master="{{ $tagihanItem->master }}"
-                                                        data-jenis_harga="{{ $tagihanItem->jenis_harga }}"
-                                                        data-item_id="{{ $tagihanItem->jenis_harga }}"
-                                                        data-jumlah="{{ $tagihanItem->jumlah }}" role="button"
-                                                        id="nama_master_tagihan_{{ $tagihanItem->id }}">
-
-                                                        {{ $tagihanItem->master }}
-                                                    </span>
-                                                </td>
-
-                                                <td id="jenis_{{ $tagihanItem->id }}">
-                                                    {{ $tagihanItem->item_jenis }}
-                                                </td>
-                                                <td>
-                                                    {{ $tagihanItem->jenis_harga }}
-                                                </td>
-                                                <td>
-                                                    Rp. {{ format_uang($tagihanItem->harga_uraian) }}
-                                                </td>
-                                                <td>
-                                                    Rp. {{ format_uang($tagihanItem->harga_master) }}
-                                                </td>
-                                                <td id="jumlah_{{ $tagihanItem->id }}" class="text-center">
-                                                    {{ $tagihanItem->jumlah }}
-                                                </td>
-                                                <td>
-                                                    <span id="total_tagihan_{{ $tagihanItem->id }}">
-                                                        Rp. {{ format_uang($tagihanItem->grand_total) }}
-                                                    </span>
-
-                                                    <input type="hidden" name="total_tagihan_value_"
-                                                        class="total_tagihan_value"
-                                                        value="{{ $tagihanItem->grand_total }}"
-                                                        id="total_tagihan_value_{{ $tagihanItem->id }}">
-                                                </td>
-                                                <td id="tanggal_adjust_{{ $tagihanItem->id }}">
-
-                                                    {{ $tagihanItem->tanggal_adjust_indo }}
-
-                                                </td>
-                                                <td>
-
-                                                    <div class="form-group">
-                                                        <div class="input-group mb-2 mr-sm-2">
-                                                            <input type="text" name="harga_adjust"
-                                                                id="harga_adjus_{{ $tagihanItem->id }}"
-                                                                placeholder="Harga"
-                                                                value="{{ format_uang($tagihanItem->total_adjust) }}"
-                                                                class="form-control">
-                                                        </div>
-                                                    </div>
-                                                    @push('script')
-                                                        <script>
-                                                            $('#harga_adjus_' + '{{ $tagihanItem->id }}').on("input keyup paste", function() {
-                                                                harga = this.value.split('.').join('');
-                                                                $('#harga_adjus_' + '{{ $tagihanItem->id }}').val(harga);
-                                                                let val = formatRupiah(this.value, ' ');
-                                                                $('#harga_adjus_' + '{{ $tagihanItem->id }}').val(val);
-                                                            });
-                                                        </script>
-                                                    @endpush
-                                                </td>
-                                                <td>
-                                                    <button type="buttom" id="btn_adjust_{{ $tagihanItem->id }}"
-                                                        data-tagihan_id="{{ $tagihanItem->id }}"
-                                                        data-item_id="{{ $tagihanItem->item_id }}"
-                                                        data-jumlah="{{ $tagihanItem->jumlah }}"
-                                                        class="btn btn-primary btn_adjust">Ubah</button>
-                                                </td>
-
-                                            </tr>
-                                        @empty
-                                            <tr class="tagihanTidakAda">
-                                                <td colspan="10">Data tagihan tidak ada</td>
-                                            </tr>
-                                        @endforelse
-                                    @else
-                                        <tr class="tagihanTidakAda">
-                                            <td colspan="10">Data tagihan tidak ada</td>
-                                        </tr>
-                                    @endif
-                                </tbody>
-                                <tfoot>
-                                    @if (isset($tagihanItem))
-                                        <tr>
-                                            <th colspan="8" class="text-right">Grand Total
-                                            </th>
-                                            <th class="text-center">
-                                                {{ $tagihanItem->sum('jumlah') }}
-                                            </th>
-                                            <th>
-                                                <span id="grand_total_tagihan_tampil">
-                                                    Rp.
-                                                    {{ format_uang($total) }}
-                                                </span>
-                                                <input type="hidden" id="grand_total_tagihan_value"
-                                                    name="grand_total_tagihan" value="{{ $total }}"
-                                                    class="grand_total_tagihan">
-                                            </th>
-
-                                        </tr>
-                                    @endif
-                                </tfoot>
-
-                            </table>
-                        </div>
+                        @if (!auth()->user()->hasRole('rekanan'))
+                            <div class="card-footer clearfix">
+                                <button type="submit" class="btn btn-primary">Setujui</button>
+                            </div>
+                        @endif
                         <div class="card-footer clearfix">
                             <a href="{{ route('tagihan.excel') }}?id={{ $tagihan->id }}" class="btn btn-success"><span
                                     class="nav-icon fa fa-file-excel" aria-hidden="true"></span> Export Excel Tagihan</a>
@@ -418,10 +257,173 @@
                                 class="btn btn-danger"><span class="nav-icon fa fa-file-word" aria-hidden="true"></span>
                                 Privew Tagihan</a>
                         </div>
-                    </div>
-                    <!-- ./col -->
+                    </form>
                 </div>
-            @endif
+                <!-- ./col -->
+            </div>
+            @isset($tagihanItem)
+                @if (count($tagihanItem) > 0)
+                    <div class="col-md-12">
+                        <div class="card">
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                <table class="table table-bordered table-responsive" width="100%" id="tableDokumentasi">
+                                    <thead>
+                                        <tr>
+                                            <th width="5">#</th>
+                                            <th width="5">No Pekerjaan</th>
+                                            <th width="150">Uraian Rekanan</th>
+                                            <th width="10%">Master Uraian</th>
+                                            <th width="10">Jenis Pekerjaan</th>
+                                            <th width="5">Jenis Harga</th>
+                                            <th width="120">Harga Rekanan</th>
+                                            <th width="120">Harga Master</th>
+                                            <th width="5" class="text-center">Jumlah</th>
+                                            <th width="120">Total</th>
+                                            <th width="100">Tanggal Adjust</th>
+                                            <th width="120">Harga Adjust</th>
+                                            <th width="10">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (isset($tagihanItem))
+                                            @forelse ($tagihanItem as $key => $tagihanItem)
+                                                <tr class="{{ $tagihanItem->selisih == 'ya' ? 'bg-danger' : '' }}"
+                                                    id="listtagihan_{{ $tagihanItem->id }}"
+                                                    data-tagihan_id="{{ $tagihanItem->id }}"
+                                                    data-master="{{ $tagihanItem->master }}"
+                                                    data-jenis_harga="{{ $tagihanItem->jenis_harga }}"
+                                                    data-jumlah="{{ $tagihanItem->jumlah }}" class="list_table_tagihan">
+                                                    <td class="text-center nomor_tagihan" data-index="{{ $key + 1 }}">
+                                                        {{ $key + 1 }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $tagihanItem->no_pekerjaan }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $tagihanItem->uraian }}
+                                                    </td>
+                                                    <td>
+                                                        <span class="ubah_pekerjaan" data-tagihan_id="{{ $tagihanItem->id }}"
+                                                            data-master="{{ $tagihanItem->master }}"
+                                                            data-jenis_harga="{{ $tagihanItem->jenis_harga }}"
+                                                            data-item_id="{{ $tagihanItem->jenis_harga }}"
+                                                            data-jumlah="{{ $tagihanItem->jumlah }}" role="button"
+                                                            id="nama_master_tagihan_{{ $tagihanItem->id }}">
+
+                                                            {{ $tagihanItem->master }}
+                                                        </span>
+                                                    </td>
+
+                                                    <td id="jenis_{{ $tagihanItem->id }}">
+                                                        {{ $tagihanItem->item_jenis }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $tagihanItem->jenis_harga }}
+                                                    </td>
+                                                    <td>
+                                                        Rp. {{ format_uang($tagihanItem->harga_uraian) }}
+                                                    </td>
+                                                    <td>
+                                                        Rp. {{ format_uang($tagihanItem->harga_master) }}
+                                                    </td>
+                                                    <td id="jumlah_{{ $tagihanItem->id }}" class="text-center">
+                                                        {{ $tagihanItem->jumlah }}
+                                                    </td>
+                                                    <td>
+                                                        <span id="total_tagihan_{{ $tagihanItem->id }}">
+                                                            Rp. {{ format_uang($tagihanItem->grand_total) }}
+                                                        </span>
+
+                                                        <input type="hidden" name="total_tagihan_value_"
+                                                            class="total_tagihan_value"
+                                                            value="{{ $tagihanItem->grand_total }}"
+                                                            id="total_tagihan_value_{{ $tagihanItem->id }}">
+                                                    </td>
+                                                    <td id="tanggal_adjust_{{ $tagihanItem->id }}">
+
+                                                        {{ $tagihanItem->tanggal_adjust_indo }}
+
+                                                    </td>
+                                                    <td>
+
+                                                        <div class="form-group">
+                                                            <div class="input-group mb-2 mr-sm-2">
+                                                                <input type="text" name="harga_adjust"
+                                                                    id="harga_adjus_{{ $tagihanItem->id }}"
+                                                                    placeholder="Harga"
+                                                                    value="{{ format_uang($tagihanItem->total_adjust) }}"
+                                                                    class="form-control">
+                                                            </div>
+                                                        </div>
+                                                        @push('script')
+                                                            <script>
+                                                                $('#harga_adjus_' + '{{ $tagihanItem->id }}').on("input keyup paste", function() {
+                                                                    harga = this.value.split('.').join('');
+                                                                    $('#harga_adjus_' + '{{ $tagihanItem->id }}').val(harga);
+                                                                    let val = formatRupiah(this.value, ' ');
+                                                                    $('#harga_adjus_' + '{{ $tagihanItem->id }}').val(val);
+                                                                });
+                                                            </script>
+                                                        @endpush
+                                                    </td>
+                                                    <td>
+                                                        <button type="buttom" id="btn_adjust_{{ $tagihanItem->id }}"
+                                                            data-tagihan_id="{{ $tagihanItem->id }}"
+                                                            data-item_id="{{ $tagihanItem->item_id }}"
+                                                            data-jumlah="{{ $tagihanItem->jumlah }}"
+                                                            class="btn btn-primary btn_adjust">Ubah</button>
+                                                    </td>
+
+                                                </tr>
+                                            @empty
+                                                <tr class="tagihanTidakAda">
+                                                    <td colspan="10">Data tagihan tidak ada</td>
+                                                </tr>
+                                            @endforelse
+                                        @else
+                                            <tr class="tagihanTidakAda">
+                                                <td colspan="10">Data tagihan tidak ada</td>
+                                            </tr>
+                                        @endif
+                                    </tbody>
+                                    <tfoot>
+                                        @if (isset($tagihanItem))
+                                            <tr>
+                                                <th colspan="8" class="text-right">Grand Total
+                                                </th>
+                                                <th class="text-center">
+                                                    {{ $tagihanItem->sum('jumlah') }}
+                                                </th>
+                                                <th>
+                                                    <span id="grand_total_tagihan_tampil">
+                                                        Rp.
+                                                        {{ format_uang($total) }}
+                                                    </span>
+                                                    <input type="hidden" id="grand_total_tagihan_value"
+                                                        name="grand_total_tagihan" value="{{ $total }}"
+                                                        class="grand_total_tagihan">
+                                                </th>
+
+                                            </tr>
+                                        @endif
+                                    </tfoot>
+
+                                </table>
+                            </div>
+                            <div class="card-footer clearfix">
+                                <a href="{{ route('tagihan.excel') }}?id={{ $tagihan->id }}" class="btn btn-success"><span
+                                        class="nav-icon fa fa-file-excel" aria-hidden="true"></span> Export Excel Tagihan</a>
+
+                                <a href="{{ route('tagihan.word') }}?id={{ $tagihan->id }}" target="_blank"
+                                    class="btn btn-danger"><span class="nav-icon fa fa-file-word" aria-hidden="true"></span>
+                                    Privew Tagihan</a>
+                            </div>
+                        </div>
+                        <!-- ./col -->
+                    </div>
+                @endif
+            @endisset
             <!-- /.row -->
             <!-- Main row  dataitem-->
             <!-- /.row (main row) -->

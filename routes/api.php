@@ -24,7 +24,6 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('logout', [AuthController::class, 'logout'])->name('auth.logout');
     Route::get('me', AuthController::class . '@me')->name('auth.me');
     Route::get('refresh', AuthController::class . '@refresh')->name('auth.refresh');
-    Route::get('refresh', AuthController::class . '@refresh')->name('auth.refresh');
 
     // Item
     Route::get('item', ItemController::class . '@index')->name('item.api.index');
@@ -80,6 +79,9 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('list-pekerjaan-rekanan', PelaksanaanPekerjaanController::class . '@index')->name('pelaksanaan.api.index');
 
     Route::get('list-tagihan', TagihanController::class . '@index')->name('tagihan.api.index');
+
+    // tagiahan
+    Route::get('tagihan', TagihanController::class . '@show')->name('tagihan.api.show');
 
     Route::post('simpan-tagihan', TagihanController::class . '@store')->name('tagihan.api.store');
 

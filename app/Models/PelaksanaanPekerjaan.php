@@ -67,6 +67,17 @@ class PelaksanaanPekerjaan extends Model
         }
     }
 
+    public function getLuasGalianAttribute()
+    {
+        $total = 0;
+        if ($this->hasGalianPekerjaan) {
+            foreach ($this->hasGalianPekerjaan as $key => $value) {
+                $total += $value->panjang * $value->lebar * $value->dalam;
+            }
+        }
+        return $total;
+    }
+
     public function hasGalianPekerjaan()
     {
         return $this->hasMany(GalianPekerjaan::class, 'pelaksanaan_pekerjaan_id');
@@ -108,6 +119,19 @@ class PelaksanaanPekerjaan extends Model
 
         return $harga;
     }
+
+
+
+
+    public function getTotalPekerjaanAttribute()
+    {
+        $total = 0;
+        if ($this->total_galian && $this->total_harga) {
+            $total = $this->total_galian + $this->total_harga;
+        }
+        return $total;
+    }
+
 
 
     public function hasUserMany()

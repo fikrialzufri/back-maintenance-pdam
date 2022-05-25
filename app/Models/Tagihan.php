@@ -138,6 +138,41 @@ class Tagihan extends Model
         return $total;
     }
 
+    public function getTotalTagihanAttribute()
+    {
+        $total = 0;
+        if ($this->tagihan && $this->galian) {
+            $total = $this->tagihan + $this->galian;
+        }
+        return $total;
+    }
+
+    public function getTotalLokasiPekerjaanAttribute()
+    {
+        $counttotal = 0;
+        if ($this->hasPelaksanaanPekerjaan) {
+            $counttotal = count($this->hasPelaksanaanPekerjaan);
+        }
+        return $counttotal;
+    }
+
+    public function getListPekerjaanAttribute()
+    {
+        $result = [];
+        if ($this->hasPelaksanaanPekerjaan) {
+            foreach ($this->hasPelaksanaanPekerjaan as $key => $value) {
+                # code...
+                $result[$key] = [
+                    'slug' => $value->hasPenunjukanPekerjaan->slug,
+                    'tanggal_mulai' => $value->hasPenunjukanPekerjaan->tanggal_mulai,
+                    'tanggal_selesai' => $value->hasPenunjukanPekerjaan->tanggal_selesai
+                ];
+            }
+        }
+        return $result;
+    }
+
+
 
     public function hasUserMany()
     {

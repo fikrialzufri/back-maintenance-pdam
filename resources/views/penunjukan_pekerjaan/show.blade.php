@@ -1306,8 +1306,7 @@
         <div class="row">
             <div class="col-12">
                 <div class="card">
-                    <button type="submit" id="btn_pekerjaan" class="btn btn-primary">Update Semua
-                        Pekerjaan</button>
+                    <button type="submit" id="btn_pekerjaan" class="btn btn-primary">Simpan Koreksi Pekerjaan</button>
                 </div>
             </div>
         </div>

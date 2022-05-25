@@ -132,24 +132,14 @@ class AuthController extends Controller
         $user =  Auth::user();
         $user->tokens()->delete();
 
-        $dataRole = [];
-        $dataPermission = [];
-
-        foreach ($user->role as $key => $value) {
-            $dataRole[$key] = $value->slug;
-            foreach ($value->permissions as $index => $item) {
-                $dataPermission[$index] = $item->slug;
-            }
-        }
         $token = $user->createToken("access_token")
             ->plainTextToken;
+
         $result = [
-            'user' => $user,
-            'role' => $dataRole,
             'token' => $token
         ];
 
-        $message = 'resfresh token';
+        $message = 'refresh token';
         return $this->sendResponse($result, $message, 200);
     }
 
