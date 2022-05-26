@@ -17,10 +17,12 @@
                                     class="btn btn-sm btn-primary float-right text-light">
                                     <i class="fa fa-plus"></i>Tambah Data
                                 </a>
-                                <a href="{{ route($route . '.upload') }}"
-                                    class="btn btn-sm btn-warning float-right text-light mr-5">
-                                    <i class="fa fa-file"></i> Upload
-                                </a>
+                                @if (!auth()->user()->hasRole('rekanan'))
+                                    <a href="{{ route($route . '.upload') }}"
+                                        class="btn btn-sm btn-warning float-right text-light mr-5">
+                                        <i class="fa fa-file"></i> Upload
+                                    </a>
+                                @endif
                             @endcan
                         </div>
 
