@@ -17,7 +17,7 @@
     <div class="sidebar-content">
         <div class="nav-container">
             <nav id="main-menu-navigation" class="navigation-main">
-                <div class="nav-item {{ $segment1 == 'home' ? 'active' : '' }}">
+                <div class="nav-item {{ $segment1 == '' ? 'active' : '' }}">
                     <a href="{{ route('home') }}">
                         <i class="ik ik-bar-chart-2"></i>
                         <span>{{ __('Dashboard') }}</span>

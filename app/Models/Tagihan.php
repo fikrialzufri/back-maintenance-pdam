@@ -115,12 +115,16 @@ class Tagihan extends Model
     {
         $danger = '';
         $user = auth()->user()->id;
-
-        if ($this->hasUserMany) {
-            foreach ($this->hasUserMany as $key => $value) {
-                if ($value->id ==  $user) {
-                    $danger = 'bg-danger';
+        if (!auth()->user()->hasRole('rekanan')) {
+            $danger = 'bg-danger';
+            if ($this->hasUserMany) {
+                foreach ($this->hasUserMany as $key => $value) {
+                    if ($value->id ==  $user) {
+                        $danger = '';
+                    }
                 }
+            } else {
+                $danger = 'bg-danger';
             }
         }
         return $danger;
