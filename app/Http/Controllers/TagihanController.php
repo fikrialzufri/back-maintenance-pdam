@@ -224,18 +224,12 @@ class TagihanController extends Controller
         if (!auth()->user()->hasRole('superadmin')) {
             if (auth()->user()->hasRole('rekanan')) {
                 $rekanan_id = auth()->user()->id_rekanan;
-                $penunjukanAduan = PenunjukanPekerjaan::where('rekanan_id', $rekanan_id)->get()->pluck('aduan_id')->toArray();
-                $query->whereIn('id', $penunjukanAduan);
+
+                $query->where('rekanan_id', $rekanan_id);
             } else {
                 $list_rekanan_id = auth()->user()->karyawan->hasRekanan->pluck('id');
                 if (count($list_rekanan_id) > 0) {
                     $query->whereIn('rekanan_id', $list_rekanan_id);
-                } else {
-                    $id_wilayah = auth()->user()->karyawan->id_wilayah;
-                    $wilayah = Wilayah::find($id_wilayah);
-                    if ($wilayah->nama !== 'Wilayah Samarinda') {
-                        $query->where('wilayah_id', auth()->user()->karyawan->id_wilayah);
-                    }
                 }
             }
         }
@@ -362,19 +356,12 @@ class TagihanController extends Controller
         if (!auth()->user()->hasRole('superadmin')) {
             if (auth()->user()->hasRole('rekanan')) {
                 $rekanan_id = auth()->user()->id_rekanan;
-                $penunjukanAduan = PenunjukanPekerjaan::where('rekanan_id', $rekanan_id)->get()->pluck('aduan_id')->toArray();
-                $query->whereIn('id', $penunjukanAduan);
+                $query->where('rekanan_id', $rekanan_id);
             } else {
                 $list_rekanan_id = auth()->user()->karyawan->hasRekanan->pluck('id');
+
                 if (count($list_rekanan_id) > 0) {
-                    $penunjukanAduan = PenunjukanPekerjaan::whereIn('rekanan_id', $list_rekanan_id)->get()->pluck('aduan_id');
-                    $query->whereIn('id', $penunjukanAduan);
-                } else {
-                    $id_wilayah = auth()->user()->karyawan->id_wilayah;
-                    $wilayah = Wilayah::find($id_wilayah);
-                    if ($wilayah->nama !== 'Wilayah Samarinda') {
-                        $query->where('wilayah_id', auth()->user()->karyawan->id_wilayah);
-                    }
+                    $query->whereIn('rekanan_id', $list_rekanan_id);
                 }
             }
         }
@@ -382,8 +369,10 @@ class TagihanController extends Controller
         // $hasValue = $this->hasValue;
         $start = Carbon::now()->subMonths(2)->startOfMonth()->format('Y-m-d') . ' 00:00:01';
         $end =  Carbon::now()->endOfMonth()->format('Y-m-d') . ' 23:59:59';
-        $query->where('tagihan', 'tidak')->whereBetween(DB::raw('DATE(tanggal_selesai)'), array($start, $end));
+
+        $query->where('tagihan', 'tidak')->where('status', 'selesai koreksi')->whereBetween(DB::raw('DATE(tanggal_selesai)'), array($start, $end));
         $penunjukan =  $query->get();
+
 
         return view('tagihan.form', compact(
             'title',
