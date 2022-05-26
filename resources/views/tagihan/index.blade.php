@@ -69,8 +69,10 @@
                             <tbody>
                                 @forelse ($data as $index => $item)
 
-                                    <tr class="{{ $item->belum_adjust == 'ya' ? 'bg-danger' : '' }}">
+                                    <tr
+                                        class="{{ $item->belum_adjust == 'ya' ? 'bg-danger' : '' }} {{ $item->belum_persetujuan }}">
                                         <td>{{ $index + 1 + ($data->CurrentPage() - 1) * $data->PerPage() }}</td>
+                                        <td>{{ $item->belum_persetujuan }}</td>
                                         @foreach ($configHeaders as $key => $header)
                                             @if (isset($header['input']))
                                                 @if ($header['input'] == 'rupiah')

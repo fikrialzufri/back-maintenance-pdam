@@ -272,9 +272,8 @@ class TagihanController extends Controller
         $total = 0;
         $total_lokasi = 0;
         $tagihanItem = [];
-        $tagihan = $query->with(['hasPelaksanaanPekerjaan' => function ($q) {
-            $q->with('hasGalianPekerjaan')->orderBy('created_at', 'asc');
-        }])->first();
+        $tagihan = $query->orderBy('created_at', 'desc')->first();
+
         if ($tagihan) {
 
             if (isset($tagihan->hasPelaksanaanPekerjaan)) {
@@ -301,11 +300,14 @@ class TagihanController extends Controller
         $dataitem = Item::all();
         $bntSetuju = false;
         $user = auth()->user()->id;
-        $list_perserujuan = $tagihan->list_persetujuan;
+        $list_persetujuan = [];
+
+
 
         if (isset($tagihan->list_persetujuan)) {
+            $list_persetujuan = (object) $tagihan->list_persetujuan;
             foreach ($tagihan->list_persetujuan as $key => $value) {
-                if ($value['id'] ===  $user) {
+                if ($value->id ===  $user) {
                     $bntSetuju = true;
                 }
             }
@@ -317,11 +319,11 @@ class TagihanController extends Controller
             'total',
             'rekanan',
             'filename',
+            'list_persetujuan',
             'bntSetuju',
             'total_lokasi',
             'nomor_tagihan',
             'tagihanItem',
-            'list_perserujuan',
             'tanggal_tagihan',
             'tagihan'
         ));

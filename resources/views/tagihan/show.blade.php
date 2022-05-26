@@ -84,11 +84,30 @@
                                 <div class="col-6 timeline">
                                     <h6>List Persetujuan</h6>
                                     <ul>
-                                        @if (count($list_perserujuan) > 0)
+                                        @forelse ( $list_persetujuan as $item)
+                                            @if ($item->is_setuju === true)
+                                                <li>
+                                                    <div class="bullet bg-primary"></div>
+                                                    <div class="time">{{ $item->tanggal_disetujui }}</div>
+                                                    <div class="desc">
+                                                        <h3>{{ $item->nama }}</h3>
+                                                        <h4>{{ $item->jabatan }}</h4>
+                                                    </div>
+                                                </li>
+                                            @else
+                                                <li>
+                                                    <div class="bullet bg-navy"></div>
+                                                    <div class="time"></div>
+                                                    <div class="desc">
+                                                        <h3>212</h3>
+                                                        <h4>12</h4>
+                                                    </div>
+                                                </li>
+                                            @endif
+                                        @empty
 
-                                            @foreach ($list_perserujuan as $item)
-                                            @endforeach
-                                        @endif
+                                        @endforelse
+
 
                                     </ul>
                                 </div>

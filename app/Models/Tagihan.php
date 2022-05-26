@@ -100,13 +100,26 @@ class Tagihan extends Model
     }
     public function getBelumAdjustAttribute()
     {
-        $harga = [];
         $danger = '';
         if ($this->hasTagihanItem) {
             foreach ($this->hasTagihanItem as $key => $value) {
                 if ($value->selisih == 'ya') {
                     $danger .= 'ya';
                     break;
+                }
+            }
+        }
+        return $danger;
+    }
+    public function getBelumPersetujuanAttribute()
+    {
+        $danger = '';
+        $user = auth()->user()->id;
+
+        if ($this->hasUserMany) {
+            foreach ($this->hasUserMany as $key => $value) {
+                if ($value->id ==  $user) {
+                    $danger = 'bg-danger';
                 }
             }
         }
@@ -177,7 +190,7 @@ class Tagihan extends Model
         $result = [];
         if ($this->hasUserMany) {
             foreach ($this->hasUserMany as $key => $value) {
-                $result[$key] = [
+                $result[$key] = (object) [
                     'id' => $value->id,
                     'nama' => $value->karyawan->nama,
                     'jabatan' => $value->karyawan->nama_jabatan,
