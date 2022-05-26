@@ -76,7 +76,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     // modul tagihan
     // list pekerjaan yang selesai
-    Route::get('list-pekerjaan-rekanan', PelaksanaanPekerjaanController::class . '@index')->name('pelaksanaan.api.index');
+    Route::get('list-pekerjaan-rekanan', PelaksanaanPekerjaanController::class . '@index')->name('pelaksanaan.api.list-pekerjaan');
 
     Route::get('list-tagihan', TagihanController::class . '@index')->name('tagihan.api.index');
 

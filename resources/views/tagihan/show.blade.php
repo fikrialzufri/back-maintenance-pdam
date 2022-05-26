@@ -8,67 +8,104 @@
             <div class="col-md-12">
                 <div class="card">
                     <!-- /.card-header -->
-                    <form action="{{ $action }}" method="post" role="form" enctype="multipart/form-data">
+                    <form action="{{ route('tagihan.update', $tagihan->id) }}" method="POST" role="form"
+                        enctype="multipart/form-data">
                         {{ csrf_field() }}
+                        {{ method_field('PUT') }}
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-2">
-                                    <div class="form-group">
-                                        <div>
-                                            <label for="NoTagihan" class=" form-control-label">Nomor Tagihan </label>
-                                        </div>
-                                        <div>
-                                            <input type="text" name="no_tagihan" id="No Tagihan" placeholder="No Tagihan "
-                                                class="form-control" readonly value="{{ $nomor_tagihan }}">
-                                        </div>
+                                <div class="col-6">
+                                    <div class="col-12">
+                                        <h6>Detail Tagihan</h6>
                                     </div>
-                                </div>
-                                <div class="col-2">
-                                    <div class="form-group">
-                                        <div>
-                                            <label for="NoTagihan" class=" form-control-label">Total Lokasi</label>
-                                        </div>
-                                        <div>
-                                            <input type="text" name="no_tagihan" id="No Tagihan" placeholder="No Tagihan "
-                                                class="form-control" readonly value="{{ $total_lokasi }}">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-2">
-                                    <div class="form-group">
-                                        <div>
-                                            <label for="NoTagihan" class=" form-control-label">Tanggal Tagihan</label>
-                                        </div>
-                                        <div>
-                                            <input type="text" name="no_tagihan" id="No Tagihan" placeholder="No Tagihan "
-                                                class="form-control" readonly value="{{ $tanggal_tagihan }}">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-2">
-                                    <div class="form-group">
-                                        <div>
-                                            <label for="rekanan" class=" form-control-label">Rekanan</label>
-                                        </div>
-                                        <div>
-                                            <input type="text" name="rekanan" id="rekanan" placeholder="Rekanan "
-                                                class="form-control" readonly value="{{ $rekanan }}">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-2">
-                                    <div class="form-group">
-                                        <div>
-                                            <label for="total_tagihan" class=" form-control-label">Total Tagihan</label>
-                                        </div>
-                                        <div class="input-group mb-2 mr-sm-2">
-                                            <div class="input-group-prepend">
-                                                <div class="input-group-text">Rp.</div>
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <div>
+                                                <label for="NoTagihan" class=" form-control-label">Nomor Tagihan </label>
                                             </div>
-                                            <input type="text" name="total_tagihan" id="total_tagihan_all" placeholder=""
-                                                class="form-control" readonly value="{{ format_uang($total) }}">
+                                            <div>
+                                                <input type="text" name="no_tagihan" id="No Tagihan"
+                                                    placeholder="No Tagihan " class="form-control" readonly
+                                                    value="{{ $nomor_tagihan }}">
+                                            </div>
                                         </div>
                                     </div>
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <div>
+                                                <label for="NoTagihan" class=" form-control-label">Total Lokasi</label>
+                                            </div>
+                                            <div>
+                                                <input type="text" name="no_tagihan" id="No Tagihan"
+                                                    placeholder="No Tagihan " class="form-control" readonly
+                                                    value="{{ $total_lokasi }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <div>
+                                                <label for="NoTagihan" class=" form-control-label">Tanggal Tagihan</label>
+                                            </div>
+                                            <div>
+                                                <input type="text" name="no_tagihan" id="No Tagihan"
+                                                    placeholder="No Tagihan " class="form-control" readonly
+                                                    value="{{ $tanggal_tagihan }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <div>
+                                                <label for="rekanan" class=" form-control-label">Rekanan</label>
+                                            </div>
+                                            <div>
+                                                <input type="text" name="rekanan" id="rekanan" placeholder="Rekanan "
+                                                    class="form-control" readonly value="{{ $rekanan }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <div>
+                                                <label for="total_tagihan" class=" form-control-label">Total Tagihan</label>
+                                            </div>
+                                            <div class="input-group mb-2 mr-sm-2">
+                                                <div class="input-group-prepend">
+                                                    <div class="input-group-text">Rp.</div>
+                                                </div>
+                                                <input type="text" name="total_tagihan" id="total_tagihan_all"
+                                                    placeholder="" class="form-control" readonly
+                                                    value="{{ format_uang($total) }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6 timeline">
+                                    <h6>List Persetujuan</h6>
+                                    <ul>
+                                        @foreach ($list_perserujuan as $item)
+                                            @if ($item['is_setuju'] === true)
+                                                <li>
+                                                    <div class="bullet bg-primary"></div>
+                                                    <div class="time">{{ $item['tangal_disetujui'] }}</div>
+                                                    <div class="desc">
+                                                        <h3>{{ $item['nama'] }}</h3>
+                                                        <h4>{{ $item['jabatan'] }}</h4>
+                                                    </div>
+                                                </li>
+                                            @else
+                                                <li>
+                                                    <div class="bullet bg-navy"></div>
+                                                    <div class="time"></div>
+                                                    <div class="desc">
+                                                        <h3>212</h3>
+                                                        <h4>12</h4>
+                                                    </div>
+                                                </li>
+                                            @endif
+                                        @endforeach
+                                    </ul>
                                 </div>
 
 
@@ -246,9 +283,12 @@
 
                     <!-- /.card-body -->
                     @if (!auth()->user()->hasRole('rekanan'))
-                        <div class="card-footer clearfix">
-                            <button type="submit" class="btn btn-primary">Setujui</button>
-                        </div>
+                        @if ($bntSetuju === false)
+                            <div class="card-footer clearfix">
+                                <button type="submit" class="btn btn-primary">Setujui Pekerjaan</button>
+                            </div>
+
+                        @endif
                     @endif
                     <div class="card-footer clearfix">
                         @if ($tagihan)

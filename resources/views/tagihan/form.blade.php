@@ -38,7 +38,7 @@
                                             class="{{ $item->keterangan_barang != null ? 'bg-danger' : '' }} list_pelaksanaan">
                                             <td class="text-center">
                                                 <input type="checkbox" name="pelaksanaan[]" id="pelaksanaan"
-                                                    class="check" value="{{ $item->id }}">
+                                                    class="check" value="{{ $item->id }}" checked>
                                             </td>
                                             <td>{{ $index + 1 }}
                                             </td>
@@ -92,6 +92,15 @@
                 $(".check" + this.value).prop('checked', false);
             }
         });
+
+        var cekcountList = $('.list_pelaksanaan').length;
+        var cekcountChecked = $('.check:checked').length;
+
+        if (cekcountList == cekcountChecked) {
+            $(".checkAll").prop('checked', true);
+        } else {
+            $(".checkAll").prop('checked', false);
+        }
 
         $(".check").on('click', function() {
             var header = $(this).attr('class');

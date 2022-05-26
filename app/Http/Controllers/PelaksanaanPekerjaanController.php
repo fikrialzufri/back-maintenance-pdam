@@ -109,6 +109,12 @@ class PelaksanaanPekerjaanController extends Controller
             $total = ($panjang * $lebar * $dalam) * $harga_item;
             $item_id = $dataItem->id;
 
+            $perencanaan = 'false';
+
+            if (auth()->user()->hasRole('staf-perencanaan')) {
+                $perencanaan = 'true';
+            }
+
             $data = $this->model()->find($id);
 
             if ($data) {
@@ -135,6 +141,7 @@ class PelaksanaanPekerjaanController extends Controller
                     'total' => $dataGalian->total,
                     'keterangan' => $dataGalian->keterangan,
                     'pekerjaan' => $dataGalian->pekerjaan,
+                    'perencanaan' => $perencanaan,
                     'item_id' => $dataGalian->item_id,
                 ];
                 return $this->sendResponse($result, $message, 200);
@@ -186,6 +193,10 @@ class PelaksanaanPekerjaanController extends Controller
         ], $messages);
 
         $keterangan = $request->keterangan;
+        $perencanaan = 'false';
+        if (auth()->user()->hasRole('staf-perencanaan')) {
+            $perencanaan = 'true';
+        }
 
         try {
             $message = 'Data Pekerjaan';
@@ -231,6 +242,7 @@ class PelaksanaanPekerjaanController extends Controller
                     'total' => $existItem->pivot->total,
                     'keterangan' => $existItem->pivot->keterangan,
                     'pekerjaan' => $dataItem->nama,
+                    'perencanaan' => $perencanaan,
                     'item_id' => $item_id,
                 ];
 

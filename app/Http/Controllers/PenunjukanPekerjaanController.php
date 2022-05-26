@@ -37,9 +37,11 @@ class PenunjukanPekerjaanController extends Controller
         $title = 'List Pekerjaan';
         $route = 'penunjukan_pekerjaan';
         $search = request()->search;
-        $limit = request()->limit ?? 30;
+        $limit = request()->limit ?? 50;
         $rekanan_id  = null;
-        $query = Aduan::query()->orderBy('status', 'asc');
+        $btnProsesPenunjukan = false;
+
+        $query = Aduan::query();
 
         if ($search) {
             $query->where('no_ticket', 'like', "%" . $search . "%")->orWhere('no_aduan', 'like', "%" . $search . "%");
@@ -50,26 +52,64 @@ class PenunjukanPekerjaanController extends Controller
                 $rekanan_id = auth()->user()->id_rekanan;
                 $penunjukanAduan = PenunjukanPekerjaan::where('rekanan_id', $rekanan_id)->get()->pluck('aduan_id')->toArray();
                 $query->whereIn('id', $penunjukanAduan);
+                $penunjukan = $query->paginate($limit);
+
+                $penunjukan = $penunjukan->setCollection(
+                    $penunjukan->sortBy(function ($pekerjaan) {
+                        return $pekerjaan->status_order;
+                    })
+                );
             } else {
                 $list_rekanan_id = auth()->user()->karyawan->hasRekanan->pluck('id');
                 if (count($list_rekanan_id) > 0) {
                     $penunjukanAduan = PenunjukanPekerjaan::whereIn('rekanan_id', $list_rekanan_id)->get()->pluck('aduan_id');
-                    $query->whereIn('id', $penunjukanAduan);
+                    $query->whereStatus('selesai')->whereIn('id', $penunjukanAduan)->orderBy('updated_at', 'desc');
+                    $penunjukan = $query->paginate($limit);
+                    $penunjukan = $penunjukan->setCollection(
+                        $penunjukan->sortByDesc(function ($pekerjaan) {
+                            return $pekerjaan->status_order_pengawas;
+                        })
+                    );
                 } else {
                     $id_wilayah = auth()->user()->karyawan->id_wilayah;
                     $wilayah = Wilayah::find($id_wilayah);
+                    $penunjukanAduan = PenunjukanPekerjaan::whereStatus('dikoreksi')->get()->pluck('aduan_id')->toArray();
+
+                    // $query->whereStatus('selesai');
                     if ($wilayah->nama !== 'Wilayah Samarinda') {
-                        $query->where('wilayah_id', auth()->user()->karyawan->id_wilayah);
+                        $query->where('wilayah_id', auth()->user()->karyawan->id_wilayah)->orderBy('status', 'asc')->orderBy('updated_at', 'desc');
+                        $penunjukan = $query->paginate($limit);
+                    } else {
+
+                        $penunjukan = $query->where('status', '!=', 'draft')->with(['hasPenunjukanPekerjaan' => function ($query) {
+                            $query->orderBy('status', 'desc');
+                        }])->orderBy('status', 'desc')->orderBy('updated_at', 'desc');
+                        $penunjukan = $query->paginate($limit);
+
+                        $penunjukan = $penunjukan->setCollection(
+                            $penunjukan->sortBy(function ($pekerjaan) {
+                                return $pekerjaan->status_order;
+                            })
+                        );
                     }
                 }
             }
+        } else {
+
+            $penunjukan = $query->paginate(50);
+            $penunjukan = $penunjukan->setCollection(
+                $penunjukan->sortBy(function ($pekerjaan) {
+                    return $pekerjaan->status_order_all;
+                })
+            );
         }
 
-        $penunjukan = $query->orderBy('created_at', 'desc')->paginate($limit);
+
 
         return view('penunjukan_pekerjaan.index', compact(
             'title',
             'route',
+            'btnProsesPenunjukan',
             'rekanan_id',
             'penunjukan',
             'search',
@@ -144,11 +184,23 @@ class PenunjukanPekerjaanController extends Controller
         $fotoPekerjaan = [];
         $fotoPenyelesaian = [];
         $tombolEdit = '';
+        $lat_long_pekerjaan = '';
+        $lokasi_pekerjaan = '';
         $pekerjaanUtama = [];
+        $perencaan = false;
+
+
         if ($aduan->status != 'draft') {
-            # code...
             $penunjukan = PenunjukanPekerjaan::where('aduan_id', $aduan->id)->first();
             $query = PelaksanaanPekerjaan::where('penunjukan_pekerjaan_id', $penunjukan->id);
+
+            if (auth()->user()->hasRole('staf-perencanaan')) {
+                $perencaan = true;
+            }
+            if (auth()->user()->hasRole('superadmin')) {
+                $perencaan = true;
+            }
+
             $pekerjaanUtama = $query->first();
             if ($pekerjaanUtama) {
                 $fotoBahan = (object) $penunjukan->foto_bahan;
@@ -180,6 +232,9 @@ class PenunjukanPekerjaanController extends Controller
                 $totalPekerjaan = $daftarPekerjaan->hasItem->sum('pivot.total') + $daftarBahan->hasItem->sum('pivot.total') + $daftarAlatBantu->hasItem->sum('pivot.total') + $daftarTransportasi->hasItem->sum('pivot.total') + $daftarDokumentasi->hasItem->sum('pivot.total') + $daftarGalian->sum('total');
                 // $action = route('penunjukan_pekerjaan.update');
                 $action = route('penunjukan_pekerjaan.update', $pekerjaanUtama->id);
+
+                $lat_long_pekerjaan =  $pekerjaanUtama->lat_long;
+                $lokasi_pekerjaan =  $pekerjaanUtama->lokasi;
 
                 if (auth()->user()->hasRole('staf-pengawas')) {
                     if ($pekerjaanUtama->status  === 'selesai') {
@@ -216,10 +271,10 @@ class PenunjukanPekerjaanController extends Controller
         }
 
 
-
         return view('penunjukan_pekerjaan.show', compact(
             'aduan',
             'action',
+            'perencaan',
             'penunjukan',
             'pekerjaanUtama',
             'daftarPekerjaan',
@@ -228,6 +283,8 @@ class PenunjukanPekerjaanController extends Controller
             'daftarAlatBantu',
             'daftarTransportasi',
             'daftarDokumentasi',
+            'lat_long_pekerjaan',
+            'lokasi_pekerjaan',
             'rekanan_id',
             'jenisAduan',
             'jenis_aduan',

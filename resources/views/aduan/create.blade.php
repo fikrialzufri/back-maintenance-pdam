@@ -268,7 +268,8 @@
                                     <div id="search">
                                         <input type="text" name="addr" class="form-control" value="" id="addr"
                                             size="10" />
-                                        <button type="button" onclick="addr_search();">Cari</button>
+                                        <button type="button" class="btn btn-primary mb-3"
+                                            onclick="addr_search();">Cari</button>
                                         <div id="results" />
                                     </div>
                                     <div id="map"></div>

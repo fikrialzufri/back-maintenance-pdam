@@ -23,7 +23,7 @@ class CreateAduanTable extends Migration
             $table->string('mps');
             $table->string('atas_nama');
             $table->string('sumber_informasi');
-            $table->longText('keterangan');
+            $table->longText('keterangan')->nullable();
             $table->longText('lokasi');
             $table->string('lat_long');
             $table->enum('status', ['draft', 'proses', 'selesai', 'disetujui']);

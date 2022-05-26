@@ -47,7 +47,7 @@
                                         <td>{{ ucfirst($item->user) }}</td>
                                         <td>{{ $item->wilayah }}</td>
                                         <td>{{ $item->lokasi }}</td>
-                                        <td>{{ ucfirst($item->status) }}</td>
+                                        <td>{{ ucfirst($item->status_aduan) }}</td>
                                         @if ($item->status == 'draft')
                                             @canany(['create-aduan', 'delete-aduan'])
                                                 <td class="text-center">

@@ -172,7 +172,22 @@ class Tagihan extends Model
         return $result;
     }
 
-
+    public function getListPersetujuanAttribute()
+    {
+        $result = [];
+        if ($this->hasUserMany) {
+            foreach ($this->hasUserMany as $key => $value) {
+                $result[$key] = [
+                    'id' => $value->id,
+                    'nama' => $value->karyawan->nama,
+                    'jabatan' => $value->karyawan->nama_jabatan,
+                    'is_setuju' => true,
+                    'tanggal_disetujui' => isset($value->pivot->created_at) ? tanggal_indonesia($value->pivot->created_at) : ''
+                ];
+            }
+        }
+        return $result;
+    }
 
     public function hasUserMany()
     {

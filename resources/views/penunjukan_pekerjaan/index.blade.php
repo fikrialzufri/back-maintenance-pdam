@@ -58,9 +58,27 @@
 
                                         <td class="text-center">
                                             <a href="{{ route('penunjukan_pekerjaan.show', $item->slug) }}"
-                                                class="btn btn-sm {{ $item->status == 'draft' ? 'btn-primary' : 'btn-success' }} text-light">
-                                                @if ($item->status == 'draft')
-                                                    <i class="nav-icon fas fa-eye"></i> Proses
+                                                class="btn btn-sm {{ $item->btn }}   text-light">
+                                                @if (auth()->user()->hasRole('rekanan'))
+                                                    <i class="nav-icon fa fa-search"></i> Detail
+                                                @elseif (auth()->user()->hasRole('staf-pengawas'))
+                                                    @if ($item->status_aduan == 'Selesai dikerjakan')
+                                                        <i class="nav-icon fas fa-eye"></i> Koreksi
+                                                    @else
+                                                        <i class="nav-icon fa fa-search"></i> Detail
+                                                    @endif
+                                                @elseif (auth()->user()->hasRole('staf-perencanaan'))
+                                                    @if ($item->status_aduan == 'Dikoreksi pengawas')
+                                                        <i class="nav-icon fas fa-eye"></i> Koreksi
+                                                    @else
+                                                        <i class="nav-icon fa fa-search"></i> Detail
+                                                    @endif
+                                                @elseif (auth()->user()->hasRole('admin-asisten-manager'))
+                                                    @if ($item->status_aduan == 'Belum ditunjuk')
+                                                        <i class="nav-icon fas fa-eye"></i> Proses
+                                                    @else
+                                                        <i class="nav-icon fa fa-search"></i> Detail
+                                                    @endif
                                                 @else
                                                     <i class="nav-icon fa fa-search"></i> Detail
                                                 @endif

@@ -84,7 +84,6 @@ class AduanController extends Controller
             'no_ticket' => 'required|string',
             'mps' => 'required|string',
             'sumber_informasi' => 'required|string',
-            'keterangan' => 'required|string',
             'lokasi' => 'required|string',
             'lat_long' => 'required|string',
         ], $messages);
@@ -111,7 +110,7 @@ class AduanController extends Controller
             $aduan->mps = $request->mps;
             $aduan->atas_nama = $request->atas_nama;
             $aduan->sumber_informasi = $request->sumber_informasi;
-            $aduan->keterangan = $request->keterangan;
+            $aduan->keterangan = isset($request->keterangan) ?  $request->keterangan : '';
             $aduan->lokasi = $request->lokasi;
             $aduan->lat_long = str_replace(array('LatLng(', ')'), '', $request->lat_long);
             $aduan->status = "draft";

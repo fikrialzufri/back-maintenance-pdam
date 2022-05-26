@@ -229,8 +229,7 @@ class TagihanController extends Controller
             } else {
                 $list_rekanan_id = auth()->user()->karyawan->hasRekanan->pluck('id');
                 if (count($list_rekanan_id) > 0) {
-                    $penunjukanAduan = PenunjukanPekerjaan::whereIn('rekanan_id', $list_rekanan_id)->get()->pluck('aduan_id');
-                    $query->whereIn('id', $penunjukanAduan);
+                    $query->whereIn('rekanan_id', $list_rekanan_id);
                 } else {
                     $id_wilayah = auth()->user()->karyawan->id_wilayah;
                     $wilayah = Wilayah::find($id_wilayah);
@@ -302,13 +301,21 @@ class TagihanController extends Controller
             $tanggal_tagihan = tanggal_indonesia($tagihan->tanggal_tagihan);
             $rekanan = $tagihan->rekanan;
         }
-        $action = route('tagihan.store');
         $title =  "Proses Tagihan Nomor :" .  $nomor_tagihan;
         $filename =  "Tagihan Nomor :" .  $nomor_tagihan;
 
         $dataitem = Item::all();
+        $bntSetuju = false;
+        $user = auth()->user()->id;
+        $list_perserujuan = $tagihan->list_persetujuan;
 
-
+        if (isset($tagihan->list_persetujuan)) {
+            foreach ($tagihan->list_persetujuan as $key => $value) {
+                if ($value['id'] ===  $user) {
+                    $bntSetuju = true;
+                }
+            }
+        }
         return view('tagihan.show', compact(
             'action',
             'title',
@@ -316,9 +323,11 @@ class TagihanController extends Controller
             'total',
             'rekanan',
             'filename',
+            'bntSetuju',
             'total_lokasi',
             'nomor_tagihan',
             'tagihanItem',
+            'list_perserujuan',
             'tanggal_tagihan',
             'tagihan'
         ));
@@ -389,7 +398,30 @@ class TagihanController extends Controller
         ));
     }
 
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        $user = auth()->user()->id;
+        DB::beginTransaction();
+        $tagihan  = $this->model()->find($id);
 
+        try {
+            DB::commit();
+            if ($tagihan) {
+                $tagihan->hasUserMany()->attach($user);
+                $message = 'Berhasil Menyetujui Tagihan : ' . $tagihan->nomor_tagihan;
+                return redirect()->route('tagihan.index')->with('message', $message)->with('Class', 'primary');
+            }
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return redirect()->route('tagihan.index')->with('message', 'Penunjukan pekerjaan gagal ditambah')->with('Class', 'danger');
+        }
+    }
     /**
      * Store a newly created resource in storage.
      *
@@ -411,18 +443,18 @@ class TagihanController extends Controller
             $nomor_tagihan =  $no . "/" . "BAPP-KJB/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
         }
 
-        if (!auth()->user()->hasRole('superadmin')) {
-            if (auth()->user()->hasRole('rekanan')) {
-                $rekanan_id = auth()->user()->id_rekanan;
-            } else {
-                $PelaksanaanPekerjaan = PelaksanaanPekerjaan::whereIn('id', $pelaksanaan)
-                    ->where('tagihan', 'tidak')->first();
-                $rekanan_id =  $PelaksanaanPekerjaan->rekanan_id;
-            }
-        }
         DB::beginTransaction();
         try {
             DB::commit();
+            if (!auth()->user()->hasRole('superadmin')) {
+                if (auth()->user()->hasRole('rekanan')) {
+                    $rekanan_id = auth()->user()->id_rekanan;
+                } else {
+                    $PelaksanaanPekerjaan = PelaksanaanPekerjaan::whereIn('id', $pelaksanaan)
+                        ->where('tagihan', 'tidak')->first();
+                    $rekanan_id =  $PelaksanaanPekerjaan->rekanan_id;
+                }
+            }
             $data = $this->model();
             $data->nomor_tagihan = $nomor_tagihan;
             $data->tanggal_tagihan = $tanggal_tagihan;
@@ -842,7 +874,6 @@ class TagihanController extends Controller
             "tagihan"
         ));
     }
-
 
     public function model()
     {
