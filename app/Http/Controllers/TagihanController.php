@@ -301,7 +301,16 @@ class TagihanController extends Controller
         $bntSetuju = false;
         $user = auth()->user()->id;
         $list_persetujuan = [];
-
+        $perencaan = true;
+        if (auth()->user()->hasRole('rekanan')) {
+            $perencaan = false;
+        }
+        if (auth()->user()->hasRole('staf-pengawas')) {
+            $perencaan = false;
+        }
+        if (auth()->user()->hasRole('superadmin')) {
+            $perencaan = true;
+        }
 
 
         if (isset($tagihan->list_persetujuan)) {
@@ -321,6 +330,7 @@ class TagihanController extends Controller
             'filename',
             'list_persetujuan',
             'bntSetuju',
+            'perencaan',
             'total_lokasi',
             'nomor_tagihan',
             'tagihanItem',

@@ -370,7 +370,6 @@ class PenunjukanPekerjaanController extends Controller
         DB::beginTransaction();
         $PelaksanaanPekerjaan  = PelaksanaanPekerjaan::find($id);
         if (auth()->user()->hasRole('staf-pengawas')) {
-
             $status = 'dikoreksi';
         } else {
             if ($PelaksanaanPekerjaan->status === 'dikoreksi') {

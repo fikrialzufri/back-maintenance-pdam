@@ -304,27 +304,27 @@ class PelaksanaanPekerjaanController extends Controller
     public function selesai(Request $request)
     {
         DB::beginTransaction();
-        $message = 'Gagal Menyimpan Pelaksanaan Pekerjaan';
-        $status = 'selesai';
-        $slug = $request->slug;
-        $user_id = auth()->user()->id;
-        $keterangan = $request->keterangan;
-        $user = [];
-        $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $slug)->first();
-        $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->first();
-
-        if ($data->status == 'selesai') {
-            $message = "Pekerjaan sudah selesai";
-            $response = [
-                'success' => false,
-                'message' => $message,
-                'code' => '409'
-            ];
-            return $this->sendError($response, $message, 409);
-        }
-
         try {
             DB::commit();
+            $message = 'Gagal Menyimpan Pelaksanaan Pekerjaan';
+            $status = 'selesai';
+            $slug = $request->slug;
+            $user_id = auth()->user()->id;
+            $keterangan = $request->keterangan;
+            $user = [];
+            $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $slug)->first();
+            $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->first();
+
+            if ($data->status == 'selesai') {
+                $message = "Pekerjaan sudah selesai";
+                $response = [
+                    'success' => false,
+                    'message' => $message,
+                    'code' => '409'
+                ];
+                return $this->sendError($response, $message, 409);
+            }
+
             $data->status = $status;
             $data->tanggal_selesai = Carbon::now();
             $data->keterangan = $keterangan;
@@ -345,6 +345,8 @@ class PelaksanaanPekerjaanController extends Controller
             $aduan->status = $status;
             $aduan->save();
 
+            $item = [];
+
             foreach ($data->hasItem as $value) {
                 $item = Item::find($value->id);
                 $item->hapus = 'tidak';
@@ -362,21 +364,23 @@ class PelaksanaanPekerjaanController extends Controller
                 $listDokumentasi = Item::whereIn('jenis_id', $jenisDokumentasi)->first();
                 if (count($fotolokasi) > 0) {
 
-                    if (now()->format('H:i') >= '18:01') {
-                        $harga = $item->harga_malam;
-                    } else {
-                        $harga = $item->harga;
+                    if (count($item) > 0) {
+                        if (now()->format('H:i') >= '18:01') {
+                            $harga = $item->harga_malam;
+                        } else {
+                            $harga = $item->harga;
+                        }
+                        $total = 1 * $harga;
+
+                        $listitem[$listDokumentasi->id] = [
+                            'keterangan' => $keterangan,
+                            'harga' => $harga,
+                            'qty' => 1,
+                            'total' => $total,
+                        ];
+
+                        $data->hasItem()->attach($listitem);
                     }
-                    $total = 1 * $harga;
-
-                    $listitem[$listDokumentasi->id] = [
-                        'keterangan' => $keterangan,
-                        'harga' => $harga,
-                        'qty' => 1,
-                        'total' => $total,
-                    ];
-
-                    $data->hasItem()->attach($listitem);
                 }
             }
 
@@ -444,11 +448,11 @@ class PelaksanaanPekerjaanController extends Controller
                         'keterangan' => $status,
                     ];
 
-                    $data->hasUserMany()->sync($user);
+                    $data->hasUserMany()->attach($user);
 
                     $penunjukanPekerjaan->status = $status;
                     $penunjukanPekerjaan->save();
-                    $penunjukanPekerjaan->hasUserMany()->sync($user);
+                    $penunjukanPekerjaan->hasUserMany()->attach($user);
 
                     $aduan = Aduan::find($penunjukanPekerjaan->aduan_id);
                     $aduan->status = $status;

@@ -129,6 +129,16 @@ class Tagihan extends Model
         }
         return $danger;
     }
+    public function getBelumPersetujuanMobileAttribute()
+    {
+        $danger = false;
+        if ($this->hasUserMany) {
+            if (count($this->hasUserMany) > 0) {
+                $danger = true;
+            }
+        }
+        return $danger;
+    }
 
     public function getTagihanAttribute()
     {

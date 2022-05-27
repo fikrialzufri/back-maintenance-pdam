@@ -69,6 +69,7 @@ class TagihanController extends Controller
                     'status' =>  $value->status,
                     'created_at' =>  $value->created_at,
                     'status_mobile' =>  $value->status_mobile,
+                    'is_accept' =>  $value->belum_persetujuan_mobile,
                 ];
             }
             return $this->sendResponse($result, $message, 200);

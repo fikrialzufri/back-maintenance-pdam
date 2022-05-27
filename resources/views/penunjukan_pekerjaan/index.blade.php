@@ -43,7 +43,7 @@
                             </thead>
                             <tbody>
                                 @forelse ($penunjukan as $index => $item)
-                                    <tr class="{{ $item->keterangan_barang != null ? 'bg-danger' : '' }}">
+                                    <tr class="{{ $item->keterangan_barang != null ? 'bg-danger' : '' }} ">
                                         <td>{{ $index + 1 + ($penunjukan->CurrentPage() - 1) * $penunjukan->PerPage() }}
                                         </td>
                                         <td>{{ $item->no_spk }}</td>
