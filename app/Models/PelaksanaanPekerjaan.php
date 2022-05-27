@@ -78,6 +78,18 @@ class PelaksanaanPekerjaan extends Model
         return $total;
     }
 
+    public function hasAduan()
+    {
+        return $this->hasOne(Aduan::class, 'id', 'aduan_id');
+    }
+
+    public function getWilayahAttribute()
+    {
+        if ($this->hasAduan) {
+            return $this->hasAduan->hasWilayah->singkatan;
+        }
+    }
+
     public function hasGalianPekerjaan()
     {
         return $this->hasMany(GalianPekerjaan::class, 'pelaksanaan_pekerjaan_id');

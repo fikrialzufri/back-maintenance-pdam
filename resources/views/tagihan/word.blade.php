@@ -1,5 +1,63 @@
 @extends('template.app')
 @section('title', ucwords(str_replace([':', '_', '-', '*'], ' ', $title)))
+
+@push('head')
+    <style>
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+        @media print {
+
+            html,
+            body {
+                width: 215mm;
+                max-width: 215mm;
+                height: 355mm;
+                margin: 5px;
+            }
+        }
+
+        #text {
+            white-space: nowrap;
+            width: 80%;
+            font-size: 20px;
+            padding-left: 25px;
+        }
+
+        .child {
+            display: inline-block;
+            vertical-align: top;
+            white-space: normal;
+        }
+
+        .child2 {
+            width: 100%;
+        }
+
+        page[size="letter"] {}
+
+        @media print {
+
+            body,
+            page[size="letter"] {
+                background: white;
+                width: 21cm;
+                padding-left: 30px;
+                padding-right: 30px;
+                height: 29.7cm;
+                display: block;
+                margin: 0 auto;
+                font-family: "Times New Roman", serif;
+                font-size: 20px;
+                margin-bottom: 0.5cm;
+                box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);
+            }
+        }
+
+    </style>
+@endpush
 @section('content')
 
     <div class="container-fluid">
@@ -8,202 +66,98 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-body">
-                        <div id="exportContent">
+                        <page id="content" size="A4">
+                            <div style=" d-flex justify-content-center align-items-center align-items-center">
+                                <div class="text-center">
+                                    <img src="{{ asset('img/kopsurat.png') }}" class="img-responsive" width="80%">
+                                </div>
+                            </div>
+                            <br>
+                            <div class="text-center" style="margin-bottom:24px;">
+                                <span style=' font-size: 25px;'>
+                                    <strong>
+                                        <u>BERITA ACARA</u>
+                                    </strong>
+                                    <br>
+                                    <strong>
+                                        <u> PEMERIKSAAN
+                                            PEKERJAAN</u>
+                                    </strong>
+                                    <br>
+                                    <strong>
+                                        <u> Nomor : {{ $tagihan->nomor_tagihan }}</u>
+                                    </strong>
+                                    <br>
+                                </span>
+                            </div>
+                            <p style=' font-size: 20px;'>
+                                <span style=''>Pada Hari ini,
+                                    {{ $now }}</span>
+                            </p>
+                            <p style=' font-size: 20px;'>
+                                <span style=''>Kami Masing-Masing Adalah
+                                    :</span>
+                            </p>
+                            <ol style="font-size: 20px;">
+                                @forelse ($tagihan->list_persetujuan as $index => $item)
+                                    @if ($item->jabatan !== 'Direktur Teknik')
+                                        <li> <span style=''>{{ $item->nama }}
+                                                Sebagai {{ $item->jabatan }}</span></li>
+                                    @endif
+                                @empty
+                                @endforelse
+                            </ol>
+                            <p style=' font-size: 20px;'>
+                                <span style=''>Telah Mengadakan
+                                    Pemeriksaan Pekerjaan,</span>
+                            </p>
+                            <div>
+                                <p style='font-size: 20px;'>
+                                    <span style=''>Service Kebocoran
+                                        Pipa Dinas, Tersier, Sekunder, dan Interkoneksi Pipa Periode Bulan
+                                        {{ $bulan }}
+                                        Tahun {{ date('Y') }} di Wilayah {{ $wilayah }} Sebanyak
+                                        {{ $total_lokasi }}
+                                        Lokasi, Perumdam Tirta Kencana
+                                        Kota Samarinda.</span>
+                                </p>
+                            </div>
 
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:4.0pt;margin-left:0cm;line-height:normal;font-size:15px;font-family:"Calibri",sans-serif;'>
-                                <span style='font-size:16px;font-family:"Times New Roman",serif;'>Nomor :
-                                    {{ $tagihan->nomor_tagihan }}</span>
+                            <p style=' font-size: 20px;'>
+                                <span style=''>Pekerjaan Tersebut
+                                    Dilaksanakan Oleh :</span>
                             </p>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:4.0pt;margin-left:0cm;line-height:normal;font-size:15px;font-family:"Calibri",sans-serif;'>
-                                <span style='font-size:16px;font-family:"Times New Roman",serif;'>Tanggal :
-                                    {{ $tanggal }}</span>
-                            </p>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:4.0pt;margin-left:0cm;line-height:normal;font-size:15px;font-family:"Calibri",sans-serif;'>
-                                <span style='font-size:16px;font-family:"Times New Roman",serif;'>Nama Rekanan :
-                                    {{ $tagihan->rekanan }}</span>
-                            </p>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:4.0pt;margin-left:0cm;line-height:normal;font-size:15px;font-family:"Calibri",sans-serif;'>
-                                <span style='font-size:16px;font-family:"Times New Roman",serif;'>Lapiran : &nbsp;</span>
-                            </p>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:4.0pt;margin-left:0cm;line-height:normal;font-size:15px;font-family:"Calibri",sans-serif;'>
-                                <span style='font-size:16px;font-family:"Times New Roman",serif;'>Perihal&nbsp; &nbsp;
-                                    &nbsp;
-                                    &nbsp; &nbsp;
-                                    &nbsp; &nbsp;: Permohonan Pembayaran</span>
-                            </p>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:4.0pt;margin-left:0cm;line-height:normal;font-size:15px;font-family:"Calibri",sans-serif;'>
-                                <span style='font-size:16px;font-family:"Times New Roman",serif;'>&nbsp;</span>
-                            </p>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:4.0pt;margin-left:0cm;line-height:normal;font-size:15px;font-family:"Calibri",sans-serif;'>
-                                <span style='font-size:16px;font-family:"Times New Roman",serif;'>Kepada Yth,</span>
-                            </p>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:4.0pt;margin-left:0cm;line-height:normal;font-size:15px;font-family:"Calibri",sans-serif;'>
-                                <span style='font-size:16px;font-family:"Times New Roman",serif;'>Direktur Utama</span>
-                            </p>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:4.0pt;margin-left:0cm;line-height:normal;font-size:15px;font-family:"Calibri",sans-serif;'>
-                                <span style='font-size:16px;font-family:"Times New Roman",serif;'>PERUMDAM Tirta Kencana
-                                    Kota
-                                    Samarinda</span>
-                            </p>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:4.0pt;margin-left:0cm;line-height:normal;font-size:15px;font-family:"Calibri",sans-serif;'>
-                                <span style='font-size:16px;font-family:"Times New Roman",serif;'>Di &ndash;</span>
-                            </p>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:4.0pt;margin-left:0cm;line-height:normal;font-size:15px;font-family:"Calibri",sans-serif;'>
-                                <span style='font-size:16px;font-family:"Times New Roman",serif;'>&nbsp; &nbsp; &nbsp;
-                                    &nbsp;
-                                    &nbsp;
-                                    &nbsp;&nbsp;SAMARINDA</span>
-                            </p>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:107%;font-size:15px;font-family:"Calibri",sans-serif;'>
-                                <span
-                                    style='font-size:16px;line-height:107%;font-family:"Times New Roman",serif;'>&nbsp;</span>
-                            </p>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:107%;font-size:15px;font-family:"Calibri",sans-serif;'>
-                                <span
-                                    style='font-size:16px;line-height:107%;font-family:"Times New Roman",serif;'>&nbsp;</span>
-                            </p>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:150%;font-size:15px;font-family:"Calibri",sans-serif;text-align:justify;'>
-                                <span style='font-size:16px;line-height:150%;font-family:"Times New Roman",serif;'>Dengan
-                                    Hormat,</span>
-                            </p>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:150%;font-size:15px;font-family:"Calibri",sans-serif;text-align:justify;'>
-                                <span style='font-size:16px;line-height:150%;font-family:"Times New Roman",serif;'>Berhubung
-                                    dengan
-                                    selesainya
-                                    pekerjaan service Kebocoran, Rehab Pipa dan Pemasangan Pipa Sekunder PERUMDAM Tirta
-                                    Kencana
-                                    Samarinda
-                                    Periode bulan, {{ $bulan }} {{ date('Y') }} di wilayah I,II,III sebanyak
-                                    {{ $total_lokasi }}
-                                    Lokasi, kami mengajukan Permohonan
-                                    Pembayaran atas pekerjaan tersebut senilai Rp. {{ format_uang($total_tagihan) }}.
-                                    <i>
+                            <p id="text">
+                                <span class="child"> Nama &nbsp;&nbsp; :
+                                </span>
+                                <span class="child child2">
+                                    {{ $tagihan->rekanan }}
+                                </span>
+                                <br>
+                                <span class="child">
+                                    Alamat :
+                                </span>
+                                <span class="child child2">
+                                    {{ $tagihan->alamat_rekanan }}
+                                </span>
 
-                                        ({{ strtoupper(terbilang($total_tagihan)) }} RUPIAH)
-                                    </i>
-                                    Demikian
-                                    Permohonan
-                                    ini
-                                    kami
-                                    sampaikan.
-                                    Atas perhatian dan kerjasamanya diucapkan terimakasih.</span>
                             </p>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:107%;font-size:15px;font-family:"Calibri",sans-serif;'>
-                                <span
-                                    style='font-size:16px;line-height:107%;font-family:"Times New Roman",serif;'>&nbsp;</span>
+                            <p style=' font-size: 20px;'>
+                                <span style=''>Berdasarkan Surat Perintah
+                                    Pelaksanaan untuk pekerjaan tersebut dan persyaratan-persyaratan bahan-bahan maupun
+                                    pelaksanaannya, dengan ini menyatakan bahwa pekerjaan (terlampir) dari perumdam, telah
+                                    selesai dikerjakan dan memenuhi prosedur dan syarat-syarat yang ditetapkan oleh Perumdam
+                                    Tirta Kencana Kota Samarinda.</span>
                             </p>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:107%;font-size:15px;font-family:"Calibri",sans-serif;'>
-                                <span
-                                    style='font-size:16px;line-height:107%;font-family:"Times New Roman",serif;'>&nbsp;</span>
+                            <p style=' font-size: 20px;'>
+                                <span style=''>Demikian Berita Acara
+                                    Pemeriksaan Pekerjaan ini dibuat dengan penuh tanggung jawab sebagaimana
+                                    mestinya.</span>
                             </p>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:107%;font-size:15px;font-family:"Calibri",sans-serif;'>
-                                <span
-                                    style='font-size:16px;line-height:107%;font-family:"Times New Roman",serif;'>&nbsp;</span>
-                            </p>
-                            <table style="border: none;width:98.44%;border-collapse:collapse;">
-                                <tbody>
-                                    <tr>
-                                        <td style="width: 58.48%;padding: 0cm 5.4pt;vertical-align: top;"><br></td>
-                                        <td
-                                            style="width: 41.52%;padding: 0cm 5.4pt;border-image: initial;vertical-align: top;">
-                                            <p
-                                                style='margin-right:0cm;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;margin:0cm;margin-top:0cm;margin-bottom:8.0pt;text-align:center;line-height:105%;'>
-                                                Hormat Kami,</p>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td
-                                            style="width: 58.48%;padding: 0cm 5.4pt;border-image: initial;vertical-align: top;">
-                                            <p
-                                                style='margin-right:0cm;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;margin:0cm;margin-top:0cm;margin-bottom:8.0pt;text-align:center;line-height:105%;'>
-                                                &nbsp;</p>
-                                        </td>
-                                        <td style="width: 41.52%;padding: 0cm 5.4pt;vertical-align: top;">
-                                            <p
-                                                style='margin-right:0cm;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;margin:0cm;margin-top:0cm;margin-bottom:8.0pt;text-align:center;line-height:105%;'>
-                                                Samarinda,{{ $now }}</p>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td
-                                            style="width: 58.48%;padding: 0cm 5.4pt;border-image: initial;vertical-align: top;">
-                                            <p
-                                                style='margin-right:0cm;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;margin:0cm;margin-top:0cm;margin-bottom:8.0pt;text-align:center;line-height:105%;'>
-                                                &nbsp;</p>
-                                        </td>
-                                        <td style="width: 41.52%;padding: 0cm 5.4pt;vertical-align: top;">
-                                            <p
-                                                style='margin-right:0cm;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;margin:0cm;margin-top:0cm;margin-bottom:8.0pt;text-align:center;line-height:105%;'>
-                                                &nbsp;</p>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td
-                                            style="width: 58.48%;padding: 0cm 5.4pt;border-image: initial;vertical-align: top;">
-                                            <p
-                                                style='margin-right:0cm;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;margin:0cm;margin-top:0cm;margin-bottom:8.0pt;text-align:center;line-height:105%;'>
-                                                &nbsp;</p>
-                                        </td>
-                                        <td style="width: 41.52%;padding: 0cm 5.4pt;vertical-align: top;">
-                                            <p
-                                                style='margin-right:0cm;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;margin:0cm;margin-top:0cm;margin-bottom:8.0pt;text-align:center;line-height:105%;'>
-                                                &nbsp;</p>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="width: 58.48%;padding: 0cm 5.4pt;vertical-align: top;">
-                                            <p
-                                                style='margin-right:0cm;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;margin:0cm;margin-top:0cm;margin-bottom:8.0pt;text-align:center;line-height:105%;'>
-                                                &nbsp;</p>
-                                        </td>
-                                        <td style="width: 41.52%;padding: 0cm 5.4pt;vertical-align: top;">
-                                            <p
-                                                style='margin-right:0cm;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;margin:0cm;margin-top:0cm;margin-bottom:8.0pt;text-align:center;line-height:105%;'>
-                                                Direktur</p>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="width: 58.48%;padding: 0cm 5.4pt;vertical-align: top;">
-                                            <p
-                                                style='margin-right:0cm;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;margin:0cm;margin-top:0cm;margin-bottom:8.0pt;text-align:center;line-height:105%;'>
-                                                &nbsp;</p>
-                                        </td>
-                                        <td style="width: 41.52%;padding: 0cm 5.4pt;vertical-align: top;">
-                                            <p
-                                                style='margin-right:0cm;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;margin:0cm;text-align:center;'>
-                                                {{ $tagihan->direktur }}</p>
-                                            <p
-                                                style='margin-right:0cm;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;margin:0cm;margin-top:0cm;margin-bottom:8.0pt;text-align:center;line-height:105%;'>
-                                                &nbsp;</p>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+
+                        </page>
                     </div>
-                    <div class="card-footer">
-                        <a href="" class="btn btn-primary" id="word-export"><span class="nav-icon fa fa-file-word"
-                                aria-hidden="true"></span>
-                            Export Tagihan</a>
-                    </div>
+
                 </div>
                 <!-- ./col -->
             </div>
@@ -212,17 +166,45 @@
             <!-- /.row (main row) -->
         </div><!-- /.container-fluid -->
     </div><!-- /.container-fluid -->
-
+    <div class="card-footer">
+        <btn class="btn btn-primary" id="word-export"><span class="nav-icon fa fa-file-word" aria-hidden="true"></span>
+            Export Tagihan</btn>
+    </div>
 @stop
 
 @push('scriptdinamis')
-    <script src="{{ asset('js/FileSaver.js') }}"></script>
-    <script src="{{ asset('js/jquery.wordexport.js') }}"></script>
+    {{-- <script src="{{ asset('js/FileSaver.js') }}"></script>
+    <script src="{{ asset('js/jquery.wordexport.js') }}"></script> --}}
 
-    <script type="text/javascript">
-        let title = "{{ $filename }}";
-        $("#word-export").click(function(event) {
-            $("#exportContent").wordExport(title);
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
+    <script>
+        // window.jsPDF = window.jspdf.jsPDF; // add this line of code
+
+        // window.jsPDF = window.jspdf.jsPDF;
+        function createPdf() {
+            var printContents = document.getElementById('content').innerHTML;
+            var originalContents = document.body.innerHTML;
+
+            document.body.innerHTML = printContents;
+
+            window.print();
+
+            document.body.innerHTML = originalContents;
+        }
+
+        $('#word-export').click(function() {
+            createPdf()
         });
+
+        window.onafterprint = function() {
+            window.location.reload(true);
+        };
+
+        // let title = "{{ $filename }}";
+        // $("#word-export").click(function(event) {
+        //     $("#exportContent").wordExport(title);
+        // });
     </script>
 @endpush

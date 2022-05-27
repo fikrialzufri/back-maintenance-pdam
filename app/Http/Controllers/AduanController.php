@@ -46,13 +46,11 @@ class AduanController extends Controller
 
         $aduan = $query->orderBy('status', 'asc')->orderBy('created_at', 'desc')->paginate($limit);
         $count_aduan = $query->count();
-        $no = $limit * ($aduan->currentPage() - 1);
 
         return view('aduan.index', compact(
             'title',
             'route',
             'aduan',
-            'no',
             'count_aduan',
             'search',
             'limit'

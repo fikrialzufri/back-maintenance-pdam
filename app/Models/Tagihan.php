@@ -6,6 +6,7 @@ use App\Traits\UsesUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Str;
+use Carbon\Carbon;
 
 class Tagihan extends Model
 {
@@ -38,6 +39,12 @@ class Tagihan extends Model
     {
         if ($this->hasRekanan) {
             return $this->hasRekanan->nama;
+        }
+    }
+    public function getAlamatRekananAttribute()
+    {
+        if ($this->hasRekanan) {
+            return $this->hasRekanan->alamat;
         }
     }
 
@@ -168,7 +175,7 @@ class Tagihan extends Model
     public function getTotalTagihanAttribute()
     {
         $total = 0;
-        if ($this->tagihan && $this->galian) {
+        if ($this->tagihan || $this->galian) {
             $total = $this->tagihan + $this->galian;
         }
         return $total;
@@ -209,9 +216,31 @@ class Tagihan extends Model
                     'nama' => $value->karyawan->nama,
                     'jabatan' => $value->karyawan->nama_jabatan,
                     'is_setuju' => true,
-                    'tanggal_disetujui' => isset($value->pivot->created_at) ? tanggal_indonesia($value->pivot->created_at) : ''
+                    'created_at' => $value->pivot->created_at,
+                    'tanggal_disetujui' => isset($value->pivot->created_at) ? tanggal_indonesia($value->pivot->created_at) . " - " . Carbon::parse($value->pivot->created_at)->format('H:i') : ''
                 ];
             }
+
+            $result = collect($result)->sortByDesc('created_at');
+        }
+        return $result;
+    }
+    public function getListPersetujuanTandaTanganAttribute()
+    {
+        $result = [];
+        if ($this->hasUserMany) {
+            foreach ($this->hasUserMany as $key => $value) {
+                $result[$key] = (object) [
+                    'id' => $value->id,
+                    'nama' => $value->karyawan->nama,
+                    'jabatan' => $value->karyawan->nama_jabatan,
+                    'is_setuju' => true,
+                    'created_at' => $value->pivot->created_at,
+                    'tanggal_disetujui' => isset($value->pivot->created_at) ? tanggal_indonesia($value->pivot->created_at) . " - " . Carbon::parse($value->pivot->created_at)->format('H:i') : ''
+                ];
+            }
+
+            $result = collect($result)->sortByDesc('created_at');
         }
         return $result;
     }

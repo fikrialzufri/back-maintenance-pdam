@@ -345,41 +345,31 @@ class PelaksanaanPekerjaanController extends Controller
             $aduan->status = $status;
             $aduan->save();
 
-            $item = [];
-
-            foreach ($data->hasItem as $value) {
-                $item = Item::find($value->id);
-                $item->hapus = 'tidak';
-                $item->save();
-            }
-
-
             $stafPengawas = Auth::user()->hasRekanan->hasKaryawan;
-            $fotolokasi = $penunjukanPekerjaan->foto_lokasi;
-
+            $fotolokasi = $penunjukanPekerjaan->foto_penyelesaian;
 
             $kategoriDokumentasi = Kategori::whereSlug('dokumentasi')->first();
             if ($kategoriDokumentasi) {
                 $jenisDokumentasi = Jenis::where('kategori_id', $kategoriDokumentasi->id)->get()->pluck('id');
                 $listDokumentasi = Item::whereIn('jenis_id', $jenisDokumentasi)->first();
                 if (count($fotolokasi) > 0) {
+                    if (isset($listDokumentasi)) {
 
-                    if (count($item) > 0) {
                         if (now()->format('H:i') >= '18:01') {
-                            $harga = $item->harga_malam;
+                            $harga = $listDokumentasi->harga_malam;
                         } else {
-                            $harga = $item->harga;
+                            $harga = $listDokumentasi->harga;
                         }
                         $total = 1 * $harga;
 
                         $listitem[$listDokumentasi->id] = [
-                            'keterangan' => $keterangan,
+                            'keterangan' => '',
                             'harga' => $harga,
                             'qty' => 1,
                             'total' => $total,
                         ];
 
-                        $data->hasItem()->attach($listitem);
+                        $data->hasItem()->sync($listitem);
                     }
                 }
             }

@@ -42,9 +42,15 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                @php
+                                    $nomor = 0;
+                                @endphp
                                 @forelse ($penunjukan as $index => $item)
+                                    @php
+                                        ++$nomor;
+                                    @endphp
                                     <tr class="{{ $item->keterangan_barang != null ? 'bg-danger' : '' }} ">
-                                        <td>{{ $index + 1 + ($penunjukan->CurrentPage() - 1) * $penunjukan->PerPage() }}
+                                        <td>{{ $nomor + ($penunjukan->CurrentPage() - 1) * $penunjukan->PerPage() }}
                                         </td>
                                         <td>{{ $item->no_spk }}</td>
                                         <td>{{ $item->no_aduan }}</td>

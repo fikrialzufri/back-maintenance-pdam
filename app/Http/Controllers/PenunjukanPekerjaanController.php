@@ -366,7 +366,7 @@ class PenunjukanPekerjaanController extends Controller
 
     public function update(Request $request, $id)
     {
-        $user = auth()->user()->id;
+        $user = [];
         DB::beginTransaction();
         $PelaksanaanPekerjaan  = PelaksanaanPekerjaan::find($id);
         if (auth()->user()->hasRole('staf-pengawas')) {
@@ -384,6 +384,10 @@ class PenunjukanPekerjaanController extends Controller
             if ($PelaksanaanPekerjaan) {
                 $PelaksanaanPekerjaan->status = $status;
                 $PelaksanaanPekerjaan->save();
+
+                $user[auth()->user()->id] = [
+                    'keterangan' => $status,
+                ];
                 $PelaksanaanPekerjaan->hasUserMany()->sync($user);
 
                 $penunjukanPekerjaan = PenunjukanPekerjaan::find($PelaksanaanPekerjaan->penunjukan_pekerjaan_id);
@@ -413,7 +417,7 @@ class PenunjukanPekerjaanController extends Controller
     }
     public function notifikasi($id)
     {
-        $notifikasi = Notifikasi::where('modul_id', $id)->where('to_user_id', auth()->user()->id)->first();
+        $notifikasi = Notifikasi::where('id', $id)->where('to_user_id', auth()->user()->id)->first();
         $notifikasi->status = 'baca';
         $notifikasi->save();
 

@@ -17,6 +17,7 @@ class CreateWilayahTable extends Migration
             $table->uuid('id')->primary();
             $table->string('nama');
             $table->string('slug');
+            $table->string('singkatan');
             $table->timestamps();
         });
     }

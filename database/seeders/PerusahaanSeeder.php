@@ -35,22 +35,27 @@ class PerusahaanSeeder extends Seeder
 
         $WilayahSamarinda = new Wilayah();
         $WilayahSamarinda->nama = 'Wilayah Samarinda';
+        $WilayahSamarinda->singkatan = 'smd';
         $WilayahSamarinda->save();
 
         $WilayahSatu = new Wilayah();
         $WilayahSatu->nama = 'Wilayah Satu';
+        $WilayahSatu->singkatan = 'I';
         $WilayahSatu->save();
 
         $WilayahDua = new Wilayah();
         $WilayahDua->nama = 'Wilayah Dua';
+        $WilayahDua->singkatan = 'II';
         $WilayahDua->save();
 
         $WilayahTiga = new Wilayah();
         $WilayahTiga->nama = 'Wilayah Tiga';
+        $WilayahTiga->singkatan = 'III';
         $WilayahTiga->save();
 
         $WilayahEmpat = new Wilayah();
         $WilayahEmpat->nama = 'Wilayah Empat';
+        $WilayahEmpat->singkatan = 'IV';
         $WilayahEmpat->save();
 
         $divisiHumas = new Divisi();

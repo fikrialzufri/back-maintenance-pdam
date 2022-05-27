@@ -61,7 +61,7 @@ class TagihanController extends Controller
             [
                 'name'    => 'total_tagihan',
                 'input' => 'rupiah',
-                'alias'    => 'Total Lokasi',
+                'alias'    => 'Total Tagihan',
             ],
         ];
     }
@@ -273,7 +273,7 @@ class TagihanController extends Controller
         $total_lokasi = 0;
         $tagihanItem = [];
         $tagihan = $query->orderBy('created_at', 'desc')->first();
-
+        $action = '';
         if ($tagihan) {
 
             if (isset($tagihan->hasPelaksanaanPekerjaan)) {
@@ -284,7 +284,7 @@ class TagihanController extends Controller
             }
             $nomor_tagihan = $tagihan->nomor_tagihan;
             $tagihanItem = TagihanItem::where('tagihan_id', $tagihan->id)->orderBy('urutan')->get();
-            $action = route('tagihan.store', $tagihan->id);
+            $action = route('tagihan.update', $tagihan->id);
             $total = $tagihanItem->sum('grand_total');
             $total_lokasi = $tagihan->total_lokasi;
             if (count($tagihanItem) === 0) {
@@ -311,7 +311,6 @@ class TagihanController extends Controller
         if (auth()->user()->hasRole('superadmin')) {
             $perencaan = true;
         }
-
 
         if (isset($tagihan->list_persetujuan)) {
             $list_persetujuan = (object) $tagihan->list_persetujuan;
@@ -382,7 +381,8 @@ class TagihanController extends Controller
         $start = Carbon::now()->subMonths(2)->startOfMonth()->format('Y-m-d') . ' 00:00:01';
         $end =  Carbon::now()->endOfMonth()->format('Y-m-d') . ' 23:59:59';
 
-        $query->where('tagihan', 'tidak')->where('status', 'selesai koreksi')->whereBetween(DB::raw('DATE(tanggal_selesai)'), array($start, $end));
+        // ->where('status', 'selesai koreksi')
+        $query->where('tagihan', 'tidak')->whereBetween(DB::raw('DATE(tanggal_selesai)'), array($start, $end));
         $penunjukan =  $query->get();
 
 
@@ -407,20 +407,31 @@ class TagihanController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $user = auth()->user()->id;
         DB::beginTransaction();
-        $tagihan  = $this->model()->find($id);
-
         try {
             DB::commit();
-            if ($tagihan) {
-                $tagihan->hasUserMany()->attach($user);
-                $message = 'Berhasil Menyetujui Tagihan : ' . $tagihan->nomor_tagihan;
+            $user = [];
+            $data  = $this->model()->find($id);
+            if ($data) {
+                $status = 'dikoreksi';
+
+                if (auth()->user()->hasRole('direktur-teknik')) {
+                    $status = 'disetujui';
+                }
+                $data->status = $status;
+                $data->save();
+
+                $user[auth()->user()->id] = [
+                    'keterangan' => $status,
+                ];
+                $data->hasUserMany()->attach($user);
+                $message = 'Berhasil Menyetujui Tagihan : ' . $data->nomor_tagihan;
+
                 return redirect()->route('tagihan.index')->with('message', $message)->with('Class', 'primary');
             }
         } catch (\Throwable $th) {
             DB::rollback();
-            return redirect()->route('tagihan.index')->with('message', 'Penunjukan pekerjaan gagal ditambah')->with('Class', 'danger');
+            return redirect()->route('tagihan.index')->with('message', 'Tagihan gagal disetujui')->with('Class', 'danger');
         }
     }
     /**
@@ -846,15 +857,26 @@ class TagihanController extends Controller
 
     public function wordtagihan()
     {
+        $now = capital_tanggal_indonesia(Carbon::now());
+
         $id = request()->get('id') ?: "";
         $tagihan = Tagihan::find($id);
         $TagihanItem = TagihanItem::where('tagihan_id', $tagihan->id)->get();
+
+        $wilayah = '';
+
+        if ($tagihan->hasPelaksanaanPekerjaan) {
+            foreach ($tagihan->hasPelaksanaanPekerjaan as $key => $value) {
+                $wilayah .= $value->wilayah . ', ';
+            }
+        }
+
+        $wilayah = rtrim($wilayah, ", ");
 
         $filename =  "Tagihan Rekenan " . $tagihan->rekanan . " Nomor " . $tagihan->nomor_tagihan;
         $title =  "Priview Tagihan : " . $tagihan->nomor_tagihan;
         $bulan = bulan_indonesia(Carbon::parse($tagihan->tanggal_adjust));
         $tanggal = tanggal_indonesia(Carbon::parse($tagihan->tanggal_adjust));
-        $now = tanggal_indonesia(Carbon::now(), false);
 
         if (count($TagihanItem) == 0) {
             $total_lokasi = $tagihan->total_lokasi_pekerjaan;
@@ -866,6 +888,7 @@ class TagihanController extends Controller
 
         return view('tagihan.word', compact(
             "title",
+            "wilayah",
             "total_tagihan",
             "total_lokasi",
             "filename",

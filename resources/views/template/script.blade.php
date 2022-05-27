@@ -51,7 +51,7 @@
         let notifikasi = function() {
             $.ajax({
                 type: 'GET',
-                url: '/notification',
+                url: "{{ route('notification') }}",
                 data: {
                     "_token": "{{ csrf_token() }}",
                 },
@@ -68,7 +68,7 @@
                         let lenght = $('#modul_' + id).length;
                         let url =
                             '{{ route('penunjukan_pekerjaan.notification', ':id') }}';
-                        url = url.replace(':id', val.modul_id);
+                        url = url.replace(':id', val.id);
 
                         content = `<a href="${url}" class="media"  id="modul_${val.id}">
                         <span class="d-flex">
@@ -86,7 +86,7 @@
 
                             let url =
                                 '{{ route('penunjukan_pekerjaan.notification', ':id') }}';
-                            url = url.replace(':id', val.modul_id);
+                            url = url.replace(':id', val.id);
 
                             if (lenght === 0) {
                                 $('#notifikasi').append(content);

@@ -36,9 +36,15 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                @php
+                                    $nomor = 0;
+                                @endphp
                                 @forelse ($aduan as $index => $item)
+                                    @php
+                                        ++$nomor;
+                                    @endphp
                                     <tr>
-                                        <td>{{ ++$no }}</td>
+                                        <td>{{ $nomor + ($aduan->CurrentPage() - 1) * $aduan->PerPage() }}</td>
                                         <td>{{ $item->no_ticket }}</td>
                                         <td>{{ $item->no_aduan }}</td>
                                         <td>{{ $item->atas_nama }}</td>

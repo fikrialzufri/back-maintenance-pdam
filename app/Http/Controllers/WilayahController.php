@@ -48,6 +48,12 @@ class WilayahController extends Controller
                 'input'    => 'text',
                 'alias'    => 'Nama Wilayah',
                 'validasi'    => ['required', 'unique', 'min:1'],
+            ],
+            [
+                'name'    => 'singkatan',
+                'input'    => 'text',
+                'alias'    => 'Singkatan Wilayah',
+                'validasi'    => ['required', 'unique', 'min:1'],
             ]
         ];
     }
