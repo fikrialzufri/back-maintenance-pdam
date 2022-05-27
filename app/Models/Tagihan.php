@@ -211,14 +211,16 @@ class Tagihan extends Model
         $result = [];
         if ($this->hasUserMany) {
             foreach ($this->hasUserMany as $key => $value) {
-                $result[$key] = (object) [
-                    'id' => $value->id,
-                    'nama' => $value->karyawan->nama,
-                    'jabatan' => $value->karyawan->nama_jabatan,
-                    'is_setuju' => true,
-                    'created_at' => $value->pivot->created_at,
-                    'tanggal_disetujui' => isset($value->pivot->created_at) ? tanggal_indonesia($value->pivot->created_at) . " - " . Carbon::parse($value->pivot->created_at)->format('H:i') : ''
-                ];
+                if ($value->karyawan) {
+                    $result[$key] = (object) [
+                        'id' => $value->id,
+                        'nama' => $value->karyawan->nama,
+                        'jabatan' => $value->karyawan->nama_jabatan,
+                        'is_setuju' => true,
+                        'created_at' => $value->pivot->created_at,
+                        'tanggal_disetujui' => isset($value->pivot->created_at) ? tanggal_indonesia($value->pivot->created_at) . " - " . Carbon::parse($value->pivot->created_at)->format('H:i') : ''
+                    ];
+                }
             }
 
             $result = collect($result)->sortByDesc('created_at');
@@ -230,14 +232,16 @@ class Tagihan extends Model
         $result = [];
         if ($this->hasUserMany) {
             foreach ($this->hasUserMany as $key => $value) {
-                $result[$key] = (object) [
-                    'id' => $value->id,
-                    'nama' => $value->karyawan->nama,
-                    'jabatan' => $value->karyawan->nama_jabatan,
-                    'is_setuju' => true,
-                    'created_at' => $value->pivot->created_at,
-                    'tanggal_disetujui' => isset($value->pivot->created_at) ? tanggal_indonesia($value->pivot->created_at) . " - " . Carbon::parse($value->pivot->created_at)->format('H:i') : ''
-                ];
+                if ($value->karyawan) {
+                    $result[$key] = (object) [
+                        'id' => $value->id,
+                        'nama' => $value->karyawan->nama,
+                        'jabatan' => $value->karyawan->nama_jabatan,
+                        'is_setuju' => true,
+                        'created_at' => $value->pivot->created_at,
+                        'tanggal_disetujui' => isset($value->pivot->created_at) ? tanggal_indonesia($value->pivot->created_at) . " - " . Carbon::parse($value->pivot->created_at)->format('H:i') : ''
+                    ];
+                }
             }
 
             $result = collect($result)->sortByDesc('created_at');

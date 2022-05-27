@@ -100,7 +100,7 @@
                             </p>
                             <ol style="font-size: 20px;">
                                 @forelse ($tagihan->list_persetujuan as $index => $item)
-                                    @if ($item->jabatan !== 'Direktur Teknik')
+                                    @if ($item->jabatan !== 'Direktur Teknik' && $item->jabatan !== 'Staf Perencanaan')
                                         <li> <span style=''>{{ $item->nama }}
                                                 Sebagai {{ $item->jabatan }}</span></li>
                                     @endif
@@ -142,15 +142,15 @@
                                 </span>
 
                             </p>
-                            <p style=' font-size: 20px;'>
-                                <span style=''>Berdasarkan Surat Perintah
+                            <p>
+                                <span style='font-size: 20px;'>Berdasarkan Surat Perintah
                                     Pelaksanaan untuk pekerjaan tersebut dan persyaratan-persyaratan bahan-bahan maupun
                                     pelaksanaannya, dengan ini menyatakan bahwa pekerjaan (terlampir) dari perumdam, telah
                                     selesai dikerjakan dan memenuhi prosedur dan syarat-syarat yang ditetapkan oleh Perumdam
                                     Tirta Kencana Kota Samarinda.</span>
                             </p>
-                            <p style=' font-size: 20px;'>
-                                <span style=''>Demikian Berita Acara
+                            <p>
+                                <span style='font-size: 20px;'>Demikian Berita Acara
                                     Pemeriksaan Pekerjaan ini dibuat dengan penuh tanggung jawab sebagaimana
                                     mestinya.</span>
                             </p>
@@ -167,8 +167,8 @@
         </div><!-- /.container-fluid -->
     </div><!-- /.container-fluid -->
     <div class="card-footer">
-        <btn class="btn btn-primary" id="word-export"><span class="nav-icon fa fa-file-word" aria-hidden="true"></span>
-            Export Tagihan</btn>
+        <btn class="btn btn-primary" id="word-export"><span class="nav-icon fa fa-file-pdf" aria-hidden="true"></span>
+            Print Surat Berita Acara</btn>
     </div>
 @stop
 
