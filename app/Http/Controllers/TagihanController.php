@@ -470,7 +470,7 @@ class TagihanController extends Controller
                 if (auth()->user()->hasRole('direktur-teknik')) {
                     $status = 'disetujui';
                 }
-                if (auth()->user()->hasRole('staf-keuangan')) {
+                if (auth()->user()->hasRole('keuangan')) {
                     $status = 'dibayar';
                     $data->kode_vocher = $request->kode_voucher;
                 }
