@@ -487,7 +487,7 @@ class TagihanController extends Controller
                 }
 
                 $title = "Tagihan telah setujui";
-                $body = "Nomor Tagihan " . $data->nomor_tagihan . " telah disetujui oleh" . $namakaryawan;
+                $body = "Nomor Tagihan " . $data->nomor_tagihan . " telah disetujui oleh " . $namakaryawan;
                 $modul = "tagihan";
 
                 $rekanan = Rekanan::find($data->rekanan_id);
