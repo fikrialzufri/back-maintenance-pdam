@@ -67,6 +67,19 @@
                                             </div>
                                         </div>
                                     </div>
+                                    @if ($tagihan->kode_vocher != '')
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <div>
+                                                    <label for="voucher" class=" form-control-label">Voucher</label>
+                                                </div>
+                                                <div>
+                                                    <input type="text" placeholder="voucher " class="form-control"
+                                                        readonly value="{{ $tagihan->kode_vocher }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
                                     <div class="col-12">
                                         <div class="form-group">
                                             <div>
@@ -119,8 +132,6 @@
                             @if (isset($tagihan->hasPelaksanaanPekerjaan))
                                 @foreach ($tagihan->hasPelaksanaanPekerjaan as $key => $item)
                                     <div>
-                                        <hr>
-                                        <hr>
                                         <label for="rekanan" class=" form-control-label">
                                             <h3>Pekerjaan :
                                                 {{ $item->No_Spk }} </h3>
@@ -217,7 +228,7 @@
                                         </div>
                                         <div class="col-md-12">
                                             <div>
-                                                <span>Daftar Pekerjaan Galian</span>
+
                                                 <table class="table table-bordered " width="100%">
                                                     <thead>
                                                         <tr>
@@ -285,6 +296,26 @@
                                 @endforeach
                             @endif
                             @if (!auth()->user()->hasRole('rekanan'))
+                                @if ($keuangan === true)
+                                    <div class="row mb-5">
+                                        <div class="col-12">
+                                            <div>
+                                                <label for="kode_voucher" class=" form-control-label">Kode Voucher</label>
+                                            </div>
+                                            <div>
+                                                <input type="text" name="kode_voucher" placeholder="Kode Voucher"
+                                                    class="form-control  {{ $errors->has('kode_voucher') ? 'form-control is-invalid' : 'form-control' }}"
+                                                    value="{{ old('kode_voucher') }}" required>
+                                            </div>
+
+                                            @if ($errors->has('kode_voucher'))
+                                                <span class="text-danger">
+                                                    <strong id="textkk">{{ $errors->first('kode_voucher') }}</strong>
+                                                </span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                @endif
                                 @if ($bntSetuju === false)
                                     <div class="row">
                                         <div class="col-12">
@@ -304,12 +335,8 @@
 
 
                                 @if ($tagihan)
-                                    @if (auth()->user()->hasRole('staf-pengawas'))
-                                        <a href="{{ route('tagihan.excel') }}?id={{ $tagihan->id }}"
-                                            class="btn btn-success"><span class="nav-icon fa fa-file-excel"
-                                                aria-hidden="true"></span> Export Excel Tagihan</a>
-                                    @endif
                                     <div class="col-2">
+
                                         @if ($tagihan->status === 'disetujui')
                                             <a href="{{ route('tagihan.word') }}?id={{ $tagihan->id }}"
                                                 target="_blank" class="btn btn-danger"><span
@@ -476,8 +503,8 @@
                                 </table>
                             </div>
                             <div class="card-footer clearfix">
-                                <a href="{{ route('tagihan.excel') }}?id={{ $tagihan->id }}" class="btn btn-success"><span
-                                        class="nav-icon fa fa-file-excel" aria-hidden="true"></span>
+                                <a href="{{ route('tagihan.excel') }}?id={{ $tagihan->id }}"
+                                    class="btn btn-success"><span class="nav-icon fa fa-file-excel" aria-hidden="true"></span>
                                     Export Excel Tagihan</a>
 
                                 <a href="{{ route('tagihan.word') }}?id={{ $tagihan->id }}" target="_blank"

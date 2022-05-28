@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Aduan;
 use App\Models\GalianPekerjaan;
 use App\Models\Item;
+use App\Models\Jabatan;
 use App\Models\Jenis;
+use App\Models\Karyawan;
 use App\Models\Kategori;
 use App\Models\PelaksanaanPekerjaan;
 use App\Models\PenunjukanPekerjaan;
@@ -304,6 +306,12 @@ class PelaksanaanPekerjaanController extends Controller
     public function selesai(Request $request)
     {
         DB::beginTransaction();
+        // list jabatan
+        $listJabatan = Jabatan::whereSlug('manager-distribusi')->orWhere('slug', 'staf-perencanaan')->orWhere('slug', 'asisten-manager-pengawas-fisik')->orWhere('slug', 'direktur-teknik')->get()->pluck('id')->toArray();
+
+        // list karyawan bedasarkan jabatan
+        $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get();
+
         try {
             DB::commit();
             $message = 'Gagal Menyimpan Pelaksanaan Pekerjaan';
@@ -369,7 +377,7 @@ class PelaksanaanPekerjaanController extends Controller
                             'total' => $total,
                         ];
 
-                        $data->hasItem()->sync($listitem);
+                        $data->hasItem()->attach($listitem);
                     }
                 }
             }
@@ -378,9 +386,18 @@ class PelaksanaanPekerjaanController extends Controller
             $body = "Dengan nomor SPK : " . $penunjukanPekerjaan->nomor_pekerjaan . " telah selesai";
             $modul = "pelaksanaan-pekerjaan";
 
+            // notif ke staf pengawas
             foreach ($stafPengawas as $pengawas) {
-                $this->notification($aduan->id, $penunjukanPekerjaan->slug, $title, $body, $modul, auth()->user()->id, $pengawas->user_id);
+                $this->notification($data->id, $penunjukanPekerjaan->slug, $title, $body, $modul, auth()->user()->id, $pengawas->user_id);
             }
+
+            // notif ke karyawan bedasarkan jabatan
+            if ($listKaryawan) {
+                foreach (collect($listKaryawan) as $i => $kr) {
+                    $this->notification($data->id, $penunjukanPekerjaan->slug, $title, $body, $modul, auth()->user()->id, $kr->user_id);
+                }
+            }
+
 
 
             $message = 'Berhasil Menyimpan Pelaksanaan Pekerjaan';

@@ -218,7 +218,7 @@ trait CrudTrait
         if ($this->index) {
             $template = $this->index . '.index';
         }
-        // return  $export;
+        // return  $data;
 
         return view($template,  compact(
             "title",

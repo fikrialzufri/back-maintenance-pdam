@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Exports\ExportTagihan;
 use App\Models\Item;
+use App\Models\Jabatan;
 use App\Models\Jenis;
+use App\Models\Karyawan;
 use App\Models\PelaksanaanPekerjaan;
 use App\Models\PenunjukanPekerjaan;
 use App\Models\Rekanan;
@@ -28,6 +30,8 @@ class TagihanController extends Controller
         $this->route = 'tagihan';
         $this->tambah = 'false';
         $this->index = 'tagihan';
+        $this->sort = 'created_at';
+        $this->desc = 'desc';
         $this->middleware('permission:view-' . $this->route, ['only' => ['index', 'show']]);
         $this->middleware('permission:create-' . $this->route, ['only' => ['create', 'store']]);
         $this->middleware('permission:edit-' . $this->route, ['only' => ['edit', 'update']]);
@@ -302,6 +306,8 @@ class TagihanController extends Controller
         $user = auth()->user()->id;
         $list_persetujuan = [];
         $perencaan = true;
+        $keuangan = false;
+
         if (auth()->user()->hasRole('rekanan')) {
             $perencaan = false;
         }
@@ -312,6 +318,37 @@ class TagihanController extends Controller
             $perencaan = true;
         }
 
+
+        if (auth()->user()->hasRole('direktur-teknik')) {
+            // list jabatan
+
+            $listJabatan = Jabatan::whereSlug('manager-distribusi')->orWhere('slug', 'staf-perencanaan')->orWhere('slug', 'staf-pengawas')->orWhere('slug', 'asisten-manager-pengawas-fisik')->get()->pluck('id')->toArray();
+
+            // list karyawan bedasarkan jabatan
+            $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get()->pluck('user_id')->toArray();
+
+
+            if (count($tagihan->list_persetujuan) > 0) {
+                $bntSetuju = true;
+                $arrayList = collect($tagihan->list_persetujuan)->pluck('id')->toArray();
+
+                if ((count(array_unique(array_merge($arrayList, $listKaryawan))) === count($arrayList))) {
+                    $bntSetuju = false;
+                } else {
+                    $bntSetuju = true;
+                }
+            }
+        }
+
+        if (auth()->user()->hasRole('staf-keuangan')) {
+            $keuangan = true;
+            $bntSetuju = true;
+            if ($tagihan->status === 'disetujui') {
+                $keuangan = false;
+                $bntSetuju = false;
+            }
+        }
+
         if (isset($tagihan->list_persetujuan)) {
             $list_persetujuan = (object) $tagihan->list_persetujuan;
             foreach ($tagihan->list_persetujuan as $key => $value) {
@@ -320,6 +357,8 @@ class TagihanController extends Controller
                 }
             }
         }
+
+
         return view('tagihan.show', compact(
             'action',
             'title',
@@ -333,6 +372,7 @@ class TagihanController extends Controller
             'total_lokasi',
             'nomor_tagihan',
             'tagihanItem',
+            'keuangan',
             'tanggal_tagihan',
             'tagihan'
         ));
@@ -408,6 +448,14 @@ class TagihanController extends Controller
     public function update(Request $request, $id)
     {
         DB::beginTransaction();
+
+        // list jabatan
+        $listJabatan = Jabatan::whereSlug('manager-distribusi')->orWhere('slug', 'staf-perencanaan')->orWhere('slug', 'asisten-manager-pengawas-fisik')->orWhere('slug', 'direktur-teknik')->get()->pluck('id')->toArray();
+
+        // list karyawan bedasarkan jabatan
+        $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get();
+
+
         try {
             DB::commit();
             $user = [];
@@ -418,6 +466,10 @@ class TagihanController extends Controller
                 if (auth()->user()->hasRole('direktur-teknik')) {
                     $status = 'disetujui';
                 }
+                if (auth()->user()->hasRole('staf-keuangan')) {
+                    $status = 'dibayar';
+                    $data->kode_vocher = $request->kode_voucher;
+                }
                 $data->status = $status;
                 $data->save();
 
@@ -426,6 +478,23 @@ class TagihanController extends Controller
                 ];
                 $data->hasUserMany()->attach($user);
                 $message = 'Berhasil Menyetujui Tagihan : ' . $data->nomor_tagihan;
+
+                $title = "Tagihan telah dibuat";
+                $body = "Nomor Tagihan " . $data->nomor_tagihan . " telah dibuat";
+                $modul = "tagihan";
+
+                $rekanan = Rekanan::find($data->rekanan_id);
+                // notif ke staf pengawas
+                if ($rekanan->hasKaryawan) {
+                    foreach (collect($rekanan->hasKaryawan) as $key => $value) {
+                        $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $value->user_id);
+                    }
+                }
+                if ($listKaryawan) {
+                    foreach (collect($listKaryawan) as $i => $kr) {
+                        $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $kr->user_id);
+                    }
+                }
 
                 return redirect()->route('tagihan.index')->with('message', $message)->with('Class', 'primary');
             }
@@ -455,6 +524,12 @@ class TagihanController extends Controller
             $nomor_tagihan =  $no . "/" . "BAPP-KJB/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
         }
 
+        // list jabatan
+        $listJabatan = Jabatan::whereSlug('manager-distribusi')->orWhere('slug', 'staf-perencanaan')->orWhere('slug', 'asisten-manager-pengawas-fisik')->orWhere('slug', 'direktur-teknik')->get()->pluck('id')->toArray();
+
+        // list karyawan bedasarkan jabatan
+        $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get();
+
         DB::beginTransaction();
         try {
             DB::commit();
@@ -474,6 +549,27 @@ class TagihanController extends Controller
             $data->user_id = auth()->user()->id;
             $data->status = 'dikirim';
             $data->save();
+
+            $title = "Tagihan telah dibuat";
+            $body = "Nomor Tagihan " . $nomor_tagihan . " telah dibuat";
+            $modul = "tagihan";
+
+
+            if (auth()->user()->hasRole('rekanan')) {
+                $rekanan = Rekanan::find($rekanan_id);
+                // notif ke staf pengawas
+                if ($rekanan->hasKaryawan) {
+                    foreach (collect($rekanan->hasKaryawan) as $key => $value) {
+                        $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $value->user_id);
+                    }
+                }
+            }
+
+            if ($listKaryawan) {
+                foreach (collect($listKaryawan) as $i => $kr) {
+                    $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $kr->user_id);
+                }
+            }
 
             foreach ($pelaksanaan as $value) {
                 $PelaksanaanPekerjaan = PelaksanaanPekerjaan::where('id', $value)
@@ -504,7 +600,7 @@ class TagihanController extends Controller
         }
     }
     /**
-     * Show the form for creating a new resource.
+     * upload the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
@@ -874,9 +970,9 @@ class TagihanController extends Controller
         $wilayah = rtrim($wilayah, ", ");
 
         $filename =  "Tagihan Rekenan " . $tagihan->rekanan . " Nomor " . $tagihan->nomor_tagihan;
-        $title =  "Priview Tagihan : " . $tagihan->nomor_tagihan;
+        $title =  "Tagihan : " . $tagihan->nomor_tagihan;
         $bulan = bulan_indonesia(Carbon::parse($tagihan->tanggal_adjust));
-        $tanggal = tanggal_indonesia(Carbon::parse($tagihan->tanggal_adjust));
+        $tanggal = tanggal_indonesia(Carbon::parse($tagihan->tanggal_adjust), false);
 
         if (count($TagihanItem) == 0) {
             $total_lokasi = $tagihan->total_lokasi_pekerjaan;
@@ -886,6 +982,23 @@ class TagihanController extends Controller
             $total_tagihan = $TagihanItem->sum('grand_total');
         }
 
+        $preview = $tagihan->slug;
+
+        if (auth()->user()->hasRole('rekanan')) {
+            return view('tagihan.wordrekanan', compact(
+                "title",
+                "wilayah",
+                "total_tagihan",
+                "total_lokasi",
+                "filename",
+                "bulan",
+                "preview",
+                "now",
+                "tanggal",
+                "tagihan"
+            ));
+        }
+
         return view('tagihan.word', compact(
             "title",
             "wilayah",
@@ -893,6 +1006,54 @@ class TagihanController extends Controller
             "total_lokasi",
             "filename",
             "bulan",
+            "preview",
+            "now",
+            "tanggal",
+            "tagihan"
+        ));
+    }
+
+    public function preview($slug)
+    {
+        $now = capital_tanggal_indonesia(Carbon::now());
+
+        $id = request()->get('id') ?: "";
+        $tagihan = Tagihan::whereSlug($slug)->first();
+        $TagihanItem = TagihanItem::where('tagihan_id', $tagihan->id)->get();
+
+        $wilayah = '';
+
+        if ($tagihan->hasPelaksanaanPekerjaan) {
+            foreach ($tagihan->hasPelaksanaanPekerjaan as $key => $value) {
+                $wilayah .= $value->wilayah . ', ';
+            }
+        }
+
+        $wilayah = rtrim($wilayah, ", ");
+
+        $filename =  "Tagihan Rekenan " . $tagihan->rekanan . " Nomor " . $tagihan->nomor_tagihan;
+        $title =  "Tagihan : " . $tagihan->nomor_tagihan;
+        $bulan = bulan_indonesia(Carbon::parse($tagihan->tanggal_adjust));
+        $tanggal = tanggal_indonesia(Carbon::parse($tagihan->tanggal_adjust), false);
+
+        if (count($TagihanItem) == 0) {
+            $total_lokasi = $tagihan->total_lokasi_pekerjaan;
+            $total_tagihan = $tagihan->total_tagihan;
+        } else {
+            $total_lokasi = $tagihan->total_lokasi;
+            $total_tagihan = $TagihanItem->sum('grand_total');
+        }
+
+        $preview = $tagihan->slug;
+
+        return view('tagihan.preview', compact(
+            "title",
+            "wilayah",
+            "total_tagihan",
+            "total_lokasi",
+            "filename",
+            "bulan",
+            "preview",
             "now",
             "tanggal",
             "tagihan"

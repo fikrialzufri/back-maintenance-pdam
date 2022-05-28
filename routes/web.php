@@ -65,7 +65,7 @@ Route::group(['middleware' => 'auth'], function () {
     // Aduan
     Route::resource('aduan', AduanController::class)->except('show');
 
-    Route::get('notifikasi/aduan/{id}', [PenunjukanPekerjaanController::class, 'notifikasi'])->name('penunjukan_pekerjaan.notification');
+    Route::get('notifikasi/aduan/{id}', [PenunjukanPekerjaanController::class, 'opennotifikasi'])->name('penunjukan_pekerjaan.notification');
 
     Route::resource('penunjukan-pekerjaan', PenunjukanPekerjaanController::class, ['names' => 'penunjukan_pekerjaan'])->except('destroy');
 
@@ -90,6 +90,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('exxceltagihan', [TagihanController::class, 'exxceltagihan'])->name('tagihan.excel');
     Route::get('wordtagihan', [TagihanController::class, 'wordtagihan'])->name('tagihan.word');
 
+
     // Karyawan
     Route::resource('departemen', DepartemenController::class);
     Route::resource('wilayah', WilayahController::class);
@@ -109,3 +110,5 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
     Route::post('/setting', [SettingController::class, 'store'])->name('setting.store');
 });
+
+Route::get('previewtagihan/{slug}', [TagihanController::class, 'preview'])->name('tagihan.preview');

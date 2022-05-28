@@ -4,7 +4,7 @@
 @push('head')
     <style>
         @page {
-            size: A4;
+            size: legal;
             margin: 0;
         }
 
@@ -36,16 +36,13 @@
             width: 100%;
         }
 
-        page[size="letter"] {}
-
         @media print {
 
             body,
-            page[size="letter"] {
+            page[size="legal"] {
                 background: white;
                 width: 21cm;
-                padding-left: 30px;
-                padding-right: 30px;
+                padding: 40px;
                 height: 29.7cm;
                 display: block;
                 margin: 0 auto;
@@ -72,7 +69,6 @@
                                     <img src="{{ asset('img/kopsurat.png') }}" class="img-responsive" width="80%">
                                 </div>
                             </div>
-                            <br>
                             <div class="text-center" style="margin-bottom:24px;">
                                 <span style=' font-size: 25px;'>
                                     <strong>
@@ -118,7 +114,7 @@
                                         {{ $bulan }}
                                         Tahun {{ date('Y') }} di Wilayah {{ $wilayah }} Sebanyak
                                         {{ $total_lokasi }}
-                                        Lokasi, Perumdam Tirta Kencana
+                                        Lokasi. Perumdam Tirta Kencana
                                         Kota Samarinda.</span>
                                 </p>
                             </div>
@@ -154,7 +150,63 @@
                                     Pemeriksaan Pekerjaan ini dibuat dengan penuh tanggung jawab sebagaimana
                                     mestinya.</span>
                             </p>
+                            <div class="row">
+                                <div style='font-size: 20px;' class="col-3">
+                                    {{ $tagihan->rekanan }}
+                                    <br>
+                                    Samarinda, {{ $tanggal }}
+                                    <br>
+                                    <img src="data:image/png;base64, {!! base64_encode(
+    QrCode::format('png')->size(97)->generate(route('tagihan.preview', $preview)),
+) !!} " class="img-square">
+                                    <br>
+                                    {{ $tagihan->direktur }}
+                                </div>
 
+                                <div style='font-size: 20px;' class="text-left col-9">
+                                    Samarinda, {{ $tanggal }}
+                                    <br>
+                                    Pemeriksa Pekerjaan,
+                                    <br>
+                                    <div class="d-flex justify-content-start">
+                                        <div class="d mr-3">
+                                            <img src="data:image/png;base64, {!! base64_encode(
+    QrCode::format('png')->size(97)->generate(route('tagihan.preview', $preview)),
+) !!} "
+                                                class="img-square">
+                                        </div>
+                                        <div class="d">
+                                            <ol style="">
+
+                                                @forelse ($tagihan->list_persetujuan as $index => $item)
+                                                    @if ($item->jabatan !== 'Direktur Teknik' && $item->jabatan !== 'Staf Perencanaan')
+                                                        <li> <span style=''>{{ $item->nama }}
+                                                                Sebagai {{ $item->jabatan }}</span></li>
+                                                    @endif
+                                                @empty
+                                                @endforelse
+                                            </ol>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <span style=' font-size: 20px;'>
+                                    <p style=' font-size: 20px;'> Mengetahui, <br> Direktur Teknik
+                                        PEKERJAAN <br> Perumdam Tirta Kencana Kota Samarinda</p>
+                                    @forelse ($tagihan->list_persetujuan as $index => $item)
+                                        @if ($item->jabatan === 'Direktur Teknik')
+                                            <img src="data:image/png;base64, {!! base64_encode(
+    QrCode::format('png')->size(97)->generate(route('tagihan.preview', $preview)),
+) !!} "
+                                                class="img-square">
+                                        @endif
+                                    @empty
+                                    @endforelse
+
+                                    <p> <strong style=' font-size: 20px;'> Ali Rachman AS, S.T.</strong></p>
+                                </span>
+                            </div>
                         </page>
                     </div>
 
@@ -198,9 +250,9 @@
             createPdf()
         });
 
-        window.onafterprint = function() {
-            window.location.reload(true);
-        };
+        // window.onafterprint = function() {
+        //     window.location.reload(true);
+        // };
 
         // let title = "{{ $filename }}";
         // $("#word-export").click(function(event) {

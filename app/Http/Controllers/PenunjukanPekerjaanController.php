@@ -6,10 +6,12 @@ use Illuminate\Http\Request;
 use App\Models\Aduan;
 use App\Models\GalianPekerjaan;
 use App\Models\Item;
+use App\Models\Jabatan;
 use App\Models\Jenis;
 use App\Models\PenunjukanPekerjaan;
 use App\Models\PelaksanaanPekerjaan;
 use App\Models\JenisAduan;
+use App\Models\Karyawan;
 use App\Models\Kategori;
 use App\Models\Notifikasi;
 use App\Models\Rekanan;
@@ -250,6 +252,18 @@ class PenunjukanPekerjaanController extends Controller
             if (auth()->user()->hasRole('rekanan')) {
                 $rekanan_id = auth()->user()->id_rekanan;
             }
+
+            $notifikasi = Notifikasi::where('modul_id', $penunjukan->id)->where('to_user_id',  auth()->user()->id)->first();
+            if ($notifikasi) {
+                $notifikasi->status = 'baca';
+                $notifikasi->save();
+            }
+        } else {
+            $notifikasi = Notifikasi::where('modul_id', $aduan->id)->first();
+            if ($notifikasi) {
+                $notifikasi->status = 'baca';
+                $notifikasi->save();
+            }
         }
 
 
@@ -257,11 +271,6 @@ class PenunjukanPekerjaanController extends Controller
         $jenis_aduan = JenisAduan::orderBy('nama')->get();
         $rekanan = Rekanan::orderBy('nama')->get();
 
-        $notifikasi = Notifikasi::where('modul_id', $aduan->id)->first();
-        if ($notifikasi) {
-            $notifikasi->status = 'baca';
-            $notifikasi->save();
-        }
 
         $title = 'Detail Aduan ' . $aduan->nomor_pekerjaan;
 
@@ -335,7 +344,15 @@ class PenunjukanPekerjaanController extends Controller
             return redirect()->route('penunjukan_pekerjaan.index')->with('message', 'Aduan sudah dikerjakan')->with('Class', 'danger');
         }
 
+        // list jabatan
+        $listJabatan = Jabatan::whereSlug('manager-distribusi')->orWhere('slug', 'staf-perencanaan')->orWhere('slug', 'asisten-manager-pengawas-fisik')->orWhere('slug', 'direktur-teknik')->get()->pluck('id')->toArray();
+
+        // list karyawan bedasarkan jabatan
+        $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get();
+
         $rekanan = Rekanan::find($rekanan_id);
+        if (auth()->user()->hasRole('rekanan')) { }
+
 
         try {
             DB::commit();
@@ -354,7 +371,23 @@ class PenunjukanPekerjaanController extends Controller
             $body = "SPK " . $nomor_pekerjaan . " telah diterbitkan";
             $modul = "penunjukan-pekerjaan";
 
+            // notif ke reknanan
             $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $rekanan->hasUser->id);
+            $rekanan = Rekanan::find($rekanan_id);
+
+            // notif ke staf pengawas
+            if ($rekanan->hasKaryawan) {
+                foreach (collect($rekanan->hasKaryawan) as $key => $value) {
+                    $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $value->user_id);
+                }
+            }
+
+            // notif ke karyawan bedasarkan jabatan
+            if ($listKaryawan) {
+                foreach (collect($listKaryawan) as $i => $kr) {
+                    $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $kr->user_id);
+                }
+            }
 
             $message = 'Berhasil Menyimpan Pelaksanaan Pekerjaan';
             return redirect()->route('penunjukan_pekerjaan.index')->with('message', 'Penunjukan pekerjaan berhasil ditambah')->with('Class', 'primary');
@@ -399,7 +432,7 @@ class PenunjukanPekerjaanController extends Controller
 
                     $penunjukanPekerjaan->hasUserMany()->sync($user);
                     $rekanan = Rekanan::find($PelaksanaanPekerjaan->rekanan_id)->first();
-                    $title = "Pekerjaan Telah dikoreksi Pekerjaan Baru";
+                    $title = "Pekerjaan Telah dikoreksi";
                     $body = "SPK " . $nomor_pekerjaan . " telah dikoreksi";
                     $modul = "penunjukan-pekerjaan";
 
@@ -415,11 +448,32 @@ class PenunjukanPekerjaanController extends Controller
             return redirect()->route('penunjukan_pekerjaan.index')->with('message', 'Penunjukan pekerjaan gagal ditambah')->with('Class', 'danger');
         }
     }
-    public function notifikasi($id)
+    public function opennotifikasi($id)
     {
         $notifikasi = Notifikasi::where('id', $id)->where('to_user_id', auth()->user()->id)->first();
         $notifikasi->status = 'baca';
         $notifikasi->save();
+
+        if ($notifikasi->modul === 'tagihan') {
+            $tagihan = Tagihan::find($notifikasi->modul_id);
+            if ($tagihan) {
+                return redirect()->route('tagihan.show',  $tagihan->slug);
+            }
+        }
+        if ($notifikasi->modul === 'penunjukan-pekerjaan') {
+            $penunjukanAduan = PenunjukanPekerjaan::find($notifikasi->modul_id);
+            if ($penunjukanAduan) {
+                $aduan  = Aduan::find($penunjukanAduan->aduan_id);
+                return redirect()->route('penunjukan_pekerjaan.show',  $aduan->slug);
+            }
+        }
+        if ($notifikasi->modul === 'pelaksanaan-pekerjaan') {
+            $PelaksanaanPekerjaan = PelaksanaanPekerjaan::find($notifikasi->modul_id);
+            if ($PelaksanaanPekerjaan) {
+                $aduan  = Aduan::find($PelaksanaanPekerjaan->aduan_id);
+                return redirect()->route('penunjukan_pekerjaan.show',  $aduan->slug);
+            }
+        }
 
         $aduan  = Aduan::find($notifikasi->modul_id);
         $slug = '';

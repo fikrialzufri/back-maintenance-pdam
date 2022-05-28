@@ -57,7 +57,7 @@ class TagihanController extends Controller
         }
 
         try {
-            $data = $query->with('hasPelaksanaanPekerjaan')->orderBy('status', 'ASC')->orderBy('created_at')->get();
+            $data = $query->with('hasPelaksanaanPekerjaan')->orderBy('created_at', 'desc')->get();
             if (count($data) == 0) {
                 $message = 'Data List Tagihan Belum Ada';
             }
@@ -208,6 +208,7 @@ class TagihanController extends Controller
             'list_pekerjaan' =>  $data->list_pekerjaan,
             'total_lokasi' =>  $data->total_lokasi_pekerjaan,
             'list_persetujuan' =>  $data->list_persetujuan,
+            'kode_voucher' =>  $data->kode_vocher,
             'status' =>  $data->status,
             'status_mobile' =>  $data->status_mobile,
         ];

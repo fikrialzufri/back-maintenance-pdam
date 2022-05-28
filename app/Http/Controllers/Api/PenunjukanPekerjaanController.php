@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Pekerjaan;
+use App\Http\Resources\PekerjaanDetailResource;
 use App\Models\Aduan;
 
 use App\Models\PenunjukanPekerjaan;
@@ -78,56 +80,18 @@ class PenunjukanPekerjaanController extends Controller
             if (!$data) {
                 $message = 'Data Penunjukan Pekerjaan Belum Ada';
             } else {
-                $result = [
-                    'id' =>  $data->id,
-                    'nomor_pekerjaan' =>  $data->nomor_pekerjaan,
-                    'nomor_pelaksaan_pekerjaan' =>  $data->nomor_pelaksanaan_pekerjaan,
-                    'slug' =>  $data->slug,
-                    'status' =>  $data->status,
-                    'lokasi_aduan' =>  $data->lokasi,
-                    'lokasi_pekerjaan' =>  $data->lokasi_pekerjaan,
-                    'lat_long' =>  $data->lat_long,
-                    'nama_rekanan' =>  $data->rekanan,
-                    'foto_lokasi' =>  $data->foto_lokasi,
-                    'foto_bahan' =>  $data->foto_bahan,
-                    'foto_penyelesaian' =>  $data->foto_penyelesaian,
-                    'galian_pekerjaan' =>  $data->galian_pekerjaan,
-                    'jenis_aduan' =>  $data->jenis_aduan,
-                    'atas_nama' =>  $data->atas_nama,
-                    'no_hp' =>  $data->no_hp,
-                    'no_pelanggan' =>  $data->no_pelanggan,
-                    'item_pekerjaan' =>  $data->list_pekerjaan,
-                    'item_bahan' =>  $data->list_bahan,
-                    'item_alat_bantu' =>  $data->list_alat_bantu,
-                    'item_transportasi' =>  $data->list_transportasi,
-                    'sumber_informasi' =>  $data->sumber_informasi,
-                    'keterangan_aduan' =>  $data->keterangan_aduan,
-                    'keterangan_barang' =>  $data->keterangan_barang,
-                    'keterangan_penyelesaian' =>  $data->keterangan_penyelesaian,
-                    'created_at' =>  $data->created_at,
-                    'status_mobile' =>  $data->status_mobile,
-                ];
+                $result = new PekerjaanDetailResource($data);
             }
         } else {
-            $data = $query->orderBy('status', 'ASC')->orderBy('created_at', 'desc')->get();
+            $data = $query->orderBy('status', 'ASC')->orderBy('created_at', 'desc')->paginate(10);
+
             if (count($data) == 0) {
                 $message = 'Data Penunjukan Pekerjaan Belum Ada';
             }
-            foreach ($data as $key => $value) {
-                $result[$key] = [
-                    'id' =>  $value->id,
-                    'nomor_pekerjaan' =>  $value->nomor_pekerjaan,
-                    'slug' =>  $value->slug,
-                    'lokasi_aduan' =>  $value->lokasi,
-                    'lokasi_pekerjaan' =>  $value->lokasi_pekerjaan,
-                    'status' =>  $value->status,
-                    'tanggal_selesai' =>  $value->tanggal_selesai,
-                    'created_at' =>  $value->created_at,
-                    'status_mobile' =>  $value->status_mobile,
-                ];
-            }
-        }
+            $data = Pekerjaan::collection($data)->response()->getData(true);
 
+            $result =  $data['data'];
+        }
         return $this->sendResponse($result, $message, 200);
         try { } catch (\Throwable $th) {
             $response = [

@@ -47,6 +47,12 @@ class Tagihan extends Model
             return $this->hasRekanan->alamat;
         }
     }
+    public function getTddRekananAttribute()
+    {
+        if ($this->hasRekanan) {
+            return $this->hasRekanan->tdd;
+        }
+    }
 
     public function getDirekturAttribute()
     {
@@ -209,11 +215,12 @@ class Tagihan extends Model
     public function getListPersetujuanAttribute()
     {
         $result = [];
+        $hasUserMany = [];
         if ($this->hasUserMany) {
             foreach ($this->hasUserMany as $key => $value) {
                 if ($value->karyawan) {
-                    $result[$key] = (object) [
-                        'id' => $value->id,
+                    $hasUserMany[$key] = (object) [
+                        'id' => $value->karyawan->user_id,
                         'nama' => $value->karyawan->nama,
                         'jabatan' => $value->karyawan->nama_jabatan,
                         'is_setuju' => true,
@@ -223,7 +230,19 @@ class Tagihan extends Model
                 }
             }
 
-            $result = collect($result)->sortByDesc('created_at');
+            $collect = collect($hasUserMany)->sortByDesc('created_at');
+            $nomor = 0;
+            foreach ($collect as $key => $value) {
+                $result[$nomor] = (object) [
+                    'id' => $value->id,
+                    'nama' => $value->nama,
+                    'jabatan' => $value->jabatan,
+                    'is_setuju' => $value->is_setuju,
+                    'created_at' => $value->created_at,
+                    'tanggal_disetujui' => $value->tanggal_disetujui
+                ];
+                $nomor++;
+            }
         }
         return $result;
     }
@@ -239,6 +258,7 @@ class Tagihan extends Model
                         'jabatan' => $value->karyawan->nama_jabatan,
                         'is_setuju' => true,
                         'created_at' => $value->pivot->created_at,
+                        'tdd' => $value->karyawan->tdd,
                         'tanggal_disetujui' => isset($value->pivot->created_at) ? tanggal_indonesia($value->pivot->created_at) . " - " . Carbon::parse($value->pivot->created_at)->format('H:i') : ''
                     ];
                 }
