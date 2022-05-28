@@ -59,6 +59,10 @@ class TagihanController extends Controller
                 'alias'    => 'Status',
             ],
             [
+                'name'    => 'kode_vocher',
+                'alias'    => 'Kode Voucher',
+            ],
+            [
                 'name'    => 'total_lokasi_pekerjaan',
                 'alias'    => 'Total Lokasi',
             ],
