@@ -351,8 +351,14 @@
 
                                 @if ($tagihan)
                                     <div class="col-2">
-
-                                        @if ($tagihan->status === 'disetujui')
+                                        @if (!auth()->user()->hasRole('rekanan'))
+                                            @if ($tagihan->status === 'disetujui')
+                                                <a href="{{ route('tagihan.word') }}?id={{ $tagihan->id }}"
+                                                    target="_blank" class="btn btn-danger"><span
+                                                        class="nav-icon fa fa-file-word" aria-hidden="true"></span>
+                                                    Privew Tagihan</a>
+                                            @endif
+                                        @else
                                             <a href="{{ route('tagihan.word') }}?id={{ $tagihan->id }}"
                                                 target="_blank" class="btn btn-danger"><span
                                                     class="nav-icon fa fa-file-word" aria-hidden="true"></span>

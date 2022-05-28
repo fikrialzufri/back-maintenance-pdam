@@ -479,20 +479,28 @@ class TagihanController extends Controller
                 $data->hasUserMany()->attach($user);
                 $message = 'Berhasil Menyetujui Tagihan : ' . $data->nomor_tagihan;
 
-                $title = "Tagihan telah dibuat";
-                $body = "Nomor Tagihan " . $data->nomor_tagihan . " telah dibuat";
+                $title = "Tagihan telah setujui";
+                $body = "Nomor Tagihan " . $data->nomor_tagihan . " telah setujui";
                 $modul = "tagihan";
 
                 $rekanan = Rekanan::find($data->rekanan_id);
-                // notif ke staf pengawas
-                if ($rekanan->hasKaryawan) {
-                    foreach (collect($rekanan->hasKaryawan) as $key => $value) {
-                        $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $value->user_id);
+                if ($rekanan) {
+                    $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $rekanan->user_id);
+
+                    // notif ke staf pengawas
+                    if ($rekanan->hasKaryawan) {
+                        foreach (collect($rekanan->hasKaryawan) as $key => $value) {
+                            if (auth()->user()->id !== $value->user_id) {
+                                $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $value->user_id);
+                            }
+                        }
                     }
-                }
-                if ($listKaryawan) {
-                    foreach (collect($listKaryawan) as $i => $kr) {
-                        $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $kr->user_id);
+                    if ($listKaryawan) {
+                        foreach (collect($listKaryawan) as $i => $kr) {
+                            if (auth()->user()->id !== $kr->user_id) {
+                                $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $kr->user_id);
+                            }
+                        }
                     }
                 }
 
