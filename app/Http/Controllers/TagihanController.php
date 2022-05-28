@@ -345,10 +345,10 @@ class TagihanController extends Controller
         }
 
         if (auth()->user()->hasRole('keuangan')) {
-            return $keuangan = true;
             $bntSetuju = true;
+            $keuangan = false;
             if ($tagihan->status === 'disetujui') {
-                $keuangan = false;
+                $keuangan = true;
                 $bntSetuju = false;
             }
         }
