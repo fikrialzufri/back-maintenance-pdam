@@ -149,8 +149,10 @@
                                                             <th>Nama</th>
                                                             <th>Jenis Pekerjaan</th>
                                                             <th width="10">Jumlah</th>
-                                                            <th>Harga</th>
-                                                            <th>Total Harga</th>
+                                                            @if ($perencaan === true)
+                                                                <th>Harga</th>
+                                                                <th>Total Harga</th>
+                                                            @endif
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -163,45 +165,48 @@
                                                                 <td>{{ $barang->jenis }}</td>
                                                                 <td id="qty_{{ $barang->slug }}_{{ $item->id }}">
                                                                     {{ $barang->pivot->qty }}</td>
-                                                                @if ($barang->pivot->harga == 0)
-                                                                    <td>
-                                                                        <div class="input-group mb-2 mr-sm-2">
-                                                                            <div class="input-group-prepend">
-                                                                                <div class="input-group-text">Rp.</div>
+                                                                @if ($perencaan === true)
+                                                                    @if ($barang->pivot->harga == 0)
+                                                                        <td>
+                                                                            <div class="input-group mb-2 mr-sm-2">
+                                                                                <div class="input-group-prepend">
+                                                                                    <div class="input-group-text">Rp.</div>
+                                                                                </div>
+                                                                                <input type="text"
+                                                                                    name="harga_{{ $barang->slug }}_{{ $item->id }}"
+                                                                                    id="harga_{{ $barang->slug }}_{{ $item->id }}"
+                                                                                    placeholder="" class="form-control">
                                                                             </div>
-                                                                            <input type="text"
-                                                                                name="harga_{{ $barang->slug }}_{{ $item->id }}"
-                                                                                id="harga_{{ $barang->slug }}_{{ $item->id }}"
-                                                                                placeholder="" class="form-control">
-                                                                        </div>
-                                                                    </td>
-                                                                    <td
-                                                                        id="total_harga_{{ $barang->slug }}_{{ $item->id }}">
-                                                                        Rp. 0</td>
-                                                                    @push('script')
-                                                                        <script>
-                                                                            $('#harga_{{ $barang->slug }}_{{ $item->id }}').on("input", function() {
+                                                                        </td>
+                                                                        <td
+                                                                            id="total_harga_{{ $barang->slug }}_{{ $item->id }}">
+                                                                            Rp. 0</td>
+                                                                        @push('script')
+                                                                            <script>
+                                                                                $('#harga_{{ $barang->slug }}_{{ $item->id }}').on("input", function() {
 
-                                                                                let val = formatRupiah(this.value, '');
-                                                                                $('#harga_{{ $barang->slug }}_{{ $item->id }}').val(val);
-                                                                                let qty = parseInt($('#qty_{{ $barang->slug }}_{{ $item->id }}').text());
-                                                                                let totalHarga = val.replace(".", "") * qty;
+                                                                                    let val = formatRupiah(this.value, '');
+                                                                                    $('#harga_{{ $barang->slug }}_{{ $item->id }}').val(val);
+                                                                                    let qty = parseInt($('#qty_{{ $barang->slug }}_{{ $item->id }}').text());
+                                                                                    let totalHarga = val.replace(".", "") * qty;
 
-                                                                                $('#total_harga_{{ $barang->slug }}_{{ $item->id }}').text("Rp. " + formatRupiah(totalHarga
-                                                                                    .toString(), ''));
+                                                                                    $('#total_harga_{{ $barang->slug }}_{{ $item->id }}').text("Rp. " + formatRupiah(totalHarga
+                                                                                        .toString(), ''));
 
-                                                                                $('#{{ $barang->slug }}_{{ $item->id }}').removeClass('bg-danger');
-                                                                            });
-                                                                        </script>
-                                                                    @endpush
-                                                                @else
-                                                                    <td>
-                                                                        Rp. {{ format_uang($barang->pivot->harga) }}</td>
+                                                                                    $('#{{ $barang->slug }}_{{ $item->id }}').removeClass('bg-danger');
+                                                                                });
+                                                                            </script>
+                                                                        @endpush
+                                                                    @else
+                                                                        <td>
+                                                                            Rp. {{ format_uang($barang->pivot->harga) }}
+                                                                        </td>
 
-                                                                    <td>
-                                                                        Rp.
-                                                                        {{ format_uang($barang->pivot->harga * $barang->pivot->qty) }}
-                                                                    </td>
+                                                                        <td>
+                                                                            Rp.
+                                                                            {{ format_uang($barang->pivot->harga * $barang->pivot->qty) }}
+                                                                        </td>
+                                                                    @endif
                                                                 @endif
 
                                                             </tr>
@@ -216,10 +221,11 @@
                                                             <th colspan="3">Total
                                                             </th>
                                                             <th>{{ $item->hasItem->sum('pivot.qty') }}</th>
-                                                            <th>
-                                                            </th>
-                                                            <th>Rp. {{ format_uang($item->total_harga) }}
-                                                            </th>
+                                                            @if ($perencaan === true)
+                                                                <th></th>
+                                                                <th>Rp. {{ format_uang($item->total_harga) }}
+                                                                </th>
+                                                            @endif
                                                         </tr>
                                                     </tfoot>
 
@@ -233,13 +239,16 @@
                                                     <thead>
                                                         <tr>
                                                             <th width="5">#</th>
-                                                            <th>Pekerjaan</th>
+                                                            <th width="500">Pekerjaan</th>
                                                             <th width="10">Panjang</th>
                                                             <th width="10">Lebar</th>
                                                             <th width="10">Dalam</th>
-                                                            <th width="10">Volume</th>
-                                                            <th>Total Harga</th>
-
+                                                            <th
+                                                                @if ($perencaan === true) width="10" @else width="50" @endif>
+                                                                Volume</th>
+                                                            @if ($perencaan === true)
+                                                                <th>Total Harga</th>
+                                                            @endif
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -258,7 +267,9 @@
                                                                 <td>{{ $value->panjang * $value->lebar * $value->dalam }}
                                                                     m<sup>2</sup>
                                                                 </td>
-                                                                <td>Rp. {{ format_uang($value->total) }}</td>
+                                                                @if ($perencaan === true)
+                                                                    <td>Rp. {{ format_uang($value->total) }}</td>
+                                                                @endif
                                                                 @php
                                                                     $sum += $value->panjang * $value->lebar * $value->dalam;
                                                                 @endphp
@@ -276,12 +287,16 @@
                                                             <th>
                                                                 {{ $item->luas_galian }} m<sup>2</sup>
                                                             </th>
-                                                            <th>Rp.
-                                                                {{ format_uang($item->hasGalianPekerjaan->sum('total')) }}
-                                                            </th>
+                                                            @if ($perencaan === true)
+                                                                <th>Rp.
+                                                                    {{ format_uang($item->hasGalianPekerjaan->sum('total')) }}
+                                                                </th>
+                                                            @endif
                                                         </tr>
                                                         <tr>
-                                                            <th colspan="6"> Grand Total
+                                                            <th
+                                                                @if ($perencaan === true) colspan="6" @else colspan="5" @endif>
+                                                                Grand Total
                                                             </th>
                                                             <th>Rp.
                                                                 {{ format_uang($item->total_pekerjaan) }}

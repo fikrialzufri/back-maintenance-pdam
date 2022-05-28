@@ -65,7 +65,7 @@ class PenunjukanPekerjaanController extends Controller
                 $list_rekanan_id = auth()->user()->karyawan->hasRekanan->pluck('id');
                 if (count($list_rekanan_id) > 0) {
                     $penunjukanAduan = PenunjukanPekerjaan::whereIn('rekanan_id', $list_rekanan_id)->get()->pluck('aduan_id');
-                    $query->whereStatus('selesai')->whereIn('id', $penunjukanAduan)->orderBy('updated_at', 'desc');
+                    $query->whereIn('id', $penunjukanAduan)->orderBy('updated_at', 'desc');
                     $penunjukan = $query->paginate($limit);
                     $penunjukan = $penunjukan->setCollection(
                         $penunjukan->sortByDesc(function ($pekerjaan) {
