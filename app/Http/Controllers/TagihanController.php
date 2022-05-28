@@ -479,8 +479,15 @@ class TagihanController extends Controller
                 $data->hasUserMany()->attach($user);
                 $message = 'Berhasil Menyetujui Tagihan : ' . $data->nomor_tagihan;
 
+                $namakaryawan = '';
+
+                if (auth()->user()->karyawan) {
+                    $namakaryawan = auth()->user()->karyawan->nama;
+                    # code...
+                }
+
                 $title = "Tagihan telah setujui";
-                $body = "Nomor Tagihan " . $data->nomor_tagihan . " telah setujui";
+                $body = "Nomor Tagihan " . $data->nomor_tagihan . " telah setujui " . $namakaryawan;
                 $modul = "tagihan";
 
                 $rekanan = Rekanan::find($data->rekanan_id);
