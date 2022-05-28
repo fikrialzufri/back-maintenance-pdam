@@ -169,6 +169,12 @@ class PelaksanaanPekerjaan extends Model
             case 'diadjust':
                 return 6;
                 break;
+            case 'dikoreksi':
+                return 7;
+                break;
+            case 'disetujui':
+                return 8;
+                break;
             default:
                 return 1;
                 break;
