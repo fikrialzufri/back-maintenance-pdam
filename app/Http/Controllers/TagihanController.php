@@ -334,9 +334,9 @@ class TagihanController extends Controller
 
                 if ((count(array_unique(array_merge($arrayList, $listKaryawan))) === count($arrayList))) {
                     $bntSetuju = false;
-                } else {
-                    $bntSetuju = true;
                 }
+            } else {
+                $bntSetuju = true;
             }
         }
 
