@@ -5,12 +5,12 @@
     <div class="container-fluid">
         <div class="row">
             <!-- page statustic chart start -->
-            <div class="col-xl-3 col-md-6">
+            <div class="col-xl-4 col-md-6">
                 <div class="card card-red text-white">
                     <div class="card-block">
                         <div class="row align-items-center">
                             <div class="col-8">
-                                <h4 class="mb-0">{{ __('2,563') }}</h4>
+                                <h4 class="mb-0">{{ __($aduanCount) }}</h4>
                                 <p class="mb-0">{{ __('Aduan') }}</p>
                             </div>
                             <div class="col-4 text-right">
@@ -21,12 +21,12 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xl-3 col-md-6">
+            <div class="col-xl-4 col-md-6">
                 <div class="card card-blue text-white">
                     <div class="card-block">
                         <div class="row align-items-center">
                             <div class="col-8">
-                                <h4 class="mb-0">{{ __('3,612') }}</h4>
+                                <h4 class="mb-0">{{ __($pekerjaanCount) }}</h4>
                                 <p class="mb-0">{{ __('Pekerjaan') }}</p>
                             </div>
                             <div class="col-4 text-right">
@@ -37,12 +37,12 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xl-3 col-md-6">
+            <div class="col-xl-4 col-md-6">
                 <div class="card card-green text-white">
                     <div class="card-block">
                         <div class="row align-items-center">
                             <div class="col-8">
-                                <h4 class="mb-0">{{ __('865') }}</h4>
+                                <h4 class="mb-0">{{ __($rekananCount) }}</h4>
                                 <p class="mb-0">{{ __('Rekanan') }}</p>
                             </div>
                             <div class="col-4 text-right">
@@ -53,30 +53,16 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xl-3 col-md-6">
-                <div class="card card-yellow text-white">
-                    <div class="card-block">
-                        <div class="row align-items-center">
-                            <div class="col-8">
-                                <h4 class="mb-0">{{ __('35,500') }}</h4>
-                                <p class="mb-0">{{ __('Tagihan') }}</p>
-                            </div>
-                            <div class="col-4 text-right">
-                                <i class="ik f-30">৳</i>
-                            </div>
-                        </div>
-                        <div id="Widget-line-chart4" class="chart-line chart-shadow"></div>
-                    </div>
-                </div>
-            </div>
+
             <div class="col-md-12 col-xl-12">
                 <div class="card sale-card">
                     <div class="card-header">
                         <h3>Daftar Aduan Tahun ini</h3>
                     </div>
                     <div class="card-block text-center">
-                        <div id="listAduan" class="chart-shadow"></div>
+                        <div id="line_chart" class="chart-shadow"></div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -134,44 +120,53 @@
     <script src="{{ asset('js/widget-data.js') }}"></script>
     <script src="{{ asset('js/dashboard-charts.js') }}"></script>
     <script>
-        var chart = AmCharts.makeChart("listAduan", {
+        let grafikperbulan = @json($aduanPerbulanGrafik);
+        console.log(grafikperbulan);
+
+        var chart = AmCharts.makeChart("line_chart", {
             "type": "serial",
             "theme": "light",
             "dataDateFormat": "YYYY-MM-DD",
-            "precision": 0,
+            "precision": 2,
             "valueAxes": [{
                 "id": "v1",
-                "fontSize": 0,
-                "axisAlpha": 0,
-                "lineAlpha": 0,
-                "gridAlpha": 0,
                 "position": "left",
                 "autoGridCount": false,
-
+                "labelFunction": function(value) {
+                    return "$" + Math.round(value) + "M";
+                }
+            }, {
+                "id": "v2",
+                "gridAlpha": 0,
+                "autoGridCount": false
             }],
             "graphs": [{
-                "id": "g3",
-                "valueAxis": "v1",
+                "id": "g1",
+                "valueAxis": "v2",
+                "bullet": "round",
+                "bulletBorderAlpha": 1,
+                "bulletColor": "#FFFFFF",
+                "bulletSize": 8,
+                "hideBulletsCount": 50,
+                "lineThickness": 3,
                 "lineColor": "#2ed8b6",
-                "fillColors": "#2ed8b6",
-                "fillAlphas": 0.3,
-                "type": "column",
                 "title": "Aduan",
-                "valueField": "sales2",
-                "columnWidth": 0.5,
-                "legendValueText": "[[value]]",
+                "useLineColorForBulletBorder": true,
+                "valueField": "aduan",
                 "balloonText": "[[title]]<br /><b style='font-size: 130%'>[[value]]</b>"
             }, {
-                "id": "g4",
-                "valueAxis": "v1",
-                "lineColor": "#2ed8b6",
-                "fillColors": "#2ed8b6",
-                "fillAlphas": 1,
-                "type": "column",
+                "id": "g2",
+                "valueAxis": "v2",
+                "bullet": "round",
+                "bulletBorderAlpha": 1,
+                "bulletColor": "#FFFFFF",
+                "bulletSize": 8,
+                "hideBulletsCount": 50,
+                "lineThickness": 3,
+                "lineColor": "#e95753",
                 "title": "Pekerjaan",
-                "valueField": "sales1",
-                "columnWidth": 0.5,
-                "legendValueText": "[[value]]",
+                "useLineColorForBulletBorder": true,
+                "valueField": "pekerjaan",
                 "balloonText": "[[title]]<br /><b style='font-size: 130%'>[[value]]</b>"
             }],
             "chartCursor": {
@@ -184,39 +179,18 @@
             "categoryField": "date",
             "categoryAxis": {
                 "parseDates": true,
-                "axisAlpha": 0,
-                "lineAlpha": 0,
-                "gridAlpha": 0,
-                "minorGridEnabled": true,
+                "dashLength": 1,
+                "minorGridEnabled": true
+            },
+            "legend": {
+                "useGraphSettings": true,
+                "position": "top"
             },
             "balloon": {
                 "borderThickness": 1,
                 "shadowAlpha": 0
             },
-            "export": {
-                "enabled": true
-            },
-            "dataProvider": [{
-                "date": "2020-01-01",
-                "sales1": 5,
-                "sales2": 8
-            }, {
-                "date": "2020-01-02",
-                "sales1": 4,
-                "sales2": 6
-            }, {
-                "date": "2020-01-18",
-                "sales1": 5,
-                "sales2": 2
-            }, {
-                "date": "2020-01-19",
-                "sales1": 8,
-                "sales2": 9
-            }, {
-                "date": "2020-01-20",
-                "sales1": 9,
-                "sales2": 6
-            }]
+            "dataProvider": grafikperbulan
         });
     </script>
 @endpush

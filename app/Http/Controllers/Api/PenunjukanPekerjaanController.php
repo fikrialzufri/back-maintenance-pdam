@@ -27,6 +27,7 @@ class PenunjukanPekerjaanController extends Controller
     {
         $nomor_pekerjaan = $request->nomor_pekerjaan;
         $status = $request->status;
+        $statusNot = $request->status_not;
         $slug = $request->slug;
         $aduan_id = $request->aduan_id;
         $tagihan = $request->tagihan;
@@ -42,6 +43,9 @@ class PenunjukanPekerjaanController extends Controller
         }
         if ($status != '') {
             $query = $query->where('status',  $status);
+        }
+        if ($statusNot != '') {
+            $query = $query->where('status', '!=',  $statusNot);
         }
         if ($slug != '') {
             $query = $query->where('slug',  $slug);
@@ -76,14 +80,14 @@ class PenunjukanPekerjaanController extends Controller
 
 
         if ($slug) {
-            $data = $query->with('hasAduan')->orderBy('status', 'ASC')->orderBy('created_at', 'desc')->first();
+            $data = $query->with('hasAduan')->orderBy('status', 'desc')->orderBy('created_at', 'desc')->first();
             if (!$data) {
                 $message = 'Data Penunjukan Pekerjaan Belum Ada';
             } else {
                 $result = new PekerjaanDetailResource($data);
             }
         } else {
-            $data = $query->orderBy('status', 'ASC')->orderBy('created_at', 'desc')->paginate(10);
+            $data = $query->orderBy('status', 'desc')->orderBy('created_at', 'desc')->paginate(10);
 
             if (count($data) == 0) {
                 $message = 'Data Penunjukan Pekerjaan Belum Ada';
