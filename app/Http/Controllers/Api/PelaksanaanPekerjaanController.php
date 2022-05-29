@@ -210,26 +210,26 @@ class PelaksanaanPekerjaanController extends Controller
      */
     public function proses(Request $request)
     {
+        DB::beginTransaction();
+        $message = 'Gagal Menyimpan Pelaksanaan Pekerjaan';
         try {
-            DB::beginTransaction();
-            $message = 'Gagal Menyimpan Pelaksanaan Pekerjaan';
+            DB::commit();
             $slug = $request->slug;
             $lokasi = $request->lokasi;
             $keterangan = $request->keterangan;
             $user_id = auth()->user()->id;
-            DB::commit();
             $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug',  $slug)->first();
             $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->first();
 
-            if ($data->status == 'selesai') {
-                $message = "Pekerjaan sudah selesai";
-                $response = [
-                    'success' => false,
-                    'message' => $message,
-                    'code' => '409'
-                ];
-                return $this->sendError($response, $message, 409);
-            }
+            // if ($data->status == 'selesai') {
+            //     $message = "Pekerjaan sudah selesai";
+            //     $response = [
+            //         'success' => false,
+            //         'message' => $message,
+            //         'code' => '409'
+            //     ];
+            //     return $this->sendError($response, $message, 409);
+            // }
             $data->lokasi = $lokasi;
             $data->lat_long = $request->lat_long;
             $data->keterangan_barang = $request->keterangan_barang;
@@ -244,7 +244,7 @@ class PelaksanaanPekerjaanController extends Controller
             $data->hasUserMany()->sync($user);
 
             $message = 'Berhasil Menyimpan Pelaksanaan Pekerjaan';
-            return $this->sendResponse($data, $message, 200);
+            return $this->sendResponse($data, $message, 200, 0);
         } catch (\Throwable $th) {
             DB::rollback();
             $response = [
