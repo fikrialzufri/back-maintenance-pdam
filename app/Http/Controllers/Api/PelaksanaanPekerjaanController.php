@@ -388,13 +388,13 @@ class PelaksanaanPekerjaanController extends Controller
 
             // notif ke staf pengawas
             foreach ($stafPengawas as $pengawas) {
-                $this->notification($data->id, $penunjukanPekerjaan->slug, $title, $body, $modul, auth()->user()->id, $pengawas->user_id);
+                $this->notification($data->id, $aduan->slug, $title, $body, $modul, auth()->user()->id, $pengawas->user_id);
             }
 
             // notif ke karyawan bedasarkan jabatan
             if ($listKaryawan) {
                 foreach (collect($listKaryawan) as $i => $kr) {
-                    $this->notification($data->id, $penunjukanPekerjaan->slug, $title, $body, $modul, auth()->user()->id, $kr->user_id);
+                    $this->notification($data->id, $aduan->slug, $title, $body, $modul, auth()->user()->id, $kr->user_id);
                 }
             }
 

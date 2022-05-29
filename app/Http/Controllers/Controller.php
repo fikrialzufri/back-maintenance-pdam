@@ -63,10 +63,10 @@ class Controller extends BaseController
             "notification" => [
                 "body" => $body,
                 "title" => $title,
-
             ],
             "data" => [
                 'slug' => $slug,
+                'modul' => $modul,
             ],
         ];
         $dataString = json_encode($data);

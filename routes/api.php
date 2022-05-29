@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\PenunjukanPekerjaanController;
 use App\Http\Controllers\Api\RekananController;
 use App\Http\Controllers\Api\PelaksanaanPekerjaanController;
 use App\Http\Controllers\Api\TagihanController;
+use App\Http\Controllers\NotifikasiController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
 
@@ -91,5 +92,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('media', MediaController::class . '@store')->name('media.api.store');
     // uplod pelaksanaan-pekerjaan
     Route::post('media-remove', MediaController::class . '@destroy')->name('media.api.destroy');
+
+    Route::get('notification', [NotifikasiController::class, 'all'])->name('notification.api');
 });
 Route::post('login', [AuthController::class, 'login'])->name('auth.login');

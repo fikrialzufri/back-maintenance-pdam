@@ -26,4 +26,23 @@ class NotifikasiController extends Controller
         // return response()->json($notifikasi);
         return $this->sendResponse($result, $message, 200);
     }
+    public function all()
+    {
+        // $user_id =  array();
+        $notifikasi = Notifikasi::where('to_user_id', auth()->user()->id)->orderBy('created_at', 'desc')->get();
+
+        // $data = [
+        //     'modul_id' => $notifikasi->modul_id,
+        //     'title' => $notifikasi->title,
+        //     'body' => $notifikasi->body,
+        //     'countNotif' => $notifikasi->count()
+        // ];
+        $result = [
+            'data' => $notifikasi,
+            'total' => count($notifikasi),
+        ];
+        $message = 'success';
+        // return response()->json($notifikasi);
+        return $this->sendResponse($result, $message, 200);
+    }
 }
