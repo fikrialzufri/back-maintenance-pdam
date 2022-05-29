@@ -63,9 +63,20 @@ class AduanController extends Controller
         $route = 'aduan';
         $action = route('aduan.store');
 
+        $dataAduan = Aduan::count();
+
+        if ($dataAduan >= 1) {
+            $no = str_pad($dataAduan + 1, 4, "0", STR_PAD_LEFT);
+            $noAduan =  $no . "/" . "ADB/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
+        } else {
+            $no = str_pad(1, 4, "0", STR_PAD_LEFT);
+            $noAduan =  $no . "/" . "ADB/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
+        }
+
         $jenis_aduan = JenisAduan::orderBy('nama')->get();
         return view('aduan.create', compact(
             'title',
+            'noAduan',
             'route',
             'action',
             'jenis_aduan'

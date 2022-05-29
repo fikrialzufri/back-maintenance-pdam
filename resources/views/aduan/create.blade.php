@@ -40,7 +40,7 @@
                                         <div>
                                             <input type="text" name="no_ticket" placeholder="Nomor Tiket"
                                                 class="{{ $errors->has('no_ticket') ? 'form-control is-invalid' : 'form-control' }}"
-                                                value="{{ old('no_ticket') }}" required id="">
+                                                value="{{ $noAduan }}" required disabled id="">
                                         </div>
                                         @if ($errors->has('no_ticket'))
                                             Nomor Tiket
