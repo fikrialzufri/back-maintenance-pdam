@@ -23,6 +23,7 @@
                                     <th>#</th>
                                     <th>Nomor Tiket</th>
                                     <th>Nomor Aduan</th>
+                                    <th>Kategori Aduan</th>
                                     <th>Atas Nama</th>
                                     <th>Sumber Informasi</th>
                                     <th>Tanggal</th>
@@ -48,6 +49,7 @@
                                         <td>{{ $item->no_ticket }}</td>
                                         <td>{{ $item->no_aduan }}</td>
                                         <td>{{ $item->atas_nama }}</td>
+                                        <td>{{ $item->kategori_aduan }}</td>
                                         <td>{{ $item->sumber_informasi }}</td>
                                         <td>{{ tanggal_indonesia($item->created_at) }}</td>
                                         <td>{{ ucfirst($item->user) }}</td>

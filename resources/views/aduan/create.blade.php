@@ -35,26 +35,6 @@
                                 <div class="col-12">
                                     <div class="form-group">
                                         <div>
-                                            <label for="no_aduan" class=" form-control-label">Nomor Aduan</label>
-                                        </div>
-                                        <div>
-                                            <input type="text" name="no_aduan" placeholder="Nomor Tiket"
-                                                class="{{ $errors->has('no_aduan') ? 'form-control is-invalid' : 'form-control' }}"
-                                                value="{{ $noAduan }}" required disabled id="">
-                                        </div>
-                                        @if ($errors->has('no_aduan'))
-                                            Nomor Tiket
-                                            <span class="text-danger">
-                                                <strong id="textkk">Nomor Tiket wajib diisi!</strong>
-                                            </span>
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="form-group">
-                                        <div>
                                             <label for="no_ticket" class=" form-control-label">Nomor Tiket</label>
                                         </div>
                                         <div>
@@ -71,6 +51,7 @@
                                     </div>
                                 </div>
                             </div>
+
                             <div class="row">
                                 <div class="col-12">
                                     <div class="form-group">
@@ -88,6 +69,29 @@
                                                 <strong id="textkk">MPS wajib diisi!</strong>
                                             </span>
                                         @endif
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div>
+                                        <label for="kategori_aduan" class=" form-control-label">Kategori Aduan</label>
+                                    </div>
+                                    <div class="form-radio">
+                                        <div class="radio radiofill radio-inline">
+                                            <label>
+                                                <input type="radio" class="kategori_aduan" name="kategori_aduan"
+                                                    value="pipa dinas" checked="checked">
+                                                <i class="helper"></i>Pipa Dinas
+                                            </label>
+                                        </div>
+                                        <div class="radio radiofill radio-inline">
+                                            <label>
+                                                <input type="radio" class="kategori_aduan" name="kategori_aduan"
+                                                    value="pipa tersier / skunder">
+                                                <i class="helper"></i>Pipa Tersier / Skunder
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

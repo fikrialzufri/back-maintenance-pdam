@@ -74,6 +74,33 @@
                             </div>
                             <div class="row">
                                 <div class="col-12">
+                                    <div>
+                                        <label for="kategori_aduan" class=" form-control-label">Kategori Adua</label>
+                                    </div>
+                                    <div class="form-radio">
+                                        <form>
+                                            <div class="radio radiofill radio-inline">
+                                                <label>
+                                                    <input type="radio" class="kategori_aduan" name="kategori_aduan"
+                                                        value="pipa dinas"
+                                                        checked="{{ $aduan->kategori_aduan == 'pipa dinas' ? 'checked' : '' }}">
+                                                    <i class="helper"></i>Siang
+                                                </label>
+                                            </div>
+                                            <div class="radio radiofill radio-inline">
+                                                <label>
+                                                    <input type="radio" class="kategori_aduan" name="kategori_aduan"
+                                                        checked="{{ $aduan->kategori_aduan == 'pipa tersier / skunder' ? 'checked' : '' }}"
+                                                        value="pipa tersier / skunder">
+                                                    <i class="helper"></i>Malam
+                                                </label>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
                                     <div class="form-group">
                                         <div>
                                             <label for="atas_nama" class=" form-control-label">Atas Nama</label>
