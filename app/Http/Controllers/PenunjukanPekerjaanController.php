@@ -341,14 +341,10 @@ class PenunjukanPekerjaanController extends Controller
 
         $penunjukanPekerjaan = PenunjukanPekerjaan::where('aduan_id', $aduan->id)->first();
         if ($penunjukanPekerjaan) {
+
             return redirect()->route('penunjukan_pekerjaan.index')->with('message', 'Aduan sudah dikerjakan')->with('Class', 'danger');
         }
 
-        $notifikasi = Notifikasi::where('modul_id', $penunjukanPekerjaan->id)->first();
-        if ($notifikasi) {
-            $notifikasi->status = 'baca';
-            $notifikasi->delete();
-        }
 
         // list jabatan
         $listJabatan = Jabatan::whereSlug('manager-distribusi')->orWhere('slug', 'staf-perencanaan')->orWhere('slug', 'asisten-manager-pengawas-fisik')->orWhere('slug', 'direktur-teknik')->get()->pluck('id')->toArray();
