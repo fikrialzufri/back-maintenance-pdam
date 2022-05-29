@@ -324,11 +324,11 @@ class PenunjukanPekerjaanController extends Controller
 
         $aduan = Aduan::where('slug', $slug)->first();
 
-        // $notifikasi = Notifikasi::where('modul_id', $aduan->id)->first();
-        // if ($notifikasi) {
-        //     $notifikasi->status = 'baca';
-        //     $notifikasi->delete();
-        // }
+        $notifikasi = Notifikasi::where('modul_id', $aduan->id)->first();
+        if ($notifikasi) {
+            $notifikasi->status = 'baca';
+            $notifikasi->delete();
+        }
 
         $dataPenunjukanPerkerjaan = PenunjukanPekerjaan::count();
         if ($dataPenunjukanPerkerjaan >= 1) {

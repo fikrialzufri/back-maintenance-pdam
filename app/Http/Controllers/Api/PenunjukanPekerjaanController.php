@@ -77,7 +77,7 @@ class PenunjukanPekerjaanController extends Controller
                 });
         }
 
-
+        $count = 0;
 
         if ($slug) {
             $data = $query->with('hasAduan')->orderBy('status', 'desc')->orderBy('created_at', 'desc')->first();
