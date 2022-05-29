@@ -75,7 +75,7 @@
                             <div class="row">
                                 <div class="col-12">
                                     <div>
-                                        <label for="kategori_aduan" class=" form-control-label">Kategori Adua</label>
+                                        <label for="kategori_aduan" class=" form-control-label">Kategori Aduan</label>
                                     </div>
                                     <div class="form-radio">
                                         <form>
@@ -84,7 +84,7 @@
                                                     <input type="radio" class="kategori_aduan" name="kategori_aduan"
                                                         value="pipa dinas"
                                                         checked="{{ $aduan->kategori_aduan == 'pipa dinas' ? 'checked' : '' }}">
-                                                    <i class="helper"></i>Siang
+                                                    <i class="helper"></i>Pipa Dinas
                                                 </label>
                                             </div>
                                             <div class="radio radiofill radio-inline">
@@ -92,7 +92,7 @@
                                                     <input type="radio" class="kategori_aduan" name="kategori_aduan"
                                                         checked="{{ $aduan->kategori_aduan == 'pipa tersier / skunder' ? 'checked' : '' }}"
                                                         value="pipa tersier / skunder">
-                                                    <i class="helper"></i>Malam
+                                                    <i class="helper"></i>Pipa Tersier / Skunder
                                                 </label>
                                             </div>
                                         </form>

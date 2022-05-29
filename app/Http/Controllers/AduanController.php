@@ -78,6 +78,9 @@ class AduanController extends Controller
             'required' => ':attribute tidak boleh kosong',
         ];
 
+        $start = Carbon::now()->startOfMonth()->format('Y-m-d H:i:s');
+        $end = Carbon::now()->endOfMonth()->format('Y-m-d H:i:s');
+
         $this->validate(request(), [
             'no_ticket' => 'required|string',
             'mps' => 'required|string',
@@ -89,7 +92,7 @@ class AduanController extends Controller
         $kategori_aduan = $request->kategori_aduan == '' ? '' : $request->kategori_aduan;
 
         if ($kategori_aduan == 'pipa dinas') {
-            $dataAduan = Aduan::where('kategori_aduan', 'pipa dinas')->count();
+            $dataAduan = Aduan::where('kategori_aduan', 'pipa dinas')->whereBetween(DB::raw('DATE(created_at)'), array($start, $end))->count();
             if ($dataAduan >= 1) {
                 $no = str_pad($dataAduan + 1, 4, "0", STR_PAD_LEFT);
                 $noAduan =  $no . "/" . "ADU-DS/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
@@ -98,7 +101,7 @@ class AduanController extends Controller
                 $noAduan =  $no . "/" . "ADU-DS/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
             }
         } else {
-            $dataAduan = Aduan::where('kategori_aduan', 'pipa tersier / skunder')->count();
+            $dataAduan = Aduan::where('kategori_aduan', 'pipa tersier / skunder')->whereBetween(DB::raw('DATE(created_at)'), array($start, $end))->count();
             if ($dataAduan >= 1) {
                 $no = str_pad($dataAduan + 1, 4, "0", STR_PAD_LEFT);
                 $noAduan =  $no . "/" . "ADU-SK/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
