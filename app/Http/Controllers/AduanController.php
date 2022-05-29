@@ -67,10 +67,10 @@ class AduanController extends Controller
 
         if ($dataAduan >= 1) {
             $no = str_pad($dataAduan + 1, 4, "0", STR_PAD_LEFT);
-            $noAduan =  $no . "/" . "ADB/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
+            $noAduan =  $no . "/" . "ADU/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
         } else {
             $no = str_pad(1, 4, "0", STR_PAD_LEFT);
-            $noAduan =  $no . "/" . "ADB/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
+            $noAduan =  $no . "/" . "ADU/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
         }
 
         $jenis_aduan = JenisAduan::orderBy('nama')->get();
@@ -100,10 +100,10 @@ class AduanController extends Controller
         $dataAduan = Aduan::count();
         if ($dataAduan >= 1) {
             $no = str_pad($dataAduan + 1, 4, "0", STR_PAD_LEFT);
-            $noAduan =  $no . "/" . "ADB/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
+            $noAduan =  $no . "/" . "ADU/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
         } else {
             $no = str_pad(1, 4, "0", STR_PAD_LEFT);
-            $noAduan =  $no . "/" . "ADB/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
+            $noAduan =  $no . "/" . "ADU/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
         }
         $id_wilayah =  auth()->user()->id_wilayah;
         DB::beginTransaction();

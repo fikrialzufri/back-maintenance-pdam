@@ -7,6 +7,7 @@ use App\Models\Item;
 use App\Models\Jabatan;
 use App\Models\Jenis;
 use App\Models\Karyawan;
+use App\Models\Notifikasi;
 use App\Models\PelaksanaanPekerjaan;
 use App\Models\PenunjukanPekerjaan;
 use App\Models\Rekanan;

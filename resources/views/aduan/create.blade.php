@@ -35,12 +35,32 @@
                                 <div class="col-12">
                                     <div class="form-group">
                                         <div>
+                                            <label for="no_aduan" class=" form-control-label">Nomor Aduan</label>
+                                        </div>
+                                        <div>
+                                            <input type="text" name="no_aduan" placeholder="Nomor Tiket"
+                                                class="{{ $errors->has('no_aduan') ? 'form-control is-invalid' : 'form-control' }}"
+                                                value="{{ $noAduan }}" required disabled id="">
+                                        </div>
+                                        @if ($errors->has('no_aduan'))
+                                            Nomor Tiket
+                                            <span class="text-danger">
+                                                <strong id="textkk">Nomor Tiket wajib diisi!</strong>
+                                            </span>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <div>
                                             <label for="no_ticket" class=" form-control-label">Nomor Tiket</label>
                                         </div>
                                         <div>
                                             <input type="text" name="no_ticket" placeholder="Nomor Tiket"
                                                 class="{{ $errors->has('no_ticket') ? 'form-control is-invalid' : 'form-control' }}"
-                                                value="{{ $noAduan }}" required disabled id="">
+                                                value="{{ old('no_ticket') }}" required id="">
                                         </div>
                                         @if ($errors->has('no_ticket'))
                                             Nomor Tiket
