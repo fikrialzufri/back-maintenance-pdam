@@ -333,7 +333,7 @@ class TagihanController extends Controller
         if (auth()->user()->hasRole('direktur-teknik')) {
             // list jabatan
 
-            $listJabatan = Jabatan::whereSlug('manager-distribusi')->orWhere('slug', 'staf-perencanaan')->orWhere('slug', 'staf-pengawas')->orWhere('slug', 'keuangan')->orWhere('slug', 'asisten-manager-pengawas-fisik')->get()->pluck('id')->toArray();
+            $listJabatan = Jabatan::whereSlug('manager-distribusi')->orWhere('slug', 'staf-perencanaan')->orWhere('slug', 'staf-pengawas')->orWhere('slug', 'asisten-manager-pengawas-fisik')->get()->pluck('id')->toArray();
 
             // list karyawan bedasarkan jabatan
             $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get()->pluck('user_id')->toArray();
