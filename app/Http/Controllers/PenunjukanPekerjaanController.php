@@ -256,13 +256,13 @@ class PenunjukanPekerjaanController extends Controller
             $notifikasi = Notifikasi::where('modul_id', $penunjukan->id)->where('to_user_id',  auth()->user()->id)->first();
             if ($notifikasi) {
                 $notifikasi->status = 'baca';
-                $notifikasi->save();
+                $notifikasi->delete();
             }
         } else {
             $notifikasi = Notifikasi::where('modul_id', $aduan->id)->first();
             if ($notifikasi) {
                 $notifikasi->status = 'baca';
-                $notifikasi->save();
+                $notifikasi->delete();
             }
         }
 
@@ -327,7 +327,7 @@ class PenunjukanPekerjaanController extends Controller
         $notifikasi = Notifikasi::where('modul_id', $aduan->id)->first();
         if ($notifikasi) {
             $notifikasi->status = 'baca';
-            $notifikasi->save();
+            $notifikasi->delete();
         }
 
         $dataPenunjukanPerkerjaan = PenunjukanPekerjaan::count();
@@ -342,6 +342,12 @@ class PenunjukanPekerjaanController extends Controller
         $penunjukanPekerjaan = PenunjukanPekerjaan::where('aduan_id', $aduan->id)->first();
         if ($penunjukanPekerjaan) {
             return redirect()->route('penunjukan_pekerjaan.index')->with('message', 'Aduan sudah dikerjakan')->with('Class', 'danger');
+        }
+
+        $notifikasi = Notifikasi::where('modul_id', $penunjukanPekerjaan->id)->first();
+        if ($notifikasi) {
+            $notifikasi->status = 'baca';
+            $notifikasi->delete();
         }
 
         // list jabatan
@@ -452,7 +458,7 @@ class PenunjukanPekerjaanController extends Controller
     {
         $notifikasi = Notifikasi::where('id', $id)->where('to_user_id', auth()->user()->id)->first();
         $notifikasi->status = 'baca';
-        $notifikasi->save();
+        $notifikasi->delete();
 
         if ($notifikasi->modul === 'tagihan') {
             $tagihan = Tagihan::find($notifikasi->modul_id);
@@ -474,14 +480,13 @@ class PenunjukanPekerjaanController extends Controller
                 return redirect()->route('penunjukan_pekerjaan.show',  $aduan->slug);
             }
         }
-
-        $aduan  = Aduan::find($notifikasi->modul_id);
-        $slug = '';
-        if ($aduan) {
-            $slug = $aduan->slug;
+        if ($notifikasi->modul === 'aduan') {
+            $aduan = Aduan::find($notifikasi->modul_id);
+            if ($aduan) {
+                return redirect()->route('penunjukan_pekerjaan.show',  $aduan->slug);
+            }
         }
-
-        return redirect()->route('penunjukan_pekerjaan.show',  $slug);
+        return redirect()->route('penunjukan_pekerjaan.index');
     }
 
     /**

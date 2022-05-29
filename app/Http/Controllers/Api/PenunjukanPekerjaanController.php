@@ -150,9 +150,13 @@ class PenunjukanPekerjaanController extends Controller
             $aduan->status = 'proses';
             $aduan->save();
 
+            $notifikasi = Notifikasi::where('modul_id', $data->id)->where('to_user_id', auth()->user()->id)->first();
+            $notifikasi->status = 'baca';
+            $notifikasi->delete();
+
             $notifikasi = Notifikasi::where('modul_id', $aduan->id)->where('to_user_id', auth()->user()->id)->first();
             $notifikasi->status = 'baca';
-            $notifikasi->save();
+            $notifikasi->delete();
 
             $message = 'Berhasil Menyimpan Penunjukan Pekerjaan';
             return $this->sendResponse($data, $message, 200);
