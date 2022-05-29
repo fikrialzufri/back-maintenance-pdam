@@ -80,7 +80,7 @@
                                     </div>
                                     @if (!auth()->user()->hasRole('admin-asisten-manager'))
                                         @if ($pekerjaanUtama)
-                                            @if ($pekerjaanUtama->status == 'selesai')
+                                            @if ($pekerjaanUtama->status == 'selesai dikoreksi')
                                                 <div class="col-12">
                                                     <div class="form-group">
                                                         <div>
