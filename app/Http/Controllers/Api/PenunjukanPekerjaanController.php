@@ -88,7 +88,7 @@ class PenunjukanPekerjaanController extends Controller
             }
         } else {
             $data = $query->orderBy('status', 'desc')->orderBy('created_at', 'desc')->paginate(10);
-
+            $count =  $query->orderBy('status', 'desc')->orderBy('created_at', 'desc')->count();
             if (count($data) == 0) {
                 $message = 'Data Penunjukan Pekerjaan Belum Ada';
             }
@@ -96,7 +96,7 @@ class PenunjukanPekerjaanController extends Controller
 
             $result =  $data['data'];
         }
-        return $this->sendResponse($result, $message, 200);
+        return $this->sendResponse($result, $message, 200, $count);
         try { } catch (\Throwable $th) {
             $response = [
                 'success' => false,

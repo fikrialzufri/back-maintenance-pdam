@@ -19,11 +19,12 @@ class Controller extends BaseController
      *
      * @return JsonResponse
      */
-    public function sendResponse($result, $message)
+    public function sendResponse($result, $message, $code = 200, $total = 0)
     {
         $response = [
             'success' => true,
             'data' => $result,
+            'total' => $total,
             'message' => $message,
         ];
 
@@ -92,6 +93,7 @@ class Controller extends BaseController
         $notification->title = $title;
         $notification->body = $body;
         $notification->modul = $modul;
+        $notification->modul_slug = $slug;
         $notification->status = 'belum';
         $notification->from_user_id = $from_user_id;
         $notification->to_user_id = $to_user_id;

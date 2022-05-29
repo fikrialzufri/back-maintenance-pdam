@@ -19,6 +19,7 @@ class CreateNotifikasisTable extends Migration
             $table->string('slug');
             $table->string('body');
             $table->string('modul');
+            $table->string('modul_slug');
             $table->enum('status', ['baca', 'belum'])->default('belum');
             $table->string('from_user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('to_user_id')->references('id')->on('users')->onDelete('cascade');
