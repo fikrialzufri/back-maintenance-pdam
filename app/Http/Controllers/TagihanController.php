@@ -301,6 +301,12 @@ class TagihanController extends Controller
             }
             $tanggal_tagihan = tanggal_indonesia($tagihan->tanggal_tagihan);
             $rekanan = $tagihan->rekanan;
+
+            $notifikasi = Notifikasi::where('modul_id', $tagihan->id)->where('to_user_id',  auth()->user()->id)->first();
+            if ($notifikasi) {
+                $notifikasi->status = 'baca';
+                $notifikasi->delete();
+            }
         }
         $title =  "Proses Tagihan Nomor :" .  $nomor_tagihan;
         $filename =  "Tagihan Nomor :" .  $nomor_tagihan;
