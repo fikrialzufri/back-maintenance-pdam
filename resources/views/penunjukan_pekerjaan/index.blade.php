@@ -30,8 +30,8 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Nomor SPK</th>
-                                    <th>Nomor Tiket</th>
                                     <th>Nomor Aduan</th>
+                                    <th>Nomor Tiket</th>
                                     <th>Rekanan</th>
                                     <th>Tanggal</th>
                                     <th>Pelapor</th>

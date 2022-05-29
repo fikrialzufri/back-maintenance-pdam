@@ -48,8 +48,8 @@
                                         <td>{{ $nomor + ($aduan->CurrentPage() - 1) * $aduan->PerPage() }}</td>
                                         <td>{{ $item->no_ticket }}</td>
                                         <td>{{ $item->no_aduan }}</td>
-                                        <td>{{ $item->atas_nama }}</td>
                                         <td>{{ $item->kategori_aduan }}</td>
+                                        <td>{{ $item->atas_nama }}</td>
                                         <td>{{ $item->sumber_informasi }}</td>
                                         <td>{{ tanggal_indonesia($item->created_at) }}</td>
                                         <td>{{ ucfirst($item->user) }}</td>
