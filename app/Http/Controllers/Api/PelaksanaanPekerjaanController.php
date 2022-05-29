@@ -160,15 +160,15 @@ class PelaksanaanPekerjaanController extends Controller
             $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $request->slug)->first();
             $pelaksanaan_pekerjaan = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->first();
 
-            if ($pelaksanaan_pekerjaan) {
-                $message = "No SPK sudah dikerjakan";
-                $response = [
-                    'success' => false,
-                    'message' => $message,
-                    'code' => '409'
-                ];
-                return $this->sendError($response, $message, 409);
-            }
+            // if ($pelaksanaan_pekerjaan) {
+            //     $message = "No SPK sudah dikerjakan";
+            //     $response = [
+            //         'success' => false,
+            //         'message' => $message,
+            //         'code' => '409'
+            //     ];
+            //     return $this->sendError($response, $message, 409);
+            // }
 
             DB::commit();
             $data = $this->model();
