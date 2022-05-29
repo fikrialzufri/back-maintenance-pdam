@@ -989,7 +989,9 @@ class TagihanController extends Controller
 
         if ($tagihan->hasPelaksanaanPekerjaan) {
             foreach ($tagihan->hasPelaksanaanPekerjaan as $key => $value) {
-                $wilayah .= $value->wilayah . ', ';
+                if ($wilayah != $value->wilayah . ', ') {
+                    $wilayah .= $value->wilayah . ', ';
+                }
             }
         }
 
