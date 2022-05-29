@@ -330,15 +330,30 @@ class PenunjukanPekerjaanController extends Controller
             $notifikasi->delete();
         }
 
-        $dataPenunjukanPerkerjaan = PenunjukanPekerjaan::count();
-        if ($dataPenunjukanPerkerjaan >= 1) {
-            $no = str_pad($dataPenunjukanPerkerjaan + 1, 4, "0", STR_PAD_LEFT);
-            $nomor_pekerjaan =  $no . "/" . "SPK/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
-        } else {
-            $no = str_pad(1, 4, "0", STR_PAD_LEFT);
-            $nomor_pekerjaan =  $no . "/" . "SPK/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
-        }
+        $start = Carbon::now()->startOfMonth()->format('Y-m-d H:i:s');
+        $end = Carbon::now()->endOfMonth()->format('Y-m-d H:i:s');
 
+        $kategori_aduan = $aduan->kategori_aduan;
+
+        if ($kategori_aduan == 'pipa dinas') {
+            $dataPenunjukanPerkerjaan = PenunjukanPekerjaan::where('kategori_aduan', 'pipa dinas')->whereBetween(DB::raw('DATE(created_at)'), array($start, $end))->count();
+            if ($dataPenunjukanPerkerjaan >= 1) {
+                $no = str_pad($dataPenunjukanPerkerjaan + 1, 4, "0", STR_PAD_LEFT);
+                $nomor_pekerjaan =  $no . "/" . "SPK-DS/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
+            } else {
+                $no = str_pad(1, 4, "0", STR_PAD_LEFT);
+                $nomor_pekerjaan =  $no . "/" . "SPK-DS/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
+            }
+        } else {
+            $dataPenunjukanPerkerjaan = PenunjukanPekerjaan::where('kategori_aduan', 'pipa tersier / skunder')->whereBetween(DB::raw('DATE(created_at)'), array($start, $end))->count();
+            if ($dataPenunjukanPerkerjaan >= 1) {
+                $no = str_pad($dataPenunjukanPerkerjaan + 1, 4, "0", STR_PAD_LEFT);
+                $nomor_pekerjaan =  $no . "/" . "SPK-SK/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
+            } else {
+                $no = str_pad(1, 4, "0", STR_PAD_LEFT);
+                $nomor_pekerjaan =  $no . "/" . "SPK-SK/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
+            }
+        }
         $penunjukanPekerjaan = PenunjukanPekerjaan::where('aduan_id', $aduan->id)->first();
         if ($penunjukanPekerjaan) {
 
@@ -362,6 +377,7 @@ class PenunjukanPekerjaanController extends Controller
             $data->nomor_pekerjaan = $nomor_pekerjaan;
             $data->rekanan_id = $rekanan_id;
             $data->aduan_id = $aduan->id;
+            $data->kategori_aduan = $kategori_aduan;
             $data->user_id = $user_id;
             $data->status = 'draft';
             $data->save();
