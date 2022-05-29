@@ -79,21 +79,26 @@
                                         </div>
                                     </div>
                                     @if (!auth()->user()->hasRole('admin-asisten-manager'))
-                                        <div class="col-12">
-                                            <div class="form-group">
-                                                <div>
-                                                    <label for="no_ticket" class=" form-control-label">Total Tagihan
-                                                        Pekerjaan</label>
-                                                </div>
-                                                <div>
-                                                    <h3>
-                                                        <strong id="total_tagihan_pekerjaan">Rp.
-                                                            {{ format_uang($totalPekerjaan) }}</strong>
-                                                    </h3>
-                                                </div>
+                                        @if ($pekerjaanUtama)
+                                            @if ($pekerjaanUtama->status == 'selesai')
+                                                <div class="col-12">
+                                                    <div class="form-group">
+                                                        <div>
+                                                            <label for="no_ticket" class=" form-control-label">Total Tagihan
+                                                                Pekerjaan</label>
+                                                        </div>
+                                                        <div>
+                                                            <h3>
+                                                                <strong id="total_tagihan_pekerjaan">Rp.
+                                                                    {{ format_uang($totalPekerjaan) }}</strong>
+                                                            </h3>
+                                                        </div>
 
-                                            </div>
-                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endif
+
+                                        @endif
                                     @endif
                                     <div class="col-12">
                                         <div class="form-group">
