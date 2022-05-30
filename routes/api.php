@@ -94,6 +94,6 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('media-remove', MediaController::class . '@destroy')->name('media.api.destroy');
 
     Route::get('notification', [NotifikasiController::class, 'all'])->name('notification.api');
-    Route::delete('notification/{id}', [NotifikasiController::class, 'detail'])->name('notification.api.detail');
+    Route::delete('notification/{id}', [NotifikasiController::class, 'delete'])->name('notification.api.delete');
 });
 Route::post('login', [AuthController::class, 'login'])->name('auth.login');
