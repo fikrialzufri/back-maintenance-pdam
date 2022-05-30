@@ -42,7 +42,7 @@ class NotifikasiController extends Controller
         return $this->sendResponse($result, $message, 200, $count);
     }
 
-    public function destory($id)
+    public function detail($id)
     {
         try {
             $notifikasi  = Notifikasi::find($id);
@@ -51,7 +51,7 @@ class NotifikasiController extends Controller
             $message = 'success';
             return $this->sendResponse($result, $message, 200);
         } catch (\Throwable $th) {
-            $message = 'gagal';
+            $message = 'success';
             return $this->sendResponse($result, $message, 200);
         }
     }
