@@ -82,7 +82,7 @@
                 <div class="radio radiofill radio-inline">
                     <label>
                         <input type="radio" name="{{ $item['name'] }}" value="{{ $val }}"
-                            @if ($store == 'update') {{ $data[$item['name']] == $val ? 'checked' : '' }} @else {{ old($item['name']) == $val ? 'checked' : '' }} @endif>
+                            @if ($store == 'update') {{ $data[$item['name']] == $val ? 'checked' : '' }} @else {{ old($item['name']) == $val ? 'checked' : '' }} {{ $item['default'] == $val ? 'checked' : '' }} @endif>
                         <i class="helper"></i>{{ ucfirst($val) }}
                     </label>
                 </div>

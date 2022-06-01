@@ -33,6 +33,11 @@ class PenunjukanPekerjaan extends Model
         return $this->hasOne(Aduan::class, 'id', 'aduan_id');
     }
 
+    public function hasKaryawan()
+    {
+        return $this->hasOne(Karyawan::class, 'id', 'karyawan_id');
+    }
+
     public function getLokasiAttribute()
     {
         if ($this->hasAduan) {
@@ -87,6 +92,9 @@ class PenunjukanPekerjaan extends Model
     {
         if ($this->hasRekanan) {
             return $this->hasRekanan->nama;
+        }
+        if ($this->hasKaryawan) {
+            return $this->hasKaryawan->nama;
         }
     }
     public function getMediaAttribute()

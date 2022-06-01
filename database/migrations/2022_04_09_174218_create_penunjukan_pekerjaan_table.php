@@ -21,7 +21,8 @@ class CreatePenunjukanPekerjaanTable extends Migration
             $table->enum('kategori_aduan', ['pipa dinas', 'pipa tersier / skunder'])->nullable();
             $table->enum('tagihan', ['tidak', 'ya'])->default('tidak');
             $table->foreignUuid('aduan_id')->references('id')->on('aduan');
-            $table->foreignUuid('rekanan_id')->references('id')->on('rekanan');
+            $table->foreignUuid('rekanan_id')->nullable()->references('id')->on('rekanan');
+            $table->foreignUuid('karyawan_id')->nullable()->references('id')->on('karyawan');
             $table->foreignUuid('user_id')->references('id')->on('users');
             $table->timestamps();
         });

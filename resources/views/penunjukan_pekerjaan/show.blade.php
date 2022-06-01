@@ -55,7 +55,7 @@
                                     <div class="col-12">
                                         <div class="form-group">
                                             <div>
-                                                <label for="no_ticket" class=" form-control-label">Nama Rekanan :</label>
+                                                <label for="no_ticket" class=" form-control-label">Nama Pekerja :</label>
                                             </div>
                                             <div>
                                                 <h2>
@@ -162,42 +162,50 @@
 
                         </div>
                     @else
-                        <div class="card-header">
-                            <div class="card-title">Pilih Rekanan</div>
-                        </div>
-                        <form action="{{ $action }}" method="post" role="form" enctype="multipart/form-data">
-                            @csrf
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <div class="form-group">
-                                            <input type="hidden" name="slug" value="{{ $aduan->slug }}">
-                                            <div>
-                                                <select name="rekanan_id" class="selected2 form-control" id="cmbRekanan">
-                                                    <option value="">--Pilih Rekanan--</option>
-                                                    @foreach ($rekanan as $item)
-                                                        <option value="{{ $item->id }}"
-                                                            {{ old('rekanan_id') == $item->id ? 'selected' : '' }}>
-                                                            {{ $item->nama }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                                @if ($errors->has('rekanan_id'))
-                                                    <span class="text-danger">
-                                                        <strong id="textrule">{{ $errors->first('rekanan_id') }}</strong>
-                                                    </span>
-                                                @endif
+                        @canany(['edit-penunjukan-pekerjaan', 'create-penunjukan-pekerjaan'])
+                            <div class="card-header">
+                                <div class="card-title">Pilih Pekerja</div>
+                            </div>
+                            <form action="{{ $action }}" method="post" role="form" enctype="multipart/form-data">
+                                @csrf
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <input type="hidden" name="slug" value="{{ $aduan->slug }}">
+                                                <div>
+                                                    <select name="rekanan_id" class="selected2 form-control" id="cmbRekanan">
+                                                        <option value="">--Pilih Pekerja--</option>
+                                                        @foreach ($rekanan as $rek)
+                                                            <option value="{{ $rek->id }}"
+                                                                {{ old('rekanan_id') == $rek->id ? 'selected' : '' }}>
+                                                                {{ $rek->nama }}
+                                                            </option>
+                                                        @endforeach
+                                                        @foreach ($karyawanPekerja as $kary)
+                                                            <option value="{{ $kary->id }}"
+                                                                {{ old('rekanan_id') == $kary->id ? 'selected' : '' }}>
+                                                                {{ $kary->nama }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                    @if ($errors->has('rekanan_id'))
+                                                        <span class="text-danger">
+                                                            <strong id="textrule">{{ $errors->first('rekanan_id') }}</strong>
+                                                        </span>
+                                                    @endif
+                                                </div>
+
                                             </div>
-
                                         </div>
-                                    </div>
 
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="card-footer clearfix">
-                                <button type="submit" class="btn btn-primary">Simpan</button>
-                            </div>
-                        </form>
+                                <div class="card-footer clearfix">
+                                    <button type="submit" class="btn btn-primary">Simpan</button>
+                                </div>
+                            </form>
+                        @endcanany
                     @endif
                 </div>
             </div>
@@ -1842,7 +1850,7 @@
         // -- end galian
         $(document).ready(function() {
             $('#cmbRekanan').select2({
-                placeholder: '--- Pilih Rekanan ---',
+                placeholder: '--- Pilih Pekerja ---',
                 width: '100%'
             });
             $('#cmbBahan').select2({
