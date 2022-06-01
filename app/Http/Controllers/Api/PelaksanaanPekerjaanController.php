@@ -496,7 +496,7 @@ class PelaksanaanPekerjaanController extends Controller
 
             $slug = $request->slug;
             $keterangan = $request->keterangan;
-            $jumlah = $request->jumlah;
+            $jumlah = $request->jumlah != '' ? $request->jumlah : 0;
 
             $id_barang = $request->id_barang;
             $listitem = [];
