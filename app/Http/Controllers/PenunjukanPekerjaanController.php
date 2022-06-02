@@ -378,7 +378,7 @@ class PenunjukanPekerjaanController extends Controller
             if (!empty($rekanan)) {
                 $data->rekanan_id = $rekanan_id;
             } else {
-                $karyawan = Karyawan::find($rekanan_id);
+                return $karyawan = Karyawan::find($rekanan_id);
                 if ($karyawan) {
                     return $user_id_karayawan =  $karyawan->hasUser->id;
                     $karyawan_id = $karyawan->id;
