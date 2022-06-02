@@ -65,6 +65,10 @@ class UsersTableSeedeer extends Seeder
         $StaffDistribusiRole->name = 'Staf Distribusi';
         $StaffDistribusiRole->save();
 
+        $roleManajerPerencaan = new Role();
+        $roleManajerPerencaan->name = 'Manajer Perencanaan';
+        $roleManajerPerencaan->save();
+
         $roleAsistenManajerPerencaan = new Role();
         $roleAsistenManajerPerencaan->name = 'Asisten Manajer Perencanaan';
         $roleAsistenManajerPerencaan->save();

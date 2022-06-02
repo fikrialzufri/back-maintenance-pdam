@@ -227,38 +227,38 @@ class PelaksanaanPekerjaanController extends Controller
     {
         DB::beginTransaction();
         $message = 'Gagal Menyimpan Pelaksanaan Pekerjaan';
+        $slug = $request->slug;
+        $lokasi = $request->lokasi;
+        $keterangan = $request->keterangan;
+        $user_id = auth()->user()->id;
+        $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug',  $slug)->first();
+        $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->first();
+
+        if ($data->status == 'selesai') {
+            $message = "Pekerjaan sudah selesai";
+            $response = [
+                'success' => false,
+                'message' => $message,
+                'code' => '409'
+            ];
+            return $this->sendError($response, $message, 409);
+        }
+        $data->lokasi = $lokasi;
+        $data->lat_long = $request->lat_long;
+        $data->keterangan_barang = $request->keterangan_barang;
+        $data->user_id = $user_id;
+        $data->tanggal_mulai = Carbon::now();
+        $data->status = 'proses';
+        $data->save();
+
+        $user[$user_id] = [
+            'keterangan' => 'proses',
+        ];
+        $data->hasUserMany()->sync($user);
+
+        $message = 'Berhasil Menyimpan Pelaksanaan Pekerjaan';
         try {
             DB::commit();
-            $slug = $request->slug;
-            $lokasi = $request->lokasi;
-            $keterangan = $request->keterangan;
-            $user_id = auth()->user()->id;
-            $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug',  $slug)->first();
-            $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->first();
-
-            if ($data->status == 'selesai') {
-                $message = "Pekerjaan sudah selesai";
-                $response = [
-                    'success' => false,
-                    'message' => $message,
-                    'code' => '409'
-                ];
-                return $this->sendError($response, $message, 409);
-            }
-            $data->lokasi = $lokasi;
-            $data->lat_long = $request->lat_long;
-            $data->keterangan_barang = $request->keterangan_barang;
-            $data->user_id = $user_id;
-            $data->tanggal_mulai = Carbon::now();
-            $data->status = 'proses';
-            $data->save();
-
-            $user[$user_id] = [
-                'keterangan' => 'proses',
-            ];
-            $data->hasUserMany()->sync($user);
-
-            $message = 'Berhasil Menyimpan Pelaksanaan Pekerjaan';
             return $this->sendResponse($data, $message, 200, 0);
         } catch (\Throwable $th) {
             DB::rollback();
@@ -322,7 +322,7 @@ class PelaksanaanPekerjaanController extends Controller
     {
         DB::beginTransaction();
         // list jabatan
-        $listJabatan = Jabatan::whereSlug('manager-distribusi')->orWhere('slug', 'asisten-manajer-perencanaan')->orWhere('slug', 'asisten-manager-pengawas-fisik')->orWhere('slug', 'direktur-teknik')->get()->pluck('id')->toArray();
+        $listJabatan = Jabatan::whereSlug('manager-distribusi')->orWhere('slug', 'manajer-perencanaan')->orWhere('slug', 'asisten-manajer-perencanaan')->orWhere('slug', 'asisten-manager-pengawas-fisik')->orWhere('slug', 'direktur-teknik')->get()->pluck('id')->toArray();
 
         // list karyawan bedasarkan jabatan
         $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get();
@@ -413,6 +413,21 @@ class PelaksanaanPekerjaanController extends Controller
                 }
             }
 
+
+            // notif ke admin distribusi sesuai wilyah
+            if ($aduan->wilayah_id) {
+                $jabatanWilayah = Jabatan::where('wilayah_id', $aduan->wilayah_id)->pluck('id')->toArray();
+
+                if ($jabatanWilayah) {
+                    $karyawanwilayah =   Karyawan::whereIn('jabatan_id', $jabatanWilayah);
+
+                    if ($karyawanwilayah) {
+                        foreach (collect($listKaryawan) as $i => $kr) {
+                            $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $kr->user_id);
+                        }
+                    }
+                }
+            }
 
 
             $message = 'Berhasil Menyimpan Pelaksanaan Pekerjaan';

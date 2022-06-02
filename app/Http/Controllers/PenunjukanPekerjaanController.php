@@ -377,7 +377,7 @@ class PenunjukanPekerjaanController extends Controller
 
 
             // list jabatan
-            $listJabatan = Jabatan::whereSlug('manager-distribusi')->orWhere('slug', 'asisten-manajer-perencanaan')->orWhere('slug', 'asisten-manager-pengawas-fisik')->orWhere('slug', 'direktur-teknik')->get()->pluck('id')->toArray();
+            $listJabatan = Jabatan::whereSlug('manager-distribusi')->orWhere('slug', 'manajer-perencanaan')->orWhere('slug', 'asisten-manajer-perencanaan')->orWhere('slug', 'asisten-manager-pengawas-fisik')->orWhere('slug', 'direktur-teknik')->get()->pluck('id')->toArray();
 
             // list karyawan bedasarkan jabatan
             $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get();
@@ -424,6 +424,7 @@ class PenunjukanPekerjaanController extends Controller
                 }
             }
             if ($user_id_karayawan != '') {
+                // / notif ke karyawan
                 $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $user_id_karayawan);
             }
 
@@ -433,6 +434,22 @@ class PenunjukanPekerjaanController extends Controller
                     $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $kr->user_id);
                 }
             }
+
+            // notif ke admin distribusi sesuai wilyah
+            if ($aduan->wilayah_id) {
+                $jabatanWilayah = Jabatan::where('wilayah_id', $aduan->wilayah_id)->pluck('id')->toArray();
+
+                if ($jabatanWilayah) {
+                    $karyawanwilayah =   Karyawan::whereIn('jabatan_id', $jabatanWilayah);
+
+                    if ($karyawanwilayah) {
+                        foreach (collect($listKaryawan) as $i => $kr) {
+                            $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $kr->user_id);
+                        }
+                    }
+                }
+            }
+
 
             $message = 'Berhasil Menyimpan Pelaksanaan Pekerjaan';
             return redirect()->route('penunjukan_pekerjaan.index')->with('message', 'Penunjukan pekerjaan berhasil ditambah')->with('Class', 'primary');

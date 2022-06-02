@@ -208,6 +208,12 @@ class PerusahaanSeeder extends Seeder
         $jabatanAsistenManajerPerencaan->wilayah_id = $WilayahSamarinda->id;
         $jabatanAsistenManajerPerencaan->save();
 
+        $jabatanManajerPerencaan = new Jabatan();
+        $jabatanManajerPerencaan->nama = 'Manajer Perencanaan';
+        $jabatanManajerPerencaan->divisi_id = $divisiPengawas->id;
+        $jabatanManajerPerencaan->wilayah_id = $WilayahSamarinda->id;
+        $jabatanManajerPerencaan->save();
+
         $jabatanDirektur = new Jabatan();
         $jabatanDirektur->nama = 'Direktur Teknik';
         $jabatanDirektur->divisi_id = $divisiDistribusi->id;
