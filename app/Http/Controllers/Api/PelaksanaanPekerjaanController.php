@@ -161,15 +161,15 @@ class PelaksanaanPekerjaanController extends Controller
         $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $request->slug)->first();
         $pelaksanaan_pekerjaan = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->first();
 
-        // if ($pelaksanaan_pekerjaan) {
-        //     $message = "No SPK sudah dikerjakan";
-        //     $response = [
-        //         'success' => false,
-        //         'message' => $message,
-        //         'code' => '409'
-        //     ];
-        //     return $this->sendError($response, $message, 409);
-        // }
+        if ($pelaksanaan_pekerjaan) {
+            $message = "No SPK sudah dikerjakan";
+            $response = [
+                'success' => false,
+                'message' => $message,
+                'code' => '409'
+            ];
+            return $this->sendError($response, $message, 409);
+        }
 
 
         $data = $this->model();
@@ -266,13 +266,12 @@ class PelaksanaanPekerjaanController extends Controller
 
         $checkUserPelaksanaan = $data->hasUserMany()->find($user_id);
         if (!empty($checkUserPelaksanaan)) {
-            return 1;
             $data->hasUserMany()->find($user_id);
             $data->hasUserMany()->keterangan =  $status;
             $data->hasUserMany()->save();
         } else {
-            return $user[$user_id] = [
-                'keterangan' =>  $status,
+            $user[$user_id] = [
+                'keterangan' => 'proses',
             ];
             $data->hasUserMany()->attach($user);
         }
@@ -280,11 +279,11 @@ class PelaksanaanPekerjaanController extends Controller
         $checkUserpenunjukanPekerjaan = $penunjukanPekerjaan->hasUserMany()->find($user_id);
         if ($checkUserpenunjukanPekerjaan) {
             $penunjukanPekerjaan->hasUserMany()->find($user_id);
-            $penunjukanPekerjaan->hasUserMany()->keterangan =  $status;
+            $penunjukanPekerjaan->hasUserMany()->keterangan = 'proses';
             $penunjukanPekerjaan->hasUserMany()->save();
         } else {
             $user[$user_id] = [
-                'keterangan' =>  $status,
+                'keterangan' =>  'proses',
             ];
             $penunjukanPekerjaan->hasUserMany()->attach($user);
         }
