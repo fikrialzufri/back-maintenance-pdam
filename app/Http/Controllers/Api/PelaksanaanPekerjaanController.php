@@ -193,7 +193,7 @@ class PelaksanaanPekerjaanController extends Controller
         $data->status = 'diterima';
         $data->save();
 
-        $user[$user_id] = [
+        return $user[$user_id] = [
             'keterangan' =>  'diterima',
         ];
         $data->hasUserMany()->attach($user);
