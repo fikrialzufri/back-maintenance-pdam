@@ -70,6 +70,13 @@ class PenunjukanPekerjaan extends Model
         }
     }
 
+    public function getKategoriAduanttribute()
+    {
+        if ($this->hasAduan) {
+            return $this->hasAduan->kategori_aduan;
+        }
+    }
+
     public function getSumberInformasiAttribute()
     {
         if ($this->hasAduan) {
