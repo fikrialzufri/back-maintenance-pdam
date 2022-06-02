@@ -380,15 +380,15 @@ class PelaksanaanPekerjaanController extends Controller
         $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $slug)->first();
         $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->first();
 
-        // if ($data->status == 'selesai') {
-        //     $message = "Pekerjaan sudah selesai";
-        //     $response = [
-        //         'success' => false,
-        //         'message' => $message,
-        //         'code' => '409'
-        //     ];
-        //     return $this->sendError($response, $message, 409);
-        // }
+        if ($data->status == 'selesai') {
+            $message = "Pekerjaan sudah selesai";
+            $response = [
+                'success' => false,
+                'message' => $message,
+                'code' => '409'
+            ];
+            return $this->sendError($response, $message, 409);
+        }
 
         $data->status = $status;
         $data->tanggal_selesai = Carbon::now();
