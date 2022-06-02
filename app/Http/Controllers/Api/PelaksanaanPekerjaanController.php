@@ -277,8 +277,8 @@ class PelaksanaanPekerjaanController extends Controller
 
         $checkUserpenunjukanPekerjaan = $penunjukanPekerjaan->hasUserMany()->find($user_id);
         if ($checkUserpenunjukanPekerjaan) {
-            $penunjukanPekerjaan->pivot->keterangan = $status;
-            $penunjukanPekerjaan->save();
+            $checkUserpenunjukanPekerjaan->pivot->keterangan = $status;
+            $checkUserpenunjukanPekerjaan->save();
         } else {
             $user[$user_id] = [
                 'keterangan' =>  $status,
