@@ -381,7 +381,7 @@ class PenunjukanPekerjaanController extends Controller
             } else {
                 $karyawan = Karyawan::find($rekanan_id);
                 if ($karyawan) {
-                    return $user_id_karayawan =  $karyawan->user_id;
+                    $user_id_karayawan =  $karyawan->user_id;
                     $karyawan_id = $karyawan->id;
                     $data->karyawan_id = $karyawan_id;
                 }
