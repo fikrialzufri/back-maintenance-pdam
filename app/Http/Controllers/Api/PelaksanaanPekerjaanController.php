@@ -146,7 +146,7 @@ class PelaksanaanPekerjaanController extends Controller
     public function store(Request $request)
     {
         DB::beginTransaction();
-        $user_id = auth()->user()->id;
+        return $user_id = auth()->user()->id;
         $rekanan_id = auth()->user()->id_rekanan;
         $id_karyawan = auth()->user()->id_karyawan;
 
