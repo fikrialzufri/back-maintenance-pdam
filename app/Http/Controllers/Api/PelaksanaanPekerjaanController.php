@@ -267,7 +267,7 @@ class PelaksanaanPekerjaanController extends Controller
         $checkUserPelaksanaan = $data->hasUserMany()->find($user_id);
         if (!empty($checkUserPelaksanaan)) {
             $data->hasUserMany()->find($user_id);
-            $data->hasUserMany()->pivot->keterangan =  $status;
+            $data->hasUserMany()->pivot->keterangan =  'proses';
             $data->hasUserMany()->save();
         } else {
             $user[$user_id] = [
@@ -337,11 +337,11 @@ class PelaksanaanPekerjaanController extends Controller
 
             if ($data->hasUserMany()->find($user_id)) {
                 $data->hasUserMany()->find($user_id);
-                $data->hasUserMany()->pivot->keterangan =  $status;
+                $data->hasUserMany()->pivot->keterangan = 'proses-akhir';
                 $data->hasUserMany()->save();
             } else {
                 $user[$user_id] = [
-                    'keterangan' =>  $status,
+                    'keterangan' => 'proses-akhir',
                 ];
                 $data->hasUserMany()->attach($user);
             }
@@ -401,11 +401,11 @@ class PelaksanaanPekerjaanController extends Controller
             // update histori user
             if ($data->hasUserMany()->find($user_id)) {
                 $data->hasUserMany()->find($user_id);
-                $data->hasUserMany()->pivot->keterangan =  $status;
+                $data->hasUserMany()->pivot->keterangan = 'selesai';
                 $data->hasUserMany()->save();
             } else {
                 $user[$user_id] = [
-                    'keterangan' =>  $status,
+                    'keterangan' => 'selesai',
                 ];
                 $data->hasUserMany()->attach($user);
             }
@@ -415,11 +415,11 @@ class PelaksanaanPekerjaanController extends Controller
 
             if ($penunjukanPekerjaan->hasUserMany()->find($user_id)) {
                 $penunjukanPekerjaan->hasUserMany()->find($user_id);
-                $penunjukanPekerjaan->hasUserMany()->pivot->keterangan =  $status;
+                $penunjukanPekerjaan->hasUserMany()->pivot->keterangan =  'selesai';
                 $penunjukanPekerjaan->hasUserMany()->save();
             } else {
                 $user[$user_id] = [
-                    'keterangan' =>  $status,
+                    'keterangan' =>  'selesai',
                 ];
                 $penunjukanPekerjaan->hasUserMany()->attach($user);
             }
@@ -428,16 +428,16 @@ class PelaksanaanPekerjaanController extends Controller
             $aduan->status = $status;
             $aduan->save();
 
-            if ($aduan->hasUserMany()->find($user_id)) {
-                $aduan->hasUserMany()->find($user_id);
-                $aduan->hasUserMany()->pivot->keterangan =  $status;
-                $aduan->hasUserMany()->save();
-            } else {
-                $user[$user_id] = [
-                    'keterangan' =>  $status,
-                ];
-                $aduan->hasUserMany()->attach($user);
-            }
+            // if ($aduan->hasUserMany()->find($user_id)) {
+            //     $aduan->hasUserMany()->find($user_id);
+            //     $aduan->hasUserMany()->pivot->keterangan = 'selesai';
+            //     $aduan->hasUserMany()->save();
+            // } else {
+            //     $user[$user_id] = [
+            //         'keterangan' => 'selesai',
+            //     ];
+            //     $aduan->hasUserMany()->attach($user);
+            // }
 
             $stafPengawas = Auth::user()->hasRekanan->hasKaryawan;
             $fotolokasi = $penunjukanPekerjaan->foto_penyelesaian;
