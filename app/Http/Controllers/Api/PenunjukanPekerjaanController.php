@@ -34,7 +34,7 @@ class PenunjukanPekerjaanController extends Controller
         $result = [];
         $message = 'List Penunjukan Pekerjaan';
         $rekanan_id = auth()->user()->id_rekanan;
-        $id_karyawan = auth()->user()->id_karyawan;
+        return $id_karyawan = auth()->user()->id_karyawan;
         $start_date = $request->start_date;
         $end_date = $request->end_date;
 
@@ -83,25 +83,26 @@ class PenunjukanPekerjaanController extends Controller
 
         $count = 0;
 
-        if ($slug) {
-            $data = $query->with('hasAduan')->orderBy('status', 'desc')->orderBy('created_at', 'desc')->first();
-            if (!$data) {
-                $message = 'Data Penunjukan Pekerjaan Belum Ada';
+        try {
+            if ($slug) {
+                $data = $query->with('hasAduan')->orderBy('status', 'desc')->orderBy('created_at', 'desc')->first();
+                if (!$data) {
+                    $message = 'Data Penunjukan Pekerjaan Belum Ada';
+                } else {
+                    $result = new PekerjaanDetailResource($data);
+                }
             } else {
-                $result = new PekerjaanDetailResource($data);
-            }
-        } else {
-            $data = $query->orderBy('status', 'desc')->orderBy('created_at', 'desc')->paginate(10);
-            $count =  $query->orderBy('status', 'desc')->orderBy('created_at', 'desc')->count();
-            if (count($data) == 0) {
-                $message = 'Data Penunjukan Pekerjaan Belum Ada';
-            }
-            $data = Pekerjaan::collection($data)->response()->getData(true);
+                $data = $query->orderBy('status', 'desc')->orderBy('created_at', 'desc')->paginate(10);
+                $count =  $query->orderBy('status', 'desc')->orderBy('created_at', 'desc')->count();
+                if (count($data) == 0) {
+                    $message = 'Data Penunjukan Pekerjaan Belum Ada';
+                }
+                $data = Pekerjaan::collection($data)->response()->getData(true);
 
-            $result =  $data['data'];
-        }
-        return $this->sendResponse($result, $message, 200, $count);
-        try { } catch (\Throwable $th) {
+                $result =  $data['data'];
+            }
+            return $this->sendResponse($result, $message, 200, $count);
+        } catch (\Throwable $th) {
             $response = [
                 'success' => false,
                 'message' => $message,
