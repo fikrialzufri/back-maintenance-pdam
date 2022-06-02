@@ -146,7 +146,7 @@ class PelaksanaanPekerjaanController extends Controller
     public function store(Request $request)
     {
         DB::beginTransaction();
-        return $user_id = auth()->user()->id;
+        $user_id = auth()->user()->id;
         $rekanan_id = auth()->user()->id_rekanan;
         $id_karyawan = auth()->user()->id_karyawan;
 
@@ -161,15 +161,15 @@ class PelaksanaanPekerjaanController extends Controller
         $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $request->slug)->first();
         $pelaksanaan_pekerjaan = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->first();
 
-        if ($pelaksanaan_pekerjaan) {
-            $message = "No SPK sudah dikerjakan";
-            $response = [
-                'success' => false,
-                'message' => $message,
-                'code' => '409'
-            ];
-            return $this->sendError($response, $message, 409);
-        }
+        // if ($pelaksanaan_pekerjaan) {
+        //     $message = "No SPK sudah dikerjakan";
+        //     $response = [
+        //         'success' => false,
+        //         'message' => $message,
+        //         'code' => '409'
+        //     ];
+        //     return $this->sendError($response, $message, 409);
+        // }
 
 
         $data = $this->model();
@@ -192,11 +192,12 @@ class PelaksanaanPekerjaanController extends Controller
         $data->user_id = $user_id;
         $data->status = 'diterima';
         $data->save();
+        $user = [];
 
         return $user[$user_id] = [
             'keterangan' =>  'diterima',
         ];
-        $data->hasUserMany()->attach($user);
+        $data->hasUserMany()->sync($user);
 
         $penunjukanPekerjaan->status = 'proses';
         $penunjukanPekerjaan->save();
