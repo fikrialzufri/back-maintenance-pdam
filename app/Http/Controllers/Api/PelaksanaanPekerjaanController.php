@@ -196,13 +196,21 @@ class PelaksanaanPekerjaanController extends Controller
             $data->status = 'diterima';
             $data->save();
 
+            $checkUserPelaksanaan = $data->hasUserMany()->find($user_id);
+            if (!empty($checkUserPelaksanaan)) {
+                return 1;
+                PelaksanaaPekerjaa::hasUserMany()->find($user_id);
+                PelaksanaaPekerjaa::hasUserMany()->keterangan =  'diterima';
+                PelaksanaaPekerjaa::hasUserMany()->save();
+            } else {
+                return $user[$user_id] = [
+                    'keterangan' =>  'diterima',
+                ];
+                $data->hasUserMany()->attach($user);
+            }
+
             $penunjukanPekerjaan->status = 'proses';
             $penunjukanPekerjaan->save();
-
-            $user[$user_id] = [
-                'keterangan' =>  'diterima',
-            ];
-            $data->hasUserMany()->attach($user);
 
             $checkUserpenunjukanPekerjaan = $penunjukanPekerjaan->hasUserMany()->find($user_id);
             if ($checkUserpenunjukanPekerjaan) {
