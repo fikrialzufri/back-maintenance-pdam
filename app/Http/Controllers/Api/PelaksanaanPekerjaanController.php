@@ -148,6 +148,7 @@ class PelaksanaanPekerjaanController extends Controller
         $message = 'Gagal Menyimpan Pelaksanaan Pekerjaan';
         $user_id = auth()->user()->id;
         $rekanan_id = auth()->user()->id_rekanan;
+        $id_karyawan = auth()->user()->id_karyawan;
         try {
             $dataPelaksanaanPekerjaan = $this->model()->count();
             if ($dataPelaksanaanPekerjaan >= 1) {
@@ -178,7 +179,7 @@ class PelaksanaanPekerjaanController extends Controller
             if (!empty($rekanan)) {
                 $data->rekanan_id = $rekanan_id;
             } else {
-                $karyawan = Karyawan::find($rekanan_id);
+                $karyawan = Karyawan::find($id_karyawan);
                 if ($karyawan) {
                     $karyawan_id = $karyawan->id;
                     $data->karyawan_id = $karyawan_id;

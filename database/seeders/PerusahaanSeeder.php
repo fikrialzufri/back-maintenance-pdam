@@ -130,29 +130,29 @@ class PerusahaanSeeder extends Seeder
         $jabatanAsistenManagerDistribusi->wilayah_id = $WilayahSamarinda->id;
         $jabatanAsistenManagerDistribusi->save();
 
-        $jabatanAdminAsistenManagerSatu = new Jabatan();
-        $jabatanAdminAsistenManagerSatu->nama = 'Admin Asisten Manager Distribusi';
-        $jabatanAdminAsistenManagerSatu->divisi_id = $divisiDistribusi->id;
-        $jabatanAdminAsistenManagerSatu->wilayah_id = $WilayahSatu->id;
-        $jabatanAdminAsistenManagerSatu->save();
+        $jabatanAsistenManagerSatu = new Jabatan();
+        $jabatanAsistenManagerSatu->nama = 'Asisten Manager Distribusi';
+        $jabatanAsistenManagerSatu->divisi_id = $divisiDistribusi->id;
+        $jabatanAsistenManagerSatu->wilayah_id = $WilayahSatu->id;
+        $jabatanAsistenManagerSatu->save();
 
-        $jabatanAdminAsistenManagerDua = new Jabatan();
-        $jabatanAdminAsistenManagerDua->nama = 'Admin Asisten Manager Distribusi';
-        $jabatanAdminAsistenManagerDua->divisi_id = $divisiDistribusi->id;
-        $jabatanAdminAsistenManagerDua->wilayah_id = $WilayahDua->id;
-        $jabatanAdminAsistenManagerDua->save();
+        $jabatanAsistenManagerDua = new Jabatan();
+        $jabatanAsistenManagerDua->nama = 'Asisten Manager Distribusi';
+        $jabatanAsistenManagerDua->divisi_id = $divisiDistribusi->id;
+        $jabatanAsistenManagerDua->wilayah_id = $WilayahDua->id;
+        $jabatanAsistenManagerDua->save();
 
-        $jabatanAdminAsistenManagerTiga = new Jabatan();
-        $jabatanAdminAsistenManagerTiga->nama = 'Admin Asisten Manager Distribusi';
-        $jabatanAdminAsistenManagerTiga->divisi_id = $divisiDistribusi->id;
-        $jabatanAdminAsistenManagerTiga->wilayah_id = $WilayahTiga->id;
-        $jabatanAdminAsistenManagerTiga->save();
+        $jabatanAsistenManagerTiga = new Jabatan();
+        $jabatanAsistenManagerTiga->nama = 'Asisten Manager Distribusi';
+        $jabatanAsistenManagerTiga->divisi_id = $divisiDistribusi->id;
+        $jabatanAsistenManagerTiga->wilayah_id = $WilayahTiga->id;
+        $jabatanAsistenManagerTiga->save();
 
-        $jabatanAdminAsistenManagerEmpat = new Jabatan();
-        $jabatanAdminAsistenManagerEmpat->nama = 'Admin Asisten Manager Distribusi';
-        $jabatanAdminAsistenManagerEmpat->divisi_id = $divisiDistribusi->id;
-        $jabatanAdminAsistenManagerEmpat->wilayah_id = $WilayahEmpat->id;
-        $jabatanAdminAsistenManagerEmpat->save();
+        $jabatanAsistenManagerEmpat = new Jabatan();
+        $jabatanAsistenManagerEmpat->nama = 'Asisten Manager Distribusi';
+        $jabatanAsistenManagerEmpat->divisi_id = $divisiDistribusi->id;
+        $jabatanAsistenManagerEmpat->wilayah_id = $WilayahEmpat->id;
+        $jabatanAsistenManagerEmpat->save();
 
         $jabatanUmum = new Jabatan();
         $jabatanUmum->nama = 'Umum';
