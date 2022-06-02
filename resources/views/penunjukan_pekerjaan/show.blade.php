@@ -1528,6 +1528,18 @@
                             <div class="col-12">
                                 <div class="form-group">
                                     <div>
+                                        <label for="kategori_aduan" class=" form-control-label">Kategori Aduan</label>
+                                    </div>
+                                    <div>
+                                        <strong>{{ $aduan->kategori_aduan }}</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <div>
                                         <label for="sumber_informasi" class=" form-control-label">Sumber Informasi</label>
                                     </div>
                                     <div>
@@ -1585,6 +1597,18 @@
                                     </div>
                                     <div>
                                         <strong>{{ $aduan->lokasi }}</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <div>
+                                        <label for="detail_lokasi" class=" form-control-label">Detail Lokasi</label>
+                                    </div>
+                                    <div>
+                                        <strong>{{ $aduan->detail_lokasi }}</strong>
                                     </div>
                                 </div>
                             </div>

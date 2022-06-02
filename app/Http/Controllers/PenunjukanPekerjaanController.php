@@ -123,6 +123,24 @@ class PenunjukanPekerjaanController extends Controller
     {
         $aduan = Aduan::where('slug', $slug)->first();
 
+        if ($aduan == null) {
+            return redirect()->route('penunjukan_pekerjaan.index')->with('message', 'Data Aduan tidak ditemukan')->with('Class', 'primary');
+        }
+
+        $id_wilayah =  auth()->user()->id_wilayah;
+
+        $wilayah = Wilayah::find($id_wilayah);
+
+        $querykaryawan  =  Karyawan::where('pekerjaan', 'ya');
+        if ($wilayah) {
+            if ($wilayah->nama != 'Samarinda') {
+                $jabatan = Jabatan::where('wilayah_id', $wilayah->id)->pluck('id');
+                $querykaryawan =   $querykaryawan->whereIn('jabatan_id', $jabatan);
+            }
+        }
+
+        $karyawanPekerja =  $querykaryawan->orderBy('nama')->get();
+
         $jenisPekerjaan = [];
         $jenisBahan = [];
         $jenisBajenisAlatBanturang = [];
@@ -270,15 +288,9 @@ class PenunjukanPekerjaanController extends Controller
         $jenis_aduan = JenisAduan::orderBy('nama')->get();
         $rekanan = Rekanan::orderBy('nama')->get();
 
-        $karyawanPekerja = Karyawan::where('pekerjaan', 'ya')->orderBy('nama')->get();
+
 
         $title = 'Detail Pekrjaan ' . $aduan->nomor_pekerjaan;
-
-
-        if ($aduan == null) {
-            return redirect()->route('penunjukan_pekerjaan.index')->with('message', 'Data Aduan tidak ditemukan')->with('Class', 'primary');
-        }
-
 
         return view('penunjukan_pekerjaan.show', compact(
             'aduan',
