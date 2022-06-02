@@ -24,6 +24,7 @@ class PekerjaanDetailResource extends JsonResource
             'lokasi_detail_aduan' =>  $this->detail_lokasi_aduan,
             'lokasi_pekerjaan' =>  $this->lokasi_pekerjaan,
             'jenis_aduan' =>  $this->jenis_aduan,
+            'kategori_aduan' =>  $this->kategori_aduan,
             'lat_long' =>  $this->lat_long,
             'lat_long_aduan' =>  $this->lat_long_aduan,
             'nama_rekanan' =>  $this->rekanan,

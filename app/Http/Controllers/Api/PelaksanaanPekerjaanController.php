@@ -174,7 +174,16 @@ class PelaksanaanPekerjaanController extends Controller
             $data = $this->model();
             $data->nomor_pelaksanaan_pekerjaan = $nomor_pelaksanaan_pekerjaan;
             $data->penunjukan_pekerjaan_id = $penunjukanPekerjaan->id;
-            $data->rekanan_id = $rekanan_id;
+            $rekanan = Rekanan::find($rekanan_id);
+            if (!empty($rekanan)) {
+                $data->rekanan_id = $rekanan_id;
+            } else {
+                $karyawan = Karyawan::find($rekanan_id);
+                if ($karyawan) {
+                    $karyawan_id = $karyawan->id;
+                    $data->karyawan_id = $karyawan_id;
+                }
+            }
             $data->aduan_id = $penunjukanPekerjaan->aduan_id;
             $data->tanggal_mulai = Carbon::now();
             $data->user_id = $user_id;
@@ -221,15 +230,15 @@ class PelaksanaanPekerjaanController extends Controller
             $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug',  $slug)->first();
             $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->first();
 
-            // if ($data->status == 'selesai') {
-            //     $message = "Pekerjaan sudah selesai";
-            //     $response = [
-            //         'success' => false,
-            //         'message' => $message,
-            //         'code' => '409'
-            //     ];
-            //     return $this->sendError($response, $message, 409);
-            // }
+            if ($data->status == 'selesai') {
+                $message = "Pekerjaan sudah selesai";
+                $response = [
+                    'success' => false,
+                    'message' => $message,
+                    'code' => '409'
+                ];
+                return $this->sendError($response, $message, 409);
+            }
             $data->lokasi = $lokasi;
             $data->lat_long = $request->lat_long;
             $data->keterangan_barang = $request->keterangan_barang;

@@ -26,7 +26,8 @@ class CreatePelaksanaanPekerjaansTable extends Migration
             $table->enum('status', ['diterima', 'proses', 'proses-akhir', 'selesai', 'disetujui', 'dikoreksi', 'selesai koreksi'])->default('diterima');
             $table->enum('tagihan', ['tidak', 'ya'])->default('tidak');
             $table->foreignUuid('aduan_id')->references('id')->on('aduan')->nullable();
-            $table->foreignUuid('rekanan_id')->references('id')->on('rekanan')->nullable();
+            $table->foreignUuid('rekanan_id')->nullable()->references('id')->on('rekanan');
+            $table->foreignUuid('karyawan_id')->nullable()->references('id')->on('karyawan');
             $table->foreignUuid('penunjukan_pekerjaan_id')->references('id')->on('penunjukan_pekerjaan')->nullable();
             $table->foreignUuid('user_id')->references('id')->on('users');
             $table->timestamps();

@@ -370,11 +370,11 @@ class PenunjukanPekerjaanController extends Controller
             // list karyawan bedasarkan jabatan
             $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get();
 
-            $rekanan = Rekanan::find($rekanan_id);
 
             $data = new PenunjukanPekerjaan;
             $data->nomor_pekerjaan = $nomor_pekerjaan;
 
+            $rekanan = Rekanan::find($rekanan_id);
             if (!empty($rekanan)) {
                 $data->rekanan_id = $rekanan_id;
             } else {
