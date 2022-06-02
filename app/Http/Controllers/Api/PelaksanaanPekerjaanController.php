@@ -371,138 +371,127 @@ class PelaksanaanPekerjaanController extends Controller
         // list karyawan bedasarkan jabatan
         $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get();
 
+        $message = 'Gagal Menyimpan Pelaksanaan Pekerjaan';
+        $status = 'selesai';
+        $slug = $request->slug;
+        $user_id = auth()->user()->id;
+        $keterangan = $request->keterangan;
+        $user = [];
+        $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $slug)->first();
+        $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->first();
+
+        // if ($data->status == 'selesai') {
+        //     $message = "Pekerjaan sudah selesai";
+        //     $response = [
+        //         'success' => false,
+        //         'message' => $message,
+        //         'code' => '409'
+        //     ];
+        //     return $this->sendError($response, $message, 409);
+        // }
+
+        $data->status = $status;
+        $data->tanggal_selesai = Carbon::now();
+        $data->keterangan = $keterangan;
+        $data->save();
+
+        // update histori user
+
+
+        $penunjukanPekerjaan->status = $status;
+        $penunjukanPekerjaan->save();
+
+        $checkUserPelaksanaan = $data->hasUserMany()->find($user_id);
+        if (!empty($checkUserPelaksanaan)) {
+            $checkUserPelaksanaan->pivot->keterangan = 'selesai';
+            $checkUserPelaksanaan->save();
+        } else {
+            $user[$user_id] = [
+                'keterangan' => 'selesai',
+            ];
+            $data->hasUserMany()->attach($user);
+        }
+        $checkUserpenunjukanPekerjaan = $penunjukanPekerjaan->hasUserMany()->find($user_id);
+        if ($checkUserpenunjukanPekerjaan) {
+            $checkUserpenunjukanPekerjaan->pivot->keterangan = 'selesai';
+            $checkUserpenunjukanPekerjaan->save();
+        } else {
+            $user[$user_id] = [
+                'keterangan' =>  'selesai',
+            ];
+            $penunjukanPekerjaan->hasUserMany()->attach($user);
+        }
+
+        $aduan = Aduan::find($penunjukanPekerjaan->aduan_id);
+        $aduan->status = $status;
+        $aduan->save();
+
+        $stafPengawas = Auth::user()->hasRekanan->hasKaryawan;
+        $fotolokasi = $penunjukanPekerjaan->foto_penyelesaian;
+
+        $kategoriDokumentasi = Kategori::whereSlug('dokumentasi')->first();
+        if ($kategoriDokumentasi) {
+            $jenisDokumentasi = Jenis::where('kategori_id', $kategoriDokumentasi->id)->get()->pluck('id');
+            $listDokumentasi = Item::whereIn('jenis_id', $jenisDokumentasi)->first();
+            if (count($fotolokasi) > 0) {
+                if (isset($listDokumentasi)) {
+
+                    if (now()->format('H:i') >= '18:01') {
+                        $harga = $listDokumentasi->harga_malam;
+                    } else {
+                        $harga = $listDokumentasi->harga;
+                    }
+                    $total = 1 * $harga;
+
+                    $listitem[$listDokumentasi->id] = [
+                        'keterangan' => '',
+                        'harga' => $harga,
+                        'qty' => 1,
+                        'total' => $total,
+                    ];
+
+                    $data->hasItem()->attach($listitem);
+                }
+            }
+        }
+
+        $title = "Pengerjaan Telah selesai";
+        $body = "Dengan nomor SPK : " . $penunjukanPekerjaan->nomor_pekerjaan . " telah selesai";
+        $modul = "pelaksanaan-pekerjaan";
+
+        // notif ke staf pengawas
+        foreach ($stafPengawas as $pengawas) {
+            $this->notification($data->id, $aduan->slug, $title, $body, $modul, auth()->user()->id, $pengawas->user_id);
+        }
+
+        // notif ke karyawan bedasarkan jabatan
+        if ($listKaryawan) {
+            foreach (collect($listKaryawan) as $i => $kr) {
+                $this->notification($data->id, $aduan->slug, $title, $body, $modul, auth()->user()->id, $kr->user_id);
+            }
+        }
+
+
+        // notif ke admin distribusi sesuai wilyah
+        if ($aduan->wilayah_id) {
+            $jabatanWilayah = Jabatan::where('wilayah_id', $aduan->wilayah_id)->pluck('id')->toArray();
+
+            if ($jabatanWilayah) {
+                $karyawanwilayah =   Karyawan::whereIn('jabatan_id', $jabatanWilayah);
+
+                if ($karyawanwilayah) {
+                    foreach (collect($listKaryawan) as $i => $kr) {
+                        $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $kr->user_id);
+                    }
+                }
+            }
+        }
+
+
+        $message = 'Berhasil Menyimpan Pelaksanaan Pekerjaan';
+        return $this->sendResponse($data, $message, 200);
         try {
             DB::commit();
-            $message = 'Gagal Menyimpan Pelaksanaan Pekerjaan';
-            $status = 'selesai';
-            $slug = $request->slug;
-            $user_id = auth()->user()->id;
-            $keterangan = $request->keterangan;
-            $user = [];
-            $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $slug)->first();
-            $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->first();
-
-            if ($data->status == 'selesai') {
-                $message = "Pekerjaan sudah selesai";
-                $response = [
-                    'success' => false,
-                    'message' => $message,
-                    'code' => '409'
-                ];
-                return $this->sendError($response, $message, 409);
-            }
-
-            $data->status = $status;
-            $data->tanggal_selesai = Carbon::now();
-            $data->keterangan = $keterangan;
-            $data->save();
-
-            // update histori user
-
-
-            $penunjukanPekerjaan->status = $status;
-            $penunjukanPekerjaan->save();
-
-            $checkUserPelaksanaan = $data->hasUserMany()->find($user_id);
-            if (!empty($checkUserPelaksanaan)) {
-                $checkUserPelaksanaan->pivot->keterangan = 'selesai';
-                $checkUserPelaksanaan->save();
-            } else {
-                $user[$user_id] = [
-                    'keterangan' => 'selesai',
-                ];
-                $data->hasUserMany()->attach($user);
-            }
-            $checkUserpenunjukanPekerjaan = $penunjukanPekerjaan->hasUserMany()->find($user_id);
-            if ($checkUserpenunjukanPekerjaan) {
-                $checkUserpenunjukanPekerjaan->pivot->keterangan = 'selesai';
-                $checkUserpenunjukanPekerjaan->save();
-            } else {
-                $user[$user_id] = [
-                    'keterangan' =>  'selesai',
-                ];
-                $penunjukanPekerjaan->hasUserMany()->attach($user);
-            }
-
-            $aduan = Aduan::find($penunjukanPekerjaan->aduan_id);
-            $aduan->status = $status;
-            $aduan->save();
-
-            // if ($aduan->hasUserMany()->find($user_id)) {
-            //     $aduan->hasUserMany()->find($user_id);
-            //     $aduan->hasUserMany()->pivot->keterangan = 'selesai';
-            //     $aduan->hasUserMany()->save();
-            // } else {
-            //     $user[$user_id] = [
-            //         'keterangan' => 'selesai',
-            //     ];
-            //     $aduan->hasUserMany()->attach($user);
-            // }
-
-            $stafPengawas = Auth::user()->hasRekanan->hasKaryawan;
-            $fotolokasi = $penunjukanPekerjaan->foto_penyelesaian;
-
-            $kategoriDokumentasi = Kategori::whereSlug('dokumentasi')->first();
-            if ($kategoriDokumentasi) {
-                $jenisDokumentasi = Jenis::where('kategori_id', $kategoriDokumentasi->id)->get()->pluck('id');
-                $listDokumentasi = Item::whereIn('jenis_id', $jenisDokumentasi)->first();
-                if (count($fotolokasi) > 0) {
-                    if (isset($listDokumentasi)) {
-
-                        if (now()->format('H:i') >= '18:01') {
-                            $harga = $listDokumentasi->harga_malam;
-                        } else {
-                            $harga = $listDokumentasi->harga;
-                        }
-                        $total = 1 * $harga;
-
-                        $listitem[$listDokumentasi->id] = [
-                            'keterangan' => '',
-                            'harga' => $harga,
-                            'qty' => 1,
-                            'total' => $total,
-                        ];
-
-                        $data->hasItem()->attach($listitem);
-                    }
-                }
-            }
-
-            $title = "Pengerjaan Telah selesai";
-            $body = "Dengan nomor SPK : " . $penunjukanPekerjaan->nomor_pekerjaan . " telah selesai";
-            $modul = "pelaksanaan-pekerjaan";
-
-            // notif ke staf pengawas
-            foreach ($stafPengawas as $pengawas) {
-                $this->notification($data->id, $aduan->slug, $title, $body, $modul, auth()->user()->id, $pengawas->user_id);
-            }
-
-            // notif ke karyawan bedasarkan jabatan
-            if ($listKaryawan) {
-                foreach (collect($listKaryawan) as $i => $kr) {
-                    $this->notification($data->id, $aduan->slug, $title, $body, $modul, auth()->user()->id, $kr->user_id);
-                }
-            }
-
-
-            // notif ke admin distribusi sesuai wilyah
-            if ($aduan->wilayah_id) {
-                $jabatanWilayah = Jabatan::where('wilayah_id', $aduan->wilayah_id)->pluck('id')->toArray();
-
-                if ($jabatanWilayah) {
-                    $karyawanwilayah =   Karyawan::whereIn('jabatan_id', $jabatanWilayah);
-
-                    if ($karyawanwilayah) {
-                        foreach (collect($listKaryawan) as $i => $kr) {
-                            $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $kr->user_id);
-                        }
-                    }
-                }
-            }
-
-
-            $message = 'Berhasil Menyimpan Pelaksanaan Pekerjaan';
-            return $this->sendResponse($data, $message, 200);
         } catch (\Throwable $th) {
             DB::rollback();
             $response = [
