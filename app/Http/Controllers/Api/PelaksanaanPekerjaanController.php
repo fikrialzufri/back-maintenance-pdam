@@ -226,11 +226,11 @@ class PelaksanaanPekerjaanController extends Controller
     public function proses(Request $request)
     {
         DB::beginTransaction();
+        $user_id = auth()->user()->id;
         $message = 'Gagal Menyimpan Pelaksanaan Pekerjaan';
         $slug = $request->slug;
         $lokasi = $request->lokasi;
-        $keterangan = $request->keterangan;
-        $user_id = auth()->user()->id;
+
         $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug',  $slug)->first();
         $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->first();
 
@@ -243,18 +243,26 @@ class PelaksanaanPekerjaanController extends Controller
             ];
             return $this->sendError($response, $message, 409);
         }
+        $status = 'proses';
+
         $data->lokasi = $lokasi;
         $data->lat_long = $request->lat_long;
         $data->keterangan_barang = $request->keterangan_barang;
         $data->user_id = $user_id;
         $data->tanggal_mulai = Carbon::now();
-        $data->status = 'proses';
+        $data->status =  $status;
         $data->save();
 
-        $user[$user_id] = [
-            'keterangan' => 'proses',
-        ];
-        $data->hasUserMany()->sync($user);
+        if ($data->hasUserMany()->find($user_id)) {
+            $data->hasUserMany()->find($user_id);
+            $data->hasUserMany()->keterangan =  $status;
+            $data->hasUserMany()->save();
+        } else {
+            $user[$user_id] = [
+                'keterangan' =>  $status,
+            ];
+            $data->hasUserMany()->attach($user);
+        }
 
         $message = 'Berhasil Menyimpan Pelaksanaan Pekerjaan';
         try {
@@ -282,6 +290,8 @@ class PelaksanaanPekerjaanController extends Controller
         $message = 'Gagal Menyimpan Pelaksanaan Pekerjaan';
         $status = 'proses-akhir';
         $slug = $request->slug;
+        $user_id = auth()->user()->id;
+
         try {
             DB::commit();
             $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug',  $slug)->first();
@@ -300,6 +310,17 @@ class PelaksanaanPekerjaanController extends Controller
             $data->status = $status;
             $data->keterangan_barang = $request->keterangan;
             $data->save();
+
+            if ($data->hasUserMany()->find($user_id)) {
+                $data->hasUserMany()->find($user_id);
+                $data->hasUserMany()->keterangan =  $status;
+                $data->hasUserMany()->save();
+            } else {
+                $user[$user_id] = [
+                    'keterangan' =>  $status,
+                ];
+                $data->hasUserMany()->attach($user);
+            }
             $message = 'Berhasil Menyimpan Bahan Pelaksanaan Pekerjaan';
             return $this->sendResponse($data, $message, 200);
         } catch (\Throwable $th) {
@@ -354,19 +375,45 @@ class PelaksanaanPekerjaanController extends Controller
             $data->save();
 
             // update histori user
-            $user[$user_id] = [
-                'keterangan' => $status,
-            ];
-
-            $data->hasUserMany()->sync($user);
+            if ($data->hasUserMany()->find($user_id)) {
+                $data->hasUserMany()->find($user_id);
+                $data->hasUserMany()->keterangan =  $status;
+                $data->hasUserMany()->save();
+            } else {
+                $user[$user_id] = [
+                    'keterangan' =>  $status,
+                ];
+                $data->hasUserMany()->attach($user);
+            }
 
             $penunjukanPekerjaan->status = $status;
             $penunjukanPekerjaan->save();
-            $penunjukanPekerjaan->hasUserMany()->sync($user);
+
+            if ($penunjukanPekerjaan->hasUserMany()->find($user_id)) {
+                $penunjukanPekerjaan->hasUserMany()->find($user_id);
+                $penunjukanPekerjaan->hasUserMany()->keterangan =  $status;
+                $penunjukanPekerjaan->hasUserMany()->save();
+            } else {
+                $user[$user_id] = [
+                    'keterangan' =>  $status,
+                ];
+                $penunjukanPekerjaan->hasUserMany()->attach($user);
+            }
 
             $aduan = Aduan::find($penunjukanPekerjaan->aduan_id);
             $aduan->status = $status;
             $aduan->save();
+
+            if ($aduan->hasUserMany()->find($user_id)) {
+                $aduan->hasUserMany()->find($user_id);
+                $aduan->hasUserMany()->keterangan =  $status;
+                $aduan->hasUserMany()->save();
+            } else {
+                $user[$user_id] = [
+                    'keterangan' =>  $status,
+                ];
+                $aduan->hasUserMany()->attach($user);
+            }
 
             $stafPengawas = Auth::user()->hasRekanan->hasKaryawan;
             $fotolokasi = $penunjukanPekerjaan->foto_penyelesaian;
