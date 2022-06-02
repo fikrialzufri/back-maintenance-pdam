@@ -266,9 +266,8 @@ class PelaksanaanPekerjaanController extends Controller
 
         $checkUserPelaksanaan = $data->hasUserMany()->find($user_id);
         if (!empty($checkUserPelaksanaan)) {
-            $checkUserPelaksanaan->hasUserMany()->find($user_id);
-            $checkUserPelaksanaan->hasUserMany()->pivot->keterangan =  $status;
-            $checkUserPelaksanaan->hasUserMany()->save();
+            $checkUserPelaksanaan->pivot->keterangan =  $status;
+            $checkUserPelaksanaan->save();
         } else {
             $user[$user_id] = [
                 'keterangan' => $status,
@@ -278,9 +277,8 @@ class PelaksanaanPekerjaanController extends Controller
 
         $checkUserpenunjukanPekerjaan = $penunjukanPekerjaan->hasUserMany()->find($user_id);
         if ($checkUserpenunjukanPekerjaan) {
-            $penunjukanPekerjaan->hasUserMany()->find($user_id);
-            $penunjukanPekerjaan->hasUserMany()->pivot->keterangan = $status;
-            $penunjukanPekerjaan->hasUserMany()->save();
+            $penunjukanPekerjaan->pivot->keterangan = $status;
+            $penunjukanPekerjaan->save();
         } else {
             $user[$user_id] = [
                 'keterangan' =>  $status,
@@ -337,9 +335,9 @@ class PelaksanaanPekerjaanController extends Controller
 
             $checkUserPelaksanaan = $data->hasUserMany()->find($user_id);
             if (!empty($checkUserPelaksanaan)) {
-                $checkUserPelaksanaan->hasUserMany()->find($user_id);
-                $checkUserPelaksanaan->hasUserMany()->pivot->keterangan =  $status;
-                $checkUserPelaksanaan->hasUserMany()->save();
+                $checkUserPelaksanaan->find($user_id);
+                $checkUserPelaksanaan->pivot->keterangan =  $status;
+                $checkUserPelaksanaan->save();
             } else {
                 $user[$user_id] = [
                     'keterangan' =>  $status,
@@ -407,9 +405,8 @@ class PelaksanaanPekerjaanController extends Controller
 
             $checkUserPelaksanaan = $data->hasUserMany()->find($user_id);
             if (!empty($checkUserPelaksanaan)) {
-                $checkUserPelaksanaan->hasUserMany()->find($user_id);
-                $checkUserPelaksanaan->hasUserMany()->pivot->keterangan = 'selesai';
-                $checkUserPelaksanaan->hasUserMany()->save();
+                $checkUserPelaksanaan->pivot->keterangan = 'selesai';
+                $checkUserPelaksanaan->save();
             } else {
                 $user[$user_id] = [
                     'keterangan' => 'selesai',
@@ -418,9 +415,8 @@ class PelaksanaanPekerjaanController extends Controller
             }
             $checkUserpenunjukanPekerjaan = $penunjukanPekerjaan->hasUserMany()->find($user_id);
             if ($checkUserpenunjukanPekerjaan) {
-                $penunjukanPekerjaan->hasUserMany()->find($user_id);
-                $penunjukanPekerjaan->hasUserMany()->pivot->keterangan = 'selesai';
-                $penunjukanPekerjaan->hasUserMany()->save();
+                $checkUserpenunjukanPekerjaan->pivot->keterangan = 'selesai';
+                $checkUserpenunjukanPekerjaan->save();
             } else {
                 $user[$user_id] = [
                     'keterangan' =>  'selesai',
@@ -555,16 +551,29 @@ class PelaksanaanPekerjaanController extends Controller
                     $data->status = $status;
                     $data->save();
 
-
-                    $user[$user_id] = [
-                        'keterangan' => $status,
-                    ];
-
-                    $data->hasUserMany()->attach($user);
-
                     $penunjukanPekerjaan->status = $status;
                     $penunjukanPekerjaan->save();
-                    $penunjukanPekerjaan->hasUserMany()->attach($user);
+
+                    $checkUserPelaksanaan = $data->hasUserMany()->find($user_id);
+                    if (!empty($checkUserPelaksanaan)) {
+                        $checkUserPelaksanaan->pivot->keterangan = 'selesai';
+                        $checkUserPelaksanaan->save();
+                    } else {
+                        $user[$user_id] = [
+                            'keterangan' => 'selesai',
+                        ];
+                        $data->hasUserMany()->attach($user);
+                    }
+                    $checkUserpenunjukanPekerjaan = $penunjukanPekerjaan->hasUserMany()->find($user_id);
+                    if ($checkUserpenunjukanPekerjaan) {
+                        $checkUserpenunjukanPekerjaan->pivot->keterangan = 'selesai';
+                        $checkUserpenunjukanPekerjaan->save();
+                    } else {
+                        $user[$user_id] = [
+                            'keterangan' =>  'selesai',
+                        ];
+                        $penunjukanPekerjaan->hasUserMany()->attach($user);
+                    }
 
                     $aduan = Aduan::find($penunjukanPekerjaan->aduan_id);
                     $aduan->status = $status;
