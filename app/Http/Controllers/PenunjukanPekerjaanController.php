@@ -373,14 +373,15 @@ class PenunjukanPekerjaanController extends Controller
 
             $data = new PenunjukanPekerjaan;
             $data->nomor_pekerjaan = $nomor_pekerjaan;
+            $user_id_karayawan = '';
 
             $rekanan = Rekanan::find($rekanan_id);
             if (!empty($rekanan)) {
                 $data->rekanan_id = $rekanan_id;
             } else {
-                return $karyawan = Karyawan::find($rekanan_id);
+                $karyawan = Karyawan::find($rekanan_id);
                 if ($karyawan) {
-                    return $user_id_karayawan =  $karyawan->hasUser->id;
+                    return $user_id_karayawan =  $karyawan->user_id;
                     $karyawan_id = $karyawan->id;
                     $data->karyawan_id = $karyawan_id;
                 }
@@ -409,10 +410,9 @@ class PenunjukanPekerjaanController extends Controller
                         $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $value->user_id);
                     }
                 }
-            } else {
-                if ($karyawan) {
-                    $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $user_id_karayawan);
-                }
+            }
+            if ($user_id_karayawan != '') {
+                $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $user_id_karayawan);
             }
 
             // notif ke karyawan bedasarkan jabatan
