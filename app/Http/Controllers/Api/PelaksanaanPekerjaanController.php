@@ -12,6 +12,7 @@ use App\Models\Karyawan;
 use App\Models\Kategori;
 use App\Models\PelaksanaanPekerjaan;
 use App\Models\PenunjukanPekerjaan;
+use App\Models\Rekanan;
 use App\Models\Satuan;
 use App\Models\Setting;
 use Illuminate\Http\Request;
