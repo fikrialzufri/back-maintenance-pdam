@@ -409,6 +409,11 @@ class PenunjukanPekerjaanController extends Controller
                         $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $value->user_id);
                     }
                 }
+            } else {
+                $karyawan = Karyawan::find($rekanan_id);
+                if ($karyawan) {
+                    $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $karyawan->hasUser->id);
+                }
             }
 
             // notif ke karyawan bedasarkan jabatan
