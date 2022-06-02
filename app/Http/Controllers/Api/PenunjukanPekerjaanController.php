@@ -34,6 +34,7 @@ class PenunjukanPekerjaanController extends Controller
         $result = [];
         $message = 'List Penunjukan Pekerjaan';
         $rekanan_id = auth()->user()->id_rekanan;
+        $id_karyawan = auth()->user()->id_karyawan;
         $start_date = $request->start_date;
         $end_date = $request->end_date;
 
@@ -58,6 +59,9 @@ class PenunjukanPekerjaanController extends Controller
         }
         if (request()->user()->hasRole('rekanan')) {
             $query = $query->where('rekanan_id',  $rekanan_id);
+        }
+        if (request()->user()->hasRole('staf-distribusi')) {
+            $query = $query->where('karyawan_id',  $id_karyawan);
         }
         if (request()->user()->hasRole('staf-pengawas')) {
             $rekanan_id = auth()->user()->karyawan_list_rekanan;
