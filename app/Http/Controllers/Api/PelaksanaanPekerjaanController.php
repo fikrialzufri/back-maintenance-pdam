@@ -194,7 +194,7 @@ class PelaksanaanPekerjaanController extends Controller
         $data->save();
         $user = [];
 
-        return $user[$user_id] = [
+        $user[$user_id] = [
             'keterangan' =>  'diterima',
         ];
         $data->hasUserMany()->sync($user);
