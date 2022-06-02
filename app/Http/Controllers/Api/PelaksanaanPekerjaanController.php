@@ -199,12 +199,22 @@ class PelaksanaanPekerjaanController extends Controller
             $penunjukanPekerjaan->status = 'proses';
             $penunjukanPekerjaan->save();
 
-
             $user[$user_id] = [
-                'keterangan' => 'proses',
+                'keterangan' =>  'diterima',
             ];
-            $penunjukanPekerjaan->hasUserMany()->sync($user);
+            $data->hasUserMany()->attach($user);
 
+            $checkUserpenunjukanPekerjaan = $penunjukanPekerjaan->hasUserMany()->find($user_id);
+            if ($checkUserpenunjukanPekerjaan) {
+                $penunjukanPekerjaan->hasUserMany()->find($user_id);
+                $penunjukanPekerjaan->hasUserMany()->keterangan =  'proses';
+                $penunjukanPekerjaan->hasUserMany()->save();
+            } else {
+                $user[$user_id] = [
+                    'keterangan' =>  'proses',
+                ];
+                $penunjukanPekerjaan->hasUserMany()->attach($user);
+            }
             $message = 'Berhasil Menyimpan Pelaksanaan Pekerjaan';
             return $this->sendResponse($data, $message, 200);
         } catch (\Throwable $th) {
@@ -253,16 +263,28 @@ class PelaksanaanPekerjaanController extends Controller
         $data->status =  $status;
         $data->save();
 
-        $checkUser = $data->hasUserMany()->find($user_id);
-        if ($checkUser) {
+        $checkUserPelaksanaan = $data->hasUserMany()->find($user_id);
+        if (!empty($checkUserPelaksanaan)) {
             $data->hasUserMany()->find($user_id);
             $data->hasUserMany()->keterangan =  $status;
             $data->hasUserMany()->save();
         } else {
-            $user[$user_id] = [
+            return $user[$user_id] = [
                 'keterangan' =>  $status,
             ];
             $data->hasUserMany()->attach($user);
+        }
+
+        $checkUserpenunjukanPekerjaan = $penunjukanPekerjaan->hasUserMany()->find($user_id);
+        if ($checkUserpenunjukanPekerjaan) {
+            $penunjukanPekerjaan->hasUserMany()->find($user_id);
+            $penunjukanPekerjaan->hasUserMany()->keterangan =  $status;
+            $penunjukanPekerjaan->hasUserMany()->save();
+        } else {
+            $user[$user_id] = [
+                'keterangan' =>  $status,
+            ];
+            $penunjukanPekerjaan->hasUserMany()->attach($user);
         }
 
         $message = 'Berhasil Menyimpan Pelaksanaan Pekerjaan';
