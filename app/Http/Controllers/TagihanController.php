@@ -333,7 +333,7 @@ class TagihanController extends Controller
         if (auth()->user()->hasRole('direktur-teknik')) {
             // list jabatan
 
-            $listJabatan = Jabatan::whereSlug('manager-distribusi')->orWhere('slug', 'staf-perencanaan')->orWhere('slug', 'staf-pengawas')->orWhere('slug', 'asisten-manager-pengawas-fisik')->get()->pluck('id')->toArray();
+            $listJabatan = Jabatan::whereSlug('manager-distribusi')->orWhere('slug', 'asisten-manajer-perencanaan')->orWhere('slug', 'staf-pengawas')->orWhere('slug', 'asisten-manager-pengawas-fisik')->get()->pluck('id')->toArray();
 
             // list karyawan bedasarkan jabatan
             $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get()->pluck('user_id')->toArray();
@@ -461,7 +461,7 @@ class TagihanController extends Controller
         DB::beginTransaction();
 
         // list jabatan
-        $listJabatan = Jabatan::whereSlug('manager-distribusi')->orWhere('slug', 'staf-perencanaan')->orWhere('slug', 'asisten-manager-pengawas-fisik')->orWhere('slug', 'direktur-teknik')->orWhere('slug', 'keuangan')->get()->pluck('id')->toArray();
+        $listJabatan = Jabatan::whereSlug('manager-distribusi')->orWhere('slug', 'asisten-manajer-perencanaan')->orWhere('slug', 'asisten-manager-pengawas-fisik')->orWhere('slug', 'direktur-teknik')->orWhere('slug', 'keuangan')->get()->pluck('id')->toArray();
 
         // list karyawan bedasarkan jabatan
         $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get();
@@ -551,7 +551,7 @@ class TagihanController extends Controller
         }
 
         // list jabatan
-        $listJabatan = Jabatan::whereSlug('manager-distribusi')->orWhere('slug', 'staf-perencanaan')->orWhere('slug', 'asisten-manager-pengawas-fisik')->orWhere('slug', 'direktur-teknik')->get()->pluck('id')->toArray();
+        $listJabatan = Jabatan::whereSlug('manager-distribusi')->orWhere('slug', 'asisten-manajer-perencanaan')->orWhere('slug', 'asisten-manager-pengawas-fisik')->orWhere('slug', 'direktur-teknik')->get()->pluck('id')->toArray();
 
         // list karyawan bedasarkan jabatan
         $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get();

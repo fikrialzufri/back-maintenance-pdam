@@ -195,14 +195,14 @@ class Aduan extends Model
                     if (auth()->user()->hasRole('staf-pengawas')) {
                         $btn  = "btn-danger";
                     }
-                    if (auth()->user()->hasRole('staf-perencanaan')) {
+                    if (auth()->user()->hasRole('asisten-manajer-perencanaan')) {
                         $btn  = "btn-primary";
                     }
                 } else if ($this->hasPenunjukanPekerjaan->status == 'dikoreksi') {
                     if (auth()->user()->hasRole('staf-pengawas')) {
                         $btn  = "btn-primary";
                     }
-                    if (auth()->user()->hasRole('staf-perencanaan')) {
+                    if (auth()->user()->hasRole('asisten-manajer-perencanaan')) {
                         $btn  = "btn-danger";
                     }
                 } else {

@@ -111,7 +111,7 @@ class PelaksanaanPekerjaanController extends Controller
 
             $perencanaan = 'false';
 
-            if (auth()->user()->hasRole('staf-perencanaan')) {
+            if (auth()->user()->hasRole('asisten-manajer-perencanaan')) {
                 $perencanaan = 'true';
             }
 
@@ -194,7 +194,7 @@ class PelaksanaanPekerjaanController extends Controller
 
         $keterangan = $request->keterangan;
         $perencanaan = 'false';
-        if (auth()->user()->hasRole('staf-perencanaan')) {
+        if (auth()->user()->hasRole('asisten-manajer-perencanaan')) {
             $perencanaan = 'true';
         }
 

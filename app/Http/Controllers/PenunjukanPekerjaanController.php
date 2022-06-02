@@ -214,7 +214,7 @@ class PenunjukanPekerjaanController extends Controller
             $penunjukan = PenunjukanPekerjaan::where('aduan_id', $aduan->id)->first();
             $query = PelaksanaanPekerjaan::where('penunjukan_pekerjaan_id', $penunjukan->id);
 
-            if (auth()->user()->hasRole('staf-perencanaan')) {
+            if (auth()->user()->hasRole('asisten-manajer-perencanaan')) {
                 $perencaan = true;
             }
             if (auth()->user()->hasRole('superadmin')) {
@@ -377,7 +377,7 @@ class PenunjukanPekerjaanController extends Controller
 
 
             // list jabatan
-            $listJabatan = Jabatan::whereSlug('manager-distribusi')->orWhere('slug', 'staf-perencanaan')->orWhere('slug', 'asisten-manager-pengawas-fisik')->orWhere('slug', 'direktur-teknik')->get()->pluck('id')->toArray();
+            $listJabatan = Jabatan::whereSlug('manager-distribusi')->orWhere('slug', 'asisten-manajer-perencanaan')->orWhere('slug', 'asisten-manager-pengawas-fisik')->orWhere('slug', 'direktur-teknik')->get()->pluck('id')->toArray();
 
             // list karyawan bedasarkan jabatan
             $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get();
