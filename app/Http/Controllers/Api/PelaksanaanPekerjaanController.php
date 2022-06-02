@@ -149,59 +149,63 @@ class PelaksanaanPekerjaanController extends Controller
         $user_id = auth()->user()->id;
         $rekanan_id = auth()->user()->id_rekanan;
         $id_karyawan = auth()->user()->id_karyawan;
-        try {
-            $dataPelaksanaanPekerjaan = $this->model()->count();
-            if ($dataPelaksanaanPekerjaan >= 1) {
-                $no = str_pad($dataPelaksanaanPekerjaan + 1, 4, "0", STR_PAD_LEFT);
-                $nomor_pelaksanaan_pekerjaan =  $no . "/" . "PPK/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
-            } else {
-                $no = str_pad(1, 4, "0", STR_PAD_LEFT);
-                $nomor_pelaksanaan_pekerjaan =  $no . "/" . "PPK/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
-            }
-            $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $request->slug)->first();
-            $pelaksanaan_pekerjaan = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->first();
 
-            if ($pelaksanaan_pekerjaan) {
-                $message = "No SPK sudah dikerjakan";
-                $response = [
-                    'success' => false,
-                    'message' => $message,
-                    'code' => '409'
-                ];
-                return $this->sendError($response, $message, 409);
-            }
+        $dataPelaksanaanPekerjaan = $this->model()->count();
+        if ($dataPelaksanaanPekerjaan >= 1) {
+            $no = str_pad($dataPelaksanaanPekerjaan + 1, 4, "0", STR_PAD_LEFT);
+            $nomor_pelaksanaan_pekerjaan =  $no . "/" . "PPK/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
+        } else {
+            $no = str_pad(1, 4, "0", STR_PAD_LEFT);
+            $nomor_pelaksanaan_pekerjaan =  $no . "/" . "PPK/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
+        }
+        $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $request->slug)->first();
+        $pelaksanaan_pekerjaan = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->first();
 
-            DB::commit();
-            $data = $this->model();
-            $data->nomor_pelaksanaan_pekerjaan = $nomor_pelaksanaan_pekerjaan;
-            $data->penunjukan_pekerjaan_id = $penunjukanPekerjaan->id;
-            $rekanan = Rekanan::find($rekanan_id);
-            if (!empty($rekanan)) {
-                $data->rekanan_id = $rekanan_id;
-            } else {
-                $karyawan = Karyawan::find($id_karyawan);
-                if ($karyawan) {
-                    $karyawan_id = $karyawan->id;
-                    $data->karyawan_id = $karyawan_id;
-                }
-            }
-            $data->aduan_id = $penunjukanPekerjaan->aduan_id;
-            $data->tanggal_mulai = Carbon::now();
-            $data->user_id = $user_id;
-            $data->status = 'diterima';
-            $data->save();
-
-            $penunjukanPekerjaan->status = 'proses';
-            $penunjukanPekerjaan->save();
-
-
-            $user[$user_id] = [
-                'keterangan' => 'proses',
+        if ($pelaksanaan_pekerjaan) {
+            $message = "No SPK sudah dikerjakan";
+            $response = [
+                'success' => false,
+                'message' => $message,
+                'code' => '409'
             ];
-            $penunjukanPekerjaan->hasUserMany()->sync($user);
+            return $this->sendError($response, $message, 409);
+        }
 
-            $message = 'Berhasil Menyimpan Pelaksanaan Pekerjaan';
-            return $this->sendResponse($data, $message, 200);
+
+        $data = $this->model();
+        $data->nomor_pelaksanaan_pekerjaan = $nomor_pelaksanaan_pekerjaan;
+        $data->penunjukan_pekerjaan_id = $penunjukanPekerjaan->id;
+
+        $rekanan = Rekanan::find($rekanan_id);
+        if (!empty($rekanan)) {
+            $data->rekanan_id = $rekanan_id;
+        } else {
+            $karyawan = Karyawan::find($id_karyawan);
+            if ($karyawan) {
+                $karyawan_id = $karyawan->id;
+                $data->karyawan_id = $karyawan_id;
+            }
+        }
+
+        $data->aduan_id = $penunjukanPekerjaan->aduan_id;
+        $data->tanggal_mulai = Carbon::now();
+        $data->user_id = $user_id;
+        $data->status = 'diterima';
+        $data->save();
+
+        $penunjukanPekerjaan->status = 'proses';
+        $penunjukanPekerjaan->save();
+
+
+        $user[$user_id] = [
+            'keterangan' => 'proses',
+        ];
+        $penunjukanPekerjaan->hasUserMany()->sync($user);
+
+        $message = 'Berhasil Menyimpan Pelaksanaan Pekerjaan';
+        return $this->sendResponse($data, $message, 200);
+        try {
+            DB::commit();
         } catch (\Throwable $th) {
             DB::rollback();
             $response = [
