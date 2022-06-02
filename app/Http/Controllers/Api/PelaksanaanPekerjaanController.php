@@ -253,8 +253,8 @@ class PelaksanaanPekerjaanController extends Controller
         $data->status =  $status;
         $data->save();
 
-        return $checkUser = $data->hasUserMany()->find($user_id);
-        if ($data->hasUserMany()->find($user_id)) {
+        $checkUser = $data->hasUserMany()->find($user_id);
+        if ($checkUser) {
             $data->hasUserMany()->find($user_id);
             $data->hasUserMany()->keterangan =  $status;
             $data->hasUserMany()->save();
