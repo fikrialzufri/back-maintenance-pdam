@@ -380,11 +380,11 @@ class PenunjukanPekerjaanController extends Controller
             } else {
                 $karyawan = Karyawan::find($rekanan_id);
                 if ($karyawan) {
+                    return $user_id_karayawan =  $karyawan->hasUser->id;
                     $karyawan_id = $karyawan->id;
                     $data->karyawan_id = $karyawan_id;
                 }
             }
-            $rekanan_id = '';
             $data->aduan_id = $aduan->id;
             $data->kategori_aduan = $kategori_aduan;
             $data->user_id = $user_id;
@@ -410,9 +410,8 @@ class PenunjukanPekerjaanController extends Controller
                     }
                 }
             } else {
-                $karyawan = Karyawan::find($rekanan_id);
                 if ($karyawan) {
-                    $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $karyawan->hasUser->id);
+                    $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $user_id_karayawan);
                 }
             }
 
