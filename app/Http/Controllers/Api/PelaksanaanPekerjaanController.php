@@ -426,7 +426,6 @@ class PelaksanaanPekerjaanController extends Controller
         $aduan->status = $status;
         $aduan->save();
 
-        $stafPengawas = Auth::user()->hasRekanan->hasKaryawan;
         $fotolokasi = $penunjukanPekerjaan->foto_penyelesaian;
 
         $kategoriDokumentasi = Kategori::whereSlug('dokumentasi')->first();
@@ -460,8 +459,12 @@ class PelaksanaanPekerjaanController extends Controller
         $modul = "pelaksanaan-pekerjaan";
 
         // notif ke staf pengawas
-        foreach ($stafPengawas as $pengawas) {
-            $this->notification($data->id, $aduan->slug, $title, $body, $modul, auth()->user()->id, $pengawas->user_id);
+        $rekanan = Rekanan::find($user_id);
+        if (!empty($rekanan)) {
+            $stafPengawas = Auth::user()->hasRekanan->hasKaryawan;
+            foreach ($stafPengawas as $pengawas) {
+                $this->notification($data->id, $aduan->slug, $title, $body, $modul, auth()->user()->id, $pengawas->user_id);
+            }
         }
 
         // notif ke karyawan bedasarkan jabatan
