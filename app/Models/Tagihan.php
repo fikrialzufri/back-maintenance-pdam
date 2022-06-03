@@ -128,7 +128,7 @@ class Tagihan extends Model
     {
         $danger = '';
         $user = auth()->user()->id;
-        if (!auth()->user()->hasRole('rekanan')) {
+        if (auth()->user()->hasRole('asisten-manajer-perencanaan') || auth()->user()->hasRole('manajer-perencanaan') || auth()->user()->hasRole('direktur-teknik')) {
             $danger = 'bg-danger';
             if ($this->hasUserMany) {
                 foreach ($this->hasUserMany as $key => $value) {
@@ -177,12 +177,26 @@ class Tagihan extends Model
         }
         return $total;
     }
+    public function getPekerjaanAdjustAttribute()
+    {
+        $total = 0;
+        if ($this->hasPelaksanaanPekerjaan) {
+            foreach ($this->hasPelaksanaanPekerjaan as $key => $value) {
+
+                $total += $value->hasPekerjaanAdjust->sum('total');
+            }
+        }
+        return $total;
+    }
 
     public function getTotalTagihanAttribute()
     {
         $total = 0;
-        if ($this->tagihan || $this->galian) {
-            $total = $this->tagihan + $this->galian;
+        if ($this->hasPelaksanaanPekerjaan) {
+            foreach ($this->hasPelaksanaanPekerjaan as $key => $value) {
+
+                $total += $value->total_pekerjaan;
+            }
         }
         return $total;
     }

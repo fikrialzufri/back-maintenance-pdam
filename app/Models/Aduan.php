@@ -69,6 +69,12 @@ class Aduan extends Model
             return $this->hasUser->name;
         }
     }
+    public function getIdRekananAttribute()
+    {
+        if ($this->hasPenunjukanPekerjaan) {
+            return $this->hasPenunjukanPekerjaan->rekanan_id;
+        }
+    }
     public function getRekananAttribute()
     {
         if ($this->hasPenunjukanPekerjaan) {

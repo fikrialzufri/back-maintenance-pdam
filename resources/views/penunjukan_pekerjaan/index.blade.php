@@ -49,7 +49,8 @@
                                     @php
                                         ++$nomor;
                                     @endphp
-                                    <tr class="{{ $item->keterangan_barang != null ? 'bg-danger' : '' }} ">
+                                    <tr
+                                        class="{{ $item->keterangan_barang != null && $item->id_rekanan != '' ? 'bg-danger' : '' }} ">
                                         <td>{{ $nomor + ($penunjukan->CurrentPage() - 1) * $penunjukan->PerPage() }}
                                         </td>
                                         <td>{{ $item->no_spk }}</td>
@@ -64,7 +65,7 @@
 
                                         <td class="text-center">
                                             <a href="{{ route('penunjukan_pekerjaan.show', $item->slug) }}"
-                                                class="btn btn-sm {{ $item->btn }}   text-light">
+                                                class="btn btn-sm {{ $item->btn }}   text-light m-1">
                                                 @if (auth()->user()->hasRole('rekanan'))
                                                     <i class="nav-icon fa fa-search"></i> Detail
                                                 @elseif (auth()->user()->hasRole('staf-pengawas'))
@@ -88,7 +89,18 @@
                                                 @else
                                                     <i class="nav-icon fa fa-search"></i> Detail
                                                 @endif
+
                                             </a>
+                                            <br>
+
+                                            @if (auth()->user()->hasRole('asisten-manajer-perencanaan'))
+                                                @if ($item->status_aduan == 'selesai koreksi')
+                                                    <a href="{{ route('penunjukan_pekerjaan.adjust', $item->slug) }}"
+                                                        class="btn btn-sm btn-success  text-light">
+                                                        <i class="nav-icon fa fa-edit"></i> Adjust
+                                                    </a>
+                                                @endif
+                                            @endif
                                         </td>
                                     </tr>
                                 @empty

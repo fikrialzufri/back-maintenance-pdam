@@ -30,6 +30,8 @@
                                         <th>Tanggal Mulai</th>
                                         <th>Tanggal Selesai</th>
                                         <th>Lokasi</th>
+                                        <th>Total Tagihan</th>
+                                        <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -49,6 +51,13 @@
                                             <td>{{ isset($item->tanggal_selesai) ? tanggal_indonesia($item->tanggal_selesai) : '' }}
                                             </td>
                                             <td>{{ $item->lokasi }}</td>
+                                            <td>Rp. {{ format_uang($item->total_pekerjaan) }}</td>
+                                            <td>
+                                                <a href="{{ route('penunjukan_pekerjaan.show', $item->no_spk_slug) }}"
+                                                    class="btn btn-sm btn-primary text-light m-1">
+                                                    Detail
+                                                </a>
+                                            </td>
 
 
                                         </tr>

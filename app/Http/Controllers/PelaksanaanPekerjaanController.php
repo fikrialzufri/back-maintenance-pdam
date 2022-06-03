@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\GalianPekerjaan;
 use App\Models\Item;
+use App\Models\PelaksanaanAdjust;
 use App\Models\PelaksanaanPekerjaan;
 use App\Traits\CrudTrait;
 use Illuminate\Http\Request;
@@ -157,6 +158,7 @@ class PelaksanaanPekerjaanController extends Controller
         }
     }
 
+
     public function hapusgalian(Request $request)
     {
         $id = $request->id;
@@ -171,6 +173,102 @@ class PelaksanaanPekerjaanController extends Controller
                 return $this->sendResponse([], $message, 200);
             }
         } catch (\Throwable $th) {
+            $message = 'Gagal Menyimpan Pekerjaan';
+            $response = [
+                'success' => false,
+                'message' => $message,
+                'code' => '404'
+            ];
+            return $this->sendError($response, $th, 404);
+        }
+    }
+    public function hapuspekerjaan(Request $request)
+    {
+        $id = $request->id;
+        $item_id = $request->item_id;
+        try {
+            $dataPelaksanaanAdjust = PelaksanaanAdjust::where('item_id', $item_id)->where('pelaksanaan_pekerjaan_id', $id)->first();
+            if ($dataPelaksanaanAdjust) {
+
+                $dataPelaksanaanAdjust->delete();
+
+                $message = 'Berhasil Hapus Galian Pekerjaan';
+                return $this->sendResponse([], $message, 200);
+            }
+        } catch (\Throwable $th) {
+            $message = 'Gagal Menyimpan Pekerjaan';
+            $response = [
+                'success' => false,
+                'message' => $message,
+                'code' => '404'
+            ];
+            return $this->sendError($response, $th, 404);
+        }
+    }
+
+    public function pekerjaan(Request $request)
+    {
+        $messages = [
+            'required' => ':attribute tidak boleh kosong',
+        ];
+
+        $this->validate(request(), [
+            'jumlah' => 'required|string|min:1',
+            'item' => 'required',
+        ], $messages);
+
+        $message = 'Data Pelaksanaan Adjust';
+        $id = $request->id;
+        $jumlah = $request->jumlah;
+        $harga = $request->harga;
+        $item = $request->item;
+        $keterangan = $request->keterangan;
+        $user_id = auth()->user()->id;
+
+        $dataItem = Item::find($item);
+        $harga_item = $dataItem->harga;
+
+        if ($harga === 'malam') {
+            $harga_item = $dataItem->harga_malam;
+        }
+
+        $total = $jumlah * $harga_item;
+        $item_id = $dataItem->id;
+
+        $perencanaan = 'false';
+
+        if (auth()->user()->hasRole('asisten-manajer-perencanaan')) {
+            $perencanaan = 'true';
+        }
+
+        $data = $this->model()->find($id);
+
+        if ($data) {
+            $dataPelaksanaanAdjust = PelaksanaanAdjust::where('item_id', $item)->where('pelaksanaan_pekerjaan_id', $id)->first();
+
+            if (empty($dataPelaksanaanAdjust)) {
+                $dataPelaksanaanAdjust = new PelaksanaanAdjust;
+            }
+            $dataPelaksanaanAdjust->qty = $jumlah;
+            $dataPelaksanaanAdjust->keterangan = $keterangan;
+            $dataPelaksanaanAdjust->harga = $harga_item;
+            $dataPelaksanaanAdjust->total = $total;
+            $dataPelaksanaanAdjust->item_id = $item_id;
+            $dataPelaksanaanAdjust->user_id = $user_id;
+            $dataPelaksanaanAdjust->pelaksanaan_pekerjaan_id = $data->id;
+            $dataPelaksanaanAdjust->save();
+
+            $result = [
+                'jumlah' => $dataPelaksanaanAdjust->qty,
+                'total' => $dataPelaksanaanAdjust->total,
+                'keterangan' => $dataPelaksanaanAdjust->keterangan,
+                'pekerjaan' => $dataPelaksanaanAdjust->pekerjaan,
+                'perencanaan' => $perencanaan,
+                'item_id' => $dataPelaksanaanAdjust->item_id,
+            ];
+            return $this->sendResponse($result, $message, 200);
+        }
+        try { } catch (\Throwable $th) {
             $message = 'Gagal Menyimpan Pekerjaan';
             $response = [
                 'success' => false,

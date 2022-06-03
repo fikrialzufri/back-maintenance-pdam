@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Resources\Pekerjaan;
 use App\Traits\UsesUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -53,6 +54,12 @@ class PelaksanaanPekerjaan extends Model
             return $this->hasPenunjukanPekerjaan->nomor_pekerjaan;
         }
     }
+    public function getNoSpkSlugAttribute()
+    {
+        if ($this->hasAduan) {
+            return $this->hasAduan->slug;
+        }
+    }
 
     public function getGalianAttribute()
     {
@@ -64,6 +71,12 @@ class PelaksanaanPekerjaan extends Model
     {
         if ($this->hasGalianPekerjaan) {
             return $this->hasGalianPekerjaan->sum('total');
+        }
+    }
+    public function getTotalAdjustAttribute()
+    {
+        if ($this->hasPekerjaanAdjust) {
+            return $this->hasPekerjaanAdjust->sum('total');
         }
     }
 
@@ -95,6 +108,10 @@ class PelaksanaanPekerjaan extends Model
         return $this->hasMany(GalianPekerjaan::class, 'pelaksanaan_pekerjaan_id');
     }
 
+    public function hasPekerjaanAdjust()
+    {
+        return $this->hasMany(PelaksanaanAdjust::class, 'pelaksanaan_pekerjaan_id');
+    }
 
     public function hasUser()
     {
@@ -138,9 +155,19 @@ class PelaksanaanPekerjaan extends Model
     public function getTotalPekerjaanAttribute()
     {
         $total = 0;
-        if ($this->total_galian && $this->total_harga) {
-            $total = $this->total_galian + $this->total_harga;
+        $total_galian = 0;
+        $total_harga = 0;
+        $total_adjust = 0;
+        if ($this->total_galian) {
+            $total_galian = $this->total_galian;
         }
+        if ($this->total_harga) {
+            $total_harga = $this->total_harga;
+        }
+        if ($this->total_adjust) {
+            $total_adjust = $this->total_adjust;
+        }
+        $total = $total_galian + $total_harga + $total_adjust;
         return $total;
     }
 

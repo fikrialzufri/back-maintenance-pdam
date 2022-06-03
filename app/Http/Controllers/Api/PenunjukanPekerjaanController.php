@@ -121,6 +121,9 @@ class PenunjukanPekerjaanController extends Controller
         $message = 'Gagal Menyimpan Penunjukan Pekerjaan';
         $aduan_id = $request->aduan_id;
 
+        $rekanan_id = auth()->user()->id_rekanan;
+        $id_karyawan = auth()->user()->id_karyawan;
+
         $dataPenunjukanPerkerjaan = $this->model()->count();
         if ($dataPenunjukanPerkerjaan >= 1) {
             $no = str_pad($dataPenunjukanPerkerjaan + 1, 4, "0", STR_PAD_LEFT);
@@ -144,27 +147,36 @@ class PenunjukanPekerjaanController extends Controller
         try {
             DB::commit();
             $data = $this->model();
-            $data->nomor_pekerjaan = $nomor_pekerjaan;
-            $data->aduan_id = $aduan_id;
-            $data->rekanan_id = $request->rekanan_id;
-            $data->user_id = auth()->user()->id;
-            $data->status = 'draft';
-            $data->save();
+            if (request()->user()->hasRole('rekanan')) {
+                $data = $data->where('rekanan_id',  $rekanan_id);
+            }
+            if (request()->user()->hasRole('staf-distribusi')) {
+                $data = $data->where('karyawan_id',  $id_karyawan);
+            }
 
-            $aduan = Aduan::find($aduan_id);
-            $aduan->status = 'proses';
-            $aduan->save();
+            if ($data->first()) {
+                $data->nomor_pekerjaan = $nomor_pekerjaan;
+                $data->aduan_id = $aduan_id;
+                $data->rekanan_id = $request->rekanan_id;
+                $data->user_id = auth()->user()->id;
+                $data->status = 'draft';
+                $data->save();
 
-            $notifikasi = Notifikasi::where('modul_id', $data->id)->where('to_user_id', auth()->user()->id)->first();
-            $notifikasi->status = 'baca';
-            $notifikasi->delete();
+                $aduan = Aduan::find($aduan_id);
+                $aduan->status = 'proses';
+                $aduan->save();
 
-            $notifikasi = Notifikasi::where('modul_id', $aduan->id)->where('to_user_id', auth()->user()->id)->first();
-            $notifikasi->status = 'baca';
-            $notifikasi->delete();
+                $notifikasi = Notifikasi::where('modul_id', $data->id)->where('to_user_id', auth()->user()->id)->first();
+                $notifikasi->status = 'baca';
+                $notifikasi->delete();
 
-            $message = 'Berhasil Menyimpan Penunjukan Pekerjaan';
-            return $this->sendResponse($data, $message, 200);
+                $notifikasi = Notifikasi::where('modul_id', $aduan->id)->where('to_user_id', auth()->user()->id)->first();
+                $notifikasi->status = 'baca';
+                $notifikasi->delete();
+
+                $message = 'Berhasil Menyimpan Penunjukan Pekerjaan';
+                return $this->sendResponse($data, $message, 200);
+            }
         } catch (\Throwable $th) {
             DB::rollback();
             $response = [

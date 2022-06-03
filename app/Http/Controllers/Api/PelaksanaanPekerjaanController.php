@@ -160,7 +160,27 @@ class PelaksanaanPekerjaanController extends Controller
                 $no = str_pad(1, 4, "0", STR_PAD_LEFT);
                 $nomor_pelaksanaan_pekerjaan =  $no . "/" . "PPK/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
             }
-            $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $request->slug)->first();
+            $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $request->slug);
+
+            if (request()->user()->hasRole('rekanan')) {
+                $penunjukanPekerjaan =  $penunjukanPekerjaan->where('rekanan_id',  $rekanan_id);
+            }
+            if (request()->user()->hasRole('staf-distribusi')) {
+                $penunjukanPekerjaan =  $penunjukanPekerjaan->where('karyawan_id',  $id_karyawan);
+            }
+
+            $penunjukanPekerjaan = $penunjukanPekerjaan->first();
+
+            if (empty($penunjukanPekerjaan)) {
+                $message = "No SPK sudah bukan ditunjukan untuk anda";
+                $response = [
+                    'success' => false,
+                    'message' => $message,
+                    'code' => '409'
+                ];
+                return $this->sendError($response, $message, 409);
+            }
+
             $pelaksanaan_pekerjaan = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->first();
 
             if ($pelaksanaan_pekerjaan) {
@@ -172,7 +192,6 @@ class PelaksanaanPekerjaanController extends Controller
                 ];
                 return $this->sendError($response, $message, 409);
             }
-
 
             $data = $this->model();
             $data->nomor_pelaksanaan_pekerjaan = $nomor_pelaksanaan_pekerjaan;
@@ -217,8 +236,9 @@ class PelaksanaanPekerjaanController extends Controller
             }
             $message = 'Berhasil Menyimpan Pelaksanaan Pekerjaan';
             return $this->sendResponse($data, $message, 200);
-            $message = 'Gagal Menyimpan Pelaksanaan Pekerjaan';
         } catch (\Throwable $th) {
+
+            $message = 'Gagal Menyimpan Pelaksanaan Pekerjaan';
             DB::rollback();
             $response = [
                 'success' => false,
@@ -242,10 +262,33 @@ class PelaksanaanPekerjaanController extends Controller
         $slug = $request->slug;
         $lokasi = $request->lokasi;
 
-        $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug',  $slug)->first();
+        $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $request->slug);
+
+        $rekanan_id = auth()->user()->id_rekanan;
+        $id_karyawan = auth()->user()->id_karyawan;
+
+        if (request()->user()->hasRole('rekanan')) {
+            $penunjukanPekerjaan =  $penunjukanPekerjaan->where('rekanan_id',  $rekanan_id);
+        }
+        if (request()->user()->hasRole('staf-distribusi')) {
+            $penunjukanPekerjaan =  $penunjukanPekerjaan->where('karyawan_id',  $id_karyawan);
+        }
+
+        $penunjukanPekerjaan = $penunjukanPekerjaan->first();
+
+        if (empty($penunjukanPekerjaan)) {
+            $message = "No SPK sudah dikerjakan";
+            $response = [
+                'success' => false,
+                'message' => $message,
+                'code' => '409'
+            ];
+            return $this->sendError($response, $message, 409);
+        }
+
         $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->first();
 
-        if ($data->status == 'selesai') {
+        if ($data->status == 'selesai' || $data->status == 'disetujui' || $data->status == 'dikoreksi' || $data->status == 'selesai koreksi') {
             $message = "Pekerjaan sudah selesai";
             $response = [
                 'success' => false,
@@ -316,10 +359,33 @@ class PelaksanaanPekerjaanController extends Controller
 
         try {
             DB::commit();
-            $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug',  $slug)->first();
+            $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $request->slug);
+
+            $rekanan_id = auth()->user()->id_rekanan;
+            $id_karyawan = auth()->user()->id_karyawan;
+
+            if (request()->user()->hasRole('rekanan')) {
+                $penunjukanPekerjaan =  $penunjukanPekerjaan->where('rekanan_id',  $rekanan_id);
+            }
+            if (request()->user()->hasRole('staf-distribusi')) {
+                $penunjukanPekerjaan =  $penunjukanPekerjaan->where('karyawan_id',  $id_karyawan);
+            }
+
+            $penunjukanPekerjaan = $penunjukanPekerjaan->first();
+
+            if (empty($penunjukanPekerjaan)) {
+                $message = "No SPK sudah dikerjakan";
+                $response = [
+                    'success' => false,
+                    'message' => $message,
+                    'code' => '409'
+                ];
+                return $this->sendError($response, $message, 409);
+            }
+
             $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->first();
 
-            if ($data->status == 'selesai') {
+            if ($data->status == 'selesai' || $data->status == 'disetujui' || $data->status == 'dikoreksi' || $data->status == 'selesai koreksi') {
                 $message = "Pekerjaan sudah selesai";
                 $response = [
                     'success' => false,
@@ -379,10 +445,33 @@ class PelaksanaanPekerjaanController extends Controller
             $user_id = auth()->user()->id;
             $keterangan = $request->keterangan;
             $user = [];
-            $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $slug)->first();
+            $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $request->slug);
+
+            $rekanan_id = auth()->user()->id_rekanan;
+            $id_karyawan = auth()->user()->id_karyawan;
+
+            if (request()->user()->hasRole('rekanan')) {
+                $penunjukanPekerjaan =  $penunjukanPekerjaan->where('rekanan_id',  $rekanan_id);
+            }
+            if (request()->user()->hasRole('staf-distribusi')) {
+                $penunjukanPekerjaan =  $penunjukanPekerjaan->where('karyawan_id',  $id_karyawan);
+            }
+
+            $penunjukanPekerjaan = $penunjukanPekerjaan->first();
+
+            if (empty($penunjukanPekerjaan)) {
+                $message = "No SPK sudah dikerjakan";
+                $response = [
+                    'success' => false,
+                    'message' => $message,
+                    'code' => '409'
+                ];
+                return $this->sendError($response, $message, 409);
+            }
+
             $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->first();
 
-            if ($data->status == 'selesai') {
+            if ($data->status == 'selesai' || $data->status == 'disetujui' || $data->status == 'dikoreksi' || $data->status == 'selesai koreksi') {
                 $message = "Pekerjaan sudah selesai";
                 $response = [
                     'success' => false,
@@ -752,8 +841,8 @@ class PelaksanaanPekerjaanController extends Controller
     {
         DB::beginTransaction();
         $result = [];
+        $message = 'Gagal Hapus Penunjukan Pekerjaan';
         try {
-            $message = 'Gagal Hapus Penunjukan Pekerjaan';
 
             $slug = $request->slug;
             $id_galian = $request->id_galian;
@@ -790,6 +879,7 @@ class PelaksanaanPekerjaanController extends Controller
             }
         } catch (\Throwable $th) {
             DB::rollback();
+
             $response = [
                 'success' => false,
                 'message' => $message,

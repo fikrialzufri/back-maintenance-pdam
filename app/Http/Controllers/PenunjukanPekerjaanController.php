@@ -14,6 +14,7 @@ use App\Models\JenisAduan;
 use App\Models\Karyawan;
 use App\Models\Kategori;
 use App\Models\Notifikasi;
+use App\Models\PelaksanaanAdjust;
 use App\Models\Rekanan;
 use App\Models\Tagihan;
 use App\Models\Wilayah;
@@ -53,6 +54,17 @@ class PenunjukanPekerjaanController extends Controller
             if (auth()->user()->hasRole('rekanan')) {
                 $rekanan_id = auth()->user()->id_rekanan;
                 $penunjukanAduan = PenunjukanPekerjaan::where('rekanan_id', $rekanan_id)->get()->pluck('aduan_id')->toArray();
+                $query->whereIn('id', $penunjukanAduan);
+                $penunjukan = $query->paginate($limit);
+
+                $penunjukan = $penunjukan->setCollection(
+                    $penunjukan->sortBy(function ($pekerjaan) {
+                        return $pekerjaan->status_order;
+                    })
+                );
+            } elseif (auth()->user()->hasRole('staf-distribusi')) {
+                $id_karyawan = auth()->user()->id_karyawan;
+                $penunjukanAduan = PenunjukanPekerjaan::where('karyawan_id', $id_karyawan)->get()->pluck('aduan_id')->toArray();
                 $query->whereIn('id', $penunjukanAduan);
                 $penunjukan = $query->paginate($limit);
 
@@ -203,6 +215,7 @@ class PenunjukanPekerjaanController extends Controller
         $fotoBahan = [];
         $fotoPekerjaan = [];
         $fotoPenyelesaian = [];
+        $daftarPelaksaanAdjust = [];
         $tombolEdit = '';
         $lat_long_pekerjaan = '';
         $lokasi_pekerjaan = '';
@@ -265,6 +278,7 @@ class PenunjukanPekerjaanController extends Controller
                         $tombolEdit = 'bisa';
                     }
                 }
+                $daftarPelaksaanAdjust = PelaksanaanAdjust::where('pelaksanaan_pekerjaan_id', $pekerjaanUtama->id)->get();
             }
 
             if (auth()->user()->hasRole('rekanan')) {
@@ -290,7 +304,7 @@ class PenunjukanPekerjaanController extends Controller
 
 
 
-        $title = 'Detail Pekrjaan ' . $aduan->nomor_pekerjaan;
+        $title = 'Detail Pekerjaan ' . $aduan->nomor_pekerjaan;
 
         return view('penunjukan_pekerjaan.show', compact(
             'aduan',
@@ -312,6 +326,7 @@ class PenunjukanPekerjaanController extends Controller
             'jenis_aduan',
             'rekanan',
             'title',
+            'daftarPelaksaanAdjust',
             'listPekerjaan',
             'listGalian',
             'listBahan',
@@ -440,7 +455,7 @@ class PenunjukanPekerjaanController extends Controller
                 $jabatanWilayah = Jabatan::where('wilayah_id', $aduan->wilayah_id)->pluck('id')->toArray();
 
                 if ($jabatanWilayah) {
-                    $karyawanwilayah =   Karyawan::whereIn('jabatan_id', $jabatanWilayah);
+                    $karyawanwilayah = Karyawan::whereIn('jabatan_id', $jabatanWilayah);
 
                     if ($karyawanwilayah) {
                         foreach (collect($listKaryawan) as $i => $kr) {
@@ -514,34 +529,50 @@ class PenunjukanPekerjaanController extends Controller
     {
         $notifikasi = Notifikasi::where('id', $id)->where('to_user_id', auth()->user()->id)->first();
         $notifikasi->status = 'baca';
-        $notifikasi->delete();
 
         if ($notifikasi->modul === 'tagihan') {
             $tagihan = Tagihan::find($notifikasi->modul_id);
             if ($tagihan) {
+                $notifikasi->delete();
                 return redirect()->route('tagihan.show',  $tagihan->slug);
             }
         }
         if ($notifikasi->modul === 'penunjukan-pekerjaan') {
             $penunjukanAduan = PenunjukanPekerjaan::find($notifikasi->modul_id);
+            $aduan  = Aduan::find($notifikasi->modul_id);
             if ($penunjukanAduan) {
+                $notifikasi->delete();
                 $aduan  = Aduan::find($penunjukanAduan->aduan_id);
+                return redirect()->route('penunjukan_pekerjaan.show',  $aduan->slug);
+            }
+            if ($aduan) {
+                $notifikasi->delete();
                 return redirect()->route('penunjukan_pekerjaan.show',  $aduan->slug);
             }
         }
         if ($notifikasi->modul === 'pelaksanaan-pekerjaan') {
             $PelaksanaanPekerjaan = PelaksanaanPekerjaan::find($notifikasi->modul_id);
+            $aduan  = Aduan::find($notifikasi->modul_id);
             if ($PelaksanaanPekerjaan) {
                 $aduan  = Aduan::find($PelaksanaanPekerjaan->aduan_id);
+                $notifikasi->delete();
+                return redirect()->route('penunjukan_pekerjaan.show',  $aduan->slug);
+            }
+            if ($aduan) {
+                $notifikasi->delete();
                 return redirect()->route('penunjukan_pekerjaan.show',  $aduan->slug);
             }
         }
         if ($notifikasi->modul === 'aduan') {
             $aduan = Aduan::find($notifikasi->modul_id);
             if ($aduan) {
+                $notifikasi->delete();
                 return redirect()->route('penunjukan_pekerjaan.show',  $aduan->slug);
             }
         }
+
+
+        $notifikasi->delete();
         return redirect()->route('penunjukan_pekerjaan.index');
     }
 
@@ -641,7 +672,7 @@ class PenunjukanPekerjaanController extends Controller
                         $dataLebarGalian[$index] != null &&
                         $dataDalamGalian[$index] != null
                     ) {
-                        # code...
+
                         $dataRekanan[$index] = Rekanan::where('nama', 'like', '%' . $dataCv[$index] . '%')->first();
 
                         if ($dataRekanan[$index]) {
@@ -735,5 +766,149 @@ class PenunjukanPekerjaanController extends Controller
         //     //throw $th;
         //     return redirect()->route($this->route . '.index')->with('message', ucwords(str_replace('-', ' ', $this->route)) . ' gagal diupload')->with('Class', 'success');
         // }
+    }
+
+    /**
+     * data adjust
+     *
+     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request
+     */
+    public function adjust($slug)
+    {
+        $aduan = Aduan::where('slug', $slug)->first();
+
+        if ($aduan == null) {
+            return redirect()->route('penunjukan_pekerjaan.index')->with('message', 'Data Aduan tidak ditemukan')->with('Class', 'primary');
+        }
+
+        $id_wilayah =  auth()->user()->id_wilayah;
+
+        $wilayah = Wilayah::find($id_wilayah);
+
+        $querykaryawan  =  Karyawan::where('pekerjaan', 'ya');
+        if ($wilayah) {
+            if ($wilayah->nama != 'Samarinda') {
+                $jabatan = Jabatan::where('wilayah_id', $wilayah->id)->pluck('id');
+                $querykaryawan =   $querykaryawan->whereIn('jabatan_id', $jabatan);
+            }
+        }
+
+        $karyawanPekerja =  $querykaryawan->orderBy('nama')->get();
+
+        $jenisPekerjaan = [];
+        $jenisBahan = [];
+        $jenisBajenisAlatBanturang = [];
+        $jenisTransportasi = [];
+
+        $listPekerjaan = [];
+        $listBahan = [];
+        $listAlatBantu = [];
+        $listTransportasi = [];
+        $penunjukan = [];
+        $pekerjaanUtama = [];
+        $daftarPekerjaan = [];
+        $daftarGalian = [];
+        $daftarBahan = [];
+        $daftarAlatBantu = [];
+        $daftarTransportasi = [];
+        $listDokumentasi = [];
+        $daftarDokumentasi = [];
+
+        $totalPekerjaan = 0;
+
+        $action = route('penunjukan_pekerjaan.store');
+        $rekanan_id  = null;
+        $fotoBahan = [];
+        $fotoPekerjaan = [];
+        $fotoPenyelesaian = [];
+        $tombolEdit = '';
+        $lat_long_pekerjaan = '';
+        $lokasi_pekerjaan = '';
+        $nomor_pekerjaan = '';
+        $pekerjaanUtama = [];
+        $perencaan = false;
+
+        $listPekerjaan = Item::get();
+
+        if ($aduan->status != 'draft') {
+            $penunjukan = PenunjukanPekerjaan::where('aduan_id', $aduan->id)->first();
+            $nomor_pekerjaan = $penunjukan->nomor_pekerjaan;
+            $query = PelaksanaanPekerjaan::where('penunjukan_pekerjaan_id', $penunjukan->id);
+
+            if (auth()->user()->hasRole('asisten-manajer-perencanaan')) {
+                $perencaan = true;
+            }
+            if (auth()->user()->hasRole('superadmin')) {
+                $perencaan = true;
+            }
+
+            $pekerjaanUtama = $query->first();
+            if ($pekerjaanUtama) {
+                $fotoBahan = (object) $penunjukan->foto_bahan;
+                $fotoPekerjaan = (object) $penunjukan->foto_lokasi;
+                $fotoPenyelesaian = (object) $penunjukan->foto_penyelesaian;
+                $totalPekerjaan =  $pekerjaanUtama->total_pekerjaan;
+                $lat_long_pekerjaan =  $pekerjaanUtama->lat_long;
+                $lokasi_pekerjaan =  $pekerjaanUtama->lokasi;
+            }
+
+            if (auth()->user()->hasRole('rekanan')) {
+                $rekanan_id = auth()->user()->id_rekanan;
+            }
+
+            if (auth()->user()->hasRole('asisten-manajer-perencanaan')) {
+                if ($pekerjaanUtama->tagihan == 'tidak') {
+                    if ($pekerjaanUtama->status === 'selesai koreksi') {
+                        $tombolEdit = 'bisa';
+                    }
+                }
+            }
+
+            $daftarPelaksaanAdjust = PelaksanaanAdjust::where('pelaksanaan_pekerjaan_id', $pekerjaanUtama->id)->get();
+
+            $notifikasi = Notifikasi::where('modul_id', $penunjukan->id)->where('to_user_id',  auth()->user()->id)->first();
+            if ($notifikasi) {
+                $notifikasi->status = 'baca';
+                $notifikasi->delete();
+            }
+        } else {
+            $notifikasi = Notifikasi::where('modul_id', $aduan->id)->first();
+            if ($notifikasi) {
+                $notifikasi->status = 'baca';
+                $notifikasi->delete();
+            }
+        }
+
+
+        $jenisAduan = $aduan->hasJenisAduan->toArray();
+        $jenis_aduan = JenisAduan::orderBy('nama')->get();
+        $rekanan = Rekanan::orderBy('nama')->get();
+
+        $title = 'Detail Pekerjaan ' . $aduan->nomor_pekerjaan;
+
+        return view('penunjukan_pekerjaan.adjust', compact(
+            'aduan',
+            'action',
+            'perencaan',
+            'penunjukan',
+            'pekerjaanUtama',
+            'lat_long_pekerjaan',
+            'listPekerjaan',
+            'karyawanPekerja',
+            'lokasi_pekerjaan',
+            'daftarPelaksaanAdjust',
+            'rekanan_id',
+            'jenisAduan',
+            'jenis_aduan',
+            'rekanan',
+            'title',
+            'totalPekerjaan',
+            'fotoPekerjaan',
+            'fotoPenyelesaian',
+            'fotoBahan',
+            'tombolEdit',
+            'action'
+        ));
     }
 }

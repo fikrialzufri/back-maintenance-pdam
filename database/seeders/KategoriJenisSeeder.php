@@ -22,6 +22,7 @@ class KategoriJenisSeeder extends Seeder
             ['nama' => 'Alat Bantu'],
             ['nama' => 'Pekerjaan'],
             ['nama' => 'Transportasi'],
+            ['nama' => 'Dokumentasi'],
         ];
 
         foreach ($listKategori as $key => $value) {

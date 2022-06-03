@@ -297,7 +297,7 @@ class TagihanController extends Controller
             $total = $tagihanItem->sum('grand_total');
             $total_lokasi = $tagihan->total_lokasi;
             if (count($tagihanItem) === 0) {
-                $total = $tagihan->tagihan + $tagihan->galian;
+                $total = $tagihan->total_tagihan;
                 $total_lokasi = $tagihan->total_lokasi_pekerjaan;
             }
             $tanggal_tagihan = tanggal_indonesia($tagihan->tanggal_tagihan);
@@ -313,7 +313,7 @@ class TagihanController extends Controller
         $filename =  "Tagihan Nomor :" .  $nomor_tagihan;
 
         $dataitem = Item::all();
-        $bntSetuju = false;
+        $bntSetuju = true;
         $user = auth()->user()->id;
         $list_persetujuan = [];
         $perencaan = true;
@@ -328,26 +328,38 @@ class TagihanController extends Controller
         if (auth()->user()->hasRole('superadmin')) {
             $perencaan = true;
         }
-
-
-        if (auth()->user()->hasRole('direktur-teknik')) {
-            // list jabatan
-
-            $listJabatan = Jabatan::whereSlug('manager-distribusi')->orWhere('slug', 'manajer-perencanaan')->orWhere('slug', 'asisten-manajer-perencanaan')->orWhere('slug', 'staf-pengawas')->orWhere('slug', 'asisten-manager-pengawas-fisik')->get()->pluck('id')->toArray();
+        if (auth()->user()->hasRole('asisten-manajer-perencanaan')) {
+            $listJabatan = Jabatan::where('slug', 'asisten-manajer-perencanaan')->get()->pluck('id')->toArray();
 
             // list karyawan bedasarkan jabatan
             $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get()->pluck('user_id')->toArray();
 
-
+            $bntSetuju = true;
             if (count($tagihan->list_persetujuan) > 0) {
-                $bntSetuju = true;
                 $arrayList = collect($tagihan->list_persetujuan)->pluck('id')->toArray();
 
                 if ((count(array_unique(array_merge($arrayList, $listKaryawan))) === count($arrayList))) {
                     $bntSetuju = false;
                 }
-            } else {
-                $bntSetuju = true;
+            }
+        }
+
+
+        if (auth()->user()->hasRole('direktur-teknik')) {
+
+            // list jabatan
+            $listJabatan = Jabatan::where('slug', 'manajer-perencanaan')->orWhere('slug', 'asisten-manajer-perencanaan')->get()->pluck('id')->toArray();
+
+            // list karyawan bedasarkan jabatan
+            $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get()->pluck('user_id')->toArray();
+            $bntSetuju = true;
+
+            if (count($tagihan->list_persetujuan) > 0) {
+                $arrayList = collect($tagihan->list_persetujuan)->pluck('id')->toArray();
+
+                if ((count(array_unique(array_merge($arrayList, $listKaryawan))) === count($arrayList))) {
+                    $bntSetuju = false;
+                }
             }
         }
 

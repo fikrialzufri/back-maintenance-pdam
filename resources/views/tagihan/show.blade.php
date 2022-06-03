@@ -91,7 +91,7 @@
                                                 </div>
                                                 <input type="text" name="total_tagihan" id="total_tagihan_all"
                                                     placeholder="" class="form-control" readonly
-                                                    value="{{ format_uang($total) }}">
+                                                    value="{{ $total }}">
                                             </div>
                                         </div>
                                     </div>
@@ -224,6 +224,103 @@
                                                             @if ($perencaan === true)
                                                                 <th></th>
                                                                 <th>Rp. {{ format_uang($item->total_harga) }}
+                                                                </th>
+                                                            @endif
+                                                        </tr>
+                                                    </tfoot>
+
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div>
+                                                <span>Daftar Pekerjaan Tambahan</span>
+                                                <table class="table table-bordered " width="100%">
+                                                    <thead>
+                                                        <tr>
+                                                            <th width="5">#</th>
+                                                            <th>Nama</th>
+                                                            <th>Jenis Pekerjaan</th>
+                                                            <th width="10">Jumlah</th>
+                                                            @if ($perencaan === true)
+                                                                <th>Harga</th>
+                                                                <th>Total Harga</th>
+                                                            @endif
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @forelse ($item->hasPekerjaanAdjust as $nomor => $pekerjaantambahan)
+                                                            <tr class=""
+                                                                id="{{ $pekerjaantambahan->slug }}_{{ $item->id }}">
+                                                                <td>{{ $nomor + 1 }}
+                                                                </td>
+                                                                <td>{{ $pekerjaantambahan->pekerjaan }}</td>
+                                                                <td>{{ $pekerjaantambahan->jenis }}</td>
+                                                                <td
+                                                                    id="qty_{{ $pekerjaantambahan->slug }}_{{ $item->id }}">
+                                                                    {{ $pekerjaantambahan->qty }}</td>
+                                                                @if ($perencaan === true)
+                                                                    @if ($pekerjaantambahan->harga == 0)
+                                                                        <td>
+                                                                            <div class="input-group mb-2 mr-sm-2">
+                                                                                <div class="input-group-prepend">
+                                                                                    <div class="input-group-text">Rp.</div>
+                                                                                </div>
+                                                                                <input type="text"
+                                                                                    name="harga_{{ $pekerjaantambahan->slug }}_{{ $item->id }}"
+                                                                                    id="harga_{{ $pekerjaantambahan->slug }}_{{ $item->id }}"
+                                                                                    placeholder="" class="form-control">
+                                                                            </div>
+                                                                        </td>
+                                                                        <td
+                                                                            id="total_harga_{{ $pekerjaantambahan->slug }}_{{ $item->id }}">
+                                                                            Rp. 0</td>
+                                                                        @push('script')
+                                                                            <script>
+                                                                                $('#harga_{{ $pekerjaantambahan->slug }}_{{ $item->id }}').on("input", function() {
+
+                                                                                    let val = formatRupiah(this.value, '');
+                                                                                    $('#harga_{{ $pekerjaantambahan->slug }}_{{ $item->id }}').val(val);
+                                                                                    let qty = parseInt($('#qty_{{ $pekerjaantambahan->slug }}_{{ $item->id }}').text());
+                                                                                    let totalHarga = val.replace(".", "") * qty;
+
+                                                                                    $('#total_harga_{{ $pekerjaantambahan->slug }}_{{ $item->id }}').text("Rp. " + formatRupiah(
+                                                                                        totalHarga
+                                                                                        .toString(), ''));
+
+                                                                                    $('#{{ $pekerjaantambahan->slug }}_{{ $item->id }}').removeClass('bg-danger');
+                                                                                });
+                                                                            </script>
+                                                                        @endpush
+                                                                    @else
+                                                                        <td>
+                                                                            Rp.
+                                                                            {{ format_uang($pekerjaantambahan->harga) }}
+                                                                        </td>
+
+                                                                        <td>
+                                                                            Rp.
+                                                                            {{ format_uang($pekerjaantambahan->harga * $pekerjaantambahan->qty) }}
+                                                                        </td>
+                                                                    @endif
+                                                                @endif
+
+                                                            </tr>
+                                                        @empty
+                                                            <tr>
+                                                                <td colspan="10">Data Item tidak ada</td>
+                                                            </tr>
+                                                        @endforelse
+                                                    </tbody>
+                                                    <tfoot>
+                                                        <tr>
+                                                            <th colspan="3">Total
+                                                            </th>
+                                                            <th>{{ $item->hasPekerjaanAdjust->sum('qty') }}</th>
+                                                            @if ($perencaan === true)
+                                                                <th></th>
+                                                                <th>Rp.
+                                                                    {{ format_uang($item->hasPekerjaanAdjust->sum('total')) }}
                                                                 </th>
                                                             @endif
                                                         </tr>

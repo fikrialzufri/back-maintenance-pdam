@@ -1457,6 +1457,134 @@
                             </div>
                         </div>
                     </div>
+                    @if ($pekerjaanUtama->status == 'selesai koreksi')
+                        @isset($daftarPelaksaanAdjust)
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="card">
+                                        <div class="card-header  justify-content-between">
+                                            <div class="card-title">Daftar Pekerjaan Tambahan</div>
+
+                                        </div>
+                                        <div class="card-body">
+                                            <table class="table table-bordered " width="100%" id="tablePekerjaanTambahan">
+                                                <thead>
+                                                    <tr>
+                                                        <th width="5">#</th>
+                                                        <th width="250">Pekerjaan</th>
+                                                        <th width="10">Jumlah</th>
+                                                        @if ($perencaan == true)
+                                                            <th width="200">Total Harga</th>
+                                                        @endif
+                                                        <th width="150">Keterangan</th>
+                                                        <th width="150">Tanggal</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @forelse ($daftarPelaksaanAdjust as $key => $pekerjaan)
+                                                        <tr id="listPekerjaanTambahan_{{ $pekerjaan->id }}"
+                                                            class="list_table_pekerjaan_tambahan">
+                                                            <td class="text-center nomor_pekerjaan_tambahan"
+                                                                data-index="{{ $key + 1 }}">
+                                                                {{ $key + 1 }}
+                                                            </td>
+                                                            <td>
+                                                                {{ $pekerjaan->pekerjaan }}
+                                                            </td>
+                                                            <td>
+                                                                <span
+                                                                    id="jumlah_pekerjaan_tambahan_tampil_{{ $pekerjaan->id }}">{{ $pekerjaan->qty }}
+                                                                </span>
+
+                                                                <input type="hidden"
+                                                                    id="jumlah_pekerjaan_tambahan_value_{{ $pekerjaan->id }}"
+                                                                    name="jumlah_pekerjaan_tambahan"
+                                                                    value="{{ $pekerjaan->qty }}">
+                                                            </td>
+                                                            @if ($perencaan == true)
+                                                                <td>
+                                                                    <span
+                                                                        id="total_pekerjaan_tambahan_tampil_{{ $pekerjaan->id }}">
+                                                                        Rp.
+                                                                        {{ format_uang($pekerjaan->total) }}
+                                                                    </span>
+                                                                    <input type="hidden"
+                                                                        id="total_pekerjaan_tambahan_value_{{ $pekerjaan->id }}"
+                                                                        name="total_pekerjaan_tambahan"
+                                                                        value="{{ $pekerjaan->total }}"
+                                                                        class="total_pekerjaan_tambahan">
+                                                                </td>
+                                                            @endif
+                                                            <td>
+                                                                </span>
+                                                                <span id="keterangan_pekerjaan_tambahan_{{ $pekerjaan->id }}">
+                                                                    {{ $pekerjaan->keterangan }}</span>
+
+                                                                <input type="hidden"
+                                                                    id="keterangan_pekerjaan_tambahan_value_{{ $pekerjaan->id }}"
+                                                                    name="keterangan_pekerjaan_tambahan"
+                                                                    value="{{ $pekerjaan->keterangan }}">
+                                                            </td>
+                                                            <td>
+                                                                {{ tanggal_indonesia($pekerjaan->created_at) }}
+                                                            </td>
+                                                            @if ($rekanan_id == null)
+                                                                @if ($tombolEdit === 'bisa')
+                                                                    <td>
+                                                                        <button class="btn btn-sm btn-warning text-light btn-edit"
+                                                                            data-pekerjaanutama="{{ $pekerjaanUtama->id }}"
+                                                                            data-modul="pekerjaan_tambahan"
+                                                                            data-item="{{ $pekerjaan->id }}">
+                                                                            <i class="nav-icon fas fa-edit"></i>
+                                                                            Ubah
+                                                                        </button>
+                                                                        <button type="button"
+                                                                            class="btn btn-danger btn-xs text-center btn-hapus"
+                                                                            data-pekerjaanutama="{{ $pekerjaanUtama->id }}"
+                                                                            data-modul="pekerjaan_tambahan"
+                                                                            data-item="{{ $pekerjaan->id }}">
+                                                                            <i class="fa fa-trash"></i>
+                                                                            Hapus
+                                                                        </button>
+                                                                    </td>
+                                                                @endif
+                                                            @endif
+                                                        </tr>
+                                                    @empty
+                                                        <tr class="pekerjaanTidakAda">
+                                                            <td colspan="10">Data Pekerjaan tidak ada</td>
+                                                        </tr>
+                                                    @endforelse
+                                                </tbody>
+                                                <tfoot>
+                                                    @if ($perencaan == true)
+                                                        @if (isset($daftarPelaksaanAdjust))
+                                                            <tr>
+                                                                <th colspan="5" class="text-right">Grand Total
+                                                                </th>
+                                                                <th>
+                                                                    <span id="grand_total_pekerjaan_tambahan_tampil">
+                                                                        Rp.
+                                                                        {{ format_uang($daftarPelaksaanAdjust->sum('total')) }}
+                                                                    </span>
+                                                                    <input type="hidden" id="grand_total_pekerjaan_tambahan_value"
+                                                                        name="grand_total_pekerjaan_tambahan"
+                                                                        value="{{ $daftarPelaksaanAdjust->sum('total') }}"
+                                                                        class="grand_total_pekerjaan_tambahan total_tagihan">
+                                                                </th>
+                                                            </tr>
+                                                        @endif
+                                                    @endif
+                                                </tfoot>
+
+                                            </table>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endisset
+                    @endif
                     @if (!auth()->user()->hasRole('rekanan'))
                         @if ($tombolEdit === 'bisa')
                             <div class="row">
@@ -2257,7 +2385,7 @@
                 let panjang = $('#panjang_galian').val();
                 let keterangan = $('#keterangan_galian').val();
                 let harga = $("input[name='harga_galian']:checked").val();
-
+                $('.galianTidakAda').remove();
                 if (item === "") {
                     $('#cmbGalian').parent().addClass('is-invalid')
                 }
@@ -2332,7 +2460,7 @@
                                 $('#keterangan_value_' + item_id).val(keterangan);
                                 toast('success mengubah galian')
                             } else {
-                                $('.galianTidakAda').remove();
+
 
                                 let content = elementGalian(
                                     id, nomor, pekerjaan, lebar, panjang, dalam,

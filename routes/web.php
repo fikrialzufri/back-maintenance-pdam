@@ -69,6 +69,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::resource('penunjukan-pekerjaan', PenunjukanPekerjaanController::class, ['names' => 'penunjukan_pekerjaan'])->except('destroy');
 
+    Route::get('penunjukan-pekerjaan-adjust/{slug}', [PenunjukanPekerjaanController::class, 'adjust'])->name('penunjukan_pekerjaan.adjust');
+
     Route::get('upload/penunjukan-pekerjaan', [PenunjukanPekerjaanController::class, 'upload'])->name('penunjukan_pekerjaan.upload');
 
     Route::post('upload/penunjukan-pekerjaan', [PenunjukanPekerjaanController::class, 'uploaddata'])->name('penunjukan_pekerjaan.uploaddata');
@@ -78,6 +80,9 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::post('tambah-item', [PelaksanaanPekerjaanController::class, 'item'])->name('pelaksanaan-pekerjaan.item');
     Route::post('hapus-item', [PelaksanaanPekerjaanController::class, 'hapusitem'])->name('pelaksanaan-pekerjaan.hapus.item');
+
+    Route::post('tambah-pekerjaan', [PelaksanaanPekerjaanController::class, 'pekerjaan'])->name('pelaksanaan-pekerjaan.pekerjaan');
+    Route::post('hapus-pekerjaan', [PelaksanaanPekerjaanController::class, 'hapuspekerjaan'])->name('pelaksanaan-pekerjaan.hapus.pekerjaan');
 
     Route::resource('pelaksanaan-pekerjaan', PelaksanaanPekerjaanController::class);
     //
