@@ -329,6 +329,9 @@ class TagihanController extends Controller
             $perencaan = true;
         }
         if (auth()->user()->hasRole('asisten-manajer-perencanaan')) {
+            $bntSetuju = false;
+        }
+        if (auth()->user()->hasRole('manajer-perencanaan')) {
             $listJabatan = Jabatan::where('slug', 'asisten-manajer-perencanaan')->get()->pluck('id')->toArray();
 
             // list karyawan bedasarkan jabatan
@@ -1007,6 +1010,10 @@ class TagihanController extends Controller
             }
         }
 
+        $rekanan = Rekanan::find($tagihan->rekanan_id);
+
+        $stafPengawas = $rekanan->hasKaryawan;
+
         $wilayah = rtrim($wilayah, ", ");
 
         $filename =  "Tagihan Rekenan " . $tagihan->rekanan . " Nomor " . $tagihan->nomor_tagihan;
@@ -1033,6 +1040,7 @@ class TagihanController extends Controller
                 "filename",
                 "bulan",
                 "preview",
+                "stafPengawas",
                 "now",
                 "tanggal",
                 "tagihan"
@@ -1047,6 +1055,7 @@ class TagihanController extends Controller
             "filename",
             "bulan",
             "preview",
+            "stafPengawas",
             "now",
             "tanggal",
             "tagihan"
@@ -1068,6 +1077,10 @@ class TagihanController extends Controller
                 $wilayah .= $value->wilayah . ', ';
             }
         }
+
+        $rekanan = Rekanan::find($tagihan->rekanan_id);
+
+        $stafPengawas = $rekanan->hasKaryawan;
 
         $wilayah = rtrim($wilayah, ", ");
 
@@ -1092,6 +1105,7 @@ class TagihanController extends Controller
             "total_tagihan",
             "total_lokasi",
             "filename",
+            "stafPengawas",
             "bulan",
             "preview",
             "now",

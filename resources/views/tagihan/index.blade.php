@@ -92,9 +92,16 @@
                                         <td class="text-center">
                                             <a href="{{ route($route . '.show', $item->slug) }}"
                                                 class="btn btn-sm btn-primary text-light" data-toggle="tooltip"
-                                                data-placement="top" title="Proses">
+                                                data-placement="top"
+                                                title="@if (auth()->user()->hasRole('asisten-manajer-perencanaan') ||
+                                                    auth()->user()->hasRole('manajer-perencanaan') ||
+                                                    auth()->user()->hasRole('direktur-teknik')) Proses
+                                                @else
+                                                    Rician @endif">
                                                 <i class="nav-icon fas fa-edit"></i>
-                                                @if (!auth()->user()->hasRole('rekanan'))
+                                                @if (auth()->user()->hasRole('asisten-manajer-perencanaan') ||
+                                                    auth()->user()->hasRole('manajer-perencanaan') ||
+                                                    auth()->user()->hasRole('direktur-teknik'))
                                                     Proses
                                                 @else
                                                     Rician
