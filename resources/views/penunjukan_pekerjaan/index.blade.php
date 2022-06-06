@@ -95,10 +95,12 @@
 
                                             @if (auth()->user()->hasRole('asisten-manajer-perencanaan'))
                                                 @if ($item->status_aduan == 'selesai koreksi')
-                                                    <a href="{{ route('penunjukan_pekerjaan.adjust', $item->slug) }}"
-                                                        class="btn btn-sm btn-success  text-light">
-                                                        <i class="nav-icon fa fa-edit"></i> Adjust
-                                                    </a>
+                                                    @if ($item->tagihan == 'tidak')
+                                                        <a href="{{ route('penunjukan_pekerjaan.adjust', $item->slug) }}"
+                                                            class="btn btn-sm btn-success  text-light">
+                                                            <i class="nav-icon fa fa-edit"></i> Adjust
+                                                        </a>
+                                                    @endif
                                                 @endif
                                             @endif
                                         </td>
