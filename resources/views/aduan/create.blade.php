@@ -14,7 +14,6 @@
         #map {
             height: 45vh;
         }
-
     </style>
 
     {{-- <link rel="stylesheet" href="{{ asset('leaflet/leaflet.css') }}" /> --}}
@@ -160,6 +159,26 @@
                                 <div class="col-12">
                                     <div class="form-group">
                                         <div>
+                                            <label for="nama_pelanggan" class=" form-control-label">Nama Pelanggan</label>
+                                        </div>
+                                        <div>
+                                            <input type="text" name="nama_pelanggan" placeholder="Nomor Pelanggan"
+                                                class="{{ $errors->has('nama_pelanggan') ? 'form-control is-invalid' : 'form-control' }}"
+                                                value="{{ old('nama_pelanggan') }}" required id="">
+                                        </div>
+                                        @if ($errors->has('nama_pelanggan'))
+                                            Nomor Pelanggan
+                                            <span class="text-danger">
+                                                <strong id="textkk">Nomor Pelanggan!</strong>
+                                            </span>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <div>
                                             <label for="no_pelanggan" class=" form-control-label">Nomor Pelanggan / Nomor
                                                 Meter</label>
                                         </div>
@@ -177,6 +196,7 @@
                                     </div>
                                 </div>
                             </div>
+
                             <div class="row">
                                 <div class="col-12">
                                     <div class="form-group">
@@ -212,8 +232,7 @@
                                         </div>
                                         <div>
                                             <textarea class="{{ $errors->has('keterangan') ? 'form-control is-invalid' : 'form-control' }}" name="keterangan"
-                                                id="keterangan" rows="10"
-                                                placeholder="Keterangan">{{ old('keterangan') }}</textarea>
+                                                id="keterangan" rows="10" placeholder="Keterangan">{{ old('keterangan') }}</textarea>
                                         </div>
                                         @if ($errors->has('keterangan'))
                                             Keterangan
@@ -255,9 +274,7 @@
                                     </div>
                                     <div>
                                         <textarea class="{{ $errors->has('detail_lokasi') ? 'form-control is-invalid' : 'form-control' }}"
-                                            name="detail_lokasi" id="detail_lokasi" rows="10"
-                                            placeholder="Detail Lokasi"
-                                            required>{{ old('detail_lokasi') }}</textarea>
+                                            name="detail_lokasi" id="detail_lokasi" rows="10" placeholder="Detail Lokasi" required>{{ old('detail_lokasi') }}</textarea>
                                     </div>
                                     @if ($errors->has('detail_lokasi'))
                                         detail_lokasi

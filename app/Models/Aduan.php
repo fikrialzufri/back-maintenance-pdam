@@ -75,12 +75,52 @@ class Aduan extends Model
             return $this->hasPenunjukanPekerjaan->rekanan_id;
         }
     }
+    public function getTanggalPekerjaanAttribute()
+    {
+        if ($this->hasPenunjukanPekerjaan) {
+
+            if ($this->hasPenunjukanPekerjaan->tanggal_pekerjaan != '') {
+                return $this->hasPenunjukanPekerjaan->tanggal_pekerjaan;
+            }
+        }
+    }
+    public function getTagihanAttribute()
+    {
+        if ($this->hasPenunjukanPekerjaan) {
+
+            if ($this->hasPenunjukanPekerjaan->hasPelaksanaanPekerjaan != '') {
+                return $this->hasPenunjukanPekerjaan->hasPelaksanaanPekerjaan->tagihan;
+            }
+        }
+    }
+    public function getTotalPekerjaanAttribute()
+    {
+        if ($this->hasPenunjukanPekerjaan) {
+
+            if ($this->hasPenunjukanPekerjaan->hasPelaksanaanPekerjaan != '') {
+                return $this->hasPenunjukanPekerjaan->hasPelaksanaanPekerjaan->total_pekerjaan;
+            }
+        }
+    }
+    public function getBukanRekananAttribute()
+    {
+        $bukan = false;
+        if ($this->hasPenunjukanPekerjaan) {
+            if ($this->hasPenunjukanPekerjaan->hasPelaksanaanPekerjaan != '') {
+                if ($this->hasPenunjukanPekerjaan->hasPelaksanaanPekerjaan->rekanan_id == null) {
+                    $bukan = true;
+                }
+            }
+        }
+        return $bukan;
+    }
     public function getRekananAttribute()
     {
         if ($this->hasPenunjukanPekerjaan) {
             return $this->hasPenunjukanPekerjaan->rekanan;
         }
     }
+
     public function getNoSpkAttribute()
     {
         if ($this->hasPenunjukanPekerjaan) {
@@ -155,11 +195,11 @@ class Aduan extends Model
         $status = 5;
         if ($this->hasPenunjukanPekerjaan) {;
             if ($this->hasPenunjukanPekerjaan->status) {
-                if ($this->hasPenunjukanPekerjaan->status == 'dikoreksi') {
+                if ($this->hasPenunjukanPekerjaan->status == 'selesai') {
                     $status  = 1;
-                } else if ($this->hasPenunjukanPekerjaan->status == 'selesai koreksi') {
+                } else if ($this->hasPenunjukanPekerjaan->status == 'dikoreksi') {
                     $status  = 2;
-                } else if ($this->hasPenunjukanPekerjaan->status == 'selesai') {
+                } else if ($this->hasPenunjukanPekerjaan->status == 'selesai koreksi') {
                     $status  = 3;
                 } else if ($this->hasPenunjukanPekerjaan->status == 'draft') {
                     $status  = 4;

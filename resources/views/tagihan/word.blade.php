@@ -52,7 +52,6 @@
                 box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);
             }
         }
-
     </style>
 @endpush
 @section('content')
@@ -96,16 +95,12 @@
                             </p>
                             <ol style="font-size: 20px;">
                                 @forelse ($tagihan->list_persetujuan as $index => $item)
-                                    @if ($item->jabatan !== 'Direktur Teknik' && $item->jabatan !== 'Asisten Manajer Perencanaan' && $item->jabatan !== 'Staf Perencanaan')
+                                    @if ($item->jabatan === 'Staf Pengawas' || $item->jabatan === 'Asisten Manajer Pengawas' || $item->jabatan === 'Manajer Distribusi')
                                         <li> <span style=''>{{ $item->nama }}
                                                 Sebagai {{ $item->jabatan }}</span></li>
                                     @endif
                                 @empty
                                 @endforelse
-                                @foreach ($stafPengawas as $pengawas)
-                                    <li> <span style=''>{{ $pengawas->nama }}
-                                            Sebagai {{ $pengawas->nama_jabatan }}</span></li>
-                                @endforeach
                             </ol>
                             <p style=' font-size: 20px;'>
                                 <span style=''>Telah Mengadakan
@@ -183,16 +178,12 @@
                                             <ol style="">
 
                                                 @forelse ($tagihan->list_persetujuan as $index => $item)
-                                                    @if ($item->jabatan !== 'Direktur Teknik' && $item->jabatan !== 'Asisten Manajer Perencanaan' && $item->jabatan !== 'Staf Perencanaan')
+                                                    @if ($item->jabatan === 'Staf Pengawas' || $item->jabatan === 'Asisten Manajer Pengawas' || $item->jabatan === 'Manajer Distribusi')
                                                         <li> <span style=''>{{ $item->nama }}
                                                                 Sebagai {{ $item->jabatan }}</span></li>
                                                     @endif
                                                 @empty
                                                 @endforelse
-                                                @foreach ($stafPengawas as $pengawas)
-                                                    <li> <span style=''>{{ $pengawas->nama }}
-                                                            Sebagai {{ $pengawas->nama_jabatan }}</span></li>
-                                                @endforeach
                                             </ol>
                                         </div>
                                     </div>

@@ -110,6 +110,16 @@ class PenunjukanPekerjaan extends Model
             return $this->hasPelaksanaanPekerjaan->hasMedia;
         }
     }
+
+    public function getTanggalPekerjaanAttribute()
+    {
+        if ($this->hasPelaksanaanPekerjaan) {
+
+            if ($this->hasPelaksanaanPekerjaan->created_at != '') {
+                return tanggal_indonesia($this->hasPelaksanaanPekerjaan->created_at);
+            }
+        }
+    }
     public function getGalianPekerjaanAttribute()
     {
         $result = [];

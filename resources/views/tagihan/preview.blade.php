@@ -39,7 +39,6 @@
             background-repeat: no-repeat;
             background-size: cover;
         }
-
     </style>
 </head>
 
@@ -94,16 +93,12 @@
                                         </p>
                                         <ol style="">
                                             @forelse ($tagihan->list_persetujuan as $index => $item)
-                                                @if ($item->jabatan !== 'Direktur Teknik' && $item->jabatan !== 'Asisten Manajer Perencanaan' && $item->jabatan !== 'Staf Perencanaan')
+                                                @if ($item->jabatan === 'Staf Pengawas' && $item->jabatan === 'Asisten Manajer Pengawas' && $item->jabatan === 'Manager Distribusi')
                                                     <li> <span style=''>{{ $item->nama }}
                                                             Sebagai {{ $item->jabatan }}</span></li>
                                                 @endif
                                             @empty
                                             @endforelse
-                                            @foreach ($stafPengawas as $pengawas)
-                                                <li> <span style=''>{{ $pengawas->nama }}
-                                                        Sebagai {{ $pengawas->nama_jabatan }}</span></li>
-                                            @endforeach
                                         </ol>
                                         <p>
                                             <span style=''>Telah Mengadakan
@@ -181,7 +176,7 @@
                                                 <ol style="">
 
                                                     @forelse ($tagihan->list_persetujuan_tanda_tangan as $index => $item)
-                                                        @if ($item->jabatan !== 'Direktur Teknik' && $item->jabatan !== 'Asisten Manajer Perencanaan' && $item->jabatan !== 'Staf Perencanaan')
+                                                        @if ($item->jabatan === 'Staf Pengawas' && $item->jabatan === 'Asisten Manajer Pengawas' && $item->jabatan === 'Manager Distribusi')
                                                             <li> <img
                                                                     src="{{ asset('storage/karyawan/' . $item->tdd) }}"
                                                                     alt="" width="5%"> <span
@@ -205,10 +200,6 @@
                                                     @endif
                                                 @empty
                                                 @endforelse
-                                                @foreach ($stafPengawas as $pengawas)
-                                                    <img src="{{ asset('storage/karyawan/' . $pengawas->tdd) }}"
-                                                        alt="" width="8%">
-                                                @endforeach
 
                                                 <p> <strong> Ali Rachman AS, S.T.</strong>
                                                 </p>

@@ -37,7 +37,9 @@ class AduanController extends Controller
 
         if (!auth()->user()->hasRole('superadmin')) {
             if (!auth()->user()->hasRole('rekanan')) {
-                $query->where('wilayah_id', auth()->user()->karyawan->id_wilayah);
+                if (auth()->user()->hasRole('admin-distribusi')) {
+                    $query->where('wilayah_id', auth()->user()->karyawan->id_wilayah);
+                }
             } else {
                 $rekanan_id = auth()->user()->id_rekanan;
                 $penunjukanAduan = PenunjukanPekerjaan::where('rekanan_id', $rekanan_id)->get()->pluck('aduan_id')->toArray();
@@ -140,7 +142,7 @@ class AduanController extends Controller
             $body = "Aduan dengan nomor aduan " . $noAduan . " telah dikirim";
             $modul = "aduan";
 
-            $jabatan = Jabatan::where('wilayah_id', $id_wilayah)->where('nama', 'like', "%Asisten Manager%")->pluck('id');
+            $jabatan = Jabatan::where('wilayah_id', $id_wilayah)->where('nama', 'like', "%Asisten Manajer%")->pluck('id');
             $karyawan = Karyawan::whereIn('jabatan_id', $jabatan)->get();
             foreach ($karyawan as $item) {
                 $this->notification($aduan->id, $aduan->slug, $title, $body, $modul, auth()->user()->id, $item->user_id);

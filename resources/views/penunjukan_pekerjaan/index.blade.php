@@ -11,20 +11,81 @@
                         <h3 class="card-title">Daftar {{ $title }}</h3>
 
                         <div>
-                            {{-- @if ($rekanan_id == null)
-                                <a href="{{ route($route . '.create') }}"
-                                    class="btn btn-sm btn-primary float-right text-light">
-                                    <i class="fa fa-plus"></i>Tambah Data
-                                </a>
-                                <a href="{{ route($route . '.upload') }}"
-                                    class="btn btn-sm btn-warning float-right text-light mr-5">
-                                    <i class="fa fa-file"></i> Upload
-                                </a>
-                            @endif --}}
+                            {{-- Tanggal --}}
+
+                            {{-- Kategori Dinas --}}
+                            {{-- Rekanan --}}
                         </div>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
+                        <form action="" role="form" id="form" enctype="multipart/form-data">
+                            <div class="row">
+                                <div class="col-lg-2">
+                                    <label for="">No Spk</label>
+                                    <input type="text" name="spk" value="{{ $spk }}" class="form-control">
+                                </div>
+                                <div class="col-lg-2">
+                                    <label for="">Kategori Aduan</label>
+                                    <select name="kategori" class="selected2 form-control">
+                                        <option value="">Semua Kategori</option>
+                                        <option value="pipa dinas" {{ $kategori == 'pipa dinas' ? 'selected' : '' }}>Pipa
+                                            dinas
+                                        </option>
+                                        <option value="pipa tersier / skunder">Pipa tersier / skunder
+                                            {{ $kategori == 'pipa tersier / skunder' ? 'selected' : '' }}</option>
+
+                                    </select>
+                                    @if ($errors->has('rule'))
+                                        <span class="text-danger">
+                                            <strong id="textrule">{{ $errors->first('rule') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                                @if (!auth()->user()->hasRole('rekanan'))
+                                    <div class="col-lg-2">
+                                        <label for="">Daftar Rekanan</label>
+                                        <select name="rekanan_id" class="selected2 form-control" id="cmbrekanan">
+                                            <option value="">Pilih Rekanan</option>
+                                            @foreach ($rekanan as $rek)
+                                                <option value="{{ $rek->id }}"
+                                                    {{ $rekananid == $rek->id ? 'selected' : '' }}>{{ $rek->nama }}
+                                                </option>
+                                            @endforeach
+
+                                        </select>
+                                    </div>
+                                @endif
+                                <div class="col-lg-2">
+                                    <label for="">Tanggal Pekerjaan</label>
+                                    <input type="text" id="daterange" name="tanggal" value="{{ $tanggal }}"
+                                        class="form-control">
+                                </div>
+
+                                <div class="col-lg-1">
+                                    <label for="">Aksi</label>
+                                    <div class="input-group">
+
+
+                                        <button type="submit" class="btn btn-warning">
+                                            <span class="fa fa-search"></span>
+                                            Cari
+                                        </button>
+                                    </div>
+                                </div>
+                                @if (auth()->user()->hasRole('asisten-manajer-perencanaan'))
+                                    <div class="col-lg-3">
+                                        <label for="">Rekapan Pekerjaan</label>
+                                        <div class="input-group">
+                                            <a href="{{ route('penunjukan_pekerjaan.rekanan') }}" class="btn btn-primary">
+                                                <span class="fa fa-edit"></span>
+                                                Proses
+                                            </a>
+                                        </div>
+                                    </div>
+                                @endif
+                            </div>
+                        </form>
                         <table class="table table-bordered table-responsive" width="100%">
                             <thead>
                                 <tr>
@@ -33,7 +94,9 @@
                                     <th>Nomor Aduan</th>
                                     <th>Nomor Tiket</th>
                                     <th>Pekerja</th>
-                                    <th>Tanggal</th>
+                                    <th>Kategori Aduan</th>
+                                    <th>Tanggal Aduan</th>
+                                    <th>Tanggal Pekerjaan</th>
                                     <th>Pelapor</th>
                                     <th>Admin</th>
                                     <th width="20%">Lokasi</th>
@@ -57,7 +120,9 @@
                                         <td>{{ $item->no_aduan }}</td>
                                         <td>{{ $item->no_ticket }}</td>
                                         <td>{{ $item->rekanan }}</td>
+                                        <td>{{ ucfirst($item->kategori_aduan) }}</td>
                                         <td>{{ tanggal_indonesia($item->created_at) }}</td>
+                                        <td>{{ $item->tanggal_pekerjaan }}</td>
                                         <td>{{ $item->atas_nama }}</td>
                                         <td>{{ ucfirst($item->user) }}</td>
                                         <td>{{ $item->lokasi }}</td>
@@ -80,7 +145,7 @@
                                                     @else
                                                         <i class="nav-icon fa fa-search"></i> Detail
                                                     @endif
-                                                @elseif (auth()->user()->hasRole('admin-asisten-manager'))
+                                                @elseif (auth()->user()->hasRole('asisten-manajer-distribusi'))
                                                     @if ($item->status_aduan == 'Belum ditunjuk')
                                                         <i class="nav-icon fas fa-eye"></i> Proses
                                                     @else
@@ -95,7 +160,7 @@
 
                                             @if (auth()->user()->hasRole('asisten-manajer-perencanaan'))
                                                 @if ($item->status_aduan == 'selesai koreksi')
-                                                    @if ($item->tagihan == 'tidak')
+                                                    @if ($item->tagihan == 'tidak' && $item->bukan_rekanan != true)
                                                         <a href="{{ route('penunjukan_pekerjaan.adjust', $item->slug) }}"
                                                             class="btn btn-sm btn-success  text-light">
                                                             <i class="nav-icon fa fa-edit"></i> Adjust
@@ -126,3 +191,35 @@
         </div><!-- /.container-fluid -->
     </div><!-- /.container-fluid -->
 @stop
+@push('head')
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+@endpush
+@push('script')
+    <script script src="{{ asset('plugins/select2/dist/js/select2.min.js') }}"></script>
+    <script>
+        $('#cmbrekanan').select2({
+            placeholder: '--- Pilih Rekanan ---',
+            width: '100%'
+        });
+    </script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
+    <script type="text/javascript">
+        $('#daterange').daterangepicker({
+            autoUpdateInput: false,
+            locale: {
+                cancelLabel: 'Clear'
+            }
+        });
+
+        $('input[name="tanggal"]').on('apply.daterangepicker', function(ev, picker) {
+            $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+        });
+
+        $('input[name="tanggal"]').on('cancel.daterangepicker', function(ev, picker) {
+            $(this).val('');
+        });
+    </script>
+@endpush

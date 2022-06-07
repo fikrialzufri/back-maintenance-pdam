@@ -128,7 +128,13 @@ class Tagihan extends Model
     {
         $danger = '';
         $user = auth()->user()->id;
-        if (auth()->user()->hasRole('asisten-manajer-perencanaan') || auth()->user()->hasRole('manajer-perencanaan') || auth()->user()->hasRole('direktur-teknik')) {
+        if (
+            auth()->user()->hasRole('staf-pengawas') ||
+            auth()->user()->hasRole('asisten-manajer-pengawas') ||
+            auth()->user()->hasRole('manajer-distribusi') ||
+            auth()->user()->hasRole('asisten-manajer-perencanaan') ||
+            auth()->user()->hasRole('manajer-perencanaan') || auth()->user()->hasRole('direktur-teknik')
+        ) {
             $danger = 'bg-danger';
             if ($this->hasUserMany) {
                 foreach ($this->hasUserMany as $key => $value) {
@@ -244,7 +250,7 @@ class Tagihan extends Model
                 }
             }
 
-            $collect = collect($hasUserMany)->sortByDesc('created_at');
+            $collect = collect($hasUserMany)->sortBy('created_at');
             $nomor = 0;
             foreach ($collect as $key => $value) {
                 $result[$nomor] = (object) [

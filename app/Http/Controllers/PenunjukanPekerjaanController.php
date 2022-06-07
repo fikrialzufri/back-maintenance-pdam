@@ -40,20 +40,56 @@ class PenunjukanPekerjaanController extends Controller
         $title = 'List Pekerjaan';
         $route = 'penunjukan_pekerjaan';
         $search = request()->search;
+        $kategori = request()->kategori;
+        $rekananid = request()->rekanan_id;
         $limit = request()->limit ?? 50;
         $rekanan_id  = null;
         $btnProsesPenunjukan = false;
 
         $query = Aduan::query();
+        $tanggal = '';
+        $spk = request()->spk;
+
+        $rekanan = Rekanan::query();
+
+        if (request()->tanggal != '') {
+            $date = explode(' - ',  request()->tanggal);
+            $start = Carbon::parse($date[0])->format('Y-m-d') . ' 00:00:01';
+            $end = Carbon::parse($date[1])->format('Y-m-d') . ' 23:59:59';
+            $tanggal = request()->tanggal;
+        } else {
+            $start = Carbon::now()->startOfMonth()->format('m/d/Y');
+            $end = Carbon::now()->endOfMonth()->format('m/d/Y');
+            // $tanggal = $start . " - " . $end;
+        }
+
+        // $query = $query->whereBetween(DB::raw('DATE(' . $val['name'] . ')'), array($start, $end));
 
         if ($search) {
             $query->where('no_ticket', 'like', "%" . $search . "%")->orWhere('no_aduan', 'like', "%" . $search . "%");
+        }
+        if ($kategori) {
+            $query->where('kategori_aduan', 'like', "%" . $kategori . "%");
         }
 
         if (!auth()->user()->hasRole('superadmin')) {
             if (auth()->user()->hasRole('rekanan')) {
                 $rekanan_id = auth()->user()->id_rekanan;
-                $penunjukanAduan = PenunjukanPekerjaan::where('rekanan_id', $rekanan_id)->get()->pluck('aduan_id')->toArray();
+                $penunjukanAduan = PenunjukanPekerjaan::where('rekanan_id', $rekanan_id);
+
+                if (request()->spk != '') {
+                    $penunjukanAduan = $penunjukanAduan->where('nomor_pekerjaan', 'like', '%' . $spk . '%');
+                }
+
+                if (request()->tanggal != '') {
+                    $PelaksanaanPekerjaan = PelaksanaanPekerjaan::whereBetween(DB::raw('DATE(created_at)'), array($start, $end))->get()->pluck('penunjukan_pekerjaan_id')->toArray();
+
+                    $penunjukanAduan = $penunjukanAduan->whereIn('id', $PelaksanaanPekerjaan);
+                }
+
+                $penunjukanAduan = $penunjukanAduan->get()->pluck('aduan_id')->toArray();
+
+
                 $query->whereIn('id', $penunjukanAduan);
                 $penunjukan = $query->paginate($limit);
 
@@ -64,7 +100,24 @@ class PenunjukanPekerjaanController extends Controller
                 );
             } elseif (auth()->user()->hasRole('staf-distribusi')) {
                 $id_karyawan = auth()->user()->id_karyawan;
-                $penunjukanAduan = PenunjukanPekerjaan::where('karyawan_id', $id_karyawan)->get()->pluck('aduan_id')->toArray();
+                $penunjukanAduan = PenunjukanPekerjaan::where('karyawan_id', $id_karyawan);
+                if (request()->spk != '') {
+                    $penunjukanAduan = $penunjukanAduan->where('nomor_pekerjaan', 'like', '%' . $spk . '%');
+                }
+
+                if (request()->tanggal != '') {
+                    $PelaksanaanPekerjaan = PelaksanaanPekerjaan::whereBetween(DB::raw('DATE(created_at)'), array($start, $end))->get()->pluck('penunjukan_pekerjaan_id')->toArray();
+
+                    $penunjukanAduan = $penunjukanAduan->whereIn('id', $PelaksanaanPekerjaan);
+                }
+                if ($rekananid) {
+                    $PelaksanaanPekerjaan = PelaksanaanPekerjaan::where('rekanan_id', $rekananid)->get()->pluck('penunjukan_pekerjaan_id')->toArray();
+
+                    $penunjukanAduan = $penunjukanAduan->whereIn('id', $PelaksanaanPekerjaan);
+                }
+
+                $penunjukanAduan = $penunjukanAduan->get()->pluck('aduan_id')->toArray();
+
                 $query->whereIn('id', $penunjukanAduan);
                 $penunjukan = $query->paginate($limit);
 
@@ -75,19 +128,62 @@ class PenunjukanPekerjaanController extends Controller
                 );
             } else {
                 $list_rekanan_id = auth()->user()->karyawan->hasRekanan->pluck('id');
+
                 if (count($list_rekanan_id) > 0) {
-                    $penunjukanAduan = PenunjukanPekerjaan::whereIn('rekanan_id', $list_rekanan_id)->get()->pluck('aduan_id');
+                    $rekanan = $rekanan->whereIn('id', $list_rekanan_id);
+
+                    if ($rekananid) {
+                        $penunjukanAduan = PenunjukanPekerjaan::whereIn('rekanan_id', [$rekananid]);
+                    } else {
+                        $penunjukanAduan = PenunjukanPekerjaan::whereIn('rekanan_id', $list_rekanan_id);
+                    }
+
+
+                    if (request()->spk != '') {
+                        $penunjukanAduan = $penunjukanAduan->where('nomor_pekerjaan', 'like', '%' . $spk . '%');
+                    }
+
+                    if (request()->tanggal != '') {
+                        $PelaksanaanPekerjaan = PelaksanaanPekerjaan::whereBetween(DB::raw('DATE(created_at)'), array($start, $end))->get()->pluck('penunjukan_pekerjaan_id')->toArray();
+
+                        $penunjukanAduan = $penunjukanAduan->whereIn('id', $PelaksanaanPekerjaan);
+                    }
+
+                    $penunjukanAduan = $penunjukanAduan->get()->pluck('aduan_id')->toArray();
+
                     $query->whereIn('id', $penunjukanAduan)->orderBy('updated_at', 'desc');
                     $penunjukan = $query->paginate($limit);
                     $penunjukan = $penunjukan->setCollection(
-                        $penunjukan->sortByDesc(function ($pekerjaan) {
+                        $penunjukan->sortBy(function ($pekerjaan) {
                             return $pekerjaan->status_order_pengawas;
                         })
                     );
                 } else {
                     $id_wilayah = auth()->user()->karyawan->id_wilayah;
                     $wilayah = Wilayah::find($id_wilayah);
-                    $penunjukanAduan = PenunjukanPekerjaan::whereStatus('dikoreksi')->get()->pluck('aduan_id')->toArray();
+                    $penunjukanAduan = PenunjukanPekerjaan::query();
+
+                    if (request()->spk != '') {
+                        $penunjukanAduan = $penunjukanAduan->where('nomor_pekerjaan', 'like', '%' . $spk . '%');
+                    }
+                    if (request()->tanggal != '') {
+                        $PelaksanaanPekerjaan = PelaksanaanPekerjaan::whereBetween(DB::raw('DATE(created_at)'), array($start, $end))->get()->pluck('penunjukan_pekerjaan_id')->toArray();
+
+                        $penunjukanAduan = $penunjukanAduan->whereIn('id', $PelaksanaanPekerjaan);
+                    }
+
+                    if ($rekananid) {
+                        $PelaksanaanPekerjaan = PelaksanaanPekerjaan::where('rekanan_id', $rekananid)->get()->pluck('penunjukan_pekerjaan_id')->toArray();
+
+                        $penunjukanAduan = $penunjukanAduan->whereIn('id', $PelaksanaanPekerjaan);
+                    }
+
+                    if (request()->spk != '' || request()->tanggal != '') {
+                        $penunjukanAduan = $penunjukanAduan->get()->pluck('aduan_id')->toArray();
+
+                        $query->whereIn('id', $penunjukanAduan);
+                    }
+
 
                     // $query->whereStatus('selesai');
                     if ($wilayah->nama !== 'Wilayah Samarinda') {
@@ -118,13 +214,18 @@ class PenunjukanPekerjaanController extends Controller
             );
         }
 
-
+        $rekanan = $rekanan->orderBy('nama')->get();
 
         return view('penunjukan_pekerjaan.index', compact(
             'title',
             'route',
+            'tanggal',
             'btnProsesPenunjukan',
             'rekanan_id',
+            'rekanan',
+            'rekananid',
+            'spk',
+            'kategori',
             'penunjukan',
             'search',
             'limit'
@@ -909,6 +1010,65 @@ class PenunjukanPekerjaanController extends Controller
             'fotoBahan',
             'tombolEdit',
             'action'
+        ));
+    }
+
+    public function rekanan()
+    {
+        //nama title
+        $title =  "Rekapan Rekanan";
+
+        //nama route dan action route
+        $route =  $this->route;
+        $search =  request()->search;
+        $query = Rekanan::query();
+
+        if ($search) {
+            $query->where('nama', 'like', "%" . $search . "%")->orWhere('nama_penangung_jawab', 'like', "%" . $search . "%")->orWhere('no_hp', 'like', "%" . $search . "%");
+        }
+
+        $rekanan = $query->paginate(50);
+
+        return view('penunjukan_pekerjaan.rekanan', compact(
+            'title',
+            'search',
+            'rekanan'
+        ));
+    }
+    public function rekapan($slug)
+    {
+        //nama title
+        $rekanan = Rekanan::whereSlug($slug)->first();
+
+        $title =  "Rekapan Rekanan - " . $rekanan->nama;
+        $route =  $this->route;
+
+        $query =  PelaksanaanPekerjaan::query();
+        $query->where('rekanan_id', $rekanan->id);
+
+        $start = Carbon::now()->subMonths(2)->startOfMonth()->format('Y-m-d') . ' 00:00:01';
+        $end =  Carbon::now()->endOfMonth()->format('Y-m-d') . ' 23:59:59';
+
+        $query->where('tagihan', 'tidak')->whereBetween(DB::raw('DATE(tanggal_selesai)'), array($start, $end));
+        $penunjukan =  $query->get();
+
+        return view('penunjukan_pekerjaan.rekapan', compact(
+            'title',
+            'penunjukan',
+            'rekanan'
+        ));
+    }
+    public function kirimwa()
+    {
+        //nama title
+
+        $title =  "Rekapan Rekanan";
+
+
+        return view('penunjukan_pekerjaan.rekanan', compact(
+            'title',
+            'search',
+            'rekanan'
         ));
     }
 }

@@ -70,6 +70,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('penunjukan-pekerjaan', PenunjukanPekerjaanController::class, ['names' => 'penunjukan_pekerjaan'])->except('destroy');
 
     Route::get('penunjukan-pekerjaan-adjust/{slug}', [PenunjukanPekerjaanController::class, 'adjust'])->name('penunjukan_pekerjaan.adjust');
+    Route::get('rekapan-rekanan', [PenunjukanPekerjaanController::class, 'rekanan'])->name('penunjukan_pekerjaan.rekanan');
+    Route::get('rekapan-rekanan/{slug}', [PenunjukanPekerjaanController::class, 'rekapan'])->name('penunjukan_pekerjaan.rekapan');
 
     Route::get('upload/penunjukan-pekerjaan', [PenunjukanPekerjaanController::class, 'upload'])->name('penunjukan_pekerjaan.upload');
 

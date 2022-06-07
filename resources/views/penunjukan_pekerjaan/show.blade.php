@@ -23,7 +23,6 @@
         .needs-validation~span>.select2-dropdown {
             border-color: red !important;
         }
-
     </style>
 @endpush
 
@@ -78,7 +77,7 @@
 
                                         </div>
                                     </div>
-                                    @if (!auth()->user()->hasRole('admin-asisten-manager'))
+                                    @if (!auth()->user()->hasRole('admin-asisten-manajer'))
                                         @if ($pekerjaanUtama)
                                             @if ($pekerjaanUtama->status == 'selesai koreksi')
                                                 <div class="col-12">
@@ -90,7 +89,7 @@
                                                         <div>
                                                             <h3>
                                                                 <strong id="total_tagihan_pekerjaan">Rp.
-                                                                    {{ format_uang($totalPekerjaan) }}</strong>
+                                                                    {{ format_uang($aduan->total_pekerjaan) }}</strong>
                                                             </h3>
                                                         </div>
 
@@ -224,7 +223,7 @@
         </div>
 
         @if ($aduan->status != 'draft')
-            @if (!auth()->user()->hasRole('admin-asisten-manager'))
+            @if (!auth()->user()->hasRole('admin-asisten-manajer'))
                 @isset($pekerjaanUtama)
 
                     <input type="hidden" name="id_pekerjaan" id="idPekerjaan" value="{{ $pekerjaanUtama->id }}">
@@ -1463,7 +1462,7 @@
                                 <div class="col-md-12">
                                     <div class="card">
                                         <div class="card-header  justify-content-between">
-                                            <div class="card-title">Daftar Pekerjaan Tambahan</div>
+                                            <div class="card-title">Daftar Koreksi Pekerjaan</div>
 
                                         </div>
                                         <div class="card-body">

@@ -56,30 +56,33 @@
                                         <td>{{ $item->wilayah }}</td>
                                         <td>{{ $item->lokasi }}</td>
                                         <td>{{ ucfirst($item->status_aduan) }}</td>
-                                        @if ($item->status == 'draft')
-                                            @canany(['create-aduan', 'delete-aduan'])
-                                                <td class="text-center">
-                                                    @can('create-aduan')
-                                                        <a href="{{ route('aduan.edit', $item->slug) }}"
-                                                            class="btn btn-sm btn-warning text-light">
-                                                            <i class="nav-icon fas fa-edit"></i> Ubah
-                                                        </a>
-                                                    @endcan
-                                                    @can('delete-aduan')
-                                                        <form id="form-{{ $item->slug }}"
-                                                            action="{{ route('aduan.destroy', $item->slug) }}" method="POST"
-                                                            style="display: none;">
-                                                            {{ csrf_field() }}
-                                                            {{ method_field('DELETE') }}
-                                                        </form>
-                                                        <button class="btn btn-danger btn-sm" data-toggle="tooltip"
-                                                            data-placement="top" title="Hapus"
-                                                            onclick=deleteconf("{{ $item->slug }}")>
-                                                            <i class="fa fa-trash"></i> Hapus
-                                                        </button>
-                                                    @endcan
-                                                </td>
-                                            @endcan
+                                        @if (auth()->user()->hasRole('admin-distribusi'))
+                                            {
+                                            @if ($item->status == 'draft')
+                                                @canany(['create-aduan', 'delete-aduan'])
+                                                    <td class="text-center">
+                                                        @can('create-aduan')
+                                                            <a href="{{ route('aduan.edit', $item->slug) }}"
+                                                                class="btn btn-sm btn-warning text-light">
+                                                                <i class="nav-icon fas fa-edit"></i> Ubah
+                                                            </a>
+                                                        @endcan
+                                                        @can('delete-aduan')
+                                                            <form id="form-{{ $item->slug }}"
+                                                                action="{{ route('aduan.destroy', $item->slug) }}" method="POST"
+                                                                style="display: none;">
+                                                                {{ csrf_field() }}
+                                                                {{ method_field('DELETE') }}
+                                                            </form>
+                                                            <button class="btn btn-danger btn-sm" data-toggle="tooltip"
+                                                                data-placement="top" title="Hapus"
+                                                                onclick=deleteconf("{{ $item->slug }}")>
+                                                                <i class="fa fa-trash"></i> Hapus
+                                                            </button>
+                                                        @endcan
+                                                    </td>
+                                                @endcan
+                                            @endif
                                         @endif
                                     </tr>
                                 @empty

@@ -328,8 +328,47 @@ class TagihanController extends Controller
         if (auth()->user()->hasRole('superadmin')) {
             $perencaan = true;
         }
-        if (auth()->user()->hasRole('asisten-manajer-perencanaan')) {
+        if (auth()->user()->hasRole('manajer-distribusi')) {
             $bntSetuju = false;
+        }
+        if (auth()->user()->hasRole('asisten-manajer-pengawas')) {
+            $listJabatan = Jabatan::where('slug', 'manajer-distribusi')->get()->pluck('id')->toArray();
+
+            $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get()->pluck('user_id')->toArray();
+
+            if (count($tagihan->list_persetujuan) > 0) {
+                $arrayList = collect($tagihan->list_persetujuan)->pluck('id')->toArray();
+
+                if ((count(array_unique(array_merge($arrayList, $listKaryawan))) === count($arrayList))) {
+                    $bntSetuju = false;
+                }
+            }
+        }
+        if (auth()->user()->hasRole('staf-pengawas')) {
+            $listJabatan = Jabatan::where('slug', 'asisten-manajer-pengawas')->get()->pluck('id')->toArray();
+
+            $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get()->pluck('user_id')->toArray();
+
+            if (count($tagihan->list_persetujuan) > 0) {
+                $arrayList = collect($tagihan->list_persetujuan)->pluck('id')->toArray();
+
+                if ((count(array_unique(array_merge($arrayList, $listKaryawan))) === count($arrayList))) {
+                    $bntSetuju = false;
+                }
+            }
+        }
+        if (auth()->user()->hasRole('asisten-manajer-perencanaan')) {
+            $listJabatan = Jabatan::where('slug', 'staf-pengawas')->get()->pluck('id')->toArray();
+
+            $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get()->pluck('user_id')->toArray();
+
+            if (count($tagihan->list_persetujuan) > 0) {
+                $arrayList = collect($tagihan->list_persetujuan)->pluck('id')->toArray();
+
+                if ((count(array_unique(array_merge($arrayList, $listKaryawan))) === count($arrayList))) {
+                    $bntSetuju = false;
+                }
+            }
         }
         if (auth()->user()->hasRole('manajer-perencanaan')) {
             $listJabatan = Jabatan::where('slug', 'asisten-manajer-perencanaan')->get()->pluck('id')->toArray();
@@ -337,7 +376,6 @@ class TagihanController extends Controller
             // list karyawan bedasarkan jabatan
             $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get()->pluck('user_id')->toArray();
 
-            $bntSetuju = true;
             if (count($tagihan->list_persetujuan) > 0) {
                 $arrayList = collect($tagihan->list_persetujuan)->pluck('id')->toArray();
 
@@ -355,7 +393,6 @@ class TagihanController extends Controller
 
             // list karyawan bedasarkan jabatan
             $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get()->pluck('user_id')->toArray();
-            $bntSetuju = true;
 
             if (count($tagihan->list_persetujuan) > 0) {
                 $arrayList = collect($tagihan->list_persetujuan)->pluck('id')->toArray();

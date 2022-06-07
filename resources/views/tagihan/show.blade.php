@@ -97,10 +97,10 @@
                                     </div>
                                 </div>
                                 <div class="col-6 timeline">
-                                    <h6>List Persetujuan</h6>
+                                    <h6>List Persetujuan Pekerjaan</h6>
                                     <ul>
                                         @forelse ($list_persetujuan as $item)
-                                            @if ($item->is_setuju === true)
+                                            @if ($item->jabatan === 'Staf Pengawas' || $item->jabatan === 'Asisten Manajer Pengawas' || $item->jabatan === 'Manajer Distribusi')
                                                 <li>
                                                     <div class="bullet bg-primary"></div>
                                                     <div class="time">{{ $item->tanggal_disetujui }}</div>
@@ -109,13 +109,22 @@
                                                         <h4>{{ $item->jabatan }}</h4>
                                                     </div>
                                                 </li>
-                                            @else
+                                            @endif
+                                        @empty
+                                        @endforelse
+
+
+                                    </ul>
+                                    <h6>List Persetujuan Tagihan</h6>
+                                    <ul>
+                                        @forelse ($list_persetujuan as $item)
+                                            @if ($item->jabatan === 'Asisten Manajer Perencanaan' || $item->jabatan === ' Manajer Perencanaan' || $item->jabatan === 'Direktur Teknik')
                                                 <li>
-                                                    <div class="bullet bg-navy"></div>
-                                                    <div class="time"></div>
+                                                    <div class="bullet bg-primary"></div>
+                                                    <div class="time">{{ $item->tanggal_disetujui }}</div>
                                                     <div class="desc">
-                                                        <h3>212</h3>
-                                                        <h4>12</h4>
+                                                        <h3>{{ $item->nama }}</h3>
+                                                        <h4>{{ $item->jabatan }}</h4>
                                                     </div>
                                                 </li>
                                             @endif
@@ -157,7 +166,7 @@
                                                     </thead>
                                                     <tbody>
                                                         @forelse ($item->hasItem as $nomor => $barang)
-                                                            <tr class="{{ $barang->pivot->harga == 0 ? 'bg-danger' : '' }}"
+                                                            <tr class=""
                                                                 id="{{ $barang->slug }}_{{ $item->id }}">
                                                                 <td>{{ $nomor + 1 }}
                                                                 </td>
@@ -166,47 +175,14 @@
                                                                 <td id="qty_{{ $barang->slug }}_{{ $item->id }}">
                                                                     {{ $barang->pivot->qty }}</td>
                                                                 @if ($perencaan === true)
-                                                                    @if ($barang->pivot->harga == 0)
-                                                                        <td>
-                                                                            <div class="input-group mb-2 mr-sm-2">
-                                                                                <div class="input-group-prepend">
-                                                                                    <div class="input-group-text">Rp.</div>
-                                                                                </div>
-                                                                                <input type="text"
-                                                                                    name="harga_{{ $barang->slug }}_{{ $item->id }}"
-                                                                                    id="harga_{{ $barang->slug }}_{{ $item->id }}"
-                                                                                    placeholder="" class="form-control">
-                                                                            </div>
-                                                                        </td>
-                                                                        <td
-                                                                            id="total_harga_{{ $barang->slug }}_{{ $item->id }}">
-                                                                            Rp. 0</td>
-                                                                        @push('script')
-                                                                            <script>
-                                                                                $('#harga_{{ $barang->slug }}_{{ $item->id }}').on("input", function() {
+                                                                    <td>
+                                                                        Rp. {{ format_uang($barang->pivot->harga) }}
+                                                                    </td>
 
-                                                                                    let val = formatRupiah(this.value, '');
-                                                                                    $('#harga_{{ $barang->slug }}_{{ $item->id }}').val(val);
-                                                                                    let qty = parseInt($('#qty_{{ $barang->slug }}_{{ $item->id }}').text());
-                                                                                    let totalHarga = val.replace(".", "") * qty;
-
-                                                                                    $('#total_harga_{{ $barang->slug }}_{{ $item->id }}').text("Rp. " + formatRupiah(totalHarga
-                                                                                        .toString(), ''));
-
-                                                                                    $('#{{ $barang->slug }}_{{ $item->id }}').removeClass('bg-danger');
-                                                                                });
-                                                                            </script>
-                                                                        @endpush
-                                                                    @else
-                                                                        <td>
-                                                                            Rp. {{ format_uang($barang->pivot->harga) }}
-                                                                        </td>
-
-                                                                        <td>
-                                                                            Rp.
-                                                                            {{ format_uang($barang->pivot->harga * $barang->pivot->qty) }}
-                                                                        </td>
-                                                                    @endif
+                                                                    <td>
+                                                                        Rp.
+                                                                        {{ format_uang($barang->pivot->harga * $barang->pivot->qty) }}
+                                                                    </td>
                                                                 @endif
 
                                                             </tr>
@@ -234,7 +210,7 @@
                                         </div>
                                         <div class="col-md-12">
                                             <div>
-                                                <span>Daftar Pekerjaan Tambahan</span>
+                                                <span>Daftar Koreksi Pekerjaan</span>
                                                 <table class="table table-bordered " width="100%">
                                                     <thead>
                                                         <tr>
@@ -699,7 +675,6 @@
         [role=button] {
             cursor: pointer;
         }
-
     </style>
 @endpush
 @push('script')

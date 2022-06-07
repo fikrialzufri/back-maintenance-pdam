@@ -29,25 +29,25 @@ class UsersTableSeedeer extends Seeder
         $DirekturRole->name = 'Direktur Teknik';
         $DirekturRole->save();
 
-        $ManagerDistribusiRole = new Role();
-        $ManagerDistribusiRole->name = 'Manager Distribusi';
-        $ManagerDistribusiRole->save();
+        $ManajerDistribusiRole = new Role();
+        $ManajerDistribusiRole->name = 'Manajer Distribusi';
+        $ManajerDistribusiRole->save();
 
-        $ManagerPengawasRole = new Role();
-        $ManagerPengawasRole->name = 'Manager Pengawas';
-        $ManagerPengawasRole->save();
+        $ManajerPengawasRole = new Role();
+        $ManajerPengawasRole->name = 'Manajer Pengawas';
+        $ManajerPengawasRole->save();
 
         $AdminDistribusiRole = new Role();
         $AdminDistribusiRole->name = 'Admin Distribusi';
         $AdminDistribusiRole->save();
 
-        $AsistenManagerPengawasRole = new Role();
-        $AsistenManagerPengawasRole->name = 'Asisten Manager Pengawas';
-        $AsistenManagerPengawasRole->save();
+        $AsistenManajerPengawasRole = new Role();
+        $AsistenManajerPengawasRole->name = 'Asisten Manajer Pengawas';
+        $AsistenManajerPengawasRole->save();
 
-        $AsistenManagerDistribusiRole = new Role();
-        $AsistenManagerDistribusiRole->name = 'Asisten Manager Distribusi';
-        $AsistenManagerDistribusiRole->save();
+        $AsistenManajerDistribusiRole = new Role();
+        $AsistenManajerDistribusiRole->name = 'Asisten Manajer Distribusi';
+        $AsistenManajerDistribusiRole->save();
 
         $HumasRole = new Role();
         $HumasRole->name = 'Humas';
