@@ -40,6 +40,18 @@
 
                                     <div class="form-group">
                                         <div>
+                                            <label for="lokasi" class=" form-control-label">Total Lokasi</label>
+                                        </div>
+                                        <div>
+                                            <input type="text" name="lokasi" class="form-control" id="lokasi"
+                                                value="{{ $total_lokasi }}" disabled>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+
+                                    <div class="form-group">
+                                        <div>
                                             <label for="nama_penangung_jawab" class=" form-control-label">Penanggung
                                                 Jawab</label>
                                         </div>
@@ -184,10 +196,11 @@
             let namarekanan = $('#nama').val();
             let no_hp = $('#no_hp').val();
             let nama_penangung_jawab = $('#nama_penangung_jawab').val();
+            let lokasi = $('#lokasi').val();
             let total_pekerjaan = $('#total_pekerjaan').val();
 
             let textMessage =
-                `PERUMDAM TIRTA KENCANA SAMARIDA\n\nKepada yang terhormat Bapak/Ibu di Samarinda, berikut detail pekerjan ${namarekanan} :\n\n${dataRekanan}\n\Total Tagihan : ${total_pekerjaan}`;
+                `PERUMDAM TIRTA KENCANA SAMARIDA\n\nKepada yang terhormat Bapak/Ibu di Samarinda, berikut detail tagihan ${namarekanan} :\n\nTotal Lokasi: ${lokasi}\n\Total Tagihan : ${total_pekerjaan}`;
 
             window.open(`https://api.whatsapp.com/send?phone=62${no_hp}&text=` + encodeURI(
                 textMessage));

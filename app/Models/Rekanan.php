@@ -43,4 +43,9 @@ class Rekanan extends Model
             return $this->hasUser->email;
         }
     }
+
+    public function hasPelaksanaanPekerjaan()
+    {
+        return $this->belongsTo(PelaksanaanPekerjaan::class,  'rekanan_id');
+    }
 }

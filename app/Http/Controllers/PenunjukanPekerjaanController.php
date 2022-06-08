@@ -1052,9 +1052,12 @@ class PenunjukanPekerjaanController extends Controller
         $query->where('tagihan', 'tidak')->whereBetween(DB::raw('DATE(tanggal_selesai)'), array($start, $end));
         $penunjukan =  $query->get();
 
+        $total_lokasi = $query->count();
+
         return view('penunjukan_pekerjaan.rekapan', compact(
             'title',
             'penunjukan',
+            'total_lokasi',
             'rekanan'
         ));
     }
