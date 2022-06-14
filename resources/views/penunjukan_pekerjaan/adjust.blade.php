@@ -312,8 +312,14 @@
                                                     {{ $pekerjaanUtama->luas_galian }} m<sup>2</sup>
                                                 </th>
                                                 @if ($perencaan === true)
-                                                    <th>Rp.
-                                                        {{ format_uang($pekerjaanUtama->hasGalianPekerjaan->sum('total')) }}
+                                                    <th>
+                                                        <span id="total_galian_tampil">
+                                                            Rp.
+                                                            {{ format_uang($pekerjaanUtama->hasGalianPekerjaan->sum('total')) }}
+                                                        </span>
+                                                        <input type="hidden" name="total_galian_value"
+                                                            value="{{ $pekerjaanUtama->hasGalianPekerjaan->sum('total') }}"
+                                                            id="total_galian_value">
                                                     </th>
                                                 @endif
                                             </tr>
@@ -752,8 +758,9 @@
                     .val());
             });
 
+            let totalGalian = $('#total_galian_value').val();
             let total = $('#total_harga_value').val();
-            sumGrandTotal = parseFloat(total) + parseFloat(sumTotal);
+            sumGrandTotal = parseFloat(total) + parseFloat(sumTotal) + parseFloat(totalGalian);
 
             console.log(total);
             console.log(sumGrandTotal);
