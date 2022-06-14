@@ -198,9 +198,10 @@
             let nama_penangung_jawab = $('#nama_penangung_jawab').val();
             let lokasi = $('#lokasi').val();
             let total_pekerjaan = $('#total_pekerjaan').val();
+            let bulan = "{{ $bulan }}";
 
             let textMessage =
-                `PERUMDAM TIRTA KENCANA SAMARIDA\n\nKepada yang terhormat Bapak/Ibu di Samarinda, berikut detail tagihan ${namarekanan} :\n\nTotal Lokasi: ${lokasi}\n\Total Tagihan : ${total_pekerjaan}`;
+                `PERUMDAM TIRTA KENCANA SAMARIDA\n\nKepada yang terhormat Bapak/Ibu di Samarinda, berikut detail tagihan ${namarekanan} : \n\nBulan Tagihan : ${bulan} \nTotal Lokasi : ${lokasi}\nTotal Tagihan : ${total_pekerjaan}\n\nTTD\nASISTEN MANAGER PERENCANAAN`;
 
             window.open(`https://api.whatsapp.com/send?phone=62${no_hp}&text=` + encodeURI(
                 textMessage));

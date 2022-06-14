@@ -14,7 +14,6 @@
         #map {
             height: 45vh;
         }
-
     </style>
 
     {{-- <link rel="stylesheet" href="{{ asset('leaflet/leaflet.css') }}" /> --}}
@@ -78,24 +77,22 @@
                                         <label for="kategori_aduan" class=" form-control-label">Kategori Aduan</label>
                                     </div>
                                     <div class="form-radio">
-                                        <form>
-                                            <div class="radio radiofill radio-inline">
-                                                <label>
-                                                    <input type="radio" class="kategori_aduan" name="kategori_aduan"
-                                                        value="pipa dinas"
-                                                        checked="{{ $aduan->kategori_aduan == 'pipa dinas' ? 'checked' : '' }}">
-                                                    <i class="helper"></i>Pipa Dinas
-                                                </label>
-                                            </div>
-                                            <div class="radio radiofill radio-inline">
-                                                <label>
-                                                    <input type="radio" class="kategori_aduan" name="kategori_aduan"
-                                                        checked="{{ $aduan->kategori_aduan == 'pipa tersier / skunder' ? 'checked' : '' }}"
-                                                        value="pipa tersier / skunder">
-                                                    <i class="helper"></i>Pipa Tersier / Skunder
-                                                </label>
-                                            </div>
-                                        </form>
+                                        <div class="radio radiofill radio-inline">
+                                            <label>
+                                                <input type="radio" class="kategori_aduan" name="kategori_aduan"
+                                                    value="pipa dinas"
+                                                    checked="{{ $aduan->kategori_aduan == 'pipa dinas' ? 'checked' : '' }}">
+                                                <i class="helper"></i>Pipa Dinas
+                                            </label>
+                                        </div>
+                                        <div class="radio radiofill radio-inline">
+                                            <label>
+                                                <input type="radio" class="kategori_aduan" name="kategori_aduan"
+                                                    checked="{{ $aduan->kategori_aduan == 'pipa tersier / skunder' ? 'checked' : '' }}"
+                                                    value="pipa tersier / skunder">
+                                                <i class="helper"></i>Pipa Tersier / Skunder
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -164,13 +161,33 @@
                                 <div class="col-12">
                                     <div class="form-group">
                                         <div>
+                                            <label for="nama_pelanggan" class=" form-control-label">Nama Pelanggan</label>
+                                        </div>
+                                        <div>
+                                            <input type="text" name="nama_pelanggan" placeholder="Nama Pelanggan"
+                                                class="{{ $errors->has('nama_pelanggan') ? 'form-control is-invalid' : 'form-control' }}"
+                                                value="{{ $aduan->nama_pelanggan }}" id="">
+                                        </div>
+                                        @if ($errors->has('nama_pelanggan'))
+                                            Nama Pelanggan
+                                            <span class="text-danger">
+                                                <strong id="textkk">Nama Pelanggan!</strong>
+                                            </span>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <div>
                                             <label for="no_pelanggan" class=" form-control-label">Nomor Pelanggan / Nomor
                                                 Meter</label>
                                         </div>
                                         <div>
                                             <input type="text" name="no_pelanggan" placeholder="Nomor Pelanggan"
                                                 class="{{ $errors->has('no_pelanggan') ? 'form-control is-invalid' : 'form-control' }}"
-                                                value="{{ $aduan->no_pelanggan }}" required id="">
+                                                value="{{ $aduan->no_pelanggan }}" id="">
                                         </div>
                                         @if ($errors->has('no_pelanggan'))
                                             Nomor Pelanggan
@@ -217,8 +234,7 @@
                                         </div>
                                         <div>
                                             <textarea class="{{ $errors->has('keterangan') ? 'form-control is-invalid' : 'form-control' }}" name="keterangan"
-                                                id="keterangan" rows="10"
-                                                placeholder="Keterangan">{{ $aduan->keterangan }}</textarea>
+                                                id="keterangan" rows="10" placeholder="Keterangan">{{ $aduan->keterangan }}</textarea>
                                         </div>
                                         @if ($errors->has('keterangan'))
                                             Keterangan
@@ -260,8 +276,7 @@
                                     </div>
                                     <div>
                                         <textarea class="{{ $errors->has('detail_lokasi') ? 'form-control is-invalid' : 'form-control' }}"
-                                            name="detail_lokasi" id="detail_lokasi" rows="10"
-                                            required>{{ $aduan->detail_lokasi }}</textarea>
+                                            name="detail_lokasi" id="detail_lokasi" rows="10" required>{{ $aduan->detail_lokasi }}</textarea>
                                     </div>
                                     @if ($errors->has('detail_lokasi'))
                                         detail_lokasi
@@ -296,7 +311,8 @@
                                     <div id="search">
                                         <input type="text" name="addr" class="form-control" value="" id="addr"
                                             size="10" />
-                                        <button type="button" onclick="addr_search();">Cari</button>
+                                        <button type="button" class="btn btn-primary mb-3"
+                                            onclick="addr_search();">Cari</button>
                                         <div id="results" />
                                     </div>
                                     <div id="map"></div>

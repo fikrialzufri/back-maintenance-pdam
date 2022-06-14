@@ -17,6 +17,7 @@ class CreateAduanTable extends Migration
             $table->uuid('id')->primary();
             $table->string('no_ticket');
             $table->string('no_hp')->nullable();
+            $table->string('nama_pelanggan')->nullable();
             $table->string('no_pelanggan')->nullable();
             $table->string('detail_lokasi')->nullable();
             $table->enum('kategori_aduan', ['pipa dinas', 'pipa tersier / skunder'])->nullable();

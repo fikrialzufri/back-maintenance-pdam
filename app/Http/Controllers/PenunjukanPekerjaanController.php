@@ -1046,18 +1046,21 @@ class PenunjukanPekerjaanController extends Controller
         $query =  PelaksanaanPekerjaan::query();
         $query->where('rekanan_id', $rekanan->id);
 
-        $start = Carbon::now()->subMonths(2)->startOfMonth()->format('Y-m-d') . ' 00:00:01';
-        $end =  Carbon::now()->endOfMonth()->format('Y-m-d') . ' 23:59:59';
+        $start =  Carbon::now()->subMonths(2)->startOfMonth()->format('Y-m-d') . ' 00:00:01';
+        $end =   Carbon::now()->endOfMonth()->format('Y-m-d') . ' 23:59:59';
 
         $query->where('tagihan', 'tidak')->whereBetween(DB::raw('DATE(tanggal_selesai)'), array($start, $end));
         $penunjukan =  $query->get();
 
         $total_lokasi = $query->count();
 
+        $bulan = bulan_indonesia(Carbon::now()) . ' ' . date('Y');
+
         return view('penunjukan_pekerjaan.rekapan', compact(
             'title',
             'penunjukan',
             'total_lokasi',
+            'bulan',
             'rekanan'
         ));
     }

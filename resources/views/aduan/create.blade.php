@@ -162,14 +162,14 @@
                                             <label for="nama_pelanggan" class=" form-control-label">Nama Pelanggan</label>
                                         </div>
                                         <div>
-                                            <input type="text" name="nama_pelanggan" placeholder="Nomor Pelanggan"
+                                            <input type="text" name="nama_pelanggan" placeholder="Nama Pelanggan"
                                                 class="{{ $errors->has('nama_pelanggan') ? 'form-control is-invalid' : 'form-control' }}"
-                                                value="{{ old('nama_pelanggan') }}" required id="">
+                                                value="{{ old('nama_pelanggan') }}" id="">
                                         </div>
                                         @if ($errors->has('nama_pelanggan'))
-                                            Nomor Pelanggan
+                                            Nama Pelanggan
                                             <span class="text-danger">
-                                                <strong id="textkk">Nomor Pelanggan!</strong>
+                                                <strong id="textkk">Nama Pelanggan!</strong>
                                             </span>
                                         @endif
                                     </div>
@@ -185,7 +185,7 @@
                                         <div>
                                             <input type="text" name="no_pelanggan" placeholder="Nomor Pelanggan"
                                                 class="{{ $errors->has('no_pelanggan') ? 'form-control is-invalid' : 'form-control' }}"
-                                                value="{{ old('no_pelanggan') }}" required id="">
+                                                value="{{ old('no_pelanggan') }}" id="">
                                         </div>
                                         @if ($errors->has('no_pelanggan'))
                                             Nomor Pelanggan

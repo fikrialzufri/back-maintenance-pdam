@@ -14,6 +14,8 @@ use Carbon\Carbon;
 
 class AduanController extends Controller
 {
+
+    private $endpoint;
     public function __construct()
     {
         $this->route = 'aduan';
@@ -21,6 +23,20 @@ class AduanController extends Controller
         $this->middleware('permission:create-' . $this->route, ['only' => ['create', 'store']]);
         $this->middleware('permission:edit-' . $this->route, ['only' => ['edit', 'update']]);
         $this->middleware('permission:delete-' . $this->route, ['only' => ['delete']]);
+
+        $this->endpoint = env('CUSTOMER_ENDPOINT');
+    }
+
+    public function headers()
+    {
+        return [
+            'Authorization' => request()->headers->get('Authorization')
+        ];
+    }
+
+    public function request()
+    {
+        return \Http::withHeaders($this->headers())->accept('application/json');
     }
 
     public function index()
@@ -67,6 +83,8 @@ class AduanController extends Controller
         $action = route('aduan.store');
 
         $jenis_aduan = JenisAduan::orderBy('nama')->get();
+
+        // return $listPelanggan = $this->request()->get("{$this->endpoint}")->json();
         return view('aduan.create', compact(
             'title',
             'route',
@@ -125,6 +143,7 @@ class AduanController extends Controller
             $aduan->no_pelanggan = $request->no_pelanggan;
             $aduan->detail_lokasi = $request->detail_lokasi;
             $aduan->no_hp = $request->no_hp;
+            $aduan->nama_pelanggan = $request->nama_pelanggan;
             $aduan->mps = $request->mps;
             $aduan->kategori_aduan = $request->kategori_aduan;
             $aduan->atas_nama = $request->atas_nama;
@@ -186,7 +205,6 @@ class AduanController extends Controller
             'no_ticket' => 'required|string',
             'mps' => 'required|string',
             'sumber_informasi' => 'required|string',
-            'keterangan' => 'required|string',
             'lokasi' => 'required|string',
             'lat_long' => 'required|string',
         ], $messages);
@@ -195,6 +213,7 @@ class AduanController extends Controller
         $aduan->no_ticket = $request->no_ticket;
         $aduan->mps = $request->mps;
         $aduan->detail_lokasi = $request->detail_lokasi;
+        $aduan->nama_pelanggan = $request->nama_pelanggan;
         $aduan->no_pelanggan = $request->no_pelanggan;
         $aduan->no_hp = $request->no_hp;
         $aduan->atas_nama = $request->atas_nama;

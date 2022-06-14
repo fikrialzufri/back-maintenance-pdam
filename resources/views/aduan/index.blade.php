@@ -57,7 +57,6 @@
                                         <td>{{ $item->lokasi }}</td>
                                         <td>{{ ucfirst($item->status_aduan) }}</td>
                                         @if (auth()->user()->hasRole('admin-distribusi'))
-                                            {
                                             @if ($item->status == 'draft')
                                                 @canany(['create-aduan', 'delete-aduan'])
                                                     <td class="text-center">
