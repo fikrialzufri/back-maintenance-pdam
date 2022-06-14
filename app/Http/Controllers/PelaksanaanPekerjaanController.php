@@ -185,8 +185,8 @@ class PelaksanaanPekerjaanController extends Controller
     public function hapuspekerjaan(Request $request)
     {
         try {
-            $item_id = $request->item;
-            $dataPelaksanaanAdjust = PelaksanaanAdjust::find($item_id);
+            $pekerjaan = $request->pekerjaan;
+            $dataPelaksanaanAdjust = PelaksanaanAdjust::find($pekerjaan);
             if ($dataPelaksanaanAdjust) {
 
                 $dataPelaksanaanAdjust->delete();
@@ -258,6 +258,7 @@ class PelaksanaanPekerjaanController extends Controller
             $dataPelaksanaanAdjust->save();
 
             $result = [
+                'id' => $dataPelaksanaanAdjust->id,
                 'jumlah' => $dataPelaksanaanAdjust->qty,
                 'total' => $dataPelaksanaanAdjust->total,
                 'keterangan' => $dataPelaksanaanAdjust->keterangan,

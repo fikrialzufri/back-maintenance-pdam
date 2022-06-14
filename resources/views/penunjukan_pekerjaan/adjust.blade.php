@@ -474,14 +474,18 @@
                                                         <td>
                                                             <button class="btn btn-sm btn-warning text-light btn-edit"
                                                                 data-pekerjaanutama="{{ $pekerjaanUtama->id }}"
-                                                                data-modul="pekerjaan" data-item="{{ $pekerjaan->id }}">
+                                                                data-modul="pekerjaan"
+                                                                data-item="{{ $pekerjaan->item_id }}"
+                                                                data-pekerjaan="{{ $pekerjaan->id }}">
                                                                 <i class="nav-icon fas fa-edit"></i>
                                                                 Ubah
                                                             </button>
                                                             <button type="button"
                                                                 class="btn btn-danger btn-xs text-center btn-hapus"
                                                                 data-pekerjaanutama="{{ $pekerjaanUtama->id }}"
-                                                                data-modul="pekerjaan" data-item="{{ $pekerjaan->id }}">
+                                                                data-modul="pekerjaan"
+                                                                data-item="{{ $pekerjaan->item_id }}"
+                                                                data-pekerjaan="{{ $pekerjaan->id }}">
                                                                 <i class="fa fa-trash"></i>
                                                                 Hapus
                                                             </button>
@@ -771,85 +775,25 @@
 
         }
 
-        $(document).on("click", ".btn-galian-edit", function(e) {
-            let galian_id = $(this).data('galian');
-            let getpanjangan = $('#panjang_value_' + galian_id).val();
-            let getlebar = $('#lebar_value_' + galian_id).val();
-            let getdalam = $('#dalam_value_' + galian_id).val();
-            let getketerangan = $('#keterangan_value_' + galian_id).val();
-
-
-            let lebar = $('#lebar_galian').val(getlebar);
-            let dalam = $('#dalam_galian').val(getdalam);
-            let panjang = $('#panjang_galian').val(getpanjangan);
-            let keterangan = $('#keterangan_galian').val(getketerangan);
-
-            $('#cmbGalian').val(galian_id).trigger('change');
-        });
-
-        $(document).on("click", ".btn-galian-hapus", function(e) {
-            let content = '';
-            let modul = 'galian';
-            let item_id = $(this).data('galian');
-
-            let item = $('#listgalian_' + item_id).length;
-            if (item > 0) {
-                $('#listgalian_' + item_id).remove();
-
-                $('#tableGalian').append(content);
-            }
-
-            let n = 1;
-            $('.nomor_' + modul).each(function(index, item) {
-                let number = n++;
-                $(item).text(number);
-                $(this).attr('data-index', number);
-            });
-
-
-            $.when($.ajax({
-                type: 'POST',
-                url: "{{ route('pelaksanaan-pekerjaan.galian.hapus') }}",
-                data: {
-                    "_token": "{{ csrf_token() }}",
-                    id,
-                    item_id,
-                },
-                success: function(data) {
-                    toast('success hapus ' + modul)
-                    totalHarga(modul);
-                },
-                error: function(data) {
-
-                    Swal.fire({
-                        title: 'Oops...',
-                        text: "gagal Mengahapus " +
-                            modul,
-                        footer: '<a href="">terdapat data yang kosong</a>'
-                    })
-                }
-            })).then(function(data, textStatus, jqXHR) {
-                totalHarga(modul)
-            });
-        });
 
 
         $(document).on("click", ".btn-hapus", function(e) {
             let id = $(this).data('pekerjaanutama');
             let modul = $(this).data('modul');
             let item = $(this).data('item');
+            let pekerjaan = $(this).data('pekerjaan');
             let content = '';
             let modulLowcasse = capitalizeFirstLetter(modul);
-            let itemLength = $('#list' + modulLowcasse + '_' + item).length;
-            if (itemLength > 0) {
-                $('#list' + modulLowcasse + '_' + item).remove();
+            let pekerjaanLength = $('#list' + modulLowcasse + '_' + pekerjaan).length;
+            if (pekerjaanLength > 0) {
+                $('#list' + modulLowcasse + '_' + pekerjaan).remove();
 
                 $('#table' + modulLowcasse).append(content);
             }
             let n = 1;
-            $('.nomor_' + modul).each(function(index, item) {
+            $('.nomor_' + modul).each(function(index, pekerjaan) {
                 let number = n++;
-                $(item).text(number);
+                $(pekerjaan).text(number);
                 $(this).attr('data-index', number);
             });
             $.when($.ajax({
@@ -859,6 +803,7 @@
                     "_token": "{{ csrf_token() }}",
                     id,
                     modul,
+                    pekerjaan,
                     item,
                 },
                 success: function(data) {
@@ -886,10 +831,11 @@
             let id = $(this).data('pekerjaanutama');
             let modul = $(this).data('modul');
             let item = $(this).data('item');
+            let pekerjaan = $(this).data('pekerjaan');
             let modulLowcasse = capitalizeFirstLetter(modul);
             $('#cmb' + modulLowcasse).val(item).trigger('change');
-            let getjumlah = $('#jumlah_' + modul + '_value_' + item).val();
-            let getketerangan = $('#keterangan_' + modul + '_value_' + item).val();
+            let getjumlah = $('#jumlah_' + modul + '_value_' + pekerjaan).val();
+            let getketerangan = $('#keterangan_' + modul + '_value_' + pekerjaan).val();
             $('#jumlah_' + modul + '_tampil').val(getjumlah);
             $('#jumlah_' + modul).val(getjumlah);
             $('#keterangan_' + modul).val(getketerangan);
@@ -970,7 +916,15 @@
                 $('#cmbTransportasi').parent().removeClass('is-invalid')
             });
 
-            function elementPekerjaan(id, nomor, pekerjaan, jumlah, total, keterangan, modul, perencanaan) {
+            function elementPekerjaan(id,
+                nomor,
+                item_id,
+                jumlah,
+                pekerjaan,
+                keterangan,
+                perencanaan,
+                total,
+                modul) {
                 let modulLowcasse = capitalizeFirstLetter(modul);
                 let pekerjaanUtama = $('#idPekerjaan').val();
 
@@ -1002,14 +956,14 @@
                     <td>
                             <button class="btn btn-sm btn-warning text-light btn-edit"
                                 data-pekerjaanutama="${pekerjaanUtama}"
-                                data-modul="${modul}" data-item="${id}">
+                                data-modul="${modul}" data-pekerjaan="${id}" data-item="${item_id}">
                                 <i class="nav-icon fas fa-edit"></i>
                                 Ubah
                             </button>
                             <button type="button"
                                 class="btn btn-danger btn-xs text-center btn-hapus"
                                 data-pekerjaanutama="${pekerjaanUtama}"
-                                data-modul="${modul}" data-item="${id}">
+                                data-modul="${modul}" data-pekerjaan="${id}" data-item="${item_id}">
                                 <i class="fa fa-trash"></i>
                                 Hapus
                             </button>
@@ -1057,40 +1011,40 @@
                                 perencanaan,
                                 total
                             } = data.data;
-
-
-                            let lengthPekerjaan = $('#list' + modulLowcasse + '_' + item_id)
+                            let lengthPekerjaan = $('#list' + modulLowcasse + '_' + id)
                                 .length;
+                            console.log(lengthPekerjaan);
 
                             let tableCount = $('#table' + modulLowcasse + '  > tbody > tr')
                                 .length;
                             let nomor = tableCount + 1;
 
                             if (lengthPekerjaan !== 0) {
-                                $('#jumlah_' + modul + '_tampil_' + item_id).text(jumlah);
+                                $('#jumlah_' + modul + '_tampil_' + id).text(jumlah);
 
-                                $('#total_' + modul + '_tampil_' + item_id).text(formatRupiah(
+                                $('#total_' + modul + '_tampil_' + id).text(formatRupiah(
                                     Math
                                     .floor(total).toString(), 'Rp. '));
-                                $('#total_' + modul + '_value_' + item_id).val(total);
+                                $('#total_' + modul + '_value_' + id).val(total);
 
-                                $('#keterangan_' + modul + '_' + item_id).text(keterangan);
+                                $('#keterangan_' + modul + '_' + id).text(keterangan);
 
-                                $('#jumlah_' + modul + '_value_' + item_id).val(jumlah);
-                                $('#keterangan_' + modul + '_value_' + item_id).val(keterangan);
+                                $('#jumlah_' + modul + '_value_' + id).val(jumlah);
+                                $('#keterangan_' + modul + '_value_' + id).val(keterangan);
 
                                 toast('success mengubah ' + modul + '')
                             } else {
 
                                 let content = elementPekerjaan(
-                                    item_id,
+                                    id,
                                     nomor,
-                                    pekerjaan,
+                                    item_id,
                                     jumlah,
-                                    total,
+                                    pekerjaan,
                                     keterangan,
-                                    modul,
-                                    perencanaan
+                                    perencanaan,
+                                    total,
+                                    modul
                                 );
                                 $('#table' + modulLowcasse).append(content);
                                 toast('success menambah ' + modulLowcasse)
