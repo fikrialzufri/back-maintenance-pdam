@@ -35,6 +35,7 @@ class PekerjaanDetailResource extends JsonResource
             'jenis_aduan' =>  $this->jenis_aduan,
             'atas_nama' =>  $this->atas_nama,
             'no_hp' =>  $this->no_hp,
+            'nama_pelanggan' =>  $this->nama_pelanggan,
             'no_pelanggan' =>  $this->no_pelanggan,
             'item_pekerjaan' =>  $this->list_pekerjaan,
             'item_bahan' =>  $this->list_bahan,
