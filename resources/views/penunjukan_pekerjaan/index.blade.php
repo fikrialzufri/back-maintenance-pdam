@@ -89,7 +89,8 @@
                         <table class="table table-bordered table-responsive" width="100%">
                             <thead>
                                 <tr>
-                                    <th>#</th>
+                                    <th class="text-center" width="10%">Aksi</th>
+                                    <th>No.</th>
                                     <th>Nomor SPK</th>
                                     <th>Nomor Aduan</th>
                                     <th>Nomor Tiket</th>
@@ -101,7 +102,6 @@
                                     <th>Admin</th>
                                     <th width="20%">Lokasi</th>
                                     <th>Status</th>
-                                    <th class="text-center" width="10%">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -114,20 +114,6 @@
                                     @endphp
                                     <tr
                                         class="{{ $item->keterangan_barang != null && $item->id_rekanan != '' ? 'bg-danger' : '' }} ">
-                                        <td>{{ $nomor + ($penunjukan->CurrentPage() - 1) * $penunjukan->PerPage() }}
-                                        </td>
-                                        <td>{{ $item->no_spk }}</td>
-                                        <td>{{ $item->no_aduan }}</td>
-                                        <td>{{ $item->no_ticket }}</td>
-                                        <td>{{ $item->rekanan }}</td>
-                                        <td>{{ ucfirst($item->kategori_aduan) }}</td>
-                                        <td>{{ tanggal_indonesia($item->created_at) }}</td>
-                                        <td>{{ $item->tanggal_pekerjaan }}</td>
-                                        <td>{{ $item->atas_nama }}</td>
-                                        <td>{{ ucfirst($item->user) }}</td>
-                                        <td>{{ $item->lokasi }}</td>
-                                        <td>{{ ucfirst($item->status_aduan) }}</td>
-
                                         <td class="text-center">
                                             <a href="{{ route('penunjukan_pekerjaan.show', $item->slug) }}"
                                                 class="btn btn-sm {{ $item->btn }}   text-light m-1">
@@ -169,6 +155,21 @@
                                                 @endif
                                             @endif
                                         </td>
+                                        <td>{{ $nomor + ($penunjukan->CurrentPage() - 1) * $penunjukan->PerPage() }}
+                                        </td>
+                                        <td>{{ $item->no_spk }}</td>
+                                        <td>{{ $item->no_aduan }}</td>
+                                        <td>{{ $item->no_ticket }}</td>
+                                        <td>{{ $item->rekanan }}</td>
+                                        <td>{{ ucfirst($item->kategori_aduan) }}</td>
+                                        <td>{{ tanggal_indonesia($item->created_at) }}</td>
+                                        <td>{{ $item->tanggal_pekerjaan }}</td>
+                                        <td>{{ $item->atas_nama }}</td>
+                                        <td>{{ ucfirst($item->user) }}</td>
+                                        <td>{{ $item->lokasi }}</td>
+                                        <td>{{ ucfirst($item->status_aduan) }}</td>
+
+
                                     </tr>
                                 @empty
                                     <tr>
