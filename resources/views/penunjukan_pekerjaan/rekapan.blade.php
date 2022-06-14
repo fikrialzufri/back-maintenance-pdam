@@ -205,7 +205,6 @@
 
             window.open(`https://api.whatsapp.com/send?phone=62${no_hp}&text=` + encodeURI(
                 textMessage));
-            console.log(dataRekanan);
         });
     </script>
 @endpush

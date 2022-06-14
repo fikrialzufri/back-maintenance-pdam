@@ -120,7 +120,6 @@
     <script src="{{ asset('js/dashboard-charts.js') }}"></script>
     <script>
         let grafikperbulan = @json($aduanPerbulanGrafik);
-        console.log(grafikperbulan);
 
         var chart = AmCharts.makeChart("line_chart", {
             "type": "serial",

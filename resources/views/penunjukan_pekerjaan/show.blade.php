@@ -2196,7 +2196,6 @@
                             keterangan
                         },
                         success: function(data) {
-                            console.log(data);
                             const {
                                 id,
                                 item_id,
@@ -2439,7 +2438,6 @@
                             harga,
                         },
                         success: function(data) {
-                            console.log(data);
 
                             const {
                                 id,

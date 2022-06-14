@@ -762,9 +762,6 @@
             let total = $('#total_harga_value').val();
             sumGrandTotal = parseFloat(total) + parseFloat(sumTotal) + parseFloat(totalGalian);
 
-            console.log(total);
-            console.log(sumGrandTotal);
-
             $('#total_semua_pekerjaan_tampil').text(formatRupiah(Math.floor(
                 sumGrandTotal).toString(), 'Rp. '));
             $('#total_tagihan_pekerjaan').text(formatRupiah(Math.floor(
@@ -865,11 +862,11 @@
                     item,
                 },
                 success: function(data) {
-                    console.log(data);
+
                     toast('success hapus ' + modul)
                 },
                 error: function(data) {
-                    console.log(data);
+
                     Swal.fire({
                         title: 'Oops...',
                         text: "gagal Mengahapus " +
@@ -878,7 +875,7 @@
                     })
                 }
             })).then(function(data, textStatus, jqXHR) {
-                console.log(data);
+
                 totalHarga(modul)
                 $('#cmb' + modulLowcasse).val(null).trigger('change');
                 $('#jumlah_' + modul).val('');
@@ -974,7 +971,6 @@
             });
 
             function elementPekerjaan(id, nomor, pekerjaan, jumlah, total, keterangan, modul, perencanaan) {
-                console.log(id);
                 let modulLowcasse = capitalizeFirstLetter(modul);
                 let pekerjaanUtama = $('#idPekerjaan').val();
 
@@ -1051,7 +1047,7 @@
                             keterangan
                         },
                         success: function(data) {
-                            console.log(data);
+
                             const {
                                 id,
                                 item_id,
