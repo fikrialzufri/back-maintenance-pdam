@@ -1679,6 +1679,30 @@
                             <div class="col-12">
                                 <div class="form-group">
                                     <div>
+                                        <label for="nama_pelanggan" class=" form-control-label">Nama Pelanggan</label>
+                                    </div>
+                                    <div>
+                                        <strong>{{ $aduan->nama_pelanggan }}</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <div>
+                                        <label for="no_pelanggan" class=" form-control-label">Nomor Pelanggan</label>
+                                    </div>
+                                    <div>
+                                        <strong>{{ $aduan->no_pelanggan }}</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <div>
                                         <label for="jenis_aduan_id" class=" form-control-label">Jenis Aduan</label>
                                     </div>
                                     <div>
