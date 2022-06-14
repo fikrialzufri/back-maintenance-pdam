@@ -322,9 +322,7 @@ class TagihanController extends Controller
         if (auth()->user()->hasRole('rekanan')) {
             $perencaan = false;
         }
-        if (auth()->user()->hasRole('staf-pengawas')) {
-            $perencaan = false;
-        }
+
         if (auth()->user()->hasRole('superadmin')) {
             $perencaan = true;
         }
