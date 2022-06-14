@@ -100,7 +100,6 @@
             vertical-align: middle;
             top: 50%;
         }
-
     </style>
 @endpush
 @push('script')
@@ -127,7 +126,7 @@
             "type": "serial",
             "theme": "light",
             "dataDateFormat": "YYYY-MM-DD",
-            "precision": 2,
+            "precision": 0,
             "valueAxes": [{
                 "id": "v1",
                 "position": "left",
