@@ -184,10 +184,9 @@ class PelaksanaanPekerjaanController extends Controller
     }
     public function hapuspekerjaan(Request $request)
     {
-        $id = $request->id;
-        $item_id = $request->item_id;
         try {
-            $dataPelaksanaanAdjust = PelaksanaanAdjust::where('item_id', $item_id)->where('pelaksanaan_pekerjaan_id', $id)->first();
+            $item_id = $request->item;
+            $dataPelaksanaanAdjust = PelaksanaanAdjust::find($item_id);
             if ($dataPelaksanaanAdjust) {
 
                 $dataPelaksanaanAdjust->delete();

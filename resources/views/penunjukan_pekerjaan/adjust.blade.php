@@ -23,7 +23,6 @@
         .needs-validation~span>.select2-dropdown {
             border-color: red !important;
         }
-
     </style>
 @endpush
 
@@ -242,7 +241,14 @@
                                                 <th>{{ $pekerjaanUtama->hasItem->sum('pivot.qty') }}</th>
                                                 @if ($perencaan === true)
                                                     <th></th>
-                                                    <th>Rp. {{ format_uang($pekerjaanUtama->total_harga) }}
+                                                    <th>
+                                                        <span id="total_harga_tampil">
+                                                            Rp.
+                                                            {{ format_uang($pekerjaanUtama->total_harga) }}
+                                                        </span>
+                                                        <input type="hidden" name="total_harga_value"
+                                                            value="{{ $pekerjaanUtama->total_harga }}"
+                                                            id="total_harga_value">
                                                     </th>
                                                 @endif
                                             </tr>
@@ -315,8 +321,15 @@
                                                 <th @if ($perencaan === true) colspan="6" @else colspan="5" @endif>
                                                     Grand Total
                                                 </th>
-                                                <th>Rp.
-                                                    {{ format_uang($pekerjaanUtama->total_pekerjaan) }}
+                                                <th>
+                                                    <span id="total_semua_pekerjaan_tampil">
+                                                        Rp.
+                                                        {{ format_uang($pekerjaanUtama->total_pekerjaan) }}
+                                                    </span>
+                                                    <input type="hidden" name="total_semua_pekerjaan_value"
+                                                        value="{{ $pekerjaanUtama->total_pekerjaan }}"
+                                                        id="total_semua_pekerjaan_value">
+
                                                 </th>
                                             </tr>
                                         </tfoot>
@@ -327,7 +340,7 @@
                             </div>
                             <div class="col-md-12 mt-3">
                                 <div class="mb-4">
-                                    <h6>Pekerjaan Tambahan</h6>
+                                    <h6>Daftar Koreksi Pekerjaan</h6>
                                 </div>
 
                                 @if ($pekerjaanUtama->tagihan == 'tidak')
@@ -732,27 +745,25 @@
 
         function totalHarga(modul) {
             let sumTotal = 0;
+            let sumGrandTotal = 0;
 
             $('.total_' + modul).each(function() {
                 sumTotal += parseFloat($(this)
                     .val());
             });
 
-            let sumGrandTotal = 0;
+            let total = $('#total_harga_value').val();
+            sumGrandTotal = parseFloat(total) + parseFloat(sumTotal);
 
-            $('#grand_total_' + modul + '_value').val(sumTotal);
-            $('#grand_total_' + modul + '_tampil').text(formatRupiah(Math.floor(
-                sumTotal).toString(), 'Rp. '));
+            console.log(total);
+            console.log(sumGrandTotal);
 
-            // $('#total_tagihan_pekerjaan').val(sumTotal);
-
-            $('.total_tagihan').each(function() {
-                sumGrandTotal += parseFloat($(this)
-                    .val());
-            });
+            $('#total_semua_pekerjaan_tampil').text(formatRupiah(Math.floor(
+                sumGrandTotal).toString(), 'Rp. '));
             $('#total_tagihan_pekerjaan').text(formatRupiah(Math.floor(
                 sumGrandTotal).toString(), 'Rp. '));
 
+            $('#total_semua_pekerjaan_value').val(sumGrandTotal);
 
         }
 
@@ -819,72 +830,66 @@
         });
 
 
-        function tombol() {
+        $(document).on("click", ".btn-hapus", function(e) {
+            let id = $(this).data('pekerjaanutama');
+            let modul = $(this).data('modul');
+            let item = $(this).data('item');
+            let content = '';
+            let modulLowcasse = capitalizeFirstLetter(modul);
+            let itemLength = $('#list' + modulLowcasse + '_' + item).length;
+            if (itemLength > 0) {
+                $('#list' + modulLowcasse + '_' + item).remove();
 
-            $(document).on("click", ".btn-hapus", function(e) {
-                let id = $(this).data('pekerjaanutama');
-                let modul = $(this).data('modul');
-                let item = $(this).data('item');
-                let content = '';
-                let modulLowcasse = capitalizeFirstLetter(modul);
-                let itemLength = $('#list' + modulLowcasse + '_' + item).length;
-                if (itemLength > 0) {
-                    $('#list' + modulLowcasse + '_' + item).remove();
-
-                    $('#table' + modulLowcasse).append(content);
-                }
-                let n = 1;
-                $('.nomor_' + modul).each(function(index, item) {
-                    let number = n++;
-                    $(item).text(number);
-                    $(this).attr('data-index', number);
-                });
-                $.when($.ajax({
-                    type: 'POST',
-                    url: "{{ route('pelaksanaan-pekerjaan.hapus.pekerjaan') }}",
-                    data: {
-                        "_token": "{{ csrf_token() }}",
-                        id,
-                        modul,
-                        item,
-                    },
-                    success: function(data) {
-                        console.log(data);
-                        toast('success hapus ' + modul)
-                    },
-                    error: function(data) {
-                        console.log(data);
-                        Swal.fire({
-                            title: 'Oops...',
-                            text: "gagal Mengahapus " +
-                                modul,
-                            footer: '<a href="">terdapat data yang kosong</a>'
-                        })
-                    }
-                })).then(function(data, textStatus, jqXHR) {
+                $('#table' + modulLowcasse).append(content);
+            }
+            let n = 1;
+            $('.nomor_' + modul).each(function(index, item) {
+                let number = n++;
+                $(item).text(number);
+                $(this).attr('data-index', number);
+            });
+            $.when($.ajax({
+                type: 'POST',
+                url: "{{ route('pelaksanaan-pekerjaan.hapus.pekerjaan') }}",
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    id,
+                    modul,
+                    item,
+                },
+                success: function(data) {
                     console.log(data);
-                    totalHarga(modul)
-                    $('#cmb' + modulLowcasse).val(null).trigger('change');
-                    $('#jumlah_' + modul).val('');
-                });
-
+                    toast('success hapus ' + modul)
+                },
+                error: function(data) {
+                    console.log(data);
+                    Swal.fire({
+                        title: 'Oops...',
+                        text: "gagal Mengahapus " +
+                            modul,
+                        footer: '<a href="">terdapat data yang kosong</a>'
+                    })
+                }
+            })).then(function(data, textStatus, jqXHR) {
+                console.log(data);
+                totalHarga(modul)
+                $('#cmb' + modulLowcasse).val(null).trigger('change');
+                $('#jumlah_' + modul).val('');
             });
-            $(document).on("click", ".btn-edit", function(e) {
-                let id = $(this).data('pekerjaanutama');
-                let modul = $(this).data('modul');
-                let item = $(this).data('item');
-                let modulLowcasse = capitalizeFirstLetter(modul);
-                $('#cmb' + modulLowcasse).val(item).trigger('change');
-                let getjumlah = $('#jumlah_' + modul + '_value_' + item).val();
-                let getketerangan = $('#keterangan_' + modul + '_value_' + item).val();
-                $('#jumlah_' + modul + '_tampil').val(getjumlah);
-                $('#jumlah_' + modul).val(getjumlah);
-                $('#keterangan_' + modul).val(getketerangan);
-            });
-        }
 
-        tombol();
-
+        });
+        $(document).on("click", ".btn-edit", function(e) {
+            let id = $(this).data('pekerjaanutama');
+            let modul = $(this).data('modul');
+            let item = $(this).data('item');
+            let modulLowcasse = capitalizeFirstLetter(modul);
+            $('#cmb' + modulLowcasse).val(item).trigger('change');
+            let getjumlah = $('#jumlah_' + modul + '_value_' + item).val();
+            let getketerangan = $('#keterangan_' + modul + '_value_' + item).val();
+            $('#jumlah_' + modul + '_tampil').val(getjumlah);
+            $('#jumlah_' + modul).val(getjumlah);
+            $('#keterangan_' + modul).val(getketerangan);
+        });
 
         // -- end galian
         $(document).ready(function() {
@@ -962,6 +967,7 @@
             });
 
             function elementPekerjaan(id, nomor, pekerjaan, jumlah, total, keterangan, modul, perencanaan) {
+                console.log(id);
                 let modulLowcasse = capitalizeFirstLetter(modul);
                 let pekerjaanUtama = $('#idPekerjaan').val();
 
@@ -1183,185 +1189,6 @@
                 } // prevent if already dot
                 $(this).removeClass("is-invalid");
             })
-
-            function elementGalian(id, nomor, pekerjaan, lebar, panjang, dalam, total, keterangan, item_id,
-                perencanaan) {
-
-                let elementTotal = '';
-
-                if (perencanaan === 'true') {
-                    elementTotal = `<td>
-                        <span id="total_galian_tampil_${item_id}">
-                            ${formatRupiah(Math
-                                        .floor(total).toString(), 'Rp. ')}
-                        </span>
-                        <input type="hidden" id="total_galian_value_${item_id}"
-                            name="total_galian" value="${total}" class="total_galian">
-                    </td>`;
-                }
-
-                return `<tr id="listgalian_${item_id}" class="list_table_galian">
-                    <td class="text-center nomor_galian" data-index="${nomor}">${nomor}
-                    </td>
-                    <td>${pekerjaan}</td>
-                    <td>
-                        <span id="panjang_galian_${item_id}">${panjang} M</span>
-                        <input type="hidden" name="panjang" id="panjang_value_${item_id}" value="${panjang}">
-                    </td>
-                    <td>
-                        <span id="lebar_galian_${item_id}">${lebar} M</span>
-                        <input type="hidden" name="lebar" id="lebar_value_${item_id}" value="${lebar}">
-                    </td>
-                    <td>
-                        <span id="dalam_galian_${item_id}">${dalam} M</span>
-                        <input type="hidden" name="dalam" id="dalam_value_${item_id}"  value="${dalam}">
-                    </td>
-                    ${elementTotal}
-                    <td>
-                        <span id="keterangan_galian_${item_id}">${keterangan === null ? '' : keterangan}</span>
-                        <input type="hidden" name="keterangan" id="keterangan_value_${item_id}" value="${keterangan === null ? '' : keterangan}">
-                    </td>
-                    <td>
-                        <button class="btn btn-sm btn-warning text-light btn-galian-edit"
-                            data-galian="${item_id}"
-                            >
-                            <i class="nav-icon fas fa-edit"></i>
-                            Ubah
-                        </button>
-                        <button type="button"
-                            class="btn btn-danger btn-xs text-center btn-galian-hapus"
-                            data-galian="${item_id}">
-                            <i class="fa fa-trash"></i>
-                            Hapus
-                        </button>
-                    </td>
-                </tr>`;
-
-            }
-            $("#cmbGalian").on("change", function(e) {
-                $('#cmbGalian').parent().removeClass('is-invalid')
-            });
-
-            $('#formGalian').on('submit', function(e) {
-                e.preventDefault();
-                let item = $('#cmbGalian').val();
-                let lebar = $('#lebar_galian').val();
-                let dalam = $('#dalam_galian').val();
-                let panjang = $('#panjang_galian').val();
-                let keterangan = $('#keterangan_galian').val();
-                let harga = $("input[name='harga_galian']:checked").val();
-                $('.galianTidakAda').remove();
-                if (item === "") {
-                    $('#cmbGalian').parent().addClass('is-invalid')
-                }
-                if (panjang === "") {
-                    $('#panjang_galian').addClass("is-invalid");
-                }
-                if (lebar === "") {
-                    $('#lebar_galian').addClass("is-invalid");
-                }
-                if (dalam === "") {
-                    $('#dalam_galian').addClass("is-invalid");
-                }
-
-                if (item !== "" && panjang !== "" && lebar !== "" && dalam !== "") {
-
-
-                    $.when($.ajax({
-                        type: 'POST',
-                        url: "{{ route('pelaksanaan-pekerjaan.galian') }}",
-                        data: {
-                            "_token": "{{ csrf_token() }}",
-                            id,
-                            item,
-                            lebar,
-                            dalam,
-                            panjang,
-                            keterangan,
-                            harga,
-                        },
-                        success: function(data) {
-                            console.log(data);
-
-                            const {
-                                id,
-                                item_id,
-                                pekerjaan,
-                                panjang,
-                                lebar,
-                                dalam,
-                                total,
-                                perencanaan,
-                                keterangan
-                            } = data.data;
-
-                            let lengthGalian = $('#listgalian_' + item).length;
-                            let tableCount = $('#tableGalian  > tbody > tr').length;
-                            let nomor = tableCount + 1;
-
-                            $('#cmbGalian').val('');
-                            $('#lebar_galian').val('');
-                            $('#dalam_galian').val('');
-                            $('#panjang_galian').val('');
-                            $('#keterangan_galian').val('');
-
-                            if (lengthGalian !== 0) {
-                                $('#panjang_galian_' + item_id).text(panjang + ' M');
-
-                                $('#lebar_galian_' + item_id).text(lebar + ' M');
-                                $('#dalam_galian_' + item_id).text(dalam + ' M');
-
-                                $('#total_galian_tampil_' + item_id).text(
-                                    formatRupiah(Math
-                                        .floor(total).toString(), 'Rp. '));
-
-                                $('#total_galian_value_' + item_id).val(total);
-
-                                $('#keterangan_galian_' + item_id).text(keterangan);
-
-                                $('#panjang_value_' + item_id).val(panjang);
-                                $('#lebar_value_' + item_id).val(lebar);
-                                $('#dalam_value_' + item_id).val(dalam);
-                                $('#keterangan_value_' + item_id).val(keterangan);
-                                toast('success mengubah galian')
-                            } else {
-
-
-                                let content = elementGalian(
-                                    id, nomor, pekerjaan, lebar, panjang, dalam,
-                                    total, keterangan === null ? '' : keterangan,
-                                    item_id, perencanaan);
-
-                                $('#tableGalian').append(content);
-                                toast('success mengubah galian')
-
-                            }
-                            $("#cmbGalian").select2("val", "");
-                            $('#cmbGalian').val(null).trigger('change');
-
-                        },
-                        error: function(data) {
-                            Swal.fire({
-                                title: 'Oops...',
-                                text: "Isi dengan lengkap",
-                                footer: '<a href="">terdapat data yang kosong</a>'
-                            })
-                        }
-                    })).then(function(data, textStatus, jqXHR) {
-                        totalHarga('galian')
-
-
-                    });
-                } else {
-
-                    Swal.fire({
-                        title: 'Oops...',
-                        text: "Isi dengan lengkap",
-                        footer: '<a href="">terdapat data yang kosong</a>'
-                    })
-
-                }
-            });
 
             // --- End Galian
         });
