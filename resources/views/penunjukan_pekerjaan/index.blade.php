@@ -146,6 +146,7 @@
                                                         <i class="nav-icon fa fa-search"></i> Detail
                                                     @endif
                                                 @elseif (auth()->user()->hasRole('asisten-manajer-distribusi'))
+                                                    asisten-manajer-distribusi
                                                     @if ($item->status_aduan == 'Belum ditunjuk')
                                                         <i class="nav-icon fas fa-eye"></i> Proses
                                                     @else
