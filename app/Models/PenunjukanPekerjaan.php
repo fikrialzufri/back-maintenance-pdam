@@ -89,6 +89,18 @@ class PenunjukanPekerjaan extends Model
             return $this->hasAduan->keterangan;
         }
     }
+    public function getNoPelangganAttribute()
+    {
+        if ($this->hasAduan) {
+            return $this->hasAduan->no_pelanggan;
+        }
+    }
+    public function getNamaPelangganAttribute()
+    {
+        if ($this->hasAduan) {
+            return $this->hasAduan->nama_pelanggan;
+        }
+    }
 
     public function hasRekanan()
     {
