@@ -50,6 +50,7 @@ class Aduan extends Model
         // menjadikan EYD atau comma serta dan di belakang comma
         $data = rtrim(implode(", ", $data), ", ");
         $data = substr_replace($data, ' dan', strrpos($data, ','), 1);;
+        $data = rtrim(implode("dan", $data), "");
         return $data;
     }
 
