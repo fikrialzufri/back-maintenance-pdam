@@ -12,7 +12,7 @@ class NotifikasiController extends Controller
     {
         // $user_id =  array();
         $query  = Notifikasi::where('to_user_id', auth()->user()->id)->where('status', '!=', 'baca');
-        $notifikasi =  $query->limit(15)->get();
+        $notifikasi =  $query->limit(15)->orderBy('created_at', 'desc')->get();
 
         $count =  $query->count();
 
