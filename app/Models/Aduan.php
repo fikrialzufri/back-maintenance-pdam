@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\UsesUuid;
+use PHPUnit\Framework\Constraint\Count;
 use Str;
 
 class Aduan extends Model
@@ -46,11 +47,13 @@ class Aduan extends Model
             foreach ($this->hasJenisAduan as $index => $value) {
                 $data[$index] = $value->nama;
             }
+            if (count($this->hasJenisAduan) > 1) {
+                $data = rtrim(implode(", ", $data), ", ");
+                $data = substr_replace($data, ' dan', strrpos($data, ','), 1);
+            } else {
+                $data = rtrim(implode(", ", $data), ", ");
+            }
         }
-        // menjadikan EYD atau comma serta dan di belakang comma
-        $data = rtrim(implode(", ", $data), ", ");
-        $data = substr_replace($data, ' dan', strrpos($data, ','), 1);;
-        $data = rtrim(implode("dan", $data), "");
         return $data;
     }
 
