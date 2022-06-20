@@ -817,6 +817,7 @@ class PelaksanaanPekerjaanController extends Controller
             $gajian->dalam = $dalam;
             $gajian->keterangan = $keterangan;
             $gajian->harga = $harga;
+            $gajian->harga_satuan = $harga_item;
             $gajian->item_id = $item;
             $gajian->total = $total;
             $gajian->user_id = $user_id;

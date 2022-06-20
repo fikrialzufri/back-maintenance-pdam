@@ -22,7 +22,7 @@
 @section('content')
     <div class="container-fluid">
         <div class="row">
-            <div class="col-6">
+            <div class="col-md-6 mb-3">
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">{{ $title }}</h3>
@@ -246,7 +246,7 @@
                         </div>
                 </div>
             </div>
-            <div class="col-6">
+            <div class="col-md-6">
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">Detail Lokasi</h3>

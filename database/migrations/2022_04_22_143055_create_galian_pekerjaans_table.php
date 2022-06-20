@@ -21,7 +21,14 @@ class CreateGalianPekerjaansTable extends Migration
             $table->float('lebar')->default(0);
             $table->float('dalam')->default(0);
             $table->float('total')->default(0);
+            $table->float('harga_satuan')->default(0);
+            $table->float('qty_pengawas')->nullable();
+            $table->float('harga_perencanaan')->nullable();
+            $table->float('harga_perencanaan_adjust')->nullable();
             $table->string('keterangan')->nullable();
+            $table->string('keterangan_pengawas')->nullable();
+            $table->string('keterangan_perencanaan')->nullable();
+            $table->string('keterangan_perencanaan_adjust')->nullable();
             $table->enum('harga', ['siang', 'malam'])->default('siang');
 
             $table->string('user_id')->references('id')->on('users')->onDelete('cascade');

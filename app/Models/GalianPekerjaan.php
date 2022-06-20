@@ -27,4 +27,10 @@ class GalianPekerjaan extends Model
             return $this->hasItem->nama;
         }
     }
+    public function getHargaAttribute()
+    {
+        if ($this->hasItem) {
+            return $this->hasItem->harga;
+        }
+    }
 }

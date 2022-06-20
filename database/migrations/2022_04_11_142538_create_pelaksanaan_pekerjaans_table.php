@@ -21,6 +21,7 @@ class CreatePelaksanaanPekerjaansTable extends Migration
             $table->dateTime('tanggal_selesai')->nullable();
             $table->longText('keterangan')->nullable();
             $table->longText('keterangan_barang')->nullable();
+            $table->longText('keterangan_penagawas')->nullable();
             $table->longText('lokasi')->nullable();
             $table->string('lat_long')->nullable();
             $table->enum('status', ['diterima', 'proses', 'proses-akhir', 'selesai', 'disetujui', 'dikoreksi', 'selesai koreksi'])->default('diterima');

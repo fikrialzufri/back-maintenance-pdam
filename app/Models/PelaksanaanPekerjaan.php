@@ -120,7 +120,7 @@ class PelaksanaanPekerjaan extends Model
 
     public function hasItem()
     {
-        return $this->belongsToMany(Item::class, 'pelaksanaan_item')->withPivot('qty', 'harga', 'total', 'keterangan')->withTimestamps();
+        return $this->belongsToMany(Item::class, 'pelaksanaan_item')->withPivot('qty', 'qty_pengawas', 'harga', 'total', 'keterangan', 'harga_perencanaan', 'keterangan_pengawas', 'keterangan_perencanaan', 'keterangan_perencanaan_adjust')->withTimestamps();
     }
 
     public function getTotalHargaAttribute()
