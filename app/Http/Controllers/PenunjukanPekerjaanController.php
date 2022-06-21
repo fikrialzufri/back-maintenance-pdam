@@ -653,7 +653,10 @@ class PenunjukanPekerjaanController extends Controller
     public function opennotifikasi($id)
     {
         $notifikasi = Notifikasi::where('id', $id)->where('to_user_id', auth()->user()->id)->first();
-        $notifikasi->status = 'baca';
+
+        // if ($notifikasi) {
+        //     $notifikasi->status = 'baca';
+        // }
 
         if ($notifikasi->modul === 'tagihan') {
             $tagihan = Tagihan::find($notifikasi->modul_id);
