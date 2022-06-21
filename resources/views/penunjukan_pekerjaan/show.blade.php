@@ -451,7 +451,9 @@
                                                             <th width="500">Adjust Harga Satuan Perencanaan</th>
                                                             <th width="250">Keterangan Adjust Perencanaan</th>
                                                         @endif
-                                                        <th width="120">Total Harga</th>
+                                                        <th
+                                                            @if ($pekerjaanUtama->status === 'diadjust') width="250" @else width="120" @endif>
+                                                            Total Harga</th>
                                                     @endif
 
                                                 </tr>
@@ -461,7 +463,6 @@
                                                     @forelse ($daftarGalian as $inv => $galian)
                                                         @php
                                                             $sum = 0;
-                                                            $sumPengawas = 0;
                                                         @endphp
                                                         <tr id="listgalian_{{ $galian->item_id }}"
                                                             class="list_table_galian">
@@ -610,7 +611,7 @@
                                                                     </td>
 
                                                                     <td>
-                                                                        {{ $galian->keterangan_perencaan_adjust }}
+                                                                        {{ $galian->keterangan_perencanaan_adjust }}
                                                                     </td>
                                                                 @endif
                                                                 <td>
@@ -654,6 +655,15 @@
                                                                 <th colspan="3">
 
                                                                 </th>
+                                                                @if ($pekerjaanUtama->status === 'diadjust')
+                                                                    <th>
+                                                                        {{ $daftarGalian->sum('qty_perencanaan_adjust') }}
+                                                                        m<sup>2</sup>
+                                                                    </th>
+                                                                    <th></th>
+                                                                    <th></th>
+                                                                @endif
+
                                                                 <th>Rp.
                                                                     {{ format_uang($daftarGalian->sum('total')) }}
                                                                 </th>
@@ -661,7 +671,7 @@
                                                         </tr>
                                                         <tr>
                                                             <th
-                                                                @if ($perencaan === true) colspan="11" @else colspan="5" @endif>
+                                                                @if ($pekerjaanUtama->status === 'diadjust') colspan="14" @else colspan="11" @endif>
                                                                 Grand Total
                                                             </th>
                                                             <th>Rp.

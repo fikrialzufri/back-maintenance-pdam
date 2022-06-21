@@ -601,7 +601,7 @@ class PenunjukanPekerjaanController extends Controller
 
                     $galianPekerjaan[$key]->qty_perencanaan_adjust = isset($request->qty_perencanaan_adjust_galian[$key]) ? $request->qty_perencanaan_adjust_galian[$key] : null;
 
-                    $galianPekerjaan[$key]->keterangan_perencanaan_galian = isset($request->keterangan_perencanaan_galian_adjust[$key]) ? $request->keterangan_perencanaan_galian_adjust[$key] : null;
+                    $galianPekerjaan[$key]->keterangan_perencanaan_adjust = isset($request->keterangan_perencanaan_galian_adjust[$key]) ? $request->keterangan_perencanaan_galian_adjust[$key] : null;
 
                     $galianPekerjaan[$key]->total = isset($request->harga_perencanaan_adjust_galian[$key]) && isset($request->qty_perencanaan_adjust_galian[$key]) ? str_replace(
                         ".",

@@ -29,7 +29,7 @@ class CreateGalianPekerjaansTable extends Migration
             $table->string('keterangan')->nullable();
             $table->string('keterangan_pengawas')->nullable();
             $table->string('keterangan_perencanaan')->nullable();
-            $table->string('keterangan_perencanaan_galian')->nullable();
+            $table->string('keterangan_perencanaan_adjust')->nullable();
             $table->enum('harga', ['siang', 'malam'])->default('siang');
 
             $table->string('user_id')->references('id')->on('users')->onDelete('cascade');
