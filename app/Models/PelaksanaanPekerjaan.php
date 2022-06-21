@@ -120,7 +120,19 @@ class PelaksanaanPekerjaan extends Model
 
     public function hasItem()
     {
-        return $this->belongsToMany(Item::class, 'pelaksanaan_item')->withPivot('qty', 'qty_pengawas', 'harga', 'total', 'keterangan', 'harga_perencanaan', 'keterangan_pengawas', 'keterangan_perencanaan', 'keterangan_perencanaan_adjust')->withTimestamps();
+        return $this->belongsToMany(Item::class, 'pelaksanaan_item')->withPivot(
+            'qty',
+            'qty_pengawas',
+            'qty_perencanaan_adjust',
+            'harga',
+            'total',
+            'keterangan',
+            'harga_perencanaan',
+            'harga_perencanaan_adjust',
+            'keterangan_pengawas',
+            'keterangan_perencanaan',
+            'keterangan_perencanaan_adjust'
+        )->withTimestamps();
     }
 
     public function getTotalHargaAttribute()
@@ -128,7 +140,7 @@ class PelaksanaanPekerjaan extends Model
         $total = 0;
         if ($this->hasItem) {
             foreach ($this->hasItem as $value) {
-                $total += $value->pivot->harga * $value->pivot->qty;
+                $total += $value->pivot->total;
             }
         }
 
@@ -163,9 +175,6 @@ class PelaksanaanPekerjaan extends Model
         }
         if ($this->total_harga) {
             $total_harga = $this->total_harga;
-        }
-        if ($this->total_adjust) {
-            $total_adjust = $this->total_adjust;
         }
         $total = $total_galian + $total_harga + $total_adjust;
         return $total;

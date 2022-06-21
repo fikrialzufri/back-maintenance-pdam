@@ -525,28 +525,39 @@ class PenunjukanPekerjaanController extends Controller
         $user = [];
         $listitem = [];
 
-        // return $request;
-
         DB::beginTransaction();
-        foreach ($request->item_id as $key => $value) {
-            $listitem[$value] = [
-                'keterangan' =>  $request->keterangan_pekerjaan[$key],
-                'keterangan_pengawas' =>  isset($request->keterangan_pengawas_pekerjaan[$key]) ? $request->keterangan_pengawas_pekerjaan[$key] : null,
-                'harga' => $request->harga[$key],
-                'harga_perencanaan' => isset($request->harga_perencanaan_pekerjaan[$key]) ? str_replace(
-                    ".",
-                    "",
-                    $request->harga_perencanaan_pekerjaan[$key]
-                ) : 0,
-                'qty' => $request->qty[$key],
-                'qty_pengawas' => $request->qty_pengawas_pekerjaan[$key],
-                'total' =>  isset($request->harga_perencanaan_pekerjaan[$key]) ? str_replace(".", "", $request->harga_perencanaan_pekerjaan[$key]) * (float) $request->qty_pengawas_pekerjaan[$key] : $request->harga[$key] * (float) $request->qty_pengawas_pekerjaan[$key],
-                'keterangan_pengawas' =>  $request->keterangan_pengawas_pekerjaan[$key],
-            ];
-        }
-
+        // return $request;
         try {
             DB::commit();
+            foreach ($request->item_id as $key => $value) {
+                $total[$key] = isset($request->harga_perencanaan_pekerjaan[$key]) ? str_replace(".", "", $request->harga_perencanaan_pekerjaan[$key]) * (float) $request->qty_pengawas_pekerjaan[$key] : $request->harga[$key] * (float) $request->qty_pengawas_pekerjaan[$key];
+
+                $listitem[$value] = [
+                    'keterangan' =>  $request->keterangan_pekerjaan[$key],
+                    'keterangan_pengawas' =>  isset($request->keterangan_pengawas_pekerjaan[$key]) ? $request->keterangan_pengawas_pekerjaan[$key] : null,
+                    'harga' => $request->harga[$key],
+                    'harga_perencanaan' => isset($request->harga_perencanaan_pekerjaan[$key]) ? str_replace(
+                        ".",
+                        "",
+                        $request->harga_perencanaan_pekerjaan[$key]
+                    ) : 0,
+                    'harga_perencanaan_adjust' => isset($request->harga_perencanaan_adjust[$key]) ? str_replace(
+                        ".",
+                        "",
+                        $request->harga_perencanaan_adjust[$key]
+                    ) : 0,
+                    'qty' => $request->qty[$key],
+                    'qty_pengawas' => $request->qty_pengawas_pekerjaan[$key],
+                    'qty_perencanaan_adjust' => isset($request->qty_perencanaan_adjust[$key]) ? $request->qty_perencanaan_adjust[$key] : 0,
+                    'total' =>  isset($request->qty_perencanaan_adjust[$key]) && isset($request->harga_perencanaan_adjust[$key]) ?  str_replace(
+                        ".",
+                        "",
+                        $request->harga_perencanaan_adjust[$key]
+                    ) *  $request->qty_perencanaan_adjust[$key] : $total[$key],
+                    'keterangan_perencanaan' =>  isset($request->keterangan_perencanaan[$key]) ? $request->keterangan_perencanaan[$key] : null,
+                    'keterangan_perencanaan_adjust' => isset($request->keterangan_perencanaan_adjust[$key]) ? $request->keterangan_perencanaan_adjust[$key] : null,
+                ];
+            };
             $PelaksanaanPekerjaan  = PelaksanaanPekerjaan::find($id);
             if (auth()->user()->hasRole('staf-pengawas')) {
                 $status = 'dikoreksi';
@@ -555,12 +566,17 @@ class PenunjukanPekerjaanController extends Controller
                     $status = 'selesai koreksi';
                     $PelaksanaanPekerjaan->keterangan_barang = '';
                 }
+                if ($PelaksanaanPekerjaan->status === 'selesai koreksi') {
+                    $status = 'diadjust';
+                    $PelaksanaanPekerjaan->keterangan_barang = '';
+                }
             }
 
 
             if ($request->qty_pengawas) {
                 foreach ($request->qty_pengawas as $key => $galian) {
                     $galianPekerjaan[$key] = GalianPekerjaan::find($key);
+
                     $hargaGalian[$key] = $galianPekerjaan[$key]->harga;
                     if ($hargaGalian[$key] === "siang") {
                         $harga_item[$key] = Item::find($galianPekerjaan[$key]->item_id)->harga;
@@ -569,11 +585,29 @@ class PenunjukanPekerjaanController extends Controller
                         $harga_item[$key] = Item::find($galianPekerjaan[$key]->item_id)->harga_malam;
                     }
 
+                    $totalgalian = isset($request->harga_perencanaan_galian[$key]) ? str_replace(".", "", ($request->harga_perencanaan_galian)[$key]) * (float) $galian : $harga_item[$key] * (float) $galian;
+
                     $galianPekerjaan[$key]->qty_pengawas = $galian;
                     $galianPekerjaan[$key]->harga_satuan = $harga_item[$key];
                     $galianPekerjaan[$key]->harga_perencanaan = isset($request->harga_perencanaan_galian[$key]) ? str_replace(".", "", ($request->harga_perencanaan_galian)[$key]) : 0;
                     $galianPekerjaan[$key]->keterangan_pengawas = isset($request->keterangan_pengawas_galian_[$key]) ? $request->keterangan_pengawas_galian_[$key] : null;
-                    $galianPekerjaan[$key]->total = isset($request->harga_perencanaan_galian[$key]) ? str_replace(".", "", ($request->harga_perencanaan_galian)[$key]) * (float) $galian : $harga_item[$key] * (float) $galian;
+                    $galianPekerjaan[$key]->keterangan_perencanaan = isset($request->keterangan_perencanaan_galian[$key]) ? $request->keterangan_perencanaan_galian[$key] : null;
+
+                    $galianPekerjaan[$key]->harga_perencanaan_adjust = isset($request->harga_perencanaan_adjust_galian[$key]) ?  str_replace(
+                        ".",
+                        "",
+                        $request->harga_perencanaan_adjust_galian[$key]
+                    ) : null;
+
+                    $galianPekerjaan[$key]->qty_perencanaan_adjust = isset($request->qty_perencanaan_adjust_galian[$key]) ? $request->qty_perencanaan_adjust_galian[$key] : null;
+
+                    $galianPekerjaan[$key]->keterangan_perencanaan_galian = isset($request->keterangan_perencanaan_galian_adjust[$key]) ? $request->keterangan_perencanaan_galian_adjust[$key] : null;
+
+                    $galianPekerjaan[$key]->total = isset($request->harga_perencanaan_adjust_galian[$key]) && isset($request->qty_perencanaan_adjust_galian[$key]) ? str_replace(
+                        ".",
+                        "",
+                        $request->harga_perencanaan_adjust_galian[$key]
+                    ) *  $request->qty_perencanaan_adjust_galian[$key] : $totalgalian;
                     $galianPekerjaan[$key]->save();
                 }
             }
@@ -908,28 +942,24 @@ class PenunjukanPekerjaanController extends Controller
 
         $totalPekerjaan = 0;
 
+
         $action = route('penunjukan_pekerjaan.store');
         $rekanan_id  = null;
         $fotoBahan = [];
         $fotoPekerjaan = [];
         $fotoPenyelesaian = [];
+        $daftarPelaksaanAdjust = [];
         $tombolEdit = '';
         $lat_long_pekerjaan = '';
         $lokasi_pekerjaan = '';
-        $nomor_pekerjaan = '';
         $pekerjaanUtama = [];
+        $pengawas = false;
         $perencaan = false;
 
-        $listPekerjaan = Item::get();
 
         if ($aduan->status != 'draft') {
             $penunjukan = PenunjukanPekerjaan::where('aduan_id', $aduan->id)->first();
-            $nomor_pekerjaan = $penunjukan->nomor_pekerjaan;
             $query = PelaksanaanPekerjaan::where('penunjukan_pekerjaan_id', $penunjukan->id);
-
-            if (auth()->user()->hasRole('asisten-manajer-perencanaan')) {
-                $perencaan = true;
-            }
             if (auth()->user()->hasRole('superadmin')) {
                 $perencaan = true;
             }
@@ -939,24 +969,30 @@ class PenunjukanPekerjaanController extends Controller
                 $fotoBahan = (object) $penunjukan->foto_bahan;
                 $fotoPekerjaan = (object) $penunjukan->foto_lokasi;
                 $fotoPenyelesaian = (object) $penunjukan->foto_penyelesaian;
-                $totalPekerjaan =  $pekerjaanUtama->total_pekerjaan;
+
+                $daftarPekerjaan = $query->with("hasItem")->first();
+
+                $daftarGalian = GalianPekerjaan::where('pelaksanaan_pekerjaan_id', $pekerjaanUtama->id)->get();
+
+                // $action = route('penunjukan_pekerjaan.update');
+                $action = route('penunjukan_pekerjaan.update', $pekerjaanUtama->id);
+
                 $lat_long_pekerjaan =  $pekerjaanUtama->lat_long;
                 $lokasi_pekerjaan =  $pekerjaanUtama->lokasi;
+
+                if (auth()->user()->hasRole('asisten-manajer-perencanaan')) {
+                    $perencaan = true;
+                    if ($pekerjaanUtama->status === 'selesai koreksi') {
+                        $tombolEdit = 'bisa';
+                    }
+                }
+
+                $daftarPelaksaanAdjust = PelaksanaanAdjust::where('pelaksanaan_pekerjaan_id', $pekerjaanUtama->id)->get();
             }
 
             if (auth()->user()->hasRole('rekanan')) {
                 $rekanan_id = auth()->user()->id_rekanan;
             }
-
-            if (auth()->user()->hasRole('asisten-manajer-perencanaan')) {
-                if ($pekerjaanUtama->tagihan == 'tidak') {
-                    if ($pekerjaanUtama->status === 'selesai koreksi') {
-                        $tombolEdit = 'bisa';
-                    }
-                }
-            }
-
-            $daftarPelaksaanAdjust = PelaksanaanAdjust::where('pelaksanaan_pekerjaan_id', $pekerjaanUtama->id)->get();
 
             $notifikasi = Notifikasi::where('modul_id', $penunjukan->id)->where('to_user_id',  auth()->user()->id)->first();
             if ($notifikasi) {
@@ -971,29 +1007,36 @@ class PenunjukanPekerjaanController extends Controller
             }
         }
 
-
         $jenisAduan = $aduan->hasJenisAduan->toArray();
         $jenis_aduan = JenisAduan::orderBy('nama')->get();
         $rekanan = Rekanan::orderBy('nama')->get();
+
+
 
         $title = 'Detail Pekerjaan ' . $aduan->nomor_pekerjaan;
 
         return view('penunjukan_pekerjaan.adjust', compact(
             'aduan',
             'action',
+            'pengawas',
             'perencaan',
             'penunjukan',
             'pekerjaanUtama',
+            'daftarPekerjaan',
+            'daftarGalian',
+            'daftarBahan',
+            'daftarAlatBantu',
+            'daftarTransportasi',
+            'daftarDokumentasi',
             'lat_long_pekerjaan',
-            'listPekerjaan',
             'karyawanPekerja',
             'lokasi_pekerjaan',
-            'daftarPelaksaanAdjust',
             'rekanan_id',
             'jenisAduan',
             'jenis_aduan',
             'rekanan',
             'title',
+            'daftarPelaksaanAdjust',
             'totalPekerjaan',
             'fotoPekerjaan',
             'fotoPenyelesaian',

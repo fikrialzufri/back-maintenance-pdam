@@ -20,6 +20,7 @@ class CreatePelaksanaanPekerjaanItemTable extends Migration
             $table->float('qty');
             $table->float('harga');
             $table->float('qty_pengawas')->nullable();
+            $table->float('qty_perencanaan_adjust')->nullable();
             $table->float('harga_perencanaan')->nullable();
             $table->float('harga_perencanaan_adjust')->nullable();
             $table->float('total')->default(0);
