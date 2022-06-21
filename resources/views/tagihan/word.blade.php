@@ -114,7 +114,12 @@
                                         Tahun {{ date('Y') }} di Wilayah {{ $wilayah }} Sebanyak
                                         {{ $total_lokasi }}
                                         Lokasi. Perumdam Tirta Kencana
-                                        Kota Samarinda.</span>
+                                        Kota Samarinda, dengan Jumlah Tagihan Sebesar Rp.
+                                        {{ format_uang($total_tagihan) }}.
+                                        <i>
+                                            ({{ strtoupper(terbilang($total_tagihan)) }} RUPIAH)
+                                        </i>
+                                    </span>
                                 </p>
                             </div>
 
@@ -155,9 +160,7 @@
                                     <br>
                                     Samarinda, {{ $tanggal }}
                                     <br>
-                                    <img src="data:image/png;base64, {!! base64_encode(
-    QrCode::format('png')->size(97)->generate(route('tagihan.preview', $preview)),
-) !!} " class="img-square">
+                                    <img class="img-square">
                                     <br>
                                     {{ $tagihan->direktur }}
                                 </div>
@@ -169,10 +172,7 @@
                                     <br>
                                     <div class="d-flex justify-content-start">
                                         <div class="d mr-3">
-                                            <img src="data:image/png;base64, {!! base64_encode(
-    QrCode::format('png')->size(97)->generate(route('tagihan.preview', $preview)),
-) !!} "
-                                                class="img-square">
+                                            <img class="img-square">
                                         </div>
                                         <div class="d">
                                             <ol style="">
@@ -195,10 +195,7 @@
                                         PEKERJAAN <br> Perumdam Tirta Kencana Kota Samarinda</p>
                                     @forelse ($tagihan->list_persetujuan as $index => $item)
                                         @if ($item->jabatan === 'Direktur Teknik')
-                                            <img src="data:image/png;base64, {!! base64_encode(
-    QrCode::format('png')->size(97)->generate(route('tagihan.preview', $preview)),
-) !!} "
-                                                class="img-square">
+                                            <img src="" class="img-square">
                                         @endif
                                     @empty
                                     @endforelse

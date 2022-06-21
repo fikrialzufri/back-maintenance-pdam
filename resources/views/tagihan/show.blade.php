@@ -144,6 +144,7 @@
                                         <label for="rekanan" class=" form-control-label">
                                             <h3>Pekerjaan :
                                                 {{ $item->No_Spk }} </h3>
+                                            </h3>
                                         </label>
 
                                     </div>
@@ -157,9 +158,10 @@
                                                             <th width="5">#</th>
                                                             <th>Nama</th>
                                                             <th>Jenis Pekerjaan</th>
-                                                            <th width="10">Jumlah</th>
+                                                            <th width="10">Volume</th>
                                                             @if ($perencaan === true)
-                                                                <th>Harga</th>
+                                                                <th>Harga </th>
+
                                                                 <th>Total Harga</th>
                                                             @endif
                                                         </tr>
@@ -172,16 +174,28 @@
                                                                 </td>
                                                                 <td>{{ $barang->nama }}</td>
                                                                 <td>{{ $barang->jenis }}</td>
-                                                                <td id="qty_{{ $barang->slug }}_{{ $item->id }}">
-                                                                    {{ $barang->pivot->qty }}</td>
+
                                                                 @if ($perencaan === true)
-                                                                    <td>
-                                                                        Rp. {{ format_uang($barang->pivot->harga) }}
-                                                                    </td>
+                                                                    @if ($item->status === 'diadjust')
+                                                                        <td>
+                                                                            {{ $barang->pivot->qty_perencanaan_adjust }}
+                                                                        </td>
+                                                                        <td>
+                                                                            Rp.
+                                                                            {{ format_uang($barang->pivot->harga_perencanaan_adjust) }}
+                                                                        </td>
+                                                                    @else
+                                                                        <td>
+                                                                            {{ $barang->pivot->qty_pengawas }}
+                                                                        </td>
+                                                                        <td>
+                                                                            Rp. {{ format_uang($barang->pivot->harga) }}
+                                                                        </td>
+                                                                    @endif
 
                                                                     <td>
                                                                         Rp.
-                                                                        {{ format_uang($barang->pivot->harga * $barang->pivot->qty) }}
+                                                                        {{ format_uang($barang->pivot->total) }}
                                                                     </td>
                                                                 @endif
 
@@ -196,10 +210,10 @@
                                                         <tr>
                                                             <th colspan="3">Total
                                                             </th>
-                                                            <th>{{ $item->hasItem->sum('pivot.qty') }}</th>
+                                                            <th>{{ $item->hasItem->sum('pivot.qty_pengawas') }}</th>
                                                             @if ($perencaan === true)
                                                                 <th></th>
-                                                                <th>Rp. {{ format_uang($item->total_harga) }}
+                                                                <th>Rp. {{ format_uang($item->hasItem()->sum('total')) }}
                                                                 </th>
                                                             @endif
                                                         </tr>
@@ -240,15 +254,19 @@
                                                                 <td>{{ $value->panjang }} m</td>
                                                                 <td>{{ $value->lebar }} m</td>
                                                                 <td>{{ $value->dalam }} m</td>
-                                                                <td>{{ $value->panjang * $value->lebar * $value->dalam }}
-                                                                    m<sup>2</sup>
+
                                                                 </td>
                                                                 @if ($perencaan === true)
+                                                                    @if ($item->status === 'diadjust')
+                                                                        <td>{{ $value->qty_perencanaan_adjust }}
+                                                                            m<sup>2</sup>
+                                                                        @else
+                                                                        <td>{{ $value->panjang * $value->lebar * $value->dalam }}
+                                                                            m<sup>2</sup>
+                                                                    @endif
                                                                     <td>Rp. {{ format_uang($value->total) }}</td>
                                                                 @endif
-                                                                @php
-                                                                    $sum += $value->panjang * $value->lebar * $value->dalam;
-                                                                @endphp
+
                                                             </tr>
                                                         @empty
                                                             <tr>
@@ -260,9 +278,18 @@
                                                         <tr>
                                                             <th colspan="5"> Total
                                                             </th>
-                                                            <th>
-                                                                {{ $item->luas_galian }} m<sup>2</sup>
-                                                            </th>
+
+                                                            @if ($item->status === 'diadjust')
+                                                                <th>
+                                                                    {{ $item->hasGalianPekerjaan->sum('qty_perencanaan_adjust') }}
+                                                                    m<sup>2</sup>
+                                                                </th>
+                                                            @else
+                                                                <th>
+                                                                    {{ $item->hasGalianPekerjaan->sum('qty_pengawas') }}
+                                                                    m<sup>2</sup>
+                                                                </th>
+                                                            @endif
                                                             @if ($perencaan === true)
                                                                 <th>Rp.
                                                                     {{ format_uang($item->hasGalianPekerjaan->sum('total')) }}
@@ -327,18 +354,18 @@
 
                                 @if ($tagihan)
                                     <div class="col-2">
-                                        @if (!auth()->user()->hasRole('rekanan'))
+                                        @if (auth()->user()->hasRole('rekanan'))
+                                            <a href="{{ route('tagihan.word') }}?id={{ $tagihan->id }}"
+                                                target="_blank" class="btn btn-danger"><span
+                                                    class="nav-icon fa fa-file-word" aria-hidden="true"></span>
+                                                Privew Tagihan</a>
+                                        @else
                                             @if ($tagihan->status === 'disetujui')
                                                 <a href="{{ route('tagihan.word') }}?id={{ $tagihan->id }}"
                                                     target="_blank" class="btn btn-danger"><span
                                                         class="nav-icon fa fa-file-word" aria-hidden="true"></span>
                                                     Privew Tagihan</a>
                                             @endif
-                                        @else
-                                            <a href="{{ route('tagihan.word') }}?id={{ $tagihan->id }}"
-                                                target="_blank" class="btn btn-danger"><span
-                                                    class="nav-icon fa fa-file-word" aria-hidden="true"></span>
-                                                Privew Tagihan</a>
                                         @endif
                                     </div>
                                 @endif
@@ -392,7 +419,8 @@
                                                         {{ $tagihanItem->uraian }}
                                                     </td>
                                                     <td>
-                                                        <span class="ubah_pekerjaan" data-tagihan_id="{{ $tagihanItem->id }}"
+                                                        <span class="ubah_pekerjaan"
+                                                            data-tagihan_id="{{ $tagihanItem->id }}"
                                                             data-master="{{ $tagihanItem->master }}"
                                                             data-jenis_harga="{{ $tagihanItem->jenis_harga }}"
                                                             data-item_id="{{ $tagihanItem->jenis_harga }}"
@@ -501,7 +529,8 @@
                             </div>
                             <div class="card-footer clearfix">
                                 <a href="{{ route('tagihan.excel') }}?id={{ $tagihan->id }}"
-                                    class="btn btn-success"><span class="nav-icon fa fa-file-excel" aria-hidden="true"></span>
+                                    class="btn btn-success"><span class="nav-icon fa fa-file-excel"
+                                        aria-hidden="true"></span>
                                     Export Excel Tagihan</a>
 
                                 <a href="{{ route('tagihan.word') }}?id={{ $tagihan->id }}" target="_blank"

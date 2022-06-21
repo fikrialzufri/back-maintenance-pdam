@@ -165,7 +165,7 @@ class Tagihan extends Model
         if ($this->hasPelaksanaanPekerjaan) {
             foreach ($this->hasPelaksanaanPekerjaan as $key => $value) {
                 foreach ($value->hasItem as $i => $item) {
-                    $total += $item->pivot->harga * $item->pivot->qty;
+                    $total += $item->pivot->total;
                 }
             }
         }
