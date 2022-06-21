@@ -654,53 +654,53 @@ class PenunjukanPekerjaanController extends Controller
     {
         $notifikasi = Notifikasi::where('id', $id)->where('to_user_id', auth()->user()->id)->first();
 
-        // if ($notifikasi) {
-        //     $notifikasi->status = 'baca';
-        // }
+        if ($notifikasi) {
+            $notifikasi->status = 'baca';
+            if ($notifikasi->modul === 'tagihan') {
+                $tagihan = Tagihan::find($notifikasi->modul_id);
+                if ($tagihan) {
+                    $notifikasi->delete();
+                    return redirect()->route('tagihan.show',  $tagihan->slug);
+                }
+            }
+            if ($notifikasi->modul === 'penunjukan-pekerjaan') {
+                $penunjukanAduan = PenunjukanPekerjaan::find($notifikasi->modul_id);
+                $aduan  = Aduan::find($notifikasi->modul_id);
+                if ($penunjukanAduan) {
+                    $notifikasi->delete();
+                    $aduan  = Aduan::find($penunjukanAduan->aduan_id);
+                    return redirect()->route('penunjukan_pekerjaan.show',  $aduan->slug);
+                }
+                if ($aduan) {
+                    $notifikasi->delete();
+                    return redirect()->route('penunjukan_pekerjaan.show',  $aduan->slug);
+                }
+            }
+            if ($notifikasi->modul === 'pelaksanaan-pekerjaan') {
+                $PelaksanaanPekerjaan = PelaksanaanPekerjaan::find($notifikasi->modul_id);
+                $aduan  = Aduan::find($notifikasi->modul_id);
+                if ($PelaksanaanPekerjaan) {
+                    $aduan  = Aduan::find($PelaksanaanPekerjaan->aduan_id);
+                    $notifikasi->delete();
+                    return redirect()->route('penunjukan_pekerjaan.show',  $aduan->slug);
+                }
+                if ($aduan) {
+                    $notifikasi->delete();
+                    return redirect()->route('penunjukan_pekerjaan.show',  $aduan->slug);
+                }
+            }
+            if ($notifikasi->modul === 'aduan') {
+                $aduan = Aduan::find($notifikasi->modul_id);
+                if ($aduan) {
+                    $notifikasi->delete();
+                    return redirect()->route('penunjukan_pekerjaan.show',  $aduan->slug);
+                }
+            }
+            $notifikasi->delete();
+        }
 
-        if ($notifikasi->modul === 'tagihan') {
-            $tagihan = Tagihan::find($notifikasi->modul_id);
-            if ($tagihan) {
-                $notifikasi->delete();
-                return redirect()->route('tagihan.show',  $tagihan->slug);
-            }
-        }
-        if ($notifikasi->modul === 'penunjukan-pekerjaan') {
-            $penunjukanAduan = PenunjukanPekerjaan::find($notifikasi->modul_id);
-            $aduan  = Aduan::find($notifikasi->modul_id);
-            if ($penunjukanAduan) {
-                $notifikasi->delete();
-                $aduan  = Aduan::find($penunjukanAduan->aduan_id);
-                return redirect()->route('penunjukan_pekerjaan.show',  $aduan->slug);
-            }
-            if ($aduan) {
-                $notifikasi->delete();
-                return redirect()->route('penunjukan_pekerjaan.show',  $aduan->slug);
-            }
-        }
-        if ($notifikasi->modul === 'pelaksanaan-pekerjaan') {
-            $PelaksanaanPekerjaan = PelaksanaanPekerjaan::find($notifikasi->modul_id);
-            $aduan  = Aduan::find($notifikasi->modul_id);
-            if ($PelaksanaanPekerjaan) {
-                $aduan  = Aduan::find($PelaksanaanPekerjaan->aduan_id);
-                $notifikasi->delete();
-                return redirect()->route('penunjukan_pekerjaan.show',  $aduan->slug);
-            }
-            if ($aduan) {
-                $notifikasi->delete();
-                return redirect()->route('penunjukan_pekerjaan.show',  $aduan->slug);
-            }
-        }
-        if ($notifikasi->modul === 'aduan') {
-            $aduan = Aduan::find($notifikasi->modul_id);
-            if ($aduan) {
-                $notifikasi->delete();
-                return redirect()->route('penunjukan_pekerjaan.show',  $aduan->slug);
-            }
-        }
 
 
-        $notifikasi->delete();
         return redirect()->route('penunjukan_pekerjaan.index');
     }
 
