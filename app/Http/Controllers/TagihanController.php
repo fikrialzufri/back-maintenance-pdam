@@ -482,8 +482,8 @@ class TagihanController extends Controller
         $start = Carbon::now()->subMonths(2)->startOfMonth()->format('Y-m-d') . ' 00:00:01';
         $end =  Carbon::now()->endOfMonth()->format('Y-m-d') . ' 23:59:59';
 
-        // ->where('status', 'selesai koreksi')
-        $query->where('tagihan', 'tidak')->whereBetween(DB::raw('DATE(tanggal_selesai)'), array($start, $end));
+        // ->where('status', 'selesai koreksi');
+        $query->where('status', 'selesai koreksi')->orWhere('status', 'diadjust')->where('tagihan', 'tidak')->whereBetween(DB::raw('DATE(tanggal_selesai)'), array($start, $end));
         $penunjukan =  $query->get();
 
 

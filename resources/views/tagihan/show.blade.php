@@ -189,7 +189,8 @@
                                                                             {{ $barang->pivot->qty_pengawas }}
                                                                         </td>
                                                                         <td>
-                                                                            Rp. {{ format_uang($barang->pivot->harga) }}
+                                                                            Rp.
+                                                                            {{ format_uang($barang->pivot->harga_perencanaan) }}
                                                                         </td>
                                                                     @endif
 
