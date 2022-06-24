@@ -529,35 +529,7 @@ class PenunjukanPekerjaanController extends Controller
         // return $request;
         try {
             DB::commit();
-            foreach ($request->item_id as $key => $value) {
-                $total[$key] = isset($request->harga_perencanaan_pekerjaan[$key]) ? str_replace(".", "", $request->harga_perencanaan_pekerjaan[$key]) * (float) $request->qty_pengawas_pekerjaan[$key] : $request->harga[$key] * (float) $request->qty_pengawas_pekerjaan[$key];
 
-                $listitem[$value] = [
-                    'keterangan' =>  $request->keterangan_pekerjaan[$key],
-                    'keterangan_pengawas' =>  isset($request->keterangan_pengawas_pekerjaan[$key]) ? $request->keterangan_pengawas_pekerjaan[$key] : null,
-                    'harga' => $request->harga[$key],
-                    'harga_perencanaan' => isset($request->harga_perencanaan_pekerjaan[$key]) ? str_replace(
-                        ".",
-                        "",
-                        $request->harga_perencanaan_pekerjaan[$key]
-                    ) : 0,
-                    'harga_perencanaan_adjust' => isset($request->harga_perencanaan_adjust[$key]) ? str_replace(
-                        ".",
-                        "",
-                        $request->harga_perencanaan_adjust[$key]
-                    ) : 0,
-                    'qty' => $request->qty[$key],
-                    'qty_pengawas' => $request->qty_pengawas_pekerjaan[$key],
-                    'qty_perencanaan_adjust' => isset($request->qty_perencanaan_adjust[$key]) ? $request->qty_perencanaan_adjust[$key] : 0,
-                    'total' =>  isset($request->qty_perencanaan_adjust[$key]) && isset($request->harga_perencanaan_adjust[$key]) ?  str_replace(
-                        ".",
-                        "",
-                        $request->harga_perencanaan_adjust[$key]
-                    ) *  $request->qty_perencanaan_adjust[$key] : $total[$key],
-                    'keterangan_perencanaan' =>  isset($request->keterangan_perencanaan[$key]) ? $request->keterangan_perencanaan[$key] : null,
-                    'keterangan_perencanaan_adjust' => isset($request->keterangan_perencanaan_adjust[$key]) ? $request->keterangan_perencanaan_adjust[$key] : null,
-                ];
-            };
             $PelaksanaanPekerjaan  = PelaksanaanPekerjaan::find($id);
             if (auth()->user()->hasRole('staf-pengawas')) {
                 $status = 'dikoreksi';
@@ -619,7 +591,38 @@ class PenunjukanPekerjaanController extends Controller
                     'keterangan' => $status,
                 ];
                 $PelaksanaanPekerjaan->hasUserMany()->sync($user);
-                $PelaksanaanPekerjaan->hasItem()->sync($listitem);
+                if ($request->item_id) {
+                    foreach ($request->item_id as $key => $value) {
+                        $total[$key] = isset($request->harga_perencanaan_pekerjaan[$key]) ? str_replace(".", "", $request->harga_perencanaan_pekerjaan[$key]) * (float) $request->qty_pengawas_pekerjaan[$key] : $request->harga[$key] * (float) $request->qty_pengawas_pekerjaan[$key];
+
+                        $listitem[$value] = [
+                            'keterangan' =>  $request->keterangan_pekerjaan[$key],
+                            'keterangan_pengawas' =>  isset($request->keterangan_pengawas_pekerjaan[$key]) ? $request->keterangan_pengawas_pekerjaan[$key] : null,
+                            'harga' => $request->harga[$key],
+                            'harga_perencanaan' => isset($request->harga_perencanaan_pekerjaan[$key]) ? str_replace(
+                                ".",
+                                "",
+                                $request->harga_perencanaan_pekerjaan[$key]
+                            ) : 0,
+                            'harga_perencanaan_adjust' => isset($request->harga_perencanaan_adjust[$key]) ? str_replace(
+                                ".",
+                                "",
+                                $request->harga_perencanaan_adjust[$key]
+                            ) : 0,
+                            'qty' => $request->qty[$key],
+                            'qty_pengawas' => $request->qty_pengawas_pekerjaan[$key],
+                            'qty_perencanaan_adjust' => isset($request->qty_perencanaan_adjust[$key]) ? $request->qty_perencanaan_adjust[$key] : 0,
+                            'total' =>  isset($request->qty_perencanaan_adjust[$key]) && isset($request->harga_perencanaan_adjust[$key]) ?  str_replace(
+                                ".",
+                                "",
+                                $request->harga_perencanaan_adjust[$key]
+                            ) *  $request->qty_perencanaan_adjust[$key] : $total[$key],
+                            'keterangan_perencanaan' =>  isset($request->keterangan_perencanaan[$key]) ? $request->keterangan_perencanaan[$key] : null,
+                            'keterangan_perencanaan_adjust' => isset($request->keterangan_perencanaan_adjust[$key]) ? $request->keterangan_perencanaan_adjust[$key] : null,
+                        ];
+                    };
+                    $PelaksanaanPekerjaan->hasItem()->sync($listitem);
+                }
 
 
 
