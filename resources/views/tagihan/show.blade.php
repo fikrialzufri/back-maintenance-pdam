@@ -234,12 +234,9 @@
                                                             <th width="10">Panjang</th>
                                                             <th width="10">Lebar</th>
                                                             <th width="10">Dalam</th>
-                                                            <th
-                                                                @if ($perencaan === true) width="10" @else width="50" @endif>
+                                                            <th width="10">
                                                                 Volume</th>
-                                                            @if ($perencaan === true)
-                                                                <th>Total Harga</th>
-                                                            @endif
+                                                            <th>Total Harga</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -257,16 +254,14 @@
                                                                 <td>{{ $value->dalam }} m</td>
 
                                                                 </td>
-                                                                @if ($perencaan === true)
-                                                                    @if ($item->status === 'diadjust')
-                                                                        <td>{{ $value->qty_perencanaan_adjust }}
-                                                                            m<sup>2</sup>
-                                                                        @else
-                                                                        <td>{{ $value->panjang * $value->lebar * $value->dalam }}
-                                                                            m<sup>2</sup>
-                                                                    @endif
-                                                                    <td>Rp. {{ format_uang($value->total) }}</td>
+                                                                @if ($item->status === 'diadjust')
+                                                                    <td>{{ $value->qty_perencanaan_adjust }}
+                                                                        m<sup>2</sup>
+                                                                    @else
+                                                                    <td>{{ $value->panjang * $value->lebar * $value->dalam }}
+                                                                        m<sup>2</sup>
                                                                 @endif
+                                                                <td>Rp. {{ format_uang($value->total) }}</td>
 
                                                             </tr>
                                                         @empty
@@ -292,14 +287,13 @@
                                                                 </th>
                                                             @endif
                                                             @if ($perencaan === true)
-                                                                <th>Rp.
-                                                                    {{ format_uang($item->hasGalianPekerjaan->sum('total')) }}
-                                                                </th>
                                                             @endif
+                                                            <th>Rp.
+                                                                {{ format_uang($item->hasGalianPekerjaan->sum('total')) }}
+                                                            </th>
                                                         </tr>
                                                         <tr>
-                                                            <th
-                                                                @if ($perencaan === true) colspan="6" @else colspan="5" @endif>
+                                                            <th colspan="6">
                                                                 Grand Total
                                                             </th>
                                                             <th>Rp.
@@ -360,13 +354,12 @@
                                                 target="_blank" class="btn btn-danger"><span
                                                     class="nav-icon fa fa-file-word" aria-hidden="true"></span>
                                                 Privew Tagihan</a>
-                                        @else
-                                            @if ($tagihan->status === 'disetujui')
-                                                <a href="{{ route('tagihan.word') }}?id={{ $tagihan->id }}"
-                                                    target="_blank" class="btn btn-danger"><span
-                                                        class="nav-icon fa fa-file-word" aria-hidden="true"></span>
-                                                    Privew Tagihan</a>
-                                            @endif
+                                        @endif
+                                        @if ($tagihan->status === 'disetujui')
+                                            <a href="{{ route('tagihan.word') }}?id={{ $tagihan->id }}"
+                                                target="_blank" class="btn btn-danger"><span
+                                                    class="nav-icon fa fa-file-word" aria-hidden="true"></span>
+                                                Privew Tagihan</a>
                                         @endif
                                     </div>
                                 @endif
@@ -548,7 +541,7 @@
             <!-- /.row (main row) -->
         </div><!-- /.container-fluid -->
     </div><!-- /.container-fluid -->
-    <div class="modal fade" id="list_item_modal" role="dialog" aria-labelledby="pekerjaan_label" aria-hidden="true">
+    {{-- <div class="modal fade" id="list_item_modal" role="dialog" aria-labelledby="pekerjaan_label" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -600,7 +593,7 @@
                 </form>
             </div>
         </div>
-    </div>
+    </div> --}}
 @stop
 
 @push('script')

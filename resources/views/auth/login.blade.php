@@ -29,7 +29,7 @@
 
         .bg {
             /* The image used */
-            background-image: url("img/PDAM-BG.jpg");
+            background-image: url("img/bag.png");
 
             /* Full height */
             height: 100%;
@@ -39,7 +39,6 @@
             background-repeat: no-repeat;
             background-size: cover;
         }
-
     </style>
 </head>
 
@@ -54,8 +53,8 @@
                 <div class="col-xl-4 col-lg-4 col-md-4 m-auto">
                     <div class="authentication-form mx-auto">
                         <div class="logo-centered">
-                            <a href="http://radmin.rakibhstu.com"><img height="100" src="{{ asset('img/logo.png') }}"
-                                    alt="RADMIN"></a>
+                            <a href="http://radmin.rakibhstu.com"><img height="100"
+                                    src="{{ asset('img/logo.png') }}" alt="RADMIN"></a>
                         </div>
                         <p>Welcome back! </p>
                         <form method="POST" action="{{ route('login') }}">
