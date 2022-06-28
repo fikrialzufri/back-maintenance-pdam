@@ -250,8 +250,6 @@
                                                     <th width="150">Keterangan Rekanan</th>
                                                     <th width="50">Koreksi Volume Pengawas</th>
                                                     <th width="250">Keterangan Pengawas</th>
-                                                    @if ($perencaan == true)
-                                                    @endif
                                                     <th width="120">Harga</th>
                                                     <th width="400">Koreksi Harga Satuan Perencanaan</th>
                                                     <th width="250">Keterangan Perencanaan</th>
@@ -340,8 +338,7 @@
                                                                         value="{{ $pekerjaan->pivot->keterangan_pengawas }}">
                                                                 @endif
                                                             </td>
-                                                            @if ($perencaan == true)
-                                                            @endif
+
                                                             <td>
                                                                 <span id="total_pekerjaan_tampil_{{ $pekerjaan->id }}">
                                                                     Rp.
@@ -353,28 +350,31 @@
                                                                     value="{{ $pekerjaan->pivot->harga }}"
                                                                     class="total_pekerjaan[{{ $pekerjaan->item_id }}]">
                                                             </td>
-                                                            @if ($pekerjaanUtama->status === 'dikoreksi')
-                                                                <td>
-                                                                    <div class="input-group mb-2 mr-sm-2">
-                                                                        <div class="input-group-prepend">
-                                                                            <div class="input-group-text">Rp.</div>
-                                                                        </div>
-                                                                        <input type="text" class="form-control"
-                                                                            id="harga_perencanaan_pekerjaan{{ $pekerjaan->item_id }}{{ $key }}"
-                                                                            name="harga_perencanaan_pekerjaan[{{ $pekerjaan->item_id }}]"
-                                                                            value="{{ format_uang($pekerjaan->pivot->harga) }}"
-                                                                            placeholder="Koreksi Perencanaan">
-                                                                    </div>
-                                                                    @push('script')
-                                                                        <script>
-                                                                            $("#harga_perencanaan_pekerjaan{{ $pekerjaan->item_id }}{{ $key }}").on("input", function() {
 
-                                                                                let val = formatRupiahTanpaRp(this.value, '')
-                                                                                $("#harga_perencanaan_pekerjaan{{ $pekerjaan->item_id }}{{ $key }}").val(val)
-                                                                            });
-                                                                        </script>
-                                                                    @endpush
-                                                                </td>
+                                                            @if ($pekerjaanUtama->status === 'dikoreksi')
+                                                                @if ($perencaan == true)
+                                                                    <td>
+                                                                        <div class="input-group mb-2 mr-sm-2">
+                                                                            <div class="input-group-prepend">
+                                                                                <div class="input-group-text">Rp.</div>
+                                                                            </div>
+                                                                            <input type="text" class="form-control"
+                                                                                id="harga_perencanaan_pekerjaan{{ $pekerjaan->item_id }}{{ $key }}"
+                                                                                name="harga_perencanaan_pekerjaan[{{ $pekerjaan->item_id }}]"
+                                                                                value="{{ format_uang($pekerjaan->pivot->harga) }}"
+                                                                                placeholder="Koreksi Perencanaan">
+                                                                        </div>
+                                                                        @push('script')
+                                                                            <script>
+                                                                                $("#harga_perencanaan_pekerjaan{{ $pekerjaan->item_id }}{{ $key }}").on("input", function() {
+
+                                                                                    let val = formatRupiahTanpaRp(this.value, '')
+                                                                                    $("#harga_perencanaan_pekerjaan{{ $pekerjaan->item_id }}{{ $key }}").val(val)
+                                                                                });
+                                                                            </script>
+                                                                        @endpush
+                                                                    </td>
+                                                                @endif
                                                             @else
                                                                 <td>
                                                                     Rp.
@@ -412,6 +412,7 @@
                                                                     {{ $pekerjaan->pivot->keterangan_perencanaan_adjust }}
                                                                 </td>
                                                             @endif
+
 
                                                             <td>
                                                                 <span id="total_pekerjaan_tampil_{{ $pekerjaan->id }}">
@@ -474,10 +475,10 @@
                                                     <th width="150">Keterangan Rekanan</th>
                                                     <th width="150">Koreksi Volume Pengawas</th>
                                                     <th width="250">Keterangan Pengawas</th>
-                                                    @if ($perencaan)
-                                                    @endif
                                                     <th width="250">Koreksi Harga Satuan Perencanaan</th>
                                                     <th width="250">Keterangan Perencanaan</th>
+                                                    {{-- @if ($perencaan)
+                                                    @endif --}}
                                                     @if ($pekerjaanUtama->status === 'diadjust')
                                                         <th width="50">Adjust Volume Perencanaan</th>
                                                         <th width="500">Adjust Harga Satuan Perencanaan</th>
@@ -580,43 +581,43 @@
                                                                 @endif
                                                             </td>
 
-                                                            @if ($perencaan == true)
-                                                            @endif
                                                             @if ($pekerjaanUtama->status === 'dikoreksi')
-                                                                <td>
-                                                                    <div class="input-group mb-2 mr-sm-2">
-                                                                        <div class="input-group-prepend">
-                                                                            <div class="input-group-text">Rp.</div>
+                                                                @if ($perencaan == true)
+                                                                    <td>
+                                                                        <div class="input-group mb-2 mr-sm-2">
+                                                                            <div class="input-group-prepend">
+                                                                                <div class="input-group-text">Rp.</div>
+                                                                            </div>
+                                                                            <input type="text" class="form-control"
+                                                                                id="harga_perencanaan_galian{{ $galian->id }}{{ $inv }}"
+                                                                                name="harga_perencanaan_galian[{{ $galian->id }}]"
+                                                                                value="{{ format_uang($galian->harga_satuan) }}"
+                                                                                placeholder="Koreksi Perencanaan">
                                                                         </div>
-                                                                        <input type="text" class="form-control"
-                                                                            id="harga_perencanaan_galian{{ $galian->id }}{{ $inv }}"
-                                                                            name="harga_perencanaan_galian[{{ $galian->id }}]"
-                                                                            value="{{ format_uang($galian->harga_satuan) }}"
-                                                                            placeholder="Koreksi Perencanaan">
-                                                                    </div>
-                                                                    @push('script')
-                                                                        <script>
-                                                                            $("#harga_perencanaan_galian{{ $galian->id }}{{ $inv }}").on("input", function() {
+                                                                        @push('script')
+                                                                            <script>
+                                                                                $("#harga_perencanaan_galian{{ $galian->id }}{{ $inv }}").on("input", function() {
 
-                                                                                let val = formatRupiahTanpaRp(this.value, '')
-                                                                                $("#harga_perencanaan_galian{{ $galian->id }}{{ $inv }}").val(val)
-                                                                            });
-                                                                        </script>
-                                                                    @endpush
-                                                                </td>
-                                                                <td>
-                                                                    <div class="input-group mb-2 mr-sm-2">
+                                                                                    let val = formatRupiahTanpaRp(this.value, '')
+                                                                                    $("#harga_perencanaan_galian{{ $galian->id }}{{ $inv }}").val(val)
+                                                                                });
+                                                                            </script>
+                                                                        @endpush
+                                                                    </td>
+                                                                    <td>
+                                                                        <div class="input-group mb-2 mr-sm-2">
 
-                                                                        <input type="text"
-                                                                            name="keterangan_perencanaan_galian[{{ $galian->id }}]"
-                                                                            id="keterangan_perencanaan_galian[{{ $galian->id }}]{}"
-                                                                            placeholder="Koreksi Pengawas"
-                                                                            class="form-control">
-                                                                        <div class="input-group-prepend">
+                                                                            <input type="text"
+                                                                                name="keterangan_perencanaan_galian[{{ $galian->id }}]"
+                                                                                id="keterangan_perencanaan_galian[{{ $galian->id }}]{}"
+                                                                                placeholder="Koreksi Pengawas"
+                                                                                class="form-control">
+                                                                            <div class="input-group-prepend">
 
+                                                                            </div>
                                                                         </div>
-                                                                    </div>
-                                                                </td>
+                                                                    </td>
+                                                                @endif
                                                             @else
                                                                 <td>
                                                                     Rp.
