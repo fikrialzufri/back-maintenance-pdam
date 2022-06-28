@@ -343,14 +343,14 @@ class TagihanController extends Controller
             }
         }
         if (auth()->user()->hasRole('asisten-manajer-pengawas')) {
-            $listJabatanStafPengawas = Jabatan::where('slug', 'staf-pengawas')->get()->pluck('id')->toArray();
+            $listJabatan = Jabatan::where('slug', 'staf-pengawas')->get()->pluck('id')->toArray();
 
-            $listKaryawanStafPengawas = Karyawan::whereIn('jabatan_id', $listJabatanStafPengawas)->get()->pluck('user_id')->toArray();
+            $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get()->pluck('user_id')->toArray();
 
             if (count($tagihan->list_persetujuan) > 0) {
-                $arrayListStafPengawas = collect($tagihan->list_persetujuan)->pluck('id')->toArray();
+                $arrayList = collect($tagihan->list_persetujuan)->pluck('id')->toArray();
 
-                if ((count(array_unique(array_merge($arrayListStafPengawas, $listKaryawanStafPengawas))) === count($arrayListStafPengawas))) {
+                if ((count(array_unique(array_merge($arrayList, $listKaryawan))) === count($arrayList))) {
                     $bntSetuju = false;
                 }
             }
