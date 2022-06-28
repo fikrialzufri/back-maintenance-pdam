@@ -348,9 +348,9 @@ class TagihanController extends Controller
             $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get()->pluck('user_id')->toArray();
 
             if (count($tagihan->list_persetujuan) > 0) {
-                return $arrayList = collect($tagihan->list_persetujuan)->pluck('id')->toArray();
+                return $arrayListPengawas = collect($tagihan->list_persetujuan)->pluck('id')->toArray();
 
-                if ((count(array_unique(array_merge($arrayList, $listKaryawan))) === count($arrayList))) {
+                if ((count(array_unique(array_merge($arrayListPengawas, $listKaryawan))) === count($arrayListPengawas))) {
                     $bntSetuju = false;
                 }
             }
