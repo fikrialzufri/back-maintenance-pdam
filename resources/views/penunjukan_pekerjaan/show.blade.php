@@ -251,7 +251,7 @@
                                                     <th width="50">Koreksi Volume Pengawas</th>
                                                     <th width="250">Keterangan Pengawas</th>
                                                     <th width="120">Harga</th>
-                                                    @if ($pekerjaanUtama->status === 'dikoreksi' || $pekerjaanUtama->status === 'diadjust')
+                                                    @if ($pekerjaanUtama->status === 'dikoreksi' || $pekerjaanUtama->status === 'selesai koreksi' || $pekerjaanUtama->status === 'diadjust')
                                                         <th width="400">Koreksi Harga Satuan Perencanaan</th>
                                                         <th width="250">Keterangan Perencanaan</th>
                                                     @endif
@@ -353,7 +353,7 @@
                                                                     class="total_pekerjaan[{{ $pekerjaan->item_id }}]">
                                                             </td>
 
-                                                            @if ($pekerjaanUtama->status === 'dikoreksi' || $pekerjaanUtama->status === 'diadjust')
+                                                            @if ($pekerjaanUtama->status === 'dikoreksi' || $pekerjaanUtama->status === 'selesai koreksi' || $pekerjaanUtama->status === 'diadjust')
                                                                 @if ($perencaan == true)
                                                                     <td>
                                                                         <div class="input-group mb-2 mr-sm-2">
@@ -383,7 +383,7 @@
                                                                     </td>
                                                                 @endif
                                                             @endif
-                                                            @if ($pekerjaanUtama->status === 'dikoreksi' || $pekerjaanUtama->status === 'diadjust')
+                                                            @if ($pekerjaanUtama->status === 'dikoreksi' || $pekerjaanUtama->status === 'selesai koreksi' || $pekerjaanUtama->status === 'diadjust')
                                                                 @if ($perencaan == true)
                                                                     <td>
                                                                         <div class="input-group mb-2 mr-sm-2">
@@ -446,7 +446,7 @@
                                                 @if ($perencaan == true)
                                                     @if (isset($daftarPekerjaan->hasItem))
                                                         <tr>
-                                                            <th @if ($pekerjaanUtama->status === 'diadjust') colspan="13" @else colspan="10" @endif
+                                                            <th @if ($pekerjaanUtama->status === 'diadjust') colspan="13" @else colspan="9" @endif
                                                                 class="text-right">Total
                                                             </th>
                                                             <th>
@@ -479,7 +479,7 @@
                                                     <th width="150">Keterangan Rekanan</th>
                                                     <th width="150">Koreksi Volume Pengawas</th>
                                                     <th width="250">Keterangan Pengawas</th>
-                                                    @if ($pekerjaanUtama->status === 'dikoreksi' || $pekerjaanUtama->status === 'diadjust')
+                                                    @if ($pekerjaanUtama->status === 'dikoreksi' || $pekerjaanUtama->status === 'selesai koreksi' || $pekerjaanUtama->status === 'diadjust')
                                                         <th width="250">Koreksi Harga Satuan Perencanaan</th>
                                                         <th width="250">Keterangan Perencanaan</th>
                                                     @endif
@@ -585,7 +585,7 @@
                                                                 @endif
                                                             </td>
 
-                                                            @if ($pekerjaanUtama->status === 'dikoreksi' || $pekerjaanUtama->status === 'diadjust')
+                                                            @if ($pekerjaanUtama->status === 'dikoreksi' || $pekerjaanUtama->status === 'selesai koreksi' || $pekerjaanUtama->status === 'diadjust')
                                                                 @if ($perencaan == true)
                                                                     <td>
                                                                         <div class="input-group mb-2 mr-sm-2">
