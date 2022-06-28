@@ -351,12 +351,12 @@ class TagihanController extends Controller
                 $arrayListStafPengawas = collect($tagihan->list_persetujuan)->pluck('id')->toArray();
 
                 if ((count(array_unique(array_merge($arrayListStafPengawas, $listKaryawanStafPengawas))) === count($arrayListStafPengawas))) {
-                    return $bntSetuju = false;
+                    $bntSetuju = false;
                 }
             }
         }
         if (auth()->user()->hasRole('asisten-manajer-perencanaan')) {
-            $listJabatan = Jabatan::where('slug', 'staf-pengawas')->get()->pluck('id')->toArray();
+            $listJabatan = Jabatan::where('slug', 'asisten-manajer-pengawas')->get()->pluck('id')->toArray();
 
             $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get()->pluck('user_id')->toArray();
 
