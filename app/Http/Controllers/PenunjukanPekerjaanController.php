@@ -1088,7 +1088,7 @@ class PenunjukanPekerjaanController extends Controller
         $start =  Carbon::now()->subMonths(2)->startOfMonth()->format('Y-m-d') . ' 00:00:01';
         $end =   Carbon::now()->endOfMonth()->format('Y-m-d') . ' 23:59:59';
 
-        $query->where('tagihan', 'tidak')->whereBetween(DB::raw('DATE(tanggal_selesai)'), array($start, $end));
+        $query->where('status', 'selesai koreksi')->whereOr('status', 'diadjust')->where('tagihan', 'tidak')->whereBetween(DB::raw('DATE(tanggal_selesai)'), array($start, $end));
         $penunjukan =  $query->get();
 
         $total_lokasi = $query->count();
