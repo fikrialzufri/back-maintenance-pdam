@@ -345,10 +345,10 @@ class TagihanController extends Controller
         if (auth()->user()->hasRole('asisten-manajer-pengawas')) {
             $listJabatanStafPengawas = Jabatan::where('slug', 'staf-pengawas')->get()->pluck('id')->toArray();
 
-            return $listKaryawanStafPengawas = Karyawan::whereIn('jabatan_id', $listJabatanStafPengawas)->get()->pluck('user_id')->toArray();
+            $listKaryawanStafPengawas = Karyawan::whereIn('jabatan_id', $listJabatanStafPengawas)->get()->pluck('user_id')->toArray();
 
             if (count($tagihan->list_persetujuan) > 0) {
-                $arrayList = collect($tagihan->list_persetujuan)->pluck('id')->toArray();
+                return $arrayList = collect($tagihan->list_persetujuan)->pluck('id')->toArray();
 
                 if ((count(array_unique(array_merge($arrayList, $listKaryawanStafPengawas))) === count($arrayList))) {
                     return $bntSetuju = false;
