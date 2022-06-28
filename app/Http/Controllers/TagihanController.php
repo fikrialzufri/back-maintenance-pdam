@@ -343,7 +343,7 @@ class TagihanController extends Controller
             }
         }
         if (auth()->user()->hasRole('asisten-manajer-pengawas')) {
-            $listJabatan = Jabatan::where('slug', 'staf-pengawas')->get()->pluck('id')->toArray();
+            $listJabatan = Jabatan::where('slug', 'manajer-distribusi')->get()->pluck('id')->toArray();
 
             $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get()->pluck('user_id')->toArray();
 
