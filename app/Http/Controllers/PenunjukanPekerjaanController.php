@@ -624,7 +624,7 @@ class PenunjukanPekerjaanController extends Controller
                     $PelaksanaanPekerjaan->hasItem()->sync($listitem);
                 }
 
-                return $listitem;
+                // return $listitem;
 
                 $penunjukanPekerjaan = PenunjukanPekerjaan::find($PelaksanaanPekerjaan->penunjukan_pekerjaan_id);
 
