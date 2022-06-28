@@ -345,7 +345,7 @@ class TagihanController extends Controller
         if (auth()->user()->hasRole('asisten-manajer-pengawas')) {
             $listJabatan = Jabatan::where('slug', 'staf-pengawas')->get()->pluck('id')->toArray();
 
-            $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get()->pluck('user_id')->toArray();
+            return $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get()->pluck('user_id')->toArray();
 
             if (count($tagihan->list_persetujuan) > 0) {
                 return $arrayList = collect($tagihan->list_persetujuan)->pluck('id')->toArray();
