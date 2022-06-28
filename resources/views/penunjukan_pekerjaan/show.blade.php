@@ -354,7 +354,7 @@
                                                             </td>
 
                                                             @if ($pekerjaanUtama->status === 'dikoreksi' || $pekerjaanUtama->status === 'selesai koreksi' || $pekerjaanUtama->status === 'diadjust')
-                                                                @if ($perencaan == true)
+                                                                @if ($perencaan == true && $pekerjaanUtama->status !== 'selesai koreksi')
                                                                     <td>
                                                                         <div class="input-group mb-2 mr-sm-2">
                                                                             <div class="input-group-prepend">
@@ -384,7 +384,7 @@
                                                                 @endif
                                                             @endif
                                                             @if ($pekerjaanUtama->status === 'dikoreksi' || $pekerjaanUtama->status === 'selesai koreksi' || $pekerjaanUtama->status === 'diadjust')
-                                                                @if ($perencaan == true)
+                                                                @if ($perencaan == true && $pekerjaanUtama->status !== 'selesai koreksi')
                                                                     <td>
                                                                         <div class="input-group mb-2 mr-sm-2">
 
@@ -446,7 +446,7 @@
                                                 @if ($perencaan == true)
                                                     @if (isset($daftarPekerjaan->hasItem))
                                                         <tr>
-                                                            <th @if ($pekerjaanUtama->status === 'diadjust') colspan="13" @else colspan="9" @endif
+                                                            <th @if ($pekerjaanUtama->status === 'diadjust') colspan="13" @elseif ($pekerjaanUtama->status === 'selesai koreksi') colspan="10" @else colspan="9" @endif
                                                                 class="text-right">Total
                                                             </th>
                                                             <th>
@@ -586,7 +586,7 @@
                                                             </td>
 
                                                             @if ($pekerjaanUtama->status === 'dikoreksi' || $pekerjaanUtama->status === 'selesai koreksi' || $pekerjaanUtama->status === 'diadjust')
-                                                                @if ($perencaan == true)
+                                                                @if ($perencaan == true && $pekerjaanUtama->status !== 'selesai koreksi')
                                                                     <td>
                                                                         <div class="input-group mb-2 mr-sm-2">
                                                                             <div class="input-group-prepend">
