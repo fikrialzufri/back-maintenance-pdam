@@ -354,7 +354,7 @@
                                                             </td>
 
                                                             @if ($pekerjaanUtama->status === 'dikoreksi' || $pekerjaanUtama->status === 'selesai koreksi' || $pekerjaanUtama->status === 'diadjust')
-                                                                @if ($perencaan == true && $pekerjaanUtama->status !== 'selesai koreksi')
+                                                                @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
                                                                     <td>
                                                                         <div class="input-group mb-2 mr-sm-2">
                                                                             <div class="input-group-prepend">
@@ -384,7 +384,7 @@
                                                                 @endif
                                                             @endif
                                                             @if ($pekerjaanUtama->status === 'dikoreksi' || $pekerjaanUtama->status === 'selesai koreksi' || $pekerjaanUtama->status === 'diadjust')
-                                                                @if ($perencaan == true && $pekerjaanUtama->status !== 'selesai koreksi')
+                                                                @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
                                                                     <td>
                                                                         <div class="input-group mb-2 mr-sm-2">
 
@@ -586,7 +586,7 @@
                                                             </td>
 
                                                             @if ($pekerjaanUtama->status === 'dikoreksi' || $pekerjaanUtama->status === 'selesai koreksi' || $pekerjaanUtama->status === 'diadjust')
-                                                                @if ($perencaan == true && $pekerjaanUtama->status !== 'selesai koreksi')
+                                                                @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
                                                                     <td>
                                                                         <div class="input-group mb-2 mr-sm-2">
                                                                             <div class="input-group-prepend">
