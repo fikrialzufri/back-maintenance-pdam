@@ -329,16 +329,16 @@
                                         </div>
                                     </div>
                                 @endif
-                                @if ($bntSetuju === false)
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <div>
-                                                <button type="submit" class="btn btn-primary">Setujui Pekerjaan</button>
-                                            </div>
+                            @endif
+                            @if ($bntSetuju === false)
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div>
+                                            <button type="submit" class="btn btn-primary">Setujui Pekerjaan</button>
                                         </div>
-
                                     </div>
-                                @endif
+
+                                </div>
                             @endif
                         </div>
 
