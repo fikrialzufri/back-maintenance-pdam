@@ -95,12 +95,43 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <div>
+                                                <label for="ppn" class=" form-control-label">PPN 11%</label>
+                                            </div>
+                                            <div class="input-group mb-2 mr-sm-2">
+                                                <div class="input-group-prepend">
+                                                    <div class="input-group-text">Rp.</div>
+                                                </div>
+                                                <input type="text" name="ppn" id="ppn_all" placeholder=""
+                                                    class="form-control" readonly value="{{ format_uang($ppn) }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <div>
+                                                <label for="grand_total" class=" form-control-label">Grandtotal
+                                                    Tagihan</label>
+                                            </div>
+                                            <div class="input-group mb-2 mr-sm-2">
+                                                <div class="input-group-prepend">
+                                                    <div class="input-group-text">Rp.</div>
+                                                </div>
+                                                <input type="text" name="grand_total" id="grand_total_all" placeholder=""
+                                                    class="form-control" readonly
+                                                    value="{{ format_uang($grand_total) }}">
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
+
                                 <div class="col-6 timeline">
                                     <h6>List Persetujuan Pekerjaan</h6>
                                     <ul>
                                         @forelse ($list_persetujuan as $item)
-                                            @if ($item->jabatan === 'Staf Pengawas' || $item->jabatan === 'Asisten Manajer Pengawas' || $item->jabatan === 'Manajer Distribusi')
+                                            @if ($item->jabatan === 'Staf Pengawas' || $item->jabatan === 'Asisten Manajer Pengawas' || str_contains($item->jabatan, 'Asisten Manajer Distribusi') || $item->jabatan === 'Manajer Distribusi')
                                                 <li>
                                                     <div class="bullet bg-primary"></div>
                                                     <div class="time">{{ $item->tanggal_disetujui }}</div>
@@ -138,6 +169,8 @@
 
 
                             </div>
+
+                            <hr>
                             @if (isset($tagihan->hasPelaksanaanPekerjaan))
                                 @foreach ($tagihan->hasPelaksanaanPekerjaan as $key => $item)
                                     <div>

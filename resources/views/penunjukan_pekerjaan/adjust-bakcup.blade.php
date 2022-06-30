@@ -565,7 +565,7 @@
                                         <label for="kategori_aduan" class=" form-control-label">Kategori Aduan</label>
                                     </div>
                                     <div>
-                                        <strong>{{ $aduan->kategori_aduan }}</strong>
+                                        <strong>{{ ucfirst($aduan->kategori_aduan) }}</strong>
                                     </div>
                                 </div>
                             </div>

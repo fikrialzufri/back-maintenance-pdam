@@ -107,7 +107,7 @@
                                         <div>
                                             <p>
                                                 <span style=''>Service Kebocoran
-                                                    Pipa Dinas, Tersier, Sekunder, dan Interkoneksi Pipa Periode
+                                                    Pipa Dinas, Premier, Sekunder, dan Interkoneksi Pipa Periode
                                                     Bulan
                                                     {{ $bulan }}
                                                     Tahun {{ date('Y') }} di Wilayah {{ $wilayah }}

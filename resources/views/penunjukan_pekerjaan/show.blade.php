@@ -101,6 +101,19 @@
                                     @endif
                                     <div class="col-12">
                                         <div class="form-group">
+                                            <h6 class="">Alamat Pekerjaan</h6>
+                                        </div>
+                                        <div>
+                                            <a href="https://maps.google.com/?q={{ $lat_long_pekerjaan }}"
+                                                target="__blank" class="text-danger">
+                                                {{ $lokasi_pekerjaan }}
+                                            </a>
+                                        </div>
+                                        <br>
+
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group">
                                             <h6 class="">Lokasi Pekerjaan</h6>
                                         </div>
                                         <div id="mapdua"></div>
@@ -223,21 +236,110 @@
             </div>
         </div>
         {{-- koreksi --}}
-        <form action="{{ $action }}" method="post" id="form-update" role="form">
-            {{ csrf_field() }}
-            {{ method_field('PUT') }}
-            @if ($aduan->status != 'draft')
-                @if (!auth()->user()->hasRole('admin-asisten-manajer'))
-                    @isset($pekerjaanUtama)
-                        <input type="hidden" name="id_pekerjaan" id="idPekerjaan" value="{{ $pekerjaanUtama->id }}">
-                        <div class="row">
-                            <div class="col-12">
 
-                                <div class="card">
-                                    <div class="card-header  justify-content-between">
-                                        <div class="card-title">Daftar Pekerjaan</div>
+        @if ($aduan->status != 'draft')
+            @if (!auth()->user()->hasRole('admin-asisten-manajer'))
+                @isset($pekerjaanUtama)
+                    <input type="hidden" name="id_pekerjaan" id="idPekerjaan" value="{{ $pekerjaanUtama->id }}">
+                    <div class="row">
+                        <div class="col-12">
 
+                            <div class="card">
+                                <div class="card-header  justify-content-between">
+                                    <div class="row">
+
+                                        <div class="col-12">
+                                            <h3 class="card-title">Daftar Pekerjaan</h3>
+                                            <hr>
+                                        </div>
+                                        @if ($pengawas === true && $pekerjaanUtama->status === 'selesai')
+                                            <div class="col-12">
+                                                <form action="" id="formPekerjaan">
+                                                    @if ($rekanan_id == null)
+                                                        @if ($tombolEdit === 'bisa')
+                                                            <div class="row">
+                                                                <div class="col-2">
+                                                                    <h6>Pilih pekerjaan</h6>
+
+                                                                    <div class="form-group">
+                                                                        <select class="form-control select2"
+                                                                            id="cmbPekerjaan">
+                                                                            <option selected="selected" value="">Pilih
+                                                                                pekerjaan
+                                                                            </option>
+                                                                            @foreach ($listPekerjaan as $i => $peker)
+                                                                                <option value="{{ $peker->id }}"
+                                                                                    id="peker_{{ $peker->id }}">
+                                                                                    {{ $peker->nama }}
+                                                                                </option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col">
+                                                                    <h6>Jumlah</h6>
+                                                                    <div class="form-group">
+                                                                        <div class="input-group mb-2 mr-sm-2">
+                                                                            <input type="text" name="jumlah_pekerjaan"
+                                                                                id="jumlah_pekerjaan" placeholder="jumlah"
+                                                                                class="form-control">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col">
+                                                                    <h6>Keterangan</h6>
+                                                                    <div class="form-group">
+                                                                        <div class="input-group mb-2 mr-sm-2">
+                                                                            <input type="text"
+                                                                                name="input_keterangan_pekerjaan"
+                                                                                id="input_keterangan_pekerjaan"
+                                                                                placeholder="Keterangan pekerjaan"
+                                                                                class="form-control">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col">
+                                                                    <h6>Pilih Waktu</h6>
+                                                                    <div class="form-radio">
+                                                                        <form>
+                                                                            <div class="radio radiofill radio-inline">
+                                                                                <label>
+                                                                                    <input type="radio"
+                                                                                        class="harga_pekerjaan"
+                                                                                        name="harga_pekerjaan" value="siang"
+                                                                                        checked="checked">
+                                                                                    <i class="helper"></i>Siang
+                                                                                </label>
+                                                                            </div>
+                                                                            <div class="radio radiofill radio-inline">
+                                                                                <label>
+                                                                                    <input type="radio"
+                                                                                        class="harga_pekerjaan"
+                                                                                        name="harga_pekerjaan" value="malam">
+                                                                                    <i class="helper"></i>Malam
+                                                                                </label>
+                                                                            </div>
+                                                                        </form>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col">
+                                                                    <div class="">
+                                                                        <button type="submit" id="btn_pekerjaan"
+                                                                            class="btn btn-primary">Update
+                                                                            Pekerjaan</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        @endif
+                                                    @endif
+                                                </form>
+                                            </div>
+                                        @endif
                                     </div>
+                                </div>
+                                <form action="{{ $action }}" method="post" id="form-update" role="form">
+                                    {{ csrf_field() }}
+                                    {{ method_field('PUT') }}
                                     <div class="card-body">
                                         <table class="table table-bordered table-responsive" width="100%"
                                             id="tablePekerjaan">
@@ -246,21 +348,13 @@
                                                     <th width="5">#</th>
                                                     <th width="500">Pekerjaan</th>
                                                     <th width="50">Jenis</th>
-                                                    <th width="5">Jumlah Rekanan</th>
-                                                    <th width="150">Keterangan Rekanan</th>
-                                                    <th width="50">Koreksi Volume Pengawas</th>
-                                                    <th width="250">Keterangan Pengawas</th>
-                                                    <th width="120">Harga</th>
-                                                    @if ($pekerjaanUtama->status === 'dikoreksi' || $pekerjaanUtama->status === 'selesai koreksi' || $pekerjaanUtama->status === 'diadjust')
-                                                        <th width="400">Koreksi Harga Satuan Perencanaan</th>
-                                                        <th width="250">Keterangan Perencanaan</th>
+                                                    <th width="50">Pengguna</th>
+                                                    <th width="150">Jumlah</th>
+                                                    <th width="200">Keterangan</th>
+                                                    <th width="50">Aksi</th>
+                                                    @if ($pekerjaanUtama->status === 'selesai koreksi')
+                                                        <th width="250">Total</th>
                                                     @endif
-                                                    @if ($pekerjaanUtama->status === 'diadjust')
-                                                        <th width="50">Adjust Volume Perencanaan</th>
-                                                        <th width="500">Adjust Harga Satuan Perencanaan</th>
-                                                        <th width="250">Keterangan Perencanaan Adjust</th>
-                                                    @endif
-                                                    <th width="120">Total Harga</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -269,168 +363,50 @@
                                                         <tr id="listPekerjaan_{{ $pekerjaan->id }}"
                                                             class="list_table_pekerjaan">
                                                             <td class="text-center nomor_pekerjaan"
-                                                                data-index="{{ $key + 1 }}">
+                                                                data-index="{{ $key + 1 }}"
+                                                                @if ($pekerjaanUtama->status === 'dikoreksi') rowspan="3" @else rowspan="2" @endif>
                                                                 {{ $key + 1 }}
                                                             </td>
-                                                            <td>
+                                                            <td
+                                                                @if ($pekerjaanUtama->status === 'dikoreksi') rowspan="3" @else rowspan="2" @endif>
                                                                 {{ $pekerjaan->nama }}
                                                             </td>
-                                                            <td>
+                                                            <td
+                                                                @if ($pekerjaanUtama->status === 'dikoreksi') rowspan="3" @else rowspan="2" @endif>
                                                                 {{ $pekerjaan->jenis }}
                                                             </td>
-                                                            <td class="text-center">
-                                                                {{ $pekerjaan->pivot->qty }}
-                                                                <input type="hidden" value="{{ $pekerjaan->pivot->qty }}"
-                                                                    name="qty[{{ $pekerjaan->item_id }}]">
-                                                                <input type="hidden"
-                                                                    value="{{ $pekerjaan->pivot->item_id }}"
-                                                                    name="item_id[{{ $pekerjaan->item_id }}]">
-                                                                <input type="hidden"
-                                                                    value="{{ $pekerjaan->pivot->harga }}"
-                                                                    name="harga[{{ $pekerjaan->item_id }}]">
-                                                            </td>
-                                                            <td>
-                                                                </span>
-                                                                <span id="keterangan_pekerjaan_{{ $pekerjaan->id }}">
-                                                                    {{ $pekerjaan->pivot->keterangan }}</span>
-
-                                                                <input type="hidden"
-                                                                    id="keterangan_pekerjaan_value_[{{ $pekerjaan->item_id }}]"
-                                                                    name="keterangan_pekerjaan[{{ $pekerjaan->item_id }}]"
-                                                                    value="{{ $pekerjaan->pivot->keterangan }}">
-                                                            </td>
-
-                                                            <td>
-                                                                @if ($pengawas === true && $pekerjaanUtama->status === 'selesai')
-                                                                    <div class="input-group mb-2 mr-sm-2">
-
-                                                                        <input type="text"
-                                                                            name="qty_pengawas_pekerjaan[{{ $pekerjaan->item_id }}]"
-                                                                            id="qty_pengawas_pekerjaan[{{ $pekerjaan->item_id }}]"
-                                                                            placeholder="Koreksi Pengawas"
-                                                                            class="form-control">
-                                                                        <div class="input-group-prepend">
-
-                                                                        </div>
-                                                                    </div>
-                                                                @else
-                                                                    {{ $pekerjaan->pivot->qty_pengawas }}
-                                                                    <input type="hidden"
-                                                                        name="qty_pengawas_pekerjaan[{{ $pekerjaan->item_id }}]"
-                                                                        value="{{ $pekerjaan->pivot->qty_pengawas }}">
-                                                                @endif
-                                                            </td>
-                                                            <td>
-                                                                @if ($pengawas === true && $pekerjaanUtama->status === 'selesai')
-                                                                    <div class="input-group mb-2 mr-sm-2">
-
-                                                                        <input type="text"
-                                                                            name="keterangan_pengawas_pekerjaan[{{ $pekerjaan->item_id }}]"
-                                                                            id="keterangan_pengawas_pekerjaan[{{ $pekerjaan->item_id }}]"
-                                                                            placeholder="Koreksi Pengawas"
-                                                                            class="form-control">
-                                                                        <div class="input-group-prepend">
-
-                                                                        </div>
-                                                                    </div>
-                                                                @else
-                                                                    {{ $pekerjaan->pivot->keterangan_pengawas }}
-                                                                    <input type="hidden"
-                                                                        name="keterangan_pengawas_pekerjaan[{{ $pekerjaan->item_id }}]"
-                                                                        value="{{ $pekerjaan->pivot->keterangan_pengawas }}">
-                                                                @endif
-                                                            </td>
-
-                                                            <td>
-                                                                <span id="total_pekerjaan_tampil_{{ $pekerjaan->id }}">
-                                                                    Rp.
-                                                                    {{ format_uang($pekerjaan->pivot->harga) }}
-                                                                </span>
-                                                                <input type="hidden"
-                                                                    id="total_pekerjaan_value_{{ $pekerjaan->id }}"
-                                                                    name="total_pekerjaan"
-                                                                    value="{{ $pekerjaan->pivot->harga }}"
-                                                                    class="total_pekerjaan[{{ $pekerjaan->item_id }}]">
-                                                            </td>
-
-                                                            @if ($pekerjaanUtama->status === 'dikoreksi' || $pekerjaanUtama->status === 'selesai koreksi' || $pekerjaanUtama->status === 'diadjust')
-                                                                @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
-                                                                    <td>
-                                                                        <div class="input-group mb-2 mr-sm-2">
-                                                                            <div class="input-group-prepend">
-                                                                                <div class="input-group-text">Rp.</div>
-                                                                            </div>
-                                                                            <input type="text" class="form-control"
-                                                                                id="harga_perencanaan_pekerjaan{{ $pekerjaan->item_id }}{{ $key }}"
-                                                                                name="harga_perencanaan_pekerjaan[{{ $pekerjaan->item_id }}]"
-                                                                                value="{{ format_uang($pekerjaan->pivot->harga) }}"
-                                                                                placeholder="Koreksi Perencanaan">
-                                                                        </div>
-                                                                        @push('script')
-                                                                            <script>
-                                                                                $("#harga_perencanaan_pekerjaan{{ $pekerjaan->item_id }}{{ $key }}").on("input", function() {
-
-                                                                                    let val = formatRupiahTanpaRp(this.value, '')
-                                                                                    $("#harga_perencanaan_pekerjaan{{ $pekerjaan->item_id }}{{ $key }}").val(val)
-                                                                                });
-                                                                            </script>
-                                                                        @endpush
-                                                                    </td>
-                                                                @else
-                                                                    <td>
-                                                                        Rp.
-                                                                        {{ format_uang($pekerjaan->pivot->harga_perencanaan) }}
-                                                                    </td>
-                                                                @endif
+                                                            <td>Rekanan</td>
+                                                            <td>{{ $pekerjaan->pivot->qty }}</td>
+                                                            <td>{{ $pekerjaan->pivot->keterangan }}</td>
+                                                            @if ($pekerjaanUtama->status === 'selesai koreksi')
+                                                                <td rowspan="3">
+                                                                    Rp. {{ format_uang($pekerjaan->pivot->total) }}</td>
                                                             @endif
-                                                            @if ($pekerjaanUtama->status === 'dikoreksi' || $pekerjaanUtama->status === 'selesai koreksi' || $pekerjaanUtama->status === 'diadjust')
-                                                                @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
-                                                                    <td>
-                                                                        <div class="input-group mb-2 mr-sm-2">
-
-                                                                            <input type="text"
-                                                                                name="keterangan_perencanaan[{{ $pekerjaan->item_id }}]"
-                                                                                id="keterangan_perencanaan[{{ $pekerjaan->item_id }}]"
-                                                                                placeholder="Koreksi Perencanaan"
-                                                                                class="form-control">
-                                                                            <div class="input-group-prepend">
-
-                                                                            </div>
-                                                                        </div>
-                                                                    </td>
-                                                                @else
-                                                                    <td>
-                                                                        {{ $pekerjaan->pivot->keterangan_perencanaan }}
-                                                                    </td>
-                                                                @endif
-                                                            @endif
-                                                            @if ($pekerjaanUtama->status === 'diadjust')
-                                                                <td>
-                                                                    {{ $pekerjaan->pivot->qty_perencanaan_adjust }}
-                                                                </td>
-                                                                <td>
-                                                                    Rp.
-                                                                    {{ format_uang($pekerjaan->pivot->harga_perencanaan_adjust) }}
-                                                                </td>
-                                                                <td>
-                                                                    {{ $pekerjaan->pivot->keterangan_perencanaan_adjust }}
-                                                                </td>
-                                                            @endif
-
-
-                                                            <td>
-                                                                <span id="total_pekerjaan_tampil_{{ $pekerjaan->id }}">
-                                                                    Rp.
-                                                                    {{ format_uang($pekerjaan->pivot->total) }}
-                                                                </span>
-                                                                <input type="hidden"
-                                                                    id="total_pekerjaan_value_{{ $pekerjaan->id }}"
-                                                                    name="total_pekerjaan"
-                                                                    value="{{ $pekerjaan->pivot->total }}"
-                                                                    class="total_pekerjaan">
-                                                            </td>
 
                                                         </tr>
+                                                        <tr>
+                                                            <td>Pengawas</td>
+                                                            @if ($pengawas === true && $pekerjaanUtama->status === 'selesai')
+                                                                <td><input type="text"
+                                                                        name="qty_pengawas[{{ $pekerjaan->pivot->item_id }}]"
+                                                                        id="qty_pengawas[{{ $pekerjaan->pivot->item_id }}]"
+                                                                        placeholder="Koreksi Pengawas" class="form-control">
+                                                                </td>
+                                                                <td><input type="text"
+                                                                        name="keterangan_pengawas[{{ $pekerjaan->pivot->item_id }}]"
+                                                                        id="keterangan_pengawas[{{ $pekerjaan->pivot->item_id }}]"
+                                                                        placeholder="Keterangan Pengawas"
+                                                                        class="form-control">
+                                                                </td>
+                                                            @else
+                                                            @endif
+                                                        </tr>
+                                                        @if ($pekerjaanUtama->status === 'dikoreksi')
+                                                            <tr>
+                                                                <td>Perencanaan</td>
+                                                                <td></td>
+                                                            </tr>
+                                                        @endif
                                                     @empty
                                                         <tr class="pekerjaanTidakAda">
                                                             <td colspan="10">Data Pekerjaan tidak ada</td>
@@ -472,24 +448,6 @@
                                                 <tr>
                                                     <th width="5">#</th>
                                                     <th width="500">Galian</th>
-                                                    <th width="10">Panjang</th>
-                                                    <th width="10">Lebar</th>
-                                                    <th width="100">Dalam</th>
-                                                    <th width="100">Volume Rekanan</th>
-                                                    <th width="150">Keterangan Rekanan</th>
-                                                    <th width="150">Koreksi Volume Pengawas</th>
-                                                    <th width="250">Keterangan Pengawas</th>
-                                                    @if ($pekerjaanUtama->status === 'dikoreksi' || $pekerjaanUtama->status === 'selesai koreksi' || $pekerjaanUtama->status === 'diadjust')
-                                                        <th width="250">Koreksi Harga Satuan Perencanaan</th>
-                                                        <th width="250">Keterangan Perencanaan</th>
-                                                    @endif
-                                                    @if ($pekerjaanUtama->status === 'diadjust')
-                                                        <th width="50">Adjust Volume Perencanaan</th>
-                                                        <th width="500">Adjust Harga Satuan Perencanaan</th>
-                                                        <th width="250">Keterangan Adjust Perencanaan</th>
-                                                    @endif
-                                                    <th @if ($pekerjaanUtama->status === 'diadjust') width="250" @else width="120" @endif>
-                                                        Total Harga</th>
 
                                                 </tr>
                                             </thead>
@@ -508,158 +466,7 @@
                                                             <td>
                                                                 {{ $galian->pekerjaan }}
                                                             </td>
-                                                            <td>
-                                                                <span
-                                                                    id="panjang_galian_{{ $galian->item_id }}">{{ $galian->panjang }}
-                                                                    M</span>
 
-                                                                <input type="hidden"
-                                                                    id="panjang_value_{{ $galian->item_id }}"
-                                                                    name="panjang" value="{{ $galian->panjang }}">
-                                                            </td>
-                                                            <td>
-                                                                <span
-                                                                    id="lebar_galian_{{ $galian->item_id }}">{{ $galian->lebar }}
-                                                                    M</span>
-                                                                <input type="hidden"
-                                                                    id="lebar_value_{{ $galian->item_id }}" name="lebar"
-                                                                    value="{{ $galian->lebar }}">
-                                                            </td>
-                                                            <td>
-                                                                <span id="dalam_galian_{{ $galian->item_id }}">
-                                                                    {{ $galian->dalam }} M</span>
-                                                                <input type="hidden"
-                                                                    id="dalam_value_{{ $galian->item_id }}" name="lebar"
-                                                                    value="{{ $galian->dalam }}">
-                                                            </td>
-                                                            <td class="text-center">
-                                                                {{ $galian->panjang * $galian->lebar * $galian->dalam }}
-                                                                m<sup>2</sup>
-                                                            </td>
-                                                            <td>
-                                                                <span id="keterangan_galian_{{ $galian->item_id }}">
-                                                                    {{ $galian->keterangan }}</span>
-
-                                                                <input type="hidden"
-                                                                    id="keterangan_value_{{ $galian->item_id }}"
-                                                                    name="keterangan" value="{{ $galian->keterangan }}">
-                                                            </td>
-                                                            <td class="text-center">
-                                                                @if ($pengawas === true && $pekerjaanUtama->status === 'selesai')
-                                                                    <div class="input-group mb-2 mr-sm-2">
-
-                                                                        <input type="text"
-                                                                            name="qty_pengawas[{{ $galian->id }}]"
-                                                                            id="qty_pengawas" placeholder="Koreksi Pengawas"
-                                                                            class="form-control">
-                                                                        <div class="input-group-prepend">
-                                                                            <div class="input-group-text">m<sup>2</sup></div>
-                                                                        </div>
-                                                                    </div>
-                                                                @else
-                                                                    {{ $galian->qty_pengawas }}
-                                                                    m<sup>2
-                                                                        <input type="hidden"
-                                                                            name="qty_pengawas[{{ $galian->id }}]"
-                                                                            value="{{ $galian->qty_pengawas }}">
-                                                                @endif
-                                                            </td>
-                                                            <td>
-                                                                @if ($pengawas === true && $pekerjaanUtama->status === 'selesai')
-                                                                    <div class="input-group mb-2 mr-sm-2">
-
-                                                                        <input type="text"
-                                                                            name="keterangan_pengawas_galian_[{{ $galian->id }}]"
-                                                                            id="keterangan_pengawas_galian_[{{ $galian->id }}]"
-                                                                            placeholder="Koreksi Pengawas"
-                                                                            class="form-control">
-                                                                        <div class="input-group-prepend">
-
-                                                                        </div>
-                                                                    </div>
-                                                                @else
-                                                                    {{ $galian->keterangan_pengawas }}
-                                                                    <input type="hidden"
-                                                                        name="keterangan_pengawas_galian_[{{ $galian->id }}]"
-                                                                        value="  {{ $galian->keterangan_pengawas }}">
-                                                                @endif
-                                                            </td>
-
-                                                            @if ($pekerjaanUtama->status === 'dikoreksi' || $pekerjaanUtama->status === 'selesai koreksi' || $pekerjaanUtama->status === 'diadjust')
-                                                                @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
-                                                                    <td>
-                                                                        <div class="input-group mb-2 mr-sm-2">
-                                                                            <div class="input-group-prepend">
-                                                                                <div class="input-group-text">Rp.</div>
-                                                                            </div>
-                                                                            <input type="text" class="form-control"
-                                                                                id="harga_perencanaan_galian{{ $galian->id }}{{ $inv }}"
-                                                                                name="harga_perencanaan_galian[{{ $galian->id }}]"
-                                                                                value="{{ format_uang($galian->harga_satuan) }}"
-                                                                                placeholder="Koreksi Perencanaan">
-                                                                        </div>
-                                                                        @push('script')
-                                                                            <script>
-                                                                                $("#harga_perencanaan_galian{{ $galian->id }}{{ $inv }}").on("input", function() {
-
-                                                                                    let val = formatRupiahTanpaRp(this.value, '')
-                                                                                    $("#harga_perencanaan_galian{{ $galian->id }}{{ $inv }}").val(val)
-                                                                                });
-                                                                            </script>
-                                                                        @endpush
-                                                                    </td>
-                                                                    <td>
-                                                                        <div class="input-group mb-2 mr-sm-2">
-
-                                                                            <input type="text"
-                                                                                name="keterangan_perencanaan_galian[{{ $galian->id }}]"
-                                                                                id="keterangan_perencanaan_galian[{{ $galian->id }}]{}"
-                                                                                placeholder="Koreksi Pengawas"
-                                                                                class="form-control">
-                                                                            <div class="input-group-prepend">
-
-                                                                            </div>
-                                                                        </div>
-                                                                    </td>
-                                                                @else
-                                                                    <td>
-                                                                        Rp.
-                                                                        {{ format_uang($galian->harga_perencanaan) }}
-                                                                        <input type="hidden"
-                                                                            name="harga_perencanaan_galian[{{ $galian->id }}]"
-                                                                            value="{{ $galian->harga_perencanaan }}">
-                                                                    </td>
-                                                                    <td>
-                                                                        {{ $galian->keterangan_perencanaan }}
-                                                                        <input type="hidden"
-                                                                            name="keterangan_perencanaan_galian[{{ $galian->id }}]"
-                                                                            value="{{ $galian->keterangan_perencanaan }}">
-                                                                    </td>
-                                                                @endif
-                                                            @endif
-                                                            @if ($pekerjaanUtama->status === 'diadjust')
-                                                                <td>
-                                                                    {{ $galian->qty_perencanaan_adjust }} m<sup>2</sup>
-                                                                </td>
-                                                                <td>
-                                                                    Rp.
-                                                                    {{ format_uang($galian->harga_perencanaan_adjust) }}
-                                                                </td>
-
-                                                                <td>
-                                                                    {{ $galian->keterangan_perencanaan_adjust }}
-                                                                </td>
-                                                            @endif
-                                                            <td>
-                                                                <span id="total_galian_tampil_{{ $galian->id }}">
-                                                                    Rp.
-                                                                    {{ format_uang($galian->total) }}
-                                                                </span>
-                                                                <input type="hidden"
-                                                                    id="total_galian_value_{{ $galian->id }}"
-                                                                    name="total_galian" value="{{ $galian->total }}"
-                                                                    class="total_galian">
-                                                            </td>
 
                                                         </tr>
                                                     @empty
@@ -720,30 +527,35 @@
                                         </table>
                                         {{-- End Galian --}}
                                     </div>
-                                </div>
+                                    <div class="card-footer">
+                                        @if (!auth()->user()->hasRole('rekanan'))
+                                            @if ($tombolEdit === 'bisa')
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <input type="hidden" name="pekerjan" id="pekerjan"
+                                                            value="{{ $pekerjaanUtama->id }}">
+                                                        <input type="hidden" name="no_spk" id="no_spk"
+                                                            value="{{ $aduan->no_spk }}">
+                                                        <div class="card">
+                                                            <button type="button" id="simpan_koreksi"
+                                                                class="btn btn-primary">Simpan Koreksi
+                                                                Pekerjaan</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        @endif
+                                    </div>
+                                </form>
                             </div>
                         </div>
+                    </div>
 
-                        @if (!auth()->user()->hasRole('rekanan'))
-                            @if ($tombolEdit === 'bisa')
-                                <div class="row">
-                                    <div class="col-12">
-                                        <input type="hidden" name="pekerjan" id="pekerjan"
-                                            value="{{ $pekerjaanUtama->id }}">
-                                        <input type="hidden" name="no_spk" id="no_spk"
-                                            value="{{ $aduan->no_spk }}">
-                                        <div class="card">
-                                            <button type="button" id="simpan_koreksi" class="btn btn-primary">Simpan Koreksi
-                                                Pekerjaan</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endif
-                        @endif
-                    @endisset
-                @endif
+
+                @endisset
             @endif
-        </form>
+        @endif
+
 
         {{-- Detail Aduan --}}
         <div class="row">
@@ -797,7 +609,7 @@
                                         <label for="kategori_aduan" class=" form-control-label">Kategori Aduan</label>
                                     </div>
                                     <div>
-                                        <strong>{{ $aduan->kategori_aduan }}</strong>
+                                        <strong>{{ ucfirst($aduan->kategori_aduan) }}</strong>
                                     </div>
                                 </div>
                             </div>
@@ -886,7 +698,10 @@
                                         <label for="lokasi" class=" form-control-label">Lokasi</label>
                                     </div>
                                     <div>
-                                        <strong>{{ $aduan->lokasi }}</strong>
+                                        <a href="https://maps.google.com/?q={{ $aduan->lat_long }}" target="__blank"
+                                            class="text-danger">
+                                            <strong>{{ $aduan->lokasi }}</strong>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -898,7 +713,10 @@
                                         <label for="detail_lokasi" class=" form-control-label">Detail Lokasi</label>
                                     </div>
                                     <div>
-                                        <strong>{{ $aduan->detail_lokasi }}</strong>
+                                        <a href="https://maps.google.com/?q={{ $aduan->lat_long }}" target="__blank"
+                                            class="text-danger">
+                                            <strong>{{ $aduan->detail_lokasi }}</strong>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -1024,188 +842,29 @@
             })
         }
 
+        $(document).on('keypress', '.numberOnly', function(event) {
+            if (event.which < 46 ||
+                event.which > 59) {
+                event.preventDefault();
+            } // prevent if not number/dot
 
-        function totalHarga(modul) {
-            let sumTotal = 0;
-
-            $('.total_' + modul).each(function() {
-                sumTotal += parseFloat($(this)
-                    .val());
-            });
-
-            let sumGrandTotal = 0;
-
-            $('#grand_total_' + modul + '_value').val(sumTotal);
-            $('#grand_total_' + modul + '_tampil').text(formatRupiah(Math.floor(
-                sumTotal).toString(), 'Rp. '));
-
-            // $('#total_tagihan_pekerjaan').val(sumTotal);
-
-            $('.total_tagihan').each(function() {
-                sumGrandTotal += parseFloat($(this)
-                    .val());
-            });
-            $('#total_tagihan_pekerjaan').text(formatRupiah(Math.floor(
-                sumGrandTotal).toString(), 'Rp. '));
-
-
-        }
-
-        $(document).on("click", ".btn-galian-edit", function(e) {
-            let galian_id = $(this).data('galian');
-            let getpanjangan = $('#panjang_value_' + galian_id).val();
-            let getlebar = $('#lebar_value_' + galian_id).val();
-            let getdalam = $('#dalam_value_' + galian_id).val();
-            let getketerangan = $('#keterangan_value_' + galian_id).val();
-
-
-            let lebar = $('#lebar_galian').val(getlebar);
-            let dalam = $('#dalam_galian').val(getdalam);
-            let panjang = $('#panjang_galian').val(getpanjangan);
-            let keterangan = $('#keterangan_galian').val(getketerangan);
-
-            $('#cmbGalian').val(galian_id).trigger('change');
-        });
-
-        $(document).on("click", ".btn-galian-hapus", function(e) {
-            let content = '';
-            let modul = 'galian';
-            let item_id = $(this).data('galian');
-
-            let item = $('#listgalian_' + item_id).length;
-            if (item > 0) {
-                $('#listgalian_' + item_id).remove();
-
-                $('#tableGalian').append(content);
-            }
-
-            let n = 1;
-            $('.nomor_' + modul).each(function(index, item) {
-                let number = n++;
-                $(item).text(number);
-                $(this).attr('data-index', number);
-            });
-
-
-            $.when($.ajax({
-                type: 'POST',
-                url: "{{ route('pelaksanaan-pekerjaan.galian.hapus') }}",
-                data: {
-                    "_token": "{{ csrf_token() }}",
-                    id,
-                    item_id,
-                },
-                success: function(data) {
-                    toast('success hapus ' + modul)
-                    totalHarga(modul);
-                },
-                error: function(data) {
-
-                    Swal.fire({
-                        title: 'Oops...',
-                        text: "gagal Mengahapus " +
-                            modul,
-                        footer: '<a href="">terdapat data yang kosong</a>'
-                    })
-                }
-            })).then(function(data, textStatus, jqXHR) {
-                totalHarga(modul)
-            });
-        });
-
-
-        function tombol() {
-
-            $(document).on("click", ".btn-hapus", function(e) {
-                let id = $(this).data('pekerjaanutama');
-                let modul = $(this).data('modul');
-                let item = $(this).data('item');
-                let content = '';
-                let modulLowcasse = capitalizeFirstLetter(modul);
-                let itemLength = $('#list' + modulLowcasse + '_' + item).length;
-                if (itemLength > 0) {
-                    $('#list' + modulLowcasse + '_' + item).remove();
-
-                    $('#table' + modulLowcasse).append(content);
-                }
-                let n = 1;
-                $('.nomor_' + modul).each(function(index, item) {
-                    let number = n++;
-                    $(item).text(number);
-                    $(this).attr('data-index', number);
-                });
-                $.when($.ajax({
-                    type: 'POST',
-                    url: "{{ route('pelaksanaan-pekerjaan.hapus.item') }}",
-                    data: {
-                        "_token": "{{ csrf_token() }}",
-                        id,
-                        modul,
-                        item,
-                    },
-                    success: function(data) {
-                        toast('success hapus ' + modul)
-                    },
-                    error: function(data) {
-
-                        Swal.fire({
-                            title: 'Oops...',
-                            text: "gagal Mengahapus " +
-                                modul,
-                            footer: '<a href="">terdapat data yang kosong</a>'
-                        })
-                    }
-                })).then(function(data, textStatus, jqXHR) {
-                    totalHarga(modul)
-                    $('#cmb' + modulLowcasse).val(null).trigger('change');
-                    $('#jumlah_' + modul).val('');
-                });
-
-            });
-            $(document).on("click", ".btn-edit", function(e) {
-                let id = $(this).data('pekerjaanutama');
-                let modul = $(this).data('modul');
-                let item = $(this).data('item');
-                let modulLowcasse = capitalizeFirstLetter(modul);
-                $('#cmb' + modulLowcasse).val(item).trigger('change');
-                let getjumlah = $('#jumlah_' + modul + '_value_' + item).val();
-                let getketerangan = $('#keterangan_' + modul + '_value_' + item).val();
-                $('#jumlah_' + modul + '_tampil').val(getjumlah);
-                $('#jumlah_' + modul).val(getjumlah);
-                $('#keterangan_' + modul).val(getketerangan);
-            });
-        }
-
-        tombol()
+            if (event.which == 46 &&
+                $(this).val().indexOf('.') != -1) {
+                event.preventDefault();
+            } // prevent if already dot
+        })
 
         // -- end galian
         $(document).ready(function() {
-            $('#cmbRekanan').select2({
-                placeholder: '--- Pilih Pekerja ---',
-                width: '100%'
-            });
-            $('#cmbBahan').select2({
-                placeholder: '--- Pilih Bahan ---',
-                width: '100%'
-            });
-            $('#cmbAlat_bantu').select2({
-                placeholder: '--- Pilih Alat Bantu ---',
-                width: '100%'
-            });
-            $('#cmbTransportasi').select2({
-                placeholder: '--- Pilih Transportasi ---',
-                width: '100%'
-            });
-
-            // ----- Pekerjaan
             $('#cmbPekerjaan').select2({
                 placeholder: '--- Pilih Pekerjaan ---',
                 width: '100%'
             });
-            $('#cmbDokumentasi').select2({
-                placeholder: '--- Pilih Dokumentasi ---',
-                width: '100%'
+
+            $("#cmbPekerjaan").on("change", function(e) {
+                $('#cmbPekerjaan').parent().removeClass('is-invalid')
             });
+
 
             $('#jumlah_pekerjaan').keypress(function(event) {
                 if (event.which < 46 ||
@@ -1219,98 +878,36 @@
                 } // prevent if already dot
                 $(this).removeClass("is-invalid");
             })
-            $('#jumlah_bahan').keypress(function(event) {
-                if (event.which < 46 ||
-                    event.which > 59) {
-                    event.preventDefault();
-                } // prevent if not number/dot
 
-                if (event.which == 46 &&
-                    $(this).val().indexOf('.') != -1) {
-                    event.preventDefault();
-                } // prevent if already dot
-                $(this).removeClass("is-invalid");
-            })
-            $('#jumlah_alat_bantu').keypress(function(event) {
-                if (event.which < 46 ||
-                    event.which > 59) {
-                    event.preventDefault();
-                } // prevent if not number/dot
-
-                if (event.which == 46 &&
-                    $(this).val().indexOf('.') != -1) {
-                    event.preventDefault();
-                } // prevent if already dot
-                $(this).removeClass("is-invalid");
-            })
-            $('#jumlah_dokumentasi').keypress(function(event) {
-                if (event.which < 46 ||
-                    event.which > 59) {
-                    event.preventDefault();
-                } // prevent if not number/dot
-
-                if (event.which == 46 &&
-                    $(this).val().indexOf('.') != -1) {
-                    event.preventDefault();
-                } // prevent if already dot
-                $(this).removeClass("is-invalid");
-            })
-            $('#jumlah_transportasi').keypress(function(event) {
-                if (event.which < 46 ||
-                    event.which > 59) {
-                    event.preventDefault();
-                } // prevent if not number/dot
-
-                if (event.which == 46 &&
-                    $(this).val().indexOf('.') != -1) {
-                    event.preventDefault();
-                } // prevent if already dot
-                $(this).removeClass("is-invalid");
-            })
-
-            $("#cmbPekerjaan").on("change", function(e) {
-                $('#cmbPekerjaan').parent().removeClass('is-invalid')
-            });
-            $("#cmbTransportasi").on("change", function(e) {
-                $('#cmbTransportasi').parent().removeClass('is-invalid')
+            $('#formPekerjaan').on('submit', function(e) {
+                e.preventDefault();
+                let modul = 'pekerjaan';
+                saveform(modul);
             });
 
-            function elementPekerjaan(id, nomor, pekerjaan, jumlah, total, keterangan, modul, perencanaan) {
+
+
+            function elementPekerjaan(id, nama, slug, jenis, nomor, modul, jumlah, keterangan = null) {
                 let modulLowcasse = capitalizeFirstLetter(modul);
                 let pekerjaanUtama = $('#idPekerjaan').val();
 
-                let elementTotal = '';
-
-                if (perencanaan === 'true') {
-                    elementTotal = `<td>
-                        <span id="total_${modul}_tampil_${id}">
-                            ${formatRupiah(Math.floor(total).toString(), '')}
-                        </span>
-                        <input type="hidden" id="total_${modul}_value_${id}"
-                            name="total_${modul}" value="${total}" class="total_${modul}">
-                    </td>`;
-                }
-
-                return `<tr id="list${modulLowcasse}_${id}" class="list_table_${modul}">
+                let elementTotal = `<tr id="list${modulLowcasse}_${id}" class="list_table_${modul}">
                     <td class="text-center nomor_${modul}" data-index="${nomor}">${nomor}
                     </td>
-                    <td>${pekerjaan}</td>
+                    <td>${nama}</td>
+                    <td>${jenis}</td>
+                    <td>pengawas</td>
                     <td>
-                        <span id="jumlah_${modul}_tampil_${id}">${jumlah}</span>
-                        <input type="hidden" name="jumlah" id="jumlah_${modul}_value_${id}" value="${jumlah}">
-                    </td>
-                    ${elementTotal}
-                    <td>
-                        <span id="keterangan_${modul}_${id}">${keterangan === null ? '' : keterangan}</span>
-                        <input type="hidden" name="keterangan" id="keterangan_${modul}_value_${id}" value="${keterangan === null ? '' : keterangan}">
+                        <input type="text" name="qty_pengawas[${id}]"
+                        id="qty_pengawas_${id}" value="${jumlah}"
+                        placeholder="Koreksi Pengawas" class="form-control numberOnly">
                     </td>
                     <td>
-                            <button class="btn btn-sm btn-warning text-light btn-edit"
-                                data-pekerjaanutama="${pekerjaanUtama}"
-                                data-modul="${modul}" data-item="${id}">
-                                <i class="nav-icon fas fa-edit"></i>
-                                Ubah
-                            </button>
+                        <input type="text" name="keterangan_pengawas[${id}]"
+                        id="keterangan_pengawas[${id}]" value="${keterangan}"
+                        placeholder="Keterangan Pengawas" class="form-control ">
+                    </td>
+                    <td>
                             <button type="button"
                                 class="btn btn-danger btn-xs text-center btn-hapus"
                                 data-pekerjaanutama="${pekerjaanUtama}"
@@ -1321,7 +918,49 @@
                     </td>
                 </tr>`;
 
+                return elementTotal;
+
             }
+
+            function tombol() {
+
+                $(document).on("click", ".btn-hapus", function(e) {
+                    let id = $(this).data('pekerjaanutama');
+                    let modul = $(this).data('modul');
+                    let item = $(this).data('item');
+                    let content = '';
+                    let modulLowcasse = capitalizeFirstLetter(modul);
+                    let itemLength = $('#list' + modulLowcasse + '_' + item).length;
+                    if (itemLength > 0) {
+                        $('#list' + modulLowcasse + '_' + item).remove();
+
+                        $('#table' + modulLowcasse).append(content);
+                    }
+                    let n = 1;
+                    $('.nomor_' + modul).each(function(index, item) {
+                        let number = n++;
+                        $(item).text(number);
+                        $(this).attr('data-index', number);
+                    });
+
+                    toast('success hapus ' + modul)
+
+                });
+                $(document).on("click", ".btn-edit", function(e) {
+                    let id = $(this).data('pekerjaanutama');
+                    let modul = $(this).data('modul');
+                    let item = $(this).data('item');
+                    let modulLowcasse = capitalizeFirstLetter(modul);
+                    $('#cmb' + modulLowcasse).val(item).trigger('change');
+                    let getjumlah = $('#jumlah_' + modul + '_value_' + item).val();
+                    let getketerangan = $('#keterangan_' + modul + '_value_' + item).val();
+                    $('#jumlah_' + modul + '_tampil').val(getjumlah);
+                    $('#jumlah_' + modul).val(getjumlah);
+                    $('#keterangan_' + modul).val(getketerangan);
+                });
+            }
+
+            tombol()
 
             function saveform(modul) {
 
@@ -1330,7 +969,6 @@
                 let jumlah = $('#jumlah_' + modul).val();
                 let keterangan = $('#input_keterangan_' + modul).val();
 
-                let harga = $("input[name='harga_" + modul + "']:checked").val();
                 if (item === "") {
                     $('#cmb' + modulLowcasse).parent().addClass('is-invalid')
                 }
@@ -1339,83 +977,56 @@
                 }
 
                 if (item !== "" && jumlah !== "") {
-                    $('.' + modul + 'TidakAda').remove();
-                    $.when($.ajax({
-                        type: 'POST',
-                        url: "{{ route('pelaksanaan-pekerjaan.item') }}",
-                        data: {
-                            "_token": "{{ csrf_token() }}",
-                            id,
-                            item,
-                            jumlah,
-                            harga,
-                            keterangan
-                        },
-                        success: function(data) {
-                            const {
-                                id,
-                                item_id,
-                                jumlah,
-                                pekerjaan,
-                                keterangan,
-                                perencanaan,
-                                total
-                            } = data.data;
+                    let lengthPekerjaan = $('#list' + modulLowcasse + '_' + item).length;
+                    let tableCount = $('.nomor_pekerjaan').length;
+
+                    let nomor = tableCount + 1;
 
 
-                            let lengthPekerjaan = $('#list' + modulLowcasse + '_' + item_id)
-                                .length;
-
-                            let tableCount = $('#table' + modulLowcasse + '  > tbody > tr')
-                                .length;
-                            let nomor = tableCount + 1;
-
-                            if (lengthPekerjaan !== 0) {
-                                $('#jumlah_' + modul + '_tampil_' + item_id).text(jumlah);
-
-                                $('#total_' + modul + '_tampil_' + item_id).text(formatRupiah(
-                                    Math
-                                    .floor(total).toString(), 'Rp. '));
-                                $('#total_' + modul + '_value_' + item_id).val(total);
-
-                                $('#keterangan_' + modul + '_' + item_id).text(keterangan);
-
-                                $('#jumlah_' + modul + '_value_' + item_id).val(jumlah);
-                                $('#keterangan_' + modul + '_value_' + item_id).val(keterangan);
-
-                                toast('success mengubah ' + modul + '')
-                            } else {
-
+                    if (lengthPekerjaan === 0) {
+                        $.when($.ajax({
+                            type: 'get',
+                            url: "{{ route('item.api.index') }}/" + item,
+                            data: {
+                                "_token": "{{ csrf_token() }}",
+                                id
+                            },
+                            success: function(data) {
+                                const {
+                                    id,
+                                    nama,
+                                    slug,
+                                    jenis
+                                } = data.data;
                                 let content = elementPekerjaan(
-                                    item_id,
-                                    nomor,
-                                    pekerjaan,
-                                    jumlah,
-                                    total,
-                                    keterangan,
-                                    modul,
-                                    perencanaan
+                                    id, nama, slug, jenis, nomor, modul, jumlah, keterangan
                                 );
+
                                 $('#table' + modulLowcasse).append(content);
-                                toast('success menambah ' + modulLowcasse)
+                                toast('success menambah ' + modulLowcasse);
+                                $('#cmb' + modulLowcasse).val(null).trigger('change');
+                                $('#jumlah_' + modul).val('');
+                                $('#input_keterangan_' + modul).val('');
+
+
+                            },
+
+                            error: function(data) {
+                                Swal.fire({
+                                    title: 'Oops...',
+                                    text: "Isi dengan lengkap",
+                                    footer: '<a href="">terdapat data yang kosong</a>'
+                                })
+
                             }
-                            $('#cmb' + modulLowcasse).val(null).trigger('change');
-                            $('#jumlah_' + modul).val('');
-                            $('#input_keterangan_' + modul).val('');
-                        },
+                        })).then(function(data, textStatus, jqXHR) {
+                            // totalHarga(modul);
 
-                        error: function(data) {
-                            Swal.fire({
-                                title: 'Oops...',
-                                text: "Isi dengan lengkap",
-                                footer: '<a href="">terdapat data yang kosong</a>'
-                            })
 
-                        }
-                    })).then(function(data, textStatus, jqXHR) {
-                        totalHarga(modul);
+                        });
 
-                    });
+                    }
+
                 } else {
                     Swal.fire({
                         title: 'Oops...',
@@ -1425,255 +1036,6 @@
                 }
 
             }
-
-
-            $('#formPekerjaan').on('submit', function(e) {
-                e.preventDefault();
-                let modul = 'pekerjaan';
-                saveform(modul);
-            });
-            $('#formAlatBantu').on('submit', function(e) {
-                e.preventDefault();
-                let modul = 'alat_bantu';
-                saveform(modul);
-            });
-
-            $('#formBahan').on('submit', function(e) {
-                e.preventDefault();
-                let modul = 'bahan';
-                saveform(modul);
-            });
-            $('#formTransportasi').on('submit', function(e) {
-                e.preventDefault();
-                let modul = 'transportasi';
-                saveform(modul);
-            });
-            $('#formDokumentasi').on('submit', function(e) {
-                e.preventDefault();
-                let modul = 'dokumentasi';
-                saveform(modul);
-            });
-            // ------ End Pekerjaan
-
-            // ----- Galian
-            $('#cmbGalian').select2({
-                placeholder: '--- Pilih Galian ---',
-                width: '100%'
-            });
-            $('#lebar_galian').keypress(function(event) {
-                if (event.which < 46 ||
-                    event.which > 59) {
-                    event.preventDefault();
-                } // prevent if not number/dot
-
-                if (event.which == 46 &&
-                    $(this).val().indexOf('.') != -1) {
-                    event.preventDefault();
-                } // prevent if already dot
-                $(this).removeClass("is-invalid");
-            })
-            $('#panjang_galian').keypress(function(event) {
-                if (event.which < 46 ||
-                    event.which > 59) {
-                    event.preventDefault();
-                } // prevent if not number/dot
-
-                if (event.which == 46 &&
-                    $(this).val().indexOf('.') != -1) {
-                    event.preventDefault();
-                } // prevent if already dot
-                $(this).removeClass("is-invalid");
-            })
-            $('#dalam_galian').keypress(function(event) {
-                if (event.which < 46 ||
-                    event.which > 59) {
-                    event.preventDefault();
-                } // prevent if not number/dot
-
-                if (event.which == 46 &&
-                    $(this).val().indexOf('.') != -1) {
-                    event.preventDefault();
-                } // prevent if already dot
-                $(this).removeClass("is-invalid");
-            })
-
-            function elementGalian(id, nomor, pekerjaan, lebar, panjang, dalam, total, keterangan, item_id,
-                perencanaan) {
-
-                let elementTotal = '';
-
-                if (perencanaan === 'true') {
-                    elementTotal = `<td>
-                        <span id="total_galian_tampil_${item_id}">
-                            ${formatRupiah(Math
-                                        .floor(total).toString(), 'Rp. ')}
-                        </span>
-                        <input type="hidden" id="total_galian_value_${item_id}"
-                            name="total_galian" value="${total}" class="total_galian">
-                    </td>`;
-                }
-
-                return `<tr id="listgalian_${item_id}" class="list_table_galian">
-                    <td class="text-center nomor_galian" data-index="${nomor}">${nomor}
-                    </td>
-                    <td>${pekerjaan}</td>
-                    <td>
-                        <span id="panjang_galian_${item_id}">${panjang} M</span>
-                        <input type="hidden" name="panjang" id="panjang_value_${item_id}" value="${panjang}">
-                    </td>
-                    <td>
-                        <span id="lebar_galian_${item_id}">${lebar} M</span>
-                        <input type="hidden" name="lebar" id="lebar_value_${item_id}" value="${lebar}">
-                    </td>
-                    <td>
-                        <span id="dalam_galian_${item_id}">${dalam} M</span>
-                        <input type="hidden" name="dalam" id="dalam_value_${item_id}"  value="${dalam}">
-                    </td>
-                    ${elementTotal}
-                    <td>
-                        <span id="keterangan_galian_${item_id}">${keterangan === null ? '' : keterangan}</span>
-                        <input type="hidden" name="keterangan" id="keterangan_value_${item_id}" value="${keterangan === null ? '' : keterangan}">
-                    </td>
-                    <td>
-                        <button class="btn btn-sm btn-warning text-light btn-galian-edit"
-                            data-galian="${item_id}"
-                            >
-                            <i class="nav-icon fas fa-edit"></i>
-                            Ubah
-                        </button>
-                        <button type="button"
-                            class="btn btn-danger btn-xs text-center btn-galian-hapus"
-                            data-galian="${item_id}">
-                            <i class="fa fa-trash"></i>
-                            Hapus
-                        </button>
-                    </td>
-                </tr>`;
-
-            }
-            $("#cmbGalian").on("change", function(e) {
-                $('#cmbGalian').parent().removeClass('is-invalid')
-            });
-
-            $('#formGalian').on('submit', function(e) {
-                e.preventDefault();
-                let item = $('#cmbGalian').val();
-                let lebar = $('#lebar_galian').val();
-                let dalam = $('#dalam_galian').val();
-                let panjang = $('#panjang_galian').val();
-                let keterangan = $('#keterangan_galian').val();
-                let harga = $("input[name='harga_galian']:checked").val();
-                $('.galianTidakAda').remove();
-                if (item === "") {
-                    $('#cmbGalian').parent().addClass('is-invalid')
-                }
-                if (panjang === "") {
-                    $('#panjang_galian').addClass("is-invalid");
-                }
-                if (lebar === "") {
-                    $('#lebar_galian').addClass("is-invalid");
-                }
-                if (dalam === "") {
-                    $('#dalam_galian').addClass("is-invalid");
-                }
-
-                if (item !== "" && panjang !== "" && lebar !== "" && dalam !== "") {
-
-
-                    $.when($.ajax({
-                        type: 'POST',
-                        url: "{{ route('pelaksanaan-pekerjaan.galian') }}",
-                        data: {
-                            "_token": "{{ csrf_token() }}",
-                            id,
-                            item,
-                            lebar,
-                            dalam,
-                            panjang,
-                            keterangan,
-                            harga,
-                        },
-                        success: function(data) {
-
-                            const {
-                                id,
-                                item_id,
-                                pekerjaan,
-                                panjang,
-                                lebar,
-                                dalam,
-                                total,
-                                perencanaan,
-                                keterangan
-                            } = data.data;
-
-                            let lengthGalian = $('#listgalian_' + item).length;
-                            let tableCount = $('#tableGalian  > tbody > tr').length;
-                            let nomor = tableCount + 1;
-
-                            $('#cmbGalian').val('');
-                            $('#lebar_galian').val('');
-                            $('#dalam_galian').val('');
-                            $('#panjang_galian').val('');
-                            $('#keterangan_galian').val('');
-
-                            if (lengthGalian !== 0) {
-                                $('#panjang_galian_' + item_id).text(panjang + ' M');
-
-                                $('#lebar_galian_' + item_id).text(lebar + ' M');
-                                $('#dalam_galian_' + item_id).text(dalam + ' M');
-
-                                $('#total_galian_tampil_' + item_id).text(
-                                    formatRupiah(Math
-                                        .floor(total).toString(), 'Rp. '));
-
-                                $('#total_galian_value_' + item_id).val(total);
-
-                                $('#keterangan_galian_' + item_id).text(keterangan);
-
-                                $('#panjang_value_' + item_id).val(panjang);
-                                $('#lebar_value_' + item_id).val(lebar);
-                                $('#dalam_value_' + item_id).val(dalam);
-                                $('#keterangan_value_' + item_id).val(keterangan);
-                                toast('success mengubah galian')
-                            } else {
-
-
-                                let content = elementGalian(
-                                    id, nomor, pekerjaan, lebar, panjang, dalam,
-                                    total, keterangan === null ? '' : keterangan,
-                                    item_id, perencanaan);
-
-                                $('#tableGalian').append(content);
-                                toast('success mengubah galian')
-
-                            }
-                            $("#cmbGalian").select2("val", "");
-                            $('#cmbGalian').val(null).trigger('change');
-
-                        },
-                        error: function(data) {
-                            Swal.fire({
-                                title: 'Oops...',
-                                text: "Isi dengan lengkap",
-                                footer: '<a href="">terdapat data yang kosong</a>'
-                            })
-                        }
-                    })).then(function(data, textStatus, jqXHR) {
-                        totalHarga('galian')
-
-
-                    });
-                } else {
-
-                    Swal.fire({
-                        title: 'Oops...',
-                        text: "Isi dengan lengkap",
-                        footer: '<a href="">terdapat data yang kosong</a>'
-                    })
-
-                }
-            });
 
             // --- End Galian
         });

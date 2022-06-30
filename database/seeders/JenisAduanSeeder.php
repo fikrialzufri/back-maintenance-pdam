@@ -23,7 +23,7 @@ class JenisAduanSeeder extends Seeder
         $jenisdua->save();
 
         $jenistiga = new JenisAduan();
-        $jenistiga->nama = 'Pipa (Induk/Sekunder/Tersier) Bocor';
+        $jenistiga->nama = 'Pipa (Induk/Sekunder/Premier) Bocor';
         $jenistiga->save();
 
         $jenisempat = new JenisAduan();

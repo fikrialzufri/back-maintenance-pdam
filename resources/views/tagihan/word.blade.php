@@ -95,7 +95,7 @@
                             </p>
                             <ol style="font-size: 20px;">
                                 @forelse ($tagihan->list_persetujuan as $index => $item)
-                                    @if ($item->jabatan === 'Staf Pengawas' || $item->jabatan === 'Asisten Manajer Pengawas' || $item->jabatan === 'Manajer Distribusi')
+                                    @if ($item->jabatan === 'Staf Pengawas' || str_contains($item->jabatan, 'Asisten Manajer Distribusi') || $item->jabatan === 'Asisten Manajer Pengawas' || $item->jabatan === 'Manajer Distribusi')
                                         <li> <span style=''>{{ $item->nama }}
                                                 Sebagai {{ $item->jabatan }}</span></li>
                                     @endif
@@ -109,12 +109,11 @@
                             <div>
                                 <p style='font-size: 20px;'>
                                     <span style=''>Service Kebocoran
-                                        Pipa Dinas, Tersier, Sekunder, dan Interkoneksi Pipa Periode Bulan
+                                    Service Kebocoran Pipa Periode Bulan
                                         {{ $bulan }}
                                         Tahun {{ date('Y') }} di Wilayah {{ $wilayah }} Sebanyak
                                         {{ $total_lokasi }}
-                                        Lokasi. Perumdam Tirta Kencana
-                                        Kota Samarinda, dengan Jumlah Tagihan Sebesar Rp.
+                                        Lokasi. Dengan Jumlah Tagihan Sebesar Rp.
                                         {{ format_uang($total_tagihan) }}.
                                         <i>
                                             ({{ strtoupper(terbilang($total_tagihan)) }} RUPIAH)
@@ -143,16 +142,14 @@
 
                             </p>
                             <p>
-                                <span style='font-size: 20px;'>Berdasarkan Surat Perintah
-                                    Pelaksanaan untuk pekerjaan tersebut dan persyaratan-persyaratan bahan-bahan maupun
-                                    pelaksanaannya, dengan ini menyatakan bahwa pekerjaan (terlampir) dari perumdam, telah
-                                    selesai dikerjakan dan memenuhi prosedur dan syarat-syarat yang ditetapkan oleh Perumdam
-                                    Tirta Kencana Kota Samarinda.</span>
+                                <span style='font-size: 20px;'>Berdasarkan Surat Perintah Pelaksanaan pekerjaan tersebut 
+                                dari persyaratan-persyaratan, bahan-bahan maupun pelaksanaannya, dengan ini menyatakan bahwa 
+                                pekerjaan (terlampir), telah selesai dikerjakan dan memenuhi prosedur serta persyaratan 
+                                yang ditetapkan oleh Perumdam Tirta Kencana Kota Samarindaa.</span>
                             </p>
                             <p>
-                                <span style='font-size: 20px;'>Demikian Berita Acara
-                                    Pemeriksaan Pekerjaan ini dibuat dengan penuh tanggung jawab sebagaimana
-                                    mestinya.</span>
+                                <span style='font-size: 20px;'>Demikian Berita Acara Pemeriksaan Pekerjaan ini dibuat dengan penuh tanggung jawab 
+                                dan dapat dipergunakan sebagaimana mestinya..</span>
                             </p>
                             <div class="row">
                                 <div style='font-size: 20px;' class="col-3">
@@ -178,7 +175,7 @@
                                             <ol style="">
 
                                                 @forelse ($tagihan->list_persetujuan as $index => $item)
-                                                    @if ($item->jabatan === 'Staf Pengawas' || $item->jabatan === 'Asisten Manajer Pengawas' || $item->jabatan === 'Manajer Distribusi')
+                                                    @if ($item->jabatan === 'Staf Pengawas' || $item->jabatan === 'Asisten Manajer Pengawas' || str_contains($item->jabatan, 'Asisten Manajer Distribusi') || $item->jabatan === 'Manajer Distribusi')
                                                         <li> <span style=''>{{ $item->nama }}
                                                                 Sebagai {{ $item->jabatan }}</span></li>
                                                     @endif

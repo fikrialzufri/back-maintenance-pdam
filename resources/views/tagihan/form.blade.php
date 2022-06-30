@@ -22,8 +22,7 @@
                             <table class="table table-bordered table-responsive" width="100%">
                                 <thead>
                                     <tr>
-                                        <th>Centang Semua <input type="checkbox" name="pelaksanaan_all" id="pelaksanaan_all"
-                                                class="checkAll" value=""></th>
+                                        <th># </th>
                                         <th>No.</th>
                                         <th>Nomor SPK</th>
                                         <th>Rekanan</th>
@@ -39,8 +38,8 @@
                                         <tr
                                             class="{{ $item->keterangan_barang != null ? 'bg-danger' : '' }} list_pelaksanaan">
                                             <td class="text-center">
-                                                <input type="checkbox" name="pelaksanaan[]" id="pelaksanaan"
-                                                    class="check" value="{{ $item->id }}" checked>
+                                                <input type="checkbox" name="pelaksanaan[]" id="pelaksanaan" class="check"
+                                                    value="{{ $item->id }}" onclick="return false;" checked>
                                             </td>
                                             <td>{{ $index + 1 }}
                                             </td>
@@ -67,6 +66,35 @@
                                         </tr>
                                     @endforelse
                                 </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th colspan="7" class="text-right">
+
+                                            Total
+                                        </th>
+                                        <th>
+                                            Rp. {{ format_uang($totalPekerjaan) }}
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="7" class="text-right">
+
+                                            PPN 11%
+                                        </th>
+                                        <th>
+                                            Rp. {{ format_uang($ppn) }}
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="7" class="text-right">
+
+                                            Grand Total
+                                        </th>
+                                        <th>
+                                            Rp. {{ format_uang($grand_total) }}
+                                        </th>
+                                    </tr>
+                                </tfoot>
                             </table>
                         </div>
                     </div>

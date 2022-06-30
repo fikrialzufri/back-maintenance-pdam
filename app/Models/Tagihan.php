@@ -130,6 +130,7 @@ class Tagihan extends Model
         $user = auth()->user()->id;
         if (
             auth()->user()->hasRole('staf-pengawas') ||
+            auth()->user()->hasRole('asisten-manajer-distribusi') ||
             auth()->user()->hasRole('asisten-manajer-pengawas') ||
             auth()->user()->hasRole('manajer-distribusi') ||
             auth()->user()->hasRole('asisten-manajer-perencanaan') ||
@@ -233,6 +234,41 @@ class Tagihan extends Model
     }
 
     public function getListPersetujuanAttribute()
+    {
+        $result = [];
+        $hasUserMany = [];
+        if ($this->hasUserMany) {
+            foreach ($this->hasUserMany as $key => $value) {
+                if ($value->karyawan) {
+                    $hasUserMany[$key] = (object) [
+                        'id' => $value->karyawan->user_id,
+                        'nama' => $value->karyawan->nama,
+                        'jabatan' => $value->karyawan->nama_jabatan,
+                        'is_setuju' => true,
+                        'created_at' => $value->pivot->created_at,
+                        'tanggal_disetujui' => isset($value->pivot->created_at) ? tanggal_indonesia($value->pivot->created_at) . " - " . Carbon::parse($value->pivot->created_at)->format('H:i') : ''
+                    ];
+                }
+            }
+
+            $collect = collect($hasUserMany)->sortBy('created_at');
+            $nomor = 0;
+            foreach ($collect as $key => $value) {
+                $result[$nomor] = (object) [
+                    'id' => $value->id,
+                    'nama' => $value->nama,
+                    'jabatan' => $value->jabatan,
+                    'is_setuju' => $value->is_setuju,
+                    'created_at' => $value->created_at,
+                    'tanggal_disetujui' => $value->tanggal_disetujui
+                ];
+                $nomor++;
+            }
+        }
+        return $result;
+    }
+
+    public function getListPersetujuanPekerjaanAttribute()
     {
         $result = [];
         $hasUserMany = [];

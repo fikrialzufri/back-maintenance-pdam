@@ -40,7 +40,7 @@
                                         <div>
                                             <input type="text" name="no_ticket" placeholder="Nomor Tiket"
                                                 class="{{ $errors->has('no_ticket') ? 'form-control is-invalid' : 'form-control' }}"
-                                                value="{{ $aduan->no_ticket }}" required id="">
+                                                value="{{ $aduan->no_ticket }}" required id="" readonly>
                                         </div>
                                         @if ($errors->has('no_ticket'))
                                             Nomor Tiket
@@ -55,17 +55,17 @@
                                 <div class="col-12">
                                     <div class="form-group">
                                         <div>
-                                            <label for="mps" class=" form-control-label">MPS</label>
+                                            <label for="nps" class=" form-control-label">NPS</label>
                                         </div>
                                         <div>
-                                            <input type="text" name="mps" placeholder="MPS"
-                                                class="{{ $errors->has('mps') ? 'form-control is-invalid' : 'form-control' }}"
-                                                value="{{ $aduan->mps }}" required id="">
+                                            <input type="text" name="nps" placeholder="nPS"
+                                                class="{{ $errors->has('nps') ? 'form-control is-invalid' : 'form-control' }}"
+                                                value="{{ $aduan->nps }}" required id="" readonly>
                                         </div>
-                                        @if ($errors->has('mps'))
-                                            MPS
+                                        @if ($errors->has('nps'))
+                                            nPS
                                             <span class="text-danger">
-                                                <strong id="textkk">MPS wajib diisi!</strong>
+                                                <strong id="textkk">NPS wajib diisi!</strong>
                                             </span>
                                         @endif
                                     </div>
@@ -88,9 +88,9 @@
                                         <div class="radio radiofill radio-inline">
                                             <label>
                                                 <input type="radio" class="kategori_aduan" name="kategori_aduan"
-                                                    checked="{{ $aduan->kategori_aduan == 'pipa tersier / skunder' ? 'checked' : '' }}"
-                                                    value="pipa tersier / skunder">
-                                                <i class="helper"></i>Pipa Tersier / Skunder
+                                                    checked="{{ $aduan->kategori_aduan == 'pipa pipa premier / skunder' ? 'checked' : '' }}"
+                                                    value="pipa premier / skunder">
+                                                <i class="helper"></i>Pipa Premier / Skunder
                                             </label>
                                         </div>
                                     </div>
@@ -207,8 +207,9 @@
                                         <div>
                                             @forelse ($jenis_aduan as $index => $item)
                                                 <div>
-                                                    <input class="border-checkbox" type="checkbox" name="jenis_aduan_id[]"
-                                                        value="{{ $item->id }}" id="checkbox{{ $index }}"
+                                                    <input class="border-checkbox" type="checkbox"
+                                                        name="jenis_aduan_id[]" value="{{ $item->id }}"
+                                                        id="checkbox{{ $index }}"
                                                         {{ in_array($item->id, $jenisAduan) ? 'checked' : '' }}>
                                                     <label class="border-checkbox-label"
                                                         for="checkbox{{ $index }}">{{ $item->nama }}</label>
@@ -309,8 +310,8 @@
                                         <label for="lat_long" class=" form-control-label">Cari Alamat</label>
                                     </div>
                                     <div id="search">
-                                        <input type="text" name="addr" class="form-control" value="" id="addr"
-                                            size="10" />
+                                        <input type="text" name="addr" class="form-control" value=""
+                                            id="addr" size="10" />
                                         <button type="button" class="btn btn-primary mb-3"
                                             onclick="addr_search();">Cari</button>
                                         <div id="results" />

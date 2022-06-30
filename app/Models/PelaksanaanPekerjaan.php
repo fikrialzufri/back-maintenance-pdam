@@ -122,16 +122,16 @@ class PelaksanaanPekerjaan extends Model
     {
         return $this->belongsToMany(Item::class, 'pelaksanaan_item')->withPivot(
             'qty',
-            'qty_pengawas',
-            'qty_perencanaan_adjust',
+            // 'qty_pengawas',
+            // 'qty_perencanaan_adjust',
             'harga',
             'total',
             'keterangan',
-            'harga_perencanaan',
-            'harga_perencanaan_adjust',
-            'keterangan_pengawas',
-            'keterangan_perencanaan',
-            'keterangan_perencanaan_adjust'
+            // 'harga_perencanaan',
+            // 'harga_perencanaan_adjust',
+            // 'keterangan_pengawas',
+            // 'keterangan_perencanaan',
+            // 'keterangan_perencanaan_adjust'
         )->withTimestamps();
     }
 

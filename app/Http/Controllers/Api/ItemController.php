@@ -63,6 +63,35 @@ class ItemController extends Controller
             return $this->sendError($response, $errorMessages = [], 404);
         }
     }
+    public function show($slug)
+    {
+
+        $message = 'Data Item';
+
+        try {
+            $query = $this->model()->whereSlug($slug)->orWhere('id', $slug)->first();
+            $result = [
+                'id' =>  $query->id,
+                'nama' =>  $query->nama,
+                'slug' =>  $query->slug,
+                'satuan' =>  $query->satuan,
+                'jenis' =>  $query->jenis,
+                'kategori' =>  $query->hasJenis->nama_kategori,
+            ];
+            if (!$query) {
+                $message = 'Data Item Belum Ada';
+            }
+            return $this->sendResponse($result, $message, 200);
+        } catch (\Throwable $th) {
+            $message = 'Detail Item';
+            $response = [
+                'success' => false,
+                'message' => $message,
+                'code' => '404'
+            ];
+            return $this->sendError($response, $errorMessages = [], 404);
+        }
+    }
 
     public function model()
     {

@@ -46,6 +46,7 @@ class AduanController extends Controller
         $search = request()->search;
         $limit = request()->limit ?? 30;
 
+
         $query = Aduan::query();
         if ($search) {
             $query = $query->where('no_ticket', 'like', "%" . $search . "%")->orWhere('no_aduan', 'like', "%" . $search . "%");
@@ -76,11 +77,54 @@ class AduanController extends Controller
         ));
     }
 
+    public function getNumber(Request $request)
+    {
+        $kategori_aduan = $request->kategori_aduan == '' ? '' : $request->kategori_aduan;
+        $start = Carbon::now()->startOfMonth()->format('Y-m-d H:i:s');
+        $end = Carbon::now()->endOfMonth()->format('Y-m-d H:i:s');
+
+        if ($kategori_aduan == 'pipa dinas') {
+            $dataAduan = Aduan::where('kategori_aduan', 'pipa dinas')->whereBetween(DB::raw('DATE(created_at)'), array($start, $end))->count();
+            if ($dataAduan >= 1) {
+                $no = str_pad($dataAduan + 1, 4, "0", STR_PAD_LEFT);
+                $noAduan =  $no . "/" . "ADU-DS/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
+            } else {
+                $no = str_pad(1, 4, "0", STR_PAD_LEFT);
+                $noAduan =  $no . "/" . "ADU-DS/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
+            }
+        } else {
+            $dataAduan = Aduan::where('kategori_aduan', 'pipa premier / skunder')->whereBetween(DB::raw('DATE(created_at)'), array($start, $end))->count();
+            if ($dataAduan >= 1) {
+                $no = str_pad($dataAduan + 1, 4, "0", STR_PAD_LEFT);
+                $noAduan =  $no . "/" . "ADU-SK/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
+            } else {
+                $no = str_pad(1, 4, "0", STR_PAD_LEFT);
+                $noAduan =  $no . "/" . "ADU-SK/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
+            }
+        }
+
+        return $this->sendResponse($noAduan, "No aduan", 200, 1);
+    }
+
     public function create()
     {
         $title = 'Tambah data Aduan';
         $route = 'aduan';
         $action = route('aduan.store');
+
+        $start = Carbon::now()->startOfMonth()->format('Y-m-d H:i:s');
+        $end = Carbon::now()->endOfMonth()->format('Y-m-d H:i:s');
+
+        $dataAduan = Aduan::where('kategori_aduan', 'pipa dinas')->whereBetween(DB::raw('DATE(created_at)'), array($start, $end))->count();
+        if ($dataAduan >= 1) {
+            $no = str_pad($dataAduan + 1, 4, "0", STR_PAD_LEFT);
+            $noAduan =  $no . "/" . "ADU-DS/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
+            $noAduanNps =  "NPS/" . $no . "/" . "ADU" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
+        } else {
+            $no = str_pad(1, 4, "0", STR_PAD_LEFT);
+            $noAduan =  $no . "/" . "ADU-DS/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
+            $noAduanNps =  "NPS/" . $no . "/" . "ADU" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
+        }
 
         $jenis_aduan = JenisAduan::orderBy('nama')->get();
 
@@ -88,6 +132,8 @@ class AduanController extends Controller
         return view('aduan.create', compact(
             'title',
             'route',
+            'noAduan',
+            'noAduanNps',
             'action',
             'jenis_aduan'
         ));
@@ -104,7 +150,7 @@ class AduanController extends Controller
 
         $this->validate(request(), [
             'no_ticket' => 'required|string',
-            'mps' => 'required|string',
+            'nps' => 'required|string',
             'sumber_informasi' => 'required|string',
             'lokasi' => 'required|string',
             'lat_long' => 'required|string',
@@ -122,7 +168,7 @@ class AduanController extends Controller
                 $noAduan =  $no . "/" . "ADU-DS/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
             }
         } else {
-            $dataAduan = Aduan::where('kategori_aduan', 'pipa tersier / skunder')->whereBetween(DB::raw('DATE(created_at)'), array($start, $end))->count();
+            $dataAduan = Aduan::where('kategori_aduan', 'pipa premier / skunder')->whereBetween(DB::raw('DATE(created_at)'), array($start, $end))->count();
             if ($dataAduan >= 1) {
                 $no = str_pad($dataAduan + 1, 4, "0", STR_PAD_LEFT);
                 $noAduan =  $no . "/" . "ADU-SK/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
@@ -144,7 +190,7 @@ class AduanController extends Controller
             $aduan->detail_lokasi = $request->detail_lokasi;
             $aduan->no_hp = $request->no_hp;
             $aduan->nama_pelanggan = $request->nama_pelanggan;
-            $aduan->mps = $request->mps;
+            $aduan->nps = $request->nps;
             $aduan->kategori_aduan = $request->kategori_aduan;
             $aduan->atas_nama = $request->atas_nama;
             $aduan->sumber_informasi = $request->sumber_informasi;
@@ -203,7 +249,7 @@ class AduanController extends Controller
 
         $this->validate(request(), [
             'no_ticket' => 'required|string',
-            'mps' => 'required|string',
+            'nps' => 'required|string',
             'sumber_informasi' => 'required|string',
             'lokasi' => 'required|string',
             'lat_long' => 'required|string',
@@ -211,7 +257,7 @@ class AduanController extends Controller
 
         $aduan = Aduan::where('slug', $slug)->first();
         $aduan->no_ticket = $request->no_ticket;
-        $aduan->mps = $request->mps;
+        $aduan->nps = $request->nps;
         $aduan->detail_lokasi = $request->detail_lokasi;
         $aduan->nama_pelanggan = $request->nama_pelanggan;
         $aduan->no_pelanggan = $request->no_pelanggan;

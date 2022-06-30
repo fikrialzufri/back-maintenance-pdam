@@ -20,9 +20,9 @@ class CreateAduanTable extends Migration
             $table->string('nama_pelanggan')->nullable();
             $table->string('no_pelanggan')->nullable();
             $table->string('detail_lokasi')->nullable();
-            $table->enum('kategori_aduan', ['pipa dinas', 'pipa tersier / skunder'])->nullable();
+            $table->enum('kategori_aduan', ['pipa dinas', 'pipa premier / skunder'])->nullable();
             $table->string('no_aduan');
-            $table->string('mps');
+            $table->string('nps');
             $table->string('atas_nama');
             $table->string('sumber_informasi');
             $table->longText('keterangan')->nullable();

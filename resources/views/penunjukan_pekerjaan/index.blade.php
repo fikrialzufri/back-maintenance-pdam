@@ -32,8 +32,8 @@
                                         <option value="pipa dinas" {{ $kategori == 'pipa dinas' ? 'selected' : '' }}>Pipa
                                             dinas
                                         </option>
-                                        <option value="pipa tersier / skunder">Pipa tersier / skunder
-                                            {{ $kategori == 'pipa tersier / skunder' ? 'selected' : '' }}</option>
+                                        <option value="pipa premier / skunder">Pipa Premier / skunder
+                                            {{ $kategori == 'pipa premier / skunder' ? 'selected' : '' }}</option>
 
                                     </select>
                                     @if ($errors->has('rule'))

@@ -39,7 +39,7 @@
                                         <div>
                                             <input type="text" name="no_ticket" placeholder="Nomor Tiket"
                                                 class="{{ $errors->has('no_ticket') ? 'form-control is-invalid' : 'form-control' }}"
-                                                value="{{ old('no_ticket') }}" required id="">
+                                                value="{{ $noAduan }}" required id="no_ticket">
                                         </div>
                                         @if ($errors->has('no_ticket'))
                                             Nomor Tiket
@@ -55,17 +55,17 @@
                                 <div class="col-12">
                                     <div class="form-group">
                                         <div>
-                                            <label for="mps" class=" form-control-label">MPS</label>
+                                            <label for="nps" class=" form-control-label">NPS</label>
                                         </div>
                                         <div>
-                                            <input type="text" name="mps" placeholder="MPS"
-                                                class="{{ $errors->has('mps') ? 'form-control is-invalid' : 'form-control' }}"
-                                                value="{{ old('mps') }}" required id="">
+                                            <input type="text" name="nps" placeholder="nps"
+                                                class="{{ $errors->has('nps') ? 'form-control is-invalid' : 'form-control' }}"
+                                                value="{{ $noAduanNps }}" required id="">
                                         </div>
-                                        @if ($errors->has('mps'))
-                                            MPS
+                                        @if ($errors->has('nps'))
+                                            nps
                                             <span class="text-danger">
-                                                <strong id="textkk">MPS wajib diisi!</strong>
+                                                <strong id="textkk">NPS wajib diisi!</strong>
                                             </span>
                                         @endif
                                     </div>
@@ -87,8 +87,8 @@
                                         <div class="radio radiofill radio-inline">
                                             <label>
                                                 <input type="radio" class="kategori_aduan" name="kategori_aduan"
-                                                    value="pipa tersier / skunder">
-                                                <i class="helper"></i>Pipa Tersier / Skunder
+                                                    value="pipa premier / skunder">
+                                                <i class="helper"></i>Pipa Premier / Skunder
                                             </label>
                                         </div>
                                     </div>
@@ -206,8 +206,9 @@
                                         <div>
                                             @forelse ($jenis_aduan as $index => $item)
                                                 <div>
-                                                    <input class="border-checkbox" type="checkbox" name="jenis_aduan_id[]"
-                                                        value="{{ $item->id }}" id="checkbox{{ $index }}">
+                                                    <input class="border-checkbox" type="checkbox"
+                                                        name="jenis_aduan_id[]" value="{{ $item->id }}"
+                                                        id="checkbox{{ $index }}">
                                                     <label class="border-checkbox-label"
                                                         for="checkbox{{ $index }}">{{ $item->nama }}</label>
                                                 </div>
@@ -307,8 +308,8 @@
                                         <label for="lat_long" class=" form-control-label">Cari Alamat</label>
                                     </div>
                                     <div id="search">
-                                        <input type="text" name="addr" class="form-control" value="" id="addr"
-                                            size="10" />
+                                        <input type="text" name="addr" class="form-control" value=""
+                                            id="addr" size="10" />
                                         <button type="button" class="btn btn-primary mb-3"
                                             onclick="addr_search();">Cari</button>
                                         <div id="results" />
@@ -329,17 +330,17 @@
 
     @push('script')
         <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
-                integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
-                crossorigin=""></script>
+            integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+            crossorigin=""></script>
 
         <!-- Load Esri Leaflet from CDN -->
         <script src="https://unpkg.com/esri-leaflet@3.0.7/dist/esri-leaflet.js"
-                integrity="sha512-ciMHuVIB6ijbjTyEdmy1lfLtBwt0tEHZGhKVXDzW7v7hXOe+Fo3UA1zfydjCLZ0/vLacHkwSARXB5DmtNaoL/g=="
-                crossorigin=""></script>
+            integrity="sha512-ciMHuVIB6ijbjTyEdmy1lfLtBwt0tEHZGhKVXDzW7v7hXOe+Fo3UA1zfydjCLZ0/vLacHkwSARXB5DmtNaoL/g=="
+            crossorigin=""></script>
 
         <script src="https://unpkg.com/esri-leaflet-geocoder@3.1.2/dist/esri-leaflet-geocoder.js"
-                integrity="sha512-8bfbGLq2FUlH5HesCEDH9UiuUCnBq0A84yYv+LkUNPk/C2z81PsX2Q/U2Lg6l/QRuKiT3y2De2fy9ZPLqjMVxQ=="
-                crossorigin=""></script>
+            integrity="sha512-8bfbGLq2FUlH5HesCEDH9UiuUCnBq0A84yYv+LkUNPk/C2z81PsX2Q/U2Lg6l/QRuKiT3y2De2fy9ZPLqjMVxQ=="
+            crossorigin=""></script>
 
         {{-- <script>
             var map = L.map('map').setView([-0.47529, 117.146515], 13);
@@ -488,5 +489,25 @@
                         }
                     });
             }
+
+            $('input[name="kategori_aduan"]').click(function() {
+                let content = '';
+                var kategori_aduan = $("input[name='kategori_aduan']:checked").val();
+                $.ajax({
+                    type: 'get',
+                    url: "{{ route('aduan.nomoraduan') }}",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        kategori_aduan
+                    },
+                    success: function(data) {
+
+                        $("#no_ticket").val(data.data);
+                    }
+                });
+            });
         </script>
     @endpush
