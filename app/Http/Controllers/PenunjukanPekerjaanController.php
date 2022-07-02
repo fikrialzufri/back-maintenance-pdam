@@ -601,14 +601,18 @@ class PenunjukanPekerjaanController extends Controller
                         $cekItem[$key] = PelakasanaanItem::where('item_id', $key)->where('pelaksanaan_pekerjaan_id', $PelaksanaanPekerjaan->id)->first();
                         if ($cekItem[$key]) {
 
-                            $listitem[$key] = [
-                                'keterangan' => $cekItem[$key]->keterangan,
-                                'harga' => $cekItem[$key]->harga,
-                                'qty' => $cekItem[$key]->qty,
-                                'total' =>  str_replace(".", "", $value) * $cekItem[$key]->qty,
-                            ];
+
                             $cekItemPengawas[$key] = PelakasanaanPengawas::where('item_id', $key)->where('pelaksanaan_pekerjaan_id', $PelaksanaanPekerjaan->id)->first();
                             if ($cekItemPengawas[$key]) {
+
+                                // rekanan
+                                $listitem[$key] = [
+                                    'keterangan' => $cekItem[$key]->keterangan,
+                                    'harga' => $cekItem[$key]->harga,
+                                    'qty' => $cekItem[$key]->qty,
+                                    'total' =>  str_replace(".", "", $value) *  $cekItemPengawas[$key]->qty,
+                                ];
+
                                 // harga pengawas
                                 $listitemPengawas[$key] = [
                                     'keterangan' => $cekItemPengawas[$key]->keterangan,
