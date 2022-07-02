@@ -354,10 +354,11 @@
                                                         <th width="250">Harga Satuan</th>
                                                         <th width="250">Total</th>
                                                     @endif
-                                                    <th width="300">Keterangan</th>
                                                     @if ($pekerjaanUtama->status === 'selesai koreksi')
+                                                        <th width="250">Harga Satuan</th>
                                                         <th width="250">Total</th>
                                                     @endif
+                                                    <th width="300">Keterangan</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -367,15 +368,15 @@
                                                             class="list_table_pekerjaan">
                                                             <td class="text-center nomor_pekerjaan"
                                                                 data-index="{{ $key + 1 }}"
-                                                                @if ($pekerjaanUtama->status === 'dikoreksi') rowspan="3" @else rowspan="2" @endif>
+                                                                @if ($pekerjaanUtama->status === 'dikoreksi' || $pekerjaanUtama->status === 'selesai koreksi') rowspan="3" @else rowspan="2" @endif>
                                                                 {{ $key + 1 }}
                                                             </td>
                                                             <td
-                                                                @if ($pekerjaanUtama->status === 'dikoreksi') rowspan="3" @else rowspan="2" @endif>
+                                                                @if ($pekerjaanUtama->status === 'dikoreksi' || $pekerjaanUtama->status === 'selesai koreksi') rowspan="3" @else rowspan="2" @endif>
                                                                 {{ $pekerjaan->nama }}
                                                             </td>
                                                             <td
-                                                                @if ($pekerjaanUtama->status === 'dikoreksi') rowspan="3" @else rowspan="2" @endif>
+                                                                @if ($pekerjaanUtama->status === 'dikoreksi' || $pekerjaanUtama->status === 'selesai koreksi') rowspan="3" @else rowspan="2" @endif>
                                                                 {{ $pekerjaan->jenis }}
                                                             </td>
                                                             <td>Rekanan</td>
@@ -385,11 +386,13 @@
                                                                 <td rowspan="3">
                                                                     Rp.{{ format_uang($pekerjaan->pivot->total) }}</td>
                                                             @endif
-                                                            <td>{{ $pekerjaan->pivot->keterangan }}</td>
+
                                                             @if ($pekerjaanUtama->status === 'selesai koreksi')
+                                                                <td>Rp. {{ format_uang($pekerjaan->pivot->harga) }}</td>
                                                                 <td rowspan="3">
                                                                     Rp. {{ format_uang($pekerjaan->pivot->total) }}</td>
                                                             @endif
+                                                            <td>{{ $pekerjaan->pivot->keterangan }}</td>
 
                                                         </tr>
                                                         <tr>
@@ -435,27 +438,47 @@
                                                                                 <div class="input-group-text">Rp.</div>
                                                                             </div>
                                                                             <input type="text" class="form-control"
-                                                                                id="harga_perencanaan_pekerjaan{{ $pekerjaan->item_id }}{{ $key }}"
-                                                                                name="harga_perencanaan_pekerjaan[{{ $pekerjaan->item_id }}]"
+                                                                                id="harga_perencanaan_pekerjaan{{ $pekerjaan->pivot->item_id }}{{ $key }}"
+                                                                                name="harga_perencanaan_pekerjaan[{{ $pekerjaan->pivot->item_id }}]"
                                                                                 value="{{ format_uang($pekerjaan->pivot->harga) }}"
                                                                                 placeholder="Koreksi Perencanaan">
                                                                         </div>
                                                                         @push('script')
                                                                             <script>
-                                                                                $("#harga_perencanaan_pekerjaan{{ $pekerjaan->item_id }}{{ $key }}").on("input", function() {
+                                                                                $("#harga_perencanaan_pekerjaan{{ $pekerjaan->pivot->item_id }}{{ $key }}").on("input", function() {
 
                                                                                     let val = formatRupiahTanpaRp(this.value, '')
-                                                                                    $("#harga_perencanaan_pekerjaan{{ $pekerjaan->item_id }}{{ $key }}").val(val)
+                                                                                    $("#harga_perencanaan_pekerjaan{{ $pekerjaan->pivot->item_id }}{{ $key }}").val(val)
                                                                                 });
                                                                             </script>
                                                                         @endpush
                                                                     </td>
-                                                                    <td></td>
+                                                                    <td>
+                                                                        <input type="text" class="form-control"
+                                                                            id="keterangan_perencanaan_pekerjaan{{ $pekerjaan->pivot->item_id }}{{ $key }}"
+                                                                            name="keterangan_perencanaan_pekerjaan[{{ $pekerjaan->pivot->item_id }}]"
+                                                                            placeholder="Keterangan Perencanaan">
+                                                                    </td>
                                                                 @else
                                                                     <td></td>
                                                                     <td></td>
                                                                     <td></td>
                                                                 @endif
+                                                            </tr>
+                                                        @elseif ($pekerjaanUtama->status === 'selesai koreksi')
+                                                            <tr>
+                                                                <td>Perencanaan</td>
+
+                                                                <td></td>
+                                                                @if (isset($daftarPekerjaan->hasItemPerencanaan[$key]))
+                                                                    <td>
+                                                                        Rp.
+                                                                        {{ format_uang($daftarPekerjaan->hasItemPerencanaan[$key]->pivot->harga) }}
+                                                                    </td>
+                                                                    <td>{{ $daftarPekerjaan->hasItemPerencanaan[$key]->pivot->keterangan }}
+                                                                    </td>
+                                                                @endif
+
                                                             </tr>
                                                         @endif
                                                     @empty
@@ -470,10 +493,10 @@
                                                 @endif
                                             </tbody>
                                             <tfoot>
-                                                @if ($perencaan == true && $pekerjaanUtama->status === 'selesai koreksi')
+                                                @if ($pekerjaanUtama->status === 'selesai koreksi')
                                                     @if (isset($daftarPekerjaan->hasItem))
                                                         <tr>
-                                                            <th @if ($pekerjaanUtama->status === 'diadjust') colspan="13" @elseif ($pekerjaanUtama->status === 'selesai koreksi') colspan="10" @else colspan="9" @endif
+                                                            <th @if ($pekerjaanUtama->status === 'diadjust') colspan="7" @elseif ($pekerjaanUtama->status === 'selesai koreksi') colspan="6" @else colspan="7" @endif
                                                                 class="text-right">Total
                                                             </th>
                                                             <th>
@@ -603,11 +626,14 @@
                                                     <th width="100">Dalam</th>
                                                     <th width="100">Volume</th>
                                                     @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
-                                                        <th width="250">Harga Satuan</th>
-                                                        <th width="250">Total</th>
+                                                        <th width="200">Harga Satuan</th>
                                                     @endif
-                                                    <th width="100">Keterangan</th>
+                                                    <th width="200">Keterangan</th>
+                                                    @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
+                                                        <th width="150">Total</th>
+                                                    @endif
                                                     @if ($pekerjaanUtama->status === 'selesai koreksi')
+                                                        <th width="200">Harga Satuan</th>
                                                         <th width="250">Total</th>
                                                     @endif
                                                 </tr>
@@ -622,11 +648,11 @@
                                                             class="list_table_galian">
                                                             <td class="text-center nomor_galian"
                                                                 data-index="{{ $inv + 1 }}"
-                                                                @if ($pekerjaanUtama->status === 'dikoreksi') rowspan="3" @else rowspan="2" @endif>
+                                                                @if ($pekerjaanUtama->status === 'dikoreksi' || $pekerjaanUtama->status === 'selesai koreksi') rowspan="3" @else rowspan="2" @endif>
                                                                 {{ $inv + 1 }}
                                                             </td>
                                                             <td
-                                                                @if ($pekerjaanUtama->status === 'dikoreksi') rowspan="3" @else rowspan="2" @endif>
+                                                                @if ($pekerjaanUtama->status === 'dikoreksi' || $pekerjaanUtama->status === 'selesai koreksi') rowspan="3" @else rowspan="2" @endif>
                                                                 {{ $galian->pekerjaan }}
                                                             </td>
                                                             <td>Rekanan</td>
@@ -648,10 +674,13 @@
                                                             </td>
                                                             @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
                                                                 <td>Rp. {{ format_uang($galian->harga_satuan) }}</td>
-                                                                <td>Rp. {{ format_uang($galian->total) }}</td>
                                                             @endif
                                                             <td>{{ $galian->keterangan }}</td>
+                                                            @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
+                                                                <td>Rp. {{ format_uang($galian->total) }}</td>
+                                                            @endif
                                                             @if ($pekerjaanUtama->status === 'selesai koreksi')
+                                                                <td>Rp. {{ format_uang($galian->harga_satuan) }}</td>
                                                                 <td rowspan="3">
                                                                     Rp. {{ format_uang($galian->total) }}</td>
                                                             @endif
@@ -710,9 +739,11 @@
                                                                     <td>Rp.
                                                                         {{ format_uang($galian->galian_pengawas_harga_satuan) }}
                                                                     </td>
-                                                                    <td>Rp. {{ $galian->galian_pengawas_total }}</td>
                                                                     <td>
                                                                         {{ $galian->galian_pengawas_keterangan }}
+                                                                    </td>
+                                                                    <td>Rp.
+                                                                        {{ format_uang($galian->galian_pengawas_total) }}
                                                                     </td>
                                                                 @endif
                                                             @endif
@@ -732,7 +763,7 @@
                                                                             </div>
                                                                             <input type="text" class="form-control"
                                                                                 id="harga_galian{{ $galian->item_id }}{{ $key }}"
-                                                                                name="harga_galian[{{ $galian->item_id }}]"
+                                                                                name="harga_galian[{{ $galian->id }}]"
                                                                                 value="{{ format_uang($galian->galian_pengawas_harga_satuan) }}"
                                                                                 placeholder="Harga Perencanaan">
                                                                         </div>
@@ -746,12 +777,27 @@
                                                                             </script>
                                                                         @endpush
                                                                     </td>
-                                                                    <td></td>
+                                                                    <td>
+                                                                        <input type="text" class="form-control"
+                                                                            id="keterangan_perencanaa_galian{{ $galian->item_id }}{{ $key }}"
+                                                                            name="keterangan_perencanaa_galian[{{ $galian->item_id }}]"
+                                                                            value=""
+                                                                            placeholder="Keterangan Perencanaan">
+                                                                    </td>
                                                                 @else
                                                                     <td></td>
                                                                     <td></td>
                                                                     <td></td>
                                                                 @endif
+                                                            </tr>
+                                                        @elseif ($pekerjaanUtama->status === 'selesai koreksi')
+                                                            <tr>
+                                                                <td>Perencanaan</td>
+
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+
                                                             </tr>
                                                         @endif
                                                     @empty
@@ -771,18 +817,14 @@
                                                 @if (isset($daftarGalian))
                                                     @if ($pekerjaanUtama->status === 'selesai koreksi')
                                                         <tr>
-                                                            <th colspan="5"> Total
+                                                            <th colspan="6" class="text-right"> Total
                                                             </th>
                                                             <th class="text-center">
                                                                 {{ $pekerjaanUtama->luas_galian }} m<sup>2</sup>
                                                             </th>
-
-                                                            <th class="text-center">
-                                                                {{ $daftarGalian->sum('qty_pengawas') }} m<sup>2</sup>
-                                                            </th>
                                                             <th></th>
                                                             @if ($perencaan === true)
-                                                                <th colspan="3">
+                                                                <th>
 
                                                                 </th>
                                                                 @if ($pekerjaanUtama->status === 'diadjust')
@@ -800,8 +842,7 @@
                                                             @endif
                                                         </tr>
                                                         <tr>
-                                                            <th
-                                                                @if ($pekerjaanUtama->status === 'diadjust') colspan="14" @else colspan="11" @endif>
+                                                            <th colspan="9" class="text-right">
                                                                 Grand Total
                                                             </th>
                                                             <th>Rp.

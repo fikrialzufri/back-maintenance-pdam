@@ -731,25 +731,20 @@ class PelaksanaanPekerjaanController extends Controller
     public function itemRemove(Request $request)
     {
         DB::beginTransaction();
-
         try {
+            DB::commit();
             $message = 'Gagal Hapus Penunjukan Pekerjaan';
 
             // request
             $slug = $request->slug;
             $id_barang = $request->id_barang;
 
-            DB::commit();
+
             $penunjukanPekerjaan = PenunjukanPekerjaan::where('slug', $slug)->first();
             $data = $this->model()->where('penunjukan_pekerjaan_id', $penunjukanPekerjaan->id)->with('hasItem')->first();
 
-            $jenis = Jenis::where('slug', 'barang-baru')->first();
-
             $item = Item::find($id_barang);
             if ($item) {
-                if ($item->jenis_id == $jenis->id && $item->hapus == 'ya') {
-                    $item->delete();
-                }
 
                 $data->hasItem()->detach($item->id);
 

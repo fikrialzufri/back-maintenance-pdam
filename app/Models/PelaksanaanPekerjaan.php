@@ -136,6 +136,14 @@ class PelaksanaanPekerjaan extends Model
             'keterangan'
         )->withTimestamps();
     }
+    public function hasItemPerencanaan()
+    {
+        return $this->belongsToMany(Item::class, 'item_perencanaan')->withPivot(
+            'harga',
+            'total',
+            'keterangan'
+        )->withTimestamps();
+    }
 
     public function getTotalHargaAttribute()
     {

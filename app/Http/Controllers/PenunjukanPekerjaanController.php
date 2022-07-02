@@ -16,6 +16,7 @@ use App\Models\Karyawan;
 use App\Models\Kategori;
 use App\Models\Notifikasi;
 use App\Models\PelakasanaanItem;
+use App\Models\PelakasanaanPengawas;
 use App\Models\PelaksanaanAdjust;
 use App\Models\Rekanan;
 use App\Models\Tagihan;
@@ -536,11 +537,16 @@ class PenunjukanPekerjaanController extends Controller
         $user = [];
         $listitem = [];
         $listitemPengawas = [];
+        $listitemPerencanaan = [];
         $cekItem = [];
+        $cekItemPengawas = [];
         $dataItem = [];
 
         $PelaksanaanPekerjaan  = PelaksanaanPekerjaan::find($id);
         $PelaksanaanPekerjaan->status;
+
+
+
         DB::beginTransaction();
         try {
             DB::commit();
@@ -548,7 +554,7 @@ class PenunjukanPekerjaanController extends Controller
                 // pekerjaan
                 foreach ($request->qty_pengawas as $key => $value) {
 
-                    $cekItem[$key] = PelakasanaanItem::where('item_id', $key)->first();
+                    $cekItem[$key] = PelakasanaanItem::where('item_id', $key)->where('pelaksanaan_pekerjaan_id', $PelaksanaanPekerjaan->id)->first();
 
                     $dataItem[$key] = Item::find($key);
 
@@ -583,12 +589,42 @@ class PenunjukanPekerjaanController extends Controller
                 }
                 // end pekerjaan
 
-
                 $status = 'dikoreksi';
             } else {
                 if ($PelaksanaanPekerjaan->status === 'dikoreksi') {
                     $status = 'selesai koreksi';
                     $PelaksanaanPekerjaan->keterangan_barang = '';
+                    // return $request;
+
+                    foreach ($request->harga_perencanaan_pekerjaan as $key => $value) {
+
+                        $cekItem[$key] = PelakasanaanItem::where('item_id', $key)->where('pelaksanaan_pekerjaan_id', $PelaksanaanPekerjaan->id)->first();
+                        if ($cekItem[$key]) {
+
+                            $listitem[$key] = [
+                                'keterangan' => $cekItem[$key]->keterangan,
+                                'harga' => $cekItem[$key]->harga,
+                                'qty' => $cekItem[$key]->qty,
+                                'total' =>  str_replace(".", "", $value) * $cekItem[$key]->qty,
+                            ];
+                            $cekItemPengawas[$key] = PelakasanaanPengawas::where('item_id', $key)->where('pelaksanaan_pekerjaan_id', $PelaksanaanPekerjaan->id)->first();
+                            if ($cekItemPengawas[$key]) {
+                                // harga pengawas
+                                $listitemPengawas[$key] = [
+                                    'keterangan' => $cekItemPengawas[$key]->keterangan,
+                                    'harga' => $cekItemPengawas[$key]->harga,
+                                    'qty' => $cekItemPengawas[$key]->qty,
+                                    'total' => str_replace(".", "", $value) *  $cekItemPengawas[$key]->qty,
+                                ];
+                                // harga perencanaan
+                                $listitemPerencanaan[$key] = [
+                                    'keterangan' => isset($request->keterangan_perencanaan_pekerjaan[$key]) ? $request->keterangan_perencanaan_pekerjaan[$key] : null,
+                                    'harga' => str_replace(".", "", $value),
+                                    'total' => str_replace(".", "", $value) * $cekItemPengawas[$key]->qty,
+                                ];
+                            }
+                        }
+                    }
                 }
                 if ($PelaksanaanPekerjaan->status === 'selesai koreksi') {
                     $status = 'diadjust';
@@ -685,6 +721,13 @@ class PenunjukanPekerjaanController extends Controller
                     if ($request->qty_pengawas) {
                         $PelaksanaanPekerjaan->hasItem()->sync($listitem);
                         $PelaksanaanPekerjaan->hasItemPengawas()->sync($listitemPengawas);
+                    }
+                }
+                if (auth()->user()->hasRole('asisten-manajer-perencanaan')) {
+                    if ($request->harga_perencanaan_pekerjaan) {
+                        $PelaksanaanPekerjaan->hasItem()->sync($listitem);
+                        $PelaksanaanPekerjaan->hasItemPengawas()->sync($listitemPengawas);
+                        $PelaksanaanPekerjaan->hasItemPerencanaan()->sync($listitemPerencanaan);
                     }
                 }
                 $user[auth()->user()->id] = [
