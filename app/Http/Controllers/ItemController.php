@@ -186,8 +186,8 @@ class ItemController extends Controller
                             return redirect()->route($this->route . '.index')->with('message', ' Satuan Item tidak')->with('Class', 'danger');
                         }
                         $dataNama[$index] = $item[1];
-                        $dataHargaSiang[$index] = str_replace(".", "", $item[4]);
-                        $dataHargaMalam[$index] = str_replace(".", "", $item[5]);
+                        $dataHargaSiang[$index] = isset($item[4]) ? str_replace(".", "", $item[4]) : str_replace(".", "", $item[5]);
+                        $dataHargaMalam[$index] = isset($item[5]) ? str_replace(".", "", $item[5]) : str_replace(".", "", $item[4]);
 
                         $itemExist[$index] = Item::where('nama', 'LIKE', '%' . $dataNama[$index]  . "%")->first();
                         if ($itemExist[$index] == null) {
@@ -197,8 +197,8 @@ class ItemController extends Controller
                             $itemExist[$index]->nama =  $dataNama[$index];
                             $itemExist[$index]->jenis_id =  $dataJenis[$index]->id;
                             $itemExist[$index]->satuan_id =  $dataSatuan[$index]->id;
-                            $itemExist[$index]->harga =  $dataHargaSiang[$index];
-                            $itemExist[$index]->harga_malam =  $dataHargaMalam[$index];
+                            $itemExist[$index]->harga =  isset($dataHargaSiang[$index]) ? $dataHargaSiang[$index] : $dataHargaMalam[$index];
+                            $itemExist[$index]->harga_malam =  isset($dataHargaMalam[$index]) ? $dataHargaMalam[$index] : $dataHargaSiang[$index];
                             $itemExist[$index]->save();
                             $total = ++$index;
                         }
@@ -214,9 +214,9 @@ class ItemController extends Controller
 
     public function getdetail(Request $request)
     {
-        $id = $request->id;
+        // return $request;
         try {
-            $message = 'Data Item ada';
+            $id = $request->item;
             $item = $this->model()->find($id);
             $result = [
                 'id' => $item->id,
@@ -226,6 +226,7 @@ class ItemController extends Controller
                 'pekerjaan' => $item->pekerjaan,
                 'jenis' => $item->jenis,
             ];
+            $message = 'Data Item ada';
             return $this->sendResponse($result, $message, 200);
         } catch (\Throwable $th) {
             $message = 'Data tidak Item ada';

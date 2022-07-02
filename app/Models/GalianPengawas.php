@@ -6,15 +6,10 @@ use App\Traits\UsesUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class GalianPekerjaan extends Model
+class GalianPengawas extends Model
 {
     use HasFactory, UsesUuid;
-    protected $table = "galian_pekerjaan";
-
-    public function hasPelaksanaanPekerjaan()
-    {
-        return $this->belongsTo(PelaksanaanPekerjaan::class, 'pelaksanaan_pekerjaan_id', 'id');
-    }
+    protected $table = "galian_pengawas";
 
     public function hasItem()
     {
@@ -23,7 +18,7 @@ class GalianPekerjaan extends Model
 
     public function hasGalianPengawas()
     {
-        return $this->hasOne(GalianPengawas::class, 'galian_id');
+        return $this->hasOne(GalianPekerjaan::class, 'id', 'galian_id');
     }
 
     public function getPekerjaanAttribute()
@@ -60,18 +55,6 @@ class GalianPekerjaan extends Model
     {
         if ($this->hasGalianPengawas) {
             return $this->hasGalianPengawas->keterangan;
-        }
-    }
-    public function getGalianPengawasHargaSatuanAttribute()
-    {
-        if ($this->hasGalianPengawas) {
-            return $this->hasGalianPengawas->harga_satuan;
-        }
-    }
-    public function getGalianPengawasTotalAttribute()
-    {
-        if ($this->hasGalianPengawas) {
-            return $this->hasGalianPengawas->total;
         }
     }
 }

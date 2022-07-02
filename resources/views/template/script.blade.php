@@ -144,7 +144,7 @@
         notifikasi();
         setInterval(() => {
             notifikasi();
-        }, 5000);
+        }, 10000);
     });
 </script>
 <script script src="{{ asset('plugins/select2/dist/js/select2.min.js') }}"></script>
