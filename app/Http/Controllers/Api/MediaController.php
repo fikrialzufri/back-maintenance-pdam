@@ -37,6 +37,7 @@ class MediaController extends Controller
         $slug = $request->slug;
         $modul = $request->modul;
         $modul_id = $request->id;
+        $id_barang = $request->id_barang;
 
         $user_id = auth()->user()->id;
 
@@ -54,6 +55,7 @@ class MediaController extends Controller
                 $media->file = $imageName;
                 $media->modul_id = $modul_id;
                 $media->user_id = $user_id;
+                $media->item_id = $id_barang;
                 $media->save();
                 $message = 'Berhasil mengirim foto';
                 return $this->sendResponse($media, $message, 200);

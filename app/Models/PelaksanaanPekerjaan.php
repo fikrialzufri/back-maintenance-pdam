@@ -108,6 +108,17 @@ class PelaksanaanPekerjaan extends Model
         return $this->hasMany(GalianPekerjaan::class, 'pelaksanaan_pekerjaan_id');
     }
 
+    public function getVolumeAttribute()
+    {
+        $total = 0;
+        if ($this->hasGalianPekerjaan) {
+            foreach ($this->hasGalianPekerjaan as $value) {
+                $total += $value->volume;
+            }
+        }
+        return  $total;
+    }
+
     public function hasPekerjaanAdjust()
     {
         return $this->hasMany(PelaksanaanAdjust::class, 'pelaksanaan_pekerjaan_id');

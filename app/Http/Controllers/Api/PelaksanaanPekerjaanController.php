@@ -10,6 +10,7 @@ use App\Models\Jabatan;
 use App\Models\Jenis;
 use App\Models\Karyawan;
 use App\Models\Kategori;
+use App\Models\Media;
 use App\Models\PelaksanaanPekerjaan;
 use App\Models\PenunjukanPekerjaan;
 use App\Models\Rekanan;
@@ -750,6 +751,15 @@ class PelaksanaanPekerjaanController extends Controller
 
                 $result = [];
 
+                $media = Media::where('item_id', $id_barang)->where('modul_id', $data->id)->get();
+
+                if ($media) {
+                    foreach ($media as $ind => $image) {
+                        Storage::disk('public')->delete('proses/' . $image->file);
+                        $image->delete();
+                    }
+                }
+
                 $message = 'Berhasil Hapus Item Pekerjaan';
                 return $this->sendResponse($result, $message, 200);
             } else {
@@ -794,8 +804,11 @@ class PelaksanaanPekerjaanController extends Controller
             $harga_item = $dataItem->harga;
         }
 
-
-        $total = ($panjang * $lebar * $dalam) * $harga_item;
+        if ($dalam === 0 || $dalam === "") {
+            $total = ($panjang * $lebar * $dalam) * $harga_item;
+        } else {
+            $total = ($panjang * $lebar) * $harga_item;
+        }
         $keterangan = $request->keterangan;
 
         try {

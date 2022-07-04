@@ -1631,10 +1631,10 @@
                             <div class="col-12">
                                 <div class="form-group">
                                     <div>
-                                        <label for="mps" class=" form-control-label">MPS</label>
+                                        <label for="nps" class=" form-control-label">NPS</label>
                                     </div>
                                     <div>
-                                        <strong>{{ $aduan->mps }}</strong>
+                                        <strong>{{ $aduan->nps }}</strong>
                                     </div>
                                 </div>
                             </div>

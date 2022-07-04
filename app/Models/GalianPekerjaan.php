@@ -25,6 +25,10 @@ class GalianPekerjaan extends Model
     {
         return $this->hasOne(GalianPengawas::class, 'galian_id');
     }
+    public function hasGalianPerencanaan()
+    {
+        return $this->hasOne(GalianPerencanaan::class, 'galian_id');
+    }
 
     public function getPekerjaanAttribute()
     {
@@ -73,5 +77,43 @@ class GalianPekerjaan extends Model
         if ($this->hasGalianPengawas) {
             return $this->hasGalianPengawas->total;
         }
+    }
+    public function getGalianPerencanaanHargaSatuanAttribute()
+    {
+        if ($this->hasGalianPerencanaan) {
+            return "Rp. " . format_uang($this->hasGalianPerencanaan->harga_satuan);
+        }
+    }
+    public function getGalianPerencanaanTotalAttribute()
+    {
+        if ($this->hasGalianPerencanaan) {
+            return $this->hasGalianPerencanaan->total;
+        }
+    }
+    public function getGalianPerencanaanKeteranganAttribute()
+    {
+        if ($this->hasGalianPerencanaan) {
+            return $this->hasGalianPerencanaan->keterangan;
+        }
+    }
+
+    public function getVolumeAttribute()
+    {
+        $total = 0;
+        if ($this->hasGalianPengawas) {
+            $total = $this->hasGalianPengawas->dalam === 0.0
+                ? $this->hasGalianPengawas->panjang * $this->hasGalianPengawas->lebar
+                : $this->hasGalianPengawas->panjang * $this->hasGalianPengawas->lebar * $this->hasGalianPengawas->dalam;
+        }
+        return  $total;
+    }
+
+    public function getVolumeRekananAttribute()
+    {
+        $total = 0;
+        $total = $this->dalam === 0.0
+            ? $this->panjang * $this->lebar
+            : $this->panjang * $this->lebar * $this->dalam;
+        return  $total;
     }
 }

@@ -17,7 +17,7 @@ class Aduan extends Model
     protected $fillable = [
         'no_ticket',
         'no_aduan',
-        'mps',
+        'nps',
         'atas_nama',
         'sumber_informasi',
         'keterangan',

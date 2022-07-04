@@ -352,13 +352,19 @@
                                                     <th width="150">Jumlah </th>
                                                     @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
                                                         <th width="250">Harga Satuan</th>
+                                                        <th width="300">Keterangan</th>
                                                         <th width="250">Total</th>
                                                     @endif
+
                                                     @if ($pekerjaanUtama->status === 'selesai koreksi')
                                                         <th width="250">Harga Satuan</th>
+                                                        <th width="300">Keterangan</th>
                                                         <th width="250">Total</th>
                                                     @endif
-                                                    <th width="300">Keterangan</th>
+                                                    @if ($pekerjaanUtama->status === 'selesai' || $pekerjaanUtama->status === 'dikoreksi')
+                                                        <th width="300">Keterangan</th>
+                                                    @endif
+
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -383,16 +389,18 @@
                                                             <td>{{ $pekerjaan->pivot->qty }}</td>
                                                             @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
                                                                 <td>Rp. {{ format_uang($pekerjaan->pivot->harga) }}</td>
+                                                                <td>{{ $pekerjaan->pivot->keterangan }}</td>
                                                                 <td rowspan="3">
                                                                     Rp.{{ format_uang($pekerjaan->pivot->total) }}</td>
                                                             @endif
 
                                                             @if ($pekerjaanUtama->status === 'selesai koreksi')
                                                                 <td>Rp. {{ format_uang($pekerjaan->pivot->harga) }}</td>
+                                                                <td>{{ $pekerjaan->pivot->keterangan }}</td>
                                                                 <td rowspan="3">
                                                                     Rp. {{ format_uang($pekerjaan->pivot->total) }}</td>
                                                             @endif
-                                                            <td>{{ $pekerjaan->pivot->keterangan }}</td>
+
 
                                                         </tr>
                                                         <tr>
@@ -416,7 +424,12 @@
                                                                     <td>
                                                                         {{ $daftarPekerjaan->hasItemPengawas[$key]->pivot->qty }}
                                                                     </td>
-                                                                    @if ($perencaan == true)
+                                                                    @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
+                                                                        <td>Rp.
+                                                                            {{ format_uang($daftarPekerjaan->hasItemPengawas[$key]->pivot->harga) }}
+                                                                        </td>
+                                                                    @endif
+                                                                    @if ($pekerjaanUtama->status === 'selesai koreksi')
                                                                         <td>Rp.
                                                                             {{ format_uang($daftarPekerjaan->hasItemPengawas[$key]->pivot->harga) }}
                                                                         </td>
@@ -462,7 +475,6 @@
                                                                 @else
                                                                     <td></td>
                                                                     <td></td>
-                                                                    <td></td>
                                                                 @endif
                                                             </tr>
                                                         @elseif ($pekerjaanUtama->status === 'selesai koreksi')
@@ -496,8 +508,7 @@
                                                 @if ($pekerjaanUtama->status === 'selesai koreksi')
                                                     @if (isset($daftarPekerjaan->hasItem))
                                                         <tr>
-                                                            <th @if ($pekerjaanUtama->status === 'diadjust') colspan="7" @elseif ($pekerjaanUtama->status === 'selesai koreksi') colspan="6" @else colspan="7" @endif
-                                                                class="text-right">Total
+                                                            <th colspan="7" class="text-right">Total
                                                             </th>
                                                             <th>
                                                                 <span id="grand_total_pekerjaan_tampil">
@@ -660,15 +671,7 @@
                                                             <td>{{ $galian->lebar }}</td>
                                                             <td>{{ $galian->dalam }}</td>
                                                             <td>
-                                                                @if ($galian->dalam === 0.0)
-                                                                    {{ $galian->panjang * $galian->lebar }}
-                                                                @elseif ($galian->panjang === 0.0)
-                                                                    {{ $galian->dalam * $galian->lebar }}
-                                                                @elseif ($galian->lebar === 0.0)
-                                                                    {{ $galian->dalam * $galian->panjang }}
-                                                                @else
-                                                                    {{ $galian->dalam * $galian->panjang * $galian->lebar }}
-                                                                @endif
+                                                                {{ $galian->volume_rekanan }}
 
                                                                 m<sup>2
                                                             </td>
@@ -732,18 +735,29 @@
                                                                     {{ $galian->galian_pengawas_dalam }}
                                                                 </td>
                                                                 <td>
-                                                                    {{ $galian->galian_pengawas_dalam == 0 ? $galian->galian_pengawas_panjang * $galian->galian_pengawas_lebar : $galian->galian_pengawas_panjang * $galian->galian_pengawas_lebar * $galian->galian_pengawas_dalam }}
+                                                                    {{ $galian->volume }}
                                                                     m<sup>2
                                                                 </td>
                                                                 @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
-                                                                    <td>Rp.
-                                                                        {{ format_uang($galian->galian_pengawas_harga_satuan) }}
-                                                                    </td>
                                                                     <td>
                                                                         {{ $galian->galian_pengawas_keterangan }}
                                                                     </td>
                                                                     <td>Rp.
+                                                                        {{ format_uang($galian->galian_pengawas_harga_satuan) }}
+                                                                    </td>
+
+                                                                    <td>Rp.
                                                                         {{ format_uang($galian->galian_pengawas_total) }}
+                                                                    </td>
+                                                                @endif
+                                                                @if ($pekerjaanUtama->status === 'selesai koreksi')
+                                                                    <td>
+                                                                        adadadaad
+                                                                        {{ $galian->galian_pengawas_keterangan }}
+                                                                    </td>
+                                                                    <td>
+                                                                        Rp.
+                                                                        {{ format_uang($galian->galian_pengawas_harga_satuan) }}
                                                                     </td>
                                                                 @endif
                                                             @endif
@@ -779,8 +793,8 @@
                                                                     </td>
                                                                     <td>
                                                                         <input type="text" class="form-control"
-                                                                            id="keterangan_perencanaa_galian{{ $galian->item_id }}{{ $key }}"
-                                                                            name="keterangan_perencanaa_galian[{{ $galian->item_id }}]"
+                                                                            id="keterangan_perencanaa_galian{{ $galian->id }}{{ $key }}"
+                                                                            name="keterangan_perencanaa_galian[{{ $galian->id }}]"
                                                                             value=""
                                                                             placeholder="Keterangan Perencanaan">
                                                                     </td>
@@ -793,10 +807,12 @@
                                                         @elseif ($pekerjaanUtama->status === 'selesai koreksi')
                                                             <tr>
                                                                 <td>Perencanaan</td>
-
                                                                 <td></td>
                                                                 <td></td>
                                                                 <td></td>
+                                                                <td> </td>
+                                                                <td> {{ $galian->galian_perencanaan_keterangan }}</td>
+                                                                <td>{{ $galian->galian_perencanaan_harga_satuan }}</td>
 
                                                             </tr>
                                                         @endif
@@ -817,29 +833,11 @@
                                                 @if (isset($daftarGalian))
                                                     @if ($pekerjaanUtama->status === 'selesai koreksi')
                                                         <tr>
-                                                            <th colspan="6" class="text-right"> Total
+                                                            <th colspan="9" class="text-right"> Total
                                                             </th>
-                                                            <th class="text-center">
-                                                                {{ $pekerjaanUtama->luas_galian }} m<sup>2</sup>
+                                                            <th>Rp.
+                                                                {{ format_uang($daftarGalian->sum('total')) }}
                                                             </th>
-                                                            <th></th>
-                                                            @if ($perencaan === true)
-                                                                <th>
-
-                                                                </th>
-                                                                @if ($pekerjaanUtama->status === 'diadjust')
-                                                                    <th>
-                                                                        {{ $daftarGalian->sum('qty_perencanaan_adjust') }}
-                                                                        m<sup>2</sup>
-                                                                    </th>
-                                                                    <th></th>
-                                                                    <th></th>
-                                                                @endif
-
-                                                                <th>Rp.
-                                                                    {{ format_uang($daftarGalian->sum('total')) }}
-                                                                </th>
-                                                            @endif
                                                         </tr>
                                                         <tr>
                                                             <th colspan="9" class="text-right">
@@ -911,10 +909,10 @@
                             <div class="col-12">
                                 <div class="form-group">
                                     <div>
-                                        <label for="mps" class=" form-control-label">MPS</label>
+                                        <label for="nps" class=" form-control-label">NPS</label>
                                     </div>
                                     <div>
-                                        <strong>{{ $aduan->mps }}</strong>
+                                        <strong>{{ $aduan->nps }}</strong>
                                     </div>
                                 </div>
                             </div>
@@ -1079,132 +1077,118 @@
 @push('script')
     <script script src="{{ asset('plugins/select2/dist/js/select2.min.js') }}"></script>
     <script>
-        let id = $('#idPekerjaan').val();
+        $('#cmbRekanan').select2({
+            placeholder: '--- Pilih Pekerjaan ---',
+            width: '100%'
+        });
+    </script>
+    @if ($aduan->status != 'draft')
+        <script>
+            let id = $('#idPekerjaan').val();
 
-        function capitalizeFirstLetter(string) {
-            return string.replace(/^./, string[0].toUpperCase());
-        }
 
-        function formatRupiah(angka, prefix) {
-            let number_string = angka.replace(/[^,\d]/g, '').toString(),
-                split = number_string.split(','),
-                sisa = split[0].length % 3,
-                rupiah = split[0].substr(0, sisa),
-                ribuan = split[0].substr(sisa).match(/\d{3}/gi);
 
-            // tambahkan titik jika yang di input sudah menjadi angka ribuan
-            if (ribuan) {
-                separator = sisa ? '.' : '';
-                rupiah += separator + ribuan.join('.');
+            function capitalizeFirstLetter(string) {
+                return string.replace(/^./, string[0].toUpperCase());
             }
 
-            rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
-            return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
-        }
+            function formatRupiah(angka, prefix) {
+                let number_string = angka.replace(/[^,\d]/g, '').toString(),
+                    split = number_string.split(','),
+                    sisa = split[0].length % 3,
+                    rupiah = split[0].substr(0, sisa),
+                    ribuan = split[0].substr(sisa).match(/\d{3}/gi);
 
-        function formatRupiahTanpaRp(angka, prefix) {
-            let number_string = angka.replace(/[^,\d]/g, '').toString(),
-                split = number_string.split(','),
-                sisa = split[0].length % 3,
-                rupiah = split[0].substr(0, sisa),
-                ribuan = split[0].substr(sisa).match(/\d{3}/gi);
-
-            // tambahkan titik jika yang di input sudah menjadi angka ribuan
-            if (ribuan) {
-                separator = sisa ? '.' : '';
-                rupiah += separator + ribuan.join('.');
-            }
-
-            rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
-            return prefix == undefined ? rupiah : (rupiah ? '' + rupiah : '');
-        }
-
-        $('#simpan_koreksi').on('click', function() {
-            let spk = $('#no_spk').val();
-
-            const swalWithBootstrapButtons = swal.mixin({
-                confirmButtonClass: "btn btn-success",
-                cancelButtonClass: "btn btn-danger",
-                buttonsStyling: false,
-            });
-            swalWithBootstrapButtons({
-                title: "Anda Yakin ?",
-                text: "Mengoreksi Pekerjaan : " + spk,
-                type: "question",
-                showCancelButton: true,
-                confirmButtonText: "Ya, yakin Mengoreksi data!",
-                cancelButtonText: "Tidak, kembali!",
-            }).then((result) => {
-                if (result.value) {
-                    swalWithBootstrapButtons(
-                        "Mengoreksi!",
-                        "data anda telah dikoreksi.",
-                        "success"
-                    );
-                    document.getElementById("form-update").submit();
-                } else if (
-                    // Read more about handling dismissals
-                    result.dismiss === swal.DismissReason.cancel
-                ) {
-                    swalWithBootstrapButtons(
-                        "Kembali",
-                        "Mohon berhati-hati untuk mengoreksi data",
-                        "error"
-                    );
+                // tambahkan titik jika yang di input sudah menjadi angka ribuan
+                if (ribuan) {
+                    separator = sisa ? '.' : '';
+                    rupiah += separator + ribuan.join('.');
                 }
+
+                rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+                return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+            }
+
+            function formatRupiahTanpaRp(angka, prefix) {
+                let number_string = angka.replace(/[^,\d]/g, '').toString(),
+                    split = number_string.split(','),
+                    sisa = split[0].length % 3,
+                    rupiah = split[0].substr(0, sisa),
+                    ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+                // tambahkan titik jika yang di input sudah menjadi angka ribuan
+                if (ribuan) {
+                    separator = sisa ? '.' : '';
+                    rupiah += separator + ribuan.join('.');
+                }
+
+                rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+                return prefix == undefined ? rupiah : (rupiah ? '' + rupiah : '');
+            }
+
+            $('#simpan_koreksi').on('click', function() {
+                let spk = $('#no_spk').val();
+
+                const swalWithBootstrapButtons = swal.mixin({
+                    confirmButtonClass: "btn btn-success",
+                    cancelButtonClass: "btn btn-danger",
+                    buttonsStyling: false,
+                });
+                swalWithBootstrapButtons({
+                    title: "Anda Yakin ?",
+                    text: "Mengoreksi Pekerjaan : " + spk,
+                    type: "question",
+                    showCancelButton: true,
+                    confirmButtonText: "Ya, yakin Mengoreksi data!",
+                    cancelButtonText: "Tidak, kembali!",
+                }).then((result) => {
+                    if (result.value) {
+                        swalWithBootstrapButtons(
+                            "Mengoreksi!",
+                            "data anda telah dikoreksi.",
+                            "success"
+                        );
+                        document.getElementById("form-update").submit();
+                    } else if (
+                        // Read more about handling dismissals
+                        result.dismiss === swal.DismissReason.cancel
+                    ) {
+                        swalWithBootstrapButtons(
+                            "Kembali",
+                            "Mohon berhati-hati untuk mengoreksi data",
+                            "error"
+                        );
+                    }
+                });
             });
-        });
-        $('.pop').on('click', function() {
-            $('.imagepreview').attr('src', $(this).find('img').attr('src'));
-            $('#imagemodal').modal('show');
-        });
-
-        function toast(text) {
-            $.toast({
-                heading: 'Success',
-                text: text,
-                showHideTransition: 'slide',
-                icon: 'success',
-                loaderBg: '#f2a654',
-                position: 'top-right'
-            })
-        }
-
-        function toastError(text) {
-            $.toast({
-                heading: 'Error',
-                text: text,
-                showHideTransition: 'slide',
-                icon: 'error',
-                loaderBg: '#f2a654',
-                position: 'top-right'
-            })
-        }
-
-        $(document).on('keypress', '.numberOnly', function(event) {
-            if (event.which < 46 ||
-                event.which > 59) {
-                event.preventDefault();
-            } // prevent if not number/dot
-
-            if (event.which == 46 &&
-                $(this).val().indexOf('.') != -1) {
-                event.preventDefault();
-            } // prevent if already dot
-        })
-
-        $(document).ready(function() {
-            $('#cmbPekerjaan').select2({
-                placeholder: '--- Pilih Pekerjaan ---',
-                width: '100%'
+            $('.pop').on('click', function() {
+                $('.imagepreview').attr('src', $(this).find('img').attr('src'));
+                $('#imagemodal').modal('show');
             });
 
-            $("#cmbPekerjaan").on("change", function(e) {
-                $('#cmbPekerjaan').parent().removeClass('is-invalid')
-            });
+            function toast(text) {
+                $.toast({
+                    heading: 'Success',
+                    text: text,
+                    showHideTransition: 'slide',
+                    icon: 'success',
+                    loaderBg: '#f2a654',
+                    position: 'top-right'
+                })
+            }
 
+            function toastError(text) {
+                $.toast({
+                    heading: 'Error',
+                    text: text,
+                    showHideTransition: 'slide',
+                    icon: 'error',
+                    loaderBg: '#f2a654',
+                    position: 'top-right'
+                })
+            }
 
-            $('#jumlah_pekerjaan').keypress(function(event) {
+            $(document).on('keypress', '.numberOnly', function(event) {
                 if (event.which < 46 ||
                     event.which > 59) {
                     event.preventDefault();
@@ -1214,22 +1198,46 @@
                     $(this).val().indexOf('.') != -1) {
                     event.preventDefault();
                 } // prevent if already dot
-                $(this).removeClass("is-invalid");
             })
 
-            $('#formPekerjaan').on('submit', function(e) {
-                e.preventDefault();
-                let modul = 'pekerjaan';
-                saveform(modul);
-            });
+            $(document).ready(function() {
+
+                $('#cmbPekerjaan').select2({
+                    placeholder: '--- Pilih Pekerjaan ---',
+                    width: '100%'
+                });
+
+                $("#cmbPekerjaan").on("change", function(e) {
+                    $('#cmbPekerjaan').parent().removeClass('is-invalid')
+                });
+
+
+                $('#jumlah_pekerjaan').keypress(function(event) {
+                    if (event.which < 46 ||
+                        event.which > 59) {
+                        event.preventDefault();
+                    } // prevent if not number/dot
+
+                    if (event.which == 46 &&
+                        $(this).val().indexOf('.') != -1) {
+                        event.preventDefault();
+                    } // prevent if already dot
+                    $(this).removeClass("is-invalid");
+                })
+
+                $('#formPekerjaan').on('submit', function(e) {
+                    e.preventDefault();
+                    let modul = 'pekerjaan';
+                    saveform(modul);
+                });
 
 
 
-            function elementPekerjaan(id, nama, slug, jenis, nomor, modul, jumlah, jenis_harga, keterangan = null) {
-                let modulLowcasse = capitalizeFirstLetter(modul);
-                let pekerjaanUtama = $('#idPekerjaan').val();
+                function elementPekerjaan(id, nama, slug, jenis, nomor, modul, jumlah, jenis_harga, keterangan = null) {
+                    let modulLowcasse = capitalizeFirstLetter(modul);
+                    let pekerjaanUtama = $('#idPekerjaan').val();
 
-                let elementTotal = `<tr id="list${modulLowcasse}_${id}" class="list_table_${modul}">
+                    let elementTotal = `<tr id="list${modulLowcasse}_${id}" class="list_table_${modul}">
                     <td class="text-center nomor_${modul}" data-index="${nomor}">${nomor}
                     </td>
                     <td>${nama}</td>
@@ -1257,156 +1265,156 @@
                     </td>
                 </tr>`;
 
-                return elementTotal;
+                    return elementTotal;
 
-            }
-
-            function tombol() {
-
-                $(document).on("click", ".btn-hapus", function(e) {
-                    let id = $(this).data('pekerjaanutama');
-                    let modul = $(this).data('modul');
-                    let item = $(this).data('item');
-                    let content = '';
-                    let modulLowcasse = capitalizeFirstLetter(modul);
-                    let itemLength = $('#list' + modulLowcasse + '_' + item).length;
-                    if (itemLength > 0) {
-                        $('#list' + modulLowcasse + '_' + item).remove();
-
-                        $('#table' + modulLowcasse).append(content);
-                    }
-                    let n = 1;
-                    $('.nomor_' + modul).each(function(index, item) {
-                        let number = n++;
-                        $(item).text(number);
-                        $(this).attr('data-index', number);
-                    });
-
-                    toast('success hapus ' + modul)
-
-                });
-                $(document).on("click", ".btn-edit", function(e) {
-                    let id = $(this).data('pekerjaanutama');
-                    let modul = $(this).data('modul');
-                    let item = $(this).data('item');
-                    let modulLowcasse = capitalizeFirstLetter(modul);
-                    $('#cmb' + modulLowcasse).val(item).trigger('change');
-                    let getjumlah = $('#jumlah_' + modul + '_value_' + item).val();
-                    let getketerangan = $('#keterangan_' + modul + '_value_' + item).val();
-                    $('#jumlah_' + modul + '_tampil').val(getjumlah);
-                    $('#jumlah_' + modul).val(getjumlah);
-                    $('#keterangan_' + modul).val(getketerangan);
-                });
-            }
-
-            tombol()
-
-            function saveform(modul) {
-
-                let modulLowcasse = capitalizeFirstLetter(modul);
-                let item = $('#cmb' + modulLowcasse).val();
-                let jumlah = $('#jumlah_' + modul).val();
-                let keterangan = $('#input_keterangan_' + modul).val();
-                let jenis_harga = $("input[name='harga_" + modul + "']:checked").val();
-
-                if (item === "") {
-                    $('#cmb' + modulLowcasse).parent().addClass('is-invalid')
-                }
-                if (jumlah === "") {
-                    $('#jumlah_' + modul).addClass("is-invalid");
                 }
 
-                if (item !== "" && jumlah !== "") {
-                    let lengthPekerjaan = $('#list' + modulLowcasse + '_' + item).length;
-                    let tableCount = $('.nomor_pekerjaan').length;
+                function tombol() {
 
-                    let nomor = tableCount + 1;
+                    $(document).on("click", ".btn-hapus", function(e) {
+                        let id = $(this).data('pekerjaanutama');
+                        let modul = $(this).data('modul');
+                        let item = $(this).data('item');
+                        let content = '';
+                        let modulLowcasse = capitalizeFirstLetter(modul);
+                        let itemLength = $('#list' + modulLowcasse + '_' + item).length;
+                        if (itemLength > 0) {
+                            $('#list' + modulLowcasse + '_' + item).remove();
 
-
-                    if (lengthPekerjaan === 0) {
-                        $.when($.ajax({
-                            type: 'get',
-                            url: "{{ route('item.detail') }}",
-                            data: {
-                                "_token": "{{ csrf_token() }}",
-                                item
-                            },
-                            success: function(data) {
-                                const {
-                                    id,
-                                    nama,
-                                    slug,
-                                    jenis
-                                } = data.data;
-                                let content = elementPekerjaan(
-                                    id, nama, slug, jenis, nomor, modul, jumlah, jenis_harga,
-                                    keterangan
-                                );
-                                $('.' + modul + 'TidakAda').remove();
-                                $('#table' + modulLowcasse).append(content);
-                                toast('success menambah ' + modulLowcasse);
-                                $('#cmb' + modulLowcasse).val(null).trigger('change');
-                                $('#jumlah_' + modul).val('');
-                                $('#input_keterangan_' + modul).val('');
-
-
-                            },
-
-                            error: function(data) {
-                                Swal.fire({
-                                    title: 'Oops...',
-                                    text: "Isi dengan lengkap",
-                                    footer: '<a href="">terdapat data yang kosong</a>'
-                                })
-                                console.log(data);
-                            }
-                        })).then(function(data, textStatus, jqXHR) {
-                            // totalHarga(modul);
-
-
+                            $('#table' + modulLowcasse).append(content);
+                        }
+                        let n = 1;
+                        $('.nomor_' + modul).each(function(index, item) {
+                            let number = n++;
+                            $(item).text(number);
+                            $(this).attr('data-index', number);
                         });
 
-                    } else {
-                        toastError('Data pekerjaan sudah ada');
-                        $('#cmb' + modulLowcasse).parent().addClass('is-invalid')
-                    }
+                        toast('success hapus ' + modul)
 
-                } else {
-                    Swal.fire({
-                        title: 'Oops...',
-                        text: "Isi data dengan lengkap",
-                        footer: '<a href="">terdapat data yang kosong</a>'
-                    })
+                    });
+                    $(document).on("click", ".btn-edit", function(e) {
+                        let id = $(this).data('pekerjaanutama');
+                        let modul = $(this).data('modul');
+                        let item = $(this).data('item');
+                        let modulLowcasse = capitalizeFirstLetter(modul);
+                        $('#cmb' + modulLowcasse).val(item).trigger('change');
+                        let getjumlah = $('#jumlah_' + modul + '_value_' + item).val();
+                        let getketerangan = $('#keterangan_' + modul + '_value_' + item).val();
+                        $('#jumlah_' + modul + '_tampil').val(getjumlah);
+                        $('#jumlah_' + modul).val(getjumlah);
+                        $('#keterangan_' + modul).val(getketerangan);
+                    });
                 }
 
-            }
+                tombol()
 
-            // star galian
-            $('#cmbGalian').select2({
-                placeholder: '--- Pilih Galian ---',
-                width: '100%'
-            });
+                function saveform(modul) {
 
-            $("#cmbGalian").on("change", function(e) {
-                $('#cmbGalian').parent().removeClass('is-invalid')
-            });
+                    let modulLowcasse = capitalizeFirstLetter(modul);
+                    let item = $('#cmb' + modulLowcasse).val();
+                    let jumlah = $('#jumlah_' + modul).val();
+                    let keterangan = $('#input_keterangan_' + modul).val();
+                    let jenis_harga = $("input[name='harga_" + modul + "']:checked").val();
 
-            $('#panjang_galian').keypress(function(event) {
-                $(this).removeClass("is-invalid");
-            })
-            $('#lebar_galian').keypress(function(event) {
-                $(this).removeClass("is-invalid");
-            })
-            $('#dalam_galian').keypress(function(event) {
-                $(this).removeClass("is-invalid");
-            })
+                    if (item === "") {
+                        $('#cmb' + modulLowcasse).parent().addClass('is-invalid')
+                    }
+                    if (jumlah === "") {
+                        $('#jumlah_' + modul).addClass("is-invalid");
+                    }
 
-            function elementPekerjaanGalian(id, nama, nomor, modul, panjang, lebar, dalam, jenis_harga, keterangan =
-                null) {
-                let modulLowcasse = capitalizeFirstLetter(modul);
-                let pekerjaanUtama = $('#idPekerjaan').val();
+                    if (item !== "" && jumlah !== "") {
+                        let lengthPekerjaan = $('#list' + modulLowcasse + '_' + item).length;
+                        let tableCount = $('.nomor_pekerjaan').length;
 
-                let elementTotalGalian = `<tr id="list${modulLowcasse}_${id}" class="list_table_${modul}">
+                        let nomor = tableCount + 1;
+
+
+                        if (lengthPekerjaan === 0) {
+                            $.when($.ajax({
+                                type: 'get',
+                                url: "{{ route('item.detail') }}",
+                                data: {
+                                    "_token": "{{ csrf_token() }}",
+                                    item
+                                },
+                                success: function(data) {
+                                    const {
+                                        id,
+                                        nama,
+                                        slug,
+                                        jenis
+                                    } = data.data;
+                                    let content = elementPekerjaan(
+                                        id, nama, slug, jenis, nomor, modul, jumlah, jenis_harga,
+                                        keterangan
+                                    );
+                                    $('.' + modul + 'TidakAda').remove();
+                                    $('#table' + modulLowcasse).append(content);
+                                    toast('success menambah ' + modulLowcasse);
+                                    $('#cmb' + modulLowcasse).val(null).trigger('change');
+                                    $('#jumlah_' + modul).val('');
+                                    $('#input_keterangan_' + modul).val('');
+
+
+                                },
+
+                                error: function(data) {
+                                    Swal.fire({
+                                        title: 'Oops...',
+                                        text: "Isi dengan lengkap",
+                                        footer: '<a href="">terdapat data yang kosong</a>'
+                                    })
+                                    console.log(data);
+                                }
+                            })).then(function(data, textStatus, jqXHR) {
+                                // totalHarga(modul);
+
+
+                            });
+
+                        } else {
+                            toastError('Data pekerjaan sudah ada');
+                            $('#cmb' + modulLowcasse).parent().addClass('is-invalid')
+                        }
+
+                    } else {
+                        Swal.fire({
+                            title: 'Oops...',
+                            text: "Isi data dengan lengkap",
+                            footer: '<a href="">terdapat data yang kosong</a>'
+                        })
+                    }
+
+                }
+
+                // star galian
+                $('#cmbGalian').select2({
+                    placeholder: '--- Pilih Galian ---',
+                    width: '100%'
+                });
+
+                $("#cmbGalian").on("change", function(e) {
+                    $('#cmbGalian').parent().removeClass('is-invalid')
+                });
+
+                $('#panjang_galian').keypress(function(event) {
+                    $(this).removeClass("is-invalid");
+                });
+                $('#lebar_galian').keypress(function(event) {
+                    $(this).removeClass("is-invalid");
+                });
+                $('#dalam_galian').keypress(function(event) {
+                    $(this).removeClass("is-invalid");
+                })
+
+                function elementPekerjaanGalian(id, nama, nomor, modul, panjang, lebar, dalam, jenis_harga, keterangan =
+                    null) {
+                    let modulLowcasse = capitalizeFirstLetter(modul);
+                    let pekerjaanUtama = $('#idPekerjaan').val();
+
+                    let elementTotalGalian = `<tr id="list${modulLowcasse}_${id}" class="list_table_${modul}">
                     <td class="text-center nomor_${modul}" data-index="${nomor}">${nomor}
                     </td>
                     <td>${nama}</td>
@@ -1445,105 +1453,106 @@
                     </td>
                 </tr>`;
 
-                return elementTotalGalian;
+                    return elementTotalGalian;
 
-            }
-
-            $('#btn_galian').on("click", function(e) {
-
-                let modul = 'galian';
-                let item = $('#cmbGalian').val();
-                let panjang = $('#panjang_galian').val();
-                let lebar = $('#lebar_galian').val();
-                let dalam = $('#dalam_galian').val();
-                let keterangan = $('#input_keterangan_galian').val();
-                let jenis_harga = $("input[name='harga_galian']:checked").val();
-                let modulLowcasse = capitalizeFirstLetter(modul);
-
-                if (item === "") {
-                    $('#cmbGalian').parent().addClass('is-invalid')
-                }
-                if (panjang === "") {
-                    $('#panjang_galian').addClass("is-invalid");
-                }
-                if (lebar === "") {
-                    $('#lebar_galian').addClass("is-invalid");
-                }
-                if (dalam === "") {
-                    $('#dalam_galian').addClass("is-invalid");
                 }
 
-                if (item !== "" && panjang !== "" && dalam !== "" && lebar !== "") {
-                    let tableCount = $('.nomor_' + modul).length;
+                $('#btn_galian').on("click", function(e) {
 
-                    let nomor = tableCount + 1;
-                    let lengthPekerjaan = $('#list' + modulLowcasse + '_' + item).length;
+                    let modul = 'galian';
+                    let item = $('#cmbGalian').val();
+                    let panjang = $('#panjang_galian').val();
+                    let lebar = $('#lebar_galian').val();
+                    let dalam = $('#dalam_galian').val();
+                    let keterangan = $('#input_keterangan_galian').val();
+                    let jenis_harga = $("input[name='harga_galian']:checked").val();
+                    let modulLowcasse = capitalizeFirstLetter(modul);
 
-                    if (lengthPekerjaan === 0) {
-                        $.when($.ajax({
-                            type: 'get',
-                            url: "{{ route('item.detail') }}",
-                            data: {
-                                "_token": "{{ csrf_token() }}",
-                                item
-                            },
-                            success: function(data) {
-                                const {
-                                    id,
-                                    nama,
-                                    slug,
-                                    jenis
-                                } = data.data;
-                                let content = elementPekerjaanGalian(
-                                    id, nama,
-                                    nomor,
-                                    modul,
-                                    panjang,
-                                    lebar,
-                                    dalam,
-                                    jenis_harga,
-                                    keterangan
-                                );
-                                $('.' + modul + 'TidakAda').remove();
-                                $('#table' + modulLowcasse).append(content);
-                                $('#cmb' + modulLowcasse).val(null).trigger('change');
-                                $('#panjang_' + modul).val('');
-                                $('#lebar_' + modul).val('');
-                                $('#dalam_' + modul).val('');
-                                $('#input_keterangan_' + modul).val('');
-                                toast('success menambah ' + modulLowcasse);
-
-                            },
-
-                            error: function(data) {
-                                Swal.fire({
-                                    title: 'Oops...',
-                                    text: "Isi dengan lengkap",
-                                    footer: '<a href="">terdapat data yang kosong</a>'
-                                })
-                            }
-                        })).then(function(data, textStatus, jqXHR) {
-                            // totalHarga(modul);
-
-
-                        });
-
-                    } else {
-                        toastError('Data galian sudah ada');
+                    if (item === "") {
                         $('#cmbGalian').parent().addClass('is-invalid')
                     }
-                } else {
-                    Swal.fire({
-                        title: 'Oops...',
-                        text: "Isi data dengan lengkap",
-                        footer: '<a href="">terdapat data yang kosong</a>'
-                    })
-                }
+                    if (panjang === "") {
+                        $('#panjang_galian').addClass("is-invalid");
+                    }
+                    if (lebar === "") {
+                        $('#lebar_galian').addClass("is-invalid");
+                    }
+                    if (dalam === "") {
+                        $('#dalam_galian').addClass("is-invalid");
+                    }
+
+                    if (item !== "" && panjang !== "" && dalam !== "" && lebar !== "") {
+                        let tableCount = $('.nomor_' + modul).length;
+
+                        let nomor = tableCount + 1;
+                        let lengthPekerjaan = $('#list' + modulLowcasse + '_' + item).length;
+
+                        if (lengthPekerjaan === 0) {
+                            $.when($.ajax({
+                                type: 'get',
+                                url: "{{ route('item.detail') }}",
+                                data: {
+                                    "_token": "{{ csrf_token() }}",
+                                    item
+                                },
+                                success: function(data) {
+                                    const {
+                                        id,
+                                        nama,
+                                        slug,
+                                        jenis
+                                    } = data.data;
+                                    let content = elementPekerjaanGalian(
+                                        id, nama,
+                                        nomor,
+                                        modul,
+                                        panjang,
+                                        lebar,
+                                        dalam,
+                                        jenis_harga,
+                                        keterangan
+                                    );
+                                    $('.' + modul + 'TidakAda').remove();
+                                    $('#table' + modulLowcasse).append(content);
+                                    $('#cmb' + modulLowcasse).val(null).trigger('change');
+                                    $('#panjang_' + modul).val('');
+                                    $('#lebar_' + modul).val('');
+                                    $('#dalam_' + modul).val('');
+                                    $('#input_keterangan_' + modul).val('');
+                                    toast('success menambah ' + modulLowcasse);
+
+                                },
+
+                                error: function(data) {
+                                    Swal.fire({
+                                        title: 'Oops...',
+                                        text: "Isi dengan lengkap",
+                                        footer: '<a href="">terdapat data yang kosong</a>'
+                                    })
+                                }
+                            })).then(function(data, textStatus, jqXHR) {
+                                // totalHarga(modul);
+
+
+                            });
+
+                        } else {
+                            toastError('Data galian sudah ada');
+                            $('#cmbGalian').parent().addClass('is-invalid')
+                        }
+                    } else {
+                        Swal.fire({
+                            title: 'Oops...',
+                            text: "Isi data dengan lengkap",
+                            footer: '<a href="">terdapat data yang kosong</a>'
+                        })
+                    }
+
+                });
 
             });
-
-        });
-    </script>
+        </script>
+    @endif
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
         integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
         crossorigin=""></script>

@@ -817,7 +817,7 @@ class PenunjukanPekerjaanController extends Controller
                                 $dataAduan[$index]->no_pelanggan = $dataCv[$index];
                                 $dataAduan[$index]->detail_lokasi = $dataLokasi[$index];
                                 $dataAduan[$index]->no_hp = $dataRekanan[$index]->no_hp;
-                                $dataAduan[$index]->mps = $dataSpk[$index];
+                                $dataAduan[$index]->nps = $dataSpk[$index];
                                 $dataAduan[$index]->atas_nama = $dataRekanan[$index]->nama;
                                 $dataAduan[$index]->sumber_informasi = $dataRekanan[$index]->nama;
                                 $dataAduan[$index]->lokasi =  $dataLokasi[$index];

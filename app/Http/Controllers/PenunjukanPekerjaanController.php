@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Aduan;
 use App\Models\GalianPekerjaan;
 use App\Models\GalianPengawas;
+use App\Models\GalianPerencanaan;
 use App\Models\Item;
 use App\Models\Jabatan;
 use App\Models\Jenis;
@@ -426,19 +427,19 @@ class PenunjukanPekerjaanController extends Controller
                 $dataPenunjukanPerkerjaan = PenunjukanPekerjaan::where('kategori_aduan', 'pipa dinas')->whereBetween(DB::raw('DATE(created_at)'), array($start, $end))->count();
                 if ($dataPenunjukanPerkerjaan >= 1) {
                     $no = str_pad($dataPenunjukanPerkerjaan + 1, 4, "0", STR_PAD_LEFT);
-                    $nomor_pekerjaan =  $no . "/" . "SPK-DS/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
+                    $nomor_pekerjaan =  $no . "/" . "SPK-DS/" . date('Y')  . "/" . date('m') . "/" . date('d') . "/" . rand(0, 900);
                 } else {
                     $no = str_pad(1, 4, "0", STR_PAD_LEFT);
-                    $nomor_pekerjaan =  $no . "/" . "SPK-DS/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
+                    $nomor_pekerjaan =  $no . "/" . "SPK-DS/" . date('Y')  . "/" . date('m') . "/" . date('d') . "/" . rand(0, 900);
                 }
             } else {
                 $dataPenunjukanPerkerjaan = PenunjukanPekerjaan::where('kategori_aduan', 'pipa premier / skunder')->whereBetween(DB::raw('DATE(created_at)'), array($start, $end))->count();
                 if ($dataPenunjukanPerkerjaan >= 1) {
                     $no = str_pad($dataPenunjukanPerkerjaan + 1, 4, "0", STR_PAD_LEFT);
-                    $nomor_pekerjaan =  $no . "/" . "SPK-SK/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
+                    $nomor_pekerjaan =  $no . "/" . "SPK-SK/" . date('Y')  . "/" . date('m') . "/" . date('d') . "/" . rand(0, 900);
                 } else {
                     $no = str_pad(1, 4, "0", STR_PAD_LEFT);
-                    $nomor_pekerjaan =  $no . "/" . "SPK-SK/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
+                    $nomor_pekerjaan =  $no . "/" . "SPK-SK/" . date('Y')  . "/" . date('m') . "/" . date('d') . "/" . rand(0, 900);
                 }
             }
 
@@ -540,12 +541,12 @@ class PenunjukanPekerjaanController extends Controller
         $listitemPerencanaan = [];
         $cekItem = [];
         $cekItemPengawas = [];
+        $cekGalianPengawas = [];
         $dataItem = [];
+        $dataTotalGalianPerencanaan = [];
 
         $PelaksanaanPekerjaan  = PelaksanaanPekerjaan::find($id);
         $PelaksanaanPekerjaan->status;
-
-
 
         DB::beginTransaction();
         try {
@@ -594,7 +595,6 @@ class PenunjukanPekerjaanController extends Controller
                 if ($PelaksanaanPekerjaan->status === 'dikoreksi') {
                     $status = 'selesai koreksi';
                     $PelaksanaanPekerjaan->keterangan_barang = '';
-                    // return $request;
 
                     foreach ($request->harga_perencanaan_pekerjaan as $key => $value) {
 
@@ -733,6 +733,51 @@ class PenunjukanPekerjaanController extends Controller
                         $PelaksanaanPekerjaan->hasItemPengawas()->sync($listitemPengawas);
                         $PelaksanaanPekerjaan->hasItemPerencanaan()->sync($listitemPerencanaan);
                     }
+
+                    $newGalianPerencanaan = [];
+                    if ($request->harga_galian) {
+                        foreach ($request->harga_galian as $gal => $galian) {
+                            $cekItemGalian[$gal] = GalianPekerjaan::find($gal);
+
+                            $cekGalianPengawas[$gal] =  GalianPengawas::where('galian_id', $gal)->first();
+
+                            if ($cekItemGalian[$gal] != null) {
+                                if ($cekGalianPengawas[$gal]) {
+
+                                    $dataTotalGalianPerencanaan[$gal] = $cekGalianPengawas[$gal]->dalam === 0.00  ? ($cekGalianPengawas[$gal]->panjang *  $cekGalianPengawas[$gal]->lebar) *   str_replace(".", "", $galian) : ($cekGalianPengawas[$gal]->panjang *  $cekGalianPengawas[$gal]->lebar * $cekGalianPengawas[$gal]->dalam) *   str_replace(".", "", $galian);
+
+                                    // update galian rekanan
+                                    $cekItemGalian[$gal]->total = $dataTotalGalianPerencanaan[$gal];
+                                    $cekItemGalian[$gal]->save();
+                                    // update galian rekanan
+                                    $cekGalianPengawas[$gal]->total = $dataTotalGalianPerencanaan[$gal];
+                                    $cekGalianPengawas[$gal]->save();
+
+                                    // GalianPengawas ada
+
+                                    $newGalianPerencanaan[$gal] =  new GalianPerencanaan;
+                                    $newGalianPerencanaan[$gal]->galian_id =  $cekItemGalian[$gal]->id;
+                                    $newGalianPerencanaan[$gal]->item_id =  isset($cekItemGalian[$gal]->item_id) ? $cekItemGalian[$gal]->item_id : null;
+                                    $newGalianPerencanaan[$gal]->total =   $dataTotalGalianPerencanaan[$gal];
+                                    $newGalianPerencanaan[$gal]->harga_satuan =  str_replace(".", "", $galian);
+                                    $newGalianPerencanaan[$gal]->keterangan = isset($request->keterangan_perencanaa_galian[$gal]) ? $request->keterangan_perencanaa_galian[$gal] : null;
+                                    $newGalianPerencanaan[$gal]->user_id = auth()->user()->id;
+                                    $newGalianPerencanaan[$gal]->save();
+                                } else {
+
+                                    // GalianPengawas tidak ada
+                                    $newGalianPerencanaan[$gal] =  new GalianPerencanaan;
+                                    $newGalianPerencanaan[$gal]->galian_id =  $cekItemGalian[$gal]->id;
+                                    $newGalianPerencanaan[$gal]->item_id =  isset($cekItemGalian[$gal]->item_id) ? $cekItemGalian[$gal]->item_id : null;
+                                    $newGalianPerencanaan[$gal]->total =  0;
+                                    $newGalianPerencanaan[$gal]->harga_satuan =  str_replace(".", "", $galian);
+                                    $newGalianPerencanaan[$gal]->keterangan = isset($request->keterangan_perencanaa_galian[$gal]) ? $request->keterangan_perencanaa_galian[$gal] : null;
+                                    $newGalianPerencanaan[$gal]->user_id = auth()->user()->id;
+                                    $newGalianPerencanaan[$gal]->save();
+                                }
+                            }
+                        }
+                    }
                 }
                 $user[auth()->user()->id] = [
                     'keterangan' => $status,
@@ -766,6 +811,437 @@ class PenunjukanPekerjaanController extends Controller
             return redirect()->route('penunjukan_pekerjaan.index')->with('message', 'Penunjukan pekerjaan gagal ditambah')->with('Class', 'danger');
         }
     }
+
+    public function updateAdjust(Request $request, $id)
+    {
+        $user = [];
+        $listitem = [];
+        $listitemPengawas = [];
+        $listitemPerencanaan = [];
+        $cekItem = [];
+        $cekItemPengawas = [];
+        $cekGalianPengawas = [];
+        $dataItem = [];
+        $dataTotalGalianPerencanaan = [];
+
+        $PelaksanaanPekerjaan  = PelaksanaanPekerjaan::find($id);
+        $PelaksanaanPekerjaan->status;
+
+        DB::beginTransaction();
+        try {
+            DB::commit();
+            if (auth()->user()->hasRole('staf-pengawas')) {
+                // pekerjaan
+                foreach ($request->qty_pengawas as $key => $value) {
+
+                    $cekItem[$key] = PelakasanaanItem::where('item_id', $key)->where('pelaksanaan_pekerjaan_id', $PelaksanaanPekerjaan->id)->first();
+
+                    $dataItem[$key] = Item::find($key);
+
+                    if ($cekItem[$key]) {
+                        $listitem[$key] = [
+                            'keterangan' => $cekItem[$key][$key],
+                            'harga' => $cekItem[$key]->harga,
+                            'qty' => $cekItem[$key]->qty,
+                            'total' => $value *  $cekItem[$key]->harga,
+                        ];
+                        $listitemPengawas[$key] = [
+                            'keterangan' => $cekItem[$key][$key],
+                            'harga' => $cekItem[$key]->harga,
+                            'qty' => $value,
+                            'total' => $value *  $cekItem[$key]->harga,
+                        ];
+                    } else {
+
+                        $listitem[$key] = [
+                            'keterangan' => null,
+                            'harga' => isset($request->jenis_harga[$key]) && $request->jenis_harga[$key] === "siang" ? $dataItem[$key]->harga : $dataItem[$key]->harga_malam,
+                            'qty' => 0,
+                            'total' => $value *  $dataItem[$key]->harga,
+                        ];
+                        $listitemPengawas[$key] = [
+                            'keterangan' => isset($request->keterangan_pengawas[$key]) ? $request->keterangan_pengawas[$key] : null,
+                            'harga' => isset($request->jenis_harga[$key]) && $request->jenis_harga[$key] === "siang" ? $dataItem[$key]->harga : $dataItem[$key]->harga_malam,
+                            'qty' => $value,
+                            'total' => $value *  isset($request->jenis_harga[$key]) && $request->jenis_harga[$key] === "siang" ? $dataItem[$key]->harga : $dataItem[$key]->harga_malam,
+                        ];
+                    }
+                }
+                // end pekerjaan
+
+                $status = 'dikoreksi';
+            } else {
+                if ($PelaksanaanPekerjaan->status === 'dikoreksi') {
+                    $status = 'selesai koreksi';
+                    $PelaksanaanPekerjaan->keterangan_barang = '';
+
+                    foreach ($request->harga_perencanaan_pekerjaan as $key => $value) {
+
+                        $cekItem[$key] = PelakasanaanItem::where('item_id', $key)->where('pelaksanaan_pekerjaan_id', $PelaksanaanPekerjaan->id)->first();
+                        if ($cekItem[$key]) {
+
+
+                            $cekItemPengawas[$key] = PelakasanaanPengawas::where('item_id', $key)->where('pelaksanaan_pekerjaan_id', $PelaksanaanPekerjaan->id)->first();
+                            if ($cekItemPengawas[$key]) {
+
+                                // rekanan
+                                $listitem[$key] = [
+                                    'keterangan' => $cekItem[$key]->keterangan,
+                                    'harga' => $cekItem[$key]->harga,
+                                    'qty' => $cekItem[$key]->qty,
+                                    'total' =>  str_replace(".", "", $value) *  $cekItemPengawas[$key]->qty,
+                                ];
+
+                                // harga pengawas
+                                $listitemPengawas[$key] = [
+                                    'keterangan' => $cekItemPengawas[$key]->keterangan,
+                                    'harga' => $cekItemPengawas[$key]->harga,
+                                    'qty' => $cekItemPengawas[$key]->qty,
+                                    'total' => str_replace(".", "", $value) *  $cekItemPengawas[$key]->qty,
+                                ];
+                                // harga perencanaan
+                                $listitemPerencanaan[$key] = [
+                                    'keterangan' => isset($request->keterangan_perencanaan_pekerjaan[$key]) ? $request->keterangan_perencanaan_pekerjaan[$key] : null,
+                                    'harga' => str_replace(".", "", $value),
+                                    'total' => str_replace(".", "", $value) * $cekItemPengawas[$key]->qty,
+                                ];
+                            }
+                        }
+                    }
+                }
+                if ($PelaksanaanPekerjaan->status === 'selesai koreksi') {
+                    $status = 'diadjust';
+                    $PelaksanaanPekerjaan->keterangan_barang = '';
+                }
+            }
+
+            if ($PelaksanaanPekerjaan) {
+
+                $PelaksanaanPekerjaan->status = $status;
+                $PelaksanaanPekerjaan->save();
+                if (auth()->user()->hasRole('staf-pengawas')) {
+                    // galian
+                    $cekItemGalian = [];
+                    $datapanjang = [];
+                    $datalebar = [];
+                    $datadalam = [];
+                    $dataketerangan = [];
+                    $dataTotalGalian = [];
+                    $datahargagalian = [];
+                    $dataIdGalianPekerjaan = [];
+
+                    foreach ($request->panjang_pengawas as $in => $gal) {
+                        $cekItemGalian[$in] = GalianPekerjaan::where('item_id', $in)->where('pelaksanaan_pekerjaan_id', $PelaksanaanPekerjaan->id)->first();
+
+                        $datapanjang[$in] = $gal;
+                        $datalebar[$in] = isset($request->lebar_pengawas[$in]) ? $request->lebar_pengawas[$in] : 0;
+                        $datadalam[$in] = isset($request->dalam_pengawas[$in]) ? $request->dalam_pengawas[$in] : 0;
+                        $dataketerangan[$in] = isset($request->keterangan_pengawas_galian[$in]) ? $request->keterangan_pengawas_galian[$in] : null;
+
+                        $datahargagalian[$in] = isset($request->jenis_harga_galian[$in]) ? $request->jenis_harga_galian[$in] : null;
+
+                        $dataItem[$in] = Item::find($in);
+
+                        $harga_satuan[$in] = isset($request->jenis_harga_galian[$in]) && $request->jenis_harga_galian[$in] === "siang" ? $dataItem[$in]->harga : $dataItem[$in]->harga_malam;
+
+
+                        if ($cekItemGalian[$in]) {
+                            $harga_satuan[$in] =  $cekItemGalian[$in]->harga_satuan;
+
+                            $dataTotalGalian[$in] = $request->dalam_pengawas[$in] === "0" ? ($gal * $datalebar[$in]) *  $harga_satuan[$in] : ($gal * $datalebar[$in] * $request->dalam_pengawas[$in]) *  $harga_satuan[$in];
+
+                            // update galian
+                            $cekItemGalian[$in]->total = $dataTotalGalian[$in];
+                            $cekItemGalian[$in]->save();
+                            // create galian pengawas
+                            $dataIdGalianPekerjaan[$in] = $cekItemGalian[$in]->id;
+                        } else {
+
+                            // data total
+                            $dataTotalGalian[$in] = $request->dalam_pengawas[$in] === "0" ? ($gal * $datalebar[$in]) *  $harga_satuan[$in] : ($gal * $datalebar[$in] * $request->dalam_pengawas[$in]) *  $harga_satuan[$in];
+
+                            // create galian
+                            $newGajian[$in] = new GalianPekerjaan;
+                            $newGajian[$in]->pelaksanaan_pekerjaan_id = $PelaksanaanPekerjaan->id;
+                            $newGajian[$in]->item_id =  $in;
+                            $newGajian[$in]->panjang =  0;
+                            $newGajian[$in]->lebar = 0;
+                            $newGajian[$in]->dalam = 0;
+
+                            // harga satuan
+                            $newGajian[$in]->harga_satuan = isset($request->jenis_harga_galian[$in]) && $request->jenis_harga_galian[$in] === "siang" ? $dataItem[$in]->harga : $dataItem[$in]->harga_malam;
+
+                            $newGajian[$in]->total = $dataTotalGalian[$in];
+
+                            // jenis harga
+                            $newGajian[$in]->harga = isset($request->jenis_harga_galian[$in]) ? $request->jenis_harga_galian[$in] : "siang";
+                            $newGajian[$in]->user_id = auth()->user()->id;
+
+                            $newGajian[$in]->save();
+
+                            // create galian pengawas
+
+                            $dataIdGalianPekerjaan[$in] = $newGajian[$in]->id;
+                        }
+                        $newGajianPengawas[$in] =  GalianPengawas::where('galian_id', $dataIdGalianPekerjaan[$in])->first();
+                        if ($dataIdGalianPekerjaan[$in] != null) {
+                            $newGajianPengawas[$in] = new GalianPengawas;
+                        }
+
+                        $newGajianPengawas[$in]->galian_id =  $dataIdGalianPekerjaan[$in];
+                        $newGajianPengawas[$in]->item_id =  $in;
+                        $newGajianPengawas[$in]->panjang =  $datapanjang[$in];
+                        $newGajianPengawas[$in]->lebar =  $datalebar[$in];
+                        $newGajianPengawas[$in]->dalam = $datadalam[$in];
+                        $newGajianPengawas[$in]->harga_satuan =  $harga_satuan[$in];
+                        $newGajianPengawas[$in]->total =  $dataTotalGalian[$in];
+                        $newGajianPengawas[$in]->keterangan = $dataketerangan[$in];
+                        $newGajianPengawas[$in]->user_id = auth()->user()->id;
+                        $newGajianPengawas[$in]->save();
+                    }
+
+                    // end galian
+                    if ($request->qty_pengawas) {
+                        $PelaksanaanPekerjaan->hasItem()->sync($listitem);
+                        $PelaksanaanPekerjaan->hasItemPengawas()->sync($listitemPengawas);
+                    }
+                }
+                if (auth()->user()->hasRole('asisten-manajer-perencanaan')) {
+                    if ($request->harga_perencanaan_pekerjaan) {
+                        $PelaksanaanPekerjaan->hasItem()->sync($listitem);
+                        $PelaksanaanPekerjaan->hasItemPengawas()->sync($listitemPengawas);
+                        $PelaksanaanPekerjaan->hasItemPerencanaan()->sync($listitemPerencanaan);
+                    }
+
+                    $newGalianPerencanaan = [];
+                    if ($request->harga_galian) {
+                        foreach ($request->harga_galian as $gal => $galian) {
+                            $cekItemGalian[$gal] = GalianPekerjaan::find($gal);
+
+                            $cekGalianPengawas[$gal] =  GalianPengawas::where('galian_id', $gal)->first();
+
+                            if ($cekItemGalian[$gal] != null) {
+                                if ($cekGalianPengawas[$gal]) {
+
+                                    $dataTotalGalianPerencanaan[$gal] = $cekGalianPengawas[$gal]->dalam === 0.00  ? ($cekGalianPengawas[$gal]->panjang *  $cekGalianPengawas[$gal]->lebar) *   str_replace(".", "", $galian) : ($cekGalianPengawas[$gal]->panjang *  $cekGalianPengawas[$gal]->lebar * $cekGalianPengawas[$gal]->dalam) *   str_replace(".", "", $galian);
+
+                                    // update galian rekanan
+                                    $cekItemGalian[$gal]->total = $dataTotalGalianPerencanaan[$gal];
+                                    $cekItemGalian[$gal]->save();
+                                    // update galian rekanan
+                                    $cekGalianPengawas[$gal]->total = $dataTotalGalianPerencanaan[$gal];
+                                    $cekGalianPengawas[$gal]->save();
+
+                                    // GalianPengawas ada
+
+                                    $newGalianPerencanaan[$gal] =  new GalianPerencanaan;
+                                    $newGalianPerencanaan[$gal]->galian_id =  $cekItemGalian[$gal]->id;
+                                    $newGalianPerencanaan[$gal]->item_id =  isset($cekItemGalian[$gal]->item_id) ? $cekItemGalian[$gal]->item_id : null;
+                                    $newGalianPerencanaan[$gal]->total =   $dataTotalGalianPerencanaan[$gal];
+                                    $newGalianPerencanaan[$gal]->harga_satuan =  str_replace(".", "", $galian);
+                                    $newGalianPerencanaan[$gal]->keterangan = isset($request->keterangan_perencanaa_galian[$gal]) ? $request->keterangan_perencanaa_galian[$gal] : null;
+                                    $newGalianPerencanaan[$gal]->user_id = auth()->user()->id;
+                                    $newGalianPerencanaan[$gal]->save();
+                                } else {
+
+                                    // GalianPengawas tidak ada
+                                    $newGalianPerencanaan[$gal] =  new GalianPerencanaan;
+                                    $newGalianPerencanaan[$gal]->galian_id =  $cekItemGalian[$gal]->id;
+                                    $newGalianPerencanaan[$gal]->item_id =  isset($cekItemGalian[$gal]->item_id) ? $cekItemGalian[$gal]->item_id : null;
+                                    $newGalianPerencanaan[$gal]->total =  0;
+                                    $newGalianPerencanaan[$gal]->harga_satuan =  str_replace(".", "", $galian);
+                                    $newGalianPerencanaan[$gal]->keterangan = isset($request->keterangan_perencanaa_galian[$gal]) ? $request->keterangan_perencanaa_galian[$gal] : null;
+                                    $newGalianPerencanaan[$gal]->user_id = auth()->user()->id;
+                                    $newGalianPerencanaan[$gal]->save();
+                                }
+                            }
+                        }
+                    }
+                }
+                $user[auth()->user()->id] = [
+                    'keterangan' => $status,
+                ];
+                $PelaksanaanPekerjaan->hasUserMany()->sync($user);
+
+                $penunjukanPekerjaan = PenunjukanPekerjaan::find($PelaksanaanPekerjaan->penunjukan_pekerjaan_id);
+
+                if ($penunjukanPekerjaan) {
+                    $nomor_pekerjaan = $penunjukanPekerjaan->nomor_pekerjaan;
+                    $penunjukanPekerjaan->status = $status;
+                    $penunjukanPekerjaan->save();
+
+                    $penunjukanPekerjaan->hasUserMany()->sync($user);
+                    $rekanan = Rekanan::find($PelaksanaanPekerjaan->rekanan_id)->first();
+                    $title = "Pekerjaan Telah dikoreksi";
+                    $body = "SPK " . $nomor_pekerjaan . " telah dikoreksi";
+                    $modul = "penunjukan-pekerjaan";
+
+                    $this->notification($penunjukanPekerjaan->aduan_id, $penunjukanPekerjaan->slug, $title, $body, $modul, auth()->user()->id, $rekanan->hasUser->id);
+
+                    // return  $penunjukanPekerjaan;
+                    $message = 'Berhasil Mengoreksi Pelaksanaan Pekerjaan';
+                    $aduan = Aduan::find($penunjukanPekerjaan->aduan_id);
+
+                    return redirect()->route('penunjukan_pekerjaan.show', $aduan->slug)->with('message', $message)->with('Class', 'primary');
+                }
+            }
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return redirect()->route('penunjukan_pekerjaan.index')->with('message', 'Penunjukan pekerjaan gagal ditambah')->with('Class', 'danger');
+        }
+    }
+
+    /**
+     * data adjust
+     *
+     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request
+     */
+    public function adjust($slug)
+    {
+        $aduan = Aduan::where('slug', $slug)->first();
+
+        if ($aduan == null) {
+            return redirect()->route('penunjukan_pekerjaan.index')->with('message', 'Data Aduan tidak ditemukan')->with('Class', 'primary');
+        }
+
+        $id_wilayah =  auth()->user()->id_wilayah;
+
+        $wilayah = Wilayah::find($id_wilayah);
+
+        $querykaryawan  =  Karyawan::where('pekerjaan', 'ya');
+        if ($wilayah) {
+            if ($wilayah->nama != 'Samarinda') {
+                $jabatan = Jabatan::where('wilayah_id', $wilayah->id)->pluck('id');
+                $querykaryawan =   $querykaryawan->whereIn('jabatan_id', $jabatan);
+            }
+        }
+
+        $karyawanPekerja =  $querykaryawan->orderBy('nama')->get();
+
+        $jenisPekerjaan = [];
+        $jenisBahan = [];
+        $jenisBajenisAlatBanturang = [];
+        $jenisTransportasi = [];
+
+        $listPekerjaan = [];
+        $listBahan = [];
+        $listAlatBantu = [];
+        $listTransportasi = [];
+        $penunjukan = [];
+        $pekerjaanUtama = [];
+        $daftarPekerjaan = [];
+        $daftarGalian = [];
+        $daftarBahan = [];
+        $daftarAlatBantu = [];
+        $daftarTransportasi = [];
+        $listDokumentasi = [];
+        $daftarDokumentasi = [];
+
+        $totalPekerjaan = 0;
+
+        $rekanan_id  = null;
+        $fotoBahan = [];
+        $fotoPekerjaan = [];
+        $fotoPenyelesaian = [];
+        $daftarPelaksaanAdjust = [];
+        $tombolEdit = '';
+        $lat_long_pekerjaan = '';
+        $lokasi_pekerjaan = '';
+        $pekerjaanUtama = [];
+        $pengawas = false;
+        $perencaan = false;
+
+
+        if ($aduan->status != 'draft') {
+            $penunjukan = PenunjukanPekerjaan::where('aduan_id', $aduan->id)->first();
+            $query = PelaksanaanPekerjaan::where('penunjukan_pekerjaan_id', $penunjukan->id);
+            if (auth()->user()->hasRole('superadmin')) {
+                $perencaan = true;
+            }
+
+            $pekerjaanUtama = $query->where('tagihan', 'tidak')->first();
+            if ($pekerjaanUtama) {
+                $fotoBahan = (object) $penunjukan->foto_bahan;
+                $fotoPekerjaan = (object) $penunjukan->foto_lokasi;
+                $fotoPenyelesaian = (object) $penunjukan->foto_penyelesaian;
+
+                $daftarPekerjaan = $query->with("hasItem")->first();
+
+                $daftarGalian = GalianPekerjaan::where('pelaksanaan_pekerjaan_id', $pekerjaanUtama->id)->get();
+
+                // $action = route('penunjukan_pekerjaan.update');
+                $action = route('penunjukan_pekerjaan.adjust.ubah', $pekerjaanUtama->id);
+
+                $lat_long_pekerjaan =  $pekerjaanUtama->lat_long;
+                $lokasi_pekerjaan =  $pekerjaanUtama->lokasi;
+
+                if (auth()->user()->hasRole('asisten-manajer-perencanaan')) {
+                    $perencaan = true;
+                    if ($pekerjaanUtama->status === 'selesai koreksi') {
+                        $tombolEdit = 'bisa';
+                    }
+                }
+
+                $daftarPelaksaanAdjust = PelaksanaanAdjust::where('pelaksanaan_pekerjaan_id', $pekerjaanUtama->id)->get();
+            }
+
+            if (auth()->user()->hasRole('rekanan')) {
+                $rekanan_id = auth()->user()->id_rekanan;
+            }
+
+            $notifikasi = Notifikasi::where('modul_id', $penunjukan->id)->where('to_user_id',  auth()->user()->id)->first();
+            if ($notifikasi) {
+                $notifikasi->status = 'baca';
+                $notifikasi->delete();
+            }
+        } else {
+            $notifikasi = Notifikasi::where('modul_id', $aduan->id)->first();
+            if ($notifikasi) {
+                $notifikasi->status = 'baca';
+                $notifikasi->delete();
+            }
+        }
+
+        $jenisAduan = $aduan->hasJenisAduan->toArray();
+        $jenis_aduan = JenisAduan::orderBy('nama')->get();
+        $rekanan = Rekanan::orderBy('nama')->get();
+
+
+
+        $title = 'Detail Pekerjaan ' . $aduan->nomor_pekerjaan;
+
+        return view('penunjukan_pekerjaan.adjust', compact(
+            'aduan',
+            'action',
+            'pengawas',
+            'perencaan',
+            'penunjukan',
+            'pekerjaanUtama',
+            'daftarPekerjaan',
+            'daftarGalian',
+            'daftarBahan',
+            'daftarAlatBantu',
+            'daftarTransportasi',
+            'daftarDokumentasi',
+            'lat_long_pekerjaan',
+            'karyawanPekerja',
+            'lokasi_pekerjaan',
+            'rekanan_id',
+            'jenisAduan',
+            'jenis_aduan',
+            'rekanan',
+            'title',
+            'daftarPelaksaanAdjust',
+            'totalPekerjaan',
+            'fotoPekerjaan',
+            'fotoPenyelesaian',
+            'fotoBahan',
+            'tombolEdit',
+            'action'
+        ));
+    }
+
     public function opennotifikasi($id)
     {
         $notifikasi = Notifikasi::where('id', $id)->where('to_user_id', auth()->user()->id)->first();
@@ -929,7 +1405,7 @@ class PenunjukanPekerjaanController extends Controller
                                 $dataAduan[$index]->no_pelanggan = $dataCv[$index];
                                 $dataAduan[$index]->detail_lokasi = $dataLokasi[$index];
                                 $dataAduan[$index]->no_hp = $dataRekanan[$index]->no_hp;
-                                $dataAduan[$index]->mps = $dataSpk[$index];
+                                $dataAduan[$index]->nps = $dataSpk[$index];
                                 $dataAduan[$index]->atas_nama = $dataRekanan[$index]->nama;
                                 $dataAduan[$index]->sumber_informasi = $dataRekanan[$index]->nama;
                                 $dataAduan[$index]->lokasi =  $dataLokasi[$index];
@@ -1010,159 +1486,6 @@ class PenunjukanPekerjaanController extends Controller
         //     //throw $th;
         //     return redirect()->route($this->route . '.index')->with('message', ucwords(str_replace('-', ' ', $this->route)) . ' gagal diupload')->with('Class', 'success');
         // }
-    }
-
-    /**
-     * data adjust
-     *
-     * @return \Illuminate\Http\Response
-     * @param \Illuminate\Http\Request
-     */
-    public function adjust($slug)
-    {
-        $aduan = Aduan::where('slug', $slug)->first();
-
-        if ($aduan == null) {
-            return redirect()->route('penunjukan_pekerjaan.index')->with('message', 'Data Aduan tidak ditemukan')->with('Class', 'primary');
-        }
-
-        $id_wilayah =  auth()->user()->id_wilayah;
-
-        $wilayah = Wilayah::find($id_wilayah);
-
-        $querykaryawan  =  Karyawan::where('pekerjaan', 'ya');
-        if ($wilayah) {
-            if ($wilayah->nama != 'Samarinda') {
-                $jabatan = Jabatan::where('wilayah_id', $wilayah->id)->pluck('id');
-                $querykaryawan =   $querykaryawan->whereIn('jabatan_id', $jabatan);
-            }
-        }
-
-        $karyawanPekerja =  $querykaryawan->orderBy('nama')->get();
-
-        $jenisPekerjaan = [];
-        $jenisBahan = [];
-        $jenisBajenisAlatBanturang = [];
-        $jenisTransportasi = [];
-
-        $listPekerjaan = [];
-        $listBahan = [];
-        $listAlatBantu = [];
-        $listTransportasi = [];
-        $penunjukan = [];
-        $pekerjaanUtama = [];
-        $daftarPekerjaan = [];
-        $daftarGalian = [];
-        $daftarBahan = [];
-        $daftarAlatBantu = [];
-        $daftarTransportasi = [];
-        $listDokumentasi = [];
-        $daftarDokumentasi = [];
-
-        $totalPekerjaan = 0;
-
-
-        $action = route('penunjukan_pekerjaan.store');
-        $rekanan_id  = null;
-        $fotoBahan = [];
-        $fotoPekerjaan = [];
-        $fotoPenyelesaian = [];
-        $daftarPelaksaanAdjust = [];
-        $tombolEdit = '';
-        $lat_long_pekerjaan = '';
-        $lokasi_pekerjaan = '';
-        $pekerjaanUtama = [];
-        $pengawas = false;
-        $perencaan = false;
-
-
-        if ($aduan->status != 'draft') {
-            $penunjukan = PenunjukanPekerjaan::where('aduan_id', $aduan->id)->first();
-            $query = PelaksanaanPekerjaan::where('penunjukan_pekerjaan_id', $penunjukan->id);
-            if (auth()->user()->hasRole('superadmin')) {
-                $perencaan = true;
-            }
-
-            $pekerjaanUtama = $query->first();
-            if ($pekerjaanUtama) {
-                $fotoBahan = (object) $penunjukan->foto_bahan;
-                $fotoPekerjaan = (object) $penunjukan->foto_lokasi;
-                $fotoPenyelesaian = (object) $penunjukan->foto_penyelesaian;
-
-                $daftarPekerjaan = $query->with("hasItem")->first();
-
-                $daftarGalian = GalianPekerjaan::where('pelaksanaan_pekerjaan_id', $pekerjaanUtama->id)->get();
-
-                // $action = route('penunjukan_pekerjaan.update');
-                $action = route('penunjukan_pekerjaan.update', $pekerjaanUtama->id);
-
-                $lat_long_pekerjaan =  $pekerjaanUtama->lat_long;
-                $lokasi_pekerjaan =  $pekerjaanUtama->lokasi;
-
-                if (auth()->user()->hasRole('asisten-manajer-perencanaan')) {
-                    $perencaan = true;
-                    if ($pekerjaanUtama->status === 'selesai koreksi') {
-                        $tombolEdit = 'bisa';
-                    }
-                }
-
-                $daftarPelaksaanAdjust = PelaksanaanAdjust::where('pelaksanaan_pekerjaan_id', $pekerjaanUtama->id)->get();
-            }
-
-            if (auth()->user()->hasRole('rekanan')) {
-                $rekanan_id = auth()->user()->id_rekanan;
-            }
-
-            $notifikasi = Notifikasi::where('modul_id', $penunjukan->id)->where('to_user_id',  auth()->user()->id)->first();
-            if ($notifikasi) {
-                $notifikasi->status = 'baca';
-                $notifikasi->delete();
-            }
-        } else {
-            $notifikasi = Notifikasi::where('modul_id', $aduan->id)->first();
-            if ($notifikasi) {
-                $notifikasi->status = 'baca';
-                $notifikasi->delete();
-            }
-        }
-
-        $jenisAduan = $aduan->hasJenisAduan->toArray();
-        $jenis_aduan = JenisAduan::orderBy('nama')->get();
-        $rekanan = Rekanan::orderBy('nama')->get();
-
-
-
-        $title = 'Detail Pekerjaan ' . $aduan->nomor_pekerjaan;
-
-        return view('penunjukan_pekerjaan.adjust', compact(
-            'aduan',
-            'action',
-            'pengawas',
-            'perencaan',
-            'penunjukan',
-            'pekerjaanUtama',
-            'daftarPekerjaan',
-            'daftarGalian',
-            'daftarBahan',
-            'daftarAlatBantu',
-            'daftarTransportasi',
-            'daftarDokumentasi',
-            'lat_long_pekerjaan',
-            'karyawanPekerja',
-            'lokasi_pekerjaan',
-            'rekanan_id',
-            'jenisAduan',
-            'jenis_aduan',
-            'rekanan',
-            'title',
-            'daftarPelaksaanAdjust',
-            'totalPekerjaan',
-            'fotoPekerjaan',
-            'fotoPenyelesaian',
-            'fotoBahan',
-            'tombolEdit',
-            'action'
-        ));
     }
 
     public function rekanan()
