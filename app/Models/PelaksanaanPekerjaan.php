@@ -156,6 +156,16 @@ class PelaksanaanPekerjaan extends Model
         )->withTimestamps();
     }
 
+    public function hasItemPerencanaanAdujst()
+    {
+        return $this->belongsToMany(Item::class, 'item_perencanaan_adjust')->withPivot(
+            'qty',
+            'harga',
+            'total',
+            'keterangan',
+        )->withTimestamps();
+    }
+
     public function getTotalHargaAttribute()
     {
         $total = 0;

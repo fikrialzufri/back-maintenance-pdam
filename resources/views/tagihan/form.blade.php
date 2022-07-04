@@ -28,6 +28,7 @@
                                         <th>Rekanan</th>
                                         <th>Tanggal Mulai</th>
                                         <th>Tanggal Selesai</th>
+                                        <th width="100">Wilayah</th>
                                         <th>Lokasi</th>
                                         <th>Total Tagihan</th>
                                         <th>Aksi</th>
@@ -49,6 +50,7 @@
                                             </td>
                                             <td>{{ isset($item->tanggal_selesai) ? tanggal_indonesia($item->tanggal_selesai) : '' }}
                                             </td>
+                                            <td>Wilayah {{ $item->wilayah }}</td>
                                             <td>{{ $item->lokasi }}</td>
                                             <td>Rp. {{ format_uang($item->total_pekerjaan) }}</td>
                                             <td>

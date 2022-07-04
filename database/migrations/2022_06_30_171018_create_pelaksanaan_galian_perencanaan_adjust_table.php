@@ -22,6 +22,7 @@ class CreatePelaksanaanGalianPerencanaanAdjustTable extends Migration
             $table->float('lebar')->default(0);
             $table->float('dalam')->default(0);
             $table->float('total', 20)->default(0);
+            $table->float('harga_satuan', 20)->default(0);
             $table->string('keterangan')->nullable();
             $table->enum('harga', ['siang', 'malam'])->default('siang');
 

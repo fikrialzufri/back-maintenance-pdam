@@ -30,6 +30,8 @@ class PekerjaanDetailResource extends JsonResource
             'nama_rekanan' =>  $this->rekanan,
             'foto_lokasi' =>  $this->foto_lokasi,
             'foto_bahan' =>  $this->foto_bahan,
+            'foto_galian' =>  $this->foto_galian,
+            'foto_transportasi' =>  $this->foto_transportasi,
             'foto_penyelesaian' =>  $this->foto_penyelesaian,
             'galian_pekerjaan' =>  $this->galian_pekerjaan,
             'jenis_aduan' =>  $this->jenis_aduan,

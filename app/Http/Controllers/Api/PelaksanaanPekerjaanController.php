@@ -20,6 +20,8 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use DB;
 use Auth;
+use Str;
+use Storage;
 
 class PelaksanaanPekerjaanController extends Controller
 {
@@ -689,7 +691,6 @@ class PelaksanaanPekerjaanController extends Controller
         $message = 'Gagal Menyimpan Item Pekerjaan';
         try {
             DB::commit();
-
             $slug = $request->slug;
             $keterangan = $request->keterangan;
             $jumlah = $request->jumlah != '' ? $request->jumlah : 1;
@@ -714,7 +715,31 @@ class PelaksanaanPekerjaanController extends Controller
                     'total' => $total,
                 ];
 
-                $data->hasItem()->attach($listitem);
+                $image = $request->image;
+                $modul = $request->modul;
+                $modul_id = $penunjukanPekerjaan->id;
+                $user_id = auth()->user()->id;
+
+                if (preg_match('/^data:image\/(\w+);base64,/', $image)) {
+
+                    $imagebase64 = substr($image, strpos($image, ',') + 1);
+                    $imagebase64 = base64_decode($imagebase64);
+                    $imageName = $slug . Str::random(5) . '.png';
+                    Storage::disk('public')->put('proses/' . $imageName, $imagebase64);
+
+                    $media = new Media();
+                    $media->nama = $imageName . '-' . $modul;
+                    $media->modul = $modul;
+                    $media->file = $imageName;
+                    $media->modul_id = $modul_id;
+                    $media->user_id = $user_id;
+                    $media->item_id = $id_barang;
+                    $media->save();
+
+                    $message = 'Berhasil mengirim foto';
+                }
+
+                $data->hasItem()->sync($listitem);
                 $message = 'Berhasil Menyimpan Item Pekerjaan';
                 return $this->sendResponse($data, $message, 200);
             }
@@ -751,7 +776,7 @@ class PelaksanaanPekerjaanController extends Controller
 
                 $result = [];
 
-                $media = Media::where('item_id', $id_barang)->where('modul_id', $data->id)->get();
+                $media = Media::where('item_id', $id_barang)->where('modul_id', $penunjukanPekerjaan->id)->get();
 
                 if ($media) {
                     foreach ($media as $ind => $image) {
@@ -832,8 +857,31 @@ class PelaksanaanPekerjaanController extends Controller
             $gajian->pelaksanaan_pekerjaan_id = $data->id;
             $gajian->save();
 
-            $result = [];
+            $image = $request->image;
+            $modul = $request->modul;
+            $modul_id = $penunjukanPekerjaan->id;
             $message = 'Berhasil Menyimpan Galian Pekerjaan';
+            if (preg_match('/^data:image\/(\w+);base64,/', $image)) {
+
+                $imagebase64 = substr($image, strpos($image, ',') + 1);
+                $imagebase64 = base64_decode($imagebase64);
+                $imageName = $slug . Str::random(5) . '.png';
+                Storage::disk('public')->put('proses/' . $imageName, $imagebase64);
+
+                $media = new Media();
+                $media->nama = $imageName . '-' . $modul;
+                $media->modul = $modul;
+                $media->file = $imageName;
+                $media->modul_id = $modul_id;
+                $media->user_id = $user_id;
+                $media->item_id = $gajian->id;
+                $media->save();
+
+                $message = $message . ' dan Berhasil mengirim foto';
+            }
+
+            $result = [];
+
             return $this->sendResponse($result, $message, 200);
         } catch (\Throwable $th) {
             DB::rollback();
@@ -865,6 +913,15 @@ class PelaksanaanPekerjaanController extends Controller
                 if ($GalianPekerjaan) {
 
                     $GalianPekerjaan->delete();
+
+                    $media = Media::where('item_id', $GalianPekerjaan->id)->where('modul_id', $penunjukanPekerjaan->id)->get();
+
+                    if ($media) {
+                        foreach ($media as $ind => $image) {
+                            Storage::disk('public')->delete('proses/' . $image->file);
+                            $image->delete();
+                        }
+                    }
 
                     $message = 'Berhasil Hapus Galian Pekerjaan';
                     return $this->sendResponse($result, $message, 200);

@@ -333,6 +333,36 @@ class PenunjukanPekerjaan extends Model
         return $foto;
     }
 
+    public function getFotoGalianAttribute()
+    {
+        $media = Media::where('modul',  'galian_pekerjaan')->where('modul_id', $this->id)->orderBy('created_at', 'desc')->get();
+        $foto = [];
+        if ($media) {
+            foreach ($media as $key => $value) {
+                $foto[$key] = [
+                    'id' => $value->id,
+                    'url' => asset('storage/proses/' . rawurlencode($value->file)),
+                ];
+            }
+        }
+        return $foto;
+    }
+
+    public function getFotoTransportasiAttribute()
+    {
+        $media = Media::where('modul',  'transportasi_pekerjaan')->where('modul_id', $this->id)->orderBy('created_at', 'desc')->get();
+        $foto = [];
+        if ($media) {
+            foreach ($media as $key => $value) {
+                $foto[$key] = [
+                    'id' => $value->id,
+                    'url' => asset('storage/proses/' . rawurlencode($value->file)),
+                ];
+            }
+        }
+        return $foto;
+    }
+
     public function getFotoPenyelesaianAttribute()
     {
         $media = Media::where('modul',  'penyelesaian_kerja')->where('modul_id', $this->id)->orderBy('created_at', 'desc')->get();

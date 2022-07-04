@@ -31,51 +31,195 @@
         <div class="row">
             <div class="col-12">
                 <div class="card">
-
-                    @canany(['edit-penunjukan-pekerjaan', 'create-penunjukan-pekerjaan'])
+                    @if ($aduan->status != 'draft')
                         <div class="card-header">
-                            <div class="card-title">Pilih Pekerja</div>
+                            <div class="card-title">Detail Pekerjaan</div>
                         </div>
-                        <form action="{{ $action }}" method="post" role="form" enctype="multipart/form-data">
-                            @csrf
-                            <div class="card-body">
-                                <div class="row">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+
                                     <div class="col-12">
                                         <div class="form-group">
-                                            <input type="hidden" name="slug" value="{{ $aduan->slug }}">
                                             <div>
-                                                <select name="rekanan_id" class="selected2 form-control" id="cmbRekanan">
-                                                    <option value="">--Pilih Pekerja--</option>
-                                                    @foreach ($rekanan as $rek)
-                                                        <option value="{{ $rek->id }}"
-                                                            {{ old('rekanan_id') == $rek->id ? 'selected' : '' }}>
-                                                            {{ $rek->nama }}
-                                                        </option>
-                                                    @endforeach
-                                                    @foreach ($karyawanPekerja as $kary)
-                                                        <option value="{{ $kary->id }}"
-                                                            {{ old('rekanan_id') == $kary->id ? 'selected' : '' }}>
-                                                            {{ $kary->nama }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                                @if ($errors->has('rekanan_id'))
-                                                    <span class="text-danger">
-                                                        <strong id="textrule">{{ $errors->first('rekanan_id') }}</strong>
-                                                    </span>
-                                                @endif
+                                                <label for="no_ticket" class=" form-control-label">No SPK : </label>
+                                            </div>
+                                            <div>
+                                                <h2>
+                                                    <strong>{{ $aduan->no_spk }}</strong>
+                                                </h2>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <div>
+                                                <label for="no_ticket" class=" form-control-label">Nama Pekerja :</label>
+                                            </div>
+                                            <div>
+                                                <h2>
+                                                    <strong>{{ $aduan->rekanan }}</strong>
+                                                </h2>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <div>
+                                                <label for="no_ticket" class=" form-control-label">Keterangan Penambahan
+                                                    Item</label>
+                                            </div>
+                                            <div>
+                                                <h2>
+                                                    <strong>{{ $aduan->keterangan_barang }}</strong>
+                                                </h2>
                                             </div>
 
                                         </div>
                                     </div>
+                                    @if (!auth()->user()->hasRole('admin-asisten-manajer'))
+                                        @if ($pekerjaanUtama)
+                                            @if ($pekerjaanUtama->status == 'selesai koreksi' || $pekerjaanUtama->status == 'diadjust')
+                                                <div class="col-12">
+                                                    <div class="form-group">
+                                                        <div>
+                                                            <label for="no_ticket" class=" form-control-label">Total Tagihan
+                                                                Pekerjaan</label>
+                                                        </div>
+                                                        <div>
+                                                            <h3>
+                                                                <strong id="total_tagihan_pekerjaan">Rp.
+                                                                    {{ format_uang($aduan->total_pekerjaan) }}</strong>
+                                                            </h3>
+                                                        </div>
 
+                                                    </div>
+                                                </div>
+                                            @endif
+
+                                        @endif
+                                    @endif
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <h6 class="">Alamat Pekerjaan</h6>
+                                        </div>
+                                        <div>
+                                            <a href="https://maps.google.com/?q={{ $lat_long_pekerjaan }}"
+                                                target="__blank" class="text-danger">
+                                                {{ $lokasi_pekerjaan }}
+                                            </a>
+                                        </div>
+                                        <br>
+
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <h6 class="">Lokasi Pekerjaan</h6>
+                                        </div>
+                                        <div id="mapdua"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="row d-flex flex-row">
+                                        <div class="col-12">
+                                            <h6 class="">Foto Pekerjaan</h6>
+                                        </div>
+                                    </div>
+                                    <div class="row d-flex flex-row">
+                                        @foreach ($fotoPekerjaan as $ftpekerjaan)
+                                            <div class="p-2 pop">
+                                                <img src="{{ $ftpekerjaan['url'] }}" width="100px" alt="1"
+                                                    class="img-thumbnail rounded mx-auto d-block">
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                    <hr>
+                                    <div class="row d-flex flex-row">
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <h6 class="">Foto Bahan</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row d-flex flex-row">
+
+                                        @foreach ($fotoBahan as $ftbahan)
+                                            <div class="p-2 pop">
+                                                <img src="{{ $ftbahan['url'] }}" width="100px" alt="1"
+                                                    class="img-thumbnail rounded mx-auto d-block">
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                    <hr>
+                                    <div class="row d-flex flex-row">
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <h6 class="">Foto Penyelesaian
+                                                    Pekerjaan</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row d-flex flex-row">
+
+                                        @foreach ($fotoPenyelesaian as $ftpenyelesaian)
+                                            <div class="p-2 pop">
+                                                <img src="{{ $ftpenyelesaian['url'] }}" width="100px" alt="1"
+                                                    class="img-thumbnail rounded mx-auto d-block">
+                                            </div>
+                                        @endforeach
+                                    </div>
                                 </div>
                             </div>
-                            <div class="card-footer clearfix">
-                                <button type="submit" class="btn btn-primary">Simpan</button>
+
+
+                        </div>
+                    @else
+                        @canany(['edit-penunjukan-pekerjaan', 'create-penunjukan-pekerjaan'])
+                            <div class="card-header">
+                                <div class="card-title">Pilih Pekerja</div>
                             </div>
-                        </form>
-                    @endcanany
+                            <form action="{{ $action }}" method="post" role="form" enctype="multipart/form-data">
+                                @csrf
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <input type="hidden" name="slug" value="{{ $aduan->slug }}">
+                                                <div>
+                                                    <select name="rekanan_id" class="selected2 form-control" id="cmbRekanan">
+                                                        <option value="">--Pilih Pekerja--</option>
+                                                        @foreach ($rekanan as $rek)
+                                                            <option value="{{ $rek->id }}"
+                                                                {{ old('rekanan_id') == $rek->id ? 'selected' : '' }}>
+                                                                {{ $rek->nama }}
+                                                            </option>
+                                                        @endforeach
+                                                        @foreach ($karyawanPekerja as $kary)
+                                                            <option value="{{ $kary->id }}"
+                                                                {{ old('rekanan_id') == $kary->id ? 'selected' : '' }}>
+                                                                {{ $kary->nama }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                    @if ($errors->has('rekanan_id'))
+                                                        <span class="text-danger">
+                                                            <strong
+                                                                id="textrule">{{ $errors->first('rekanan_id') }}</strong>
+                                                        </span>
+                                                    @endif
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="card-footer clearfix">
+                                    <button type="submit" class="btn btn-primary">Simpan</button>
+                                </div>
+                            </form>
+                        @endcanany
+                    @endif
                 </div>
             </div>
         </div>
@@ -108,88 +252,79 @@
                                             <h3 class="card-title">Daftar Pekerjaan</h3>
                                             <hr>
                                         </div>
-                                        @if ($perencanaan === true && $pekerjaanUtama->status === 'selesai koreksi')
-                                            <div class="col-12">
-                                                <form action="" id="formPekerjaan">
-                                                    @if ($rekanan_id == null)
-                                                        @if ($tombolEdit === 'bisa')
-                                                            <div class="row">
-                                                                <div class="col-2">
-                                                                    <h6>Pilih Pekerjaan</h6>
+                                        <div class="col-12">
+                                            <form action="" id="formPekerjaan">
+                                                <div class="row">
+                                                    <div class="col-2">
+                                                        <h6>Pilih Pekerjaan</h6>
 
-                                                                    <div class="form-group">
-                                                                        <select class="form-control select2" id="cmbPekerjaan">
-                                                                            <option selected="selected" value="">Pilih
-                                                                                pekerjaan
-                                                                            </option>
-                                                                            @foreach ($listPekerjaan as $i => $peker)
-                                                                                <option value="{{ $peker->id }}"
-                                                                                    id="peker_{{ $peker->id }}">
-                                                                                    {{ $peker->nama }}
-                                                                                </option>
-                                                                            @endforeach
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col">
-                                                                    <h6>Jumlah</h6>
-                                                                    <div class="form-group">
-                                                                        <div class="input-group mb-2 mr-sm-2">
-                                                                            <input type="text" name="jumlah_pekerjaan"
-                                                                                id="jumlah_pekerjaan" placeholder="jumlah"
-                                                                                class="form-control numberOnly">
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col">
-                                                                    <h6>Keterangan</h6>
-                                                                    <div class="form-group">
-                                                                        <div class="input-group mb-2 mr-sm-2">
-                                                                            <input type="text"
-                                                                                name="input_keterangan_pekerjaan"
-                                                                                id="input_keterangan_pekerjaan"
-                                                                                placeholder="Keterangan pekerjaan"
-                                                                                class="form-control">
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col">
-                                                                    <h6>Pilih Waktu</h6>
-                                                                    <div class="form-radio">
-                                                                        <form>
-                                                                            <div class="radio radiofill radio-inline">
-                                                                                <label>
-                                                                                    <input type="radio"
-                                                                                        class="harga_pekerjaan"
-                                                                                        name="harga_pekerjaan" value="siang"
-                                                                                        checked="checked">
-                                                                                    <i class="helper"></i>Siang
-                                                                                </label>
-                                                                            </div>
-                                                                            <div class="radio radiofill radio-inline">
-                                                                                <label>
-                                                                                    <input type="radio"
-                                                                                        class="harga_pekerjaan"
-                                                                                        name="harga_pekerjaan" value="malam">
-                                                                                    <i class="helper"></i>Malam
-                                                                                </label>
-                                                                            </div>
-                                                                        </form>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col">
-                                                                    <div class="">
-                                                                        <button type="submit" id="btn_pekerjaan"
-                                                                            class="btn btn-primary">Update
-                                                                            Pekerjaan</button>
-                                                                    </div>
-                                                                </div>
+                                                        <div class="form-group">
+                                                            <select class="form-control select2" id="cmbPekerjaan">
+                                                                <option selected="selected" value="">Pilih
+                                                                    pekerjaan
+                                                                </option>
+                                                                @foreach ($listPekerjaan as $i => $peker)
+                                                                    <option value="{{ $peker->id }}"
+                                                                        id="peker_{{ $peker->id }}">
+                                                                        {{ $peker->nama }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <h6>Jumlah</h6>
+                                                        <div class="form-group">
+                                                            <div class="input-group mb-2 mr-sm-2">
+                                                                <input type="text" name="jumlah_pekerjaan"
+                                                                    id="jumlah_pekerjaan" placeholder="jumlah"
+                                                                    class="form-control numberOnly">
                                                             </div>
-                                                        @endif
-                                                    @endif
-                                                </form>
-                                            </div>
-                                        @endif
+                                                        </div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <h6>Keterangan</h6>
+                                                        <div class="form-group">
+                                                            <div class="input-group mb-2 mr-sm-2">
+                                                                <input type="text" name="input_keterangan_pekerjaan"
+                                                                    id="input_keterangan_pekerjaan"
+                                                                    placeholder="Keterangan pekerjaan" class="form-control">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <h6>Pilih Waktu</h6>
+                                                        <div class="form-radio">
+                                                            <form>
+                                                                <div class="radio radiofill radio-inline">
+                                                                    <label>
+                                                                        <input type="radio" class="harga_pekerjaan"
+                                                                            name="harga_pekerjaan" value="siang"
+                                                                            checked="checked">
+                                                                        <i class="helper"></i>Siang
+                                                                    </label>
+                                                                </div>
+                                                                <div class="radio radiofill radio-inline">
+                                                                    <label>
+                                                                        <input type="radio" class="harga_pekerjaan"
+                                                                            name="harga_pekerjaan" value="malam">
+                                                                        <i class="helper"></i>Malam
+                                                                    </label>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="">
+                                                            <button type="submit" id="btn_pekerjaan"
+                                                                class="btn btn-primary">Update
+                                                                Pekerjaan</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+
                                     </div>
                                 </div>
                                 <form action="{{ $action }}" method="post" id="form-update" role="form">
@@ -205,20 +340,9 @@
                                                     <th width="50">Jenis</th>
                                                     <th width="50">Pengguna</th>
                                                     <th width="150">Jumlah </th>
-                                                    @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
-                                                        <th width="250">Harga Satuan</th>
-                                                        <th width="300">Keterangan</th>
-                                                        <th width="250">Total</th>
-                                                    @endif
-
-                                                    @if ($pekerjaanUtama->status === 'selesai koreksi')
-                                                        <th width="250">Harga Satuan</th>
-                                                        <th width="300">Keterangan</th>
-                                                        <th width="250">Total</th>
-                                                    @endif
-                                                    @if ($pekerjaanUtama->status === 'selesai' || $pekerjaanUtama->status === 'dikoreksi')
-                                                        <th width="300">Keterangan</th>
-                                                    @endif
+                                                    <th width="250">Harga Satuan</th>
+                                                    <th width="300">Keterangan</th>
+                                                    <th width="250">Total</th>
 
                                                 </tr>
                                             </thead>
@@ -228,126 +352,103 @@
                                                         <tr id="listPekerjaan_{{ $pekerjaan->pivot->item_id }}"
                                                             class="list_table_pekerjaan">
                                                             <td class="text-center nomor_pekerjaan"
-                                                                data-index="{{ $key + 1 }}"
-                                                                @if ($pekerjaanUtama->status === 'dikoreksi' || $pekerjaanUtama->status === 'selesai koreksi') rowspan="3" @else rowspan="2" @endif>
+                                                                data-index="{{ $key + 1 }}" rowspan="4">
                                                                 {{ $key + 1 }}
                                                             </td>
-                                                            <td
-                                                                @if ($pekerjaanUtama->status === 'dikoreksi' || $pekerjaanUtama->status === 'selesai koreksi') rowspan="3" @else rowspan="2" @endif>
+                                                            <td rowspan="4">
                                                                 {{ $pekerjaan->nama }}
                                                             </td>
-                                                            <td
-                                                                @if ($pekerjaanUtama->status === 'dikoreksi' || $pekerjaanUtama->status === 'selesai koreksi') rowspan="3" @else rowspan="2" @endif>
+                                                            <td rowspan="4">
                                                                 {{ $pekerjaan->jenis }}
                                                             </td>
                                                             <td>Rekanan</td>
                                                             <td>{{ $pekerjaan->pivot->qty }}</td>
-                                                            @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
-                                                                <td>Rp. {{ format_uang($pekerjaan->pivot->harga) }}</td>
-                                                                <td>{{ $pekerjaan->pivot->keterangan }}</td>
-                                                                <td rowspan="3">
-                                                                    Rp.{{ format_uang($pekerjaan->pivot->total) }}</td>
-                                                            @endif
-
-                                                            @if ($pekerjaanUtama->status === 'selesai koreksi')
-                                                                <td>Rp. {{ format_uang($pekerjaan->pivot->harga) }}</td>
-                                                                <td>{{ $pekerjaan->pivot->keterangan }}</td>
-                                                                <td rowspan="3">
-                                                                    Rp. {{ format_uang($pekerjaan->pivot->total) }}</td>
-                                                            @endif
-
-
+                                                            <td>Rp. {{ format_uang($pekerjaan->pivot->harga) }}</td>
+                                                            <td>{{ $pekerjaan->pivot->keterangan }}</td>
+                                                            <td rowspan="4">
+                                                                Rp. {{ format_uang($pekerjaan->pivot->total) }}</td>
                                                         </tr>
                                                         <tr>
                                                             <td>Pengawas</td>
-                                                            @if ($perencanaan === true && $pekerjaanUtama->status === 'selesai koreksi')
-                                                                <td><input type="text"
-                                                                        name="qty_pengawas[{{ $pekerjaan->pivot->item_id }}]"
-                                                                        id="qty_pengawas_{{ $pekerjaan->pivot->item_id }}"
-                                                                        placeholder="Koreksi Pengawas"
-                                                                        class="form-control numberOnly"
-                                                                        value="{{ $pekerjaan->pivot->qty }}">
+
+                                                            @if (isset($daftarPekerjaan->hasItemPengawas[$key]))
+                                                                <td>
+                                                                    {{ $daftarPekerjaan->hasItemPengawas[$key]->pivot->qty }}
                                                                 </td>
-                                                                <td><input type="text"
-                                                                        name="keterangan_pengawas[{{ $pekerjaan->pivot->item_id }}]"
-                                                                        id="keterangan_pengawas_{{ $pekerjaan->pivot->item_id }}"
-                                                                        placeholder="Keterangan Pengawas"
-                                                                        class="form-control">
-                                                                </td>
-                                                            @else
-                                                                @if (isset($daftarPekerjaan->hasItemPengawas[$key]))
-                                                                    <td>
-                                                                        {{ $daftarPekerjaan->hasItemPengawas[$key]->pivot->qty }}
-                                                                    </td>
-                                                                    @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
-                                                                        <td>Rp.
-                                                                            {{ format_uang($daftarPekerjaan->hasItemPengawas[$key]->pivot->harga) }}
-                                                                        </td>
-                                                                    @endif
-                                                                    @if ($pekerjaanUtama->status === 'selesai koreksi')
-                                                                        <td>Rp.
-                                                                            {{ format_uang($daftarPekerjaan->hasItemPengawas[$key]->pivot->harga) }}
-                                                                        </td>
-                                                                    @endif
-                                                                    <td>
-                                                                        {{ $daftarPekerjaan->hasItemPengawas[$key]->pivot->keterangan }}
+                                                                @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
+                                                                    <td>Rp.
+                                                                        {{ format_uang($daftarPekerjaan->hasItemPengawas[$key]->pivot->harga) }}
                                                                     </td>
                                                                 @endif
+                                                                @if ($pekerjaanUtama->status === 'selesai koreksi')
+                                                                    <td>Rp.
+                                                                        {{ format_uang($daftarPekerjaan->hasItemPengawas[$key]->pivot->harga) }}
+                                                                    </td>
+                                                                @endif
+                                                                <td>
+                                                                    {{ $daftarPekerjaan->hasItemPengawas[$key]->pivot->keterangan }}
+                                                                </td>
                                                             @endif
                                                         </tr>
-                                                        @if ($pekerjaanUtama->status === 'dikoreksi')
-                                                            <tr>
-                                                                <td>Perencanaan</td>
-                                                                @if ($perencaan == true)
-                                                                    <td></td>
-                                                                    <td>
-                                                                        <div class="input-group mb-2 mr-sm-2">
-                                                                            <div class="input-group-prepend">
-                                                                                <div class="input-group-text">Rp.</div>
-                                                                            </div>
-                                                                            <input type="text" class="form-control"
-                                                                                id="harga_perencanaan_pekerjaan{{ $pekerjaan->pivot->item_id }}{{ $key }}"
-                                                                                name="harga_perencanaan_pekerjaan[{{ $pekerjaan->pivot->item_id }}]"
-                                                                                value="{{ format_uang($pekerjaan->pivot->harga) }}"
-                                                                                placeholder="Koreksi Perencanaan">
-                                                                        </div>
-                                                                        @push('script')
-                                                                            <script>
-                                                                                $("#harga_perencanaan_pekerjaan{{ $pekerjaan->pivot->item_id }}{{ $key }}").on("input", function() {
+                                                        <tr>
+                                                            <td rowspan="2">Perencanaan</td>
 
-                                                                                    let val = formatRupiahTanpaRp(this.value, '')
-                                                                                    $("#harga_perencanaan_pekerjaan{{ $pekerjaan->pivot->item_id }}{{ $key }}").val(val)
-                                                                                });
-                                                                            </script>
-                                                                        @endpush
-                                                                    </td>
-                                                                    <td>
+                                                            <td></td>
+                                                            @if (isset($daftarPekerjaan->hasItemPerencanaan[$key]))
+                                                                <td>
+                                                                    Rp.
+                                                                    {{ format_uang($daftarPekerjaan->hasItemPerencanaan[$key]->pivot->harga) }}
+                                                                </td>
+                                                                <td>{{ $daftarPekerjaan->hasItemPerencanaan[$key]->pivot->keterangan }}
+                                                                </td>
+                                                            @endif
+
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <input type="text"
+                                                                    name="qty_perencanaan[{{ $pekerjaan->pivot->item_id }}]"
+                                                                    id="qty_perencanaan_{{ $pekerjaan->pivot->item_id }}"
+                                                                    placeholder="Koreksi Perecanaan Adjust"
+                                                                    class="form-control numberOnly"
+                                                                    value="{{ $pekerjaan->pivot->qty }}">
+                                                            </td>
+                                                            <td>
+                                                                <div class="input-group mb-2 mr-sm-2">
+                                                                    <div class="input-group-prepend">
+                                                                        <div class="input-group-text">Rp.</div>
+                                                                    </div>
+                                                                    @if (isset($daftarPekerjaan->hasItemPerencanaan[$key]))
                                                                         <input type="text" class="form-control"
-                                                                            id="keterangan_perencanaan_pekerjaan{{ $pekerjaan->pivot->item_id }}{{ $key }}"
-                                                                            name="keterangan_perencanaan_pekerjaan[{{ $pekerjaan->pivot->item_id }}]"
-                                                                            placeholder="Keterangan Perencanaan">
-                                                                    </td>
-                                                                @else
-                                                                    <td></td>
-                                                                    <td></td>
-                                                                @endif
-                                                            </tr>
-                                                        @elseif ($pekerjaanUtama->status === 'selesai koreksi')
-                                                            <tr>
-                                                                <td>Perencanaan</td>
+                                                                            id="harga_satuan_{{ $pekerjaan->pivot->item_id }}{{ $key }}"
+                                                                            name="harga_satuan[{{ $pekerjaan->pivot->item_id }}]"
+                                                                            value="{{ format_uang($daftarPekerjaan->hasItemPerencanaan[$key]->pivot->harga) }}"
+                                                                            placeholder="Koreksi Perencanaan">
+                                                                    @else
+                                                                        <input type="text" class="form-control"
+                                                                            id="harga_satuan_{{ $pekerjaan->pivot->item_id }}{{ $key }}"
+                                                                            name="harga_satuan[{{ $pekerjaan->pivot->item_id }}]"
+                                                                            value="{{ format_uang($pekerjaan->pivot->harga) }}"
+                                                                            placeholder="Koreksi Perencanaan">
+                                                                    @endif
+                                                                </div>
+                                                                @push('script')
+                                                                    <script>
+                                                                        $("#harga_satuan_{{ $pekerjaan->pivot->item_id }}{{ $key }}").on("input", function() {
 
-                                                                <td></td>
-                                                                @if (isset($daftarPekerjaan->hasItemPerencanaan[$key]))
-                                                                    <td>
-                                                                        Rp.
-                                                                        {{ format_uang($daftarPekerjaan->hasItemPerencanaan[$key]->pivot->harga) }}
-                                                                    </td>
-                                                                    <td>{{ $daftarPekerjaan->hasItemPerencanaan[$key]->pivot->keterangan }}
-                                                                    </td>
-                                                                @endif
-
-                                                            </tr>
-                                                        @endif
+                                                                            let val = formatRupiahTanpaRp(this.value, '')
+                                                                            $("#harga_satuan_{{ $pekerjaan->pivot->item_id }}{{ $key }}").val(val)
+                                                                        });
+                                                                    </script>
+                                                                @endpush
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control"
+                                                                    id="keterangan_perencanaan_{{ $pekerjaan->pivot->item_id }}{{ $key }}"
+                                                                    name="keterangan_perencanaan[{{ $pekerjaan->pivot->item_id }}]"
+                                                                    placeholder="Keterangan Perencanaan">
+                                                            </td>
+                                                        </tr>
                                                     @empty
                                                         <tr class="pekerjaanTidakAda">
                                                             <td colspan="10">Data Pekerjaan tidak ada</td>
@@ -385,100 +486,93 @@
 
                                         <hr>
                                         {{-- Galian --}}
-                                        @if ($perencanaan === true && $pekerjaanUtama->status === 'selesai koreksi')
+                                        @if ($perencaan === true)
                                             <div class="col-12">
-                                                @if ($rekanan_id == null)
-                                                    @if ($tombolEdit === 'bisa')
-                                                        <div class="row">
-                                                            <div class="col-2">
-                                                                <h6>Pilih Galian</h6>
+                                                <div class="row">
+                                                    <div class="col-2">
+                                                        <h6>Pilih Galian</h6>
 
-                                                                <div class="form-group">
-                                                                    <select class="form-control select2" id="cmbGalian">
-                                                                        <option selected="selected" value="">Pilih
-                                                                            galian
-                                                                        </option>
-                                                                        @foreach ($listPekerjaanGalian as $i => $gal)
-                                                                            <option value="{{ $gal->id }}">
-                                                                                {{ $gal->nama }}
-                                                                            </option>
-                                                                        @endforeach
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col">
-                                                                <h6>Panjang</h6>
-                                                                <div class="form-group">
-                                                                    <div class="input-group mb-2 mr-sm-2">
-                                                                        <input type="text" name="panjang_galian"
-                                                                            id="panjang_galian" placeholder="panjang"
-                                                                            class="form-control numberOnly">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col">
-                                                                <h6>Lebar</h6>
-                                                                <div class="form-group">
-                                                                    <div class="input-group mb-2 mr-sm-2">
-                                                                        <input type="text" name="lebar_galian"
-                                                                            id="lebar_galian" placeholder="lebar"
-                                                                            class="form-control numberOnly">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col">
-                                                                <h6>Dalam</h6>
-                                                                <div class="form-group">
-                                                                    <div class="input-group mb-2 mr-sm-2">
-                                                                        <input type="text" name="dalam_galian"
-                                                                            id="dalam_galian" placeholder="Dalam"
-                                                                            class="form-control numberOnly">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col">
-                                                                <h6>Keterangan</h6>
-                                                                <div class="form-group">
-                                                                    <div class="input-group mb-2 mr-sm-2">
-                                                                        <input type="text" name="input_keterangan_galian"
-                                                                            id="input_keterangan_galian"
-                                                                            placeholder="Keterangan galian"
-                                                                            class="form-control">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col">
-                                                                <h6>Pilih Waktu</h6>
-                                                                <div class="form-radio">
-                                                                    <form>
-                                                                        <div class="radio radiofill radio-inline">
-                                                                            <label>
-                                                                                <input type="radio" class="harga_galian"
-                                                                                    name="harga_galian" value="siang"
-                                                                                    checked="checked">
-                                                                                <i class="helper"></i>Siang
-                                                                            </label>
-                                                                        </div>
-                                                                        <div class="radio radiofill radio-inline">
-                                                                            <label>
-                                                                                <input type="radio" class="harga_galian"
-                                                                                    name="harga_galian" value="malam">
-                                                                                <i class="helper"></i>Malam
-                                                                            </label>
-                                                                        </div>
-                                                                    </form>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col">
-                                                                <div class="">
-                                                                    <button type="button" id="btn_galian"
-                                                                        class="btn btn-primary">Update
-                                                                        Galian</button>
-                                                                </div>
+                                                        <div class="form-group">
+                                                            <select class="form-control select2" id="cmbGalian">
+                                                                <option selected="selected" value="">Pilih
+                                                                    galian
+                                                                </option>
+                                                                @foreach ($listPekerjaanGalian as $i => $gal)
+                                                                    <option value="{{ $gal->id }}">
+                                                                        {{ $gal->nama }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <h6>Panjang</h6>
+                                                        <div class="form-group">
+                                                            <div class="input-group mb-2 mr-sm-2">
+                                                                <input type="text" name="panjang_galian"
+                                                                    id="panjang_galian" placeholder="panjang"
+                                                                    class="form-control numberOnly">
                                                             </div>
                                                         </div>
-                                                    @endif
-                                                @endif
+                                                    </div>
+                                                    <div class="col">
+                                                        <h6>Lebar</h6>
+                                                        <div class="form-group">
+                                                            <div class="input-group mb-2 mr-sm-2">
+                                                                <input type="text" name="lebar_galian" id="lebar_galian"
+                                                                    placeholder="lebar" class="form-control numberOnly">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <h6>Dalam</h6>
+                                                        <div class="form-group">
+                                                            <div class="input-group mb-2 mr-sm-2">
+                                                                <input type="text" name="dalam_galian" id="dalam_galian"
+                                                                    placeholder="Dalam" class="form-control numberOnly">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <h6>Keterangan</h6>
+                                                        <div class="form-group">
+                                                            <div class="input-group mb-2 mr-sm-2">
+                                                                <input type="text" name="input_keterangan_galian"
+                                                                    id="input_keterangan_galian"
+                                                                    placeholder="Keterangan galian" class="form-control">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <h6>Pilih Waktu</h6>
+                                                        <div class="form-radio">
+                                                            <form>
+                                                                <div class="radio radiofill radio-inline">
+                                                                    <label>
+                                                                        <input type="radio" class="harga_galian"
+                                                                            name="harga_galian" value="siang"
+                                                                            checked="checked">
+                                                                        <i class="helper"></i>Siang
+                                                                    </label>
+                                                                </div>
+                                                                <div class="radio radiofill radio-inline">
+                                                                    <label>
+                                                                        <input type="radio" class="harga_galian"
+                                                                            name="harga_galian" value="malam">
+                                                                        <i class="helper"></i>Malam
+                                                                    </label>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="">
+                                                            <button type="button" id="btn_galian"
+                                                                class="btn btn-primary">Update
+                                                                Galian</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         @endif
                                         <table class="table table-bordered table-responsive" width="100%" id="tableGalian">
@@ -491,34 +585,21 @@
                                                     <th width="100">Lebar</th>
                                                     <th width="100">Dalam</th>
                                                     <th width="100">Volume</th>
-                                                    @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
-                                                        <th width="200">Harga Satuan</th>
-                                                    @endif
                                                     <th width="200">Keterangan</th>
-                                                    @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
-                                                        <th width="150">Total</th>
-                                                    @endif
-                                                    @if ($pekerjaanUtama->status === 'selesai koreksi')
-                                                        <th width="200">Harga Satuan</th>
-                                                        <th width="250">Total</th>
-                                                    @endif
+                                                    <th width="200">Harga Satuan</th>
+                                                    <th width="250">Total</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 @if (isset($daftarGalian))
                                                     @forelse ($daftarGalian as $inv => $galian)
-                                                        @php
-                                                            $sum = 0;
-                                                        @endphp
                                                         <tr id="listGalian_{{ $galian->item_id }}"
                                                             class="list_table_galian">
                                                             <td class="text-center nomor_galian"
-                                                                data-index="{{ $inv + 1 }}"
-                                                                @if ($pekerjaanUtama->status === 'dikoreksi' || $pekerjaanUtama->status === 'selesai koreksi') rowspan="3" @else rowspan="2" @endif>
+                                                                data-index="{{ $inv + 1 }}" rowspan="4">
                                                                 {{ $inv + 1 }}
                                                             </td>
-                                                            <td
-                                                                @if ($pekerjaanUtama->status === 'dikoreksi' || $pekerjaanUtama->status === 'selesai koreksi') rowspan="3" @else rowspan="2" @endif>
+                                                            <td rowspan="4">
                                                                 {{ $galian->pekerjaan }}
                                                             </td>
                                                             <td>Rekanan</td>
@@ -530,147 +611,98 @@
 
                                                                 m<sup>2
                                                             </td>
-                                                            @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
-                                                                <td>Rp. {{ format_uang($galian->harga_satuan) }}</td>
-                                                            @endif
                                                             <td>{{ $galian->keterangan }}</td>
-                                                            @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
-                                                                <td>Rp. {{ format_uang($galian->total) }}</td>
-                                                            @endif
-                                                            @if ($pekerjaanUtama->status === 'selesai koreksi')
-                                                                <td>Rp. {{ format_uang($galian->harga_satuan) }}</td>
-                                                                <td rowspan="3">
-                                                                    Rp. {{ format_uang($galian->total) }}</td>
-                                                            @endif
+                                                            <td>Rp. {{ format_uang($galian->harga_satuan) }}</td>
+                                                            <td rowspan="4">
+                                                                Rp. {{ format_uang($galian->total) }}</td>
 
                                                         </tr>
                                                         <tr>
                                                             <td>Pengawas</td>
-                                                            @if ($perencanaan === true && $pekerjaanUtama->status === 'selesai koreksi')
-                                                                <td><input type="text"
-                                                                        name="panjang_pengawas[{{ $galian->item_id }}]"
-                                                                        id="panjang_pengawas[{{ $galian->item_id }}]"
-                                                                        placeholder="Panjang Pengawas"
-                                                                        value="{{ $galian->panjang }}"
-                                                                        class="form-control numberOnly">
-                                                                </td>
-                                                                <td><input type="text"
-                                                                        name="lebar_pengawas[{{ $galian->item_id }}]"
-                                                                        id="lebar_pengawas[{{ $galian->item_id }}]"
-                                                                        placeholder="Lebar Pengawas"
-                                                                        value="{{ $galian->lebar }}"
-                                                                        class="form-control numberOnly">
-                                                                </td>
-                                                                <td><input type="text"
-                                                                        name="dalam_pengawas[{{ $galian->item_id }}]"
-                                                                        id="dalam_pengawas[{{ $galian->item_id }}]"
-                                                                        placeholder="Dalam Pengawas"
-                                                                        value="{{ $galian->dalam }}"
-                                                                        class="form-control numberOnly">
-                                                                </td>
-                                                                <td>
-                                                                    <span id="volume_galian_{{ $galian->item_id }}">
-
-                                                                    </span>
-                                                                </td>
-                                                                <td><input type="text"
-                                                                        name="keterangan_pengawas_galian[{{ $galian->item_id }}]"
-                                                                        id="keterangan_pengawas_galian_{{ $galian->item_id }}"
-                                                                        placeholder="Keterangan Galian Pengawas"
-                                                                        class="form-control">
-                                                                </td>
-                                                            @else
-                                                                <td>
-                                                                    {{ $galian->galian_pengawas_panjang }}
-                                                                </td>
-                                                                <td>
-                                                                    {{ $galian->galian_pengawas_lebar }}
-                                                                </td>
-                                                                <td>
-                                                                    {{ $galian->galian_pengawas_dalam }}
-                                                                </td>
-                                                                <td>
-                                                                    {{ $galian->volume }}
-                                                                    m<sup>2
-                                                                </td>
-                                                                @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
-                                                                    <td>
-                                                                        {{ $galian->galian_pengawas_keterangan }}
-                                                                    </td>
-                                                                    <td>Rp.
-                                                                        {{ format_uang($galian->galian_pengawas_harga_satuan) }}
-                                                                    </td>
-
-                                                                    <td>Rp.
-                                                                        {{ format_uang($galian->galian_pengawas_total) }}
-                                                                    </td>
-                                                                @endif
-                                                                @if ($pekerjaanUtama->status === 'selesai koreksi')
-                                                                    <td>
-                                                                        adadadaad
-                                                                        {{ $galian->galian_pengawas_keterangan }}
-                                                                    </td>
-                                                                    <td>
-                                                                        Rp.
-                                                                        {{ format_uang($galian->galian_pengawas_harga_satuan) }}
-                                                                    </td>
-                                                                @endif
-                                                            @endif
+                                                            <td>
+                                                                {{ $galian->galian_pengawas_panjang }}
+                                                            </td>
+                                                            <td>
+                                                                {{ $galian->galian_pengawas_lebar }}
+                                                            </td>
+                                                            <td>
+                                                                {{ $galian->galian_pengawas_dalam }}
+                                                            </td>
+                                                            <td>
+                                                                {{ $galian->volume }}
+                                                                m<sup>2
+                                                            </td>
+                                                            <td>
+                                                                {{ $galian->galian_pengawas_keterangan }}
+                                                            </td>
+                                                            <td>
+                                                                Rp.
+                                                                {{ format_uang($galian->galian_pengawas_harga_satuan) }}
+                                                            </td>
                                                         </tr>
-                                                        @if ($pekerjaanUtama->status === 'dikoreksi')
-                                                            <tr>
-                                                                <td>Perencanaan</td>
-                                                                @if ($perencaan == true)
-                                                                    <td></td>
-                                                                    <td></td>
-                                                                    <td></td>
-                                                                    <td></td>
-                                                                    <td>
-                                                                        <div class="input-group mb-2 mr-sm-2">
-                                                                            <div class="input-group-prepend">
-                                                                                <div class="input-group-text">Rp.</div>
-                                                                            </div>
-                                                                            <input type="text" class="form-control"
-                                                                                id="harga_galian{{ $galian->item_id }}{{ $key }}"
-                                                                                name="harga_galian[{{ $galian->id }}]"
-                                                                                value="{{ format_uang($galian->galian_pengawas_harga_satuan) }}"
-                                                                                placeholder="Harga Perencanaan">
-                                                                        </div>
-                                                                        @push('script')
-                                                                            <script>
-                                                                                $("#harga_galian{{ $galian->item_id }}{{ $key }}").on("input", function() {
+                                                        <tr>
+                                                            <td rowspan="2">Perencanaan</td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td> </td>
+                                                            <td> {{ $galian->galian_perencanaan_keterangan }}</td>
+                                                            <td>{{ $galian->galian_perencanaan_harga_satuan }}</td>
 
-                                                                                    let val = formatRupiahTanpaRp(this.value, '')
-                                                                                    $("#harga_galian{{ $galian->item_id }}{{ $key }}").val(val)
-                                                                                });
-                                                                            </script>
-                                                                        @endpush
-                                                                    </td>
-                                                                    <td>
-                                                                        <input type="text" class="form-control"
-                                                                            id="keterangan_perencanaa_galian{{ $galian->id }}{{ $key }}"
-                                                                            name="keterangan_perencanaa_galian[{{ $galian->id }}]"
-                                                                            value=""
-                                                                            placeholder="Keterangan Perencanaan">
-                                                                    </td>
-                                                                @else
-                                                                    <td></td>
-                                                                    <td></td>
-                                                                    <td></td>
-                                                                @endif
-                                                            </tr>
-                                                        @elseif ($pekerjaanUtama->status === 'selesai koreksi')
-                                                            <tr>
-                                                                <td>Perencanaan</td>
-                                                                <td></td>
-                                                                <td></td>
-                                                                <td></td>
-                                                                <td> </td>
-                                                                <td> {{ $galian->galian_perencanaan_keterangan }}</td>
-                                                                <td>{{ $galian->galian_perencanaan_harga_satuan }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <input type="text"
+                                                                    name="panjang_perencanaan[{{ $galian->id }}]"
+                                                                    id="panjang_perencanaan_{{ $galian->id }}"
+                                                                    placeholder="Panjang" class="form-control numberOnly"
+                                                                    value="{{ $galian->galian_pengawas_panjang }}">
+                                                            </td>
+                                                            <td>
+                                                                <input type="text"
+                                                                    name="lebar_perencanaan[{{ $galian->id }}]"
+                                                                    id="lebar_perencanaan_{{ $galian->id }}"
+                                                                    placeholder="Lebar" class="form-control numberOnly"
+                                                                    value="{{ $galian->galian_pengawas_lebar }}">
+                                                            </td>
+                                                            <td>
+                                                                <input type="text"
+                                                                    name="dalam_perencanaan[{{ $galian->id }}]"
+                                                                    id="dalam_perencanaan_{{ $galian->id }}"
+                                                                    placeholder="dalam" class="form-control numberOnly"
+                                                                    value="{{ $galian->galian_pengawas_dalam }}">
+                                                            </td>
+                                                            <td></td>
+                                                            <td>
+                                                                <input type="text" class="form-control"
+                                                                    id="keterangan_perencanaan_galian_{{ $galian->id }}{{ $key }}"
+                                                                    name="keterangan_perencanaan_galian[{{ $galian->id }}]"
+                                                                    placeholder="Keterangan Perencanaan">
+                                                            </td>
+                                                            <td>
+                                                                <div class="input-group mb-2 mr-sm-2">
+                                                                    <div class="input-group-prepend">
+                                                                        <div class="input-group-text">Rp.</div>
+                                                                    </div>
+                                                                    <input type="text" class="form-control"
+                                                                        id="harga_satuan_galian_{{ $galian->id }}{{ $key }}"
+                                                                        name="harga_satuan_galian[{{ $galian->id }}]"
+                                                                        value="{{ format_uang($galian->galian_pengawas_harga_satuan) }}"
+                                                                        placeholder="Harga Perencanaan">
+                                                                </div>
+                                                                @push('script')
+                                                                    <script>
+                                                                        $("#harga_satuan_galian_{{ $galian->id }}{{ $key }}").on("input", function() {
 
-                                                            </tr>
-                                                        @endif
+                                                                            let val = formatRupiahTanpaRp(this.value, '')
+                                                                            $("#harga_satuan_galian_{{ $galian->id }}{{ $key }}").val(val)
+                                                                        });
+                                                                    </script>
+                                                                @endpush
+                                                            </td>
+
+
+                                                        </tr>
                                                     @empty
                                                         <tr class="galianTidakAda">
                                                             <td colspan="10">Data galian tidak ada</td>
@@ -683,8 +715,6 @@
                                                 @endif
                                             </tbody>
                                             <tfoot>
-                                                @if ($perencaan == true)
-                                                @endif
                                                 @if (isset($daftarGalian))
                                                     @if ($pekerjaanUtama->status === 'selesai koreksi')
                                                         <tr>
@@ -710,30 +740,24 @@
                                         {{-- End Galian --}}
                                     </div>
                                     <div class="card-footer">
-                                        @if (!auth()->user()->hasRole('rekanan'))
-                                            @if ($tombolEdit === 'bisa')
-                                                <div class="row">
-                                                    <div class="col-12">
-                                                        <input type="hidden" name="pekerjan" id="pekerjan"
-                                                            value="{{ $pekerjaanUtama->id }}">
-                                                        <input type="hidden" name="no_spk" id="no_spk"
-                                                            value="{{ $aduan->no_spk }}">
-                                                        <div class="card">
-                                                            <button type="button" id="simpan_koreksi"
-                                                                class="btn btn-primary">Simpan Koreksi
-                                                                Pekerjaan</button>
-                                                        </div>
-                                                    </div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <input type="hidden" name="pekerjan" id="pekerjan"
+                                                    value="{{ $pekerjaanUtama->id }}">
+                                                <input type="hidden" name="no_spk" id="no_spk"
+                                                    value="{{ $aduan->no_spk }}">
+                                                <div class="card">
+                                                    <button type="button" id="simpan_koreksi" class="btn btn-primary">Simpan
+                                                        Koreksi
+                                                        Pekerjaan</button>
                                                 </div>
-                                            @endif
-                                        @endif
+                                            </div>
+                                        </div>
                                     </div>
                                 </form>
                             </div>
                         </div>
                     </div>
-
-
                 @endisset
             @endif
         @endif
@@ -961,7 +985,7 @@
                 }
 
                 rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
-                return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+                return prefix == undefined ? rupiah : (rupiah ? '' + rupiah : '');
             }
 
             function formatRupiahTanpaRp(angka, prefix) {
@@ -1088,7 +1112,8 @@
 
 
 
-                function elementPekerjaan(id, nama, slug, jenis, nomor, modul, jumlah, jenis_harga, keterangan = null) {
+                function elementPekerjaan(id, nama, slug, jenis, nomor, modul, jumlah, harga_satuan, jenis_harga,
+                    keterangan = null) {
                     let modulLowcasse = capitalizeFirstLetter(modul);
                     let pekerjaanUtama = $('#idPekerjaan').val();
 
@@ -1097,17 +1122,29 @@
                     </td>
                     <td>${nama}</td>
                     <td>${jenis}</td>
-                    <td>Pengawas</td>
+                    <td>Perencanaan</td>
                     <td>
-                        <input type="text" name="qty_pengawas[${id}]"
-                        id="qty_pengawas_${id}" value="${jumlah}"
-                        placeholder="Koreksi Pengawas" class="form-control numberOnly">
-                        <input type="hidden" name="jenis_harga_galian[${id}]" value="${jenis_harga}" />
+                        <input type="text" name="qty_perencanaan[${id}]"
+                        id="qty_perencanaan_${id}" value="${jumlah}"
+                        placeholder="Koreksi Perencanaan" class="form-control numberOnly">
+                        <input type="hidden" name="jenis_harga_perecanaan[${id}]" value="${jenis_harga}" />
                     </td>
                     <td>
-                        <input type="text" name="keterangan_pengawas[${id}]"
-                        id="keterangan_pengawas_${id}" value="${keterangan}"
-                        placeholder="Keterangan Pengawas" class="form-control ">
+                        <div class="input-group mb-2 mr-sm-2">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">Rp.</div>
+                            </div>
+                            <input type="text" class="form-control"
+                                id="harga_satuan_${id}"
+                                name="harga_satuan[${id}]"
+                                value="${formatRupiah(harga_satuan.toString())}"
+                                placeholder="Harga Perencanaan">
+                        </div>
+                    </td>
+                    <td>
+                        <input type="text" name="keterangan_perencanaan[${id}]"
+                        id="keterangan_perencanaan_${id}" value="${keterangan}"
+                        placeholder="Keterangan Perencanaan" class="form-control ">
                     </td>
                     <td>
                             <button type="button"
@@ -1185,7 +1222,6 @@
 
                         let nomor = tableCount + 1;
 
-
                         if (lengthPekerjaan === 0) {
                             $.when($.ajax({
                                 type: 'get',
@@ -1199,12 +1235,24 @@
                                         id,
                                         nama,
                                         slug,
-                                        jenis
+                                        jenis,
+                                        harga,
+                                        harga_malam
                                     } = data.data;
+
+                                    if (jenis_harga === "siang") {
+                                        harga_satuan = harga;
+                                    } else {
+                                        harga_satuan = harga_malam;
+                                    }
                                     let content = elementPekerjaan(
-                                        id, nama, slug, jenis, nomor, modul, jumlah, jenis_harga,
+                                        id, nama, slug, jenis, nomor, modul, jumlah, harga_satuan,
+                                        jenis_harga,
                                         keterangan
                                     );
+
+
+
                                     $('.' + modul + 'TidakAda').remove();
                                     $('#table' + modulLowcasse).append(content);
                                     toast('success menambah ' + modulLowcasse);
@@ -1225,7 +1273,15 @@
                                 }
                             })).then(function(data, textStatus, jqXHR) {
                                 // totalHarga(modul);
+                                const {
+                                    id
+                                } = data.data;
 
+                                $('#harga_satuan_' + id).on("input", function() {
+
+                                    let val = formatRupiah(this.value, '')
+                                    $('#harga_satuan_' + id).val(val)
+                                });
 
                             });
 
@@ -1264,7 +1320,8 @@
                     $(this).removeClass("is-invalid");
                 })
 
-                function elementPekerjaanGalian(id, nama, nomor, modul, panjang, lebar, dalam, jenis_harga, keterangan =
+                function elementPekerjaanGalian(id, nama, nomor, modul, panjang, lebar, dalam, harga_satuan,
+                    jenis_harga, keterangan =
                     null) {
                     let modulLowcasse = capitalizeFirstLetter(modul);
                     let pekerjaanUtama = $('#idPekerjaan').val();
@@ -1273,29 +1330,40 @@
                     <td class="text-center nomor_${modul}" data-index="${nomor}">${nomor}
                     </td>
                     <td>${nama}</td>
-                    <td>Pengawas</td>
+                    <td>Perencanaan</td>
                     <td>
-                        <input type="text" name="panjang_pengawas[${id}]"
-                        id="panjang_pengawas_${id}" value="${panjang}"
+                        <input type="text" name="panjang_perencanaan[${id}]"
+                        id="panjang_perencanaan_${id}" value="${panjang}"
                         placeholder="Panjang" class="form-control numberOnly">
                     </td>
                     <td>
-                        <input type="text" name="lebar_pengawas[${id}]"
-                        id="lebar_pengawas_${id}" value="${lebar}"
+                        <input type="text" name="lebar_perencanaan[${id}]"
+                        id="lebar_perencanaan_${id}" value="${lebar}"
                         placeholder="Lebar" class="form-control numberOnly">
                     </td>
                     <td>
-                        <input type="text" name="dalam_pengawas[${id}]"
-                        id="dalam_pengawas_${id}" value="${dalam}"
-                        placeholder="Koreksi Pengawas" class="form-control numberOnly">
+                        <input type="text" name="dalam_perencanaan[${id}]"
+                        id="dalam_perencanaan_${id}" value="${dalam}"
+                        placeholder="Koreksi perencanaan" class="form-control numberOnly">
                     </td>
+                    <td></td>
                     <td>
-                    </td>
-                    <td>
-                        <input type="text" name="keterangan_pengawas_galian[${id}]"
-                        id="keterangan_pengawas_galian_${id}" value="${keterangan}"
-                        placeholder="Keterangan Pengawas" class="form-control ">
+                        <input type="text" name="keterangan_perencanaan_galian[${id}]"
+                        id="keterangan_perencanaan_galian_${id}" value="${keterangan}"
+                        placeholder="Keterangan perencanaan" class="form-control ">
                         <input type="hidden" name="jenis_harga[${id}]" value="${jenis_harga}" />
+                    </td>
+                    <td>
+                        <div class="input-group mb-2 mr-sm-2">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">Rp.</div>
+                            </div>
+                            <input type="text" class="form-control"
+                                id="harga_satuan_galian_${id}"
+                                name="harga_satuan_galian[${id}]"
+                                value="${formatRupiah(harga_satuan.toString())}"
+                                placeholder="Harga Galian Perencanaan">
+                        </div>
                     </td>
                     <td>
                         <button type="button"
@@ -1341,6 +1409,7 @@
 
                         let nomor = tableCount + 1;
                         let lengthPekerjaan = $('#list' + modulLowcasse + '_' + item).length;
+                        let harga_satuan = 0;
 
                         if (lengthPekerjaan === 0) {
                             $.when($.ajax({
@@ -1355,8 +1424,17 @@
                                         id,
                                         nama,
                                         slug,
-                                        jenis
+                                        jenis,
+                                        harga,
+                                        harga_malam
                                     } = data.data;
+
+                                    if (jenis_harga === "siang") {
+                                        harga_satuan = harga;
+                                    } else {
+                                        harga_satuan = harga_malam;
+                                    }
+
                                     let content = elementPekerjaanGalian(
                                         id, nama,
                                         nomor,
@@ -1364,6 +1442,7 @@
                                         panjang,
                                         lebar,
                                         dalam,
+                                        harga_satuan,
                                         jenis_harga,
                                         keterangan
                                     );
@@ -1386,9 +1465,15 @@
                                     })
                                 }
                             })).then(function(data, textStatus, jqXHR) {
-                                // totalHarga(modul);
+                                const {
+                                    id
+                                } = data.data;
 
+                                $('#harga_satuan_galian_' + id).on("input", function() {
 
+                                    let val = formatRupiah(this.value, '')
+                                    $('#harga_satuan_galian_' + id).val(val)
+                                });
                             });
 
                         } else {

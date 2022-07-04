@@ -29,6 +29,10 @@ class GalianPekerjaan extends Model
     {
         return $this->hasOne(GalianPerencanaan::class, 'galian_id');
     }
+    public function hasGalianPerencanaanAdjust()
+    {
+        return $this->hasOne(GalianPerencanaanAdjust::class, 'galian_id');
+    }
 
     public function getPekerjaanAttribute()
     {
@@ -42,6 +46,8 @@ class GalianPekerjaan extends Model
             return $this->hasItem->harga;
         }
     }
+
+    // pengawas
     public function getGalianPengawasPanjangAttribute()
     {
         if ($this->hasGalianPengawas) {
@@ -78,6 +84,46 @@ class GalianPekerjaan extends Model
             return $this->hasGalianPengawas->total;
         }
     }
+    // PerencanaanAdjust
+    public function getGalianPerencanaanAdjustPanjangAttribute()
+    {
+        if ($this->hasGalianPerencanaanAdjust) {
+            return $this->hasGalianPerencanaanAdjust->panjang;
+        }
+    }
+    public function getGalianPerencanaanAdjustLebarAttribute()
+    {
+        if ($this->hasGalianPerencanaanAdjust) {
+            return $this->hasGalianPerencanaanAdjust->lebar;
+        }
+    }
+    public function getGalianPerencanaanAdjustDalamAttribute()
+    {
+        if ($this->hasGalianPerencanaanAdjust) {
+            return $this->hasGalianPerencanaanAdjust->dalam;
+        }
+    }
+    public function getGalianPerencanaanAdjustKeteranganAttribute()
+    {
+        if ($this->hasGalianPerencanaanAdjust) {
+            return $this->hasGalianPerencanaanAdjust->keterangan;
+        }
+    }
+    public function getGalianPerencanaanAdjustHargaSatuanAttribute()
+    {
+        if ($this->hasGalianPerencanaanAdjust) {
+            return $this->hasGalianPerencanaanAdjust->harga_satuan;
+        }
+    }
+    public function getGalianPerencanaanAdjustTotalAttribute()
+    {
+        if ($this->hasGalianPerencanaanAdjust) {
+            return $this->hasGalianPerencanaanAdjust->total;
+        }
+    }
+
+    // perencanaan
+
     public function getGalianPerencanaanHargaSatuanAttribute()
     {
         if ($this->hasGalianPerencanaan) {
@@ -104,6 +150,16 @@ class GalianPekerjaan extends Model
             $total = $this->hasGalianPengawas->dalam === 0.0
                 ? $this->hasGalianPengawas->panjang * $this->hasGalianPengawas->lebar
                 : $this->hasGalianPengawas->panjang * $this->hasGalianPengawas->lebar * $this->hasGalianPengawas->dalam;
+        }
+        return  $total;
+    }
+    public function getVolumeAdjustAttribute()
+    {
+        $total = 0;
+        if ($this->hasGalianPerencanaanAdjust) {
+            $total = $this->hasGalianPerencanaanAdjust->dalam === 0.0
+                ? $this->hasGalianPerencanaanAdjust->panjang * $this->hasGalianPerencanaanAdjust->lebar
+                : $this->hasGalianPerencanaanAdjust->panjang * $this->hasGalianPerencanaanAdjust->lebar * $this->hasGalianPerencanaanAdjust->dalam;
         }
         return  $total;
     }
