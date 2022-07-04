@@ -561,13 +561,13 @@ class PenunjukanPekerjaanController extends Controller
 
                     if ($cekItem[$key]) {
                         $listitem[$key] = [
-                            'keterangan' => $cekItem[$key][$key],
+                            'keterangan' => $cekItem[$key]->keterangan,
                             'harga' => $cekItem[$key]->harga,
                             'qty' => $cekItem[$key]->qty,
                             'total' => $value *  $cekItem[$key]->harga,
                         ];
                         $listitemPengawas[$key] = [
-                            'keterangan' => $cekItem[$key][$key],
+                            'keterangan' => isset($request->keterangan_pengawas[$key]) ? $request->keterangan_pengawas[$key] : null,
                             'harga' => $cekItem[$key]->harga,
                             'qty' => $value,
                             'total' => $value *  $cekItem[$key]->harga,

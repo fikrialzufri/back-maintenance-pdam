@@ -350,6 +350,9 @@
                                                     <th width="50">Jenis</th>
                                                     <th width="50">Pengguna</th>
                                                     <th width="150">Jumlah </th>
+                                                    @if ($perencaan == false && $pekerjaanUtama->status === 'dikoreksi')
+                                                        <th width="300">Keterangan</th>
+                                                    @endif
                                                     @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
                                                         <th width="250">Harga Satuan</th>
                                                         <th width="300">Keterangan</th>
@@ -360,9 +363,6 @@
                                                         <th width="250">Harga Satuan</th>
                                                         <th width="300">Keterangan</th>
                                                         <th width="250">Total</th>
-                                                    @endif
-                                                    @if ($pekerjaanUtama->status === 'selesai' || $pekerjaanUtama->status === 'dikoreksi')
-                                                        <th width="300">Keterangan</th>
                                                     @endif
 
                                                 </tr>
@@ -739,20 +739,25 @@
                                                                     m<sup>2
                                                                 </td>
                                                                 @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
-                                                                    <td>
-                                                                        {{ $galian->galian_pengawas_keterangan }}
-                                                                    </td>
                                                                     <td>Rp.
                                                                         {{ format_uang($galian->galian_pengawas_harga_satuan) }}
                                                                     </td>
+                                                                    <td>
+                                                                        {{ $galian->galian_pengawas_keterangan }}
+                                                                    </td>
+
 
                                                                     <td>Rp.
                                                                         {{ format_uang($galian->galian_pengawas_total) }}
                                                                     </td>
                                                                 @endif
+                                                                @if ($perencaan == false && $pekerjaanUtama->status === 'dikoreksi')
+                                                                    <td>
+                                                                        {{ $galian->galian_pengawas_keterangan }}
+                                                                    </td>
+                                                                @endif
                                                                 @if ($pekerjaanUtama->status === 'selesai koreksi')
                                                                     <td>
-                                                                        adadadaad
                                                                         {{ $galian->galian_pengawas_keterangan }}
                                                                     </td>
                                                                     <td>
