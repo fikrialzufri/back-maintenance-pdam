@@ -174,7 +174,7 @@
                                     <div class="d-flex justify-content-start">
                                         <div class="d mr-3">
                                             <img src="data:image/png;base64, {!! base64_encode(
-    QrCode::format('png')->size(100)->generate($tagihan->rekanan_url_tdd),
+    QrCode::format('png')->size(100)->generate(route('tagihan.preview', $tagihan->slug)),
 ) !!} " class="img-square">
                                         </div>
                                         <div class="d">
@@ -199,9 +199,19 @@
                                     </p>
                                     @forelse ($tagihan->list_persetujuan as $index => $item)
                                         @if ($item->jabatan === 'Direktur Teknik')
-                                            <img src="data:image/png;base64, {!! base64_encode(
-    QrCode::format('png')->size(100)->generate($direktur),
-) !!} " class="img-square">
+                                            @if ($direktur)
+                                                @if ($direktur->url)
+                                                    <img src="data:image/png;base64, {!! base64_encode(
+    QrCode::format('png')->size(100)->generate($direktur->url),
+) !!} "
+                                                        class="img-square">
+                                                @else
+                                                    <img src="data:image/png;base64, {!! base64_encode(
+    QrCode::format('png')->size(100)->generate(asset('storage/karyawan/' . $direktur->tdd)),
+) !!} "
+                                                        class="img-square">
+                                                @endif
+                                            @endif
                                         @endif
                                     @empty
                                     @endforelse

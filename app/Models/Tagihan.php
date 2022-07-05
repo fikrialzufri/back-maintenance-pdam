@@ -50,7 +50,7 @@ class Tagihan extends Model
     public function getRekananUrlTddAttribute()
     {
         if ($this->hasRekanan) {
-            return asset('storage/karyawan/' . $this->hasRekanan->tdd);
+            return asset('storage/rekanan/' . $this->hasRekanan->tdd);
         }
     }
     public function getAlamatRekananAttribute()
@@ -256,6 +256,8 @@ class Tagihan extends Model
                         'id' => $value->karyawan->user_id,
                         'nama' => $value->karyawan->nama,
                         'jabatan' => $value->karyawan->nama_jabatan,
+                        'url' => $value->karyawan->url,
+                        'tdd' => $value->karyawan->tdd,
                         'is_setuju' => true,
                         'created_at' => $value->pivot->created_at,
                         'tanggal_disetujui' => isset($value->pivot->created_at) ? tanggal_indonesia($value->pivot->created_at) . " - " . Carbon::parse($value->pivot->created_at)->format('H:i') : ''
@@ -270,6 +272,8 @@ class Tagihan extends Model
                     'id' => $value->id,
                     'nama' => $value->nama,
                     'jabatan' => $value->jabatan,
+                    'url' => $value->url,
+                    'tdd' => $value->tdd,
                     'is_setuju' => $value->is_setuju,
                     'created_at' => $value->created_at,
                     'tanggal_disetujui' => $value->tanggal_disetujui

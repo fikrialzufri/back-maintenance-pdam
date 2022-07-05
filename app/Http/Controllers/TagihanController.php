@@ -1117,7 +1117,7 @@ class TagihanController extends Controller
         $listJabatan = Jabatan::where('slug', 'manajer-perencanaan')->orWhere('slug', 'direktur-teknik')->get()->pluck('id')->toArray();
 
         // list karyawan bedasarkan jabatan
-        $direktur = Karyawan::where('jabatan_id', $listJabatan)->first()->url;
+        $direktur = Karyawan::where('jabatan_id', $listJabatan)->first();
 
         $preview = $tagihan->slug;
 

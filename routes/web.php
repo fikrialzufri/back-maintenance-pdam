@@ -120,6 +120,5 @@ Route::group(['middleware' => 'auth'], function () {
     // Setting
     Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
     Route::post('/setting', [SettingController::class, 'store'])->name('setting.store');
+    Route::get('previewtagihan/{slug}', [TagihanController::class, 'preview'])->name('tagihan.preview');
 });
-
-Route::get('previewtagihan/{slug}', [TagihanController::class, 'preview'])->name('tagihan.preview');
