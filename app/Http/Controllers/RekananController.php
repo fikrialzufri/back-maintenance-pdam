@@ -129,6 +129,11 @@ class RekananController extends Controller
                 'hasMany'    => ['role'],
             ],
             [
+                'name'    => 'url',
+                'input'    => 'text',
+                'alias'    => 'Url Tanda tangan'
+            ],
+            [
                 'name'    => 'tdd',
                 'input'    => 'image',
                 'alias'    => 'Tanda Tangan',

@@ -127,7 +127,7 @@ class GalianPekerjaan extends Model
     public function getGalianPerencanaanHargaSatuanAttribute()
     {
         if ($this->hasGalianPerencanaan) {
-            return "Rp. " . format_uang($this->hasGalianPerencanaan->harga_satuan);
+            return format_uang($this->hasGalianPerencanaan->harga_satuan);
         }
     }
     public function getGalianPerencanaanTotalAttribute()

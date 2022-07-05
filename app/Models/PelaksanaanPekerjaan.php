@@ -73,6 +73,20 @@ class PelaksanaanPekerjaan extends Model
             return $this->hasGalianPekerjaan->sum('total');
         }
     }
+    public function getTotalVolumeGalianAttribute()
+    {
+        $total = 0;
+        if ($this->hasGalianPekerjaan) {
+            foreach ($this->hasGalianPekerjaan as $key => $value) {
+                if ($this->status === 'diadjust') {
+                    $total += $value->volume_adjust;
+                } else {
+                    $total += $value->volume;
+                }
+            }
+        }
+        return  $total;
+    }
     public function getTotalAdjustAttribute()
     {
         if ($this->hasPekerjaanAdjust) {

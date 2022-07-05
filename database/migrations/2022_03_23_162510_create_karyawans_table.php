@@ -19,6 +19,7 @@ class CreateKaryawansTable extends Migration
             $table->string('nik', 20)->nullable();
             $table->string('nama');
             $table->string('slug');
+            $table->string('url')->nullable();
             $table->string('tdd')->nullable();
             $table->enum('pekerjaan', ['tidak', 'ya'])->default('tidak');
             $table->foreignUuid('jabatan_id')->references('id')->on('jabatan');

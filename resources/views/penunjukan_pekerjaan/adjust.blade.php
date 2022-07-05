@@ -411,7 +411,7 @@
                                                                     id="qty_perencanaan_{{ $pekerjaan->pivot->item_id }}"
                                                                     placeholder="Koreksi Perecanaan Adjust"
                                                                     class="form-control numberOnly"
-                                                                    value="{{ $pekerjaan->pivot->qty }}">
+                                                                    @if (isset($daftarPekerjaan->hasItemPengawas[$key])) value="{{ $daftarPekerjaan->hasItemPengawas[$key]->pivot->qty }}" @endif>
                                                             </td>
                                                             <td>
                                                                 <div class="input-group mb-2 mr-sm-2">
@@ -647,7 +647,7 @@
                                                             <td></td>
                                                             <td> </td>
                                                             <td> {{ $galian->galian_perencanaan_keterangan }}</td>
-                                                            <td>{{ $galian->galian_perencanaan_harga_satuan }}</td>
+                                                            <td>Rp. {{ $galian->galian_perencanaan_harga_satuan }}</td>
 
                                                         </tr>
                                                         <tr>
@@ -687,7 +687,7 @@
                                                                     <input type="text" class="form-control"
                                                                         id="harga_satuan_galian_{{ $galian->id }}{{ $key }}"
                                                                         name="harga_satuan_galian[{{ $galian->id }}]"
-                                                                        value="{{ format_uang($galian->galian_pengawas_harga_satuan) }}"
+                                                                        value="{{ $galian->galian_perencanaan_harga_satuan }}"
                                                                         placeholder="Harga Perencanaan">
                                                                 </div>
                                                                 @push('script')

@@ -65,11 +65,11 @@
                         <page id="content" size="A4">
                             <div style=" d-flex justify-content-center align-items-center align-items-center">
                                 <div class="text-center">
-                                    <img src="{{ asset('img/kopsurat.png') }}" class="img-responsive" width="80%">
+                                    <img src="{{ asset('img/kopsurat.png') }}" class="img-responsive" width="50%">
                                 </div>
                             </div>
                             <div class="text-center" style="margin-bottom:24px;">
-                                <span style=' font-size: 25px;'>
+                                <span style=' font-size: 20px;'>
                                     <strong>
                                         <u>BERITA ACARA</u>
                                     </strong>
@@ -86,34 +86,28 @@
                                 </span>
                             </div>
                             <p style=' font-size: 20px;'>
-                                <span style=''>Pada Hari ini,
+                                <span style=''>Pada hari ini,
                                     {{ $now }}</span>
                             </p>
                             <p style=' font-size: 20px;'>
-                                <span style=''>Kami Masing-Masing Adalah
+                                <span style=''>Kami masing-masing adalah
                                     :</span>
                             </p>
                             <ol style="font-size: 20px;">
                                 @forelse ($tagihan->list_persetujuan as $index => $item)
                                     @if ($item->jabatan === 'Staf Pengawas' || str_contains($item->jabatan, 'Asisten Manajer Distribusi') || $item->jabatan === 'Asisten Manajer Pengawas' || $item->jabatan === 'Manajer Distribusi')
-                                        <li> <span style=''>{{ $item->nama }}
-                                                Sebagai {{ $item->jabatan }}</span></li>
+                                        <li> <span style=''>{{ ucfirst($item->nama) }}
+                                                sebagai {{ $item->jabatan }}</span></li>
                                     @endif
                                 @empty
                                 @endforelse
                             </ol>
-                            <p style=' font-size: 20px;'>
-                                <span style=''>Telah Mengadakan
-                                    Pemeriksaan Pekerjaan,</span>
-                            </p>
                             <div>
                                 <p style='font-size: 20px;'>
-                                    <span style=''>Service Kebocoran
-                                    Service Kebocoran Pipa Periode Bulan
-                                        {{ $bulan }}
-                                        Tahun {{ date('Y') }} di Wilayah {{ $wilayah }} Sebanyak
-                                        {{ $total_lokasi }}
-                                        Lokasi. Dengan Jumlah Tagihan Sebesar Rp.
+                                    <span style=''>Telah mengadakan pemeriksaan pekerjaan, service kebocoran pipa
+                                        periode pulan {{ $bulan }} tahun {{ date('Y') }} di wilayah
+                                        {{ $wilayah }} Sebanyak
+                                        {{ $total_lokasi }} lokasi. Dengan jumlah tagihan sebesar Rp.
                                         {{ format_uang($total_tagihan) }}.
                                         <i>
                                             ({{ strtoupper(terbilang($total_tagihan)) }} RUPIAH)
@@ -123,8 +117,8 @@
                             </div>
 
                             <p style=' font-size: 20px;'>
-                                <span style=''>Pekerjaan Tersebut
-                                    Dilaksanakan Oleh :</span>
+                                <span style=''>Pekerjaan tersebut
+                                    dilaksanakan oleh :</span>
                             </p>
                             <p id="text">
                                 <span class="child"> Nama &nbsp;&nbsp; :
@@ -142,14 +136,16 @@
 
                             </p>
                             <p>
-                                <span style='font-size: 20px;'>Berdasarkan Surat Perintah Pelaksanaan pekerjaan tersebut 
-                                dari persyaratan-persyaratan, bahan-bahan maupun pelaksanaannya, dengan ini menyatakan bahwa 
-                                pekerjaan (terlampir), telah selesai dikerjakan dan memenuhi prosedur serta persyaratan 
-                                yang ditetapkan oleh Perumdam Tirta Kencana Kota Samarindaa.</span>
+                                <span style='font-size: 20px;'>Berdasarkan surat perintah pelaksanaan pekerjaan tersebut
+                                    dari persyaratan-persyaratan, bahan-bahan maupun pelaksanaannya, dengan ini menyatakan
+                                    bahwa
+                                    pekerjaan (terlampir), telah selesai dikerjakan dan memenuhi prosedur serta persyaratan
+                                    yang ditetapkan oleh Perumdam Tirta Kencana Kota Samarindaa.</span>
                             </p>
                             <p>
-                                <span style='font-size: 20px;'>Demikian Berita Acara Pemeriksaan Pekerjaan ini dibuat dengan penuh tanggung jawab 
-                                dan dapat dipergunakan sebagaimana mestinya..</span>
+                                <span style='font-size: 20px;'>Demikian Berita Acara Pemeriksaan Pekerjaan ini dibuat dengan
+                                    penuh tanggung jawab
+                                    dan dapat dipergunakan sebagaimana mestinya..</span>
                             </p>
                             <div class="row">
                                 <div style='font-size: 20px;' class="col-3">
@@ -157,27 +153,37 @@
                                     <br>
                                     Samarinda, {{ $tanggal }}
                                     <br>
-                                    <img class="img-square">
+                                    @if ($tagihan->rekanan_url != null)
+                                        <img src="data:image/png;base64, {!! base64_encode(
+    QrCode::format('png')->size(100)->generate($tagihan->rekanan_url),
+) !!} " class="img-square">
+                                    @else
+                                        <img src="data:image/png;base64, {!! base64_encode(
+    QrCode::format('png')->size(100)->generate($tagihan->rekanan_url_tdd),
+) !!} " class="img-square">
+                                    @endif
                                     <br>
                                     {{ $tagihan->direktur }}
                                 </div>
 
-                                <div style='font-size: 20px;' class="text-left col-9">
+                                <div style='font-size: 20px;' class="text-left col">
                                     Samarinda, {{ $tanggal }}
                                     <br>
                                     Pemeriksa Pekerjaan,
                                     <br>
                                     <div class="d-flex justify-content-start">
                                         <div class="d mr-3">
-                                            <img class="img-square">
+                                            <img src="data:image/png;base64, {!! base64_encode(
+    QrCode::format('png')->size(100)->generate($tagihan->rekanan_url_tdd),
+) !!} " class="img-square">
                                         </div>
                                         <div class="d">
                                             <ol style="">
 
                                                 @forelse ($tagihan->list_persetujuan as $index => $item)
                                                     @if ($item->jabatan === 'Staf Pengawas' || $item->jabatan === 'Asisten Manajer Pengawas' || str_contains($item->jabatan, 'Asisten Manajer Distribusi') || $item->jabatan === 'Manajer Distribusi')
-                                                        <li> <span style=''>{{ $item->nama }}
-                                                                Sebagai {{ $item->jabatan }}</span></li>
+                                                        <li> <span style=''>{{ ucfirst($item->nama) }}
+                                                                sebagai {{ $item->jabatan }}</span></li>
                                                     @endif
                                                 @empty
                                                 @endforelse
@@ -189,10 +195,13 @@
                             <div class="text-center">
                                 <span style=' font-size: 20px;'>
                                     <p style=' font-size: 20px;'> Mengetahui, <br> Direktur Teknik
-                                        PEKERJAAN <br> Perumdam Tirta Kencana Kota Samarinda</p>
+                                        <br> Perumdam Tirta Kencana Kota Samarinda
+                                    </p>
                                     @forelse ($tagihan->list_persetujuan as $index => $item)
                                         @if ($item->jabatan === 'Direktur Teknik')
-                                            <img src="" class="img-square">
+                                            <img src="data:image/png;base64, {!! base64_encode(
+    QrCode::format('png')->size(100)->generate($direktur),
+) !!} " class="img-square">
                                         @endif
                                     @empty
                                     @endforelse
@@ -243,9 +252,9 @@
             createPdf()
         });
 
-        // window.onafterprint = function() {
-        //     window.location.reload(true);
-        // };
+        window.onafterprint = function() {
+            window.location.reload(true);
+        };
 
         // let title = "{{ $filename }}";
         // $("#word-export").click(function(event) {

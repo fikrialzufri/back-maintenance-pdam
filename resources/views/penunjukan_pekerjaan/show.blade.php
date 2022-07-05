@@ -353,6 +353,9 @@
                                                     @if ($perencaan == false && $pekerjaanUtama->status === 'dikoreksi')
                                                         <th width="300">Keterangan</th>
                                                     @endif
+                                                    @if ($pekerjaanUtama->status === 'selesai')
+                                                        <th width="300">Keterangan</th>
+                                                    @endif
                                                     @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
                                                         <th width="250">Harga Satuan</th>
                                                         <th width="300">Keterangan</th>
@@ -480,7 +483,7 @@
                                                             </tr>
                                                         @elseif ($pekerjaanUtama->status === 'selesai koreksi')
                                                             <tr>
-                                                                <td>Perencanaan {{ $pekerjaanUtama->status }}</td>
+                                                                <td>Perencanaan</td>
 
                                                                 <td></td>
                                                                 @if (isset($daftarPekerjaan->hasItemPerencanaan[$key]))
@@ -849,7 +852,7 @@
                                                                 <td></td>
                                                                 <td> </td>
                                                                 <td> {{ $galian->galian_perencanaan_keterangan }}</td>
-                                                                <td>{{ $galian->galian_perencanaan_harga_satuan }}</td>
+                                                                <td>Rp. {{ $galian->galian_perencanaan_harga_satuan }}</td>
 
                                                             </tr>
                                                         @elseif ($pekerjaanUtama->status === 'diadjust')
@@ -861,7 +864,7 @@
                                                                 <td> </td>
                                                                 <td> {{ $galian->galian_perencanaan_keterangan }}</td>
                                                                 <td>
-                                                                    {{ $galian->galian_perencanaan_harga_satuan }}
+                                                                    Rp. {{ $galian->galian_perencanaan_harga_satuan }}
                                                                 </td>
 
                                                             </tr>
@@ -878,6 +881,7 @@
 
                                                             </tr>
                                                         @endif
+
                                                     @empty
                                                         <tr class="galianTidakAda">
                                                             <td colspan="10">Data galian tidak ada</td>

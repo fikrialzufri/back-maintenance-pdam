@@ -150,6 +150,11 @@ class KaryawanController extends Controller
                 'hasMany'    => ['role'],
             ],
             [
+                'name'    => 'url',
+                'input'    => 'text',
+                'alias'    => 'Url Tanda Tangan',
+            ],
+            [
                 'name'    => 'tdd',
                 'input'    => 'image',
                 'alias'    => 'Tanda Tangan',

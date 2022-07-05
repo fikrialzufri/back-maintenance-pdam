@@ -41,6 +41,18 @@ class Tagihan extends Model
             return $this->hasRekanan->nama;
         }
     }
+    public function getRekananUrlAttribute()
+    {
+        if ($this->hasRekanan) {
+            return $this->hasRekanan->url;
+        }
+    }
+    public function getRekananUrlTddAttribute()
+    {
+        if ($this->hasRekanan) {
+            return asset('storage/karyawan/' . $this->hasRekanan->tdd);
+        }
+    }
     public function getAlamatRekananAttribute()
     {
         if ($this->hasRekanan) {

@@ -24,13 +24,13 @@
                                     <tr>
                                         <th># </th>
                                         <th>No.</th>
-                                        <th>Nomor SPK</th>
+                                        <th width="205">Nomor SPK</th>
                                         <th>Rekanan</th>
                                         <th>Tanggal Mulai</th>
                                         <th>Tanggal Selesai</th>
                                         <th width="100">Wilayah</th>
                                         <th>Lokasi</th>
-                                        <th>Total Tagihan</th>
+                                        <th width="150">Total Tagihan</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
@@ -70,7 +70,7 @@
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <th colspan="7" class="text-right">
+                                        <th colspan="8" class="text-right">
 
                                             Total
                                         </th>
@@ -79,7 +79,7 @@
                                         </th>
                                     </tr>
                                     <tr>
-                                        <th colspan="7" class="text-right">
+                                        <th colspan="8" class="text-right">
 
                                             PPN 11%
                                         </th>
@@ -88,7 +88,7 @@
                                         </th>
                                     </tr>
                                     <tr>
-                                        <th colspan="7" class="text-right">
+                                        <th colspan="8" class="text-right">
 
                                             Grand Total
                                         </th>

@@ -192,7 +192,7 @@
                                                             <th>Nama</th>
                                                             <th>Jenis Pekerjaan</th>
                                                             <th width="10">Volume</th>
-                                                            <th>Harga </th>
+                                                            <th>Harga Satuan </th>
 
                                                             <th>Total Harga</th>
                                                         </tr>
@@ -204,16 +204,33 @@
                                                                 <td>{{ $nomor + 1 }}
                                                                 </td>
                                                                 <td>{{ $barang->nama }}</td>
-                                                                <td>{{ $barang->jenis }}</td>
+                                                                <td>{{ $barang->jenis }} {{ $item->status }} </td>
 
                                                                 @if ($item->status === 'diadjust')
-                                                                    <td>
-                                                                        {{ $barang->pivot->qty_perencanaan_adjust }}
-                                                                    </td>
-                                                                    <td>
-                                                                        Rp.
-                                                                        {{ format_uang($barang->pivot->harga_perencanaan_adjust) }}
-                                                                    </td>
+                                                                    @if (isset($item->hasItemPerencanaanAdujst[$key]))
+                                                                        <td>{{ $item->hasItemPerencanaanAdujst[$key]->pivot->qty }}
+
+                                                                        </td>
+                                                                        <td>
+                                                                            Rp.
+                                                                            {{ format_uang($item->hasItemPerencanaanAdujst[$key]->pivot->harga) }}
+                                                                        </td>
+                                                                    @else
+                                                                        @if (isset($item->hasItemPengawas[$nomor]))
+                                                                            <td>{{ $item->hasItemPengawas[$nomor]->pivot->qty }}
+                                                                            </td>
+                                                                            @if (isset($item->hasItemPerencanaan[$nomor]))
+                                                                                <td> Rp.
+                                                                                    {{ format_uang($item->hasItemPerencanaan[$nomor]->pivot->harga) }}
+                                                                                </td>
+                                                                            @endif
+                                                                        @else
+                                                                            <td>{{ $barang->pivot->qty }}</td>
+                                                                            <td>Rp.
+                                                                                {{ format_uang($barang->pivot->harga) }}
+                                                                            </td>
+                                                                        @endif
+                                                                    @endif
                                                                 @else
                                                                     @if (isset($item->hasItemPengawas[$nomor]))
                                                                         <td>{{ $item->hasItemPengawas[$nomor]->pivot->qty }}
@@ -279,22 +296,39 @@
                                                                 <td>
                                                                     {{ $galian->pekerjaan }}
                                                                 </td>
-                                                                <td>
-                                                                    {{ $galian->galian_pengawas_panjang }} m
-                                                                </td>
-                                                                <td>
-                                                                    {{ $galian->galian_pengawas_lebar }} m
-                                                                </td>
-                                                                <td>
-                                                                    {{ $galian->galian_pengawas_dalam }} m
-                                                                </td>
-                                                                <td>
-                                                                    {{ $galian->volume }}
-                                                                    m<sup>2</sup>
-                                                                </td>
-                                                                <td>
-                                                                    {{ $galian->galian_perencanaan_harga_satuan }}
-                                                                </td>
+
+                                                                @if ($item->status === 'diadjust')
+                                                                    <td>{{ $galian->galian_perencanaan_adjust_panjang }}
+                                                                        m
+                                                                    </td>
+                                                                    <td>{{ $galian->galian_perencanaan_adjust_lebar }} m
+                                                                    </td>
+                                                                    <td>{{ $galian->galian_perencanaan_adjust_dalam }} m
+                                                                    </td>
+                                                                    <td>{{ $galian->volume_adjust }} m<sup>2</td>
+                                                                    <td>Rp.
+                                                                        {{ $galian->galian_perencanaan_adjust_harga_satuan }}
+                                                                    </td>
+                                                                @else
+                                                                    <td>
+                                                                        {{ $galian->galian_pengawas_panjang }} m
+                                                                    </td>
+                                                                    <td>
+                                                                        {{ $galian->galian_pengawas_lebar }} m
+                                                                    </td>
+                                                                    <td>
+                                                                        {{ $galian->galian_pengawas_dalam }} m
+                                                                    </td>
+                                                                    <td>
+                                                                        {{ $galian->volume }}
+                                                                        m<sup>2</sup>
+                                                                    </td>
+                                                                    <td>
+                                                                        Rp.
+                                                                        {{ $galian->galian_perencanaan_harga_satuan }}
+                                                                    </td>
+                                                                @endif
+
 
                                                                 </td>
                                                                 <td>Rp. {{ format_uang($galian->total) }}</td>
@@ -313,15 +347,15 @@
 
                                                             @if ($item->status === 'diadjust')
                                                                 <th>
-                                                                    {{ $galian->hasGalianPekerjaan->sum('qty_perencanaan_adjust') }}
+                                                                    {{ $item->total_volume_galian }}
                                                                     m<sup>2</sup>
                                                                 </th>
                                                             @else
                                                                 <th>
                                                                     {{ $item->volume }} m<sup>2</sup>
                                                                 </th>
-                                                                <th></th>
                                                             @endif
+                                                            <th></th>
                                                             <th>Rp.
                                                                 {{ format_uang($item->hasGalianPekerjaan->sum('total')) }}
                                                             </th>
@@ -382,19 +416,26 @@
 
 
                                 @if ($tagihan)
-                                    <div class="col-2">
-                                        @if (auth()->user()->hasRole('rekanan'))
-                                            <a href="{{ route('tagihan.word') }}?id={{ $tagihan->id }}"
-                                                target="_blank" class="btn btn-danger"><span
-                                                    class="nav-icon fa fa-file-word" aria-hidden="true"></span>
-                                                Privew Tagihan</a>
-                                        @endif
-                                        @if ($tagihan->status === 'disetujui')
-                                            <a href="{{ route('tagihan.word') }}?id={{ $tagihan->id }}"
-                                                target="_blank" class="btn btn-danger"><span
-                                                    class="nav-icon fa fa-file-word" aria-hidden="true"></span>
-                                                Privew Tagihan</a>
-                                        @endif
+                                    <div class="col-3">
+                                        <div class="row">
+                                            <div class="col mb-4">
+                                                @if (auth()->user()->hasRole('rekanan'))
+                                                    <a href="{{ route('tagihan.word') }}?id={{ $tagihan->id }}&word=rekanan"
+                                                        target="_blank" class="btn btn-danger"><span
+                                                            class="nav-icon fa fa-file-word" aria-hidden="true"></span>
+                                                        Privew Tagihan</a>
+                                                @endif
+                                            </div>
+                                            <div class="col">
+                                                @if ($tagihan->status === 'disetujui')
+                                                    <a href="{{ route('tagihan.word') }}?id={{ $tagihan->id }}"
+                                                        target="_blank" class="btn btn-success"><span
+                                                            class="nav-icon fa fa-file-word" aria-hidden="true"></span>
+                                                        Privew Tagihan BAP</a>
+                                                @endif
+                                            </div>
+                                        </div>
+
                                     </div>
                                 @endif
                             </div>
