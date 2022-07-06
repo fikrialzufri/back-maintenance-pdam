@@ -55,6 +55,7 @@ class AduanController extends Controller
         if (!auth()->user()->hasRole('superadmin')) {
             if (!auth()->user()->hasRole('rekanan')) {
                 if (auth()->user()->hasRole('admin-distribusi') || auth()->user()->hasRole('asisten-manajer-distribusi')) {
+                    return auth()->user()->karyawan->id_wilayah;
                     $query->where('wilayah_id', auth()->user()->karyawan->id_wilayah);
                 }
             } else {
