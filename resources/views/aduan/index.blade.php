@@ -57,9 +57,9 @@
                                         <td>{{ $item->lokasi }}</td>
                                         <td>{{ ucfirst($item->status_aduan) }}</td>
                                         @if ($item->status == 'draft')
-                                            @canany(['create-aduan', 'delete-aduan'])
+                                            @canany(['edit-aduan', 'delete-aduan'])
                                                 <td class="text-center">
-                                                    @can('create-aduan')
+                                                    @can('edit-aduan')
                                                         <a href="{{ route('aduan.edit', $item->slug) }}"
                                                             class="btn btn-sm btn-warning text-light">
                                                             <i class="nav-icon fas fa-edit"></i> Ubah
