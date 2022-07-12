@@ -294,6 +294,7 @@ class TagihanController extends Controller
                     $pelaksanaan = $PelaksanaanPekerjaan->pluck('id')->toArray();
                     $aduanId = $PelaksanaanPekerjaan->pluck('aduan_id')->toArray();
                     $wilayahId = Aduan::whereIn('id', $aduanId)->pluck('wilayah_id')->toArray();
+                    $wilayahId = array_unique($wilayahId);
                 }
             }
             $nomor_tagihan = $tagihan->nomor_tagihan;
@@ -553,16 +554,29 @@ class TagihanController extends Controller
         DB::beginTransaction();
 
         // list jabatan
-        $listJabatan = Jabatan::whereSlug('manager-distribusi')->orWhere('slug', 'manajer-perencanaan')->orWhere('slug', 'asisten-manajer-perencanaan')->orWhere('slug', 'asisten-manager-pengawas-fisik')->orWhere('slug', 'direktur-teknik')->orWhere('slug', 'keuangan')->get()->pluck('id')->toArray();
+        $listJabatan = Jabatan::where('slug', 'manajer-distribusi')->orWhere('slug', 'manajer-perencanaan')->orWhere('slug', 'asisten-manajer-perencanaan')->orWhere('slug', 'direktur-teknik')->orWhere('slug', 'keuangan')->get()->pluck('id')->toArray();
 
         // list karyawan bedasarkan jabatan
-        $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get();
+        $data  = $this->model()->find($id);
 
+        $PelaksanaanPekerjaan = $data->hasPelaksanaanPekerjaan();
+        if ($PelaksanaanPekerjaan) {
+            $aduanId = $PelaksanaanPekerjaan->pluck('aduan_id')->toArray();
+            $wilayahId = Aduan::whereIn('id', $aduanId)->pluck('wilayah_id')->toArray();
+            $wilayahId = array_unique($wilayahId);
+
+            $ListjabatanAsmen = Jabatan::whereIn('wilayah_id', $wilayahId)->where('nama', 'like', '%Asisten Manajer Distribusi%')->get()->pluck('id')->toArray();
+
+            $ListjabatanAsmen = array_unique($ListjabatanAsmen);
+            $listJabatan = array_merge($listJabatan, $ListjabatanAsmen);
+        }
 
         try {
             DB::commit();
             $user = [];
-            $data  = $this->model()->find($id);
+
+            $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get();
+
             if ($data) {
                 $status = 'dikoreksi';
 
