@@ -125,8 +125,14 @@
                                                     @else
                                                         <i class="nav-icon fa fa-search"></i> Detail
                                                     @endif
-                                                @elseif (auth()->user()->hasRole('asisten-manajer-perencanaan'))
+                                                @elseif (auth()->user()->hasRole('asisten-manajer-pengawas'))
                                                     @if ($item->status_aduan == 'Dikoreksi pengawas')
+                                                        <i class="nav-icon fas fa-eye"></i> Koreksi
+                                                    @else
+                                                        <i class="nav-icon fa fa-search"></i> Detail
+                                                    @endif
+                                                @elseif (auth()->user()->hasRole('asisten-manajer-perencanaan'))
+                                                    @if ($item->status_aduan == 'Dikoreksi Asmen Pengawas')
                                                         <i class="nav-icon fas fa-eye"></i> Koreksi
                                                     @else
                                                         <i class="nav-icon fa fa-search"></i> Detail

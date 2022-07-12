@@ -152,9 +152,20 @@ class PelaksanaanPekerjaan extends Model
             'keterangan',
         )->withTimestamps();
     }
+
     public function hasItemPengawas()
     {
         return $this->belongsToMany(Item::class, 'item_pengawas')->withPivot(
+            'qty',
+            'harga',
+            'total',
+            'keterangan'
+        )->withTimestamps();
+    }
+
+    public function hasItemAsmenPengawas()
+    {
+        return $this->belongsToMany(Item::class, 'item_asmen_pengawas')->withPivot(
             'qty',
             'harga',
             'total',
@@ -247,14 +258,17 @@ class PelaksanaanPekerjaan extends Model
             case 'diadjust':
                 return 5;
                 break;
-            case 'dikoreksi':
+            case 'koreksi pengawas':
                 return 6;
                 break;
-            case 'selesai koreksi':
+            case 'dikoreksi':
                 return 7;
                 break;
-            case 'disetujui':
+            case 'selesai koreksi':
                 return 8;
+                break;
+            case 'disetujui':
+                return 9;
                 break;
             default:
                 return 1;

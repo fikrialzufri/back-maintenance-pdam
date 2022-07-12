@@ -25,6 +25,10 @@ class GalianPekerjaan extends Model
     {
         return $this->hasOne(GalianPengawas::class, 'galian_id');
     }
+    public function hasGalianAsmenPengawas()
+    {
+        return $this->hasOne(GalianAsmen::class, 'galian_id');
+    }
     public function hasGalianPerencanaan()
     {
         return $this->hasOne(GalianPerencanaan::class, 'galian_id');
@@ -84,6 +88,44 @@ class GalianPekerjaan extends Model
             return $this->hasGalianPengawas->total;
         }
     }
+    // Asmen Pengawas
+    public function getGalianAsmenPengawasPanjangAttribute()
+    {
+        if ($this->hasGalianAsmenPengawas) {
+            return $this->hasGalianAsmenPengawas->panjang;
+        }
+    }
+    public function getGalianAsmenPengawasLebarAttribute()
+    {
+        if ($this->hasGalianAsmenPengawas) {
+            return $this->hasGalianAsmenPengawas->lebar;
+        }
+    }
+    public function getGalianAsmenPengawasDalamAttribute()
+    {
+        if ($this->hasGalianAsmenPengawas) {
+            return $this->hasGalianAsmenPengawas->dalam;
+        }
+    }
+    public function getGalianAsmenPengawasKeteranganAttribute()
+    {
+        if ($this->hasGalianAsmenPengawas) {
+            return $this->hasGalianAsmenPengawas->keterangan;
+        }
+    }
+    public function getGalianAsmenPengawasHargaSatuanAttribute()
+    {
+        if ($this->hasGalianAsmenPengawas) {
+            return $this->hasGalianAsmenPengawas->harga_satuan;
+        }
+    }
+    public function getGalianAsmenPengawasTotalAttribute()
+    {
+        if ($this->hasGalianAsmenPengawas) {
+            return $this->hasGalianAsmenPengawas->total;
+        }
+    }
+
     // PerencanaanAdjust
     public function getGalianPerencanaanAdjustPanjangAttribute()
     {
@@ -150,6 +192,16 @@ class GalianPekerjaan extends Model
             $total = $this->hasGalianPengawas->dalam === 0.0
                 ? $this->hasGalianPengawas->panjang * $this->hasGalianPengawas->lebar
                 : $this->hasGalianPengawas->panjang * $this->hasGalianPengawas->lebar * $this->hasGalianPengawas->dalam;
+        }
+        return  $total;
+    }
+    public function getVolumeAsmenAttribute()
+    {
+        $total = 0;
+        if ($this->hasGalianAsmenPengawas) {
+            $total = $this->hasGalianAsmenPengawas->dalam === 0.0
+                ? $this->hasGalianAsmenPengawas->panjang * $this->hasGalianAsmenPengawas->lebar
+                : $this->hasGalianAsmenPengawas->panjang * $this->hasGalianAsmenPengawas->lebar * $this->hasGalianAsmenPengawas->dalam;
         }
         return  $total;
     }

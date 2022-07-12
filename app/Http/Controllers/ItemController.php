@@ -215,15 +215,27 @@ class ItemController extends Controller
     public function getdetail(Request $request)
     {
         // return $request;
+        $karyawan = null;
         try {
             $id = $request->item;
             $item = $this->model()->find($id);
+
+            if (auth()->user()->hasRole('asisten-manajer-pengawas')) {
+                $karyawan = "Asisten Manajer Pengawas";
+            }
+            if (auth()->user()->hasRole('asisten-manajer-perencanaan')) {
+                $karyawan = "Perencanaan";
+            }
+            if (auth()->user()->hasRole('staf-pengawas')) {
+                $karyawan = "Pengawas";
+            }
             $result = [
                 'id' => $item->id,
                 'nama' => $item->nama,
                 'harga' => $item->harga,
                 'harga_malam' => $item->harga_malam,
                 'pekerjaan' => $item->pekerjaan,
+                'karyawan' =>  $karyawan,
                 'jenis' => $item->jenis,
             ];
             $message = 'Data Item ada';

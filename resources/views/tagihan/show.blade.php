@@ -216,8 +216,8 @@
                                                                             {{ format_uang($item->hasItemPerencanaanAdujst[$key]->pivot->harga) }}
                                                                         </td>
                                                                     @else
-                                                                        @if (isset($item->hasItemPengawas[$nomor]))
-                                                                            <td>{{ $item->hasItemPengawas[$nomor]->pivot->qty }}
+                                                                        @if (isset($item->hasItemAsmenPengawas[$nomor]))
+                                                                            <td>{{ $item->hasItemAsmenPengawas[$nomor]->pivot->qty }}
                                                                             </td>
                                                                             @if (isset($item->hasItemPerencanaan[$nomor]))
                                                                                 <td> Rp.
@@ -232,8 +232,8 @@
                                                                         @endif
                                                                     @endif
                                                                 @else
-                                                                    @if (isset($item->hasItemPengawas[$nomor]))
-                                                                        <td>{{ $item->hasItemPengawas[$nomor]->pivot->qty }}
+                                                                    @if (isset($item->hasItemAsmenPengawas[$nomor]))
+                                                                        <td>{{ $item->hasItemAsmenPengawas[$nomor]->pivot->qty }}
                                                                         </td>
                                                                         @if (isset($item->hasItemPerencanaan[$nomor]))
                                                                             <td> Rp.
@@ -259,7 +259,7 @@
                                                         <tr>
                                                             <th colspan="3">Total
                                                             </th>
-                                                            <th>{{ $item->hasItemPengawas->sum('pivot.qty') }}</th>
+                                                            <th>{{ $item->hasItemAsmenPengawas->sum('pivot.qty') }}</th>
                                                             @if ($perencaan === true)
                                                                 <th></th>
                                                                 <th>Rp. {{ format_uang($item->hasItem()->sum('total')) }}
@@ -311,13 +311,13 @@
                                                                     </td>
                                                                 @else
                                                                     <td>
-                                                                        {{ $galian->galian_pengawas_panjang }} m
+                                                                        {{ $galian->galian_asmen_pengawas_panjang }} m
                                                                     </td>
                                                                     <td>
-                                                                        {{ $galian->galian_pengawas_lebar }} m
+                                                                        {{ $galian->galian_asmen_pengawas_lebar }} m
                                                                     </td>
                                                                     <td>
-                                                                        {{ $galian->galian_pengawas_dalam }} m
+                                                                        {{ $galian->galian_asmen_pengawas_dalam }} m
                                                                     </td>
                                                                     <td>
                                                                         {{ $galian->volume }}

@@ -335,6 +335,89 @@
                                                 </form>
                                             </div>
                                         @endif
+                                        @if ($asmenpengawas === true && $pekerjaanUtama->status === 'koreksi pengawas')
+                                            <div class="col-12">
+                                                <form action="" id="formPekerjaan">
+                                                    @if ($rekanan_id == null)
+                                                        @if ($tombolEdit === 'bisa')
+                                                            <div class="row">
+                                                                <div class="col-2">
+                                                                    <h6>Pilih Pekerjaan</h6>
+
+                                                                    <div class="form-group">
+                                                                        <select class="form-control select2"
+                                                                            id="cmbPekerjaan">
+                                                                            <option selected="selected" value="">Pilih
+                                                                                pekerjaan
+                                                                            </option>
+                                                                            @foreach ($listPekerjaan as $i => $peker)
+                                                                                <option value="{{ $peker->id }}"
+                                                                                    id="peker_{{ $peker->id }}">
+                                                                                    {{ $peker->nama }}
+                                                                                </option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col">
+                                                                    <h6>Jumlah</h6>
+                                                                    <div class="form-group">
+                                                                        <div class="input-group mb-2 mr-sm-2">
+                                                                            <input type="text" name="jumlah_pekerjaan"
+                                                                                id="jumlah_pekerjaan" placeholder="jumlah"
+                                                                                class="form-control numberOnly">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col">
+                                                                    <h6>Keterangan</h6>
+                                                                    <div class="form-group">
+                                                                        <div class="input-group mb-2 mr-sm-2">
+                                                                            <input type="text"
+                                                                                name="input_keterangan_pekerjaan"
+                                                                                id="input_keterangan_pekerjaan"
+                                                                                placeholder="Keterangan pekerjaan"
+                                                                                class="form-control">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col">
+                                                                    <h6>Pilih Waktu</h6>
+                                                                    <div class="form-radio">
+                                                                        <form>
+                                                                            <div class="radio radiofill radio-inline">
+                                                                                <label>
+                                                                                    <input type="radio"
+                                                                                        class="harga_pekerjaan"
+                                                                                        name="harga_pekerjaan" value="siang"
+                                                                                        checked="checked">
+                                                                                    <i class="helper"></i>Siang
+                                                                                </label>
+                                                                            </div>
+                                                                            <div class="radio radiofill radio-inline">
+                                                                                <label>
+                                                                                    <input type="radio"
+                                                                                        class="harga_pekerjaan"
+                                                                                        name="harga_pekerjaan" value="malam">
+                                                                                    <i class="helper"></i>Malam
+                                                                                </label>
+                                                                            </div>
+                                                                        </form>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col">
+                                                                    <div class="">
+                                                                        <button type="submit" id="btn_pekerjaan"
+                                                                            class="btn btn-primary">Update
+                                                                            Pekerjaan</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        @endif
+                                                    @endif
+                                                </form>
+                                            </div>
+                                        @endif
                                     </div>
                                 </div>
                                 <form action="{{ $action }}" method="post" id="form-update" role="form">
@@ -353,7 +436,7 @@
                                                     @if ($perencaan == false && $pekerjaanUtama->status === 'dikoreksi')
                                                         <th width="300">Keterangan</th>
                                                     @endif
-                                                    @if ($pekerjaanUtama->status === 'selesai')
+                                                    @if ($pekerjaanUtama->status === 'selesai' || $pekerjaanUtama->status === 'koreksi pengawas')
                                                         <th width="300">Keterangan</th>
                                                     @endif
                                                     @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
@@ -377,18 +460,27 @@
                                                             class="list_table_pekerjaan">
                                                             <td class="text-center nomor_pekerjaan"
                                                                 data-index="{{ $key + 1 }}"
-                                                                @if ($pekerjaanUtama->status === 'dikoreksi' || $pekerjaanUtama->status === 'selesai koreksi') rowspan="3" @elseif ($pekerjaanUtama->status === 'diadjust') rowspan="4" @else rowspan="2" @endif>
+                                                                @if ($pekerjaanUtama->status === 'koreksi pengawas') rowspan="3"
+                                                                @elseif($pekerjaanUtama->status === 'dikoreksi' || $pekerjaanUtama->status == 'selesai koreksi') rowspan="4"
+                                                                @elseif ($pekerjaanUtama->status === 'diadjust') rowspan="5"
+                                                                @else rowspan="2" @endif>
                                                                 {{ $key + 1 }}
                                                             </td>
                                                             <td
-                                                                @if ($pekerjaanUtama->status === 'dikoreksi' || $pekerjaanUtama->status === 'selesai koreksi') rowspan="3" @elseif ($pekerjaanUtama->status === 'diadjust') rowspan="4" @else rowspan="2" @endif>
+                                                                @if ($pekerjaanUtama->status === 'koreksi pengawas') rowspan="3"
+                                                                @elseif($pekerjaanUtama->status === 'dikoreksi' || $pekerjaanUtama->status == 'selesai koreksi') rowspan="4"
+                                                                @elseif ($pekerjaanUtama->status === 'diadjust') rowspan="5"
+                                                                @else rowspan="2" @endif>
                                                                 {{ $pekerjaan->nama }}
                                                             </td>
                                                             <td
-                                                                @if ($pekerjaanUtama->status === 'dikoreksi' || $pekerjaanUtama->status === 'selesai koreksi') rowspan="3" @elseif ($pekerjaanUtama->status === 'diadjust') rowspan="4" @else rowspan="2" @endif>
+                                                                @if ($pekerjaanUtama->status === 'koreksi pengawas') rowspan="3"
+                                                                @elseif($pekerjaanUtama->status === 'dikoreksi' || $pekerjaanUtama->status == 'selesai koreksi') rowspan="4"
+                                                                @elseif ($pekerjaanUtama->status === 'diadjust') rowspan="5"
+                                                                @else rowspan="2" @endif>
                                                                 {{ $pekerjaan->jenis }}
                                                             </td>
-                                                            <td>Rekanan</td>
+                                                            <td>Rekanan </td>
                                                             <td>{{ $pekerjaan->pivot->qty }}</td>
                                                             @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
                                                                 <td>Rp. {{ format_uang($pekerjaan->pivot->harga) }}</td>
@@ -401,7 +493,7 @@
                                                                 <td>Rp. {{ format_uang($pekerjaan->pivot->harga) }}</td>
                                                                 <td>{{ $pekerjaan->pivot->keterangan }}</td>
                                                                 <td
-                                                                    @if ($pekerjaanUtama->status === 'diadjust') rowspan="4" @else rowspan="3" @endif>
+                                                                    @if ($pekerjaanUtama->status === 'diadjust') rowspan="6" @else rowspan="4" @endif>
                                                                     Rp. {{ format_uang($pekerjaan->pivot->total) }}</td>
                                                             @endif
 
@@ -444,7 +536,58 @@
                                                                 @endif
                                                             @endif
                                                         </tr>
+                                                        @if ($pekerjaanUtama->status === 'koreksi pengawas')
+                                                            <tr>
+                                                                <td>Asisten Manajer Pengawas</td>
+                                                                @if ($asmenpengawas === true)
+                                                                    <td><input type="text"
+                                                                            name="qty_pengawas[{{ $pekerjaan->pivot->item_id }}]"
+                                                                            id="qty_pengawas_{{ $pekerjaan->pivot->item_id }}"
+                                                                            placeholder="Koreksi Pengawas"
+                                                                            class="form-control numberOnly"
+                                                                            @if (isset($daftarPekerjaan->hasItemPengawas[$key])) value="{{ $daftarPekerjaan->hasItemPengawas[$key]->pivot->qty }}"
+                                                                            @else
+                                                                            value="{{ $pekerjaan->pivot->qty }}" @endif>
+                                                                    </td>
+                                                                    <td><input type="text"
+                                                                            name="keterangan_pengawas[{{ $pekerjaan->pivot->item_id }}]"
+                                                                            id="keterangan_pengawas_{{ $pekerjaan->pivot->item_id }}"
+                                                                            placeholder="Keterangan Pengawas"
+                                                                            class="form-control">
+                                                                    </td>
+                                                                @else
+                                                                    <td>
+
+                                                                    </td>
+                                                                    <td>
+
+                                                                    </td>
+                                                                @endif
+                                                            </tr>
+                                                        @endif
                                                         @if ($pekerjaanUtama->status === 'dikoreksi')
+                                                            <tr>
+                                                                <td>Asisten Manajer Pengawas</td>
+
+                                                                @if (isset($daftarPekerjaan->hasItemAsmenPengawas[$key]))
+                                                                    <td>
+                                                                        {{ $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty }}
+                                                                    </td>
+                                                                    @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
+                                                                        <td>Rp.
+                                                                            {{ format_uang($daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->harga) }}
+                                                                        </td>
+                                                                    @endif
+                                                                    @if ($pekerjaanUtama->status === 'selesai koreksi' || $pekerjaanUtama->status === 'diadjust')
+                                                                        <td>Rp.
+                                                                            {{ format_uang($daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->harga) }}
+                                                                        </td>
+                                                                    @endif
+                                                                    <td>
+                                                                        {{ $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->keterangan }}
+                                                                    </td>
+                                                                @endif
+                                                            </tr>
                                                             <tr>
                                                                 <td>Perencanaan</td>
                                                                 @if ($perencaan == true)
@@ -483,6 +626,28 @@
                                                             </tr>
                                                         @elseif ($pekerjaanUtama->status === 'selesai koreksi')
                                                             <tr>
+                                                                <td>Asisten Manajer Pengawas</td>
+
+                                                                @if (isset($daftarPekerjaan->hasItemAsmenPengawas[$key]))
+                                                                    <td>
+                                                                        {{ $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty }}
+                                                                    </td>
+                                                                    @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
+                                                                        <td>Rp.
+                                                                            {{ format_uang($daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->harga) }}
+                                                                        </td>
+                                                                    @endif
+                                                                    @if ($pekerjaanUtama->status === 'selesai koreksi' || $pekerjaanUtama->status === 'diadjust')
+                                                                        <td>Rp.
+                                                                            {{ format_uang($daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->harga) }}
+                                                                        </td>
+                                                                    @endif
+                                                                    <td>
+                                                                        {{ $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->keterangan }}
+                                                                    </td>
+                                                                @endif
+                                                            </tr>
+                                                            <tr>
                                                                 <td>Perencanaan</td>
 
                                                                 <td></td>
@@ -497,6 +662,28 @@
 
                                                             </tr>
                                                         @elseif ($pekerjaanUtama->status === 'diadjust')
+                                                            <tr>
+                                                                <td>Asisten Manajer Pengawas</td>
+
+                                                                @if (isset($daftarPekerjaan->hasItemAsmenPengawas[$key]))
+                                                                    <td>
+                                                                        {{ $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty }}
+                                                                    </td>
+                                                                    @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
+                                                                        <td>Rp.
+                                                                            {{ format_uang($daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->harga) }}
+                                                                        </td>
+                                                                    @endif
+                                                                    @if ($pekerjaanUtama->status === 'selesai koreksi' || $pekerjaanUtama->status === 'diadjust')
+                                                                        <td>Rp.
+                                                                            {{ format_uang($daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->harga) }}
+                                                                        </td>
+                                                                    @endif
+                                                                    <td>
+                                                                        {{ $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->keterangan }}
+                                                                    </td>
+                                                                @endif
+                                                            </tr>
                                                             <tr>
                                                                 <td rowspan="2">Perencanaan
                                                                 </td>
@@ -660,6 +847,102 @@
                                                 @endif
                                             </div>
                                         @endif
+                                        @if ($asmenpengawas === true && $pekerjaanUtama->status === 'koreksi pengawas')
+                                            <div class="col-12">
+                                                @if ($rekanan_id == null)
+                                                    @if ($tombolEdit === 'bisa')
+                                                        <div class="row">
+                                                            <div class="col-2">
+                                                                <h6>Pilih Galian</h6>
+
+                                                                <div class="form-group">
+                                                                    <select class="form-control select2" id="cmbGalian">
+                                                                        <option selected="selected" value="">Pilih
+                                                                            galian
+                                                                        </option>
+                                                                        @foreach ($listPekerjaanGalian as $i => $gal)
+                                                                            <option value="{{ $gal->id }}">
+                                                                                {{ $gal->nama }}
+                                                                            </option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col">
+                                                                <h6>Panjang</h6>
+                                                                <div class="form-group">
+                                                                    <div class="input-group mb-2 mr-sm-2">
+                                                                        <input type="text" name="panjang_galian"
+                                                                            id="panjang_galian" placeholder="panjang"
+                                                                            class="form-control numberOnly">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col">
+                                                                <h6>Lebar</h6>
+                                                                <div class="form-group">
+                                                                    <div class="input-group mb-2 mr-sm-2">
+                                                                        <input type="text" name="lebar_galian"
+                                                                            id="lebar_galian" placeholder="lebar"
+                                                                            class="form-control numberOnly">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col">
+                                                                <h6>Dalam</h6>
+                                                                <div class="form-group">
+                                                                    <div class="input-group mb-2 mr-sm-2">
+                                                                        <input type="text" name="dalam_galian"
+                                                                            id="dalam_galian" placeholder="Dalam"
+                                                                            class="form-control numberOnly">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col">
+                                                                <h6>Keterangan</h6>
+                                                                <div class="form-group">
+                                                                    <div class="input-group mb-2 mr-sm-2">
+                                                                        <input type="text" name="input_keterangan_galian"
+                                                                            id="input_keterangan_galian"
+                                                                            placeholder="Keterangan galian"
+                                                                            class="form-control">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col">
+                                                                <h6>Pilih Waktu</h6>
+                                                                <div class="form-radio">
+                                                                    <form>
+                                                                        <div class="radio radiofill radio-inline">
+                                                                            <label>
+                                                                                <input type="radio" class="harga_galian"
+                                                                                    name="harga_galian" value="siang"
+                                                                                    checked="checked">
+                                                                                <i class="helper"></i>Siang
+                                                                            </label>
+                                                                        </div>
+                                                                        <div class="radio radiofill radio-inline">
+                                                                            <label>
+                                                                                <input type="radio" class="harga_galian"
+                                                                                    name="harga_galian" value="malam">
+                                                                                <i class="helper"></i>Malam
+                                                                            </label>
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col">
+                                                                <div class="">
+                                                                    <button type="button" id="btn_galian"
+                                                                        class="btn btn-primary">Update
+                                                                        Galian</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    @endif
+                                                @endif
+                                            </div>
+                                        @endif
                                         <table class="table table-bordered table-responsive" width="100%" id="tableGalian">
                                             <thead>
                                                 <tr>
@@ -693,11 +976,17 @@
                                                             class="list_table_galian">
                                                             <td class="text-center nomor_galian"
                                                                 data-index="{{ $inv + 1 }}"
-                                                                @if ($pekerjaanUtama->status === 'dikoreksi' || $pekerjaanUtama->status === 'selesai koreksi') rowspan="3" @elseif ($pekerjaanUtama->status === 'diadjust') rowspan="4" @else rowspan="2" @endif>
+                                                                @if ($pekerjaanUtama->status === 'koreksi pengawas') rowspan="3"
+                                                                @elseif($pekerjaanUtama->status === 'dikoreksi' || $pekerjaanUtama->status == 'selesai koreksi') rowspan="4"
+                                                                @elseif ($pekerjaanUtama->status === 'diadjust') rowspan="5"
+                                                                @else rowspan="2" @endif>
                                                                 {{ $inv + 1 }}
                                                             </td>
                                                             <td
-                                                                @if ($pekerjaanUtama->status === 'dikoreksi' || $pekerjaanUtama->status === 'selesai koreksi') rowspan="3" @elseif ($pekerjaanUtama->status === 'diadjust') rowspan="4" @else rowspan="2" @endif>
+                                                                @if ($pekerjaanUtama->status === 'koreksi pengawas') rowspan="3"
+                                                                @elseif($pekerjaanUtama->status === 'dikoreksi' || $pekerjaanUtama->status == 'selesai koreksi') rowspan="4"
+                                                                @elseif ($pekerjaanUtama->status === 'diadjust') rowspan="5"
+                                                                @else rowspan="2" @endif>
                                                                 {{ $galian->pekerjaan }}
                                                             </td>
                                                             <td>Rekanan</td>
@@ -719,13 +1008,13 @@
                                                             @if ($pekerjaanUtama->status === 'selesai koreksi' || $pekerjaanUtama->status === 'diadjust')
                                                                 <td>Rp. {{ format_uang($galian->harga_satuan) }}</td>
                                                                 <td
-                                                                    @if ($pekerjaanUtama->status === 'diadjust') rowspan="4" @else rowspan="3" @endif>
+                                                                    @if ($pekerjaanUtama->status === 'diadjust') rowspan="5" @else rowspan="4" @endif>
                                                                     Rp. {{ format_uang($galian->total) }}</td>
                                                             @endif
 
                                                         </tr>
                                                         <tr>
-                                                            <td>Pengawas</td>
+                                                            <td>Pengawas {{ $pekerjaanUtama->status }}</td>
                                                             @if ($pengawas === true && $pekerjaanUtama->status === 'selesai')
                                                                 <td><input type="text"
                                                                         name="panjang_pengawas[{{ $galian->item_id }}]"
@@ -791,6 +1080,11 @@
                                                                         {{ $galian->galian_pengawas_keterangan }}
                                                                     </td>
                                                                 @endif
+                                                                @if ($perencaan == false && $pekerjaanUtama->status === 'koreksi pengawas')
+                                                                    <td>
+                                                                        {{ $galian->galian_pengawas_keterangan }}
+                                                                    </td>
+                                                                @endif
                                                                 @if ($pekerjaanUtama->status === 'selesai koreksi' || $pekerjaanUtama->status === 'diadjust')
                                                                     <td>
                                                                         {{ $galian->galian_pengawas_keterangan }}
@@ -802,7 +1096,104 @@
                                                                 @endif
                                                             @endif
                                                         </tr>
+                                                        @if ($pekerjaanUtama->status === 'koreksi pengawas')
+                                                            <tr>
+                                                                <td>Asisten Manajer Pengawas</td>
+                                                                @if ($asmenpengawas === true)
+                                                                    <td><input type="text"
+                                                                            name="panjang_pengawas[{{ $galian->item_id }}]"
+                                                                            id="panjang_pengawas[{{ $galian->item_id }}]"
+                                                                            placeholder="Panjang Pengawas"
+                                                                            value="{{ $galian->galian_pengawas_panjang }}"
+                                                                            class="form-control numberOnly">
+                                                                    </td>
+                                                                    <td><input type="text"
+                                                                            name="lebar_pengawas[{{ $galian->item_id }}]"
+                                                                            id="lebar_pengawas[{{ $galian->item_id }}]"
+                                                                            placeholder="Lebar Pengawas"
+                                                                            value="{{ $galian->galian_pengawas_lebar }}"
+                                                                            class="form-control numberOnly">
+                                                                    </td>
+                                                                    <td><input type="text"
+                                                                            name="dalam_pengawas[{{ $galian->item_id }}]"
+                                                                            id="dalam_pengawas[{{ $galian->item_id }}]"
+                                                                            placeholder="Dalam Pengawas"
+                                                                            value="{{ $galian->galian_pengawas_dalam }}"
+                                                                            class="form-control numberOnly">
+                                                                    </td>
+                                                                    <td>
+                                                                        <span id="volume_galian_{{ $galian->item_id }}">
+
+                                                                        </span>
+                                                                    </td>
+                                                                    <td><input type="text"
+                                                                            name="keterangan_pengawas_galian[{{ $galian->item_id }}]"
+                                                                            id="keterangan_pengawas_galian_{{ $galian->item_id }}"
+                                                                            placeholder="Keterangan Galian Pengawas"
+                                                                            class="form-control">
+                                                                    </td>
+                                                                @else
+                                                                    <td>
+
+                                                                    </td>
+                                                                    <td>
+
+                                                                    </td>
+                                                                    <td>
+                                                                    </td>
+                                                                    <td>
+
+                                                                    </td>
+                                                                @endif
+                                                            </tr>
+                                                        @endif
                                                         @if ($pekerjaanUtama->status === 'dikoreksi')
+                                                            <tr>
+                                                                <td>Asisten Manajer Pengawas</td>
+                                                                <td>
+                                                                    {{ $galian->galian_asmen_pengawas_panjang }}
+                                                                </td>
+                                                                <td>
+                                                                    {{ $galian->galian_asmen_pengawas_lebar }}
+                                                                </td>
+                                                                <td>
+                                                                    {{ $galian->galian_asmen_pengawas_dalam }}
+                                                                </td>
+                                                                <td>
+                                                                    {{ $galian->volume_asmen }}
+                                                                    m<sup>2
+                                                                </td>
+                                                                @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
+                                                                    <td>Rp.
+                                                                        {{ format_uang($galian->galian_asmen_pengawas_harga_satuan) }}
+                                                                    </td>
+                                                                    <td>
+                                                                        {{ $galian->galian_asmen_pengawas_keterangan }}
+                                                                    </td>
+                                                                    <td>Rp.
+                                                                        {{ format_uang($galian->galian_asmen_pengawas_total) }}
+                                                                    </td>
+                                                                @endif
+                                                                @if ($perencaan == false && $pekerjaanUtama->status === 'dikoreksi')
+                                                                    <td>
+                                                                        {{ $galian->galian_asmen_pengawas_keterangan }}
+                                                                    </td>
+                                                                @endif
+                                                                @if ($perencaan == false && $pekerjaanUtama->status === 'koreksi pengawas')
+                                                                    <td>
+                                                                        {{ $galian->galian_asmen_pengawas_keterangan }}
+                                                                    </td>
+                                                                @endif
+                                                                @if ($pekerjaanUtama->status === 'selesai koreksi' || $pekerjaanUtama->status === 'diadjust')
+                                                                    <td>
+                                                                        {{ $galian->galian_asmen_pengawas_keterangan }}
+                                                                    </td>
+                                                                    <td>
+                                                                        Rp.
+                                                                        {{ format_uang($galian->galian_asmen_pengawas_harga_satuan) }}
+                                                                    </td>
+                                                                @endif
+                                                            </tr>
                                                             <tr>
                                                                 <td>Perencanaan</td>
                                                                 @if ($perencaan == true)
@@ -816,24 +1207,24 @@
                                                                                 <div class="input-group-text">Rp.</div>
                                                                             </div>
                                                                             <input type="text" class="form-control"
-                                                                                id="harga_galian{{ $galian->item_id }}{{ $key }}"
+                                                                                id="harga_galian{{ $galian->item_id }}{{ $inv }}"
                                                                                 name="harga_galian[{{ $galian->id }}]"
-                                                                                value="{{ format_uang($galian->galian_pengawas_harga_satuan) }}"
+                                                                                value="{{ format_uang($galian->galian_asmen_pengawas_harga_satuan) }}"
                                                                                 placeholder="Harga Perencanaan">
                                                                         </div>
                                                                         @push('script')
                                                                             <script>
-                                                                                $("#harga_galian{{ $galian->item_id }}{{ $key }}").on("input", function() {
+                                                                                $("#harga_galian{{ $galian->item_id }}{{ $inv }}").on("input", function() {
 
                                                                                     let val = formatRupiahTanpaRp(this.value, '')
-                                                                                    $("#harga_galian{{ $galian->item_id }}{{ $key }}").val(val)
+                                                                                    $("#harga_galian{{ $galian->item_id }}{{ $inv }}").val(val)
                                                                                 });
                                                                             </script>
                                                                         @endpush
                                                                     </td>
                                                                     <td>
                                                                         <input type="text" class="form-control"
-                                                                            id="keterangan_perencanaa_galian{{ $galian->id }}{{ $key }}"
+                                                                            id="keterangan_perencanaa_galian{{ $galian->id }}{{ $inv }}"
                                                                             name="keterangan_perencanaa_galian[{{ $galian->id }}]"
                                                                             value=""
                                                                             placeholder="Keterangan Perencanaan">
@@ -846,6 +1237,32 @@
                                                             </tr>
                                                         @elseif ($pekerjaanUtama->status === 'selesai koreksi')
                                                             <tr>
+                                                                <td>Asisten Manajer Pengawas</td>
+                                                                <td>
+                                                                    {{ $galian->galian_asmen_pengawas_panjang }}
+                                                                </td>
+                                                                <td>
+                                                                    {{ $galian->galian_asmen_pengawas_lebar }}
+                                                                </td>
+                                                                <td>
+                                                                    {{ $galian->galian_asmen_pengawas_dalam }}
+                                                                </td>
+                                                                <td>
+                                                                    {{ $galian->volume_asmen }}
+                                                                    m<sup>2
+                                                                </td>
+                                                                <td>
+                                                                    {{ $galian->galian_asmen_pengawas_keterangan }}
+                                                                </td>
+                                                                <td>
+                                                                    Rp.
+                                                                    {{ format_uang($galian->galian_asmen_pengawas_harga_satuan) }}
+                                                                </td>
+
+
+
+                                                            </tr>
+                                                            <tr>
                                                                 <td>Perencanaan</td>
                                                                 <td></td>
                                                                 <td></td>
@@ -856,6 +1273,32 @@
 
                                                             </tr>
                                                         @elseif ($pekerjaanUtama->status === 'diadjust')
+                                                            <tr>
+                                                                <td>Asisten Manajer Pengawas</td>
+                                                                <td>
+                                                                    {{ $galian->galian_asmen_pengawas_panjang }}
+                                                                </td>
+                                                                <td>
+                                                                    {{ $galian->galian_asmen_pengawas_lebar }}
+                                                                </td>
+                                                                <td>
+                                                                    {{ $galian->galian_asmen_pengawas_dalam }}
+                                                                </td>
+                                                                <td>
+                                                                    {{ $galian->volume_asmen }}
+                                                                    m<sup>2
+                                                                </td>
+                                                                <td>
+                                                                    {{ $galian->galian_asmen_pengawas_keterangan }}
+                                                                </td>
+                                                                <td>
+                                                                    Rp.
+                                                                    {{ format_uang($galian->galian_asmen_pengawas_harga_satuan) }}
+                                                                </td>
+
+
+
+                                                            </tr>
                                                             <tr>
                                                                 <td rowspan="2">Perencanaan</td>
                                                                 <td></td>
@@ -1299,7 +1742,8 @@
 
 
 
-                function elementPekerjaan(id, nama, slug, jenis, nomor, modul, jumlah, jenis_harga, keterangan = null) {
+                function elementPekerjaan(id, nama, slug, jenis, nomor, modul, jumlah, jenis_harga, keterangan = null,
+                    karyawan = 'Pengawas') {
                     let modulLowcasse = capitalizeFirstLetter(modul);
                     let pekerjaanUtama = $('#idPekerjaan').val();
 
@@ -1308,7 +1752,7 @@
                     </td>
                     <td>${nama}</td>
                     <td>${jenis}</td>
-                    <td>Pengawas</td>
+                    <td>${karyawan}</td>
                     <td>
                         <input type="text" name="qty_pengawas[${id}]"
                         id="qty_pengawas_${id}" value="${jumlah}"
@@ -1410,11 +1854,12 @@
                                         id,
                                         nama,
                                         slug,
+                                        karyawan,
                                         jenis
                                     } = data.data;
                                     let content = elementPekerjaan(
                                         id, nama, slug, jenis, nomor, modul, jumlah, jenis_harga,
-                                        keterangan
+                                        keterangan, karyawan
                                     );
                                     $('.' + modul + 'TidakAda').remove();
                                     $('#table' + modulLowcasse).append(content);
@@ -1476,7 +1921,7 @@
                 })
 
                 function elementPekerjaanGalian(id, nama, nomor, modul, panjang, lebar, dalam, jenis_harga, keterangan =
-                    null) {
+                    null, karyawan) {
                     let modulLowcasse = capitalizeFirstLetter(modul);
                     let pekerjaanUtama = $('#idPekerjaan').val();
 
@@ -1484,7 +1929,7 @@
                     <td class="text-center nomor_${modul}" data-index="${nomor}">${nomor}
                     </td>
                     <td>${nama}</td>
-                    <td>Pengawas</td>
+                    <td>${karyawan}</td>
                     <td>
                         <input type="text" name="panjang_pengawas[${id}]"
                         id="panjang_pengawas_${id}" value="${panjang}"
@@ -1566,7 +2011,8 @@
                                         id,
                                         nama,
                                         slug,
-                                        jenis
+                                        jenis,
+                                        karyawan
                                     } = data.data;
                                     let content = elementPekerjaanGalian(
                                         id, nama,
@@ -1576,8 +2022,10 @@
                                         lebar,
                                         dalam,
                                         jenis_harga,
-                                        keterangan
+                                        keterangan,
+                                        karyawan
                                     );
+
                                     $('.' + modul + 'TidakAda').remove();
                                     $('#table' + modulLowcasse).append(content);
                                     $('#cmb' + modulLowcasse).val(null).trigger('change');

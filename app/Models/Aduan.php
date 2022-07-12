@@ -167,8 +167,10 @@ class Aduan extends Model
                     $status  = "Sedang dikerjakan";
                 } else if ($this->hasPenunjukanPekerjaan->status == 'selesai') {
                     $status  = "Selesai dikerjakan";
-                } else if ($this->hasPenunjukanPekerjaan->status == 'dikoreksi') {
+                } else if ($this->hasPenunjukanPekerjaan->status == 'koreksi pengawas') {
                     $status  = "Dikoreksi pengawas";
+                } else if ($this->hasPenunjukanPekerjaan->status == 'dikoreksi') {
+                    $status  = "Dikoreksi Asmen Pengawas";
                 } else {
                     $status  = $this->hasPenunjukanPekerjaan->status;
                 }
@@ -201,12 +203,36 @@ class Aduan extends Model
             if ($this->hasPenunjukanPekerjaan->status) {
                 if ($this->hasPenunjukanPekerjaan->status == 'selesai') {
                     $status  = 1;
+                } else if ($this->hasPenunjukanPekerjaan->status == 'koreksi pengawas') {
+                    $status  = 2;
+                } else if ($this->hasPenunjukanPekerjaan->status == 'selesai koreksi') {
+                    $status  = 3;
+                } else if ($this->hasPenunjukanPekerjaan->status == 'dikoreksi') {
+                    $status  = 4;
+                } else if ($this->hasPenunjukanPekerjaan->status == 'draft') {
+                    $status  = 5;
+                }
+            }
+        }
+        return $status;
+    }
+    public function getStatusOrderAsemPengawasAttribute()
+    {
+        $status = 5;
+        if ($this->hasPenunjukanPekerjaan) {;
+            if ($this->hasPenunjukanPekerjaan->status) {
+                if ($this->hasPenunjukanPekerjaan->status == 'koreksi pengawas') {
+                    $status  = 1;
+                } else if ($this->hasPenunjukanPekerjaan->status == 'selesai') {
+                    $status  = 2;
                 } else if ($this->hasPenunjukanPekerjaan->status == 'dikoreksi') {
                     $status  = 2;
                 } else if ($this->hasPenunjukanPekerjaan->status == 'selesai koreksi') {
                     $status  = 3;
-                } else if ($this->hasPenunjukanPekerjaan->status == 'draft') {
+                } else if ($this->hasPenunjukanPekerjaan->status == 'diadjust') {
                     $status  = 4;
+                } else if ($this->hasPenunjukanPekerjaan->status == 'draft') {
+                    $status  = 5;
                 }
             }
         }
@@ -234,6 +260,18 @@ class Aduan extends Model
         }
         return $status;
     }
+    public function getStatusOrderPerencanaanAttribute()
+    {
+        $status = 8;
+        if ($this->hasPenunjukanPekerjaan) {;
+            if ($this->hasPenunjukanPekerjaan->status) {
+                if ($this->hasPenunjukanPekerjaan->status == 'dikoreksi' && $this->hasPenunjukanPekerjaan->tagihan = 'tidak') {
+                    $status  = 1;
+                }
+            }
+        }
+        return $status;
+    }
     public function getBtnAttribute()
     {
         $btn = 'btn-primary';
@@ -245,13 +283,12 @@ class Aduan extends Model
                     if (auth()->user()->hasRole('staf-pengawas')) {
                         $btn  = "btn-danger";
                     }
-                    if (auth()->user()->hasRole('asisten-manajer-perencanaan')) {
-                        $btn  = "btn-primary";
+                } else if ($this->hasPenunjukanPekerjaan->status == 'koreksi pengawas') {
+                    if (auth()->user()->hasRole('asisten-manajer-pengawas')) {
+                        $btn  = "btn-danger";
                     }
                 } else if ($this->hasPenunjukanPekerjaan->status == 'dikoreksi') {
-                    if (auth()->user()->hasRole('staf-pengawas')) {
-                        $btn  = "btn-primary";
-                    }
+
                     if (auth()->user()->hasRole('asisten-manajer-perencanaan')) {
                         $btn  = "btn-danger";
                     }
