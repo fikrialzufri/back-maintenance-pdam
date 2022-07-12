@@ -13,10 +13,12 @@
                         {{ $data->appends(request()->input())->links() }}
                         <div class="">
                             @if ($tambah == 'true')
-                                <a href="{{ route($route . '.create') }}"
-                                    class="btn btn-sm btn-primary float-right text-light">
-                                    <i class="fa fa-plus"></i> Tambah Data
-                                </a>
+                                @canany(['edit-' . $route, 'delete-' . $route])
+                                    <a href="{{ route($route . '.create') }}"
+                                        class="btn btn-sm btn-primary float-right text-light">
+                                        <i class="fa fa-plus"></i> Tambah Data
+                                    </a>
+                                @endcan
                             @endif
                             @if ($upload == 'true')
                                 <a href="{{ route($route . '.upload') }}"
@@ -63,7 +65,9 @@
                                             <th>{{ ucfirst($header['name']) }}</th>
                                         @endif
                                     @endforeach
-                                    <th class="text-center">Aksi</th>
+                                    @canany(['edit-' . $route, 'delete-' . $route])
+                                        <th class="text-center">Aksi</th>
+                                    @endcan
                                 </tr>
                             </thead>
                             <tbody>
@@ -86,27 +90,34 @@
                                                 <td>{{ $item[$header['name']] }}</td>
                                             @endif
                                         @endforeach
-                                        <td class="text-center">
-                                            @if (isset($button))
-                                                @foreach ($button as $key => $val)
-                                                    @include('template.button')
-                                                @endforeach
-                                            @endif
-                                            <a href="{{ route($route . '.edit', $item->id) }}"
-                                                class="btn btn-sm btn-warning text-light" data-toggle="tooltip"
-                                                data-placement="top" title="Edit">
-                                                <i class="nav-icon fas fa-edit"></i> Ubah</a>
-                                            <form id="form-{{ $item->id }}"
-                                                action="{{ route($route . '.destroy', $item->id) }}" method="POST"
-                                                style="display: none;">
-                                                {{ csrf_field() }}
-                                                {{ method_field('DELETE') }}
-                                            </form>
-                                            <button class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top"
-                                                title="Hapus" onclick=deleteconf("{{ $item->id }}")>
-                                                <i class="fa fa-trash"></i> Hapus
-                                            </button>
-                                        </td>
+                                        @canany(['edit-' . $route, 'delete-' . $route])
+                                            <td class="text-center">
+                                                @if (isset($button))
+                                                    @foreach ($button as $key => $val)
+                                                        @include('template.button')
+                                                    @endforeach
+                                                @endif
+                                                @can('edit-' . $route)
+                                                    <a href="{{ route($route . '.edit', $item->id) }}"
+                                                        class="btn btn-sm btn-warning text-light" data-toggle="tooltip"
+                                                        data-placement="top" title="Edit">
+                                                        <i class="nav-icon fas fa-edit"></i> Ubah</a>
+                                                @endcan
+                                                @can('delete-' . $route)
+                                                    <form id="form-{{ $item->id }}"
+                                                        action="{{ route($route . '.destroy', $item->id) }}" method="POST"
+                                                        style="display: none;">
+                                                        {{ csrf_field() }}
+                                                        {{ method_field('DELETE') }}
+                                                    </form>
+
+                                                    <button class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top"
+                                                        title="Hapus" onclick=deleteconf("{{ $item->id }}")>
+                                                        <i class="fa fa-trash"></i> Hapus
+                                                    </button>
+                                                @endcan
+                                            </td>
+                                        @endcan
                                     </tr>
                                 @empty
                                     <tr>
