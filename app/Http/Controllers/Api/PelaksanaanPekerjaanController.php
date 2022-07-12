@@ -552,12 +552,13 @@ class PelaksanaanPekerjaanController extends Controller
             $body = "Dengan nomor SPK : " . $penunjukanPekerjaan->nomor_pekerjaan . " telah selesai";
             $modul = "pelaksanaan-pekerjaan";
 
-            // notif ke staf pengawas
-            $rekanan = Rekanan::find($user_id);
+            $rekanan = Rekanan::find($rekanan_id);
             if (!empty($rekanan)) {
-                $stafPengawas = Auth::user()->hasRekanan->hasKaryawan;
-                foreach ($stafPengawas as $pengawas) {
-                    $this->notification($data->id, $aduan->slug, $title, $body, $modul, auth()->user()->id, $pengawas->user_id);
+                // notif ke staf pengawas
+                if ($rekanan->hasKaryawan) {
+                    foreach (collect($rekanan->hasKaryawan) as $key => $value) {
+                        $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $value->user_id);
+                    }
                 }
             }
 
