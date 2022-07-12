@@ -236,6 +236,16 @@ class TagihanController extends Controller
                 $rekanan_id = auth()->user()->id_rekanan;
 
                 $query->where('rekanan_id', $rekanan_id);
+            } elseif (auth()->user()->hasRole('asisten-manajer-distribusi')) {
+                $wilayah_id = auth()->user()->id_wilayah;
+
+                $aduan = Aduan::where('wilayah_id', $wilayah_id)->pluck('id')->toArray();
+
+                $PelaksanaanPekerjaan = PelaksanaanPekerjaan::whereIn('aduan_id', $aduan)->pluck('id')->toArray();
+
+                $query->whereHas('hasPelaksanaanPekerjaan', function ($q) use ($PelaksanaanPekerjaan) {
+                    $q->whereIn('tagihan_pelaksanaan.pelaksanaan_pekerjaan_id', $PelaksanaanPekerjaan);
+                });
             } else {
                 $list_rekanan_id = auth()->user()->karyawan->hasRekanan->pluck('id');
                 if (count($list_rekanan_id) > 0) {
@@ -358,10 +368,10 @@ class TagihanController extends Controller
             if (auth()->user()->hasRole('staf-pengawas')) {
                 $listJabatan = Jabatan::where('slug', 'manajer-distribusi')->get()->pluck('id')->toArray();
 
-                $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get()->pluck('user_id')->toArray();
+                $listKaryawanManajer = Karyawan::whereIn('jabatan_id', $listJabatan)->get()->pluck('user_id')->toArray();
 
-                $list_persetujuan = Tagihan::whereHas('hasUserMany', function ($q) use ($listKaryawan) {
-                    $q->whereIn('tagihan_user.user_id',  $listKaryawan);
+                $list_persetujuan = $query->whereHas('hasUserMany', function ($q) use ($listKaryawanManajer) {
+                    $q->whereIn('tagihan_user.user_id',  $listKaryawanManajer);
                 })->count();
 
                 if ($list_persetujuan > 0) {
@@ -373,7 +383,7 @@ class TagihanController extends Controller
 
                 $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get()->pluck('user_id')->toArray();
 
-                $list_persetujuan = Tagihan::whereHas('hasUserMany', function ($q) use ($listKaryawan) {
+                $list_persetujuan = $query->whereHas('hasUserMany', function ($q) use ($listKaryawan) {
                     $q->whereIn('tagihan_user.user_id',  $listKaryawan);
                 })->count();
 
@@ -386,7 +396,7 @@ class TagihanController extends Controller
 
                 $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get()->pluck('user_id')->toArray();
 
-                $list_persetujuan = Tagihan::whereHas('hasUserMany', function ($q) use ($listKaryawan) {
+                $list_persetujuan =  $query->whereHas('hasUserMany', function ($q) use ($listKaryawan) {
                     $q->whereIn('tagihan_user.user_id',  $listKaryawan);
                 })->count();
 
@@ -400,7 +410,7 @@ class TagihanController extends Controller
                 // list karyawan bedasarkan jabatan
                 $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get()->pluck('user_id')->toArray();
 
-                $list_persetujuan = Tagihan::whereHas('hasUserMany', function ($q) use ($listKaryawan) {
+                $list_persetujuan =  $query->whereHas('hasUserMany', function ($q) use ($listKaryawan) {
                     $q->whereIn('tagihan_user.user_id',  $listKaryawan);
                 })->count();
 
@@ -418,7 +428,7 @@ class TagihanController extends Controller
                 // list karyawan bedasarkan jabatan
                 $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get()->pluck('user_id')->toArray();
 
-                $list_persetujuan = Tagihan::whereHas('hasUserMany', function ($q) use ($listKaryawan) {
+                $list_persetujuan =  $query->whereHas('hasUserMany', function ($q) use ($listKaryawan) {
                     $q->whereIn('tagihan_user.user_id',  $listKaryawan);
                 })->count();
 

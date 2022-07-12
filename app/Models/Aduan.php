@@ -272,7 +272,7 @@ class Aduan extends Model
                     $status  = 2;
                 }
                 if ($this->hasPenunjukanPekerjaan->status == 'diadjust' && $this->hasPenunjukanPekerjaan->tagihan = 'tidak') {
-                    $status  = 2;
+                    $status  = 3;
                 }
             }
         }

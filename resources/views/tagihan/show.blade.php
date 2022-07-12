@@ -184,7 +184,7 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div>
-                                                <span>Daftar Pekerjaan {{ $item->status }}</span>
+                                                <span>Daftar Pekerjaan</span>
                                                 <table class="table table-bordered " width="100%">
                                                     <thead>
                                                         <tr>
@@ -329,7 +329,7 @@
                                                                     </td>
                                                                     <td>
                                                                         Rp.
-                                                                        {{ format_uang($galian->galian_perencanaan_harga_satuan) }}
+                                                                        {{ $galian->galian_perencanaan_harga_satuan }}
                                                                     </td>
                                                                 @endif
 
@@ -417,21 +417,19 @@
                         <!-- /.card-body -->
                         <div class="card-footer clearfix">
                             <div class="row">
-
-
                                 @if ($tagihan)
                                     <div class="col-3">
                                         <div class="row">
-                                            <div class="col mb-4">
-                                                @if (auth()->user()->hasRole('rekanan'))
+                                            @if (auth()->user()->hasRole('rekanan'))
+                                                <div class="col mb-4">
                                                     <a href="{{ route('tagihan.word') }}?id={{ $tagihan->id }}&word=rekanan"
                                                         target="_blank" class="btn btn-danger"><span
                                                             class="nav-icon fa fa-file-word" aria-hidden="true"></span>
                                                         Privew Tagihan</a>
-                                                @endif
-                                            </div>
+                                                </div>
+                                            @endif
                                             <div class="col">
-                                                @if ($tagihan->status === 'disetujui')
+                                                @if ($tagihan->status === 'disetujui' || $tagihan->status === 'dibayar')
                                                     <a href="{{ route('tagihan.word') }}?id={{ $tagihan->id }}"
                                                         target="_blank" class="btn btn-success"><span
                                                             class="nav-icon fa fa-file-word" aria-hidden="true"></span>
