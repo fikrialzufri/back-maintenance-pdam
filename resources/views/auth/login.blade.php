@@ -29,7 +29,7 @@
 
         .bg {
             /* The image used */
-            background-image: url("img/bag.png");
+            background-image: url("img/bag.jpg");
 
             /* Full height */
             height: 100%;

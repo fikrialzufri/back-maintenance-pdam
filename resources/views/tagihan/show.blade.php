@@ -184,7 +184,7 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div>
-                                                <span>Daftar Pekerjaan</span>
+                                                <span>Daftar Pekerjaan {{ $item->status }}</span>
                                                 <table class="table table-bordered " width="100%">
                                                     <thead>
                                                         <tr>
@@ -207,17 +207,17 @@
                                                                 <td>{{ $barang->jenis }} {{ $item->status }} </td>
 
                                                                 @if ($item->status === 'diadjust')
-                                                                    @if (isset($item->hasItemPerencanaanAdujst[$key]))
-                                                                        <td>{{ $item->hasItemPerencanaanAdujst[$key]->pivot->qty }}
-
+                                                                    @if (isset($item->hasItemPerencanaanAdujst[$nomor]))
+                                                                        <td>{{ $item->hasItemPerencanaanAdujst[$nomor]->pivot->qty }}
                                                                         </td>
                                                                         <td>
                                                                             Rp.
-                                                                            {{ format_uang($item->hasItemPerencanaanAdujst[$key]->pivot->harga) }}
+                                                                            {{ format_uang($item->hasItemPerencanaanAdujst[$nomor]->pivot->harga) }}
                                                                         </td>
                                                                     @else
                                                                         @if (isset($item->hasItemAsmenPengawas[$nomor]))
                                                                             <td>{{ $item->hasItemAsmenPengawas[$nomor]->pivot->qty }}
+                                                                                ini
                                                                             </td>
                                                                             @if (isset($item->hasItemPerencanaan[$nomor]))
                                                                                 <td> Rp.
@@ -257,14 +257,18 @@
                                                     </tbody>
                                                     <tfoot>
                                                         <tr>
-                                                            <th colspan="3">Total
+                                                            <th colspan="3" class="text-right">Total
                                                             </th>
-                                                            <th>{{ $item->hasItemAsmenPengawas->sum('pivot.qty') }}</th>
-                                                            @if ($perencaan === true)
-                                                                <th></th>
-                                                                <th>Rp. {{ format_uang($item->hasItem()->sum('total')) }}
+                                                            @if ($item->status === 'diadjust')
+                                                                <th>{{ $item->hasItemPerencanaanAdujst->sum('pivot.qty') }}
+                                                                </th>
+                                                            @else
+                                                                <th>{{ $item->hasItemAsmenPengawas->sum('pivot.qty') }}
                                                                 </th>
                                                             @endif
+                                                            <th></th>
+                                                            <th>Rp. {{ format_uang($item->hasItem()->sum('total')) }}
+                                                            </th>
                                                         </tr>
                                                     </tfoot>
 
@@ -307,7 +311,7 @@
                                                                     </td>
                                                                     <td>{{ $galian->volume_adjust }} m<sup>2</td>
                                                                     <td>Rp.
-                                                                        {{ $galian->galian_perencanaan_adjust_harga_satuan }}
+                                                                        {{ format_uang($galian->galian_perencanaan_adjust_harga_satuan) }}
                                                                     </td>
                                                                 @else
                                                                     <td>
@@ -320,12 +324,12 @@
                                                                         {{ $galian->galian_asmen_pengawas_dalam }} m
                                                                     </td>
                                                                     <td>
-                                                                        {{ $galian->volume }}
+                                                                        {{ $galian->volume_asmen }}
                                                                         m<sup>2</sup>
                                                                     </td>
                                                                     <td>
                                                                         Rp.
-                                                                        {{ $galian->galian_perencanaan_harga_satuan }}
+                                                                        {{ format_uang($galian->galian_perencanaan_harga_satuan) }}
                                                                     </td>
                                                                 @endif
 
@@ -342,10 +346,10 @@
                                                     </tbody>
                                                     <tfoot>
                                                         <tr>
-                                                            <th colspan="5"> Total
+                                                            <th colspan="7" class="text-right"> Total
                                                             </th>
 
-                                                            @if ($item->status === 'diadjust')
+                                                            {{-- @if ($item->status === 'diadjust')
                                                                 <th>
                                                                     {{ $item->total_volume_galian }}
                                                                     m<sup>2</sup>
@@ -355,7 +359,7 @@
                                                                     {{ $item->volume }} m<sup>2</sup>
                                                                 </th>
                                                             @endif
-                                                            <th></th>
+                                                            <th></th> --}}
                                                             <th>Rp.
                                                                 {{ format_uang($item->hasGalianPekerjaan->sum('total')) }}
                                                             </th>
