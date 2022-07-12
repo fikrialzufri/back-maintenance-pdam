@@ -480,7 +480,7 @@
                                                                 @else rowspan="2" @endif>
                                                                 {{ $pekerjaan->jenis }}
                                                             </td>
-                                                            <td>Rekanan </td>
+                                                            <td>Rekanan {{ $pekerjaanUtama->status }}</td>
                                                             <td>{{ $pekerjaan->pivot->qty }}</td>
                                                             @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
                                                                 <td>Rp. {{ format_uang($pekerjaan->pivot->harga) }}</td>
@@ -493,7 +493,7 @@
                                                                 <td>Rp. {{ format_uang($pekerjaan->pivot->harga) }}</td>
                                                                 <td>{{ $pekerjaan->pivot->keterangan }}</td>
                                                                 <td
-                                                                    @if ($pekerjaanUtama->status === 'diadjust') rowspan="6" @else rowspan="4" @endif>
+                                                                    @if ($pekerjaanUtama->status === 'diadjust') rowspan="5" @else rowspan="4" @endif>
                                                                     Rp. {{ format_uang($pekerjaan->pivot->total) }}</td>
                                                             @endif
 
@@ -1319,7 +1319,7 @@
                                                                 <td> {{ $galian->galian_perencanaan_adjust_keterangan }}
                                                                 </td>
                                                                 <td>Rp.
-                                                                    {{ $galian->galian_perencanaan_adjust_harga_satuan }}
+                                                                    {{ format_uang($galian->galian_perencanaan_adjust_harga_satuan) }}
                                                                 </td>
 
                                                             </tr>

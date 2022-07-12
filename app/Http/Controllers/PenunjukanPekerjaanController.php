@@ -18,6 +18,7 @@ use App\Models\JenisAduan;
 use App\Models\Karyawan;
 use App\Models\Kategori;
 use App\Models\Notifikasi;
+use App\Models\PelakasanaanAsmen;
 use App\Models\PelakasanaanItem;
 use App\Models\PelakasanaanPengawas;
 use App\Models\PelaksanaanAdjust;
@@ -687,14 +688,16 @@ class PenunjukanPekerjaanController extends Controller
 
 
                             $cekItemPengawas[$key] = PelakasanaanPengawas::where('item_id', $key)->where('pelaksanaan_pekerjaan_id', $PelaksanaanPekerjaan->id)->first();
-                            if ($cekItemPengawas[$key]) {
+
+                            $cekItemAsmenPengawas[$key] = PelakasanaanAsmen::where('item_id', $key)->where('pelaksanaan_pekerjaan_id', $PelaksanaanPekerjaan->id)->first();
+                            if ($cekItemAsmenPengawas[$key]) {
 
                                 // rekanan
                                 $listitem[$key] = [
                                     'keterangan' => $cekItem[$key]->keterangan,
                                     'harga' => $cekItem[$key]->harga,
                                     'qty' => $cekItem[$key]->qty,
-                                    'total' =>  str_replace(".", "", $value) *  $cekItemPengawas[$key]->qty,
+                                    'total' =>  str_replace(".", "", $value) *  $cekItemAsmenPengawas[$key]->qty,
                                 ];
 
                                 // harga pengawas
@@ -702,13 +705,19 @@ class PenunjukanPekerjaanController extends Controller
                                     'keterangan' => $cekItemPengawas[$key]->keterangan,
                                     'harga' => $cekItemPengawas[$key]->harga,
                                     'qty' => $cekItemPengawas[$key]->qty,
-                                    'total' => str_replace(".", "", $value) *  $cekItemPengawas[$key]->qty,
+                                    'total' => str_replace(".", "", $value) *  $cekItemAsmenPengawas[$key]->qty,
+                                ];
+                                $listitemAsmenPengawas[$key] = [
+                                    'keterangan' => $cekItemAsmenPengawas[$key]->keterangan,
+                                    'harga' => $cekItemAsmenPengawas[$key]->harga,
+                                    'qty' => $cekItemAsmenPengawas[$key]->qty,
+                                    'total' => str_replace(".", "", $value) *  $cekItemAsmenPengawas[$key]->qty,
                                 ];
                                 // harga perencanaan
                                 $listitemPerencanaan[$key] = [
                                     'keterangan' => isset($request->keterangan_perencanaan_pekerjaan[$key]) ? $request->keterangan_perencanaan_pekerjaan[$key] : null,
                                     'harga' => str_replace(".", "", $value),
-                                    'total' => str_replace(".", "", $value) * $cekItemPengawas[$key]->qty,
+                                    'total' => str_replace(".", "", $value) * $cekItemAsmenPengawas[$key]->qty,
                                 ];
                             }
                         }
@@ -920,7 +929,7 @@ class PenunjukanPekerjaanController extends Controller
 
                             if (isset($cekGalianAsmenPengawas[$gal])) {
                                 if ($cekItemGalian[$gal] != null) {
-                                    $dataTotalGalianPerencanaan[$gal] = isset($cekGalianAsmenPengawas[$gal]->dalam) || $cekGalianAsmenPengawas[$gal]->dalam === 0.00  ? ($cekGalianAsmenPengawas[$gal]->panjang *  $cekGalianAsmenPengawas[$gal]->lebar) *   str_replace(".", "", $galian) : ($cekGalianAsmenPengawas[$gal]->panjang *  $cekGalianAsmenPengawas[$gal]->lebar * $cekGalianAsmenPengawas[$gal]->dalam) *   str_replace(".", "", $galian);
+                                    $dataTotalGalianPerencanaan[$gal] = $cekGalianAsmenPengawas[$gal]->volume_asmen * str_replace(".", "", $galian);
 
                                     // update galian rekanan
                                     $cekItemGalian[$gal]->total = $dataTotalGalianPerencanaan[$gal];
@@ -942,17 +951,6 @@ class PenunjukanPekerjaanController extends Controller
                                         $newGalianPerencanaan[$gal]->galian_id =  $cekItemGalian[$gal]->id;
                                         $newGalianPerencanaan[$gal]->item_id =  isset($cekItemGalian[$gal]->item_id) ? $cekItemGalian[$gal]->item_id : null;
                                         $newGalianPerencanaan[$gal]->total =   $dataTotalGalianPerencanaan[$gal];
-                                        $newGalianPerencanaan[$gal]->harga_satuan =  str_replace(".", "", $galian);
-                                        $newGalianPerencanaan[$gal]->keterangan = isset($request->keterangan_perencanaa_galian[$gal]) ? $request->keterangan_perencanaa_galian[$gal] : null;
-                                        $newGalianPerencanaan[$gal]->user_id = auth()->user()->id;
-                                        $newGalianPerencanaan[$gal]->save();
-                                    } else {
-
-                                        // GalianPengawas tidak ada
-                                        $newGalianPerencanaan[$gal] =  new GalianPerencanaan;
-                                        $newGalianPerencanaan[$gal]->galian_id =  $cekItemGalian[$gal]->id;
-                                        $newGalianPerencanaan[$gal]->item_id =  isset($cekItemGalian[$gal]->item_id) ? $cekItemGalian[$gal]->item_id : null;
-                                        $newGalianPerencanaan[$gal]->total =  0;
                                         $newGalianPerencanaan[$gal]->harga_satuan =  str_replace(".", "", $galian);
                                         $newGalianPerencanaan[$gal]->keterangan = isset($request->keterangan_perencanaa_galian[$gal]) ? $request->keterangan_perencanaa_galian[$gal] : null;
                                         $newGalianPerencanaan[$gal]->user_id = auth()->user()->id;
@@ -1011,48 +1009,50 @@ class PenunjukanPekerjaanController extends Controller
 
         // pekerjaan
         DB::beginTransaction();
+        foreach ($request->qty_perencanaan as $key => $value) {
+
+            $cekItem[$key] = PelakasanaanItem::where('item_id', $key)->where('pelaksanaan_pekerjaan_id', $PelaksanaanPekerjaan->id)->first();
+            $harga_satuan[$key] =  str_replace(".", "", $request->harga_satuan[$key]);
+            if ($cekItem[$key]) {
+                $listitem[$key] = [
+                    'keterangan' => $cekItem[$key]->keterangan,
+                    'harga' => $cekItem[$key]->harga,
+                    'qty' => $cekItem[$key]->qty,
+                    'total' => ($harga_satuan[$key] * $value),
+                ];
+                $listitemPerencanaan[$key] = [
+                    'keterangan' => isset($request->keterangan_perencanaan[$key]) ? $request->keterangan_perencanaan[$key] : null,
+                    'harga' => isset($request->harga_satuan[$key]) ? (float) str_replace(".", "", $request->harga_satuan[$key]) : null,
+                    'qty' => (float) $value,
+                    'total' => ($harga_satuan[$key] * $value),
+                ];
+            } else {
+                $listitem[$key] = [
+                    'keterangan' => null,
+                    'harga' => isset($request->harga_satuan[$key]) ? (float) str_replace(".", "", $request->harga_satuan[$key]) : 0,
+                    'qty' => (float) $value,
+                    'total' => ($harga_satuan[$key] * $value),
+                ];
+                $listitemPerencanaan[$key] = [
+                    'keterangan' => isset($request->keterangan_perencanaan[$key]) ? $request->keterangan_perencanaan[$key] : null,
+                    'harga' => isset($request->harga_satuan[$key]) ? (float) str_replace(".", "", $request->harga_satuan[$key]) : null,
+                    'qty' => (float) $value,
+                    'total' => ($harga_satuan[$key] * $value),
+                ];
+            }
+        }
+        // end pekerjaan
+
+        // return $listitem;
+
+        if (auth()->user()->hasRole('asisten-manajer-perencanaan')) {
+            $status = 'diadjust';
+        }
+
+        // return $request;
+
         try {
             DB::commit();
-            foreach ($request->qty_perencanaan as $key => $value) {
-
-                $cekItem[$key] = PelakasanaanItem::where('item_id', $key)->where('pelaksanaan_pekerjaan_id', $PelaksanaanPekerjaan->id)->first();
-                $harga_satuan[$key] =  str_replace(".", "", $request->harga_satuan[$key]);
-                if ($cekItem[$key]) {
-                    $listitem[$key] = [
-                        'keterangan' => $cekItem[$key]->keterangan,
-                        'harga' => $cekItem[$key]->harga,
-                        'qty' => $cekItem[$key]->qty,
-                        'total' => ($harga_satuan[$key] * $value),
-                    ];
-                    $listitemPerencanaan[$key] = [
-                        'keterangan' => isset($request->keterangan_perencanaan[$key]) ? $request->keterangan_perencanaan[$key] : null,
-                        'harga' => isset($request->harga_satuan[$key]) ? (float) str_replace(".", "", $request->harga_satuan[$key]) : null,
-                        'qty' => (float) $value,
-                        'total' => ($harga_satuan[$key] * $value),
-                    ];
-                } else {
-                    $listitem[$key] = [
-                        'keterangan' => null,
-                        'harga' => isset($request->harga_satuan[$key]) ? (float) str_replace(".", "", $request->harga_satuan[$key]) : 0,
-                        'qty' => (float) $value,
-                        'total' => ($harga_satuan[$key] * $value),
-                    ];
-                    $listitemPerencanaan[$key] = [
-                        'keterangan' => isset($request->keterangan_perencanaan[$key]) ? $request->keterangan_perencanaan[$key] : null,
-                        'harga' => isset($request->harga_satuan[$key]) ? (float) str_replace(".", "", $request->harga_satuan[$key]) : null,
-                        'qty' => (float) $value,
-                        'total' => ($harga_satuan[$key] * $value),
-                    ];
-                }
-            }
-            // end pekerjaan
-
-            // return $listitem;
-
-            if (auth()->user()->hasRole('asisten-manajer-perencanaan')) {
-                $status = 'diadjust';
-            }
-
             if ($PelaksanaanPekerjaan) {
 
                 $PelaksanaanPekerjaan->status = $status;
@@ -1068,6 +1068,7 @@ class PenunjukanPekerjaanController extends Controller
                             $cekItemGalian[$gal] = GalianPekerjaan::find($gal);
 
                             $cekGalianPengawas[$gal] =  GalianPengawas::where('galian_id', $gal)->first();
+                            $cekGalianAsmenPengawas[$gal] =  GalianAsmen::where('galian_id', $gal)->first();
                             $harga_satuan[$gal] =  str_replace(".", "", $request->harga_satuan_galian[$gal]);
 
                             $datapanjang[$gal] = $galian;
@@ -1077,16 +1078,26 @@ class PenunjukanPekerjaanController extends Controller
                             $datalebar[$gal] = isset($request->lebar_perencanaan[$gal]) ? $request->lebar_perencanaan[$gal] : 0;
                             $dataketerangan[$gal] = isset($request->keterangan_perencanaan_galian[$gal]) ? $request->keterangan_perencanaan_galian[$gal] : null;
 
-                            $dataTotalGalianPerencanaan[$gal] =  $datadalam[$gal] === 0.00 ? ((float) $datapanjang[$gal] * (float) $datalebar[$gal]) * (float) $harga_satuan[$gal] : ((float) $datapanjang[$gal] * (float) $datalebar[$gal] * (float) $datadalam[$gal]) * (float) $harga_satuan[$gal];
+                            $dataTotalGalianPerencanaan[$gal] =  $datadalam[$gal] === 0.00 ? ((float) $datapanjang[$gal]
+                                * (float) $datalebar[$gal])
+                                * (float) $harga_satuan[$gal] : ((float) $datapanjang[$gal] *
+                                    (float) $datalebar[$gal] *
+                                    (float) $datadalam[$gal]) *
+                                (float) $harga_satuan[$gal];
 
                             if ($cekItemGalian[$gal]) {
-                                if ($cekGalianPengawas[$gal]) {
+                                if ($cekGalianAsmenPengawas[$gal]) {
                                     // update galian rekanan
                                     $cekItemGalian[$gal]->total = $dataTotalGalianPerencanaan[$gal];
                                     $cekItemGalian[$gal]->save();
                                     //  update galian pengawas
-                                    $cekGalianPengawas[$gal]->total = $dataTotalGalianPerencanaan[$gal];
-                                    $cekGalianPengawas[$gal]->save();
+                                    if ($cekGalianPengawas[$gal]) {
+                                        $cekGalianPengawas[$gal]->total = $dataTotalGalianPerencanaan[$gal];
+                                        $cekGalianPengawas[$gal]->save();
+                                    }
+
+                                    $cekGalianAsmenPengawas[$gal]->total = $dataTotalGalianPerencanaan[$gal];
+                                    $cekGalianAsmenPengawas[$gal]->save();
 
                                     //
                                     $newGalianPerencanaan[$gal] =  new GalianPerencanaanAdjust;
@@ -1116,31 +1127,6 @@ class PenunjukanPekerjaanController extends Controller
                                 $newGalianRekanan[$gal]->user_id = auth()->user()->id;
                                 $newGalianRekanan[$gal]->pelaksanaan_pekerjaan_id = $PelaksanaanPekerjaan->id;
                                 $newGalianRekanan[$gal]->save();
-
-                                // galian pengawas
-                                // $newGalianPengawas[$gal] =  new GalianPengawas;
-                                // $newGalianPengawas[$gal]->galian_id =  $newGalianRekanan[$gal]->id;
-                                // $newGalianPengawas[$gal]->item_id =  $gal;
-                                // $newGalianPengawas[$gal]->panjang =  0;
-                                // $newGalianPengawas[$gal]->lebar =  0;
-                                // $newGalianPengawas[$gal]->dalam =  0;
-                                // $newGalianPengawas[$gal]->total = $dataTotalGalianPerencanaan[$gal];
-                                // $newGalianPengawas[$gal]->harga_satuan = $harga_satuan[$gal];
-                                // $newGalianPengawas[$gal]->harga = isset($request->jenis_harga[$gal]) ? $request->jenis_harga[$gal] : "siang";
-                                // $newGalianPengawas[$gal]->keterangan =  $dataketerangan[$gal];
-                                // $newGalianPengawas[$gal]->user_id = auth()->user()->id;
-                                // $newGalianPengawas[$gal]->save();
-
-                                // galian perencanaan
-                                // $newGalianPerenncanaan[$gal] =  new GalianPerencanaan();
-                                // $newGalianPerenncanaan[$gal]->galian_id =  $newGalianRekanan[$gal]->id;
-                                // $newGalianPerenncanaan[$gal]->item_id =  $gal;
-                                // $newGalianPerenncanaan[$gal]->total = $dataTotalGalianPerencanaan[$gal];
-                                // $newGalianPerenncanaan[$gal]->harga_satuan = $harga_satuan[$gal];
-                                // $newGalianPerenncanaan[$gal]->harga = isset($request->jenis_harga[$gal]) ? $request->jenis_harga[$gal] : "siang";
-                                // $newGalianPerenncanaan[$gal]->keterangan =  $dataketerangan[$gal];
-                                // $newGalianPerenncanaan[$gal]->user_id = auth()->user()->id;
-                                // $newGalianPerenncanaan[$gal]->save();
 
                                 // perecanaan adjust
                                 $newGalianPerencanaanAdjust[$gal] =  new GalianPerencanaanAdjust;
@@ -1642,7 +1628,7 @@ class PenunjukanPekerjaanController extends Controller
         $start =  Carbon::now()->subMonths(2)->startOfMonth()->format('Y-m-d') . ' 00:00:01';
         $end =   Carbon::now()->endOfMonth()->format('Y-m-d') . ' 23:59:59';
 
-        $query->where('status', 'selesai koreksi')->whereOr('status', 'diadjust')->where('tagihan', 'tidak')->whereBetween(DB::raw('DATE(tanggal_selesai)'), array($start, $end));
+        $query->where('status', 'selesai koreksi')->orWhere('status', 'diadjust')->where('tagihan', 'tidak')->whereBetween(DB::raw('DATE(tanggal_selesai)'), array($start, $end));
         $penunjukan =  $query->get();
 
         $total_lokasi = $query->count();

@@ -57,4 +57,13 @@ class GalianAsmen extends Model
             return $this->hasGalianPengawas->keterangan;
         }
     }
+
+    public function getVolumeAsmenAttribute()
+    {
+        $total = 0;
+        $total = $this->dalam === 0.0
+            ? $this->panjang * $this->lebar
+            : $this->panjang * $this->lebar * $this->dalam;
+        return  $total;
+    }
 }

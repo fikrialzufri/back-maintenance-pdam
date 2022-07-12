@@ -268,6 +268,12 @@ class Aduan extends Model
                 if ($this->hasPenunjukanPekerjaan->status == 'dikoreksi' && $this->hasPenunjukanPekerjaan->tagihan = 'tidak') {
                     $status  = 1;
                 }
+                if ($this->hasPenunjukanPekerjaan->status == 'selesai koreksi' && $this->hasPenunjukanPekerjaan->tagihan = 'tidak') {
+                    $status  = 2;
+                }
+                if ($this->hasPenunjukanPekerjaan->status == 'diadjust' && $this->hasPenunjukanPekerjaan->tagihan = 'tidak') {
+                    $status  = 2;
+                }
             }
         }
         return $status;

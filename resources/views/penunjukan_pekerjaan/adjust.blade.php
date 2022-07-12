@@ -433,7 +433,7 @@
                                                                     id="qty_perencanaan_{{ $pekerjaan->pivot->item_id }}"
                                                                     placeholder="Koreksi Perecanaan Adjust"
                                                                     class="form-control numberOnly"
-                                                                    @if (isset($daftarPekerjaan->hasItemPengawas[$key])) value="{{ $daftarPekerjaan->hasItemPengawas[$key]->pivot->qty }}" @endif>
+                                                                    @if (isset($daftarPekerjaan->hasItemAsmenPengawas[$key])) value="{{ $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty }}" @endif>
                                                             </td>
                                                             <td>
                                                                 <div class="input-group mb-2 mr-sm-2">
@@ -639,29 +639,7 @@
                                                                 Rp. {{ format_uang($galian->total) }}</td>
 
                                                         </tr>
-                                                        <tr>
-                                                            <td>Asisten Manajer Pengawas</td>
-                                                            <td>
-                                                                {{ $galian->galian_asmen_pengawas_panjang }}
-                                                            </td>
-                                                            <td>
-                                                                {{ $galian->galian_asmen_pengawas_lebar }}
-                                                            </td>
-                                                            <td>
-                                                                {{ $galian->galian_asmen_pengawas_dalam }}
-                                                            </td>
-                                                            <td>
-                                                                {{ $galian->volume_asmen }}
-                                                                m<sup>2
-                                                            </td>
-                                                            <td>
-                                                                {{ $galian->galian_asmen_pengawas_keterangan }}
-                                                            </td>
-                                                            <td>
-                                                                Rp.
-                                                                {{ format_uang($galian->galian_asmen_pengawas_harga_satuan) }}
-                                                            </td>
-                                                        </tr>
+
                                                         <tr>
                                                             <td>Pengawas</td>
                                                             <td>
@@ -686,6 +664,29 @@
                                                             </td>
                                                         </tr>
                                                         <tr>
+                                                            <td>Asisten Manajer Pengawas</td>
+                                                            <td>
+                                                                {{ $galian->galian_asmen_pengawas_panjang }}
+                                                            </td>
+                                                            <td>
+                                                                {{ $galian->galian_asmen_pengawas_lebar }}
+                                                            </td>
+                                                            <td>
+                                                                {{ $galian->galian_asmen_pengawas_dalam }}
+                                                            </td>
+                                                            <td>
+                                                                {{ $galian->volume_asmen }}
+                                                                m<sup>2
+                                                            </td>
+                                                            <td>
+                                                                {{ $galian->galian_asmen_pengawas_keterangan }}
+                                                            </td>
+                                                            <td>
+                                                                Rp.
+                                                                {{ format_uang($galian->galian_asmen_pengawas_harga_satuan) }}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
                                                             <td rowspan="2">Perencanaan</td>
                                                             <td></td>
                                                             <td></td>
@@ -701,21 +702,21 @@
                                                                     name="panjang_perencanaan[{{ $galian->id }}]"
                                                                     id="panjang_perencanaan_{{ $galian->id }}"
                                                                     placeholder="Panjang" class="form-control numberOnly"
-                                                                    value="{{ $galian->galian_pengawas_panjang }}">
+                                                                    value="{{ $galian->galian_asmen_pengawas_panjang }}">
                                                             </td>
                                                             <td>
                                                                 <input type="text"
                                                                     name="lebar_perencanaan[{{ $galian->id }}]"
                                                                     id="lebar_perencanaan_{{ $galian->id }}"
                                                                     placeholder="Lebar" class="form-control numberOnly"
-                                                                    value="{{ $galian->galian_pengawas_lebar }}">
+                                                                    value="{{ $galian->galian_asmen_pengawas_lebar }}">
                                                             </td>
                                                             <td>
                                                                 <input type="text"
                                                                     name="dalam_perencanaan[{{ $galian->id }}]"
                                                                     id="dalam_perencanaan_{{ $galian->id }}"
                                                                     placeholder="dalam" class="form-control numberOnly"
-                                                                    value="{{ $galian->galian_pengawas_dalam }}">
+                                                                    value="{{ $galian->galian_asmen_pengawas_dalam }}">
                                                             </td>
                                                             <td></td>
                                                             <td>
