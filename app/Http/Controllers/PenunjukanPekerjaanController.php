@@ -427,131 +427,131 @@ class PenunjukanPekerjaanController extends Controller
     public function store(Request $request)
     {
         DB::beginTransaction();
-        $user_id = auth()->user()->id;
-        $rekanan_id = $request->rekanan_id;
-        $slug = $request->slug;
-
-        $aduan = Aduan::where('slug', $slug)->first();
-
-        $notifikasi = Notifikasi::where('modul_id', $aduan->id)->first();
-        if ($notifikasi) {
-            $notifikasi->status = 'baca';
-            $notifikasi->delete();
-        }
-
-        $start = Carbon::now()->startOfMonth()->format('Y-m-d H:i:s');
-        $end = Carbon::now()->endOfMonth()->format('Y-m-d H:i:s');
-
-        $kategori_aduan = $aduan->kategori_aduan;
-
-
-        if ($kategori_aduan == 'pipa dinas') {
-            $dataPenunjukanPerkerjaan = PenunjukanPekerjaan::where('kategori_aduan', 'pipa dinas')->whereBetween(DB::raw('DATE(created_at)'), array($start, $end))->count();
-            if ($dataPenunjukanPerkerjaan >= 1) {
-                $no = str_pad($dataPenunjukanPerkerjaan + 1, 4, "0", STR_PAD_LEFT);
-                $nomor_pekerjaan =  $no . "/" . "SPK-DS/" . date('Y')  . "/" . date('m') . "/" . date('d') . "/" . rand(0, 900);
-            } else {
-                $no = str_pad(1, 4, "0", STR_PAD_LEFT);
-                $nomor_pekerjaan =  $no . "/" . "SPK-DS/" . date('Y')  . "/" . date('m') . "/" . date('d') . "/" . rand(0, 900);
-            }
-        } else {
-            $dataPenunjukanPerkerjaan = PenunjukanPekerjaan::where('kategori_aduan', 'pipa premier / skunder')->whereBetween(DB::raw('DATE(created_at)'), array($start, $end))->count();
-            if ($dataPenunjukanPerkerjaan >= 1) {
-                $no = str_pad($dataPenunjukanPerkerjaan + 1, 4, "0", STR_PAD_LEFT);
-                $nomor_pekerjaan =  $no . "/" . "SPK-SK/" . date('Y')  . "/" . date('m') . "/" . date('d') . "/" . rand(0, 900);
-            } else {
-                $no = str_pad(1, 4, "0", STR_PAD_LEFT);
-                $nomor_pekerjaan =  $no . "/" . "SPK-SK/" . date('Y')  . "/" . date('m') . "/" . date('d') . "/" . rand(0, 900);
-            }
-        }
-
-        $penunjukanPekerjaan = PenunjukanPekerjaan::where('aduan_id', $aduan->id)->first();
-        if ($penunjukanPekerjaan) {
-
-            return redirect()->route('penunjukan_pekerjaan.index')->with('message', 'Aduan sudah dikerjakan')->with('Class', 'danger');
-        }
-
-
-        // list jabatan
-        $listJabatan = Jabatan::where('slug', 'manajer-distribusi')->orWhere('slug', 'manajer-perencanaan')->orWhere('slug', 'asisten-manajer-perencanaan')->orWhere('slug', 'asisten-manajer-pengawas')->orWhere('slug', 'direktur-teknik')->get()->pluck('id')->toArray();
-
-        // list karyawan bedasarkan jabatan
-        $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get();
-
-
-        $data = new PenunjukanPekerjaan;
-        $data->nomor_pekerjaan = $nomor_pekerjaan;
-        $user_id_karayawan = '';
-
-        $rekanan = Rekanan::find($rekanan_id);
-        if (!empty($rekanan)) {
-            $data->rekanan_id = $rekanan_id;
-        } else {
-            $karyawan = Karyawan::find($rekanan_id);
-            if ($karyawan) {
-                $user_id_karayawan =  $karyawan->user_id;
-                $karyawan_id = $karyawan->id;
-                $data->karyawan_id = $karyawan_id;
-            }
-        }
-        $data->aduan_id = $aduan->id;
-        $data->kategori_aduan = $kategori_aduan;
-        $data->user_id = $user_id;
-        $data->status = 'draft';
-        $data->save();
-
-        $aduan->status = 'proses';
-        $aduan->save();
-
-        $title = "Penunjukan Pekerjaan Baru";
-        $body = "SPK " . $nomor_pekerjaan . " telah diterbitkan";
-        $modul = "penunjukan-pekerjaan";
-
-
-        if (!empty($rekanan)) {
-            // notif ke reknanan
-            $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $rekanan->hasUser->id);
-
-            // notif ke staf pengawas
-            if ($rekanan->hasKaryawan) {
-                foreach (collect($rekanan->hasKaryawan) as $key => $value) {
-                    $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $value->user_id);
-                }
-            }
-        }
-        if ($user_id_karayawan != '') {
-            // / notif ke karyawan
-            $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $user_id_karayawan);
-        }
-
-        // notif ke karyawan bedasarkan jabatan
-        if ($listKaryawan) {
-            foreach (collect($listKaryawan) as $i => $kr) {
-                $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $kr->user_id);
-            }
-        }
-
-        // notif ke admin distribusi sesuai wilyah
-        if ($aduan->wilayah_id) {
-            $jabatanWilayah = Jabatan::where('wilayah_id', $aduan->wilayah_id)->pluck('id')->toArray();
-
-            if ($jabatanWilayah) {
-                $karyawanwilayah = Karyawan::whereIn('jabatan_id', $jabatanWilayah)->get();
-
-                if ($karyawanwilayah) {
-                    foreach (collect($karyawanwilayah) as $in => $krw) {
-                        $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $krw->user_id);
-                    }
-                }
-            }
-        }
-
-
-        $message = 'Berhasil Menyimpan Pelaksanaan Pekerjaan';
-        return redirect()->route('penunjukan_pekerjaan.index')->with('message', 'Penunjukan pekerjaan berhasil ditambah')->with('Class', 'primary');
         $message = 'Gagal Menyimpan Pelaksanaan Pekerjaan';
         try {
             DB::commit();
+            $user_id = auth()->user()->id;
+            $rekanan_id = $request->rekanan_id;
+            $slug = $request->slug;
+
+            $aduan = Aduan::where('slug', $slug)->first();
+
+            $notifikasi = Notifikasi::where('modul_id', $aduan->id)->first();
+            if ($notifikasi) {
+                $notifikasi->status = 'baca';
+                $notifikasi->delete();
+            }
+
+            $start = Carbon::now()->startOfMonth()->format('Y-m-d H:i:s');
+            $end = Carbon::now()->endOfMonth()->format('Y-m-d H:i:s');
+
+            $kategori_aduan = $aduan->kategori_aduan;
+
+
+            if ($kategori_aduan == 'pipa dinas') {
+                $dataPenunjukanPerkerjaan = PenunjukanPekerjaan::where('kategori_aduan', 'pipa dinas')->whereBetween(DB::raw('DATE(created_at)'), array($start, $end))->count();
+                if ($dataPenunjukanPerkerjaan >= 1) {
+                    $no = str_pad($dataPenunjukanPerkerjaan + 1, 4, "0", STR_PAD_LEFT);
+                    $nomor_pekerjaan =  $no . "/" . "SPK-DS/" . date('Y')  . "/" . date('m') . "/" . date('d') . "/" . rand(0, 900);
+                } else {
+                    $no = str_pad(1, 4, "0", STR_PAD_LEFT);
+                    $nomor_pekerjaan =  $no . "/" . "SPK-DS/" . date('Y')  . "/" . date('m') . "/" . date('d') . "/" . rand(0, 900);
+                }
+            } else {
+                $dataPenunjukanPerkerjaan = PenunjukanPekerjaan::where('kategori_aduan', 'pipa premier / skunder')->whereBetween(DB::raw('DATE(created_at)'), array($start, $end))->count();
+                if ($dataPenunjukanPerkerjaan >= 1) {
+                    $no = str_pad($dataPenunjukanPerkerjaan + 1, 4, "0", STR_PAD_LEFT);
+                    $nomor_pekerjaan =  $no . "/" . "SPK-SK/" . date('Y')  . "/" . date('m') . "/" . date('d') . "/" . rand(0, 900);
+                } else {
+                    $no = str_pad(1, 4, "0", STR_PAD_LEFT);
+                    $nomor_pekerjaan =  $no . "/" . "SPK-SK/" . date('Y')  . "/" . date('m') . "/" . date('d') . "/" . rand(0, 900);
+                }
+            }
+
+            $penunjukanPekerjaan = PenunjukanPekerjaan::where('aduan_id', $aduan->id)->first();
+            if ($penunjukanPekerjaan) {
+
+                return redirect()->route('penunjukan_pekerjaan.index')->with('message', 'Aduan sudah dikerjakan')->with('Class', 'danger');
+            }
+
+
+            // list jabatan
+            $listJabatan = Jabatan::where('slug', 'manajer-distribusi')->orWhere('slug', 'manajer-perencanaan')->orWhere('slug', 'asisten-manajer-perencanaan')->orWhere('slug', 'asisten-manajer-pengawas')->orWhere('slug', 'direktur-teknik')->get()->pluck('id')->toArray();
+
+            // list karyawan bedasarkan jabatan
+            $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get();
+
+
+            $data = new PenunjukanPekerjaan;
+            $data->nomor_pekerjaan = $nomor_pekerjaan;
+            $user_id_karayawan = '';
+
+            $rekanan = Rekanan::find($rekanan_id);
+            if (!empty($rekanan)) {
+                $data->rekanan_id = $rekanan_id;
+            } else {
+                $karyawan = Karyawan::find($rekanan_id);
+                if ($karyawan) {
+                    $user_id_karayawan =  $karyawan->user_id;
+                    $karyawan_id = $karyawan->id;
+                    $data->karyawan_id = $karyawan_id;
+                }
+            }
+            $data->aduan_id = $aduan->id;
+            $data->kategori_aduan = $kategori_aduan;
+            $data->user_id = $user_id;
+            $data->status = 'draft';
+            $data->save();
+
+            $aduan->status = 'proses';
+            $aduan->save();
+
+            $title = "Penunjukan Pekerjaan Baru";
+            $body = "SPK " . $nomor_pekerjaan . " telah diterbitkan";
+            $modul = "penunjukan-pekerjaan";
+
+
+            if (!empty($rekanan)) {
+                // notif ke reknanan
+                $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $rekanan->hasUser->id);
+
+                // notif ke staf pengawas
+                if ($rekanan->hasKaryawan) {
+                    foreach (collect($rekanan->hasKaryawan) as $key => $value) {
+                        $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $value->user_id);
+                    }
+                }
+            }
+            if ($user_id_karayawan != '') {
+                // / notif ke karyawan
+                $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $user_id_karayawan);
+            }
+
+            // notif ke karyawan bedasarkan jabatan
+            if ($listKaryawan) {
+                foreach (collect($listKaryawan) as $i => $kr) {
+                    $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $kr->user_id);
+                }
+            }
+
+            // notif ke admin distribusi sesuai wilyah
+            if ($aduan->wilayah_id) {
+                $jabatanWilayah = Jabatan::where('wilayah_id', $aduan->wilayah_id)->pluck('id')->toArray();
+
+                if ($jabatanWilayah) {
+                    $karyawanwilayah = Karyawan::whereIn('jabatan_id', $jabatanWilayah)->get();
+
+                    if ($karyawanwilayah) {
+                        foreach (collect($karyawanwilayah) as $in => $krw) {
+                            $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $krw->user_id);
+                        }
+                    }
+                }
+            }
+
+
+            $message = 'Berhasil Menyimpan Pelaksanaan Pekerjaan';
+            return redirect()->route('penunjukan_pekerjaan.index')->with('message', 'Penunjukan pekerjaan berhasil ditambah')->with('Class', 'primary');
         } catch (\Throwable $th) {
             DB::rollback();
             return redirect()->route('penunjukan_pekerjaan.index')->with('message', $message)->with('Class', 'danger');
