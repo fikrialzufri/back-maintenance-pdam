@@ -542,8 +542,8 @@ class PenunjukanPekerjaanController extends Controller
                     $karyawanwilayah = Karyawan::whereIn('jabatan_id', $jabatanWilayah);
 
                     if ($karyawanwilayah) {
-                        foreach (collect($listKaryawan) as $i => $kr) {
-                            $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $kr->user_id);
+                        foreach (collect($karyawanwilayah) as $in => $krw) {
+                            $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $krw->user_id);
                         }
                     }
                 }
