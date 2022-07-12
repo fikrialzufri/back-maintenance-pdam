@@ -476,7 +476,7 @@ class PenunjukanPekerjaanController extends Controller
 
 
             // list jabatan
-            $listJabatan = Jabatan::where('slug', 'manajer-distribusi')->orWhere('slug', 'manajer-perencanaan')->orWhere('slug', 'asisten-manajer-perencanaan')->orWhere('slug', 'asisten-manajer-pengawas')->orWhere('slug', 'direktur-teknik')->get()->pluck('id')->toArray();
+            $listJabatan = Jabatan::where('slug', 'manajer-distribusi')->orWhere('slug', 'manajer-perencanaan')->orWhere('slug', 'manajer-pengawas')->orWhere('slug', 'asisten-manajer-perencanaan')->orWhere('slug', 'asisten-manajer-pengawas')->orWhere('slug', 'direktur-teknik')->get()->pluck('id')->toArray();
 
             // list karyawan bedasarkan jabatan
             $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get();
