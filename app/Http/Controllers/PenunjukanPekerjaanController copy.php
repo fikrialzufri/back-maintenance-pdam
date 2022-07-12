@@ -502,7 +502,7 @@ class PenunjukanPekerjaanController extends Controller
                 $jabatanWilayah = Jabatan::where('wilayah_id', $aduan->wilayah_id)->pluck('id')->toArray();
 
                 if ($jabatanWilayah) {
-                    $karyawanwilayah = Karyawan::whereIn('jabatan_id', $jabatanWilayah);
+                    $karyawanwilayah = Karyawan::whereIn('jabatan_id', $jabatanWilayah)->get();
 
                     if ($karyawanwilayah) {
                         foreach (collect($listKaryawan) as $i => $kr) {
