@@ -19,8 +19,9 @@
                                             <label for="Name" class=" form-control-label">Nama Rekaan / CV</label>
                                         </div>
                                         <div>
-                                            <input type="text" name="name" placeholder="Name User" class="form-control "
-                                                value="{{ $rekanan->nama }}" disabled id="nama">
+                                            <input type="text" name="name" placeholder="Name User"
+                                                class="form-control " value="{{ $rekanan->nama }}" disabled
+                                                id="nama">
                                         </div>
                                     </div>
                                 </div>
@@ -66,8 +67,8 @@
                             <table class="table table-bordered table-responsive" width="100%">
                                 <thead>
                                     <tr>
-                                        <th class="text-center">Centang Semua <input type="checkbox"
-                                                name="pelaksanaan_all" id="pelaksanaan_all" class="checkAll" value="">
+                                        <th class="text-center">Centang Semua <input type="checkbox" name="pelaksanaan_all"
+                                                id="pelaksanaan_all" class="checkAll" value="">
                                         </th>
                                         <th>No.</th>
                                         <th>Nomor SPK</th>
@@ -87,8 +88,8 @@
                                             data-total_pekerjaan="{{ format_uang($item->total_pekerjaan) }}"
                                             data-tanggal_selesai="{{ isset($item->tanggal_selesai) ? tanggal_indonesia($item->tanggal_selesai) : '' }}">
                                             <td class="text-center">
-                                                <input type="checkbox" name="pelaksanaan[]" id="pelaksanaan"
-                                                    class="check" value="{{ $item->id }}" checked>
+                                                <input type="checkbox" name="pelaksanaan[]" id="pelaksanaan" class="check"
+                                                    value="{{ $item->id }}" checked>
                                             </td>
                                             <td>{{ $index + 1 }}
                                             </td>
@@ -201,7 +202,7 @@
             let bulan = "{{ $bulan }}";
 
             let textMessage =
-                `PERUMDAM TIRTA KENCANA SAMARIDA\n\nKepada yang terhormat Bapak/Ibu di Samarinda, berikut detail tagihan ${namarekanan} : \n\nBulan Tagihan : ${bulan} \nTotal Lokasi : ${lokasi}\nTotal Tagihan : ${total_pekerjaan}\n\nTTD\nASISTEN MANAGER PERENCANAAN`;
+                `PERUMDAM TIRTA KENCANA SAMARIDA\n\nKepada yang terhormat Bapak/Ibu di Samarinda, berikut detail tagihan ${namarekanan} : \n\nBulan Tagihan : ${bulan} \nTotal Lokasi : ${lokasi}\nTotal Tagihan : ${total_pekerjaan}\n\nTTD\nASISTEN MANAJER PERENCANAAN`;
 
             window.open(`https://api.whatsapp.com/send?phone=62${no_hp}&text=` + encodeURI(
                 textMessage));

@@ -76,7 +76,7 @@
 
                                     </div>
                                 </div>
-                                @if (!auth()->user()->hasRole('admin-asisten-manager'))
+                                @if (!auth()->user()->hasRole('admin-asisten-manajer'))
                                     @if ($pekerjaanUtama)
                                         @if ($pekerjaanUtama->status == 'selesai koreksi')
                                             <div class="col-12">
