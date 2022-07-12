@@ -352,20 +352,20 @@
                                                         <tr id="listPekerjaan_{{ $pekerjaan->pivot->item_id }}"
                                                             class="list_table_pekerjaan">
                                                             <td class="text-center nomor_pekerjaan"
-                                                                data-index="{{ $key + 1 }}" rowspan="4">
+                                                                data-index="{{ $key + 1 }}" rowspan="5">
                                                                 {{ $key + 1 }}
                                                             </td>
-                                                            <td rowspan="4">
+                                                            <td rowspan="5">
                                                                 {{ $pekerjaan->nama }}
                                                             </td>
-                                                            <td rowspan="4">
+                                                            <td rowspan="5">
                                                                 {{ $pekerjaan->jenis }}
                                                             </td>
                                                             <td>Rekanan</td>
                                                             <td>{{ $pekerjaan->pivot->qty }}</td>
                                                             <td>Rp. {{ format_uang($pekerjaan->pivot->harga) }}</td>
                                                             <td>{{ $pekerjaan->pivot->keterangan }}</td>
-                                                            <td rowspan="4">
+                                                            <td rowspan="5">
                                                                 Rp. {{ format_uang($pekerjaan->pivot->total) }}</td>
                                                         </tr>
                                                         <tr>
@@ -387,6 +387,28 @@
                                                                 @endif
                                                                 <td>
                                                                     {{ $daftarPekerjaan->hasItemPengawas[$key]->pivot->keterangan }}
+                                                                </td>
+                                                            @endif
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Asisten Manajer Pengawas</td>
+
+                                                            @if (isset($daftarPekerjaan->hasItemAsmenPengawas[$key]))
+                                                                <td>
+                                                                    {{ $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty }}
+                                                                </td>
+                                                                @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
+                                                                    <td>Rp.
+                                                                        {{ format_uang($daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->harga) }}
+                                                                    </td>
+                                                                @endif
+                                                                @if ($pekerjaanUtama->status === 'selesai koreksi' || $pekerjaanUtama->status === 'diadjust')
+                                                                    <td>Rp.
+                                                                        {{ format_uang($daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->harga) }}
+                                                                    </td>
+                                                                @endif
+                                                                <td>
+                                                                    {{ $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->keterangan }}
                                                                 </td>
                                                             @endif
                                                         </tr>
@@ -596,10 +618,10 @@
                                                         <tr id="listGalian_{{ $galian->item_id }}"
                                                             class="list_table_galian">
                                                             <td class="text-center nomor_galian"
-                                                                data-index="{{ $inv + 1 }}" rowspan="4">
+                                                                data-index="{{ $inv + 1 }}" rowspan="5">
                                                                 {{ $inv + 1 }}
                                                             </td>
-                                                            <td rowspan="4">
+                                                            <td rowspan="5">
                                                                 {{ $galian->pekerjaan }}
                                                             </td>
                                                             <td>Rekanan</td>
@@ -613,9 +635,32 @@
                                                             </td>
                                                             <td>{{ $galian->keterangan }}</td>
                                                             <td>Rp. {{ format_uang($galian->harga_satuan) }}</td>
-                                                            <td rowspan="4">
+                                                            <td rowspan="5">
                                                                 Rp. {{ format_uang($galian->total) }}</td>
 
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Asisten Manajer Pengawas</td>
+                                                            <td>
+                                                                {{ $galian->galian_asmen_pengawas_panjang }}
+                                                            </td>
+                                                            <td>
+                                                                {{ $galian->galian_asmen_pengawas_lebar }}
+                                                            </td>
+                                                            <td>
+                                                                {{ $galian->galian_asmen_pengawas_dalam }}
+                                                            </td>
+                                                            <td>
+                                                                {{ $galian->volume_asmen }}
+                                                                m<sup>2
+                                                            </td>
+                                                            <td>
+                                                                {{ $galian->galian_asmen_pengawas_keterangan }}
+                                                            </td>
+                                                            <td>
+                                                                Rp.
+                                                                {{ format_uang($galian->galian_asmen_pengawas_harga_satuan) }}
+                                                            </td>
                                                         </tr>
                                                         <tr>
                                                             <td>Pengawas</td>

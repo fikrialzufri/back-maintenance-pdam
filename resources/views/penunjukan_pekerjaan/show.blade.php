@@ -1014,7 +1014,7 @@
 
                                                         </tr>
                                                         <tr>
-                                                            <td>Pengawas {{ $pekerjaanUtama->status }}</td>
+                                                            <td>Pengawas</td>
                                                             @if ($pengawas === true && $pekerjaanUtama->status === 'selesai')
                                                                 <td><input type="text"
                                                                         name="panjang_pengawas[{{ $galian->item_id }}]"
