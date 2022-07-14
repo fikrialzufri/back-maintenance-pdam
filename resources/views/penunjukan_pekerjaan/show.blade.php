@@ -192,6 +192,107 @@
 
 
                         </div>
+
+                        @if ($penunjukan->status_mobile < 3 && $penunjukan->status !== "approve")
+                            @if ($pekerjaanUtama)
+                                @if ($pekerjaanUtama->status_mobile < 2)
+                                @canany(['edit-penunjukan-pekerjaan', 'create-penunjukan-pekerjaan'])
+                                    <div class="card-header">
+                                        <div class="card-title">Pilih Pekerja</div>
+                                    </div>
+                                    <form action="{{ $action }}" method="post" role="form" enctype="multipart/form-data">
+                                        @csrf
+                                        {{ method_field('PUT') }}
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <div class="form-group">
+                                                        <input type="hidden" name="slug" value="{{ $aduan->slug }}">
+                                                        <div>
+                                                            <select name="rekanan_id" class="selected2 form-control" id="cmbRekanan" required>
+                                                                <option value="">--Pilih Pekerja--</option>
+                                                                @foreach ($rekanan as $rek)
+                                                                    <option value="{{ $rek->id }}"
+                                                                        {{ old('rekanan_id') == $rek->id ? 'selected' : '' }}>
+                                                                        {{ $rek->nama }}
+                                                                    </option>
+                                                                @endforeach
+                                                                @foreach ($karyawanPekerja as $kary)
+                                                                    <option value="{{ $kary->id }}"
+                                                                        {{ old('rekanan_id') == $kary->id ? 'selected' : '' }}>
+                                                                        {{ $kary->nama }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                            @if ($errors->has('rekanan_id'))
+                                                                <span class="text-danger">
+                                                                    <strong
+                                                                        id="textrule">{{ $errors->first('rekanan_id') }}</strong>
+                                                                </span>
+                                                            @endif
+                                                        </div>
+    
+                                                    </div>
+                                                </div>
+    
+                                            </div>
+                                        </div>
+                                        <div class="card-footer clearfix">
+                                            <button type="submit" class="btn btn-primary">Simpan</button>
+                                        </div>
+                                    </form>
+                                @endcanany
+                                    
+                                @endif
+                            @else
+                            @canany(['edit-penunjukan-pekerjaan', 'create-penunjukan-pekerjaan'])
+                            <div class="card-header">
+                                <div class="card-title">Pilih Pekerja</div>
+                            </div>
+                            <form action="{{ $action }}" method="post" role="form" enctype="multipart/form-data">
+                                @csrf
+                                {{ method_field('PUT') }}
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <input type="hidden" name="slug" value="{{ $aduan->slug }}">
+                                                <div>
+                                                    <select name="rekanan_id" class="selected2 form-control" id="cmbRekanan" required>
+                                                        <option value="">--Pilih Pekerja--</option>
+                                                        @foreach ($rekanan as $rek)
+                                                            <option value="{{ $rek->id }}"
+                                                                {{ old('rekanan_id') == $rek->id ? 'selected' : '' }}>
+                                                                {{ $rek->nama }}
+                                                            </option>
+                                                        @endforeach
+                                                        @foreach ($karyawanPekerja as $kary)
+                                                            <option value="{{ $kary->id }}"
+                                                                {{ old('rekanan_id') == $kary->id ? 'selected' : '' }}>
+                                                                {{ $kary->nama }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                    @if ($errors->has('rekanan_id'))
+                                                        <span class="text-danger">
+                                                            <strong
+                                                                id="textrule">{{ $errors->first('rekanan_id') }}</strong>
+                                                        </span>
+                                                    @endif
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="card-footer clearfix">
+                                    <button type="submit" class="btn btn-primary">Simpan</button>
+                                </div>
+                            </form>
+                        @endcanany
+                            @endif
+                        @endif
                     @else
                         @canany(['edit-penunjukan-pekerjaan', 'create-penunjukan-pekerjaan'])
                             <div class="card-header">

@@ -92,7 +92,7 @@
                                     <th class="text-center" width="10%">Aksi</th>
                                     <th>No.</th>
                                     <th>Nomor SPK</th>
-                                    <th>Nomor Aduan</th>
+                                    <th>Nomor NPS</th>
                                     <th>Nomor Tiket</th>
                                     <th>Pekerja</th>
                                     <th>Kategori Aduan</th>
@@ -172,7 +172,7 @@
                                         <td>{{ $nomor + ($penunjukan->CurrentPage() - 1) * $penunjukan->PerPage() }}
                                         </td>
                                         <td>{{ $item->no_spk }}</td>
-                                        <td>{{ $item->no_aduan }}</td>
+                                        <td>{{ $item->nps }}</td>
                                         <td>{{ $item->no_ticket }}</td>
                                         <td>{{ $item->rekanan }}</td>
                                         <td>{{ ucfirst($item->kategori_aduan) }}</td>

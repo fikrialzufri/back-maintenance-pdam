@@ -255,20 +255,23 @@ class PelaksanaanPekerjaan extends Model
             case 'selesai':
                 return 4;
                 break;
-            case 'diadjust':
+            case 'approve':
                 return 5;
                 break;
-            case 'koreksi pengawas':
+            case 'diadjust':
                 return 6;
                 break;
-            case 'dikoreksi':
+            case 'koreksi pengawas':
                 return 7;
                 break;
-            case 'selesai koreksi':
+            case 'dikoreksi':
                 return 8;
                 break;
-            case 'disetujui':
+            case 'selesai koreksi':
                 return 9;
+                break;
+            case 'disetujui':
+                return 10;
                 break;
             default:
                 return 1;
