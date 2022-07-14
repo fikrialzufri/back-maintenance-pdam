@@ -71,7 +71,16 @@ class PenunjukanPekerjaanController extends Controller
         }
 
         // $query = $query->whereBetween(DB::raw('DATE(' . $val['name'] . ')'), array($start, $end));
-
+        if (auth()->user()->hasRole('admin-distribusi') || auth()->user()->hasRole('asisten-manajer-distribusi')) {
+            $jabatan = Jabatan::where('slug',"like","admin-distribusi%")->orWhere('slug',"like","asisten-manajer-distribusi%")->pluck('id')->toArray();
+            $user_id = Karyawan::whereIn('jabatan_id',$jabatan)->pluck('user_id')->toArray();
+            $query->where('wilayah_id', auth()->user()->karyawan->id_wilayah)->whereIn('user_id',$user_id);
+        }
+        if (auth()->user()->hasRole('admin-pengendalian-kehilangan-air') || auth()->user()->hasRole('asisten-manajer-pengendalian-kehilangan-air')) {
+            $jabatan = Jabatan::where('slug', "like","admin-pengendalian-kehilangan-air%")->orWhere('slug',"like","asisten-manajer-pengendalian-kehilangan-air%")->pluck('id')->toArray();
+            $user_id = Karyawan::whereIn('jabatan_id',$jabatan)->pluck('user_id')->toArray();
+            $query->where('wilayah_id', auth()->user()->karyawan->id_wilayah)->whereIn('user_id',$user_id);
+        }
         if ($search) {
             $query->where('no_ticket', 'like', "%" . $search . "%")->orWhere('no_aduan', 'like', "%" . $search . "%");
         }
@@ -303,11 +312,11 @@ class PenunjukanPekerjaanController extends Controller
         $fotoBahan = [];
         $fotoPekerjaan = [];
         $fotoPenyelesaian = [];
-        $daftarPelaksaanAdjust = [];
         $tombolEdit = '';
         $lat_long_pekerjaan = '';
         $lokasi_pekerjaan = '';
         $pekerjaanUtama = [];
+        $list_persetujuan  = [];
         $pengawas = false;
         $asmenpengawas = false;
         $perencaan = false;
@@ -320,7 +329,7 @@ class PenunjukanPekerjaanController extends Controller
         $listPekerjaan = Item::orderBy('nama')->whereNotIn('jenis_id',  $jenisGalian)->get();
 
         if ($aduan->status != 'draft') {
-            $penunjukan = PenunjukanPekerjaan::where('aduan_id', $aduan->id)->first();
+            $penunjukan = PenunjukanPekerjaan::where('aduan_id', $aduan->id)->with('hasUserMany')->first();
             $query = PelaksanaanPekerjaan::where('penunjukan_pekerjaan_id', $penunjukan->id);
 
             if (auth()->user()->hasRole('asisten-manajer-perencanaan')) {
@@ -347,11 +356,38 @@ class PenunjukanPekerjaanController extends Controller
                 $lat_long_pekerjaan =  $pekerjaanUtama->lat_long;
                 $lokasi_pekerjaan =  $pekerjaanUtama->lokasi;
 
-                if (auth()->user()->hasRole('staf-pengawas')) {
+                if (auth()->user()->hasRole('asisten-manajer-distribusi')) {
+                    $jabatan = Jabatan::where('slug',"like","admin-distribusi%")->orWhere('slug',"like","asisten-manajer-distribusi%")->pluck('id')->toArray();
+                    $user_id = Karyawan::whereIn('jabatan_id',$jabatan)->pluck('user_id')->toArray();
+                    $CheckAduan = Aduan::where('id', $aduan->id)->where('wilayah_id', auth()->user()->karyawan->id_wilayah)->whereIn('user_id',$user_id);
+                    if ($pekerjaanUtama->status  === 'selesai') {
+                        if ($CheckAduan) {
+                            $tombolEdit = 'bisa';
+                        }
+                    }
+                }
+                if (auth()->user()->hasRole('admin-pengendalian-kehilangan-air') || auth()->user()->hasRole('asisten-manajer-pengendalian-kehilangan-air')) {
+                    $jabatan = Jabatan::where('slug', "like","admin-pengendalian-kehilangan-air%")->orWhere('slug',"like","asisten-manajer-pengendalian-kehilangan-air%")->pluck('id')->toArray();
+                    $user_id = Karyawan::whereIn('jabatan_id',$jabatan)->pluck('user_id')->toArray();
+                    $CheckAduan = Aduan::where('id', $aduan->id)->where('wilayah_id', auth()->user()->karyawan->id_wilayah)->whereIn('user_id',$user_id);
+
+                    if ($pekerjaanUtama->status  === 'selesai') {
+                        if ($CheckAduan) {
+                            $tombolEdit = 'bisa';
+                        }
+                    }
+                }
+
+                if (auth()->user()->hasRole('asisten-manajer-distribusi')) {
                     if ($pekerjaanUtama->status  === 'selesai') {
                         $tombolEdit = 'bisa';
                     }
-                    $pengawas = true;
+                    // $pengawas = true;
+                } elseif (auth()->user()->hasRole('staf-pengawas')) {
+                    if ($pekerjaanUtama->status  === 'approve') {
+                        $tombolEdit = 'bisa';
+                    }
+                    $asmenpengawas = true;
                 } elseif (auth()->user()->hasRole('asisten-manajer-pengawas')) {
                     if ($pekerjaanUtama->status  === 'koreksi pengawas') {
                         $tombolEdit = 'bisa';
@@ -362,7 +398,8 @@ class PenunjukanPekerjaanController extends Controller
                         $tombolEdit = 'bisa';
                     }
                 }
-                $daftarPelaksaanAdjust = PelaksanaanAdjust::where('pelaksanaan_pekerjaan_id', $pekerjaanUtama->id)->get();
+
+                $list_persetujuan = $penunjukan->list_persetujuan;
             }
 
             if (auth()->user()->hasRole('rekanan')) {
@@ -386,8 +423,6 @@ class PenunjukanPekerjaanController extends Controller
         $jenis_aduan = JenisAduan::orderBy('nama')->get();
         $rekanan = Rekanan::orderBy('nama')->get();
 
-
-
         $title = 'Detail Pekerjaan ' . $aduan->nomor_pekerjaan;
 
         return view('penunjukan_pekerjaan.show', compact(
@@ -397,6 +432,7 @@ class PenunjukanPekerjaanController extends Controller
             'asmenpengawas',
             'listPekerjaan',
             'listPekerjaanGalian',
+            'list_persetujuan',
             'perencaan',
             'penunjukan',
             'pekerjaanUtama',
@@ -414,7 +450,6 @@ class PenunjukanPekerjaanController extends Controller
             'jenis_aduan',
             'rekanan',
             'title',
-            'daftarPelaksaanAdjust',
             'totalPekerjaan',
             'fotoPekerjaan',
             'fotoPenyelesaian',
@@ -428,6 +463,18 @@ class PenunjukanPekerjaanController extends Controller
     {
         DB::beginTransaction();
         $message = 'Gagal Menyimpan Pelaksanaan Pekerjaan';
+
+        $messages = [
+            'required' => ':attribute tidak boleh kosong',
+        ];
+
+        $start = Carbon::now()->startOfMonth()->format('Y-m-d H:i:s');
+        $end = Carbon::now()->endOfMonth()->format('Y-m-d H:i:s');
+
+        $this->validate(request(), [
+            'rekanan_id' => 'required',
+        ], $messages);
+
         try {
             DB::commit();
             $user_id = auth()->user()->id;
@@ -578,7 +625,11 @@ class PenunjukanPekerjaanController extends Controller
 
         try {
             DB::commit();
-            if (auth()->user()->hasRole('staf-pengawas')) {
+            if (auth()->user()->hasRole('asisten-manajer-distribusi')) {
+                $status = 'approve';
+            }elseif (auth()->user()->hasRole('asisten-manajer-pengendalian-kehilangan-air')) {
+                $status = 'approve';
+            }elseif (auth()->user()->hasRole('staf-pengawas')) {
                 // pekerjaan
                 foreach ($request->qty_pengawas as $key => $value) {
 
@@ -961,6 +1012,7 @@ class PenunjukanPekerjaanController extends Controller
                         }
                     }
                 }
+
                 $user[auth()->user()->id] = [
                     'keterangan' => $status,
                 ];
@@ -1233,7 +1285,6 @@ class PenunjukanPekerjaanController extends Controller
         $fotoBahan = [];
         $fotoPekerjaan = [];
         $fotoPenyelesaian = [];
-        $daftarPelaksaanAdjust = [];
         $tombolEdit = '';
         $lat_long_pekerjaan = '';
         $lokasi_pekerjaan = '';
@@ -1285,7 +1336,7 @@ class PenunjukanPekerjaanController extends Controller
                         $tombolEdit = 'bisa';
                     }
                 }
-                $daftarPelaksaanAdjust = PelaksanaanAdjust::where('pelaksanaan_pekerjaan_id', $pekerjaanUtama->id)->get();
+               
             }
 
             if (auth()->user()->hasRole('rekanan')) {
@@ -1336,7 +1387,6 @@ class PenunjukanPekerjaanController extends Controller
             'jenis_aduan',
             'rekanan',
             'title',
-            'daftarPelaksaanAdjust',
             'totalPekerjaan',
             'fotoPekerjaan',
             'fotoPenyelesaian',

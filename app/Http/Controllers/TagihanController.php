@@ -344,14 +344,6 @@ class TagihanController extends Controller
             if (auth()->user()->hasRole('superadmin')) {
                 $perencaan = true;
             }
-            if (auth()->user()->hasRole('asisten-manajer-distribusi')) {
-                $listJabatan = Jabatan::where('nama', 'like', '%Asisten Manajer Distribusi%')->whereIn('wilayah_id', $wilayahId)->pluck('id')->toArray();
-
-                $checkKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->where('user_id', auth()->user()->id)->first();
-                if ($checkKaryawan) {
-                    $bntSetuju = false;
-                }
-            }
             if (auth()->user()->hasRole('manajer-distribusi')) {
                 $listJabatan = Jabatan::where('nama', 'like', '%Asisten Manajer Distribusi%')->whereIn('wilayah_id', $wilayahId)->pluck('id')->toArray();
                 $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get();
@@ -365,47 +357,22 @@ class TagihanController extends Controller
                     }
                 }
             }
-            if (auth()->user()->hasRole('staf-pengawas')) {
-                $listJabatan = Jabatan::where('slug', 'manajer-distribusi')->get()->pluck('id')->toArray();
+            if (auth()->user()->hasRole('manajer-pengendalian-kehilangan-air')) {
+                $listJabatan = Jabatan::where('nama', 'like', '%Asisten Manajer Distribusi%')->whereIn('wilayah_id', $wilayahId)->pluck('id')->toArray();
+                $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get();
+                $queryHasUser =  $tagihan->hasUserMany()->pluck('id')->toArray();
 
-                $listKaryawanManajer = Karyawan::whereIn('jabatan_id', $listJabatan)->get()->pluck('user_id')->toArray();
-
-                $list_persetujuan = $query->whereHas('hasUserMany', function ($q) use ($listKaryawanManajer) {
-                    $q->whereIn('tagihan_user.user_id',  $listKaryawanManajer);
-                })->count();
-
-                if ($list_persetujuan > 0) {
-                    $bntSetuju = false;
+                foreach ($listKaryawan as $key => $value) {
+                    if (in_array($value->user_id, $queryHasUser)) {
+                        $bntSetuju = false;
+                    } else {
+                        $bntSetuju = true;
+                    }
                 }
             }
-            if (auth()->user()->hasRole('asisten-manajer-pengawas')) {
-                $listJabatan = Jabatan::where('slug', 'staf-pengawas')->get()->pluck('id')->toArray();
-
-                $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get()->pluck('user_id')->toArray();
-
-                $list_persetujuan = $query->whereHas('hasUserMany', function ($q) use ($listKaryawan) {
-                    $q->whereIn('tagihan_user.user_id',  $listKaryawan);
-                })->count();
-
-                if ($list_persetujuan > 0) {
-                    $bntSetuju = false;
-                }
-            }
-            if (auth()->user()->hasRole('asisten-manajer-perencanaan')) {
-                $listJabatan = Jabatan::where('slug', 'asisten-manajer-pengawas')->get()->pluck('id')->toArray();
-
-                $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get()->pluck('user_id')->toArray();
-
-                $list_persetujuan =  $query->whereHas('hasUserMany', function ($q) use ($listKaryawan) {
-                    $q->whereIn('tagihan_user.user_id',  $listKaryawan);
-                })->count();
-
-                if ($list_persetujuan > 0) {
-                    $bntSetuju = false;
-                }
-            }
+            
             if (auth()->user()->hasRole('manajer-perencanaan')) {
-                $listJabatan = Jabatan::where('slug', 'asisten-manajer-perencanaan')->get()->pluck('id')->toArray();
+                $listJabatan = Jabatan::where('slug', 'manajer-pengendalian-kehilangan-air')->orWhere('manajer-pengendalian-kehilangan-air','manajer-distribusi')->get()->pluck('id')->toArray();
 
                 // list karyawan bedasarkan jabatan
                 $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get()->pluck('user_id')->toArray();

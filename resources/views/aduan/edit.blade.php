@@ -63,7 +63,7 @@
                                                 value="{{ $aduan->nps }}" required id="" readonly>
                                         </div>
                                         @if ($errors->has('nps'))
-                                            nPS
+                                            NPS
                                             <span class="text-danger">
                                                 <strong id="textkk">NPS wajib diisi!</strong>
                                             </span>

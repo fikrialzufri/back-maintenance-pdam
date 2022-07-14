@@ -6,6 +6,7 @@ use App\Traits\UsesUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Str;
+use Carbon\Carbon;
 
 class PenunjukanPekerjaan extends Model
 {
@@ -386,6 +387,45 @@ class PenunjukanPekerjaan extends Model
     public function hasUserMany()
     {
         return $this->belongsToMany(User::class, 'penunjukan_user')->withPivot('keterangan')->withTimestamps();
+    }
+
+    public function getListPersetujuanAttribute()
+    {
+        $result = [];
+        $hasUserMany = [];
+        if ($this->hasUserMany) {
+            foreach ($this->hasUserMany as $key => $value) {
+                if ($value->karyawan) {
+                    $hasUserMany[$key] = (object) [
+                        'id' => $value->karyawan->user_id,
+                        'nama' => $value->karyawan->nama,
+                        'jabatan' => $value->karyawan->nama_jabatan,
+                        'url' => $value->karyawan->url,
+                        'tdd' => $value->karyawan->tdd,
+                        'is_setuju' => true,
+                        'created_at' => $value->pivot->created_at,
+                        'tanggal_disetujui' => isset($value->pivot->created_at) ? tanggal_indonesia($value->pivot->created_at) . " - " . Carbon::parse($value->pivot->created_at)->format('H:i') : ''
+                    ];
+                }
+            }
+
+            $collect = collect($hasUserMany)->sortBy('created_at');
+            $nomor = 0;
+            foreach ($collect as $key => $value) {
+                $result[$nomor] = (object) [
+                    'id' => $value->id,
+                    'nama' => $value->nama,
+                    'jabatan' => $value->jabatan,
+                    'url' => $value->url,
+                    'tdd' => $value->tdd,
+                    'is_setuju' => $value->is_setuju,
+                    'created_at' => $value->created_at,
+                    'tanggal_disetujui' => $value->tanggal_disetujui
+                ];
+                $nomor++;
+            }
+        }
+        return $result;
     }
 
     public function getStatusMobileAttribute()

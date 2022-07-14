@@ -60,7 +60,7 @@
                                         <div>
                                             <input type="text" name="nps" placeholder="nps"
                                                 class="{{ $errors->has('nps') ? 'form-control is-invalid' : 'form-control' }}"
-                                                value="{{ $noAduanNps }}" required id="">
+                                                value="{{ $noAduanNps }}" required id="" readonly>
                                         </div>
                                         @if ($errors->has('nps'))
                                             nps

@@ -24,7 +24,19 @@ class CreatePelaksanaanPekerjaansTable extends Migration
             $table->longText('keterangan_penagawas')->nullable();
             $table->longText('lokasi')->nullable();
             $table->string('lat_long')->nullable();
-            $table->enum('status', ['diterima', 'proses', 'proses-akhir', 'selesai', 'disetujui', 'koreksi pengawas', 'dikoreksi', 'selesai koreksi', 'diadjust'])->default('diterima');
+            $table->enum('status', 
+            [
+                'draft', 
+                'proses', 
+                'selesai', 
+                'approve', 
+                'disetujui', 
+                'koreksi pengawas', 
+                'dikoreksi', 
+                'selesai koreksi', 
+                'diadjust'
+            ]
+            )->default('diterima');
             $table->enum('tagihan', ['tidak', 'ya'])->default('tidak');
             $table->foreignUuid('aduan_id')->references('id')->on('aduan')->nullable();
             $table->foreignUuid('rekanan_id')->nullable()->references('id')->on('rekanan');

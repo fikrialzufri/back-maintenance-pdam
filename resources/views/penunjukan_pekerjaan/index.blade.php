@@ -119,6 +119,14 @@
                                                 class="btn btn-sm {{ $item->btn }}   text-light m-1">
                                                 @if (auth()->user()->hasRole('rekanan'))
                                                     <i class="nav-icon fa fa-search"></i> Detail
+                                                @elseif (auth()->user()->hasRole('asisten-manajer-distribusi') || auth()->user()->hasRole('asisten-manajer-pengendalian-kehilangan-air'))
+                                                    @if ($item->status_aduan == 'Selesai dikerjakan')
+                                                        <i class="nav-icon fas fa-eye"></i> Proses
+                                                    @elseif ($item->status_aduan == 'Belum ditunjuk')
+                                                        <i class="nav-icon fas fa-eye"></i> Proses
+                                                    @else
+                                                        <i class="nav-icon fa fa-search"></i> Detail
+                                                    @endif
                                                 @elseif (auth()->user()->hasRole('staf-pengawas'))
                                                     @if ($item->status_aduan == 'Selesai dikerjakan')
                                                         <i class="nav-icon fas fa-eye"></i> Koreksi

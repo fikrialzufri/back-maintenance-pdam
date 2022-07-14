@@ -77,6 +77,25 @@
 
                                         </div>
                                     </div>
+                                    <div class="col-12 timeline">
+                                        <h6>List Persetujuan Pekerjaan</h6>
+                                        <ul>
+                                            @forelse ($list_persetujuan as $item)
+                                            
+                                                    <li>
+                                                        <div class="bullet bg-primary"></div>
+                                                        <div class="time">{{ $item->tanggal_disetujui }}</div>
+                                                        <div class="desc">
+                                                            <p>{{ $item->nama }} - {{ $item->jabatan }}</p>
+                                                        </div>
+                                                    </li>
+                                            @empty
+                                            @endforelse
+
+
+                                        </ul>
+                                    </div>
+                                    
                                     @if (!auth()->user()->hasRole('admin-asisten-manajer'))
                                         @if ($pekerjaanUtama)
                                             @if ($pekerjaanUtama->status == 'selesai koreksi' || $pekerjaanUtama->status == 'diadjust')
@@ -137,7 +156,7 @@
                                     <div class="row d-flex flex-row">
                                         <div class="col-12">
                                             <div class="form-group">
-                                                <h6 class="">Foto Bahan</h6>
+                                                <h6 class="">Foto Pekerjaan, Bahan, Alat Bantu dan Galian</h6>
                                             </div>
                                         </div>
                                     </div>
@@ -186,7 +205,7 @@
                                             <div class="form-group">
                                                 <input type="hidden" name="slug" value="{{ $aduan->slug }}">
                                                 <div>
-                                                    <select name="rekanan_id" class="selected2 form-control" id="cmbRekanan">
+                                                    <select name="rekanan_id" class="selected2 form-control" id="cmbRekanan" required>
                                                         <option value="">--Pilih Pekerja--</option>
                                                         @foreach ($rekanan as $rek)
                                                             <option value="{{ $rek->id }}"
@@ -252,7 +271,7 @@
                                             <h3 class="card-title">Daftar Pekerjaan</h3>
                                             <hr>
                                         </div>
-                                        @if ($pengawas === true && $pekerjaanUtama->status === 'selesai')
+                                        @if ($pengawas === true && $pekerjaanUtama->status === 'approve')
                                             <div class="col-12">
                                                 <form action="" id="formPekerjaan">
                                                     @if ($rekanan_id == null)
@@ -436,7 +455,7 @@
                                                     @if ($perencaan == false && $pekerjaanUtama->status === 'dikoreksi')
                                                         <th width="300">Keterangan</th>
                                                     @endif
-                                                    @if ($pekerjaanUtama->status === 'selesai' || $pekerjaanUtama->status === 'koreksi pengawas')
+                                                    @if ($pekerjaanUtama->status === 'approve' || $pekerjaanUtama->status === 'koreksi pengawas')
                                                         <th width="300">Keterangan</th>
                                                     @endif
                                                     @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
@@ -480,7 +499,7 @@
                                                                 @else rowspan="2" @endif>
                                                                 {{ $pekerjaan->jenis }}
                                                             </td>
-                                                            <td>Rekanan {{ $pekerjaanUtama->status }}</td>
+                                                            <td>Rekanan</td>
                                                             <td>{{ $pekerjaan->pivot->qty }}</td>
                                                             @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
                                                                 <td>Rp. {{ format_uang($pekerjaan->pivot->harga) }}</td>
@@ -501,7 +520,7 @@
                                                         </tr>
                                                         <tr>
                                                             <td>Pengawas</td>
-                                                            @if ($pengawas === true && $pekerjaanUtama->status === 'selesai')
+                                                            @if ($pengawas === true && $pekerjaanUtama->status === 'approve')
                                                                 <td><input type="text"
                                                                         name="qty_pengawas[{{ $pekerjaan->pivot->item_id }}]"
                                                                         id="qty_pengawas_{{ $pekerjaan->pivot->item_id }}"
@@ -751,7 +770,7 @@
 
                                         <hr>
                                         {{-- Galian --}}
-                                        @if ($pengawas === true && $pekerjaanUtama->status === 'selesai')
+                                        @if ($pengawas === true && $pekerjaanUtama->status === 'approve')
                                             <div class="col-12">
                                                 @if ($rekanan_id == null)
                                                     @if ($tombolEdit === 'bisa')
@@ -1015,7 +1034,7 @@
                                                         </tr>
                                                         <tr>
                                                             <td>Pengawas</td>
-                                                            @if ($pengawas === true && $pekerjaanUtama->status === 'selesai')
+                                                            @if ($pengawas === true && $pekerjaanUtama->status === 'approve')
                                                                 <td><input type="text"
                                                                         name="panjang_pengawas[{{ $galian->item_id }}]"
                                                                         id="panjang_pengawas[{{ $galian->item_id }}]"

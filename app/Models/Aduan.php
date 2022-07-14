@@ -286,6 +286,13 @@ class Aduan extends Model
                 if ($this->hasPenunjukanPekerjaan->status == 'draft') {
                     $btn  = "btn-primary";
                 } else if ($this->hasPenunjukanPekerjaan->status == 'selesai') {
+                    if (auth()->user()->hasRole('asisten-manajer-distribusi')) {
+                        $btn  = "btn-danger";
+                    }
+                    if (auth()->user()->hasRole('asisten-manajer-pengendalian-kehilangan-air')) {
+                        $btn  = "btn-danger";
+                    }
+                } else if ($this->hasPenunjukanPekerjaan->status == 'approve') {
                     if (auth()->user()->hasRole('staf-pengawas')) {
                         $btn  = "btn-danger";
                     }

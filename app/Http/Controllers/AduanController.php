@@ -11,6 +11,7 @@ use App\Models\Notifikasi;
 use App\Models\PenunjukanPekerjaan;
 use DB;
 use Carbon\Carbon;
+use App\Models\Wilayah;
 
 class AduanController extends Controller
 {
@@ -55,7 +56,14 @@ class AduanController extends Controller
         if (!auth()->user()->hasRole('superadmin')) {
             if (!auth()->user()->hasRole('rekanan')) {
                 if (auth()->user()->hasRole('admin-distribusi') || auth()->user()->hasRole('asisten-manajer-distribusi')) {
-                    $query->where('wilayah_id', auth()->user()->karyawan->id_wilayah);
+                    $jabatan = Jabatan::where('slug',"like","admin-distribusi%")->orWhere('slug',"like","asisten-manajer-distribusi%")->pluck('id')->toArray();
+                    $user_id = Karyawan::whereIn('jabatan_id',$jabatan)->pluck('user_id')->toArray();
+                    $query->where('wilayah_id', auth()->user()->karyawan->id_wilayah)->whereIn('user_id',$user_id);
+                }
+                if (auth()->user()->hasRole('admin-pengendalian-kehilangan-air') || auth()->user()->hasRole('asisten-manajer-pengendalian-kehilangan-air')) {
+                    $jabatan = Jabatan::where('slug', "like","admin-pengendalian-kehilangan-air%")->orWhere('slug',"like","asisten-manajer-pengendalian-kehilangan-air%")->pluck('id')->toArray();
+                    $user_id = Karyawan::whereIn('jabatan_id',$jabatan)->pluck('user_id')->toArray();
+                    $query->where('wilayah_id', auth()->user()->karyawan->id_wilayah)->whereIn('user_id',$user_id);
                 }
             } else {
                 $rekanan_id = auth()->user()->id_rekanan;
@@ -83,23 +91,37 @@ class AduanController extends Controller
         $start = Carbon::now()->startOfMonth()->format('Y-m-d H:i:s');
         $end = Carbon::now()->endOfMonth()->format('Y-m-d H:i:s');
 
+        $id_wilayah = auth()->user()->karyawan->id_wilayah;
+
+        $wilayah = "WIL-".Wilayah::find($id_wilayah)->singkatan;
+        
+        $jabatan_id = auth()->user()->karyawan->jabatan_id;
+
+        $jabatan  = Jabatan::find($jabatan_id);
+
+        if(strpos($jabatan, "Distribusi") !== false){
+            $divisi= "DIS";
+        } else{
+            $divisi= "PKA";
+        }
+
         if ($kategori_aduan == 'pipa dinas') {
             $dataAduan = Aduan::where('kategori_aduan', 'pipa dinas')->whereBetween(DB::raw('DATE(created_at)'), array($start, $end))->count();
             if ($dataAduan >= 1) {
                 $no = str_pad($dataAduan + 1, 4, "0", STR_PAD_LEFT);
-                $noAduan =  $no . "/" . "ADU-DS/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
+                $noAduan =  $no . "/" . "ADU-DS/". $wilayah . "/" . $divisi . "/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
             } else {
                 $no = str_pad(1, 4, "0", STR_PAD_LEFT);
-                $noAduan =  $no . "/" . "ADU-DS/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
+                $noAduan =  $no . "/" . "ADU-DS/" . $wilayah . "/" . $divisi . "/". date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
             }
         } else {
             $dataAduan = Aduan::where('kategori_aduan', 'pipa premier / skunder')->whereBetween(DB::raw('DATE(created_at)'), array($start, $end))->count();
             if ($dataAduan >= 1) {
                 $no = str_pad($dataAduan + 1, 4, "0", STR_PAD_LEFT);
-                $noAduan =  $no . "/" . "ADU-SK/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
+                $noAduan =  $no . "/" . "ADU-SK/". $wilayah . "/" . $divisi . "/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
             } else {
                 $no = str_pad(1, 4, "0", STR_PAD_LEFT);
-                $noAduan =  $no . "/" . "ADU-SK/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
+                $noAduan =  $no . "/" . "ADU-SK/". $wilayah . "/" . $divisi . "/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
             }
         }
 
@@ -115,15 +137,29 @@ class AduanController extends Controller
         $start = Carbon::now()->startOfMonth()->format('Y-m-d H:i:s');
         $end = Carbon::now()->endOfMonth()->format('Y-m-d H:i:s');
 
+        $id_wilayah = auth()->user()->karyawan->id_wilayah;
+
+        $wilayah = "WIL-".Wilayah::find($id_wilayah)->singkatan;
+        
+        $jabatan_id = auth()->user()->karyawan->jabatan_id;
+
+        $jabatan  = Jabatan::find($jabatan_id);
+
+        if(strpos($jabatan, "Distribusi") !== false){
+            $divisi= "DIS";
+        } else{
+            $divisi= "PKA";
+        }
+
         $dataAduan = Aduan::where('kategori_aduan', 'pipa dinas')->whereBetween(DB::raw('DATE(created_at)'), array($start, $end))->count();
         if ($dataAduan >= 1) {
             $no = str_pad($dataAduan + 1, 4, "0", STR_PAD_LEFT);
-            $noAduan =  $no . "/" . "ADU-DS/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
-            $noAduanNps =  "NPS/" . $no . "/" . "ADU" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
+            $noAduan =  $no . "/" . "ADU-DS/". $wilayah . "/" . $divisi . "/"  . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
+            $noAduanNps =  "NPS/" . $no . "/" . "ADU/". $wilayah . "/" . $divisi . "/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
         } else {
             $no = str_pad(1, 4, "0", STR_PAD_LEFT);
-            $noAduan =  $no . "/" . "ADU-DS/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
-            $noAduanNps =  "NPS/" . $no . "/" . "ADU" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
+            $noAduan =  $no . "/" . "ADU-DS/". $wilayah . "/" . $divisi . "/"  . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
+            $noAduanNps =  "NPS/" . $no . "/" . "ADU/". $wilayah . "/" . $divisi . "/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
         }
 
         $jenis_aduan = JenisAduan::orderBy('nama')->get();

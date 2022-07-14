@@ -128,24 +128,6 @@
                                 </div>
 
                                 <div class="col-6 timeline">
-                                    <h6>List Persetujuan Pekerjaan</h6>
-                                    <ul>
-                                        @forelse ($list_persetujuan as $item)
-                                            @if ($item->jabatan === 'Staf Pengawas' || $item->jabatan === 'Asisten Manajer Pengawas' || str_contains($item->jabatan, 'Asisten Manajer Distribusi') || $item->jabatan === 'Manajer Distribusi')
-                                                <li>
-                                                    <div class="bullet bg-primary"></div>
-                                                    <div class="time">{{ $item->tanggal_disetujui }}</div>
-                                                    <div class="desc">
-                                                        <h3>{{ $item->nama }}</h3>
-                                                        <h4>{{ $item->jabatan }}</h4>
-                                                    </div>
-                                                </li>
-                                            @endif
-                                        @empty
-                                        @endforelse
-
-
-                                    </ul>
                                     <h6>List Persetujuan Tagihan</h6>
                                     <ul>
                                         @forelse ($list_persetujuan as $item)
