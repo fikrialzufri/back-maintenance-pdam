@@ -709,6 +709,7 @@ class PelaksanaanPekerjaanController extends Controller
                     $harga = $item->harga_malam;
                 }
                 $total = $jumlah * $harga;
+
                 $listitem[$item->id] = [
                     'keterangan' => $keterangan,
                     'harga' => $harga,
@@ -740,7 +741,7 @@ class PelaksanaanPekerjaanController extends Controller
                     $message = 'Berhasil mengirim foto';
                 }
 
-                $data->hasItem()->sync($listitem);
+                $data->hasItem()->attach($listitem);
                 $message = 'Berhasil Menyimpan Item Pekerjaan';
                 return $this->sendResponse($data, $message, 200);
             }
