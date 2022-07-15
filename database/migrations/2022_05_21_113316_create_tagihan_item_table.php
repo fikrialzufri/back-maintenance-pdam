@@ -24,7 +24,7 @@ class CreateTagihanItemTable extends Migration
             $table->bigInteger('harga_uraian')->default(0);
             $table->bigInteger('harga_master')->default(0);
             $table->integer('urutan')->default(0);
-            $table->float('jumlah')->default(0);
+            $table->float('jumlah', 20, 3)->default(0);
             $table->bigInteger('total_uraian')->default(0);
             $table->bigInteger('total_master')->default(0);
             $table->bigInteger('grand_total')->default(0);

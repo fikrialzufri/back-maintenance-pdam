@@ -22,7 +22,11 @@
                         <form action="" role="form" id="form" enctype="multipart/form-data">
                             <div class="row">
                                 <div class="col-lg-2">
-                                    <label for="">No Spk</label>
+                                    <label for="">Pencarian</label>
+                                    <input type="text" name="search" value="{{ $search }}" class="form-control">
+                                </div>
+                                <div class="col-lg-2">
+                                    <label for="">Spk</label>
                                     <input type="text" name="spk" value="{{ $spk }}" class="form-control">
                                 </div>
                                 <div class="col-lg-2">
@@ -77,7 +81,8 @@
                                     <div class="col-lg-3">
                                         <label for="">Rekapan Pekerjaan</label>
                                         <div class="input-group">
-                                            <a href="{{ route('penunjukan_pekerjaan.rekanan') }}" class="btn btn-primary">
+                                            <a href="{{ route('penunjukan_pekerjaan.rekanan') }}"
+                                                class="btn btn-primary">
                                                 <span class="fa fa-edit"></span>
                                                 Proses
                                             </a>
@@ -117,9 +122,14 @@
                                         <td class="text-center">
                                             <a href="{{ route('penunjukan_pekerjaan.show', $item->slug) }}"
                                                 class="btn btn-sm {{ $item->btn }}   text-light m-1">
+
                                                 @if (auth()->user()->hasRole('rekanan'))
                                                     <i class="nav-icon fa fa-search"></i> Detail
-                                                @elseif (auth()->user()->hasRole('asisten-manajer-distribusi') || auth()->user()->hasRole('asisten-manajer-pengendalian-kehilangan-air'))
+                                                @elseif (auth()->user()->hasRole('admin-distribusi') ||
+                                                    auth()->user()->hasRole('admin-pengendalian-kehilangan-air'))
+                                                    <i class="nav-icon fa fa-search"></i> Detail
+                                                @elseif (auth()->user()->hasRole('asisten-manajer-distribusi') ||
+                                                    auth()->user()->hasRole('asisten-manajer-pengendalian-kehilangan-air'))
                                                     @if ($item->status_aduan == 'Selesai dikerjakan')
                                                         <i class="nav-icon fas fa-eye"></i> Proses
                                                     @elseif ($item->status_aduan == 'Belum ditunjuk')
@@ -129,6 +139,8 @@
                                                     @endif
                                                 @elseif (auth()->user()->hasRole('staf-pengawas'))
                                                     @if ($item->status_aduan == 'Selesai dikerjakan')
+                                                        <i class="nav-icon fas fa-search"></i> Detail
+                                                    @elseif ($item->status_aduan == 'approve')
                                                         <i class="nav-icon fas fa-eye"></i> Koreksi
                                                     @else
                                                         <i class="nav-icon fa fa-search"></i> Detail

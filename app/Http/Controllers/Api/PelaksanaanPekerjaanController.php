@@ -434,11 +434,7 @@ class PelaksanaanPekerjaanController extends Controller
     public function selesai(Request $request)
     {
         DB::beginTransaction();
-        // list jabatan
-        $listJabatan = Jabatan::where('slug', 'manajer-distribusi')->orWhere('slug', 'manajer-perencanaan')->orWhere('slug', 'asisten-manajer-perencanaan')->orWhere('slug', 'manajer-pengawas')->orWhere('slug', 'asisten-manajer-pengawas')->orWhere('slug', 'direktur-teknik')->get()->pluck('id')->toArray();
 
-        // list karyawan bedasarkan jabatan
-        $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get();
 
         $message = 'Gagal Menyimpan Pelaksanaan Pekerjaan';
         try {
@@ -563,23 +559,39 @@ class PelaksanaanPekerjaanController extends Controller
             }
 
             // notif ke karyawan bedasarkan jabatan
+            // list jabatan
+            $listJabatan = Jabatan::Where('slug', 'manajer-perencanaan')->orWhere('slug', 'manajer-pengawas')->orWhere('slug', 'asisten-manajer-perencanaan')->orWhere('slug', 'asisten-manajer-pengawas')->orWhere('slug', 'direktur-teknik')->get()->pluck('id')->toArray();
+
+            // list karyawan bedasarkan jabatan
+            $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get();
             if ($listKaryawan) {
                 foreach (collect($listKaryawan) as $i => $kr) {
-                    $this->notification($data->id, $aduan->slug, $title, $body, $modul, auth()->user()->id, $kr->user_id);
+                    $this->notification($penunjukanPekerjaan->id, $penunjukanPekerjaan->slug, $title, $body, $modul, auth()->user()->id, $kr->user_id);
                 }
             }
 
-
-            // notif ke admin distribusi sesuai wilyah
+            // notif ke admin distribusi /pka sesuai wilyah
             if ($aduan->wilayah_id) {
-                $jabatanWilayah = Jabatan::where('wilayah_id', $aduan->wilayah_id)->pluck('id')->toArray();
-
+                if ($aduan->kategori_nps === "dis") {
+                    $jabatanWilayah = Jabatan::where('slug', "like", "admin-distribusi%")
+                        ->orWhere('slug', "like", "asisten-manajer-distribusi%")
+                        ->orWhere('slug', 'manajer-distribusi')
+                        ->pluck('id')
+                        ->toArray();
+                }
+                if ($aduan->kategori_nps === "pka") {
+                    $jabatanWilayah = Jabatan::where('slug', "like", "admin-pengendalian-kehilangan-air%")
+                        ->orWhere('slug', "like", "asisten-manajer-pengendalian-kehilangan-air%")
+                        ->orWhere('slug', 'manajer-pengendalian-kehilangan-air')
+                        ->pluck('id')
+                        ->toArray();
+                }
                 if ($jabatanWilayah) {
                     $karyawanwilayah = Karyawan::whereIn('jabatan_id', $jabatanWilayah)->get();
 
                     if ($karyawanwilayah) {
-                        foreach (collect($karyawanwilayah) as $i => $kr) {
-                            $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $kr->user_id);
+                        foreach (collect($karyawanwilayah) as $in => $krw) {
+                            $this->notification($penunjukanPekerjaan->id, $penunjukanPekerjaan->slug, $title, $body, $modul, auth()->user()->id, $krw->user_id);
                         }
                     }
                 }

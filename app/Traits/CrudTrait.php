@@ -301,6 +301,7 @@ trait CrudTrait
             $messages
         );
         $relationModels = '';
+        $id_relatioan = '';
         DB::beginTransaction();
         try {
             //open model
@@ -312,28 +313,26 @@ trait CrudTrait
                 $manyRelation  = null;
                 $valueMany  = null;
                 foreach ($relation as $key => $value) {
-                    try { //
-                        $relationModels = '\\App\Models\\' . ucfirst($key);
-                        $relationModels = new $relationModels;
-                        foreach ($value as $colom => $val) {
-                            if ($colom === "password") {
-                                $val = bcrypt($val);
-                            }
-                            if (in_array(str_replace('_id', '', $colom), $this->manyToMany)) {
-                                $manyToMany = str_replace('_id', '', $colom);
-                                $valueMany[$manyToMany] = $val;
-                                continue;
-                            }
-                            $relationModels->$colom = $val;
+                    $relationModels = '\\App\Models\\' . ucfirst($key);
+                    $relationModels = new $relationModels;
+                    foreach ($value as $colom => $val) {
+                        if ($colom === "password") {
+                            $val = bcrypt($val);
                         }
-                        $relationModels->save();
-                        if (isset($manyToMany)) {
-                            $relationModels->$manyToMany()->attach($valueMany);
+                        if (in_array(str_replace('_id', '', $colom), $this->manyToMany)) {
+                            $manyToMany = str_replace('_id', '', $colom);
+                            $valueMany[$manyToMany] = $val;
+                            continue;
                         }
-                        $relationsFields = $key . '_id';
+                        $relationModels->$colom = $val;
+                    }
+                    $relationModels->save();
+                    if (isset($manyToMany)) {
+                        $relationModels->$manyToMany()->attach($valueMany);
+                    }
+                    $relationsFields = $key . '_id';
 
-                        $data->$relationsFields = $relationModels->id;
-                    } catch (\Throwable $th) { }
+                    $data->$relationsFields = $relationModels->id;
                 }
             }
 
@@ -410,6 +409,13 @@ trait CrudTrait
             return redirect()->route($this->route . '.index')->with('message', ucwords(str_replace('-', ' ', $this->route)) . ' Berhasil Ditambahkan')->with('Class', 'success');
         } catch (\Throwable $th) {
             DB::rollback();
+
+            if (isset($relation)) {
+                foreach ($relation as $key => $value) {
+                    $relationModels = '\\App\Models\\' . ucfirst($key);
+                    $relationModels = $relationModels->find($id_relatioan)->delete();
+                }
+            }
             if (isset($this->manyToMany)) {
                 if (!isset($this->extraFrom)) {
                     return $this->manyToMany;

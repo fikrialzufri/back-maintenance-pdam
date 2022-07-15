@@ -81,21 +81,20 @@
                                         <h6>List Persetujuan Pekerjaan</h6>
                                         <ul>
                                             @forelse ($list_persetujuan as $item)
-                                            
-                                                    <li>
-                                                        <div class="bullet bg-primary"></div>
-                                                        <div class="time">{{ $item->tanggal_disetujui }}</div>
-                                                        <div class="desc">
-                                                            <p>{{ $item->nama }} - {{ $item->jabatan }}</p>
-                                                        </div>
-                                                    </li>
+                                                <li>
+                                                    <div class="bullet bg-primary"></div>
+                                                    <div class="time">{{ $item->tanggal_disetujui }}</div>
+                                                    <div class="desc">
+                                                        <p>{{ $item->nama }} - {{ $item->jabatan }}</p>
+                                                    </div>
+                                                </li>
                                             @empty
                                             @endforelse
 
 
                                         </ul>
                                     </div>
-                                    
+
                                     @if (!auth()->user()->hasRole('admin-asisten-manajer'))
                                         @if ($pekerjaanUtama)
                                             @if ($pekerjaanUtama->status == 'selesai koreksi' || $pekerjaanUtama->status == 'diadjust')
@@ -193,14 +192,65 @@
 
                         </div>
 
-                        @if ($penunjukan->status_mobile < 3 && $penunjukan->status !== "approve")
+                        @if ($penunjukan->status_mobile < 3 && $penunjukan->status !== 'approve')
                             @if ($pekerjaanUtama)
                                 @if ($pekerjaanUtama->status_mobile < 2)
+                                    @canany(['edit-penunjukan-pekerjaan', 'create-penunjukan-pekerjaan'])
+                                        <div class="card-header">
+                                            <div class="card-title">Pilih Pekerja</div>
+                                        </div>
+                                        <form action="{{ $action }}" method="post" role="form"
+                                            enctype="multipart/form-data">
+                                            @csrf
+                                            {{ method_field('PUT') }}
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <div class="form-group">
+                                                            <input type="hidden" name="slug" value="{{ $aduan->slug }}">
+                                                            <div>
+                                                                <select name="rekanan_id" class="selected2 form-control"
+                                                                    id="cmbRekanan" required>
+                                                                    <option value="">--Pilih Pekerja--</option>
+                                                                    @foreach ($rekanan as $rek)
+                                                                        <option value="{{ $rek->id }}"
+                                                                            {{ old('rekanan_id') == $rek->id ? 'selected' : '' }}>
+                                                                            {{ $rek->nama }}
+                                                                        </option>
+                                                                    @endforeach
+                                                                    @foreach ($karyawanPekerja as $kary)
+                                                                        <option value="{{ $kary->id }}"
+                                                                            {{ old('rekanan_id') == $kary->id ? 'selected' : '' }}>
+                                                                            {{ $kary->nama }}
+                                                                        </option>
+                                                                    @endforeach
+                                                                </select>
+                                                                @if ($errors->has('rekanan_id'))
+                                                                    <span class="text-danger">
+                                                                        <strong
+                                                                            id="textrule">{{ $errors->first('rekanan_id') }}</strong>
+                                                                    </span>
+                                                                @endif
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <div class="card-footer clearfix">
+                                                <button type="submit" class="btn btn-primary">Simpan</button>
+                                            </div>
+                                        </form>
+                                    @endcanany
+                                @endif
+                            @else
                                 @canany(['edit-penunjukan-pekerjaan', 'create-penunjukan-pekerjaan'])
                                     <div class="card-header">
                                         <div class="card-title">Pilih Pekerja</div>
                                     </div>
-                                    <form action="{{ $action }}" method="post" role="form" enctype="multipart/form-data">
+                                    <form action="{{ $action }}" method="post" role="form"
+                                        enctype="multipart/form-data">
                                         @csrf
                                         {{ method_field('PUT') }}
                                         <div class="card-body">
@@ -209,7 +259,8 @@
                                                     <div class="form-group">
                                                         <input type="hidden" name="slug" value="{{ $aduan->slug }}">
                                                         <div>
-                                                            <select name="rekanan_id" class="selected2 form-control" id="cmbRekanan" required>
+                                                            <select name="rekanan_id" class="selected2 form-control"
+                                                                id="cmbRekanan" required>
                                                                 <option value="">--Pilih Pekerja--</option>
                                                                 @foreach ($rekanan as $rek)
                                                                     <option value="{{ $rek->id }}"
@@ -231,10 +282,10 @@
                                                                 </span>
                                                             @endif
                                                         </div>
-    
+
                                                     </div>
                                                 </div>
-    
+
                                             </div>
                                         </div>
                                         <div class="card-footer clearfix">
@@ -242,55 +293,6 @@
                                         </div>
                                     </form>
                                 @endcanany
-                                    
-                                @endif
-                            @else
-                            @canany(['edit-penunjukan-pekerjaan', 'create-penunjukan-pekerjaan'])
-                            <div class="card-header">
-                                <div class="card-title">Pilih Pekerja</div>
-                            </div>
-                            <form action="{{ $action }}" method="post" role="form" enctype="multipart/form-data">
-                                @csrf
-                                {{ method_field('PUT') }}
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <div class="form-group">
-                                                <input type="hidden" name="slug" value="{{ $aduan->slug }}">
-                                                <div>
-                                                    <select name="rekanan_id" class="selected2 form-control" id="cmbRekanan" required>
-                                                        <option value="">--Pilih Pekerja--</option>
-                                                        @foreach ($rekanan as $rek)
-                                                            <option value="{{ $rek->id }}"
-                                                                {{ old('rekanan_id') == $rek->id ? 'selected' : '' }}>
-                                                                {{ $rek->nama }}
-                                                            </option>
-                                                        @endforeach
-                                                        @foreach ($karyawanPekerja as $kary)
-                                                            <option value="{{ $kary->id }}"
-                                                                {{ old('rekanan_id') == $kary->id ? 'selected' : '' }}>
-                                                                {{ $kary->nama }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                    @if ($errors->has('rekanan_id'))
-                                                        <span class="text-danger">
-                                                            <strong
-                                                                id="textrule">{{ $errors->first('rekanan_id') }}</strong>
-                                                        </span>
-                                                    @endif
-                                                </div>
-
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                                <div class="card-footer clearfix">
-                                    <button type="submit" class="btn btn-primary">Simpan</button>
-                                </div>
-                            </form>
-                        @endcanany
                             @endif
                         @endif
                     @else
@@ -306,7 +308,8 @@
                                             <div class="form-group">
                                                 <input type="hidden" name="slug" value="{{ $aduan->slug }}">
                                                 <div>
-                                                    <select name="rekanan_id" class="selected2 form-control" id="cmbRekanan" required>
+                                                    <select name="rekanan_id" class="selected2 form-control" id="cmbRekanan"
+                                                        required>
                                                         <option value="">--Pilih Pekerja--</option>
                                                         @foreach ($rekanan as $rek)
                                                             <option value="{{ $rek->id }}"
@@ -445,8 +448,7 @@
                                                                 <div class="col">
                                                                     <div class="">
                                                                         <button type="submit" id="btn_pekerjaan"
-                                                                            class="btn btn-primary">Update
-                                                                            Pekerjaan</button>
+                                                                            class="btn btn-primary">Tambah Pekerjaan</button>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -528,7 +530,7 @@
                                                                 <div class="col">
                                                                     <div class="">
                                                                         <button type="submit" id="btn_pekerjaan"
-                                                                            class="btn btn-primary">Update
+                                                                            class="btn btn-primary">Tambah
                                                                             Pekerjaan</button>
                                                                     </div>
                                                                 </div>
@@ -605,16 +607,17 @@
                                                             @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
                                                                 <td>Rp. {{ format_uang($pekerjaan->pivot->harga) }}</td>
                                                                 <td>{{ $pekerjaan->pivot->keterangan }}</td>
-                                                                <td rowspan="3">
-                                                                    Rp.{{ format_uang($pekerjaan->pivot->total) }}</td>
+                                                                <td>
+                                                                    Rp.{{ format_uang($pekerjaan->pivot->qty * $pekerjaan->pivot->harga) }}
+                                                                </td>
                                                             @endif
 
                                                             @if ($pekerjaanUtama->status === 'selesai koreksi' || $pekerjaanUtama->status === 'diadjust')
                                                                 <td>Rp. {{ format_uang($pekerjaan->pivot->harga) }}</td>
                                                                 <td>{{ $pekerjaan->pivot->keterangan }}</td>
-                                                                <td
-                                                                    @if ($pekerjaanUtama->status === 'diadjust') rowspan="5" @else rowspan="4" @endif>
-                                                                    Rp. {{ format_uang($pekerjaan->pivot->total) }}</td>
+                                                                <td>
+                                                                    Rp.{{ format_uang($pekerjaan->pivot->qty * $pekerjaan->pivot->harga) }}
+                                                                </td>
                                                             @endif
 
 
@@ -652,6 +655,9 @@
                                                                     @endif
                                                                     <td>
                                                                         {{ $daftarPekerjaan->hasItemPengawas[$key]->pivot->keterangan }}
+                                                                    </td>
+                                                                    <td>
+                                                                        Rp.{{ format_uang($daftarPekerjaan->hasItemPengawas[$key]->pivot->qty * $daftarPekerjaan->hasItemPengawas[$key]->pivot->harga) }}
                                                                     </td>
                                                                 @endif
                                                             @endif
@@ -705,6 +711,10 @@
                                                                     @endif
                                                                     <td>
                                                                         {{ $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->keterangan }}
+                                                                    </td>
+
+                                                                    <td>
+                                                                        Rp.{{ format_uang($daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty * $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->harga) }}
                                                                     </td>
                                                                 @endif
                                                             </tr>
@@ -765,6 +775,9 @@
                                                                     <td>
                                                                         {{ $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->keterangan }}
                                                                     </td>
+                                                                    <td>
+                                                                        Rp.{{ format_uang($daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty * $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->harga) }}
+                                                                    </td>
                                                                 @endif
                                                             </tr>
                                                             <tr>
@@ -778,6 +791,11 @@
                                                                     </td>
                                                                     <td>{{ $daftarPekerjaan->hasItemPerencanaan[$key]->pivot->keterangan }}
                                                                     </td>
+                                                                    @if (isset($daftarPekerjaan->hasItemAsmenPengawas[$key]))
+                                                                        <td>
+                                                                            Rp.{{ format_uang($daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty * $daftarPekerjaan->hasItemPerencanaan[$key]->pivot->harga) }}
+                                                                        </td>
+                                                                    @endif
                                                                 @endif
 
                                                             </tr>
@@ -802,6 +820,9 @@
                                                                     <td>
                                                                         {{ $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->keterangan }}
                                                                     </td>
+                                                                    <td>
+                                                                        Rp.{{ format_uang($daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty * $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->harga) }}
+                                                                    </td>
                                                                 @endif
                                                             </tr>
                                                             <tr>
@@ -816,6 +837,11 @@
                                                                     </td>
                                                                     <td>{{ $daftarPekerjaan->hasItemPerencanaan[$key]->pivot->keterangan }}
                                                                     </td>
+                                                                    @if (isset($daftarPekerjaan->hasItemAsmenPengawas[$key]))
+                                                                        <td>
+                                                                            Rp.{{ format_uang($daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty * $daftarPekerjaan->hasItemPerencanaan[$key]->pivot->harga) }}
+                                                                        </td>
+                                                                    @endif
                                                                 @endif
 
                                                             </tr>
@@ -829,6 +855,9 @@
                                                                         {{ format_uang($daftarPekerjaan->hasItemPerencanaanAdujst[$key]->pivot->harga) }}
                                                                     </td>
                                                                     <td>{{ $daftarPekerjaan->hasItemPerencanaanAdujst[$key]->pivot->keterangan }}
+                                                                    </td>
+                                                                    <td>
+                                                                        Rp.{{ format_uang($daftarPekerjaan->hasItemPerencanaanAdujst[$key]->pivot->qty * $daftarPekerjaan->hasItemPerencanaanAdujst[$key]->pivot->harga) }}
                                                                     </td>
                                                                 @endif
 
@@ -958,8 +987,7 @@
                                                             <div class="col">
                                                                 <div class="">
                                                                     <button type="button" id="btn_galian"
-                                                                        class="btn btn-primary">Update
-                                                                        Galian</button>
+                                                                        class="btn btn-primary">Tambah Galian</button>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1054,7 +1082,7 @@
                                                             <div class="col">
                                                                 <div class="">
                                                                     <button type="button" id="btn_galian"
-                                                                        class="btn btn-primary">Update
+                                                                        class="btn btn-primary">Tambah
                                                                         Galian</button>
                                                                 </div>
                                                             </div>
@@ -1114,7 +1142,7 @@
                                                             <td>{{ $galian->lebar }}</td>
                                                             <td>{{ $galian->dalam }}</td>
                                                             <td>
-                                                                {{ $galian->volume_rekanan }}
+                                                                {{ round($galian->volume_rekanan, 3) }}
 
                                                                 m<sup>2
                                                             </td>
@@ -1123,13 +1151,15 @@
                                                             @endif
                                                             <td>{{ $galian->keterangan }}</td>
                                                             @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
-                                                                <td>Rp. {{ format_uang($galian->total) }}</td>
+                                                                <td>Rp.
+                                                                    {{ format_uang($galian->volume_rekanan * $galian->harga_satuan) }}
+                                                                </td>
                                                             @endif
                                                             @if ($pekerjaanUtama->status === 'selesai koreksi' || $pekerjaanUtama->status === 'diadjust')
                                                                 <td>Rp. {{ format_uang($galian->harga_satuan) }}</td>
-                                                                <td
-                                                                    @if ($pekerjaanUtama->status === 'diadjust') rowspan="5" @else rowspan="4" @endif>
-                                                                    Rp. {{ format_uang($galian->total) }}</td>
+                                                                <td>Rp.
+                                                                    {{ format_uang($galian->volume_rekanan * $galian->harga_satuan) }}
+                                                                </td>
                                                             @endif
 
                                                         </tr>
@@ -1179,7 +1209,7 @@
                                                                     {{ $galian->galian_pengawas_dalam }}
                                                                 </td>
                                                                 <td>
-                                                                    {{ $galian->volume }}
+                                                                    {{ round($galian->volume, 3) }}
                                                                     m<sup>2
                                                                 </td>
                                                                 @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
@@ -1212,6 +1242,9 @@
                                                                     <td>
                                                                         Rp.
                                                                         {{ format_uang($galian->galian_pengawas_harga_satuan) }}
+                                                                    </td>
+                                                                    <td>Rp.
+                                                                        {{ format_uang($galian->galian_pengawas_total) }}
                                                                     </td>
                                                                 @endif
                                                             @endif
@@ -1280,7 +1313,7 @@
                                                                     {{ $galian->galian_asmen_pengawas_dalam }}
                                                                 </td>
                                                                 <td>
-                                                                    {{ $galian->volume_asmen }}
+                                                                    {{ round($galian->volume_asmen, 3) }}
                                                                     m<sup>2
                                                                 </td>
                                                                 @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
@@ -1311,6 +1344,9 @@
                                                                     <td>
                                                                         Rp.
                                                                         {{ format_uang($galian->galian_asmen_pengawas_harga_satuan) }}
+                                                                    </td>
+                                                                    <td>Rp.
+                                                                        {{ format_uang($galian->galian_asmen_pengawas_total) }}
                                                                     </td>
                                                                 @endif
                                                             </tr>
@@ -1368,7 +1404,7 @@
                                                                     {{ $galian->galian_asmen_pengawas_dalam }}
                                                                 </td>
                                                                 <td>
-                                                                    {{ $galian->volume_asmen }}
+                                                                    {{ round($galian->volume_asmen, 3) }}
                                                                     m<sup>2
                                                                 </td>
                                                                 <td>
@@ -1378,7 +1414,10 @@
                                                                     Rp.
                                                                     {{ format_uang($galian->galian_asmen_pengawas_harga_satuan) }}
                                                                 </td>
-
+                                                                <td>
+                                                                    Rp.
+                                                                    {{ format_uang($galian->galian_asmen_pengawas_total) }}
+                                                                </td>
 
 
                                                             </tr>
@@ -1390,6 +1429,10 @@
                                                                 <td> </td>
                                                                 <td> {{ $galian->galian_perencanaan_keterangan }}</td>
                                                                 <td>Rp. {{ $galian->galian_perencanaan_harga_satuan }}</td>
+                                                                <td>
+                                                                    Rp.
+                                                                    {{ format_uang($galian->total) }}
+                                                                </td>
 
                                                             </tr>
                                                         @elseif ($pekerjaanUtama->status === 'diadjust')
@@ -1405,7 +1448,7 @@
                                                                     {{ $galian->galian_asmen_pengawas_dalam }}
                                                                 </td>
                                                                 <td>
-                                                                    {{ $galian->volume_asmen }}
+                                                                    {{ round($galian->volume_asmen, 3) }}
                                                                     m<sup>2
                                                                 </td>
                                                                 <td>
@@ -1416,7 +1459,10 @@
                                                                     {{ format_uang($galian->galian_asmen_pengawas_harga_satuan) }}
                                                                 </td>
 
-
+                                                                <td>
+                                                                    Rp.
+                                                                    {{ format_uang($galian->galian_asmen_pengawas_total) }}
+                                                                </td>
 
                                                             </tr>
                                                             <tr>
@@ -1429,17 +1475,25 @@
                                                                 <td>
                                                                     Rp. {{ $galian->galian_perencanaan_harga_satuan }}
                                                                 </td>
+                                                                <td>
+                                                                    Rp.
+                                                                    {{ format_uang($galian->total) }}
+                                                                </td>
 
                                                             </tr>
                                                             <tr>
                                                                 <td>{{ $galian->galian_perencanaan_adjust_panjang }}</td>
                                                                 <td>{{ $galian->galian_perencanaan_adjust_lebar }}</td>
                                                                 <td>{{ $galian->galian_perencanaan_adjust_dalam }}</td>
-                                                                <td>{{ $galian->volume_adjust }} m<sup>2</td>
+                                                                <td>{{ round($galian->volume_adjust, 3) }} m<sup>2</td>
                                                                 <td> {{ $galian->galian_perencanaan_adjust_keterangan }}
                                                                 </td>
                                                                 <td>Rp.
                                                                     {{ format_uang($galian->galian_perencanaan_adjust_harga_satuan) }}
+                                                                </td>
+                                                                <td>
+                                                                    Rp.
+                                                                    {{ format_uang($galian->total) }}
                                                                 </td>
 
                                                             </tr>
@@ -1493,9 +1547,15 @@
                                                         <input type="hidden" name="no_spk" id="no_spk"
                                                             value="{{ $aduan->no_spk }}">
                                                         <div class="card">
-                                                            <button type="button" id="simpan_koreksi"
-                                                                class="btn btn-primary">Simpan Koreksi
-                                                                Pekerjaan</button>
+                                                            @if (auth()->user()->hasRole('asisten-manajer-distribusi') ||
+                                                                auth()->user()->hasRole('asisten-manajer-pengendalian-kehilangan-air'))
+                                                                <button type="button" id="simpan_koreksi"
+                                                                    class="btn btn-primary">Setujui Pekerjaan</button>
+                                                            @else
+                                                                <button type="button" id="simpan_koreksi"
+                                                                    class="btn btn-primary">Simpan Koreksi
+                                                                    Pekerjaan</button>
+                                                            @endif
                                                         </div>
                                                     </div>
                                                 </div>

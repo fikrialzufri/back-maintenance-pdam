@@ -77,6 +77,23 @@
 
                                         </div>
                                     </div>
+                                    <div class="col-12 timeline">
+                                        <h6>List Persetujuan Pekerjaan</h6>
+                                        <ul>
+                                            @forelse ($list_persetujuan as $item)
+                                                <li>
+                                                    <div class="bullet bg-primary"></div>
+                                                    <div class="time">{{ $item->tanggal_disetujui }}</div>
+                                                    <div class="desc">
+                                                        <p>{{ $item->nama }} - {{ $item->jabatan }}</p>
+                                                    </div>
+                                                </li>
+                                            @empty
+                                            @endforelse
+
+
+                                        </ul>
+                                    </div>
                                     @if (!auth()->user()->hasRole('admin-asisten-manajer'))
                                         @if ($pekerjaanUtama)
                                             @if ($pekerjaanUtama->status == 'selesai koreksi' || $pekerjaanUtama->status == 'diadjust')
@@ -365,8 +382,10 @@
                                                             <td>{{ $pekerjaan->pivot->qty }}</td>
                                                             <td>Rp. {{ format_uang($pekerjaan->pivot->harga) }}</td>
                                                             <td>{{ $pekerjaan->pivot->keterangan }}</td>
-                                                            <td rowspan="5">
-                                                                Rp. {{ format_uang($pekerjaan->pivot->total) }}</td>
+                                                            <td>
+                                                                Rp.
+                                                                {{ format_uang($pekerjaan->pivot->qty * $pekerjaan->pivot->harga) }}
+                                                            </td>
                                                         </tr>
                                                         <tr>
                                                             <td>Pengawas</td>
@@ -387,6 +406,10 @@
                                                                 @endif
                                                                 <td>
                                                                     {{ $daftarPekerjaan->hasItemPengawas[$key]->pivot->keterangan }}
+                                                                </td>
+                                                                <td>
+                                                                    Rp.
+                                                                    {{ format_uang($daftarPekerjaan->hasItemPengawas[$key]->pivot->qty * $daftarPekerjaan->hasItemPengawas[$key]->pivot->harga) }}
                                                                 </td>
                                                             @endif
                                                         </tr>
@@ -410,6 +433,10 @@
                                                                 <td>
                                                                     {{ $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->keterangan }}
                                                                 </td>
+                                                                <td>
+                                                                    Rp.
+                                                                    {{ format_uang($daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty * $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->harga) }}
+                                                                </td>
                                                             @endif
                                                         </tr>
                                                         <tr>
@@ -423,6 +450,12 @@
                                                                 </td>
                                                                 <td>{{ $daftarPekerjaan->hasItemPerencanaan[$key]->pivot->keterangan }}
                                                                 </td>
+                                                                @if (isset($daftarPekerjaan->hasItemPengawas[$key]))
+                                                                    <td>
+                                                                        Rp.
+                                                                        {{ format_uang($daftarPekerjaan->hasItemPengawas[$key]->pivot->qty * $daftarPekerjaan->hasItemPerencanaan[$key]->pivot->harga) }}
+                                                                    </td>
+                                                                @endif
                                                             @endif
 
                                                         </tr>
@@ -629,14 +662,15 @@
                                                             <td>{{ $galian->lebar }}</td>
                                                             <td>{{ $galian->dalam }}</td>
                                                             <td>
-                                                                {{ $galian->volume_rekanan }}
+                                                                {{ round($galian->volume_rekanan, 3) }}
 
                                                                 m<sup>2
                                                             </td>
                                                             <td>{{ $galian->keterangan }}</td>
                                                             <td>Rp. {{ format_uang($galian->harga_satuan) }}</td>
-                                                            <td rowspan="5">
-                                                                Rp. {{ format_uang($galian->total) }}</td>
+                                                            <td>Rp.
+                                                                {{ format_uang($galian->volume_rekanan * $galian->harga_satuan) }}
+                                                            </td>
 
                                                         </tr>
 
@@ -652,7 +686,7 @@
                                                                 {{ $galian->galian_pengawas_dalam }}
                                                             </td>
                                                             <td>
-                                                                {{ $galian->volume }}
+                                                                {{ round($galian->volume, 3) }}
                                                                 m<sup>2
                                                             </td>
                                                             <td>
@@ -661,6 +695,10 @@
                                                             <td>
                                                                 Rp.
                                                                 {{ format_uang($galian->galian_pengawas_harga_satuan) }}
+                                                            </td>
+
+                                                            <td>Rp.
+                                                                {{ format_uang($galian->volume * $galian->galian_pengawas_harga_satuan) }}
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -675,7 +713,7 @@
                                                                 {{ $galian->galian_asmen_pengawas_dalam }}
                                                             </td>
                                                             <td>
-                                                                {{ $galian->volume_asmen }}
+                                                                {{ round($galian->volume_asmen, 3) }}
                                                                 m<sup>2
                                                             </td>
                                                             <td>
@@ -684,6 +722,10 @@
                                                             <td>
                                                                 Rp.
                                                                 {{ format_uang($galian->galian_asmen_pengawas_harga_satuan) }}
+                                                            </td>
+                                                            <td>
+                                                                Rp.
+                                                                {{ format_uang($galian->galian_asmen_pengawas_harga_satuan * round($galian->volume_asmen, 3)) }}
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -694,6 +736,7 @@
                                                             <td> </td>
                                                             <td> {{ $galian->galian_perencanaan_keterangan }}</td>
                                                             <td>Rp. {{ $galian->galian_perencanaan_harga_satuan }}</td>
+                                                            <td>Rp. {{ format_uang($galian->total) }}</td>
 
                                                         </tr>
                                                         <tr>

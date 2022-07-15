@@ -63,7 +63,9 @@
                 <div class="card">
                     <div class="card-body">
                         @forelse ($tagihan->list_persetujuan as $index => $item)
-                            @if ($item->jabatan === 'Staf Pengawas' || $item->jabatan === 'Asisten Manajer Pengawas' || str_contains($item->jabatan, 'Asisten Manajer Distribusi') || $item->jabatan === 'Manajer Distribusi')
+                            @if ($item->jabatan === 'Manajer Pengendalian Kehilangan Air' ||
+                                $item->jabatan === 'Manajer Perencanaan' ||
+                                $item->jabatan === 'Manajer Distribusi')
                                 <li>
                                     <span style=''>{{ ucfirst($item->nama) }}
                                         sebagai {{ $item->jabatan }}</span>
@@ -71,12 +73,12 @@
                                     <br>
                                     @if ($item->url)
                                         <img src="data:image/png;base64, {!! base64_encode(
-    QrCode::format('png')->size(100)->generate($item->url),
-) !!} " class="img-square">
+                                            QrCode::format('png')->size(100)->generate($item->url),
+                                        ) !!} " class="img-square">
                                     @else
                                         <img src="data:image/png;base64, {!! base64_encode(
-    QrCode::format('png')->size(100)->generate(asset('storage/karyawan/' . $item->tdd)),
-) !!} " class="img-square">
+                                            QrCode::format('png')->size(100)->generate(asset('storage/karyawan/' . $item->tdd)),
+                                        ) !!} " class="img-square">
                                     @endif
                                     <br>
                                     <br>

@@ -141,11 +141,9 @@ class Tagihan extends Model
         $danger = '';
         $user = auth()->user()->id;
         if (
-            auth()->user()->hasRole('staf-pengawas') ||
-            auth()->user()->hasRole('asisten-manajer-distribusi') ||
-            auth()->user()->hasRole('asisten-manajer-pengawas') ||
+
             auth()->user()->hasRole('manajer-distribusi') ||
-            auth()->user()->hasRole('asisten-manajer-perencanaan') ||
+            auth()->user()->hasRole('manajer-pengendalian-kehilangan-air') ||
             auth()->user()->hasRole('manajer-perencanaan') || auth()->user()->hasRole('direktur-teknik')
         ) {
             $danger = 'bg-danger';
@@ -217,7 +215,9 @@ class Tagihan extends Model
                 $total += $value->total_pekerjaan;
             }
         }
-        return $total;
+
+        $ppn = ($total * 11) / 100;
+        return $total + $ppn;
     }
 
     public function getTotalLokasiPekerjaanAttribute()

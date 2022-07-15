@@ -95,7 +95,10 @@
                             </p>
                             <ol style="font-size: 20px;">
                                 @forelse ($tagihan->list_persetujuan as $index => $item)
-                                    @if ($item->jabatan === 'Staf Pengawas' || str_contains($item->jabatan, 'Asisten Manajer Distribusi') || $item->jabatan === 'Asisten Manajer Pengawas' || $item->jabatan === 'Manajer Distribusi')
+                                    @if ($item->jabatan === 'Staf Pengawas' ||
+                                        str_contains($item->jabatan, 'Asisten Manajer Distribusi') ||
+                                        $item->jabatan === 'Asisten Manajer Pengawas' ||
+                                        $item->jabatan === 'Manajer Distribusi')
                                         <li> <span style=''>{{ ucfirst($item->nama) }}
                                                 sebagai {{ $item->jabatan }}</span></li>
                                     @endif
@@ -155,12 +158,12 @@
                                     <br>
                                     @if ($tagihan->rekanan_url != null)
                                         <img src="data:image/png;base64, {!! base64_encode(
-    QrCode::format('png')->size(100)->generate($tagihan->rekanan_url),
-) !!} " class="img-square">
+                                            QrCode::format('png')->size(100)->generate($tagihan->rekanan_url),
+                                        ) !!} " class="img-square">
                                     @else
                                         <img src="data:image/png;base64, {!! base64_encode(
-    QrCode::format('png')->size(100)->generate($tagihan->rekanan_url_tdd),
-) !!} " class="img-square">
+                                            QrCode::format('png')->size(100)->generate($tagihan->rekanan_url_tdd),
+                                        ) !!} " class="img-square">
                                     @endif
                                     <br>
                                     {{ $tagihan->direktur }}
@@ -174,14 +177,16 @@
                                     <div class="d-flex justify-content-start">
                                         <div class="d mr-3">
                                             <img src="data:image/png;base64, {!! base64_encode(
-    QrCode::format('png')->size(100)->generate(route('tagihan.preview', $tagihan->slug)),
-) !!} " class="img-square">
+                                                QrCode::format('png')->size(100)->generate(route('tagihan.preview', $tagihan->slug)),
+                                            ) !!} " class="img-square">
                                         </div>
                                         <div class="d">
                                             <ol style="">
 
                                                 @forelse ($tagihan->list_persetujuan as $index => $item)
-                                                    @if ($item->jabatan === 'Staf Pengawas' || $item->jabatan === 'Asisten Manajer Pengawas' || str_contains($item->jabatan, 'Asisten Manajer Distribusi') || $item->jabatan === 'Manajer Distribusi')
+                                                    @if ($item->jabatan === 'Manajer Pengendalian Kehilangan Air' ||
+                                                        $item->jabatan === 'Manajer Perencanaan' ||
+                                                        $item->jabatan === 'Manajer Distribusi')
                                                         <li> <span style=''>{{ ucfirst($item->nama) }}
                                                                 sebagai {{ $item->jabatan }}</span></li>
                                                     @endif
@@ -202,13 +207,13 @@
                                             @if ($direktur)
                                                 @if ($direktur->url)
                                                     <img src="data:image/png;base64, {!! base64_encode(
-    QrCode::format('png')->size(100)->generate($direktur->url),
-) !!} "
+                                                        QrCode::format('png')->size(100)->generate($direktur->url),
+                                                    ) !!} "
                                                         class="img-square">
                                                 @else
                                                     <img src="data:image/png;base64, {!! base64_encode(
-    QrCode::format('png')->size(100)->generate(asset('storage/karyawan/' . $direktur->tdd)),
-) !!} "
+                                                        QrCode::format('png')->size(100)->generate(asset('storage/karyawan/' . $direktur->tdd)),
+                                                    ) !!} "
                                                         class="img-square">
                                                 @endif
                                             @endif

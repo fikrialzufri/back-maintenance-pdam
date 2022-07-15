@@ -17,13 +17,13 @@ class CreatePelaksanaanPekerjaanItemTable extends Migration
             //FOREIGN KEY CONSTRAINTS
             $table->foreignUuid('pelaksanaan_pekerjaan_id')->references('id')->on('pelaksanaan_pekerjaan')->onDelete('cascade');
             $table->foreignUuid('item_id')->references('id')->on('item')->onDelete('cascade');
-            $table->float('qty');
-            $table->float('harga');
+            $table->float('qty', 20, 3)->default(0);
+            $table->float('harga', 20, 3)->default(0);
             // $table->float('qty_pengawas')->nullable();
             // $table->float('qty_perencanaan_adjust')->nullable();
             // $table->float('harga_perencanaan')->nullable();
             // $table->float('harga_perencanaan_adjust')->nullable();
-            $table->float('total')->default(0);
+            $table->float('total', 20, 3)->default(0);
             $table->string('keterangan')->nullable();
             // $table->string('keterangan_pengawas')->nullable();
             // $table->string('keterangan_perencanaan')->nullable();

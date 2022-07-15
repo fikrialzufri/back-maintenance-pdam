@@ -17,8 +17,8 @@ class CreatePelaksanaanItemPerencanaanTable extends Migration
             //FOREIGN KEY CONSTRAINTS
             $table->foreignUuid('pelaksanaan_pekerjaan_id')->references('id')->on('pelaksanaan_pekerjaan')->onDelete('cascade');
             $table->foreignUuid('item_id')->references('id')->on('item')->onDelete('cascade');
-            $table->float('harga', 20)->default(0);
-            $table->float('total', 20)->default(0);
+            $table->float('harga', 20, 3)->default(0);
+            $table->float('total', 20, 3)->default(0);
             $table->string('keterangan')->nullable();
             //SETTING THE PRIMARY KEYS
             $table->primary(['pelaksanaan_pekerjaan_id', 'item_id']);

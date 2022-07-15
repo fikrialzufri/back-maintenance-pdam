@@ -13,8 +13,7 @@
                         {{ $data->appends(request()->input())->links() }}
                         <div>
                             @can('create-tagihan')
-                                <a href="{{ route($route . '.create') }}"
-                                    class="btn btn-sm btn-primary float-right text-light">
+                                <a href="{{ route($route . '.create') }}" class="btn btn-sm btn-primary float-right text-light">
                                     <i class="fa fa-plus"></i>Tambah Data
                                 </a>
                                 @if (!auth()->user()->hasRole('rekanan'))
@@ -92,18 +91,18 @@
                                         <td class="text-center">
                                             <a href="{{ route($route . '.show', $item->slug) }}"
                                                 class="btn btn-sm btn-primary text-light" data-toggle="tooltip"
-                                                data-placement="top"
-                                                title="@if (auth()->user()->hasRole('asisten-manajer-perencanaan') ||
-                                                    auth()->user()->hasRole('manajer-perencanaan') ||
-                                                    auth()->user()->hasRole('direktur-teknik')) Proses
+                                                data-placement="top">
+
+                                                @if ($item->belum_persetujuan === 'bg-danger')
+                                                    <i class="nav-icon fas fa-eye"></i>
+                                                    @if (auth()->user()->hasRole('manajer-distribusi') ||
+                                                        auth()->user()->hasRole('manajer-pengendalian-kehilangan-air') ||
+                                                        auth()->user()->hasRole('manajer-perencanaan') ||
+                                                        auth()->user()->hasRole('direktur-teknik'))
+                                                        Proses
+                                                    @endif
                                                 @else
-                                                    Rician @endif">
-                                                <i class="nav-icon fas fa-edit"></i>
-                                                @if (auth()->user()->hasRole('asisten-manajer-perencanaan') ||
-                                                    auth()->user()->hasRole('manajer-perencanaan') ||
-                                                    auth()->user()->hasRole('direktur-teknik'))
-                                                    Proses
-                                                @else
+                                                    <i class="nav-icon fas fa-edit"></i>
                                                     Rician
                                                 @endif
                                             </a>

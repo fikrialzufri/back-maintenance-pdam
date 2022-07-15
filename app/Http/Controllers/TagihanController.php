@@ -304,6 +304,8 @@ class TagihanController extends Controller
                     $pelaksanaan = $PelaksanaanPekerjaan->pluck('id')->toArray();
                     $aduanId = $PelaksanaanPekerjaan->pluck('aduan_id')->toArray();
                     $wilayahId = Aduan::whereIn('id', $aduanId)->pluck('wilayah_id')->toArray();
+                    $katagori_nps = Aduan::whereIn('id', $aduanId)->pluck('kategori_nps')->toArray();
+                    $katagori_nps_unique = array_unique($katagori_nps);
                     $wilayahId = array_unique($wilayahId);
                 }
             }
@@ -345,35 +347,27 @@ class TagihanController extends Controller
                 $perencaan = true;
             }
             if (auth()->user()->hasRole('manajer-distribusi')) {
-                $listJabatan = Jabatan::where('nama', 'like', '%Asisten Manajer Distribusi%')->whereIn('wilayah_id', $wilayahId)->pluck('id')->toArray();
-                $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get();
-                $queryHasUser =  $tagihan->hasUserMany()->pluck('id')->toArray();
 
-                foreach ($listKaryawan as $key => $value) {
-                    if (in_array($value->user_id, $queryHasUser)) {
-                        $bntSetuju = false;
-                    } else {
-                        $bntSetuju = true;
-                    }
+                if (in_array('dis', $katagori_nps_unique)) {
+                    $bntSetuju = false;
                 }
             }
             if (auth()->user()->hasRole('manajer-pengendalian-kehilangan-air')) {
-                $listJabatan = Jabatan::where('nama', 'like', '%Asisten Manajer Distribusi%')->whereIn('wilayah_id', $wilayahId)->pluck('id')->toArray();
-                $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get();
-                $queryHasUser =  $tagihan->hasUserMany()->pluck('id')->toArray();
-
-                foreach ($listKaryawan as $key => $value) {
-                    if (in_array($value->user_id, $queryHasUser)) {
-                        $bntSetuju = false;
-                    } else {
-                        $bntSetuju = true;
-                    }
+                if (in_array('pka', $katagori_nps_unique)) {
+                    $bntSetuju = false;
                 }
             }
-            
-            if (auth()->user()->hasRole('manajer-perencanaan')) {
-                $listJabatan = Jabatan::where('slug', 'manajer-pengendalian-kehilangan-air')->orWhere('manajer-pengendalian-kehilangan-air','manajer-distribusi')->get()->pluck('id')->toArray();
 
+            if (auth()->user()->hasRole('manajer-perencanaan')) {
+                $listJabatan = Jabatan::query();
+
+                if (in_array('dis', $katagori_nps_unique)) {
+                    $listJabatan = $listJabatan->where('slug', 'manajer-distribusi');
+                }
+                if (in_array('pka', $katagori_nps_unique)) {
+                    $listJabatan = $listJabatan->orWhere('slug', 'manajer-pengendalian-kehilangan-air');
+                }
+                $listJabatan = $listJabatan->get();
                 // list karyawan bedasarkan jabatan
                 $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get()->pluck('user_id')->toArray();
 
@@ -531,7 +525,7 @@ class TagihanController extends Controller
         DB::beginTransaction();
 
         // list jabatan
-        $listJabatan = Jabatan::where('slug', 'manajer-distribusi')->orWhere('slug', 'manajer-perencanaan')->orWhere('slug', 'asisten-manajer-perencanaan')->orWhere('slug', 'direktur-teknik')->orWhere('slug', 'keuangan')->get()->pluck('id')->toArray();
+        $listJabatan = Jabatan::where('slug', 'manajer-distribusi')->orWhere('slug', 'manajer-pengendalian-kehilangan-air')->orWhere('slug', 'manajer-perencanaan')->orWhere('slug', 'asisten-manajer-perencanaan')->orWhere('slug', 'direktur-teknik')->orWhere('slug', 'keuangan')->get()->pluck('id')->toArray();
 
         // list karyawan bedasarkan jabatan
         $data  = $this->model()->find($id);

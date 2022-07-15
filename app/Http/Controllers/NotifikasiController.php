@@ -11,7 +11,7 @@ class NotifikasiController extends Controller
     public function index()
     {
         // $user_id =  array();
-        $query  = Notifikasi::where('to_user_id', auth()->user()->id)->where('status', '!=', 'baca');
+        $query  = Notifikasi::where('to_user_id', auth()->user()->id);
         $notifikasi =  $query->limit(15)->orderBy('created_at', 'desc')->get();
 
         $count =  $query->count();
@@ -32,7 +32,7 @@ class NotifikasiController extends Controller
     }
     public function all()
     {
-        $query  = Notifikasi::where('to_user_id', auth()->user()->id);
+        $query  = Notifikasi::where('to_user_id', auth()->user()->id)->limit(15)->orderBy('created_at', 'desc');
         $notifikasi =  $query->paginate(15);
         $data = NotificationResource::collection($notifikasi)->response()->getData(true);
         $count =  $query->count();

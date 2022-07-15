@@ -10,6 +10,7 @@ use App\Models\Jabatan;
 use App\Models\Notifikasi;
 use App\Models\PenunjukanPekerjaan;
 use DB;
+use Str;
 use Carbon\Carbon;
 use App\Models\Wilayah;
 
@@ -50,20 +51,20 @@ class AduanController extends Controller
 
         $query = Aduan::query();
         if ($search) {
-            $query = $query->where('no_ticket', 'like', "%" . $search . "%")->orWhere('no_aduan', 'like', "%" . $search . "%");
+            if ($search) {
+                $query->where(function ($query) use ($search) {
+                    $query->where('no_ticket', 'like', "%" . $search . "%")->orWhere('no_aduan', 'like', "%" . $search . "%");
+                });
+            }
         }
 
         if (!auth()->user()->hasRole('superadmin')) {
             if (!auth()->user()->hasRole('rekanan')) {
                 if (auth()->user()->hasRole('admin-distribusi') || auth()->user()->hasRole('asisten-manajer-distribusi')) {
-                    $jabatan = Jabatan::where('slug',"like","admin-distribusi%")->orWhere('slug',"like","asisten-manajer-distribusi%")->pluck('id')->toArray();
-                    $user_id = Karyawan::whereIn('jabatan_id',$jabatan)->pluck('user_id')->toArray();
-                    $query->where('wilayah_id', auth()->user()->karyawan->id_wilayah)->whereIn('user_id',$user_id);
+                    $query->where('wilayah_id', auth()->user()->karyawan->id_wilayah)->where('kategori_nps', 'dis');
                 }
                 if (auth()->user()->hasRole('admin-pengendalian-kehilangan-air') || auth()->user()->hasRole('asisten-manajer-pengendalian-kehilangan-air')) {
-                    $jabatan = Jabatan::where('slug', "like","admin-pengendalian-kehilangan-air%")->orWhere('slug',"like","asisten-manajer-pengendalian-kehilangan-air%")->pluck('id')->toArray();
-                    $user_id = Karyawan::whereIn('jabatan_id',$jabatan)->pluck('user_id')->toArray();
-                    $query->where('wilayah_id', auth()->user()->karyawan->id_wilayah)->whereIn('user_id',$user_id);
+                    $query->where('wilayah_id', auth()->user()->karyawan->id_wilayah)->where('kategori_nps', 'pka');
                 }
             } else {
                 $rekanan_id = auth()->user()->id_rekanan;
@@ -93,35 +94,35 @@ class AduanController extends Controller
 
         $id_wilayah = auth()->user()->karyawan->id_wilayah;
 
-        $wilayah = "WIL-".Wilayah::find($id_wilayah)->singkatan;
-        
+        $wilayah = "WIL-" . Wilayah::find($id_wilayah)->singkatan;
+
         $jabatan_id = auth()->user()->karyawan->jabatan_id;
 
         $jabatan  = Jabatan::find($jabatan_id);
 
-        if(strpos($jabatan, "Distribusi") !== false){
-            $divisi= "DIS";
-        } else{
-            $divisi= "PKA";
+        if (strpos($jabatan, "Distribusi") !== false) {
+            $divisi = "DIS";
+        } else {
+            $divisi = "PKA";
         }
 
         if ($kategori_aduan == 'pipa dinas') {
             $dataAduan = Aduan::where('kategori_aduan', 'pipa dinas')->whereBetween(DB::raw('DATE(created_at)'), array($start, $end))->count();
             if ($dataAduan >= 1) {
                 $no = str_pad($dataAduan + 1, 4, "0", STR_PAD_LEFT);
-                $noAduan =  $no . "/" . "ADU-DS/". $wilayah . "/" . $divisi . "/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
+                $noAduan =  $no . "/" . "ADU-DS/" . $wilayah . "/" . $divisi . "/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
             } else {
                 $no = str_pad(1, 4, "0", STR_PAD_LEFT);
-                $noAduan =  $no . "/" . "ADU-DS/" . $wilayah . "/" . $divisi . "/". date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
+                $noAduan =  $no . "/" . "ADU-DS/" . $wilayah . "/" . $divisi . "/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
             }
         } else {
             $dataAduan = Aduan::where('kategori_aduan', 'pipa premier / skunder')->whereBetween(DB::raw('DATE(created_at)'), array($start, $end))->count();
             if ($dataAduan >= 1) {
                 $no = str_pad($dataAduan + 1, 4, "0", STR_PAD_LEFT);
-                $noAduan =  $no . "/" . "ADU-SK/". $wilayah . "/" . $divisi . "/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
+                $noAduan =  $no . "/" . "ADU-SK/" . $wilayah . "/" . $divisi . "/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
             } else {
                 $no = str_pad(1, 4, "0", STR_PAD_LEFT);
-                $noAduan =  $no . "/" . "ADU-SK/". $wilayah . "/" . $divisi . "/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
+                $noAduan =  $no . "/" . "ADU-SK/" . $wilayah . "/" . $divisi . "/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
             }
         }
 
@@ -139,27 +140,27 @@ class AduanController extends Controller
 
         $id_wilayah = auth()->user()->karyawan->id_wilayah;
 
-        $wilayah = "WIL-".Wilayah::find($id_wilayah)->singkatan;
-        
+        $wilayah = "WIL-" . Wilayah::find($id_wilayah)->singkatan;
+
         $jabatan_id = auth()->user()->karyawan->jabatan_id;
 
         $jabatan  = Jabatan::find($jabatan_id);
 
-        if(strpos($jabatan, "Distribusi") !== false){
-            $divisi= "DIS";
-        } else{
-            $divisi= "PKA";
+        if (strpos($jabatan, "Distribusi") !== false) {
+            $divisi = "DIS";
+        } else {
+            $divisi = "PKA";
         }
 
         $dataAduan = Aduan::where('kategori_aduan', 'pipa dinas')->whereBetween(DB::raw('DATE(created_at)'), array($start, $end))->count();
         if ($dataAduan >= 1) {
             $no = str_pad($dataAduan + 1, 4, "0", STR_PAD_LEFT);
-            $noAduan =  $no . "/" . "ADU-DS/". $wilayah . "/" . $divisi . "/"  . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
-            $noAduanNps =  "NPS/" . $no . "/" . "ADU/". $wilayah . "/" . $divisi . "/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
+            $noAduan =  $no . "/" . "ADU-DS/" . $wilayah . "/" . $divisi . "/"  . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
+            $noAduanNps =  "NPS/" . $no . "/" . "ADU/" . $wilayah . "/" . $divisi . "/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
         } else {
             $no = str_pad(1, 4, "0", STR_PAD_LEFT);
-            $noAduan =  $no . "/" . "ADU-DS/". $wilayah . "/" . $divisi . "/"  . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
-            $noAduanNps =  "NPS/" . $no . "/" . "ADU/". $wilayah . "/" . $divisi . "/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
+            $noAduan =  $no . "/" . "ADU-DS/" . $wilayah . "/" . $divisi . "/"  . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
+            $noAduanNps =  "NPS/" . $no . "/" . "ADU/" . $wilayah . "/" . $divisi . "/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
         }
 
         $jenis_aduan = JenisAduan::orderBy('nama')->get();
@@ -194,27 +195,40 @@ class AduanController extends Controller
 
         $kategori_aduan = $request->kategori_aduan == '' ? '' : $request->kategori_aduan;
 
+
+        $id_wilayah =  auth()->user()->id_wilayah;
+
+        $wilayah = "WIL-" . Wilayah::find($id_wilayah)->singkatan;
+
+        $jabatan_id = auth()->user()->karyawan->jabatan_id;
+
+        $jabatan  = Jabatan::find($jabatan_id);
+
+        if (strpos($jabatan, "Distribusi") !== false) {
+            $divisi = "DIS";
+        } else {
+            $divisi = "PKA";
+        }
         if ($kategori_aduan == 'pipa dinas') {
             $dataAduan = Aduan::where('kategori_aduan', 'pipa dinas')->whereBetween(DB::raw('DATE(created_at)'), array($start, $end))->count();
             if ($dataAduan >= 1) {
                 $no = str_pad($dataAduan + 1, 4, "0", STR_PAD_LEFT);
-                $noAduan =  $no . "/" . "ADU-DS/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
+                $noAduan =  $no . "/" . "ADU-DS/"  . $wilayah . "/" . $divisi . "/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
             } else {
                 $no = str_pad(1, 4, "0", STR_PAD_LEFT);
-                $noAduan =  $no . "/" . "ADU-DS/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
+                $noAduan =  $no . "/" . "ADU-DS/"  . $wilayah . "/" . $divisi . "/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
             }
         } else {
             $dataAduan = Aduan::where('kategori_aduan', 'pipa premier / skunder')->whereBetween(DB::raw('DATE(created_at)'), array($start, $end))->count();
             if ($dataAduan >= 1) {
                 $no = str_pad($dataAduan + 1, 4, "0", STR_PAD_LEFT);
-                $noAduan =  $no . "/" . "ADU-SK/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
+                $noAduan =  $no . "/" . "ADU-SK/"  . $wilayah . "/" . $divisi . "/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
             } else {
                 $no = str_pad(1, 4, "0", STR_PAD_LEFT);
-                $noAduan =  $no . "/" . "ADU-SK/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
+                $noAduan =  $no . "/" . "ADU-SK/"  . $wilayah . "/" . $divisi . "/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
             }
         }
 
-        $id_wilayah =  auth()->user()->id_wilayah;
         DB::beginTransaction();
 
         try {
@@ -228,6 +242,7 @@ class AduanController extends Controller
             $aduan->nama_pelanggan = $request->nama_pelanggan;
             $aduan->nps = $request->nps;
             $aduan->kategori_aduan = $request->kategori_aduan;
+            $aduan->kategori_nps = Str::slug($divisi);
             $aduan->atas_nama = $request->atas_nama;
             $aduan->sumber_informasi = $request->sumber_informasi;
             $aduan->keterangan = isset($request->keterangan) ?  $request->keterangan : '';

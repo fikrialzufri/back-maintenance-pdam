@@ -88,6 +88,12 @@ class Controller extends BaseController
 
         $response = curl_exec($ch);
 
+        $checknotifikasi = Notifikasi::where('modul_slug', $slug)->where('modul', $modul)->where('to_user_id', $to_user_id)->first();
+
+        if ($checknotifikasi) {
+            $checknotifikasi->delete();
+        }
+
         $notification = new Notifikasi();
         $notification->modul_id = $modul_id;
         $notification->title = $title;

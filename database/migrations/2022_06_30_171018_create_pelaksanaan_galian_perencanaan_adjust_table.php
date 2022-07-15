@@ -18,11 +18,11 @@ class CreatePelaksanaanGalianPerencanaanAdjustTable extends Migration
             $table->string('galian_id')->references('id')->on('galian_pekerjaan')->onDelete('cascade');
             $table->foreignUuid('item_id')->references('id')->on('item')->onDelete('cascade');
 
-            $table->float('panjang')->default(0);
-            $table->float('lebar')->default(0);
-            $table->float('dalam')->default(0);
-            $table->float('total', 20)->default(0);
-            $table->float('harga_satuan', 20)->default(0);
+            $table->float('panjang', 20, 3)->default(0);
+            $table->float('lebar', 20, 3)->default(0);
+            $table->float('dalam', 20, 3)->default(0);
+            $table->float('total', 20, 3)->default(0);
+            $table->float('harga_satuan', 20, 3)->default(0);
             $table->string('keterangan')->nullable();
             $table->enum('harga', ['siang', 'malam'])->default('siang');
 

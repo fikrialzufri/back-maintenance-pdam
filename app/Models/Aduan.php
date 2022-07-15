@@ -198,19 +198,21 @@ class Aduan extends Model
     }
     public function getStatusOrderPengawasAttribute()
     {
-        $status = 5;
+        $status = 6;
         if ($this->hasPenunjukanPekerjaan) {;
             if ($this->hasPenunjukanPekerjaan->status) {
-                if ($this->hasPenunjukanPekerjaan->status == 'selesai') {
+                if ($this->hasPenunjukanPekerjaan->status == 'approve') {
                     $status  = 1;
-                } else if ($this->hasPenunjukanPekerjaan->status == 'koreksi pengawas') {
+                } else if ($this->hasPenunjukanPekerjaan->status == 'selesai') {
                     $status  = 2;
-                } else if ($this->hasPenunjukanPekerjaan->status == 'selesai koreksi') {
+                } else if ($this->hasPenunjukanPekerjaan->status == 'koreksi pengawas') {
                     $status  = 3;
-                } else if ($this->hasPenunjukanPekerjaan->status == 'dikoreksi') {
+                } else if ($this->hasPenunjukanPekerjaan->status == 'selesai koreksi') {
                     $status  = 4;
-                } else if ($this->hasPenunjukanPekerjaan->status == 'draft') {
+                } else if ($this->hasPenunjukanPekerjaan->status == 'dikoreksi') {
                     $status  = 5;
+                } else if ($this->hasPenunjukanPekerjaan->status == 'draft') {
+                    $status  = 56;
                 }
             }
         }
@@ -311,7 +313,12 @@ class Aduan extends Model
             }
         }
         if ($this->status === 'draft') {
-            $btn  = "btn-danger";
+            if (auth()->user()->hasRole('asisten-manajer-distribusi')) {
+                $btn  = "btn-danger";
+            }
+            if (auth()->user()->hasRole('asisten-manajer-pengendalian-kehilangan-air')) {
+                $btn  = "btn-danger";
+            }
         }
         return $btn;
     }

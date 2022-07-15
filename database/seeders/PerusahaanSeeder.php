@@ -83,6 +83,11 @@ class PerusahaanSeeder extends Seeder
         $divisiDistribusi->departemen_id = $departemenTeknik->id;
         $divisiDistribusi->save();
 
+        $divisiPengendalianKehilanganAir = new Divisi();
+        $divisiPengendalianKehilanganAir->nama = 'Pengendalian Kehilangan Air';
+        $divisiPengendalianKehilanganAir->departemen_id = $departemenTeknik->id;
+        $divisiPengendalianKehilanganAir->save();
+
         $divisiPerencanaan = new Divisi();
         $divisiPerencanaan->nama = 'Perencanaan';
         $divisiPerencanaan->departemen_id = $departemenTeknik->id;
@@ -111,6 +116,30 @@ class PerusahaanSeeder extends Seeder
         $jabatanWilayahEmpat->divisi_id = $divisiDistribusi->id;
         $jabatanWilayahEmpat->wilayah_id = $WilayahEmpat->id;
         $jabatanWilayahEmpat->save();
+
+        $jabatanWilayahPkaSatu = new Jabatan();
+        $jabatanWilayahPkaSatu->nama = 'Admin Pengendalian Kehilangan Air Wilayah Satu';
+        $jabatanWilayahPkaSatu->divisi_id = $divisiPengendalianKehilanganAir->id;
+        $jabatanWilayahPkaSatu->wilayah_id = $WilayahSatu->id;
+        $jabatanWilayahPkaSatu->save();
+
+        $jabatanWilayahPkaDua = new Jabatan();
+        $jabatanWilayahPkaDua->nama = 'Admin Pengendalian Kehilangan Air Wilayah Dua';
+        $jabatanWilayahPkaDua->divisi_id = $divisiPengendalianKehilanganAir->id;
+        $jabatanWilayahPkaDua->wilayah_id = $WilayahDua->id;
+        $jabatanWilayahPkaDua->save();
+
+        $jabatanWilayahPkaTiga = new Jabatan();
+        $jabatanWilayahPkaTiga->nama = 'Admin Pengendalian Kehilangan Air Wilayah Tiga';
+        $jabatanWilayahPkaTiga->divisi_id = $divisiPengendalianKehilanganAir->id;
+        $jabatanWilayahPkaTiga->wilayah_id = $WilayahTiga->id;
+        $jabatanWilayahPkaTiga->save();
+
+        $jabatanWilayahPkaEmpat = new Jabatan();
+        $jabatanWilayahPkaEmpat->nama = 'Admin Pengendalian Kehilangan Air Wilayah Empat';
+        $jabatanWilayahPkaEmpat->divisi_id = $divisiPengendalianKehilanganAir->id;
+        $jabatanWilayahPkaEmpat->wilayah_id = $WilayahEmpat->id;
+        $jabatanWilayahPkaEmpat->save();
 
         $jabatanManajerDistribusi = new Jabatan();
         $jabatanManajerDistribusi->nama = 'Manajer Distribusi';
@@ -171,6 +200,30 @@ class PerusahaanSeeder extends Seeder
         $jabatanAsistenManajerEmpat->divisi_id = $divisiDistribusi->id;
         $jabatanAsistenManajerEmpat->wilayah_id = $WilayahEmpat->id;
         $jabatanAsistenManajerEmpat->save();
+
+        $jabatanAsistenManajerPkaSatu = new Jabatan();
+        $jabatanAsistenManajerPkaSatu->nama = 'Asisten Manajer Pengendalian Kehilangan Air Wilayah Satu';
+        $jabatanAsistenManajerPkaSatu->divisi_id = $divisiPengendalianKehilanganAir->id;
+        $jabatanAsistenManajerPkaSatu->wilayah_id = $WilayahSatu->id;
+        $jabatanAsistenManajerPkaSatu->save();
+
+        $jabatanAsistenManajerPkaDua = new Jabatan();
+        $jabatanAsistenManajerPkaDua->nama = 'Asisten Manajer Pengendalian Kehilangan Air Wilayah Dua';
+        $jabatanAsistenManajerPkaDua->divisi_id = $divisiPengendalianKehilanganAir->id;
+        $jabatanAsistenManajerPkaDua->wilayah_id = $WilayahDua->id;
+        $jabatanAsistenManajerPkaDua->save();
+
+        $jabatanAsistenManajerPkaTiga = new Jabatan();
+        $jabatanAsistenManajerPkaTiga->nama = 'Asisten Manajer Pengendalian Kehilangan Air Wilayah Tiga';
+        $jabatanAsistenManajerPkaTiga->divisi_id = $divisiPengendalianKehilanganAir->id;
+        $jabatanAsistenManajerPkaTiga->wilayah_id = $WilayahTiga->id;
+        $jabatanAsistenManajerPkaTiga->save();
+
+        $jabatanAsistenManajerPkaEmpat = new Jabatan();
+        $jabatanAsistenManajerPkaEmpat->nama = 'Asisten Manajer Pengendalian Kehilangan Air Wilayah Empat';
+        $jabatanAsistenManajerPkaEmpat->divisi_id = $divisiPengendalianKehilanganAir->id;
+        $jabatanAsistenManajerPkaEmpat->wilayah_id = $WilayahEmpat->id;
+        $jabatanAsistenManajerPkaEmpat->save();
 
         $jabatanUmum = new Jabatan();
         $jabatanUmum->nama = 'Umum';

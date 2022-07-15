@@ -17,20 +17,24 @@ class CreatePenunjukanPekerjaanTable extends Migration
             $table->uuid('id')->primary();
             $table->string('nomor_pekerjaan');
             $table->string('slug');
-            $table->enum('status', 
-            [
-                'draft', 
-                'proses', 
-                'selesai', 
-                'approve', 
-                'disetujui', 
-                'koreksi pengawas', 
-                'dikoreksi', 
-                'selesai koreksi', 
-                'diadjust'
-            ]
+            $table->enum(
+                'status',
+                [
+                    'draft',
+                    'proses',
+                    'selesai',
+                    'approve',
+                    'disetujui',
+                    'koreksi pengawas',
+                    'dikoreksi',
+                    'selesai koreksi',
+                    'diadjust'
+                ]
             )->default('draft');
+
             $table->enum('kategori_aduan', ['pipa dinas', 'pipa premier / skunder'])->nullable();
+            $table->enum('kategori_nps', ['dis', 'pka'])->default('dis');
+
             $table->enum('tagihan', ['tidak', 'ya'])->default('tidak');
             $table->foreignUuid('aduan_id')->references('id')->on('aduan');
             $table->foreignUuid('rekanan_id')->nullable()->references('id')->on('rekanan');

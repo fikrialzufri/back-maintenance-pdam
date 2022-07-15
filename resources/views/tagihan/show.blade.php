@@ -125,22 +125,36 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <div>
+                                                <label for="grand_total" class=" form-control-label">Pembulatan
+                                                    Tagihan</label>
+                                            </div>
+                                            <div class="input-group mb-2 mr-sm-2">
+                                                <div class="input-group-prepend">
+                                                    <div class="input-group-text">Rp.</div>
+                                                </div>
+                                                <input type="text" name="grand_total" id="grand_total_all"
+                                                    placeholder="" class="form-control" readonly
+                                                    value="{{ pembulatan($grand_total) }}">
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div class="col-6 timeline">
                                     <h6>List Persetujuan Tagihan</h6>
                                     <ul>
                                         @forelse ($list_persetujuan as $item)
-                                            @if ($item->jabatan === 'Asisten Manajer Perencanaan' || $item->jabatan === 'Manajer Perencanaan' || $item->jabatan === 'Direktur Teknik')
-                                                <li>
-                                                    <div class="bullet bg-primary"></div>
-                                                    <div class="time">{{ $item->tanggal_disetujui }}</div>
-                                                    <div class="desc">
-                                                        <h3>{{ $item->nama }}</h3>
-                                                        <h4>{{ $item->jabatan }}</h4>
-                                                    </div>
-                                                </li>
-                                            @endif
+                                            <li>
+                                                <div class="bullet bg-primary"></div>
+                                                <div class="time">{{ $item->tanggal_disetujui }}</div>
+                                                <div class="desc">
+                                                    <h3>{{ $item->nama }}</h3>
+                                                    <h4>{{ $item->jabatan }}</h4>
+                                                </div>
+                                            </li>
                                         @empty
                                         @endforelse
 
@@ -154,184 +168,192 @@
 
                             <hr>
                             @if (isset($tagihan->hasPelaksanaanPekerjaan))
-                                @foreach ($tagihan->hasPelaksanaanPekerjaan as $key => $item)
-                                    <div>
-                                        <label for="rekanan" class=" form-control-label">
-                                            <h3>Pekerjaan :
-                                                {{ $item->No_Spk }} </h3>
-                                            </h3>
-                                        </label>
 
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div>
-                                                <span>Daftar Pekerjaan</span>
-                                                <table class="table table-bordered " width="100%">
-                                                    <thead>
-                                                        <tr>
-                                                            <th width="5">#</th>
-                                                            <th>Nama</th>
-                                                            <th>Jenis Pekerjaan</th>
-                                                            <th width="10">Volume</th>
-                                                            <th>Harga Satuan </th>
+                                @if (auth()->user()->hasRole('keuangan'))
+                                @else
+                                    @foreach ($tagihan->hasPelaksanaanPekerjaan as $key => $item)
+                                        <div>
+                                            <label for="rekanan" class=" form-control-label">
+                                                <h3>Pekerjaan :
+                                                    {{ $item->No_Spk }} </h3>
+                                                </h3>
+                                            </label>
 
-                                                            <th>Total Harga</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @forelse ($item->hasItem as $nomor => $barang)
-                                                            <tr class=""
-                                                                id="{{ $barang->slug }}_{{ $item->id }}">
-                                                                <td>{{ $nomor + 1 }}
-                                                                </td>
-                                                                <td>{{ $barang->nama }}</td>
-                                                                <td>{{ $barang->jenis }} {{ $item->status }} </td>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div>
+                                                    <span>Daftar Pekerjaan</span>
+                                                    <table class="table table-bordered " width="100%">
+                                                        <thead>
+                                                            <tr>
+                                                                <th width="5">#</th>
+                                                                <th>Nama</th>
+                                                                <th>Jenis Pekerjaan</th>
+                                                                <th width="10">Volume</th>
+                                                                <th>Harga Satuan </th>
 
-                                                                @if ($item->status === 'diadjust')
-                                                                    @if (isset($item->hasItemPerencanaanAdujst[$nomor]))
-                                                                        <td>{{ $item->hasItemPerencanaanAdujst[$nomor]->pivot->qty }}
-                                                                        </td>
-                                                                        <td>
-                                                                            Rp.
-                                                                            {{ format_uang($item->hasItemPerencanaanAdujst[$nomor]->pivot->harga) }}
-                                                                        </td>
+                                                                <th>Total Harga</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @forelse ($item->hasItem as $nomor => $barang)
+                                                                <tr class=""
+                                                                    id="{{ $barang->slug }}_{{ $item->id }}">
+                                                                    <td>{{ $nomor + 1 }}
+                                                                    </td>
+                                                                    <td>{{ $barang->nama }}</td>
+                                                                    <td>{{ $barang->jenis }} {{ $item->status }} </td>
+
+                                                                    @if ($item->status === 'diadjust')
+                                                                        @if (isset($item->hasItemPerencanaanAdujst[$nomor]))
+                                                                            <td>{{ $item->hasItemPerencanaanAdujst[$nomor]->pivot->qty }}
+                                                                            </td>
+                                                                            <td>
+                                                                                Rp.
+                                                                                {{ format_uang($item->hasItemPerencanaanAdujst[$nomor]->pivot->harga) }}
+                                                                            </td>
+                                                                        @else
+                                                                            @if (isset($item->hasItemAsmenPengawas[$nomor]))
+                                                                                <td>{{ round($item->hasItemAsmenPengawas[$nomor]->pivot->qty, 3) }}
+                                                                                </td>
+                                                                                @if (isset($item->hasItemPerencanaan[$nomor]))
+                                                                                    <td> Rp.
+                                                                                        {{ format_uang($item->hasItemPerencanaan[$nomor]->pivot->harga) }}
+                                                                                    </td>
+                                                                                @endif
+                                                                            @else
+                                                                                <td>{{ round($barang->pivot->qty, 3) }}
+                                                                                </td>
+                                                                                <td>Rp.
+                                                                                    {{ format_uang($barang->pivot->harga) }}
+                                                                                </td>
+                                                                            @endif
+                                                                        @endif
                                                                     @else
                                                                         @if (isset($item->hasItemAsmenPengawas[$nomor]))
-                                                                            <td>{{ $item->hasItemAsmenPengawas[$nomor]->pivot->qty }}
-                                                                                ini
+                                                                            <td>{{ round($item->hasItemAsmenPengawas[$nomor]->pivot->qty, 3) }}
                                                                             </td>
                                                                             @if (isset($item->hasItemPerencanaan[$nomor]))
                                                                                 <td> Rp.
                                                                                     {{ format_uang($item->hasItemPerencanaan[$nomor]->pivot->harga) }}
                                                                                 </td>
                                                                             @endif
-                                                                        @else
-                                                                            <td>{{ $barang->pivot->qty }}</td>
-                                                                            <td>Rp.
-                                                                                {{ format_uang($barang->pivot->harga) }}
-                                                                            </td>
                                                                         @endif
                                                                     @endif
-                                                                @else
-                                                                    @if (isset($item->hasItemAsmenPengawas[$nomor]))
-                                                                        <td>{{ $item->hasItemAsmenPengawas[$nomor]->pivot->qty }}
-                                                                        </td>
-                                                                        @if (isset($item->hasItemPerencanaan[$nomor]))
-                                                                            <td> Rp.
-                                                                                {{ format_uang($item->hasItemPerencanaan[$nomor]->pivot->harga) }}
-                                                                            </td>
-                                                                        @endif
-                                                                    @endif
-                                                                @endif
 
-                                                                <td>
-                                                                    Rp.
-                                                                    {{ format_uang($barang->pivot->total) }}
-                                                                </td>
-
-                                                            </tr>
-                                                        @empty
-                                                            <tr>
-                                                                <td colspan="10">Data Item tidak ada</td>
-                                                            </tr>
-                                                        @endforelse
-                                                    </tbody>
-                                                    <tfoot>
-                                                        <tr>
-                                                            <th colspan="3" class="text-right">Total
-                                                            </th>
-                                                            @if ($item->status === 'diadjust')
-                                                                <th>{{ $item->hasItemPerencanaanAdujst->sum('pivot.qty') }}
-                                                                </th>
-                                                            @else
-                                                                <th>{{ $item->hasItemAsmenPengawas->sum('pivot.qty') }}
-                                                                </th>
-                                                            @endif
-                                                            <th></th>
-                                                            <th>Rp. {{ format_uang($item->hasItem()->sum('total')) }}
-                                                            </th>
-                                                        </tr>
-                                                    </tfoot>
-
-                                                </table>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div>
-
-                                                <table class="table table-bordered " width="100%">
-                                                    <thead>
-                                                        <tr>
-                                                            <th width="5">#</th>
-                                                            <th width="700">Galian</th>
-                                                            <th width="10">Panjang</th>
-                                                            <th width="10">Lebar</th>
-                                                            <th width="10">Dalam</th>
-                                                            <th width="10">Volume</th>
-                                                            <th width="200">Harga Satuan</th>
-                                                            <th width="250">Total Harga</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-
-                                                        @forelse ($item->hasGalianPekerjaan as $key => $galian)
-                                                            <tr>
-                                                                <td>{{ $key + 1 }}
-                                                                </td>
-                                                                <td>
-                                                                    {{ $galian->pekerjaan }}
-                                                                </td>
-
-                                                                @if ($item->status === 'diadjust')
-                                                                    <td>{{ $galian->galian_perencanaan_adjust_panjang }}
-                                                                        m
-                                                                    </td>
-                                                                    <td>{{ $galian->galian_perencanaan_adjust_lebar }} m
-                                                                    </td>
-                                                                    <td>{{ $galian->galian_perencanaan_adjust_dalam }} m
-                                                                    </td>
-                                                                    <td>{{ $galian->volume_adjust }} m<sup>2</td>
-                                                                    <td>Rp.
-                                                                        {{ format_uang($galian->galian_perencanaan_adjust_harga_satuan) }}
-                                                                    </td>
-                                                                @else
-                                                                    <td>
-                                                                        {{ $galian->galian_asmen_pengawas_panjang }} m
-                                                                    </td>
-                                                                    <td>
-                                                                        {{ $galian->galian_asmen_pengawas_lebar }} m
-                                                                    </td>
-                                                                    <td>
-                                                                        {{ $galian->galian_asmen_pengawas_dalam }} m
-                                                                    </td>
-                                                                    <td>
-                                                                        {{ $galian->volume_asmen }}
-                                                                        m<sup>2</sup>
-                                                                    </td>
                                                                     <td>
                                                                         Rp.
-                                                                        {{ $galian->galian_perencanaan_harga_satuan }}
+                                                                        {{ format_uang($barang->pivot->total) }}
                                                                     </td>
-                                                                @endif
 
-
-                                                                </td>
-                                                                <td>Rp. {{ format_uang($galian->total) }}</td>
-
-                                                            </tr>
-                                                        @empty
+                                                                </tr>
+                                                            @empty
+                                                                <tr>
+                                                                    <td colspan="10">Data Item tidak ada</td>
+                                                                </tr>
+                                                            @endforelse
+                                                        </tbody>
+                                                        <tfoot>
                                                             <tr>
-                                                                <td colspan="10">Data Item Galian ada</td>
+                                                                <th colspan="3" class="text-right">Total
+                                                                </th>
+                                                                @if ($item->status === 'diadjust')
+                                                                    <th>{{ round($item->hasItemPerencanaanAdujst->sum('pivot.qty'), 3) }}
+                                                                    </th>
+                                                                @else
+                                                                    <th>{{ round($item->hasItemAsmenPengawas->sum('pivot.qty'), 3) }}
+                                                                    </th>
+                                                                @endif
+                                                                <th></th>
+                                                                <th>Rp. {{ format_uang($item->hasItem()->sum('total')) }}
+                                                                </th>
                                                             </tr>
-                                                        @endforelse
-                                                    </tbody>
-                                                    <tfoot>
-                                                        <tr>
-                                                            <th colspan="7" class="text-right"> Total
-                                                            </th>
+                                                        </tfoot>
 
-                                                            {{-- @if ($item->status === 'diadjust')
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div>
+
+                                                    <table class="table table-bordered " width="100%">
+                                                        <thead>
+                                                            <tr>
+                                                                <th width="5">#</th>
+                                                                <th width="700">Galian</th>
+                                                                <th width="10">Panjang</th>
+                                                                <th width="10">Lebar</th>
+                                                                <th width="10">Dalam</th>
+                                                                <th width="10">Volume</th>
+                                                                <th width="200">Harga Satuan</th>
+                                                                <th width="250">Total Harga</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+
+                                                            @forelse ($item->hasGalianPekerjaan as $key => $galian)
+                                                                <tr>
+                                                                    <td>{{ $key + 1 }}
+                                                                    </td>
+                                                                    <td>
+                                                                        {{ $galian->pekerjaan }}
+                                                                    </td>
+
+                                                                    @if ($item->status === 'diadjust')
+                                                                        <td>{{ $galian->galian_perencanaan_adjust_panjang }}
+                                                                            m
+                                                                        </td>
+                                                                        <td>{{ $galian->galian_perencanaan_adjust_lebar }}
+                                                                            m
+                                                                        </td>
+                                                                        <td>{{ $galian->galian_perencanaan_adjust_dalam }}
+                                                                            m
+                                                                        </td>
+                                                                        <td>{{ round($galian->volume_adjust, 3) }}
+                                                                            m<sup>2
+                                                                        </td>
+                                                                        <td>Rp.
+                                                                            {{ format_uang($galian->galian_perencanaan_adjust_harga_satuan) }}
+                                                                        </td>
+                                                                    @else
+                                                                        <td>
+                                                                            {{ $galian->galian_asmen_pengawas_panjang }}
+                                                                            m
+                                                                        </td>
+                                                                        <td>
+                                                                            {{ $galian->galian_asmen_pengawas_lebar }} m
+                                                                        </td>
+                                                                        <td>
+                                                                            {{ $galian->galian_asmen_pengawas_dalam }} m
+                                                                        </td>
+                                                                        <td>
+                                                                            {{ round($galian->volume_asmen, 3) }}
+                                                                            m<sup>2</sup>
+                                                                        </td>
+                                                                        <td>
+                                                                            Rp.
+                                                                            {{ $galian->galian_perencanaan_harga_satuan }}
+                                                                        </td>
+                                                                    @endif
+
+
+                                                                    </td>
+                                                                    <td>Rp. {{ format_uang($galian->total) }}</td>
+
+                                                                </tr>
+                                                            @empty
+                                                                <tr>
+                                                                    <td colspan="10">Data Item Galian ada</td>
+                                                                </tr>
+                                                            @endforelse
+                                                        </tbody>
+                                                        <tfoot>
+                                                            <tr>
+                                                                <th colspan="7" class="text-right"> Total
+                                                                </th>
+
+                                                                {{-- @if ($item->status === 'diadjust')
                                                                 <th>
                                                                     {{ $item->total_volume_galian }}
                                                                     m<sup>2</sup>
@@ -342,25 +364,26 @@
                                                                 </th>
                                                             @endif
                                                             <th></th> --}}
-                                                            <th>Rp.
-                                                                {{ format_uang($item->hasGalianPekerjaan->sum('total')) }}
-                                                            </th>
-                                                        </tr>
-                                                        <tr>
-                                                            <th colspan="7" class="text-right">
-                                                                Grand Total
-                                                            </th>
-                                                            <th>Rp.
-                                                                {{ format_uang($item->total_pekerjaan) }}
-                                                            </th>
-                                                        </tr>
-                                                    </tfoot>
+                                                                <th>Rp.
+                                                                    {{ format_uang($item->hasGalianPekerjaan->sum('total')) }}
+                                                                </th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th colspan="7" class="text-right">
+                                                                    Grand Total
+                                                                </th>
+                                                                <th>Rp.
+                                                                    {{ format_uang($item->total_pekerjaan) }}
+                                                                </th>
+                                                            </tr>
+                                                        </tfoot>
 
-                                                </table>
+                                                    </table>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                @endforeach
+                                    @endforeach
+                                @endif
                             @endif
                             @if (!auth()->user()->hasRole('rekanan'))
                                 @if ($keuangan === true)
