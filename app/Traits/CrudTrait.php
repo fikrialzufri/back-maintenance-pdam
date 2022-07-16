@@ -677,13 +677,24 @@ trait CrudTrait
     {
         $data = $this->model()->find($id);
         $data->delete();
+
         if (isset($this->manyToMany)) {
+
             if (!isset($this->extraFrom)) {
                 foreach ($this->manyToMany as  $value) {
                     $hasRalation = 'has' . ucfirst($value);
                     $valueField = $data->$hasRalation()->detach();
-                    try { } catch (\Throwable $th) { }
                 }
+            }
+        }
+
+        if ($this->relations) {
+            foreach ($this->relations as $key => $value) {
+                $relationsFields = $value . '_id';
+                $relationModels = '\\App\Models\\' . ucfirst($value);
+                $relationModels = new $relationModels;
+                $relationModels = $relationModels->find($data->$relationsFields);
+                $relationModels->delete();
             }
         }
         if (isset($this->oneToMany)) {
@@ -692,7 +703,7 @@ trait CrudTrait
                 $valueField = $data->$hasRalation()->detach();
             }
         }
-        return redirect()->route($this->route . '.index')->with('message', ucwords(str_replace('-', ' ', $this->route)) . ' berhasil dihapus')->with('Class', 'danger');
+        return redirect()->route($this->route . '.index')->with('message', ucwords(str_replace('-', ' ', $this->route)) . ' berhasil dihapus')->with('Class', 'success');
     }
 
 

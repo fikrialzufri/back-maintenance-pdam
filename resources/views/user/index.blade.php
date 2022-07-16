@@ -15,6 +15,26 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
+                        <form action="" role="form" id="form" enctype="multipart/form-data">
+                            <div class="row">
+                                <div class="col-lg-2">
+                                    <label for="">Pencarian</label>
+                                    <input type="text" name="search" value="{{ $search }}" class="form-control">
+                                </div>
+
+                                <div class="col-lg-1">
+                                    <label for="">Aksi</label>
+                                    <div class="input-group">
+
+
+                                        <button type="submit" class="btn btn-warning">
+                                            <span class="fa fa-search"></span>
+                                            Cari
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                         <table class="table table-bordered  table-responsive" width="100%">
                             <thead>
                                 <tr>

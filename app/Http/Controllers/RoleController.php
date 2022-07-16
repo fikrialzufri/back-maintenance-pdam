@@ -24,10 +24,20 @@ class RoleController extends Controller
     public function index()
     {
         $title =  "Hak Akses";
-        $dataRole = Role::where('slug', '!=', 'superadmin')->orderBy('slug')->paginate(15);
+
+        $query =  Role::query();
+        $search = request()->search;
+
+        if ($search) {
+            $query->where(function ($query) use ($search) {
+                $query->where('name', 'like', "%" . $search . "%");
+            });
+        }
+        $dataRole =  $query->where('slug', '!=', 'superadmin')->orderBy('slug')->paginate(15);
         $route = 'role';
         return view('role.index', compact(
             "title",
+            "search",
             "route",
             "dataRole"
         ));

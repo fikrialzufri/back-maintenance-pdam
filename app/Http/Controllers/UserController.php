@@ -27,8 +27,17 @@ class UserController extends Controller
     public function index()
     {
         $title =  "Pengguna";
-        $dataUser = User::where('slug', '!=', 'superadmin')->paginate(15);
-        return view('user.index', ["title" => $title, "dataUser" => $dataUser]);
+        $search = request()->search;
+        $query =  User::query();
+
+        if ($search) {
+            $query->where(function ($query) use ($search) {
+                $query->where('username', 'like', "%" . $search . "%")->orWhere('email', 'like', "%" . $search . "%");
+            });
+        }
+
+        $dataUser = $query->where('slug', '!=', 'superadmin')->orderBy('slug')->paginate(15);
+        return view('user.index', ["title" => $title, "dataUser" => $dataUser, "search" => $search]);
     }
 
     /**
