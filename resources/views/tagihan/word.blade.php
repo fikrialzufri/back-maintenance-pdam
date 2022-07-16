@@ -111,9 +111,11 @@
                                         periode pulan {{ $bulan }} tahun {{ date('Y') }} di wilayah
                                         {{ $wilayah }} Sebanyak
                                         {{ $total_lokasi }} lokasi. Dengan jumlah tagihan sebesar Rp.
-                                        {{ format_uang($total_tagihan) }}.
+                                        {{ pembulatan($total_tagihan) }}.
                                         <i>
-                                            ({{ strtoupper(terbilang($total_tagihan)) }} RUPIAH)
+                                            (
+                                            {{ strtoupper(terbilang(ceil($total_tagihan) - substr(ceil($total_tagihan), -3))) }}
+                                            RUPIAH)
                                         </i>
                                     </span>
                                 </p>

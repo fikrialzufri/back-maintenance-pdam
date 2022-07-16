@@ -91,7 +91,7 @@
                                                 </div>
                                                 <input type="text" name="total_tagihan" id="total_tagihan_all"
                                                     placeholder="" class="form-control" readonly
-                                                    value="{{ format_uang($total) }}">
+                                                    value="{{ pembulatan($total) }}">
                                             </div>
                                         </div>
                                     </div>

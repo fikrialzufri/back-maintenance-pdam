@@ -57,10 +57,6 @@ class TagihanController extends Controller
                 'alias'    => 'Tanggal',
             ],
             [
-                'name'    => 'status',
-                'alias'    => 'Status',
-            ],
-            [
                 'name'    => 'kode_vocher',
                 'alias'    => 'Kode Voucher',
             ],
@@ -310,14 +306,13 @@ class TagihanController extends Controller
                 }
             }
             $nomor_tagihan = $tagihan->nomor_tagihan;
-            $tagihanItem = TagihanItem::where('tagihan_id', $tagihan->id)->orderBy('urutan')->get();
             $action = route('tagihan.update', $tagihan->id);
-            $total = $tagihanItem->sum('grand_total');
-            $total_lokasi = $tagihan->total_lokasi;
-            if (count($tagihanItem) === 0) {
-                $total = $tagihan->total_tagihan;
-                $total_lokasi = $tagihan->total_lokasi_pekerjaan;
-            }
+
+            $total = $tagihan->tagihan + $tagihan->galian;
+            $ppn = ($total * 11) / 100;
+            $grand_total = $total + $ppn;
+
+            $total_lokasi = $tagihan->total_lokasi_pekerjaan;
             $tanggal_tagihan = tanggal_indonesia($tagihan->tanggal_tagihan);
             $rekanan = $tagihan->rekanan;
 
@@ -327,8 +322,6 @@ class TagihanController extends Controller
                 $notifikasi->delete();
             }
 
-            $ppn = ($total * 11) / 100;
-            $grand_total = $total + $ppn;
             $title =  "Proses Tagihan Nomor :" .  $nomor_tagihan;
             $filename =  "Tagihan Nomor :" .  $nomor_tagihan;
 
@@ -367,7 +360,7 @@ class TagihanController extends Controller
                 if (in_array('pka', $katagori_nps_unique)) {
                     $listJabatan = $listJabatan->orWhere('slug', 'manajer-pengendalian-kehilangan-air');
                 }
-                $listJabatan = $listJabatan->get();
+                $listJabatan = $listJabatan->pluck('id')->toArray();
                 // list karyawan bedasarkan jabatan
                 $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get()->pluck('user_id')->toArray();
 
@@ -384,7 +377,7 @@ class TagihanController extends Controller
             if (auth()->user()->hasRole('direktur-teknik')) {
 
                 // list jabatan
-                $listJabatan = Jabatan::where('slug', 'manajer-perencanaan')->orWhere('slug', 'asisten-manajer-perencanaan')->get()->pluck('id')->toArray();
+                $listJabatan = Jabatan::where('slug', 'manajer-perencanaan')->pluck('id')->toArray();
 
                 // list karyawan bedasarkan jabatan
                 $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get()->pluck('user_id')->toArray();
@@ -1062,7 +1055,6 @@ class TagihanController extends Controller
         $id = request()->get('id') ?: "";
         $word = request()->get('word') ?: "";
         $tagihan = Tagihan::find($id);
-        $TagihanItem = TagihanItem::where('tagihan_id', $tagihan->id)->get();
 
         $wilayah = [];
 
@@ -1085,19 +1077,10 @@ class TagihanController extends Controller
         $bulan = bulan_indonesia(Carbon::parse($tagihan->tanggal_adjust));
         $tanggal = tanggal_indonesia(Carbon::parse($tagihan->tanggal_adjust), false);
 
-        if (count($TagihanItem) == 0) {
-            $total_lokasi = $tagihan->total_lokasi_pekerjaan;
-            $ppn = ($tagihan->total_tagihan * 11) / 100;
-
-            $total_tagihan = $tagihan->total_tagihan + $ppn;
-        } else {
-            $total_lokasi = $tagihan->total_lokasi;
-            $total_tagihan = $TagihanItem->sum('grand_total');
-
-            $ppn = ($tagihan->total_tagihan * 11) / 100;
-            $total_tagihan = $total_tagihan + $ppn;
-        }
-
+        $total = $tagihan->tagihan + $tagihan->galian;
+        $ppn = ($total * 11) / 100;
+        $total_tagihan = $total + $ppn;
+        $total_lokasi = $tagihan->total_lokasi_pekerjaan;
 
         $listJabatan = Jabatan::where('slug', 'manajer-perencanaan')->orWhere('slug', 'direktur-teknik')->get()->pluck('id')->toArray();
 
@@ -1144,7 +1127,6 @@ class TagihanController extends Controller
 
         $id = request()->get('id') ?: "";
         $tagihan = Tagihan::whereSlug($slug)->first();
-        $TagihanItem = TagihanItem::where('tagihan_id', $tagihan->id)->get();
 
         $wilayah = '';
 
@@ -1165,13 +1147,10 @@ class TagihanController extends Controller
         $bulan = bulan_indonesia(Carbon::parse($tagihan->tanggal_adjust));
         $tanggal = tanggal_indonesia(Carbon::parse($tagihan->tanggal_adjust), false);
 
-        if (count($TagihanItem) == 0) {
-            $total_lokasi = $tagihan->total_lokasi_pekerjaan;
-            $total_tagihan = $tagihan->total_tagihan;
-        } else {
-            $total_lokasi = $tagihan->total_lokasi;
-            $total_tagihan = $TagihanItem->sum('grand_total');
-        }
+        $total = $tagihan->tagihan + $tagihan->galian;
+        $ppn = ($total * 11) / 100;
+        $total_tagihan = $total + $ppn;
+        $total_lokasi = $tagihan->total_lokasi_pekerjaan;
 
         $preview = $tagihan->slug;
 

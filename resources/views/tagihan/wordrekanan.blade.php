@@ -93,10 +93,11 @@
                                     sebanyak
                                     {{ $total_lokasi }}
                                     Lokasi, kami mengajukan Permohonan
-                                    Pembayaran atas pekerjaan tersebut senilai Rp. {{ format_uang($total_tagihan) }}.
+                                    Pembayaran atas pekerjaan tersebut senilai Rp. {{ pembulatan($total_tagihan) }}.
                                     <i>
 
-                                        ({{ strtoupper(terbilang($total_tagihan)) }} RUPIAH)
+                                        ({{ strtoupper(terbilang(ceil($total_tagihan) - substr(ceil($total_tagihan), -3))) }}
+                                        RUPIAH)
                                     </i>
                                     Demikian
                                     Permohonan
