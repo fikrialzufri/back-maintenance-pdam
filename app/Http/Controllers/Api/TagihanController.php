@@ -202,7 +202,7 @@ class TagihanController extends Controller
             'id' =>  $data->id,
             'nomor_tagihan' =>  $data->nomor_tagihan,
             'rekanan' =>  $data->rekanan,
-            'total' =>   format_uang($data->total_tagihan),
+            'total' =>   pembulatan($data->total_tagihan),
             'tanggal_tagihan' =>  isset($data->tanggal_tagihan) ?  tanggal_indonesia($data->tanggal_tagihan) : '',
             'slug' =>  $data->slug,
             'list_pekerjaan' =>  $data->list_pekerjaan,

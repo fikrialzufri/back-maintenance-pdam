@@ -232,10 +232,17 @@ class TagihanController extends Controller
                 $rekanan_id = auth()->user()->id_rekanan;
 
                 $query->where('rekanan_id', $rekanan_id);
-            } elseif (auth()->user()->hasRole('asisten-manajer-distribusi')) {
-                $wilayah_id = auth()->user()->id_wilayah;
+            } elseif (auth()->user()->hasRole('manajer-distribusi')) {
+                $aduan = Aduan::where('kategori_nps', 'dis')->pluck('id')->toArray();
 
-                $aduan = Aduan::where('wilayah_id', $wilayah_id)->pluck('id')->toArray();
+                $PelaksanaanPekerjaan = PelaksanaanPekerjaan::whereIn('aduan_id', $aduan)->pluck('id')->toArray();
+
+                $query->whereHas('hasPelaksanaanPekerjaan', function ($q) use ($PelaksanaanPekerjaan) {
+                    $q->whereIn('tagihan_pelaksanaan.pelaksanaan_pekerjaan_id', $PelaksanaanPekerjaan);
+                });
+            } elseif (auth()->user()->hasRole('manajer-pengendalian-kehilangan-air')) {
+
+                $aduan = Aduan::where('kategori_nps', 'pka')->pluck('id')->toArray();
 
                 $PelaksanaanPekerjaan = PelaksanaanPekerjaan::whereIn('aduan_id', $aduan)->pluck('id')->toArray();
 

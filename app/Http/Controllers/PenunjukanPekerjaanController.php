@@ -372,11 +372,7 @@ class PenunjukanPekerjaanController extends Controller
                     }
                 }
 
-                if (auth()->user()->hasRole('asisten-manajer-distribusi')) {
-                    if ($pekerjaanUtama->status  === 'selesai') {
-                        $tombolEdit = 'bisa';
-                    }
-                } elseif (auth()->user()->hasRole('staf-pengawas')) {
+                if (auth()->user()->hasRole('staf-pengawas')) {
                     if ($pekerjaanUtama->status  === 'approve') {
                         $tombolEdit = 'bisa';
                     }
