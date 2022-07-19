@@ -524,29 +524,32 @@ class TagihanController extends Controller
     {
         DB::beginTransaction();
 
-        // list jabatan
-        $listJabatan = Jabatan::where('slug', 'manajer-distribusi')->orWhere('slug', 'manajer-pengendalian-kehilangan-air')->orWhere('slug', 'manajer-perencanaan')->orWhere('slug', 'asisten-manajer-perencanaan')->orWhere('slug', 'direktur-teknik')->orWhere('slug', 'keuangan')->get()->pluck('id')->toArray();
-
-        // list karyawan bedasarkan jabatan
         $data  = $this->model()->find($id);
 
         $PelaksanaanPekerjaan = $data->hasPelaksanaanPekerjaan();
+        // list jabatan
+        $listJabatan = Jabatan::where('slug', 'direktur-teknik')->query();
+
         if ($PelaksanaanPekerjaan) {
             $aduanId = $PelaksanaanPekerjaan->pluck('aduan_id')->toArray();
-            $wilayahId = Aduan::whereIn('id', $aduanId)->pluck('wilayah_id')->toArray();
-            $wilayahId = array_unique($wilayahId);
+            $katagori_nps = Aduan::whereIn('id', $aduanId)->pluck('kategori_nps')->toArray();
+            $katagori_nps_unique = array_unique($katagori_nps);
 
-            $ListjabatanAsmen = Jabatan::whereIn('wilayah_id', $wilayahId)->where('nama', 'like', '%Asisten Manajer Distribusi%')->get()->pluck('id')->toArray();
-
-            $ListjabatanAsmen = array_unique($ListjabatanAsmen);
-            $listJabatan = array_merge($listJabatan, $ListjabatanAsmen);
+            if (in_array('dis', $katagori_nps_unique)) {
+                $listJabatan =   $listJabatan->orWhere('slug', 'manajer-distribusi');
+            }
+            if (in_array('pka', $katagori_nps_unique)) {
+                $listJabatan =   $listJabatan->orWhere('slug', 'manajer-pengendalian-kehilangan-air');
+            }
         }
+
+        $listJabatan =   $listJabatan->pluck('id')->toArray();
+        // list karyawan bedasarkan jabatan
+        $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get();
 
         try {
             DB::commit();
             $user = [];
-
-            $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get();
 
             if ($data) {
                 $status = 'dikoreksi';
@@ -582,14 +585,6 @@ class TagihanController extends Controller
                 if ($rekanan) {
                     $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $rekanan->user_id);
 
-                    // notif ke staf pengawas
-                    if ($rekanan->hasKaryawan) {
-                        foreach (collect($rekanan->hasKaryawan) as $key => $value) {
-                            if (auth()->user()->id !== $value->user_id) {
-                                $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $value->user_id);
-                            }
-                        }
-                    }
                     if ($listKaryawan) {
                         foreach (collect($listKaryawan) as $i => $kr) {
                             if (auth()->user()->id !== $kr->user_id) {
@@ -628,11 +623,8 @@ class TagihanController extends Controller
             $nomor_tagihan =  $no . "/"  . rand(0, 900) . "/" . "BAPP-KJB/" . getRomawi($bulan) . "/" . date('Y');
         }
 
-        // list jabatan
-        $listJabatan = Jabatan::where('slug', 'manajer-distribusi')->orWhere('slug', 'manajer-perencanaan')->orWhere('slug', 'asisten-manajer-perencanaan')->orWhere('slug', 'asisten-manajer-pengawas')->orWhere('slug', 'direktur-teknik')->get()->pluck('id')->toArray();
-
-        // list karyawan bedasarkan jabatan
-        $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get();
+        $PelaksanaanPekerjaan = PelaksanaanPekerjaan::whereIn('id', $pelaksanaan)
+            ->where('tagihan', 'tidak')->first();
 
         DB::beginTransaction();
         try {
@@ -641,8 +633,6 @@ class TagihanController extends Controller
                 if (auth()->user()->hasRole('rekanan')) {
                     $rekanan_id = auth()->user()->id_rekanan;
                 } else {
-                    $PelaksanaanPekerjaan = PelaksanaanPekerjaan::whereIn('id', $pelaksanaan)
-                        ->where('tagihan', 'tidak')->first();
                     $rekanan_id =  $PelaksanaanPekerjaan->rekanan_id;
                 }
             }
@@ -658,15 +648,36 @@ class TagihanController extends Controller
             $body = "Nomor Tagihan " . $nomor_tagihan . " telah dibuat";
             $modul = "tagihan";
 
+            // list jabatan
+            $listJabatan = Jabatan::where('slug', 'direktur-teknik')->query();
+
+
+            if ($PelaksanaanPekerjaan) {
+                $aduanId = $PelaksanaanPekerjaan->pluck('aduan_id')->toArray();
+                $katagori_nps = Aduan::whereIn('id', $aduanId)->pluck('kategori_nps')->toArray();
+                $katagori_nps_unique = array_unique($katagori_nps);
+
+                if (in_array('dis', $katagori_nps_unique)) {
+                    $listJabatan =   $listJabatan->orWhere('slug', 'manajer-distribusi');
+                }
+                if (in_array('pka', $katagori_nps_unique)) {
+                    $listJabatan =   $listJabatan->orWhere('slug', 'manajer-pengendalian-kehilangan-air');
+                }
+            }
+
+            $listJabatan =   $listJabatan->pluck('id')->toArray();
+            // list karyawan bedasarkan jabatan
+            $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get();
+
 
             if (auth()->user()->hasRole('rekanan')) {
-                $rekanan = Rekanan::find($rekanan_id);
+                // $rekanan = Rekanan::find($rekanan_id);
                 // notif ke staf pengawas
-                if ($rekanan->hasKaryawan) {
-                    foreach (collect($rekanan->hasKaryawan) as $key => $value) {
-                        $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $value->user_id);
-                    }
-                }
+                // if ($rekanan->hasKaryawan) {
+                //     foreach (collect($rekanan->hasKaryawan) as $key => $value) {
+                //         $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $value->user_id);
+                //     }
+                // }
             }
 
             if ($listKaryawan) {
