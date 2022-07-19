@@ -720,7 +720,7 @@ class PenunjukanPekerjaanController extends Controller
                     }
                 }
 
-                $message = "Pekerjan dari SPK " . $penunjukanPekerjaan->nomor_pekerjaan . " berhasil diubah";
+                $message = "Pekerjaan dari SPK " . $penunjukanPekerjaan->nomor_pekerjaan . " berhasil diubah";
 
                 return redirect()->route('penunjukan_pekerjaan.show', $aduan->slug)->with('message', $message)->with('Class', 'primary');
             } else {
@@ -1226,26 +1226,43 @@ class PenunjukanPekerjaanController extends Controller
                             $body = "SPK " . $nomor_pekerjaan . " telah dikoreksi";
                             $modul = "penunjukan-pekerjaan";
 
-                            $this->notification($penunjukanPekerjaan->aduan_id, $penunjukanPekerjaan->slug, $title, $body, $modul, auth()->user()->id, $rekanan->hasUser->id);
+
 
                             // return  $penunjukanPekerjaan;
                             $message = 'Berhasil Mengoreksi Pelaksanaan Pekerjaan';
                             $aduan = Aduan::find($penunjukanPekerjaan->aduan_id);
 
+                            if (!empty($rekanan)) {
+                                // notif ke reknanan
+                                $this->notification($penunjukanPekerjaan->aduan_id, $penunjukanPekerjaan->slug, $title, $body, $modul, auth()->user()->id, $rekanan->hasUser->id);
+
+                                // notif ke staf pengawas
+                                if ($rekanan->hasKaryawan) {
+                                    foreach (collect($rekanan->hasKaryawan) as $key => $value) {
+                                        $this->notification($penunjukanPekerjaan->id, $penunjukanPekerjaan->slug, $title, $body, $modul, auth()->user()->id, $value->user_id);
+                                    }
+                                }
+                            }
+
                             // notif ke admin distribusi sesuai wilyah
                             if ($aduan->wilayah_id) {
                                 if ($aduan->kategori_nps === "dis") {
                                     $jabatanWilayah = Jabatan::where('slug', "like", "admin-distribusi%")
-                                        ->orWhere('slug', "like", "asisten-manajer-distribusi%")
-                                        ->orWhere('slug', 'manajer-distribusi')
+                                        ->where(function ($query) {
+                                            $query->orWhere('slug', "like", "asisten-manajer-distribusi%")
+                                                ->orWhere('slug', 'manajer-distribusi');
+                                        })
+                                        ->where('wilayah_id', $aduan->wilayah_id)
                                         ->pluck('id')
                                         ->toArray();
                                 }
                                 if ($aduan->kategori_nps === "pka") {
                                     $jabatanWilayah = Jabatan::where('slug', "like", "admin-pengendalian-kehilangan-air%")
-                                        ->orWhere('slug', "like", "asisten-manajer-pengendalian-kehilangan-air%")
-                                        ->orWhere('slug', 'manajer-pengendalian-kehilangan-air')
-
+                                        ->where(function ($query) {
+                                            $query->orWhere('slug', "like", "asisten-manajer-pengendalian-kehilangan-air%")
+                                                ->orWhere('slug', 'manajer-pengendalian-kehilangan-air');
+                                        })
+                                        ->where('wilayah_id', $aduan->wilayah_id)
                                         ->pluck('id')
                                         ->toArray();
                                 }
