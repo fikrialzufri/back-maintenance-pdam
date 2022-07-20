@@ -1256,7 +1256,7 @@ class PenunjukanPekerjaanController extends Controller
                                     $jabatanWilayah = $jabatanWilayah->orWhere('slug', "like", "admin-pengendalian-kehilangan-air%");
                                 }
 
-                                $jabatanWilayah =  $jabatanWilayah->where('wilayah_id', $aduan->wilayah_id)
+                                $jabatanWilayah =  $jabatanWilayah->orWhere('wilayah_id', $aduan->wilayah_id)
                                     ->orWhere('slug', 'manajer-distribusi')
                                     ->orWhere('slug', 'asisten-manajer-perencanaan')
                                     ->orWhere('slug', 'asisten-manajer-pengawas')
