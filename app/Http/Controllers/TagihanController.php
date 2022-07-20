@@ -547,56 +547,56 @@ class TagihanController extends Controller
         // list karyawan bedasarkan jabatan
         $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get();
 
-        try {
-            DB::commit();
-            $user = [];
+        $user = [];
 
-            if ($data) {
-                $status = 'dikoreksi';
+        if ($data) {
+            $status = 'dikoreksi';
 
-                if (auth()->user()->hasRole('direktur-teknik')) {
-                    $status = 'disetujui';
-                }
-                if (auth()->user()->hasRole('keuangan')) {
-                    $status = 'dibayar';
-                    $data->kode_vocher = $request->kode_voucher;
-                    $data->total_bayar = $request->total_bayar;
-                }
-                $data->status = $status;
-                $data->save();
+            if (auth()->user()->hasRole('direktur-teknik')) {
+                $status = 'disetujui';
+            }
+            if (auth()->user()->hasRole('keuangan')) {
+                $status = 'dibayar';
+                $data->kode_vocher = $request->kode_voucher;
+                $data->total_bayar = $request->total_bayar;
+            }
+            $data->status = $status;
+            $data->save();
 
-                $user[auth()->user()->id] = [
-                    'keterangan' => $status,
-                ];
-                $data->hasUserMany()->attach($user);
-                $message = 'Berhasil Menyetujui Tagihan : ' . $data->nomor_tagihan;
+            $user[auth()->user()->id] = [
+                'keterangan' => $status,
+            ];
+            $data->hasUserMany()->attach($user);
+            $message = 'Berhasil Menyetujui Tagihan : ' . $data->nomor_tagihan;
 
-                $namakaryawan = '';
+            $namakaryawan = '';
 
-                if (auth()->user()->karyawan) {
-                    $namakaryawan = auth()->user()->karyawan->nama;
-                    # code...
-                }
+            if (auth()->user()->karyawan) {
+                $namakaryawan = auth()->user()->karyawan->nama;
+                # code...
+            }
 
-                $title = "Tagihan telah setujui";
-                $body = "Nomor Tagihan " . $data->nomor_tagihan . " telah disetujui oleh " . $namakaryawan;
-                $modul = "tagihan";
+            $title = "Tagihan telah setujui";
+            $body = "Nomor Tagihan " . $data->nomor_tagihan . " telah disetujui oleh " . $namakaryawan;
+            $modul = "tagihan";
 
-                $rekanan = Rekanan::find($data->rekanan_id);
-                if ($rekanan) {
-                    $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $rekanan->user_id);
+            $rekanan = Rekanan::find($data->rekanan_id);
+            if ($rekanan) {
+                $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $rekanan->user_id);
 
-                    if ($listKaryawan) {
-                        foreach (collect($listKaryawan) as $i => $kr) {
-                            if (auth()->user()->id !== $kr->user_id) {
-                                $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $kr->user_id);
-                            }
+                if ($listKaryawan) {
+                    foreach (collect($listKaryawan) as $i => $kr) {
+                        if (auth()->user()->id !== $kr->user_id) {
+                            $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $kr->user_id);
                         }
                     }
                 }
-
-                return redirect()->route('tagihan.index')->with('message', $message)->with('Class', 'primary');
             }
+
+            return redirect()->route('tagihan.index')->with('message', $message)->with('Class', 'primary');
+        }
+        try {
+            DB::commit();
         } catch (\Throwable $th) {
             DB::rollback();
             return redirect()->route('tagihan.index')->with('message', 'Tagihan gagal disetujui')->with('Class', 'danger');
