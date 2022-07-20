@@ -646,7 +646,7 @@ class TagihanController extends Controller
         $modul = "tagihan";
 
         // list jabatan
-        $listJabatan = Jabatan::where('slug', 'direktur-teknik')->query();
+        $listJabatan = Jabatan::query();
 
 
         if ($PelaksanaanPekerjaan) {
@@ -662,7 +662,7 @@ class TagihanController extends Controller
             }
         }
 
-        $listJabatan =   $listJabatan->pluck('id')->toArray();
+        $listJabatan =   $listJabatan->where('slug', 'direktur-teknik')->pluck('id')->toArray();
         // list karyawan bedasarkan jabatan
         $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get();
 
