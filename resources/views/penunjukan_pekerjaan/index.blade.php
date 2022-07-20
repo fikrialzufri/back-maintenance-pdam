@@ -133,7 +133,7 @@
                                                     @if ($item->status_aduan == 'Selesai dikerjakan')
                                                         <i class="nav-icon fas fa-eye"></i> Setujui
                                                     @elseif ($item->status_aduan == 'Belum ditunjuk')
-                                                        <i class="nav-icon fas fa-eye"></i> Menjunjuk
+                                                        <i class="nav-icon fas fa-eye"></i> Tunjuk
                                                     @else
                                                         <i class="nav-icon fa fa-search"></i> Detail
                                                     @endif
