@@ -974,6 +974,7 @@ class PenunjukanPekerjaanController extends Controller
                             $PelaksanaanPekerjaan->keterangan_barang = '';
                         }
                     }
+
                     if ($PelaksanaanPekerjaan) {
 
                         $PelaksanaanPekerjaan->status = $status;
@@ -1250,7 +1251,9 @@ class PenunjukanPekerjaanController extends Controller
                                     $jabatanWilayah = Jabatan::where('slug', "like", "admin-distribusi%")
                                         ->where(function ($query) {
                                             $query->orWhere('slug', "like", "asisten-manajer-distribusi%")
-                                                ->orWhere('slug', 'manajer-distribusi');
+                                                ->orWhere('slug', 'manajer-distribusi')
+                                                ->orWhere('slug', 'asisten-manajer-perencanaan')
+                                                ->orWhere('slug', 'asisten-manajer-pengawas');
                                         })
                                         ->where('wilayah_id', $aduan->wilayah_id)
                                         ->pluck('id')
@@ -1260,7 +1263,9 @@ class PenunjukanPekerjaanController extends Controller
                                     $jabatanWilayah = Jabatan::where('slug', "like", "admin-pengendalian-kehilangan-air%")
                                         ->where(function ($query) {
                                             $query->orWhere('slug', "like", "asisten-manajer-pengendalian-kehilangan-air%")
-                                                ->orWhere('slug', 'manajer-pengendalian-kehilangan-air');
+                                                ->orWhere('slug', 'manajer-pengendalian-kehilangan-air')
+                                                ->orWhere('slug', 'asisten-manajer-perencanaan')
+                                                ->orWhere('slug', 'asisten-manajer-pengawas');
                                         })
                                         ->where('wilayah_id', $aduan->wilayah_id)
                                         ->pluck('id')
