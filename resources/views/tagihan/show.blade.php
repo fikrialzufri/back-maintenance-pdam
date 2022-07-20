@@ -67,19 +67,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    @if ($tagihan->kode_vocher != '')
-                                        <div class="col-12">
-                                            <div class="form-group">
-                                                <div>
-                                                    <label for="voucher" class=" form-control-label">Voucher</label>
-                                                </div>
-                                                <div>
-                                                    <input type="text" placeholder="voucher " class="form-control"
-                                                        readonly value="{{ $tagihan->kode_vocher }}">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endif
+
                                     <div class="col-12">
                                         <div class="form-group">
                                             <div>
@@ -141,6 +129,32 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                    @if ($tagihan->kode_vocher != '')
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <div>
+                                                    <label for="voucher" class=" form-control-label">Voucher</label>
+                                                </div>
+                                                <div>
+                                                    <input type="text" placeholder="voucher " class="form-control"
+                                                        readonly value="{{ $tagihan->kode_vocher }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <div>
+                                                    <label for="total_bayar" class=" form-control-label">Total
+                                                        Bayar</label>
+                                                </div>
+                                                <div>
+                                                    <input type="text" placeholder="total_bayar " class="form-control"
+                                                        readonly value="Rp. {{ format_uang($tagihan->total_bayar) }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
                                 </div>
                                 @if (!auth()->user()->hasRole('keuangan') &&
                                     !auth()->user()->hasRole('umum'))
