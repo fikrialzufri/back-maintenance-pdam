@@ -553,6 +553,9 @@ class TagihanController extends Controller
 
             if ($data) {
                 $status = 'dikoreksi';
+                if (auth()->user()->karyawan) {
+                    $namakaryawan = auth()->user()->karyawan->nama;
+                }
 
                 if (auth()->user()->hasRole('direktur-teknik')) {
                     $status = 'disetujui';
@@ -561,6 +564,13 @@ class TagihanController extends Controller
                     $status = 'dibayar';
                     $data->kode_vocher = $request->kode_voucher;
                     $data->total_bayar = $request->total_bayar;
+                    $title = "Tagihan telah dibayar";
+                    $body = "Nomor Tagihan " . $data->nomor_tagihan . " telah disetujui oleh " . $namakaryawan;
+                    $modul = "tagihan";
+                } else {
+                    $title = "Tagihan telah setujui";
+                    $body = "Nomor Tagihan " . $data->nomor_tagihan . " telah disetujui oleh " . $namakaryawan;
+                    $modul = "tagihan";
                 }
                 $data->status = $status;
                 $data->save();
@@ -573,10 +583,7 @@ class TagihanController extends Controller
 
                 $namakaryawan = '';
 
-                if (auth()->user()->karyawan) {
-                    $namakaryawan = auth()->user()->karyawan->nama;
-                    # code...
-                }
+
 
                 $title = "Tagihan telah setujui";
                 $body = "Nomor Tagihan " . $data->nomor_tagihan . " telah disetujui oleh " . $namakaryawan;
