@@ -564,10 +564,13 @@ class TagihanController extends Controller
                     $status = 'dibayar';
                     $data->kode_vocher = $request->kode_voucher;
                     $data->total_bayar = str_replace(".", "", $request->total_bayar);
+                    $message = 'Berhasil Membayar Tagihan : ' . $data->nomor_tagihan;
                     $title = "Tagihan telah dibayar";
                     $body = "Nomor Tagihan " . $data->nomor_tagihan . " telah disetujui oleh " . $namakaryawan;
                     $modul = "tagihan";
                 } else {
+                    $message = 'Berhasil Menyetujui Tagihan : ' . $data->nomor_tagihan;
+
                     $title = "Tagihan telah setujui";
                     $body = "Nomor Tagihan " . $data->nomor_tagihan . " telah disetujui oleh " . $namakaryawan;
                     $modul = "tagihan";
@@ -579,7 +582,6 @@ class TagihanController extends Controller
                     'keterangan' => $status,
                 ];
                 $data->hasUserMany()->attach($user);
-                $message = 'Berhasil Menyetujui Tagihan : ' . $data->nomor_tagihan;
 
                 $namakaryawan = '';
 
