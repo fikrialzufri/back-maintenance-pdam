@@ -512,59 +512,6 @@
             <!-- /.row (main row) -->
         </div><!-- /.container-fluid -->
     </div><!-- /.container-fluid -->
-    {{-- <div class="modal fade" id="list_item_modal" role="dialog" aria-labelledby="pekerjaan_label" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="pekerjaan_label">Ganti Pekerjaan</span>
-                    </h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">×</span></button>
-                </div>
-                <form id="formPembayaran" enctype="multipart/form-data">
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <div class="input-group mb-2 mr-sm-2">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">Cari : </div>
-                                </div>
-                                <input type="text" class="form-control" id="search" placeholder="Cari">
-                            </div>
-                        </div>
-                        <table class="table-responsive table table-head-fixed  table-bordered " id="tableItem"
-                            style="height:700px">
-                            <thead>
-                                <tr>
-                                    <th class="">Nama</th>
-                                    <th class="">Jenis</th>
-                                    <th class="">Harga Siang</th>
-                                    <th class="">Harga Malam</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($dataitem as $nor => $item)
-                                    <tr>
-                                        <td>
-                                            <span class="ganti_pekerjaan" data-item="{{ $item->id }}"
-                                                data-tagihan="">
-                                                {{ $item->nama }}
-                                            </span>
-
-                                        </td>
-                                        <td>{{ $item->jenis }}</td>
-                                        <td>{{ format_uang($item->harga) }}</td>
-                                        <td>{{ format_uang($item->harga_malam) }}</td>
-                                    </tr>
-                                @endforeach
-
-                            </tbody>
-
-                        </table>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div> --}}
 @stop
 
 @push('script')
