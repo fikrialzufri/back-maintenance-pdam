@@ -1247,30 +1247,22 @@ class PenunjukanPekerjaanController extends Controller
 
                             // notif ke admin distribusi sesuai wilyah
                             if ($aduan->wilayah_id) {
+                                $jabatanWilayah = Jabatan::query();
+
                                 if ($aduan->kategori_nps === "dis") {
-                                    $jabatanWilayah = Jabatan::where('slug', "like", "admin-distribusi%")
-                                        ->where(function ($query) {
-                                            $query->orWhere('slug', "like", "asisten-manajer-distribusi%")
-                                                ->orWhere('slug', 'manajer-distribusi')
-                                                ->orWhere('slug', 'asisten-manajer-perencanaan')
-                                                ->orWhere('slug', 'asisten-manajer-pengawas');
-                                        })
-                                        ->where('wilayah_id', $aduan->wilayah_id)
-                                        ->pluck('id')
-                                        ->toArray();
+                                    $jabatanWilayah = $jabatanWilayah->orwhere('slug', "like", "admin-distribusi%");
                                 }
                                 if ($aduan->kategori_nps === "pka") {
-                                    $jabatanWilayah = Jabatan::where('slug', "like", "admin-pengendalian-kehilangan-air%")
-                                        ->where(function ($query) {
-                                            $query->orWhere('slug', "like", "asisten-manajer-pengendalian-kehilangan-air%")
-                                                ->orWhere('slug', 'manajer-pengendalian-kehilangan-air')
-                                                ->orWhere('slug', 'asisten-manajer-perencanaan')
-                                                ->orWhere('slug', 'asisten-manajer-pengawas');
-                                        })
-                                        ->where('wilayah_id', $aduan->wilayah_id)
-                                        ->pluck('id')
-                                        ->toArray();
+                                    $jabatanWilayah = $jabatanWilayah->orWhere('slug', "like", "admin-pengendalian-kehilangan-air%");
                                 }
+
+                                $jabatanWilayah =  $jabatanWilayah->where('wilayah_id', $aduan->wilayah_id)
+                                    ->orWhere('slug', 'manajer-distribusi')
+                                    ->orWhere('slug', 'asisten-manajer-perencanaan')
+                                    ->orWhere('slug', 'asisten-manajer-pengawas')
+                                    ->pluck('id')
+                                    ->toArray();
+
                                 if ($jabatanWilayah) {
                                     $karyawanwilayah = Karyawan::whereIn('jabatan_id', $jabatanWilayah)->get();
 
