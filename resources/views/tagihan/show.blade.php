@@ -194,7 +194,8 @@
                                                         <tr>
                                                             <td>{{ $index + 1 }}</td>
                                                             <td>{{ $item->no_spk }}</td>
-                                                            <th>Rp. {{ format_uang($item->hasItem()->sum('total')) }}
+                                                            <th>
+                                                                Rp. {{ format_uang($item->$item->total_pekerjaan) }}
                                                             </th>
                                                         </tr>
                                                     @empty
