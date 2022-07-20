@@ -195,7 +195,7 @@
                                                             <td>{{ $index + 1 }}</td>
                                                             <td>{{ $item->no_spk }}</td>
                                                             <th>
-                                                                Rp. {{ format_uang($item->$item->total_pekerjaan) }}
+                                                                Rp. {{ format_uang($item->total_pekerjaan) }}
                                                             </th>
                                                         </tr>
                                                     @empty
