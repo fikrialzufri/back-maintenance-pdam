@@ -701,18 +701,14 @@
                                                                             {{ format_uang($daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->harga) }}
                                                                         </td>
                                                                     @endif
+                                                                    <td>
+                                                                        {{ $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->keterangan }}
+                                                                    </td>
                                                                     @if ($pekerjaanUtama->status === 'selesai koreksi' || $pekerjaanUtama->status === 'diadjust')
                                                                         <td>Rp.
                                                                             {{ format_uang($daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->harga) }}
                                                                         </td>
                                                                     @endif
-                                                                    <td>
-                                                                        {{ $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->keterangan }}
-                                                                    </td>
-
-                                                                    <td>
-                                                                        Rp.{{ format_uang($daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty * $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->harga) }}
-                                                                    </td>
                                                                 @endif
                                                             </tr>
                                                             <tr>
@@ -806,17 +802,14 @@
                                                                             {{ format_uang($daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->harga) }}
                                                                         </td>
                                                                     @endif
+                                                                    <td>
+                                                                        {{ $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->keterangan }}
+                                                                    </td>
                                                                     @if ($pekerjaanUtama->status === 'selesai koreksi' || $pekerjaanUtama->status === 'diadjust')
                                                                         <td>Rp.
                                                                             {{ format_uang($daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->harga) }}
                                                                         </td>
                                                                     @endif
-                                                                    <td>
-                                                                        {{ $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->keterangan }}
-                                                                    </td>
-                                                                    <td>
-                                                                        Rp.{{ format_uang($daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty * $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->harga) }}
-                                                                    </td>
                                                                 @endif
                                                             </tr>
                                                             <tr>
