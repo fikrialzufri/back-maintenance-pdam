@@ -560,6 +560,7 @@ class TagihanController extends Controller
                 if (auth()->user()->hasRole('keuangan')) {
                     $status = 'dibayar';
                     $data->kode_vocher = $request->kode_voucher;
+                    $data->total_bayar = $request->total_bayar;
                 }
                 $data->status = $status;
                 $data->save();

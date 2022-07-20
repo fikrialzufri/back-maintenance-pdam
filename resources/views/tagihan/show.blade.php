@@ -437,14 +437,35 @@
                                                 </span>
                                             @endif
                                         </div>
+                                        <div class="col-12">
+                                            <div>
+                                                <label for="total_bayar" class=" form-control-label">Total Bayar</label>
+                                            </div>
+                                            <div>
+                                                <input type="text" name="total_bayar" id="total_bayar"
+                                                    placeholder="Total Bayar"
+                                                    class="form-control  {{ $errors->has('total_bayar') ? 'form-control is-invalid' : 'form-control' }}"
+                                                    value="{{ old('total_bayar') }}" required>
+                                            </div>
+
+                                            @if ($errors->has('total_bayar'))
+                                                <span class="text-danger">
+                                                    <strong id="textkk">{{ $errors->first('total_bayar') }}</strong>
+                                                </span>
+                                            @endif
+                                        </div>
                                     </div>
                                 @endif
                             @endif
                             @if ($bntSetuju === false)
                                 <div class="row">
-                                    <div class="col-12">
+                                    <div class="col-12 mt-30">
                                         <div>
-                                            <button type="submit" class="btn btn-primary">Setujui Pekerjaan</button>
+                                            @if ($keuangan === true)
+                                                <button type="submit" class="btn btn-primary">Simpan Pembayaran</button>
+                                            @else
+                                                <button type="submit" class="btn btn-primary">Setujui Tagihan</button>
+                                            @endif
                                         </div>
                                     </div>
 
@@ -554,6 +575,30 @@
     </style>
 @endpush
 @push('script')
+    <script>
+        $("#total_bayar").on("input", function() {
+
+            let val = formatRupiahTanpaRp(this.value, '')
+            $("#total_bayar").val(val)
+        });
+
+        function formatRupiahTanpaRp(angka, prefix) {
+            let number_string = angka.replace(/[^,\d]/g, '').toString(),
+                split = number_string.split(','),
+                sisa = split[0].length % 3,
+                rupiah = split[0].substr(0, sisa),
+                ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+            // tambahkan titik jika yang di input sudah menjadi angka ribuan
+            if (ribuan) {
+                separator = sisa ? '.' : '';
+                rupiah += separator + ribuan.join('.');
+            }
+
+            rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+            return prefix == undefined ? rupiah : (rupiah ? '' + rupiah : '');
+        }
+    </script>
     <script>
         $(function() {
             $("#nama").keypress(function() {

@@ -21,6 +21,7 @@ class CreateTagihansTable extends Migration
             $table->string('kode_vocher')->nullable();
             $table->date('tanggal_tagihan');
             $table->integer('total')->default(0);
+            $table->integer('total_dibayar')->default(0);
             $table->enum('status', [
                 'dikirim',
                 'proses',
