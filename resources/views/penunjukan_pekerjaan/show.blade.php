@@ -755,24 +755,21 @@
                                                                     <td>
                                                                         {{ $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty }}
                                                                     </td>
-                                                                    @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
-                                                                        <td>Rp.
-                                                                            {{ format_uang($daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->harga) }}
-                                                                        </td>
-                                                                    @endif
+                                                                    <td>Rp.
+                                                                        {{ format_uang($daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->harga) }}
+                                                                    </td>
                                                                     <td>
                                                                         {{ $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->keterangan }}
                                                                     </td>
-                                                                    @if ($pekerjaanUtama->status === 'selesai koreksi' || $pekerjaanUtama->status === 'diadjust')
-                                                                        <td>Rp.
-                                                                            {{ format_uang($daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->harga) }}
-                                                                        </td>
-                                                                    @endif
+                                                                    <td>Rp.
+                                                                        {{ format_uang($daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->harga) }}
+                                                                    </td>
                                                                 @endif
                                                             </tr>
                                                             <tr>
                                                                 <td>Perencanaan</td>
 
+                                                                <td></td>
                                                                 <td></td>
                                                                 @if (isset($daftarPekerjaan->hasItemPerencanaan[$key]))
                                                                     <td>
@@ -797,27 +794,23 @@
                                                                     <td>
                                                                         {{ $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty }}
                                                                     </td>
-                                                                    @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
-                                                                        <td>Rp.
-                                                                            {{ format_uang($daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->harga) }}
-                                                                        </td>
-                                                                    @endif
+                                                                    <td>Rp.
+                                                                        {{ format_uang($daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->harga) }}
+                                                                    </td>
                                                                     <td>
                                                                         {{ $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->keterangan }}
                                                                     </td>
-                                                                    @if ($pekerjaanUtama->status === 'selesai koreksi' || $pekerjaanUtama->status === 'diadjust')
-                                                                        <td>Rp.
-                                                                            {{ format_uang($daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->harga) }}
-                                                                        </td>
-                                                                    @endif
+                                                                    <td>Rp.
+                                                                        {{ format_uang($daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->harga) }}
+                                                                    </td>
                                                                 @endif
                                                             </tr>
                                                             <tr>
                                                                 <td rowspan="2">Perencanaan
                                                                 </td>
+                                                                <td></td>
+                                                                <td></td>
                                                                 @if (isset($daftarPekerjaan->hasItemPerencanaan[$key]))
-                                                                    <td>{{ $daftarPekerjaan->hasItemPerencanaan[$key]->pivot->qty }}
-                                                                    </td>
                                                                     <td>
                                                                         Rp.
                                                                         {{ format_uang($daftarPekerjaan->hasItemPerencanaan[$key]->pivot->harga) }}
