@@ -648,12 +648,22 @@
                                                                             {{ format_uang($daftarPekerjaan->hasItemPengawas[$key]->pivot->harga) }}
                                                                         </td>
                                                                     @endif
-                                                                    <td>
-                                                                        {{ $daftarPekerjaan->hasItemPengawas[$key]->pivot->keterangan }}
-                                                                    </td>
+
                                                                     @if ($pekerjaanUtama->status === 'selesai koreksi' || $pekerjaanUtama->status === 'diadjust')
-                                                                        <td>Rp.
+                                                                        <td>
+                                                                            Rp.
                                                                             {{ format_uang($daftarPekerjaan->hasItemPengawas[$key]->pivot->harga) }}
+                                                                        </td>
+                                                                        <td>
+                                                                            {{ $daftarPekerjaan->hasItemPengawas[$key]->pivot->keterangan }}
+                                                                        </td>
+                                                                        <td>
+                                                                            Rp.
+                                                                            {{ format_uang($daftarPekerjaan->hasItemPengawas[$key]->pivot->harga) }}
+                                                                        </td>
+                                                                    @else
+                                                                        <td>
+                                                                            {{ $daftarPekerjaan->hasItemPengawas[$key]->pivot->keterangan }}
                                                                         </td>
                                                                     @endif
                                                                 @endif
@@ -769,7 +779,6 @@
                                                             <tr>
                                                                 <td>Perencanaan</td>
 
-                                                                <td></td>
                                                                 <td></td>
                                                                 @if (isset($daftarPekerjaan->hasItemPerencanaan[$key]))
                                                                     <td>
