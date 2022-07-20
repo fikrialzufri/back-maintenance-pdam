@@ -615,99 +615,99 @@ class TagihanController extends Controller
         $tagihan = $this->model()->count();
         $bulan = date('m');
 
-        if ($tagihan >= 1) {
-            $no = str_pad($tagihan + 1, 4, "0", STR_PAD_LEFT);
-            $nomor_tagihan =  $no . "/"  . rand(0, 900) . "/" . "BAPP-KJB/" . getRomawi($bulan) . "/" . date('Y');
-        } else {
-            $no = str_pad(1, 4, "0", STR_PAD_LEFT);
-            $nomor_tagihan =  $no . "/"  . rand(0, 900) . "/" . "BAPP-KJB/" . getRomawi($bulan) . "/" . date('Y');
-        }
-
-        $PelaksanaanPekerjaan = PelaksanaanPekerjaan::whereIn('id', $pelaksanaan)
-            ->where('tagihan', 'tidak')->first();
-
-        if (!auth()->user()->hasRole('superadmin')) {
-            if (auth()->user()->hasRole('rekanan')) {
-                $rekanan_id = auth()->user()->id_rekanan;
-            } else {
-                $rekanan_id =  $PelaksanaanPekerjaan->rekanan_id;
-            }
-        }
-        $data = $this->model();
-        $data->nomor_tagihan = $nomor_tagihan;
-        $data->tanggal_tagihan = $tanggal_tagihan;
-        $data->rekanan_id = $rekanan_id;
-        $data->user_id = auth()->user()->id;
-        $data->status = 'dikirim';
-        $data->save();
-
-        $title = "Tagihan telah dibuat";
-        $body = "Nomor Tagihan " . $nomor_tagihan . " telah dibuat";
-        $modul = "tagihan";
-
-        // list jabatan
-        $listJabatan = Jabatan::query();
-
-
-        if ($PelaksanaanPekerjaan) {
-            $aduanId = $PelaksanaanPekerjaan->pluck('aduan_id')->toArray();
-            $katagori_nps = Aduan::whereIn('id', $aduanId)->pluck('kategori_nps')->toArray();
-            $katagori_nps_unique = array_unique($katagori_nps);
-
-            if (in_array('dis', $katagori_nps_unique)) {
-                $listJabatan =   $listJabatan->orWhere('slug', 'manajer-distribusi');
-            }
-            if (in_array('pka', $katagori_nps_unique)) {
-                $listJabatan =   $listJabatan->orWhere('slug', 'manajer-pengendalian-kehilangan-air');
-            }
-        }
-
-        $listJabatan =   $listJabatan->where('slug', 'direktur-teknik')->pluck('id')->toArray();
-        // list karyawan bedasarkan jabatan
-        $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get();
-
-
-        if (auth()->user()->hasRole('rekanan')) {
-            // $rekanan = Rekanan::find($rekanan_id);
-            // notif ke staf pengawas
-            // if ($rekanan->hasKaryawan) {
-            //     foreach (collect($rekanan->hasKaryawan) as $key => $value) {
-            //         $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $value->user_id);
-            //     }
-            // }
-        }
-
-        if ($listKaryawan) {
-            foreach (collect($listKaryawan) as $i => $kr) {
-                $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $kr->user_id);
-            }
-        }
-
-        foreach ($pelaksanaan as $value) {
-            $PelaksanaanPekerjaan = PelaksanaanPekerjaan::where('id', $value)
-                ->where('tagihan', 'tidak')
-                ->where(
-                    'rekanan_id',
-                    $rekanan_id
-                )->first();
-
-            if ($PelaksanaanPekerjaan) {
-                $PelaksanaanPekerjaan->tagihan = 'ya';
-                $PelaksanaanPekerjaan->save();
-            }
-            $penunjukanPekerjaan = PenunjukanPekerjaan::where('id', $PelaksanaanPekerjaan->penunjukan_pekerjaan)->where('tagihan', 'tidak')->first();
-            if ($penunjukanPekerjaan) {
-                $penunjukanPekerjaan->tagihan = 'ya';
-                $penunjukanPekerjaan->save();
-            }
-        }
-
-        $data->hasPelaksanaanPekerjaan()->sync($pelaksanaan);
-
-        return redirect()->route($this->route . '.index')->with('message', ucwords(str_replace('-', ' ', $this->route)) . " " . $nomor_tagihan . ' Berhasil Ditambahkan')->with('Class', 'success');
         DB::beginTransaction();
         try {
             DB::commit();
+            if ($tagihan >= 1) {
+                $no = str_pad($tagihan + 1, 4, "0", STR_PAD_LEFT);
+                $nomor_tagihan =  $no . "/"  . rand(0, 900) . "/" . "BAPP-KJB/" . getRomawi($bulan) . "/" . date('Y');
+            } else {
+                $no = str_pad(1, 4, "0", STR_PAD_LEFT);
+                $nomor_tagihan =  $no . "/"  . rand(0, 900) . "/" . "BAPP-KJB/" . getRomawi($bulan) . "/" . date('Y');
+            }
+
+            $PelaksanaanPekerjaan = PelaksanaanPekerjaan::whereIn('id', $pelaksanaan)
+                ->where('tagihan', 'tidak')->first();
+
+            if (!auth()->user()->hasRole('superadmin')) {
+                if (auth()->user()->hasRole('rekanan')) {
+                    $rekanan_id = auth()->user()->id_rekanan;
+                } else {
+                    $rekanan_id =  $PelaksanaanPekerjaan->rekanan_id;
+                }
+            }
+            $data = $this->model();
+            $data->nomor_tagihan = $nomor_tagihan;
+            $data->tanggal_tagihan = $tanggal_tagihan;
+            $data->rekanan_id = $rekanan_id;
+            $data->user_id = auth()->user()->id;
+            $data->status = 'dikirim';
+            $data->save();
+
+            $title = "Tagihan telah dibuat";
+            $body = "Nomor Tagihan " . $nomor_tagihan . " telah dibuat";
+            $modul = "tagihan";
+
+            // list jabatan
+            $listJabatan = Jabatan::query();
+
+
+            if ($PelaksanaanPekerjaan) {
+                $aduanId = $PelaksanaanPekerjaan->pluck('aduan_id')->toArray();
+                $katagori_nps = Aduan::whereIn('id', $aduanId)->pluck('kategori_nps')->toArray();
+                $katagori_nps_unique = array_unique($katagori_nps);
+
+                if (in_array('dis', $katagori_nps_unique)) {
+                    $listJabatan =   $listJabatan->orWhere('slug', 'manajer-distribusi');
+                }
+                if (in_array('pka', $katagori_nps_unique)) {
+                    $listJabatan =   $listJabatan->orWhere('slug', 'manajer-pengendalian-kehilangan-air');
+                }
+            }
+
+            $listJabatan =   $listJabatan->where('slug', 'direktur-teknik')->pluck('id')->toArray();
+            // list karyawan bedasarkan jabatan
+            $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get();
+
+
+            if (auth()->user()->hasRole('rekanan')) {
+                // $rekanan = Rekanan::find($rekanan_id);
+                // notif ke staf pengawas
+                // if ($rekanan->hasKaryawan) {
+                //     foreach (collect($rekanan->hasKaryawan) as $key => $value) {
+                //         $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $value->user_id);
+                //     }
+                // }
+            }
+
+            if ($listKaryawan) {
+                foreach (collect($listKaryawan) as $i => $kr) {
+                    $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $kr->user_id);
+                }
+            }
+
+            foreach ($pelaksanaan as $value) {
+                $PelaksanaanPekerjaan = PelaksanaanPekerjaan::where('id', $value)
+                    ->where('tagihan', 'tidak')
+                    ->where(
+                        'rekanan_id',
+                        $rekanan_id
+                    )->first();
+
+                if ($PelaksanaanPekerjaan) {
+                    $PelaksanaanPekerjaan->tagihan = 'ya';
+                    $PelaksanaanPekerjaan->save();
+                }
+                $penunjukanPekerjaan = PenunjukanPekerjaan::where('id', $PelaksanaanPekerjaan->penunjukan_pekerjaan)->where('tagihan', 'tidak')->first();
+                if ($penunjukanPekerjaan) {
+                    $penunjukanPekerjaan->tagihan = 'ya';
+                    $penunjukanPekerjaan->save();
+                }
+            }
+
+            $data->hasPelaksanaanPekerjaan()->sync($pelaksanaan);
+
+            return redirect()->route($this->route . '.index')->with('message', ucwords(str_replace('-', ' ', $this->route)) . " " . $nomor_tagihan . ' Berhasil Ditambahkan')->with('Class', 'success');
         } catch (\Throwable $th) {
             DB::rollback();
 
