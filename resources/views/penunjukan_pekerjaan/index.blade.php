@@ -131,9 +131,9 @@
                                                 @elseif (auth()->user()->hasRole('asisten-manajer-distribusi') ||
                                                     auth()->user()->hasRole('asisten-manajer-pengendalian-kehilangan-air'))
                                                     @if ($item->status_aduan == 'Selesai dikerjakan')
-                                                        <i class="nav-icon fas fa-eye"></i> Proses
+                                                        <i class="nav-icon fas fa-eye"></i> Setujui
                                                     @elseif ($item->status_aduan == 'Belum ditunjuk')
-                                                        <i class="nav-icon fas fa-eye"></i> Proses
+                                                        <i class="nav-icon fas fa-eye"></i> Menjunjuk
                                                     @else
                                                         <i class="nav-icon fa fa-search"></i> Detail
                                                     @endif
@@ -154,12 +154,6 @@
                                                 @elseif (auth()->user()->hasRole('asisten-manajer-perencanaan'))
                                                     @if ($item->status_aduan == 'Dikoreksi Asmen Pengawas')
                                                         <i class="nav-icon fas fa-eye"></i> Koreksi
-                                                    @else
-                                                        <i class="nav-icon fa fa-search"></i> Detail
-                                                    @endif
-                                                @elseif (auth()->user()->hasRole('asisten-manajer-distribusi'))
-                                                    @if ($item->status_aduan == 'Belum ditunjuk')
-                                                        <i class="nav-icon fas fa-eye"></i> Proses
                                                     @else
                                                         <i class="nav-icon fa fa-search"></i> Detail
                                                     @endif
