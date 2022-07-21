@@ -777,8 +777,10 @@
                                                             </tr>
                                                             <tr>
                                                                 <td>Perencanaan</td>
-
-                                                                <td></td>
+                                                                @if (isset($daftarPekerjaan->hasItemAsmenPengawas[$key]))
+                                                                    <td>{{ $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty }}
+                                                                    </td>
+                                                                @endif
                                                                 @if (isset($daftarPekerjaan->hasItemPerencanaan[$key]))
                                                                     <td>
                                                                         Rp.
@@ -817,7 +819,10 @@
                                                                 <td rowspan="2">Perencanaan
                                                                 </td>
                                                                 <td></td>
-                                                                <td></td>
+                                                                @if (isset($daftarPekerjaan->hasItemAsmenPengawas[$key]))
+                                                                    <td>{{ $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty }}
+                                                                    </td>
+                                                                @endif
                                                                 @if (isset($daftarPekerjaan->hasItemPerencanaan[$key]))
                                                                     <td>
                                                                         Rp.
