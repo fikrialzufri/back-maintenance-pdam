@@ -76,7 +76,7 @@
                                         @foreach ($configHeaders as $key => $header)
                                             @if (isset($header['input']))
                                                 @if ($header['input'] == 'rupiah')
-                                                    <td>Rp. {{ pembulatan($item[$header['name']]) }}</td>
+                                                    <td>Rp. {{ format_uang($item[$header['name']]) }}</td>
                                                 @elseif ($header['input'] == 'date')
                                                     <td>
                                                         @if ($item[$header['name']] != null || $item[$header['name']] != '')

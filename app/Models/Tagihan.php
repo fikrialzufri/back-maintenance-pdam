@@ -216,7 +216,8 @@ class Tagihan extends Model
                 $total += $value->total_pekerjaan;
             }
         }
-
+        $total = pembulatan($total);
+        $total = str_replace(".", "", $total);
         $ppn = ($total * 11) / 100;
         return $total + $ppn;
     }

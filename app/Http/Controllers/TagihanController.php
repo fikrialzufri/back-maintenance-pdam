@@ -316,6 +316,8 @@ class TagihanController extends Controller
             $action = route('tagihan.update', $tagihan->id);
 
             $total = $tagihan->tagihan + $tagihan->galian;
+            $total = pembulatan($total);
+            $total = str_replace(".", "", $total);
             $ppn = ($total * 11) / 100;
             $grand_total = $total + $ppn;
 

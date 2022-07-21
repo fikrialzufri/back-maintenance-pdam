@@ -108,24 +108,7 @@
                                                     <div class="input-group-text">Rp.</div>
                                                 </div>
                                                 <input type="text" name="grand_total" id="grand_total_all" placeholder=""
-                                                    class="form-control" readonly
-                                                    value="{{ format_uang($grand_total) }}">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-12">
-                                        <div class="form-group">
-                                            <div>
-                                                <label for="grand_total" class=" form-control-label">Pembulatan
-                                                    Tagihan</label>
-                                            </div>
-                                            <div class="input-group mb-2 mr-sm-2">
-                                                <div class="input-group-prepend">
-                                                    <div class="input-group-text">Rp.</div>
-                                                </div>
-                                                <input type="text" name="grand_total" id="grand_total_all"
-                                                    placeholder="" class="form-control" readonly
-                                                    value="{{ pembulatan($grand_total) }}">
+                                                    class="form-control" readonly value="{{ format_uang($grand_total) }}">
                                             </div>
                                         </div>
                                     </div>
