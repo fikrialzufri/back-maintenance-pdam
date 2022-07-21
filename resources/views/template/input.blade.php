@@ -135,7 +135,11 @@
 </textarea>
     @endif
 
-    @if ($item['input'] == 'text' || $item['input'] == 'number' || $item['input'] == 'email' || $item['input'] == 'password' || $item['input'] == 'time')
+    @if ($item['input'] == 'text' ||
+        $item['input'] == 'number' ||
+        $item['input'] == 'email' ||
+        $item['input'] == 'password' ||
+        $item['input'] == 'time')
         <div>
             <input type="{{ $item['input'] }}" name="{{ $item['name'] }}" id="{{ $item['name'] }}"
                 @if ($item['input'] == 'password') autocomplete="on" @else placeholder="{{ $item['alias'] }}" @endif
@@ -159,7 +163,7 @@
 </div>
 @push('head')
     @if (isset($item['input']))
-        @if ($item['input'] == 'datetimepicker')
+        @if ($item['input'] == 'datetimepicker' || $item['input'] == 'year')
             <link rel="stylesheet" type="text/css"
                 href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
         @endif

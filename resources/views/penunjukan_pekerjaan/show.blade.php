@@ -122,8 +122,8 @@
                                             <h6 class="">Alamat Pekerjaan</h6>
                                         </div>
                                         <div>
-                                            <a href="https://maps.google.com/?q={{ $lat_long_pekerjaan }}"
-                                                target="__blank" class="text-danger">
+                                            <a href="https://maps.google.com/?q={{ $lat_long_pekerjaan }}" target="__blank"
+                                                class="text-danger">
                                                 {{ $lokasi_pekerjaan }}
                                             </a>
                                         </div>
@@ -326,8 +326,7 @@
                                                     </select>
                                                     @if ($errors->has('rekanan_id'))
                                                         <span class="text-danger">
-                                                            <strong
-                                                                id="textrule">{{ $errors->first('rekanan_id') }}</strong>
+                                                            <strong id="textrule">{{ $errors->first('rekanan_id') }}</strong>
                                                         </span>
                                                     @endif
                                                 </div>
@@ -659,7 +658,7 @@
                                                                         </td>
                                                                         <td>
                                                                             Rp.
-                                                                            {{ format_uang($daftarPekerjaan->hasItemPengawas[$key]->pivot->harga) }}
+                                                                            {{ format_uang($daftarPekerjaan->hasItemPengawas[$key]->pivot->qty * $daftarPekerjaan->hasItemPengawas[$key]->pivot->harga) }}
                                                                         </td>
                                                                     @else
                                                                         <td>
@@ -708,7 +707,7 @@
                                                                     </td>
                                                                     @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
                                                                         <td>Rp.
-                                                                            {{ format_uang($daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->harga) }}
+                                                                            {{ format_uang($daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty * $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->harga) }}
                                                                         </td>
                                                                     @endif
                                                                     <td>
@@ -772,7 +771,7 @@
                                                                         {{ $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->keterangan }}
                                                                     </td>
                                                                     <td>Rp.
-                                                                        {{ format_uang($daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->harga) }}
+                                                                        {{ format_uang($daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty * $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->harga) }}
                                                                     </td>
                                                                 @endif
                                                             </tr>
@@ -810,7 +809,7 @@
                                                                         {{ $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->keterangan }}
                                                                     </td>
                                                                     <td>Rp.
-                                                                        {{ format_uang($daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->harga) }}
+                                                                        {{ format_uang($daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty * $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->harga) }}
                                                                     </td>
                                                                 @endif
                                                             </tr>
