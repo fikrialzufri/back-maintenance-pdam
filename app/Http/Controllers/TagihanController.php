@@ -346,38 +346,39 @@ class TagihanController extends Controller
             if (auth()->user()->hasRole('superadmin')) {
                 $perencaan = true;
             }
-            if (auth()->user()->hasRole('manajer-distribusi')) {
+            // if (auth()->user()->hasRole('manajer-distribusi')) {
 
-                if (in_array('dis', $katagori_nps_unique)) {
-                    $bntSetuju = false;
-                }
-            }
-            if (auth()->user()->hasRole('manajer-pengendalian-kehilangan-air')) {
-                if (in_array('pka', $katagori_nps_unique)) {
-                    $bntSetuju = false;
-                }
-            }
+            //     if (in_array('dis', $katagori_nps_unique)) {
+            //         $bntSetuju = false;
+            //     }
+            // }
+            // if (auth()->user()->hasRole('manajer-pengendalian-kehilangan-air')) {
+            //     if (in_array('pka', $katagori_nps_unique)) {
+            //         $bntSetuju = false;
+            //     }
+            // }
 
             if (auth()->user()->hasRole('manajer-perencanaan')) {
-                $listJabatan = Jabatan::query();
+                // $listJabatan = Jabatan::query();
 
-                if (in_array('dis', $katagori_nps_unique)) {
-                    $listJabatan = $listJabatan->where('slug', 'manajer-distribusi');
-                }
-                if (in_array('pka', $katagori_nps_unique)) {
-                    $listJabatan = $listJabatan->orWhere('slug', 'manajer-pengendalian-kehilangan-air');
-                }
-                $listJabatan = $listJabatan->pluck('id')->toArray();
-                // list karyawan bedasarkan jabatan
-                $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get()->pluck('user_id')->toArray();
+                // if (in_array('dis', $katagori_nps_unique)) {
+                //     $listJabatan = $listJabatan->where('slug', 'manajer-distribusi');
+                // }
+                // if (in_array('pka', $katagori_nps_unique)) {
+                //     $listJabatan = $listJabatan->orWhere('slug', 'manajer-pengendalian-kehilangan-air');
+                // }
+                // $listJabatan = $listJabatan->pluck('id')->toArray();
+                // // list karyawan bedasarkan jabatan
+                // $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get()->pluck('user_id')->toArray();
 
-                $list_persetujuan =  $query->whereHas('hasUserMany', function ($q) use ($listKaryawan) {
-                    $q->whereIn('tagihan_user.user_id',  $listKaryawan);
-                })->count();
+                // $list_persetujuan =  $query->whereHas('hasUserMany', function ($q) use ($listKaryawan) {
+                //     $q->whereIn('tagihan_user.user_id',  $listKaryawan);
+                // })->count();
 
-                if ($list_persetujuan > 0) {
-                    $bntSetuju = false;
-                }
+                // if ($list_persetujuan > 0) {
+                //     $bntSetuju = false;
+                // }
+                $bntSetuju = false;
             }
 
 

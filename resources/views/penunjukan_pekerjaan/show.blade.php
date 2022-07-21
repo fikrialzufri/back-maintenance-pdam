@@ -1136,8 +1136,11 @@
                                                             <td>{{ str_replace('.', ',', $galian->dalam) }}</td>
                                                             <td>
                                                                 {{ round($galian->volume_rekanan, 3) }}
-
-                                                                m<sup>2
+                                                                @if ($galian->dalam === 0.0)
+                                                                    m<sup>2
+                                                                    @else
+                                                                        m<sup>3
+                                                                @endif
                                                             </td>
                                                             @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
                                                                 <td>Rp. {{ format_uang($galian->harga_satuan) }}</td>
@@ -1203,7 +1206,13 @@
                                                                 </td>
                                                                 <td>
                                                                     {{ round($galian->volume, 3) }}
-                                                                    m<sup>2
+                                                                    @if ($galian->galian_pengawas_dalam === 0.0)
+                                                                        m<sup>2
+                                                                        @else
+                                                                            m<sup>3
+                                                                    @endif
+
+
                                                                 </td>
                                                                 @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
                                                                     <td>Rp.
@@ -1307,7 +1316,11 @@
                                                                 </td>
                                                                 <td>
                                                                     {{ round($galian->volume_asmen, 3) }}
-                                                                    m<sup>2
+                                                                    @if ($galian->galian_asmen_pengawas_dalam === 0.0)
+                                                                        m<sup>2
+                                                                        @else
+                                                                            m<sup>3
+                                                                    @endif
                                                                 </td>
                                                                 @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
                                                                     <td>Rp.
@@ -1398,7 +1411,11 @@
                                                                 </td>
                                                                 <td>
                                                                     {{ round($galian->volume_asmen, 3) }}
-                                                                    m<sup>2
+                                                                    @if ($galian->galian_asmen_pengawas_dalam === 0.0)
+                                                                        m<sup>2
+                                                                        @else
+                                                                            m<sup>3
+                                                                    @endif
                                                                 </td>
                                                                 <td>
                                                                     {{ $galian->galian_asmen_pengawas_keterangan }}
@@ -1442,7 +1459,11 @@
                                                                 </td>
                                                                 <td>
                                                                     {{ round($galian->volume_asmen, 3) }}
-                                                                    m<sup>2
+                                                                    @if ($galian->galian_asmen_pengawas_dalam === 0.0)
+                                                                        m<sup>2
+                                                                        @else
+                                                                            m<sup>3
+                                                                    @endif
                                                                 </td>
                                                                 <td>
                                                                     {{ $galian->galian_asmen_pengawas_keterangan }}
@@ -1471,7 +1492,11 @@
                                                                 </td>
                                                                 <td>
                                                                     {{ round($galian->volume_asmen, 3) }}
-                                                                    m<sup>2
+                                                                    @if ($galian->galian_asmen_pengawas_dalam === 0.0)
+                                                                        m<sup>2
+                                                                        @else
+                                                                            m<sup>3
+                                                                    @endif
                                                                 </td>
                                                                 <td> {{ $galian->galian_perencanaan_keterangan }}</td>
                                                                 <td>
@@ -1487,7 +1512,15 @@
                                                                 <td>{{ $galian->galian_perencanaan_adjust_panjang }}</td>
                                                                 <td>{{ $galian->galian_perencanaan_adjust_lebar }}</td>
                                                                 <td>{{ $galian->galian_perencanaan_adjust_dalam }}</td>
-                                                                <td>{{ round($galian->volume_adjust, 3) }} m<sup>2</td>
+                                                                <td>
+                                                                    {{ round($galian->volume_adjust, 3) }}
+                                                                    @if ($galian->galian_perencanaan_adjust_dalam === 0.0)
+                                                                        m<sup>2
+                                                                        @else
+                                                                            m<sup>3
+                                                                    @endif
+
+                                                                </td>
                                                                 <td> {{ $galian->galian_perencanaan_adjust_keterangan }}
                                                                 </td>
                                                                 <td>Rp.
