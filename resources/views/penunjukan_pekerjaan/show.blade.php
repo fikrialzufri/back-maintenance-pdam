@@ -602,7 +602,7 @@
                                                                 {{ $pekerjaan->jenis }}
                                                             </td>
                                                             <td>Rekanan</td>
-                                                            <td>{{ $pekerjaan->pivot->qty }}</td>
+                                                            <td>{{ str_replace('.', ',', $pekerjaan->pivot->qty) }}</td>
                                                             @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
                                                                 <td>Rp. {{ format_uang($pekerjaan->pivot->harga) }}</td>
                                                                 <td>{{ $pekerjaan->pivot->keterangan }}</td>
@@ -640,7 +640,7 @@
                                                             @else
                                                                 @if (isset($daftarPekerjaan->hasItemPengawas[$key]))
                                                                     <td>
-                                                                        {{ $daftarPekerjaan->hasItemPengawas[$key]->pivot->qty }}
+                                                                        {{ str_replace('.', ',', $daftarPekerjaan->hasItemPengawas[$key]->pivot->qty) }}
                                                                     </td>
                                                                     @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
                                                                         <td>Rp.
@@ -703,7 +703,7 @@
 
                                                                 @if (isset($daftarPekerjaan->hasItemAsmenPengawas[$key]))
                                                                     <td>
-                                                                        {{ $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty }}
+                                                                        {{ str_replace('.', ',', $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty) }}
                                                                     </td>
                                                                     @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
                                                                         <td>Rp.
@@ -762,7 +762,7 @@
 
                                                                 @if (isset($daftarPekerjaan->hasItemAsmenPengawas[$key]))
                                                                     <td>
-                                                                        {{ $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty }}
+                                                                        {{ str_replace('.', ',', $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty) }}
                                                                     </td>
                                                                     <td>Rp.
                                                                         {{ format_uang($daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->harga) }}
@@ -778,7 +778,7 @@
                                                             <tr>
                                                                 <td>Perencanaan</td>
                                                                 @if (isset($daftarPekerjaan->hasItemAsmenPengawas[$key]))
-                                                                    <td>{{ $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty }}
+                                                                    <td>{{ str_replace('.', ',', $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty) }}
                                                                     </td>
                                                                 @endif
                                                                 @if (isset($daftarPekerjaan->hasItemPerencanaan[$key]))
@@ -802,7 +802,7 @@
 
                                                                 @if (isset($daftarPekerjaan->hasItemAsmenPengawas[$key]))
                                                                     <td>
-                                                                        {{ $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty }}
+                                                                        {{ str_replace('.', ',', $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty) }}
                                                                     </td>
                                                                     <td>Rp.
                                                                         {{ format_uang($daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->harga) }}
@@ -820,7 +820,7 @@
                                                                 </td>
                                                                 <td></td>
                                                                 @if (isset($daftarPekerjaan->hasItemAsmenPengawas[$key]))
-                                                                    <td>{{ $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty }}
+                                                                    <td>{{ str_replace('.', ',', $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty) }}
                                                                     </td>
                                                                 @endif
                                                                 @if (isset($daftarPekerjaan->hasItemPerencanaan[$key]))
@@ -841,7 +841,7 @@
                                                             <tr>
 
                                                                 @if (isset($daftarPekerjaan->hasItemPerencanaanAdujst[$key]))
-                                                                    <td>{{ $daftarPekerjaan->hasItemPerencanaanAdujst[$key]->pivot->qty }}
+                                                                    <td> {{ str_replace('.', ',', $daftarPekerjaan->hasItemPerencanaanAdujst[$key]->pivot->qty) }}
                                                                     </td>
                                                                     <td>
                                                                         Rp.
@@ -1131,9 +1131,9 @@
                                                                 {{ $galian->pekerjaan }}
                                                             </td>
                                                             <td>Rekanan</td>
-                                                            <td>{{ $galian->panjang }}</td>
-                                                            <td>{{ $galian->lebar }}</td>
-                                                            <td>{{ $galian->dalam }}</td>
+                                                            <td>{{ str_replace('.', ',', $galian->panjang) }}</td>
+                                                            <td>{{ str_replace('.', ',', $galian->lebar) }}</td>
+                                                            <td>{{ str_replace('.', ',', $galian->dalam) }}<< /td>
                                                             <td>
                                                                 {{ round($galian->volume_rekanan, 3) }}
 
@@ -1193,13 +1193,13 @@
                                                                 </td>
                                                             @else
                                                                 <td>
-                                                                    {{ $galian->galian_pengawas_panjang }}
+                                                                    {{ str_replace('.', ',', $galian->galian_pengawas_panjang) }}
                                                                 </td>
                                                                 <td>
-                                                                    {{ $galian->galian_pengawas_lebar }}
+                                                                    {{ str_replace('.', ',', $galian->galian_pengawas_lebar) }}
                                                                 </td>
                                                                 <td>
-                                                                    {{ $galian->galian_pengawas_dalam }}
+                                                                    {{ str_replace('.', ',', $galian->galian_pengawas_dalam) }}
                                                                 </td>
                                                                 <td>
                                                                     {{ round($galian->volume, 3) }}
@@ -1297,13 +1297,13 @@
                                                             <tr>
                                                                 <td>Asisten Manajer Pengawas</td>
                                                                 <td>
-                                                                    {{ $galian->galian_asmen_pengawas_panjang }}
+                                                                    {{ str_replace('.', ',', $galian->galian_asmen_pengawas_panjang) }}
                                                                 </td>
                                                                 <td>
-                                                                    {{ $galian->galian_asmen_pengawas_lebar }}
+                                                                    {{ str_replace('.', ',', $galian->galian_asmen_pengawas_lebar) }}
                                                                 </td>
                                                                 <td>
-                                                                    {{ $galian->galian_asmen_pengawas_dalam }}
+                                                                    {{ str_replace('.', ',', $galian->galian_asmen_pengawas_dalam) }}
                                                                 </td>
                                                                 <td>
                                                                     {{ round($galian->volume_asmen, 3) }}
@@ -1388,13 +1388,13 @@
                                                             <tr>
                                                                 <td>Asisten Manajer Pengawas</td>
                                                                 <td>
-                                                                    {{ $galian->galian_asmen_pengawas_panjang }}
+                                                                    {{ str_replace('.', ',', $galian->galian_asmen_pengawas_panjang) }}
                                                                 </td>
                                                                 <td>
-                                                                    {{ $galian->galian_asmen_pengawas_lebar }}
+                                                                    {{ str_replace('.', ',', $galian->galian_asmen_pengawas_lebar) }}
                                                                 </td>
                                                                 <td>
-                                                                    {{ $galian->galian_asmen_pengawas_dalam }}
+                                                                    {{ str_replace('.', ',', $galian->galian_asmen_pengawas_dalam) }}
                                                                 </td>
                                                                 <td>
                                                                     {{ round($galian->volume_asmen, 3) }}
@@ -1432,13 +1432,13 @@
                                                             <tr>
                                                                 <td>Asisten Manajer Pengawas</td>
                                                                 <td>
-                                                                    {{ $galian->galian_asmen_pengawas_panjang }}
+                                                                    {{ str_replace('.', ',', $galian->galian_asmen_pengawas_panjang) }}
                                                                 </td>
                                                                 <td>
-                                                                    {{ $galian->galian_asmen_pengawas_lebar }}
+                                                                    {{ str_replace('.', ',', $galian->galian_asmen_pengawas_lebar) }}
                                                                 </td>
                                                                 <td>
-                                                                    {{ $galian->galian_asmen_pengawas_dalam }}
+                                                                    {{ str_replace('.', ',', $galian->galian_asmen_pengawas_dalam) }}
                                                                 </td>
                                                                 <td>
                                                                     {{ round($galian->volume_asmen, 3) }}
@@ -1460,10 +1460,19 @@
                                                             </tr>
                                                             <tr>
                                                                 <td rowspan="2">Perencanaan</td>
-                                                                <td></td>
-                                                                <td></td>
-                                                                <td></td>
-                                                                <td> </td>
+                                                                <td>
+                                                                    {{ str_replace('.', ',', $galian->galian_asmen_pengawas_panjang) }}
+                                                                </td>
+                                                                <td>
+                                                                    {{ str_replace('.', ',', $galian->galian_asmen_pengawas_lebar) }}
+                                                                </td>
+                                                                <td>
+                                                                    {{ str_replace('.', ',', $galian->galian_asmen_pengawas_dalam) }}
+                                                                </td>
+                                                                <td>
+                                                                    {{ round($galian->volume_asmen, 3) }}
+                                                                    m<sup>2
+                                                                </td>
                                                                 <td> {{ $galian->galian_perencanaan_keterangan }}</td>
                                                                 <td>
                                                                     Rp. {{ $galian->galian_perencanaan_harga_satuan }}
