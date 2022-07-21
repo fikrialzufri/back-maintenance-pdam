@@ -1133,7 +1133,7 @@
                                                             <td>Rekanan</td>
                                                             <td>{{ str_replace('.', ',', $galian->panjang) }}</td>
                                                             <td>{{ str_replace('.', ',', $galian->lebar) }}</td>
-                                                            <td>{{ str_replace('.', ',', $galian->dalam) }}<< /td>
+                                                            <td>{{ str_replace('.', ',', $galian->dalam) }}</td>
                                                             <td>
                                                                 {{ round($galian->volume_rekanan, 3) }}
 
