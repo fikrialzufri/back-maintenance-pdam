@@ -81,8 +81,7 @@
                                     <div class="col-lg-3">
                                         <label for="">Rekapan Pekerjaan</label>
                                         <div class="input-group">
-                                            <a href="{{ route('penunjukan_pekerjaan.rekanan') }}"
-                                                class="btn btn-primary">
+                                            <a href="{{ route('penunjukan_pekerjaan.rekanan') }}" class="btn btn-primary">
                                                 <span class="fa fa-edit"></span>
                                                 Proses
                                             </a>
@@ -151,8 +150,14 @@
                                                     @else
                                                         <i class="nav-icon fa fa-search"></i> Detail
                                                     @endif
-                                                @elseif (auth()->user()->hasRole('asisten-manajer-perencanaan'))
+                                                @elseif (auth()->user()->hasRole('manajer-pengawas'))
                                                     @if ($item->status_aduan == 'Dikoreksi Asmen Pengawas')
+                                                        <i class="nav-icon fas fa-eye"></i> Koreksi
+                                                    @else
+                                                        <i class="nav-icon fa fa-search"></i> Detail
+                                                    @endif
+                                                @elseif (auth()->user()->hasRole('asisten-manajer-perencanaan'))
+                                                    @if ($item->status_aduan == 'Disetujui Manajer')
                                                         <i class="nav-icon fas fa-eye"></i> Koreksi
                                                     @else
                                                         <i class="nav-icon fa fa-search"></i> Detail

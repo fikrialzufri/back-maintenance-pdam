@@ -364,7 +364,7 @@
                                                                         </td>
                                                                         <td>
                                                                             Rp.
-                                                                            {{ $galian->galian_perencanaan_harga_satuan }}
+                                                                            {{ format_uang($galian->galian_perencanaan_harga_satuan) }}
                                                                         </td>
                                                                     @endif
 

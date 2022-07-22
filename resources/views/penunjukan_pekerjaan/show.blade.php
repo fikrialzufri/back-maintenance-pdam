@@ -371,7 +371,7 @@
                                     <div class="row">
 
                                         <div class="col-12">
-                                            <h3 class="card-title">Daftar Pekerjaan</h3>
+                                            <h3 class="card-title">Daftar Pekerjaan {{ $pekerjaanUtama->status }}</h3>
                                             <hr>
                                         </div>
                                         @if ($pengawas === true && $pekerjaanUtama->status === 'approve')
@@ -550,14 +550,16 @@
                                             <thead>
                                                 <tr>
                                                     <th width="5">#</th>
-                                                    <th width="500">Pekerjaan</th>
-                                                    <th width="50">Jenis</th>
+                                                    <th width="200">Pekerjaan</th>
+                                                    <th width="100">Jenis</th>
                                                     <th width="50">Pengguna</th>
                                                     <th width="150">Jumlah </th>
                                                     @if ($perencaan == false && $pekerjaanUtama->status === 'dikoreksi')
                                                         <th width="300">Keterangan</th>
                                                     @endif
-                                                    @if ($pekerjaanUtama->status === 'approve' || $pekerjaanUtama->status === 'koreksi pengawas')
+                                                    @if ($pekerjaanUtama->status === 'approve' ||
+                                                        $pekerjaanUtama->status === 'koreksi pengawas' ||
+                                                        $pekerjaanUtama->status === 'koreksi asmen')
                                                         <th width="300">Keterangan</th>
                                                     @endif
                                                     @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
@@ -581,21 +583,21 @@
                                                             class="list_table_pekerjaan">
                                                             <td class="text-center nomor_pekerjaan"
                                                                 data-index="{{ $key + 1 }}"
-                                                                @if ($pekerjaanUtama->status === 'koreksi pengawas') rowspan="3"
+                                                                @if ($pekerjaanUtama->status === 'koreksi pengawas' || $pekerjaanUtama->status === 'koreksi asmen') rowspan="3"
                                                                 @elseif($pekerjaanUtama->status === 'dikoreksi' || $pekerjaanUtama->status == 'selesai koreksi') rowspan="4"
                                                                 @elseif ($pekerjaanUtama->status === 'diadjust') rowspan="5"
                                                                 @else rowspan="2" @endif>
                                                                 {{ $key + 1 }}
                                                             </td>
                                                             <td
-                                                                @if ($pekerjaanUtama->status === 'koreksi pengawas') rowspan="3"
+                                                                @if ($pekerjaanUtama->status === 'koreksi pengawas' || $pekerjaanUtama->status === 'koreksi asmen') rowspan="3"
                                                                 @elseif($pekerjaanUtama->status === 'dikoreksi' || $pekerjaanUtama->status == 'selesai koreksi') rowspan="4"
                                                                 @elseif ($pekerjaanUtama->status === 'diadjust') rowspan="5"
                                                                 @else rowspan="2" @endif>
                                                                 {{ $pekerjaan->nama }}
                                                             </td>
                                                             <td
-                                                                @if ($pekerjaanUtama->status === 'koreksi pengawas') rowspan="3"
+                                                                @if ($pekerjaanUtama->status === 'koreksi pengawas' || $pekerjaanUtama->status === 'koreksi asmen') rowspan="3"
                                                                 @elseif($pekerjaanUtama->status === 'dikoreksi' || $pekerjaanUtama->status == 'selesai koreksi') rowspan="4"
                                                                 @elseif ($pekerjaanUtama->status === 'diadjust') rowspan="5"
                                                                 @else rowspan="2" @endif>
@@ -603,12 +605,20 @@
                                                             </td>
                                                             <td>Rekanan</td>
                                                             <td>{{ str_replace('.', ',', $pekerjaan->pivot->qty) }}</td>
+
+                                                            @if ($pekerjaanUtama->status === 'approve' ||
+                                                                $pekerjaanUtama->status === 'koreksi pengawas' ||
+                                                                $pekerjaanUtama->status === 'koreksi asmen')
+                                                                <td>{{ $pekerjaan->pivot->keterangan }}</td>
+                                                            @endif
                                                             @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
                                                                 <td>Rp. {{ format_uang($pekerjaan->pivot->harga) }}</td>
                                                                 <td>{{ $pekerjaan->pivot->keterangan }}</td>
                                                                 <td>
                                                                     Rp.{{ format_uang($pekerjaan->pivot->qty * $pekerjaan->pivot->harga) }}
                                                                 </td>
+                                                            @elseif ($perencaan == false && $pekerjaanUtama->status === 'dikoreksi')
+                                                                <td>{{ $pekerjaan->pivot->keterangan }}</td>
                                                             @endif
 
                                                             @if ($pekerjaanUtama->status === 'selesai koreksi' || $pekerjaanUtama->status === 'diadjust')
@@ -646,6 +656,13 @@
                                                                         <td>Rp.
                                                                             {{ format_uang($daftarPekerjaan->hasItemPengawas[$key]->pivot->harga) }}
                                                                         </td>
+                                                                        <td>
+                                                                            {{ $daftarPekerjaan->hasItemPengawas[$key]->pivot->keterangan }}
+                                                                        </td>
+                                                                        <td>
+                                                                            Rp.
+                                                                            {{ format_uang($daftarPekerjaan->hasItemPengawas[$key]->pivot->qty * $daftarPekerjaan->hasItemPengawas[$key]->pivot->harga) }}
+                                                                        </td>
                                                                     @endif
 
                                                                     @if ($pekerjaanUtama->status === 'selesai koreksi' || $pekerjaanUtama->status === 'diadjust')
@@ -660,9 +677,22 @@
                                                                             Rp.
                                                                             {{ format_uang($daftarPekerjaan->hasItemPengawas[$key]->pivot->qty * $daftarPekerjaan->hasItemPengawas[$key]->pivot->harga) }}
                                                                         </td>
-                                                                    @else
+                                                                    @endif
+                                                                    @if ($pekerjaanUtama->status === 'approve' ||
+                                                                        $pekerjaanUtama->status === 'koreksi pengawas' ||
+                                                                        $pekerjaanUtama->status === 'koreksi asmen')
+                                                                        <td></td>
                                                                         <td>
                                                                             {{ $daftarPekerjaan->hasItemPengawas[$key]->pivot->keterangan }}
+                                                                        </td>
+                                                                    @endif
+                                                                @else
+                                                                    @if ($pekerjaanUtama->status === 'approve' ||
+                                                                        $pekerjaanUtama->status === 'koreksi pengawas' ||
+                                                                        $pekerjaanUtama->status === 'koreksi asmen')
+                                                                        <td></td>
+                                                                        <td>
+
                                                                         </td>
                                                                     @endif
                                                                 @endif
@@ -697,6 +727,47 @@
                                                                 @endif
                                                             </tr>
                                                         @endif
+                                                        @if ($pekerjaanUtama->status === 'koreksi asmen')
+                                                            <tr>
+                                                                <td>Asisten Manajer Pengawas</td>
+
+                                                                @if (isset($daftarPekerjaan->hasItemAsmenPengawas[$key]))
+                                                                    <td>
+                                                                        {{ str_replace('.', ',', $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty) }}
+                                                                    </td>
+                                                                    @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
+                                                                        <td>Rp.
+                                                                            {{ format_uang($daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->harga) }}
+                                                                        </td>
+                                                                        <td>
+                                                                            {{ $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->keterangan }}
+                                                                        </td>
+                                                                        <td>Rp.
+                                                                            {{ format_uang($daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty * $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->harga) }}
+                                                                        </td>
+                                                                    @else
+                                                                        <td>
+                                                                            {{ $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->keterangan }}
+                                                                        </td>
+                                                                    @endif
+
+                                                                    @if ($pekerjaanUtama->status === 'selesai koreksi' || $pekerjaanUtama->status === 'diadjust')
+                                                                        <td>Rp.
+                                                                            {{ format_uang($daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->harga) }}
+                                                                        </td>
+                                                                    @endif
+                                                                    @if ($pekerjaanUtama->status === 'approve' ||
+                                                                        $pekerjaanUtama->status === 'koreksi pengawas' ||
+                                                                        $pekerjaanUtama->status === 'koreksi asmen')
+                                                                        <td></td>
+                                                                        <td>
+                                                                            {{ $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->keterangan }}
+                                                                        </td>
+                                                                    @endif
+                                                                @endif
+                                                            </tr>
+                                                        @endif
+
                                                         @if ($pekerjaanUtama->status === 'dikoreksi')
                                                             <tr>
                                                                 <td>Asisten Manajer Pengawas</td>
@@ -707,12 +778,19 @@
                                                                     </td>
                                                                     @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
                                                                         <td>Rp.
+                                                                            {{ format_uang($daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->harga) }}
+                                                                        </td>
+                                                                        <td>
+                                                                            {{ $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->keterangan }}
+                                                                        </td>
+                                                                        <td>Rp.
                                                                             {{ format_uang($daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty * $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->harga) }}
                                                                         </td>
+                                                                    @else
+                                                                        <td>
+                                                                            {{ $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->keterangan }}
+                                                                        </td>
                                                                     @endif
-                                                                    <td>
-                                                                        {{ $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->keterangan }}
-                                                                    </td>
                                                                     @if ($pekerjaanUtama->status === 'selesai koreksi' || $pekerjaanUtama->status === 'diadjust')
                                                                         <td>Rp.
                                                                             {{ format_uang($daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->harga) }}
@@ -723,7 +801,11 @@
                                                             <tr>
                                                                 <td>Perencanaan</td>
                                                                 @if ($perencaan == true)
-                                                                    <td></td>
+                                                                    @if (isset($daftarPekerjaan->hasItemAsmenPengawas[$key]))
+                                                                        <td>
+                                                                            {{ str_replace('.', ',', $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty) }}
+                                                                        </td>
+                                                                    @endif
                                                                     <td>
                                                                         <div class="input-group mb-2 mr-sm-2">
                                                                             <div class="input-group-prepend">
@@ -818,7 +900,6 @@
                                                             <tr>
                                                                 <td rowspan="2">Perencanaan
                                                                 </td>
-                                                                <td></td>
                                                                 @if (isset($daftarPekerjaan->hasItemAsmenPengawas[$key]))
                                                                     <td>{{ str_replace('.', ',', $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty) }}
                                                                     </td>
@@ -1088,8 +1169,8 @@
                                             <thead>
                                                 <tr>
                                                     <th width="5">#</th>
-                                                    <th width="500">Galian</th>
-                                                    <th width="100">User</th>
+                                                    <th width="200">Galian</th>
+                                                    <th width="50">User</th>
                                                     <th width="100">Panjang</th>
                                                     <th width="100">Lebar</th>
                                                     <th width="100">Dalam</th>
@@ -1117,14 +1198,14 @@
                                                             class="list_table_galian">
                                                             <td class="text-center nomor_galian"
                                                                 data-index="{{ $inv + 1 }}"
-                                                                @if ($pekerjaanUtama->status === 'koreksi pengawas') rowspan="3"
+                                                                @if ($pekerjaanUtama->status === 'koreksi pengawas' || $pekerjaanUtama->status === 'koreksi asmen') rowspan="3"
                                                                 @elseif($pekerjaanUtama->status === 'dikoreksi' || $pekerjaanUtama->status == 'selesai koreksi') rowspan="4"
                                                                 @elseif ($pekerjaanUtama->status === 'diadjust') rowspan="5"
                                                                 @else rowspan="2" @endif>
                                                                 {{ $inv + 1 }}
                                                             </td>
                                                             <td
-                                                                @if ($pekerjaanUtama->status === 'koreksi pengawas') rowspan="3"
+                                                                @if ($pekerjaanUtama->status === 'koreksi pengawas' || $pekerjaanUtama->status === 'koreksi asmen') rowspan="3"
                                                                 @elseif($pekerjaanUtama->status === 'dikoreksi' || $pekerjaanUtama->status == 'selesai koreksi') rowspan="4"
                                                                 @elseif ($pekerjaanUtama->status === 'diadjust') rowspan="5"
                                                                 @else rowspan="2" @endif>
@@ -1135,7 +1216,7 @@
                                                             <td>{{ str_replace('.', ',', $galian->lebar) }}</td>
                                                             <td>{{ str_replace('.', ',', $galian->dalam) }}</td>
                                                             <td>
-                                                                {{ round($galian->volume_rekanan, 3) }}
+                                                                {{ str_replace('.', ',', round($galian->volume_rekanan, 3)) }}
                                                                 @if ($galian->dalam === 0.0)
                                                                     m<sup>2
                                                                     @else
@@ -1205,7 +1286,7 @@
                                                                     {{ str_replace('.', ',', $galian->galian_pengawas_dalam) }}
                                                                 </td>
                                                                 <td>
-                                                                    {{ round($galian->volume, 3) }}
+                                                                    {{ str_replace('.', ',', round($galian->volume, 3)) }}
                                                                     @if ($galian->galian_pengawas_dalam === 0.0)
                                                                         m<sup>2
                                                                         @else
@@ -1232,7 +1313,8 @@
                                                                         {{ $galian->galian_pengawas_keterangan }}
                                                                     </td>
                                                                 @endif
-                                                                @if ($perencaan == false && $pekerjaanUtama->status === 'koreksi pengawas')
+                                                                @if (($perencaan == false && $pekerjaanUtama->status === 'koreksi pengawas') ||
+                                                                    $pekerjaanUtama->status === 'koreksi asmen')
                                                                     <td>
                                                                         {{ $galian->galian_pengawas_keterangan }}
                                                                     </td>
@@ -1246,7 +1328,7 @@
                                                                         {{ format_uang($galian->galian_pengawas_harga_satuan) }}
                                                                     </td>
                                                                     <td>Rp.
-                                                                        {{ format_uang($galian->galian_pengawas_total) }}
+                                                                        {{ format_uang($galian->galian_pengawas_harga_satuan * $galian->volume) }}
                                                                     </td>
                                                                 @endif
                                                             @endif
@@ -1299,7 +1381,35 @@
                                                                     <td>
 
                                                                     </td>
+                                                                    <td>
+
+                                                                    </td>
                                                                 @endif
+                                                            </tr>
+                                                        @endif
+                                                        @if ($pekerjaanUtama->status === 'koreksi asmen')
+                                                            <tr>
+                                                                <td>Asisten Manajer Pengawas</td>
+                                                                <td>
+                                                                    {{ str_replace('.', ',', $galian->galian_asmen_pengawas_panjang) }}
+                                                                </td>
+                                                                <td>
+                                                                    {{ str_replace('.', ',', $galian->galian_asmen_pengawas_lebar) }}
+                                                                </td>
+                                                                <td>
+                                                                    {{ str_replace('.', ',', $galian->galian_asmen_pengawas_dalam) }}
+                                                                </td>
+                                                                <td>
+                                                                    {{ str_replace('.', ',', round($galian->volume_asmen, 3)) }}
+                                                                    @if ($galian->galian_asmen_pengawas_dalam === 0.0)
+                                                                        m<sup>2
+                                                                        @else
+                                                                            m<sup>3
+                                                                    @endif
+                                                                </td>
+                                                                <td>
+                                                                    {{ $galian->galian_asmen_pengawas_keterangan }}
+                                                                </td>
                                                             </tr>
                                                         @endif
                                                         @if ($pekerjaanUtama->status === 'dikoreksi')
@@ -1315,7 +1425,7 @@
                                                                     {{ str_replace('.', ',', $galian->galian_asmen_pengawas_dalam) }}
                                                                 </td>
                                                                 <td>
-                                                                    {{ round($galian->volume_asmen, 3) }}
+                                                                    {{ str_replace('.', ',', round($galian->volume_asmen, 3)) }}
                                                                     @if ($galian->galian_asmen_pengawas_dalam === 0.0)
                                                                         m<sup>2
                                                                         @else
@@ -1359,10 +1469,23 @@
                                                             <tr>
                                                                 <td>Perencanaan</td>
                                                                 @if ($perencaan == true)
-                                                                    <td></td>
-                                                                    <td></td>
-                                                                    <td></td>
-                                                                    <td></td>
+                                                                    <td>
+                                                                    {{ str_replace('.', ',', $galian->galian_asmen_pengawas_panjang) }}
+                                                                </td>
+                                                                <td>
+                                                                    {{ str_replace('.', ',', $galian->galian_asmen_pengawas_lebar) }}
+                                                                </td>
+                                                                <td>
+                                                                    {{ str_replace('.', ',', $galian->galian_asmen_pengawas_dalam) }}
+                                                                </td>
+                                                                <td>
+                                                                    {{ str_replace('.', ',', round($galian->volume_asmen, 3)) }}
+                                                                    @if ($galian->galian_asmen_pengawas_dalam === 0.0)
+                                                                        m<sup>2
+                                                                        @else
+                                                                            m<sup>3
+                                                                    @endif
+                                                                </td>
                                                                     <td>
                                                                         <div class="input-group mb-2 mr-sm-2">
                                                                             <div class="input-group-prepend">
@@ -1395,6 +1518,8 @@
                                                                     <td></td>
                                                                     <td></td>
                                                                     <td></td>
+                                                                    <td></td>
+                                                                    <td></td>
                                                                 @endif
                                                             </tr>
                                                         @elseif ($pekerjaanUtama->status === 'selesai koreksi')
@@ -1410,7 +1535,7 @@
                                                                     {{ str_replace('.', ',', $galian->galian_asmen_pengawas_dalam) }}
                                                                 </td>
                                                                 <td>
-                                                                    {{ round($galian->volume_asmen, 3) }}
+                                                                    {{ str_replace('.', ',', round($galian->volume_asmen, 3)) }}
                                                                     @if ($galian->galian_asmen_pengawas_dalam === 0.0)
                                                                         m<sup>2
                                                                         @else
@@ -1426,7 +1551,7 @@
                                                                 </td>
                                                                 <td>
                                                                     Rp.
-                                                                    {{ format_uang($galian->galian_asmen_pengawas_total) }}
+                                                                    {{ format_uang($galian->volume_asmen * $galian->galian_asmen_pengawas_harga_satuan) }}
                                                                 </td>
 
 
@@ -1438,7 +1563,7 @@
                                                                 <td></td>
                                                                 <td> </td>
                                                                 <td> {{ $galian->galian_perencanaan_keterangan }}</td>
-                                                                <td>Rp. {{ $galian->galian_perencanaan_harga_satuan }}</td>
+                                                                <td>Rp. {{ format_uang($galian->galian_perencanaan_harga_satuan) }}</td>
                                                                 <td>
                                                                     Rp.
                                                                     {{ format_uang($galian->total) }}
@@ -1475,7 +1600,7 @@
 
                                                                 <td>
                                                                     Rp.
-                                                                    {{ format_uang($galian->galian_asmen_pengawas_total) }}
+                                                                    {{ format_uang($galian->galian_asmen_pengawas_harga_satuan * $galian->volume_asmen) }}
                                                                 </td>
 
                                                             </tr>
@@ -1491,7 +1616,7 @@
                                                                     {{ str_replace('.', ',', $galian->galian_asmen_pengawas_dalam) }}
                                                                 </td>
                                                                 <td>
-                                                                    {{ round($galian->volume_asmen, 3) }}
+                                                                    {{ str_replace('.', ',', round($galian->volume_asmen, 3)) }}
                                                                     @if ($galian->galian_asmen_pengawas_dalam === 0.0)
                                                                         m<sup>2
                                                                         @else
@@ -1500,20 +1625,23 @@
                                                                 </td>
                                                                 <td> {{ $galian->galian_perencanaan_keterangan }}</td>
                                                                 <td>
-                                                                    Rp. {{ $galian->galian_perencanaan_harga_satuan }}
+                                                                    Rp. {{ format_uang($galian->galian_perencanaan_harga_satuan) }}
                                                                 </td>
                                                                 <td>
                                                                     Rp.
-                                                                    {{ format_uang($galian->total) }}
+                                                                    {{ format_uang($galian->galian_perencanaan_harga_satuan * $galian->volume_asmen) }}
                                                                 </td>
 
                                                             </tr>
                                                             <tr>
-                                                                <td>{{ $galian->galian_perencanaan_adjust_panjang }}</td>
-                                                                <td>{{ $galian->galian_perencanaan_adjust_lebar }}</td>
-                                                                <td>{{ $galian->galian_perencanaan_adjust_dalam }}</td>
+                                                                <td>{{ str_replace('.', ',', $galian->galian_perencanaan_adjust_panjang) }}
+                                                                </td>
+                                                                <td>{{ str_replace('.', ',', $galian->galian_perencanaan_adjust_lebar) }}
+                                                                </td>
+                                                                <td>{{ str_replace('.', ',', $galian->galian_perencanaan_adjust_dalam) }}
+                                                                </td>
                                                                 <td>
-                                                                    {{ round($galian->volume_adjust, 3) }}
+                                                                    {{ str_replace('.', ',', round($galian->volume_adjust, 3)) }}
                                                                     @if ($galian->galian_perencanaan_adjust_dalam === 0.0)
                                                                         m<sup>2
                                                                         @else
@@ -1583,7 +1711,8 @@
                                                             value="{{ $aduan->no_spk }}">
                                                         <div class="card">
                                                             @if (auth()->user()->hasRole('asisten-manajer-distribusi') ||
-                                                                auth()->user()->hasRole('asisten-manajer-pengendalian-kehilangan-air'))
+                                                                auth()->user()->hasRole('asisten-manajer-pengendalian-kehilangan-air') ||
+                                                                auth()->user()->hasRole('manajer-pengawas'))
                                                                 <button type="button" id="simpan_koreksi"
                                                                     class="btn btn-primary">Setujui Pekerjaan</button>
                                                             @else
@@ -1915,12 +2044,12 @@
             $(document).on('keypress', '.numberOnly', function(event) {
                 if (event.which < 46 ||
                     event.which > 59) {
-                    event.preventDefault();
+                    event.preventDefault().toLocaleString("id");
                 } // prevent if not number/dot
 
                 if (event.which == 46 &&
                     $(this).val().indexOf('.') != -1) {
-                    event.preventDefault();
+                    event.preventDefault().toLocaleString("id");;
                 } // prevent if already dot
             })
 

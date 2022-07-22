@@ -24,8 +24,10 @@ class CreatePenunjukanPekerjaanTable extends Migration
                     'proses',
                     'selesai',
                     'approve',
+                    'approve manajer',
                     'disetujui',
                     'koreksi pengawas',
+                    'koreksi asmen',
                     'dikoreksi',
                     'selesai koreksi',
                     'diadjust'

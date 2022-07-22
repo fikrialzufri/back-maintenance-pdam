@@ -121,8 +121,8 @@
                                             <h6 class="">Alamat Pekerjaan</h6>
                                         </div>
                                         <div>
-                                            <a href="https://maps.google.com/?q={{ $lat_long_pekerjaan }}"
-                                                target="__blank" class="text-danger">
+                                            <a href="https://maps.google.com/?q={{ $lat_long_pekerjaan }}" target="__blank"
+                                                class="text-danger">
                                                 {{ $lokasi_pekerjaan }}
                                             </a>
                                         </div>
@@ -220,8 +220,7 @@
                                                     </select>
                                                     @if ($errors->has('rekanan_id'))
                                                         <span class="text-danger">
-                                                            <strong
-                                                                id="textrule">{{ $errors->first('rekanan_id') }}</strong>
+                                                            <strong id="textrule">{{ $errors->first('rekanan_id') }}</strong>
                                                         </span>
                                                     @endif
                                                 </div>
@@ -441,8 +440,12 @@
                                                         </tr>
                                                         <tr>
                                                             <td rowspan="2">Perencanaan</td>
+                                                            @if (isset($daftarPekerjaan->hasItemAsmenPengawas[$key]))
+                                                                <td>
+                                                                    {{ $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty }}
+                                                                </td>
+                                                            @endif
 
-                                                            <td></td>
                                                             @if (isset($daftarPekerjaan->hasItemPerencanaan[$key]))
                                                                 <td>
                                                                     Rp.
@@ -648,8 +651,7 @@
                                             <tbody>
                                                 @if (isset($daftarGalian))
                                                     @forelse ($daftarGalian as $inv => $galian)
-                                                        <tr id="listGalian_{{ $galian->item_id }}"
-                                                            class="list_table_galian">
+                                                        <tr id="listGalian_{{ $galian->item_id }}" class="list_table_galian">
                                                             <td class="text-center nomor_galian"
                                                                 data-index="{{ $inv + 1 }}" rowspan="5">
                                                                 {{ $inv + 1 }}
@@ -730,12 +732,27 @@
                                                         </tr>
                                                         <tr>
                                                             <td rowspan="2">Perencanaan</td>
-                                                            <td></td>
-                                                            <td></td>
-                                                            <td></td>
-                                                            <td> </td>
+                                                            <td>
+                                                                {{ str_replace('.', ',', $galian->galian_asmen_pengawas_panjang) }}
+                                                            </td>
+                                                            <td>
+                                                                {{ str_replace('.', ',', $galian->galian_asmen_pengawas_lebar) }}
+                                                            </td>
+                                                            <td>
+                                                                {{ str_replace('.', ',', $galian->galian_asmen_pengawas_dalam) }}
+                                                            </td>
+                                                            <td>
+                                                                {{ str_replace('.', ',', round($galian->volume_asmen, 3)) }}
+                                                                @if ($galian->galian_asmen_pengawas_dalam === 0.0)
+                                                                    m<sup>2
+                                                                    @else
+                                                                        m<sup>3
+                                                                @endif
+                                                            </td>
                                                             <td> {{ $galian->galian_perencanaan_keterangan }}</td>
-                                                            <td>Rp. {{ $galian->galian_perencanaan_harga_satuan }}</td>
+                                                            <td>Rp.
+                                                                {{ format_uang($galian->galian_perencanaan_harga_satuan) }}
+                                                            </td>
                                                             <td>Rp. {{ format_uang($galian->total) }}</td>
 
                                                         </tr>

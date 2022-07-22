@@ -216,6 +216,12 @@ class PenunjukanPekerjaanController extends Controller
                                     return $pekerjaan->status_order_asem_pengawas;
                                 })
                             );
+                        } elseif (auth()->user()->hasRole('manajer-pengawas')) {
+                            $penunjukan = $penunjukan->setCollection(
+                                $penunjukan->sortBy(function ($pekerjaan) {
+                                    return $pekerjaan->status_order_manajer_pengawas;
+                                })
+                            );
                         } elseif (auth()->user()->hasRole('asisten-manajer-perencanaan')) {
                             $penunjukan = $penunjukan->setCollection(
                                 $penunjukan->sortBy(function ($pekerjaan) {
@@ -371,6 +377,24 @@ class PenunjukanPekerjaanController extends Controller
                         }
                     }
                 }
+                if (auth()->user()->hasRole('manajer-distribusi')) {
+
+                    $CheckAduan = Aduan::where('id', $aduan->id)->where('kategori_nps', "dis")->first();
+                    if ($pekerjaanUtama->status  === 'approve') {
+                        if ($CheckAduan) {
+                            $tombolEdit = 'bisa';
+                        }
+                    }
+                }
+                if (auth()->user()->hasRole('manajer-pengendalian-kehilangan-air')) {
+                    $CheckAduan = Aduan::where('id', $aduan->id)->where('kategori_nps', "pka")->first();
+
+                    if ($pekerjaanUtama->status  === 'approve') {
+                        if ($CheckAduan) {
+                            $tombolEdit = 'bisa';
+                        }
+                    }
+                }
 
                 if (auth()->user()->hasRole('staf-pengawas')) {
                     if ($pekerjaanUtama->status  === 'approve') {
@@ -380,8 +404,12 @@ class PenunjukanPekerjaanController extends Controller
                 } elseif (auth()->user()->hasRole('asisten-manajer-pengawas')) {
                     if ($pekerjaanUtama->status  === 'koreksi pengawas') {
                         $tombolEdit = 'bisa';
+                        $asmenpengawas = true;
                     }
-                    $asmenpengawas = true;
+                } elseif (auth()->user()->hasRole('manajer-pengawas')) {
+                    if ($pekerjaanUtama->status  === 'koreksi asmen') {
+                        $tombolEdit = 'bisa';
+                    }
                 } else {
                     if ($pekerjaanUtama->status === 'dikoreksi') {
                         $tombolEdit = 'bisa';
@@ -570,7 +598,12 @@ class PenunjukanPekerjaanController extends Controller
 
                 // notif ke karyawan bedasarkan jabatan
                 // list jabatan
-                $listJabatan = Jabatan::Where('slug', 'manajer-perencanaan')->orWhere('slug', 'manajer-pengawas')->orWhere('slug', 'asisten-manajer-perencanaan')->orWhere('slug', 'asisten-manajer-pengawas')->orWhere('slug', 'direktur-teknik')->get()->pluck('id')->toArray();
+                $listJabatan = Jabatan::Where('slug', 'manajer-perencanaan')
+                    ->orWhere('slug', 'manajer-pengawas')
+                    ->orWhere('slug', 'asisten-manajer-perencanaan')
+                    ->orWhere('slug', 'asisten-manajer-pengawas')
+                    ->orWhere('slug', 'direktur-teknik')
+                    ->pluck('id')->toArray();
 
                 // list karyawan bedasarkan jabatan
                 $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get();
@@ -919,11 +952,17 @@ class PenunjukanPekerjaanController extends Controller
                                 }
                             }
                             // end pekerjaan;
-                            $status = 'dikoreksi';
+                            $status = 'koreksi asmen';
+                        }
+                        // $status = $PelaksanaanPekerjaan->status;
+                    } else if (auth()->user()->hasRole('manajer-pengawas')) {
+                        // pekerjaan
+                        if ($PelaksanaanPekerjaan->status === 'koreksi asmen') {
+                            $status =  'dikoreksi';
                         }
                         // $status = $PelaksanaanPekerjaan->status;
                     } else {
-                        if ($PelaksanaanPekerjaan->status === 'dikoreksi') {
+                        if ($PelaksanaanPekerjaan->status ===  'dikoreksi') {
                             $status = 'selesai koreksi';
                             $PelaksanaanPekerjaan->keterangan_barang = '';
 
@@ -979,6 +1018,8 @@ class PenunjukanPekerjaanController extends Controller
 
                         $PelaksanaanPekerjaan->status = $status;
                         $PelaksanaanPekerjaan->save();
+
+                        // koreksi yang ada angkanya
                         if (auth()->user()->hasRole('staf-pengawas')) {
                             // galian pengawas
                             $cekItemGalian = [];
@@ -1258,6 +1299,7 @@ class PenunjukanPekerjaanController extends Controller
 
                                 $jabatanWilayah =  $jabatanWilayah->orWhere('wilayah_id', $aduan->wilayah_id)
                                     ->orWhere('slug', 'manajer-distribusi')
+                                    ->orWhere('slug', 'manajer-pengawas')
                                     ->orWhere('slug', 'asisten-manajer-perencanaan')
                                     ->orWhere('slug', 'asisten-manajer-pengawas')
                                     ->pluck('id')
