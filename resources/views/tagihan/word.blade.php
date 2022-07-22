@@ -177,24 +177,41 @@
                                     Pemeriksa Pekerjaan,
                                     <br>
                                     <div class="d-flex justify-content-start">
-                                        <div class="d mr-3">
-                                            <img src="data:image/png;base64, {!! base64_encode(
-                                                QrCode::format('png')->size(100)->generate(route('tagihan.preview', $tagihan->slug)),
-                                            ) !!} " class="img-square">
-                                        </div>
                                         <div class="d">
-                                            <ol style="">
+                                            @forelse ($tagihan->list_persetujuan as $index => $item)
+                                                @if ($item->jabatan === 'Manajer Perencanaan')
+                                                    @if ($item->url != null)
+                                                        <div class="d-flex align-items-start">
+                                                            <div class="mr-3">
 
-                                                @forelse ($tagihan->list_persetujuan as $index => $item)
-                                                    @if ($item->jabatan === 'Manajer Pengendalian Kehilangan Air' ||
-                                                        $item->jabatan === 'Manajer Perencanaan' ||
-                                                        $item->jabatan === 'Manajer Distribusi')
-                                                        <li> <span style=''>{{ ucfirst($item->nama) }}
-                                                                sebagai {{ $item->jabatan }}</span></li>
+                                                                <img src="data:image/png;base64, {!! base64_encode(
+                                                                    QrCode::format('png')->size(100)->generate($item->url),
+                                                                ) !!} "
+                                                                    class="img-square">
+                                                            </div>
+                                                            <div>
+                                                                <span style=''>{{ ucfirst($item->nama) }}
+                                                                    sebagai {{ $item->jabatan }}</span>
+                                                            </div>
+                                                        </div>
+                                                    @else
+                                                        <div class="d-flex align-items-start">
+                                                            <div class="mr-3">
+
+                                                                <img src="data:image/png;base64, {!! base64_encode(
+                                                                    QrCode::format('png')->size(100)->generate(asset('storage/karyawan/' . $item->tdd)),
+                                                                ) !!} "
+                                                                    class="img-square">
+                                                            </div>
+                                                            <div>
+                                                                <span style=''>{{ ucfirst($item->nama) }}
+                                                                    sebagai {{ $item->jabatan }}</span>
+                                                            </div>
+                                                        </div>
                                                     @endif
-                                                @empty
-                                                @endforelse
-                                            </ol>
+                                                @endif
+                                            @empty
+                                            @endforelse
                                         </div>
                                     </div>
                                 </div>
