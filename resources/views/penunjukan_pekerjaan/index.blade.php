@@ -138,7 +138,7 @@
                                                     @endif
                                                 @elseif (auth()->user()->hasRole('manajer-distribusi') ||
                                                     auth()->user()->hasRole('manajer-pengendalian-kehilangan-air'))
-                                                    @if ($item->status_aduan == 'Approve pengawas')
+                                                    @if ($item->status_aduan == 'Approve Asisten Manajer')
                                                         <i class="nav-icon fas fa-eye"></i> Setujui
                                                     @else
                                                         <i class="nav-icon fa fa-search"></i> Detail

@@ -374,7 +374,7 @@
                                             <h3 class="card-title">Daftar Pekerjaan {{ $pekerjaanUtama->status }}</h3>
                                             <hr>
                                         </div>
-                                        @if ($pengawas === true && $pekerjaanUtama->status === 'approve manajer' )
+                                        @if ($pengawas === true && $pekerjaanUtama->status === 'approve manajer')
                                             <div class="col-12">
                                                 <form action="" id="formPekerjaan">
                                                     @if ($rekanan_id == null)
@@ -761,7 +761,6 @@
                                                                         </td>
                                                                     @endif
                                                                     @if ($pekerjaanUtama->status === 'approve' ||
-
                                                                         $pekerjaanUtama->status === 'koreksi pengawas' ||
                                                                         $pekerjaanUtama->status === 'approve manajer' ||
                                                                         $pekerjaanUtama->status === 'koreksi asmen')
@@ -1200,6 +1199,7 @@
                                                         @php
                                                             $sum = 0;
                                                         @endphp
+                                                        {{-- rekanan --}}
                                                         <tr id="listGalian_{{ $galian->item_id }}"
                                                             class="list_table_galian">
                                                             <td class="text-center nomor_galian"
@@ -1291,16 +1291,21 @@
                                                                 <td>
                                                                     {{ str_replace('.', ',', $galian->galian_pengawas_dalam) }}
                                                                 </td>
-                                                                <td>
-                                                                    {{ str_replace('.', ',', round($galian->volume, 3)) }}
-                                                                    @if ($galian->galian_pengawas_dalam === 0.0)
-                                                                        m<sup>2
-                                                                        @else
-                                                                            m<sup>3
-                                                                    @endif
 
+                                                                @if ($pekerjaanUtama->status === 'approve')
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                @else
+                                                                    <td>
+                                                                        {{ str_replace('.', ',', round($galian->volume, 3)) }}
+                                                                        @if ($galian->galian_pengawas_dalam === 0.0)
+                                                                            m<sup>2
+                                                                            @else
+                                                                                m<sup>3
+                                                                        @endif
 
-                                                                </td>
+                                                                    </td>
+                                                                @endif
                                                                 @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
                                                                     <td>Rp.
                                                                         {{ format_uang($galian->galian_pengawas_harga_satuan) }}
@@ -1476,22 +1481,22 @@
                                                                 <td>Perencanaan</td>
                                                                 @if ($perencaan == true)
                                                                     <td>
-                                                                    {{ str_replace('.', ',', $galian->galian_asmen_pengawas_panjang) }}
-                                                                </td>
-                                                                <td>
-                                                                    {{ str_replace('.', ',', $galian->galian_asmen_pengawas_lebar) }}
-                                                                </td>
-                                                                <td>
-                                                                    {{ str_replace('.', ',', $galian->galian_asmen_pengawas_dalam) }}
-                                                                </td>
-                                                                <td>
-                                                                    {{ str_replace('.', ',', round($galian->volume_asmen, 3)) }}
-                                                                    @if ($galian->galian_asmen_pengawas_dalam === 0.0)
-                                                                        m<sup>2
-                                                                        @else
-                                                                            m<sup>3
-                                                                    @endif
-                                                                </td>
+                                                                        {{ str_replace('.', ',', $galian->galian_asmen_pengawas_panjang) }}
+                                                                    </td>
+                                                                    <td>
+                                                                        {{ str_replace('.', ',', $galian->galian_asmen_pengawas_lebar) }}
+                                                                    </td>
+                                                                    <td>
+                                                                        {{ str_replace('.', ',', $galian->galian_asmen_pengawas_dalam) }}
+                                                                    </td>
+                                                                    <td>
+                                                                        {{ str_replace('.', ',', round($galian->volume_asmen, 3)) }}
+                                                                        @if ($galian->galian_asmen_pengawas_dalam === 0.0)
+                                                                            m<sup>2
+                                                                            @else
+                                                                                m<sup>3
+                                                                        @endif
+                                                                    </td>
                                                                     <td>
                                                                         <div class="input-group mb-2 mr-sm-2">
                                                                             <div class="input-group-prepend">
@@ -1569,7 +1574,9 @@
                                                                 <td></td>
                                                                 <td> </td>
                                                                 <td> {{ $galian->galian_perencanaan_keterangan }}</td>
-                                                                <td>Rp. {{ format_uang($galian->galian_perencanaan_harga_satuan) }}</td>
+                                                                <td>Rp.
+                                                                    {{ format_uang($galian->galian_perencanaan_harga_satuan) }}
+                                                                </td>
                                                                 <td>
                                                                     Rp.
                                                                     {{ format_uang($galian->total) }}
@@ -1631,7 +1638,8 @@
                                                                 </td>
                                                                 <td> {{ $galian->galian_perencanaan_keterangan }}</td>
                                                                 <td>
-                                                                    Rp. {{ format_uang($galian->galian_perencanaan_harga_satuan) }}
+                                                                    Rp.
+                                                                    {{ format_uang($galian->galian_perencanaan_harga_satuan) }}
                                                                 </td>
                                                                 <td>
                                                                     Rp.

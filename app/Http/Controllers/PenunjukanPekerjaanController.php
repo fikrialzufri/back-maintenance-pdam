@@ -75,8 +75,15 @@ class PenunjukanPekerjaanController extends Controller
 
             $query->where('wilayah_id', auth()->user()->karyawan->id_wilayah)->where('kategori_nps', 'dis');
         }
+        if (auth()->user()->hasRole('manajer-distribusi')) {
+
+            $query->where('kategori_nps', 'dis');
+        }
         if (auth()->user()->hasRole('admin-pengendalian-kehilangan-air') || auth()->user()->hasRole('asisten-manajer-pengendalian-kehilangan-air')) {
             $query->where('wilayah_id', auth()->user()->karyawan->id_wilayah)->where('kategori_nps', 'pka');
+        }
+        if (auth()->user()->hasRole('manajer-pengendalian-kehilangan-air')) {
+            $query->where('kategori_nps', 'pka');
         }
         if ($search) {
             $query->where('no_ticket', 'like', "%" . $search . "%")->orWhere('no_aduan', 'like', "%" . $search . "%");
@@ -202,6 +209,21 @@ class PenunjukanPekerjaanController extends Controller
                     if ($wilayah->nama !== 'Wilayah Samarinda') {
                         $query->where('wilayah_id', auth()->user()->karyawan->id_wilayah)->orderBy('status', 'asc')->orderBy('updated_at', 'desc');
                         $penunjukan = $query->paginate($limit);
+
+                        if (auth()->user()->hasRole('asisten-manajer-distribusi')) {
+                            $penunjukan = $penunjukan->setCollection(
+                                $penunjukan->sortBy(function ($pekerjaan) {
+                                    return $pekerjaan->status_order_asmen;
+                                })
+                            );
+                        } elseif (auth()->user()->hasRole('asisten-manajer-pengendalian-kehilangan-air')) {
+
+                            $penunjukan = $penunjukan->setCollection(
+                                $penunjukan->sortBy(function ($pekerjaan) {
+                                    return $pekerjaan->status_order_asmen;
+                                })
+                            );
+                        }
                     } else {
 
                         $penunjukan = $query->where('status', '!=', 'draft')->with(['hasPenunjukanPekerjaan' => function ($query) {
@@ -210,7 +232,6 @@ class PenunjukanPekerjaanController extends Controller
                         $penunjukan = $query->paginate($limit);
 
                         if (auth()->user()->hasRole('asisten-manajer-pengawas')) {
-
                             $penunjukan = $penunjukan->setCollection(
                                 $penunjukan->sortBy(function ($pekerjaan) {
                                     return $pekerjaan->status_order_asem_pengawas;

@@ -168,11 +168,11 @@ class Aduan extends Model
                 } else if ($this->hasPenunjukanPekerjaan->status == 'selesai') {
                     $status  = "Selesai dikerjakan";
                 } else if ($this->hasPenunjukanPekerjaan->status == 'approve') {
-                    $status  = "Approve pengawas";
+                    $status  = "Approve Asisten Manajer";
                 } else if ($this->hasPenunjukanPekerjaan->status == 'approve manajer') {
                     $status  = "Approve Manajer";
                 } else if ($this->hasPenunjukanPekerjaan->status == 'koreksi pengawas') {
-                    $status  = "Dikoreksi pengawas";
+                    $status  = "Dikoreksi Pengawas";
                 } else if ($this->hasPenunjukanPekerjaan->status == 'koreksi asmen') {
                     $status  = "Dikoreksi Asmen Pengawas";
                 } else if ($this->hasPenunjukanPekerjaan->status == 'dikoreksi') {
@@ -260,6 +260,30 @@ class Aduan extends Model
                 } else if ($this->hasPenunjukanPekerjaan->status == 'koreksi asmen') {
                     $status  = 2;
                 } else if ($this->hasPenunjukanPekerjaan->status == 'selesai') {
+                    $status  = 3;
+                } else if ($this->hasPenunjukanPekerjaan->status == 'dikoreksi') {
+                    $status  = 4;
+                } else if ($this->hasPenunjukanPekerjaan->status == 'selesai koreksi') {
+                    $status  = 5;
+                } else if ($this->hasPenunjukanPekerjaan->status == 'diadjust') {
+                    $status  = 6;
+                } else if ($this->hasPenunjukanPekerjaan->status == 'draft') {
+                    $status  = 7;
+                }
+            }
+        }
+        return $status;
+    }
+    public function getStatusOrderAsmenAttribute()
+    {
+        $status = 5;
+        if ($this->hasPenunjukanPekerjaan) {;
+            if ($this->hasPenunjukanPekerjaan->status) {
+                if ($this->hasPenunjukanPekerjaan->status == 'selesai') {
+                    $status  = 1;
+                } else if ($this->hasPenunjukanPekerjaan->status == 'koreksi pengawas') {
+                    $status  = 2;
+                } else if ($this->hasPenunjukanPekerjaan->status == 'koreksi asmen') {
                     $status  = 3;
                 } else if ($this->hasPenunjukanPekerjaan->status == 'dikoreksi') {
                     $status  = 4;
