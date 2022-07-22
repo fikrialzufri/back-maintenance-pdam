@@ -374,7 +374,7 @@
                                             <h3 class="card-title">Daftar Pekerjaan {{ $pekerjaanUtama->status }}</h3>
                                             <hr>
                                         </div>
-                                        @if ($pengawas === true && $pekerjaanUtama->status === 'approve')
+                                        @if ($pengawas === true && $pekerjaanUtama->status === 'approve manajer' )
                                             <div class="col-12">
                                                 <form action="" id="formPekerjaan">
                                                     @if ($rekanan_id == null)
@@ -558,6 +558,7 @@
                                                         <th width="300">Keterangan</th>
                                                     @endif
                                                     @if ($pekerjaanUtama->status === 'approve' ||
+                                                        $pekerjaanUtama->status === 'approve manajer' ||
                                                         $pekerjaanUtama->status === 'koreksi pengawas' ||
                                                         $pekerjaanUtama->status === 'koreksi asmen')
                                                         <th width="300">Keterangan</th>
@@ -607,6 +608,7 @@
                                                             <td>{{ str_replace('.', ',', $pekerjaan->pivot->qty) }}</td>
 
                                                             @if ($pekerjaanUtama->status === 'approve' ||
+                                                                $pekerjaanUtama->status === 'approve manajer' ||
                                                                 $pekerjaanUtama->status === 'koreksi pengawas' ||
                                                                 $pekerjaanUtama->status === 'koreksi asmen')
                                                                 <td>{{ $pekerjaan->pivot->keterangan }}</td>
@@ -633,7 +635,7 @@
                                                         </tr>
                                                         <tr>
                                                             <td>Pengawas</td>
-                                                            @if ($pengawas === true && $pekerjaanUtama->status === 'approve')
+                                                            @if ($pengawas === true && $pekerjaanUtama->status === 'approve manajer')
                                                                 <td><input type="text"
                                                                         name="qty_pengawas[{{ $pekerjaan->pivot->item_id }}]"
                                                                         id="qty_pengawas_{{ $pekerjaan->pivot->item_id }}"
@@ -679,6 +681,7 @@
                                                                         </td>
                                                                     @endif
                                                                     @if ($pekerjaanUtama->status === 'approve' ||
+                                                                        $pekerjaanUtama->status === 'approve manajer' ||
                                                                         $pekerjaanUtama->status === 'koreksi pengawas' ||
                                                                         $pekerjaanUtama->status === 'koreksi asmen')
                                                                         <td></td>
@@ -688,6 +691,7 @@
                                                                     @endif
                                                                 @else
                                                                     @if ($pekerjaanUtama->status === 'approve' ||
+                                                                        $pekerjaanUtama->status === 'approve manajer' ||
                                                                         $pekerjaanUtama->status === 'koreksi pengawas' ||
                                                                         $pekerjaanUtama->status === 'koreksi asmen')
                                                                         <td></td>
@@ -757,7 +761,9 @@
                                                                         </td>
                                                                     @endif
                                                                     @if ($pekerjaanUtama->status === 'approve' ||
+
                                                                         $pekerjaanUtama->status === 'koreksi pengawas' ||
+                                                                        $pekerjaanUtama->status === 'approve manajer' ||
                                                                         $pekerjaanUtama->status === 'koreksi asmen')
                                                                         <td></td>
                                                                         <td>
@@ -974,7 +980,7 @@
 
                                         <hr>
                                         {{-- Galian --}}
-                                        @if ($pengawas === true && $pekerjaanUtama->status === 'approve')
+                                        @if ($pengawas === true && $pekerjaanUtama->status === 'approve manajer')
                                             <div class="col-12">
                                                 @if ($rekanan_id == null)
                                                     @if ($tombolEdit === 'bisa')
@@ -1242,7 +1248,7 @@
                                                         </tr>
                                                         <tr>
                                                             <td>Pengawas</td>
-                                                            @if ($pengawas === true && $pekerjaanUtama->status === 'approve')
+                                                            @if ($pengawas === true && $pekerjaanUtama->status === 'approve manajer')
                                                                 <td><input type="text"
                                                                         name="panjang_pengawas[{{ $galian->item_id }}]"
                                                                         id="panjang_pengawas[{{ $galian->item_id }}]"

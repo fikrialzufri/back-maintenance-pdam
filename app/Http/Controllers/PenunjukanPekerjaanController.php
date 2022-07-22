@@ -222,6 +222,18 @@ class PenunjukanPekerjaanController extends Controller
                                     return $pekerjaan->status_order_manajer_pengawas;
                                 })
                             );
+                        } elseif (auth()->user()->hasRole('manajer-distribusi')) {
+                            $penunjukan = $penunjukan->setCollection(
+                                $penunjukan->sortBy(function ($pekerjaan) {
+                                    return $pekerjaan->status_order_manajer;
+                                })
+                            );
+                        } elseif (auth()->user()->hasRole('manajer-pengendalian-kehilangan-air')) {
+                            $penunjukan = $penunjukan->setCollection(
+                                $penunjukan->sortBy(function ($pekerjaan) {
+                                    return $pekerjaan->status_order_manajer;
+                                })
+                            );
                         } elseif (auth()->user()->hasRole('asisten-manajer-perencanaan')) {
                             $penunjukan = $penunjukan->setCollection(
                                 $penunjukan->sortBy(function ($pekerjaan) {
@@ -388,7 +400,7 @@ class PenunjukanPekerjaanController extends Controller
                 }
                 if (auth()->user()->hasRole('manajer-pengendalian-kehilangan-air')) {
                     $CheckAduan = Aduan::where('id', $aduan->id)->where('kategori_nps', "pka")->first();
-
+                    // return $pekerjaanUtama->status;
                     if ($pekerjaanUtama->status  === 'approve') {
                         if ($CheckAduan) {
                             $tombolEdit = 'bisa';
@@ -397,7 +409,7 @@ class PenunjukanPekerjaanController extends Controller
                 }
 
                 if (auth()->user()->hasRole('staf-pengawas')) {
-                    if ($pekerjaanUtama->status  === 'approve') {
+                    if ($pekerjaanUtama->status  === 'approve manajer') {
                         $tombolEdit = 'bisa';
                     }
                     $pengawas = true;
@@ -857,6 +869,10 @@ class PenunjukanPekerjaanController extends Controller
                         $status = 'approve';
                     } elseif (auth()->user()->hasRole('asisten-manajer-pengendalian-kehilangan-air')) {
                         $status = 'approve';
+                    } elseif (auth()->user()->hasRole('manajer-distribusi')) {
+                        $status = 'approve manajer';
+                    } elseif (auth()->user()->hasRole('manajer-pengendalian-kehilangan-air')) {
+                        $status = 'approve manajer';
                     } elseif (auth()->user()->hasRole('staf-pengawas')) {
                         // pekerjaan
                         foreach ($request->qty_pengawas as $key => $value) {
@@ -896,6 +912,12 @@ class PenunjukanPekerjaanController extends Controller
                         }
                         // end pekerjaan
                         $status = 'koreksi pengawas';
+                    } else if (auth()->user()->hasRole('manajer-distribusi')) {
+                        // pekerjaan
+                        if ($PelaksanaanPekerjaan->status === 'koreksi asmen') {
+                            $status =  'dikoreksi';
+                        }
+                        // $status = $PelaksanaanPekerjaan->status;
                     } else if (auth()->user()->hasRole('asisten-manajer-pengawas')) {
                         // pekerjaan
                         if ($PelaksanaanPekerjaan->status === 'koreksi pengawas') {

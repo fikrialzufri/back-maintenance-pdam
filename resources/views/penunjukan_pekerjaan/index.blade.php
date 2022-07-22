@@ -136,10 +136,17 @@
                                                     @else
                                                         <i class="nav-icon fa fa-search"></i> Detail
                                                     @endif
+                                                @elseif (auth()->user()->hasRole('manajer-distribusi') ||
+                                                    auth()->user()->hasRole('manajer-pengendalian-kehilangan-air'))
+                                                    @if ($item->status_aduan == 'Approve pengawas')
+                                                        <i class="nav-icon fas fa-eye"></i> Setujui
+                                                    @else
+                                                        <i class="nav-icon fa fa-search"></i> Detail
+                                                    @endif
                                                 @elseif (auth()->user()->hasRole('staf-pengawas'))
                                                     @if ($item->status_aduan == 'Selesai dikerjakan')
                                                         <i class="nav-icon fas fa-search"></i> Detail
-                                                    @elseif ($item->status_aduan == 'approve')
+                                                    @elseif ($item->status_aduan == 'Approve Manajer')
                                                         <i class="nav-icon fas fa-eye"></i> Koreksi
                                                     @else
                                                         <i class="nav-icon fa fa-search"></i> Detail

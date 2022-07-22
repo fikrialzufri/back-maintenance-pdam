@@ -167,6 +167,10 @@ class Aduan extends Model
                     $status  = "Sedang dikerjakan";
                 } else if ($this->hasPenunjukanPekerjaan->status == 'selesai') {
                     $status  = "Selesai dikerjakan";
+                } else if ($this->hasPenunjukanPekerjaan->status == 'approve') {
+                    $status  = "Approve pengawas";
+                } else if ($this->hasPenunjukanPekerjaan->status == 'approve manajer') {
+                    $status  = "Approve Manajer";
                 } else if ($this->hasPenunjukanPekerjaan->status == 'koreksi pengawas') {
                     $status  = "Dikoreksi pengawas";
                 } else if ($this->hasPenunjukanPekerjaan->status == 'koreksi asmen') {
@@ -198,23 +202,49 @@ class Aduan extends Model
         }
         return $status;
     }
-    public function getStatusOrderPengawasAttribute()
+    public function getStatusOrderManajerAttribute()
     {
         $status = 6;
         if ($this->hasPenunjukanPekerjaan) {;
             if ($this->hasPenunjukanPekerjaan->status) {
                 if ($this->hasPenunjukanPekerjaan->status == 'approve') {
                     $status  = 1;
-                } else if ($this->hasPenunjukanPekerjaan->status == 'selesai') {
+                } else if ($this->hasPenunjukanPekerjaan->status == 'approve manajer') {
                     $status  = 2;
-                } else if ($this->hasPenunjukanPekerjaan->status == 'koreksi pengawas') {
+                } else if ($this->hasPenunjukanPekerjaan->status == 'selesai') {
                     $status  = 3;
-                } else if ($this->hasPenunjukanPekerjaan->status == 'selesai koreksi') {
+                } else if ($this->hasPenunjukanPekerjaan->status == 'koreksi pengawas') {
                     $status  = 4;
-                } else if ($this->hasPenunjukanPekerjaan->status == 'dikoreksi') {
+                } else if ($this->hasPenunjukanPekerjaan->status == 'selesai koreksi') {
                     $status  = 5;
+                } else if ($this->hasPenunjukanPekerjaan->status == 'dikoreksi') {
+                    $status  = 6;
                 } else if ($this->hasPenunjukanPekerjaan->status == 'draft') {
-                    $status  = 56;
+                    $status  = 7;
+                }
+            }
+        }
+        return $status;
+    }
+    public function getStatusOrderPengawasAttribute()
+    {
+        $status = 6;
+        if ($this->hasPenunjukanPekerjaan) {;
+            if ($this->hasPenunjukanPekerjaan->status) {
+                if ($this->hasPenunjukanPekerjaan->status == 'approve manajer') {
+                    $status  = 1;
+                } else if ($this->hasPenunjukanPekerjaan->status == 'approve') {
+                    $status  = 2;
+                } else if ($this->hasPenunjukanPekerjaan->status == 'selesai') {
+                    $status  = 3;
+                } else if ($this->hasPenunjukanPekerjaan->status == 'koreksi pengawas') {
+                    $status  = 4;
+                } else if ($this->hasPenunjukanPekerjaan->status == 'selesai koreksi') {
+                    $status  = 5;
+                } else if ($this->hasPenunjukanPekerjaan->status == 'dikoreksi') {
+                    $status  = 6;
+                } else if ($this->hasPenunjukanPekerjaan->status == 'draft') {
+                    $status  = 7;
                 }
             }
         }
@@ -323,6 +353,13 @@ class Aduan extends Model
                         $btn  = "btn-danger";
                     }
                 } else if ($this->hasPenunjukanPekerjaan->status == 'approve') {
+                    if (auth()->user()->hasRole('manajer-distribusi')) {
+                        $btn  = "btn-danger";
+                    }
+                    if (auth()->user()->hasRole('manajer-pengendalian-kehilangan-air')) {
+                        $btn  = "btn-danger";
+                    }
+                } else if ($this->hasPenunjukanPekerjaan->status == 'approve manajer') {
                     if (auth()->user()->hasRole('staf-pengawas')) {
                         $btn  = "btn-danger";
                     }
