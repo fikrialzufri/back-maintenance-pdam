@@ -347,200 +347,202 @@
                                     {{ csrf_field() }}
                                     {{ method_field('PUT') }}
                                     <div class="card-body">
-                                        <table class="table table-bordered table-responsive" width="100%"
-                                            id="tablePekerjaan">
-                                            <thead>
-                                                <tr>
-                                                    <th width="5">#</th>
-                                                    <th width="500">Pekerjaan</th>
-                                                    <th width="50">Jenis</th>
-                                                    <th width="50">Pengguna</th>
-                                                    <th width="150">Jumlah </th>
-                                                    <th width="250">Harga Satuan</th>
-                                                    <th width="300">Keterangan</th>
-                                                    <th width="250">Total</th>
+                                        <div class="table-responsive">
 
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @if (isset($daftarPekerjaan->hasItem))
-                                                    @forelse ($daftarPekerjaan->hasItem as $key => $pekerjaan)
-                                                        <tr id="listPekerjaan_{{ $pekerjaan->pivot->item_id }}"
-                                                            class="list_table_pekerjaan">
-                                                            <td class="text-center nomor_pekerjaan"
-                                                                data-index="{{ $key + 1 }}" rowspan="5">
-                                                                {{ $key + 1 }}
-                                                            </td>
-                                                            <td rowspan="5">
-                                                                {{ $pekerjaan->nama }}
-                                                            </td>
-                                                            <td rowspan="5">
-                                                                {{ $pekerjaan->jenis }}
-                                                            </td>
-                                                            <td>Rekanan</td>
-                                                            <td>{{ $pekerjaan->pivot->qty }}</td>
-                                                            <td>Rp. {{ format_uang($pekerjaan->pivot->harga) }}</td>
-                                                            <td>{{ $pekerjaan->pivot->keterangan }}</td>
-                                                            <td>
-                                                                Rp.
-                                                                {{ format_uang($pekerjaan->pivot->qty * $pekerjaan->pivot->harga) }}
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Pengawas</td>
+                                            <table class="table table-bordered" width="100%" id="tablePekerjaan">
+                                                <thead>
+                                                    <tr>
+                                                        <th width="5">#</th>
+                                                        <th width="200">Pekerjaan</th>
+                                                        <th width="50">Jenis</th>
+                                                        <th width="50">Pengguna</th>
+                                                        <th width="150">Jumlah </th>
+                                                        <th width="250">Harga Satuan</th>
+                                                        <th width="300">Keterangan</th>
+                                                        <th width="250">Total</th>
 
-                                                            @if (isset($daftarPekerjaan->hasItemPengawas[$key]))
-                                                                <td>
-                                                                    {{ $daftarPekerjaan->hasItemPengawas[$key]->pivot->qty }}
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @if (isset($daftarPekerjaan->hasItem))
+                                                        @forelse ($daftarPekerjaan->hasItem as $key => $pekerjaan)
+                                                            <tr id="listPekerjaan_{{ $pekerjaan->pivot->item_id }}"
+                                                                class="list_table_pekerjaan">
+                                                                <td class="text-center nomor_pekerjaan"
+                                                                    data-index="{{ $key + 1 }}" rowspan="5">
+                                                                    {{ $key + 1 }}
                                                                 </td>
-                                                                @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
-                                                                    <td>Rp.
-                                                                        {{ format_uang($daftarPekerjaan->hasItemPengawas[$key]->pivot->harga) }}
-                                                                    </td>
-                                                                @endif
-                                                                @if ($pekerjaanUtama->status === 'selesai koreksi')
-                                                                    <td>Rp.
-                                                                        {{ format_uang($daftarPekerjaan->hasItemPengawas[$key]->pivot->harga) }}
-                                                                    </td>
-                                                                @endif
-                                                                <td>
-                                                                    {{ $daftarPekerjaan->hasItemPengawas[$key]->pivot->keterangan }}
+                                                                <td rowspan="5">
+                                                                    {{ $pekerjaan->nama }}
                                                                 </td>
+                                                                <td rowspan="5">
+                                                                    {{ $pekerjaan->jenis }}
+                                                                </td>
+                                                                <td>Rekanan</td>
+                                                                <td>{{ $pekerjaan->pivot->qty }}</td>
+                                                                <td>Rp. {{ format_uang($pekerjaan->pivot->harga) }}</td>
+                                                                <td>{{ $pekerjaan->pivot->keterangan }}</td>
                                                                 <td>
                                                                     Rp.
-                                                                    {{ format_uang($daftarPekerjaan->hasItemPengawas[$key]->pivot->qty * $daftarPekerjaan->hasItemPengawas[$key]->pivot->harga) }}
+                                                                    {{ format_uang($pekerjaan->pivot->qty * $pekerjaan->pivot->harga) }}
                                                                 </td>
-                                                            @endif
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Asisten Manajer Pengawas</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Pengawas</td>
 
-                                                            @if (isset($daftarPekerjaan->hasItemAsmenPengawas[$key]))
-                                                                <td>
-                                                                    {{ $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty }}
-                                                                </td>
-                                                                @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
-                                                                    <td>Rp.
-                                                                        {{ format_uang($daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->harga) }}
-                                                                    </td>
-                                                                @endif
-                                                                @if ($pekerjaanUtama->status === 'selesai koreksi' || $pekerjaanUtama->status === 'diadjust')
-                                                                    <td>Rp.
-                                                                        {{ format_uang($daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->harga) }}
-                                                                    </td>
-                                                                @endif
-                                                                <td>
-                                                                    {{ $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->keterangan }}
-                                                                </td>
-                                                                <td>
-                                                                    Rp.
-                                                                    {{ format_uang($daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty * $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->harga) }}
-                                                                </td>
-                                                            @endif
-                                                        </tr>
-                                                        <tr>
-                                                            <td rowspan="2">Perencanaan</td>
-                                                            @if (isset($daftarPekerjaan->hasItemAsmenPengawas[$key]))
-                                                                <td>
-                                                                    {{ $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty }}
-                                                                </td>
-                                                            @endif
-
-                                                            @if (isset($daftarPekerjaan->hasItemPerencanaan[$key]))
-                                                                <td>
-                                                                    Rp.
-                                                                    {{ format_uang($daftarPekerjaan->hasItemPerencanaan[$key]->pivot->harga) }}
-                                                                </td>
-                                                                <td>{{ $daftarPekerjaan->hasItemPerencanaan[$key]->pivot->keterangan }}
-                                                                </td>
                                                                 @if (isset($daftarPekerjaan->hasItemPengawas[$key]))
                                                                     <td>
+                                                                        {{ $daftarPekerjaan->hasItemPengawas[$key]->pivot->qty }}
+                                                                    </td>
+                                                                    @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
+                                                                        <td>Rp.
+                                                                            {{ format_uang($daftarPekerjaan->hasItemPengawas[$key]->pivot->harga) }}
+                                                                        </td>
+                                                                    @endif
+                                                                    @if ($pekerjaanUtama->status === 'selesai koreksi')
+                                                                        <td>Rp.
+                                                                            {{ format_uang($daftarPekerjaan->hasItemPengawas[$key]->pivot->harga) }}
+                                                                        </td>
+                                                                    @endif
+                                                                    <td>
+                                                                        {{ $daftarPekerjaan->hasItemPengawas[$key]->pivot->keterangan }}
+                                                                    </td>
+                                                                    <td>
                                                                         Rp.
-                                                                        {{ format_uang($daftarPekerjaan->hasItemPengawas[$key]->pivot->qty * $daftarPekerjaan->hasItemPerencanaan[$key]->pivot->harga) }}
+                                                                        {{ format_uang($daftarPekerjaan->hasItemPengawas[$key]->pivot->qty * $daftarPekerjaan->hasItemPengawas[$key]->pivot->harga) }}
                                                                     </td>
                                                                 @endif
-                                                            @endif
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Asisten Manajer Pengawas</td>
 
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <input type="text"
-                                                                    name="qty_perencanaan[{{ $pekerjaan->pivot->item_id }}]"
-                                                                    id="qty_perencanaan_{{ $pekerjaan->pivot->item_id }}"
-                                                                    placeholder="Koreksi Perecanaan Adjust"
-                                                                    class="form-control numberOnly"
-                                                                    @if (isset($daftarPekerjaan->hasItemAsmenPengawas[$key])) value="{{ $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty }}" @endif>
-                                                            </td>
-                                                            <td>
-                                                                <div class="input-group mb-2 mr-sm-2">
-                                                                    <div class="input-group-prepend">
-                                                                        <div class="input-group-text">Rp.</div>
-                                                                    </div>
-                                                                    @if (isset($daftarPekerjaan->hasItemPerencanaan[$key]))
-                                                                        <input type="text" class="form-control"
-                                                                            id="harga_satuan_{{ $pekerjaan->pivot->item_id }}{{ $key }}"
-                                                                            name="harga_satuan[{{ $pekerjaan->pivot->item_id }}]"
-                                                                            value="{{ format_uang($daftarPekerjaan->hasItemPerencanaan[$key]->pivot->harga) }}"
-                                                                            placeholder="Koreksi Perencanaan">
-                                                                    @else
-                                                                        <input type="text" class="form-control"
-                                                                            id="harga_satuan_{{ $pekerjaan->pivot->item_id }}{{ $key }}"
-                                                                            name="harga_satuan[{{ $pekerjaan->pivot->item_id }}]"
-                                                                            value="{{ format_uang($pekerjaan->pivot->harga) }}"
-                                                                            placeholder="Koreksi Perencanaan">
+                                                                @if (isset($daftarPekerjaan->hasItemAsmenPengawas[$key]))
+                                                                    <td>
+                                                                        {{ $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty }}
+                                                                    </td>
+                                                                    @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
+                                                                        <td>Rp.
+                                                                            {{ format_uang($daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->harga) }}
+                                                                        </td>
                                                                     @endif
-                                                                </div>
-                                                                @push('script')
-                                                                    <script>
-                                                                        $("#harga_satuan_{{ $pekerjaan->pivot->item_id }}{{ $key }}").on("input", function() {
+                                                                    @if ($pekerjaanUtama->status === 'selesai koreksi' || $pekerjaanUtama->status === 'diadjust')
+                                                                        <td>Rp.
+                                                                            {{ format_uang($daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->harga) }}
+                                                                        </td>
+                                                                    @endif
+                                                                    <td>
+                                                                        {{ $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->keterangan }}
+                                                                    </td>
+                                                                    <td>
+                                                                        Rp.
+                                                                        {{ format_uang($daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty * $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->harga) }}
+                                                                    </td>
+                                                                @endif
+                                                            </tr>
+                                                            <tr>
+                                                                <td rowspan="2">Perencanaan</td>
+                                                                @if (isset($daftarPekerjaan->hasItemAsmenPengawas[$key]))
+                                                                    <td>
+                                                                        {{ $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty }}
+                                                                    </td>
+                                                                @endif
 
-                                                                            let val = formatRupiahTanpaRp(this.value, '')
-                                                                            $("#harga_satuan_{{ $pekerjaan->pivot->item_id }}{{ $key }}").val(val)
-                                                                        });
-                                                                    </script>
-                                                                @endpush
-                                                            </td>
-                                                            <td>
-                                                                <input type="text" class="form-control"
-                                                                    id="keterangan_perencanaan_{{ $pekerjaan->pivot->item_id }}{{ $key }}"
-                                                                    name="keterangan_perencanaan[{{ $pekerjaan->pivot->item_id }}]"
-                                                                    placeholder="Keterangan Perencanaan">
-                                                            </td>
-                                                        </tr>
-                                                    @empty
+                                                                @if (isset($daftarPekerjaan->hasItemPerencanaan[$key]))
+                                                                    <td>
+                                                                        Rp.
+                                                                        {{ format_uang($daftarPekerjaan->hasItemPerencanaan[$key]->pivot->harga) }}
+                                                                    </td>
+                                                                    <td>{{ $daftarPekerjaan->hasItemPerencanaan[$key]->pivot->keterangan }}
+                                                                    </td>
+                                                                    @if (isset($daftarPekerjaan->hasItemPengawas[$key]))
+                                                                        <td>
+                                                                            Rp.
+                                                                            {{ format_uang($daftarPekerjaan->hasItemPengawas[$key]->pivot->qty * $daftarPekerjaan->hasItemPerencanaan[$key]->pivot->harga) }}
+                                                                        </td>
+                                                                    @endif
+                                                                @endif
+
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <input type="text"
+                                                                        name="qty_perencanaan[{{ $pekerjaan->pivot->item_id }}]"
+                                                                        id="qty_perencanaan_{{ $pekerjaan->pivot->item_id }}"
+                                                                        placeholder="Koreksi Perecanaan Adjust"
+                                                                        class="form-control numberOnly"
+                                                                        @if (isset($daftarPekerjaan->hasItemAsmenPengawas[$key])) value="{{ $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty }}" @endif>
+                                                                </td>
+                                                                <td>
+                                                                    <div class="input-group mb-2 mr-sm-2">
+                                                                        <div class="input-group-prepend">
+                                                                            <div class="input-group-text">Rp.</div>
+                                                                        </div>
+                                                                        @if (isset($daftarPekerjaan->hasItemPerencanaan[$key]))
+                                                                            <input type="text" class="form-control"
+                                                                                id="harga_satuan_{{ $pekerjaan->pivot->item_id }}{{ $key }}"
+                                                                                name="harga_satuan[{{ $pekerjaan->pivot->item_id }}]"
+                                                                                value="{{ format_uang($daftarPekerjaan->hasItemPerencanaan[$key]->pivot->harga) }}"
+                                                                                placeholder="Koreksi Perencanaan">
+                                                                        @else
+                                                                            <input type="text" class="form-control"
+                                                                                id="harga_satuan_{{ $pekerjaan->pivot->item_id }}{{ $key }}"
+                                                                                name="harga_satuan[{{ $pekerjaan->pivot->item_id }}]"
+                                                                                value="{{ format_uang($pekerjaan->pivot->harga) }}"
+                                                                                placeholder="Koreksi Perencanaan">
+                                                                        @endif
+                                                                    </div>
+                                                                    @push('script')
+                                                                        <script>
+                                                                            $("#harga_satuan_{{ $pekerjaan->pivot->item_id }}{{ $key }}").on("input", function() {
+
+                                                                                let val = formatRupiahTanpaRp(this.value, '')
+                                                                                $("#harga_satuan_{{ $pekerjaan->pivot->item_id }}{{ $key }}").val(val)
+                                                                            });
+                                                                        </script>
+                                                                    @endpush
+                                                                </td>
+                                                                <td>
+                                                                    <input type="text" class="form-control"
+                                                                        id="keterangan_perencanaan_{{ $pekerjaan->pivot->item_id }}{{ $key }}"
+                                                                        name="keterangan_perencanaan[{{ $pekerjaan->pivot->item_id }}]"
+                                                                        placeholder="Keterangan Perencanaan">
+                                                                </td>
+                                                            </tr>
+                                                        @empty
+                                                            <tr class="pekerjaanTidakAda">
+                                                                <td colspan="10">Data Pekerjaan tidak ada</td>
+                                                            </tr>
+                                                        @endforelse
+                                                    @else
                                                         <tr class="pekerjaanTidakAda">
                                                             <td colspan="10">Data Pekerjaan tidak ada</td>
                                                         </tr>
-                                                    @endforelse
-                                                @else
-                                                    <tr class="pekerjaanTidakAda">
-                                                        <td colspan="10">Data Pekerjaan tidak ada</td>
-                                                    </tr>
-                                                @endif
-                                            </tbody>
-                                            <tfoot>
-                                                @if ($pekerjaanUtama->status === 'selesai koreksi')
-                                                    @if (isset($daftarPekerjaan->hasItem))
-                                                        <tr>
-                                                            <th colspan="7" class="text-right">Total
-                                                            </th>
-                                                            <th>
-                                                                <span id="grand_total_pekerjaan_tampil">
-                                                                    Rp.
-                                                                    {{ format_uang($daftarPekerjaan->hasItem->sum('pivot.total')) }}
-                                                                </span>
-                                                                <input type="hidden" id="grand_total_pekerjaan_value"
-                                                                    name="grand_total_pekerjaan"
-                                                                    value="{{ $daftarPekerjaan->hasItem->sum('pivot.total') }}"
-                                                                    class="grand_total_pekerjaan total_tagihan">
-                                                            </th>
-
-                                                        </tr>
                                                     @endif
-                                                @endif
-                                            </tfoot>
+                                                </tbody>
+                                                <tfoot>
+                                                    @if ($pekerjaanUtama->status === 'selesai koreksi')
+                                                        @if (isset($daftarPekerjaan->hasItem))
+                                                            <tr>
+                                                                <th colspan="7" class="text-right">Total
+                                                                </th>
+                                                                <th>
+                                                                    <span id="grand_total_pekerjaan_tampil">
+                                                                        Rp.
+                                                                        {{ format_uang($daftarPekerjaan->hasItem->sum('pivot.total')) }}
+                                                                    </span>
+                                                                    <input type="hidden" id="grand_total_pekerjaan_value"
+                                                                        name="grand_total_pekerjaan"
+                                                                        value="{{ $daftarPekerjaan->hasItem->sum('pivot.total') }}"
+                                                                        class="grand_total_pekerjaan total_tagihan">
+                                                                </th>
 
-                                        </table>
+                                                            </tr>
+                                                        @endif
+                                                    @endif
+                                                </tfoot>
+
+                                            </table>
+                                        </div>
 
                                         <hr>
                                         {{-- Galian --}}
@@ -633,217 +635,221 @@
                                                 </div>
                                             </div>
                                         @endif
-                                        <table class="table table-bordered table-responsive" width="100%" id="tableGalian">
-                                            <thead>
-                                                <tr>
-                                                    <th width="5">#</th>
-                                                    <th width="500">Galian</th>
-                                                    <th width="100">User</th>
-                                                    <th width="100">Panjang</th>
-                                                    <th width="100">Lebar</th>
-                                                    <th width="100">Dalam</th>
-                                                    <th width="100">Volume</th>
-                                                    <th width="200">Keterangan</th>
-                                                    <th width="200">Harga Satuan</th>
-                                                    <th width="250">Total</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @if (isset($daftarGalian))
-                                                    @forelse ($daftarGalian as $inv => $galian)
-                                                        <tr id="listGalian_{{ $galian->item_id }}" class="list_table_galian">
-                                                            <td class="text-center nomor_galian"
-                                                                data-index="{{ $inv + 1 }}" rowspan="5">
-                                                                {{ $inv + 1 }}
-                                                            </td>
-                                                            <td rowspan="5">
-                                                                {{ $galian->pekerjaan }}
-                                                            </td>
-                                                            <td>Rekanan</td>
-                                                            <td>{{ $galian->panjang }}</td>
-                                                            <td>{{ $galian->lebar }}</td>
-                                                            <td>{{ $galian->dalam }}</td>
-                                                            <td>
-                                                                {{ round($galian->volume_rekanan, 3) }}
+                                        <div class="table-responsive">
 
-                                                                m<sup>2
-                                                            </td>
-                                                            <td>{{ $galian->keterangan }}</td>
-                                                            <td>Rp. {{ format_uang($galian->harga_satuan) }}</td>
-                                                            <td>Rp.
-                                                                {{ format_uang($galian->volume_rekanan * $galian->harga_satuan) }}
-                                                            </td>
+                                            <table class="table table-bordered " width="100%" id="tableGalian">
+                                                <thead>
+                                                    <tr>
+                                                        <th width="5">#</th>
+                                                        <th width="200">Galian</th>
+                                                        <th width="100">User</th>
+                                                        <th width="100">Panjang</th>
+                                                        <th width="100">Lebar</th>
+                                                        <th width="100">Dalam</th>
+                                                        <th width="100">Volume</th>
+                                                        <th width="200">Keterangan</th>
+                                                        <th width="200">Harga Satuan</th>
+                                                        <th width="250">Total</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @if (isset($daftarGalian))
+                                                        @forelse ($daftarGalian as $inv => $galian)
+                                                            <tr id="listGalian_{{ $galian->item_id }}"
+                                                                class="list_table_galian">
+                                                                <td class="text-center nomor_galian"
+                                                                    data-index="{{ $inv + 1 }}" rowspan="5">
+                                                                    {{ $inv + 1 }}
+                                                                </td>
+                                                                <td rowspan="5">
+                                                                    {{ $galian->pekerjaan }}
+                                                                </td>
+                                                                <td>Rekanan</td>
+                                                                <td>{{ $galian->panjang }}</td>
+                                                                <td>{{ $galian->lebar }}</td>
+                                                                <td>{{ $galian->dalam }}</td>
+                                                                <td>
+                                                                    {{ round($galian->volume_rekanan, 3) }}
 
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td>Pengawas</td>
-                                                            <td>
-                                                                {{ $galian->galian_pengawas_panjang }}
-                                                            </td>
-                                                            <td>
-                                                                {{ $galian->galian_pengawas_lebar }}
-                                                            </td>
-                                                            <td>
-                                                                {{ $galian->galian_pengawas_dalam }}
-                                                            </td>
-                                                            <td>
-                                                                {{ round($galian->volume, 3) }}
-                                                                m<sup>2
-                                                            </td>
-                                                            <td>
-                                                                {{ $galian->galian_pengawas_keterangan }}
-                                                            </td>
-                                                            <td>
-                                                                Rp.
-                                                                {{ format_uang($galian->galian_pengawas_harga_satuan) }}
-                                                            </td>
-
-                                                            <td>Rp.
-                                                                {{ format_uang($galian->volume * $galian->galian_pengawas_harga_satuan) }}
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Asisten Manajer Pengawas</td>
-                                                            <td>
-                                                                {{ $galian->galian_asmen_pengawas_panjang }}
-                                                            </td>
-                                                            <td>
-                                                                {{ $galian->galian_asmen_pengawas_lebar }}
-                                                            </td>
-                                                            <td>
-                                                                {{ $galian->galian_asmen_pengawas_dalam }}
-                                                            </td>
-                                                            <td>
-                                                                {{ round($galian->volume_asmen, 3) }}
-                                                                m<sup>2
-                                                            </td>
-                                                            <td>
-                                                                {{ $galian->galian_asmen_pengawas_keterangan }}
-                                                            </td>
-                                                            <td>
-                                                                Rp.
-                                                                {{ format_uang($galian->galian_asmen_pengawas_harga_satuan) }}
-                                                            </td>
-                                                            <td>
-                                                                Rp.
-                                                                {{ format_uang($galian->galian_asmen_pengawas_harga_satuan * round($galian->volume_asmen, 3)) }}
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td rowspan="2">Perencanaan</td>
-                                                            <td>
-                                                                {{ str_replace('.', ',', $galian->galian_asmen_pengawas_panjang) }}
-                                                            </td>
-                                                            <td>
-                                                                {{ str_replace('.', ',', $galian->galian_asmen_pengawas_lebar) }}
-                                                            </td>
-                                                            <td>
-                                                                {{ str_replace('.', ',', $galian->galian_asmen_pengawas_dalam) }}
-                                                            </td>
-                                                            <td>
-                                                                {{ str_replace('.', ',', round($galian->volume_asmen, 3)) }}
-                                                                @if ($galian->galian_asmen_pengawas_dalam === 0.0)
                                                                     m<sup>2
-                                                                    @else
-                                                                        m<sup>3
-                                                                @endif
-                                                            </td>
-                                                            <td> {{ $galian->galian_perencanaan_keterangan }}</td>
-                                                            <td>Rp.
-                                                                {{ format_uang($galian->galian_perencanaan_harga_satuan) }}
-                                                            </td>
-                                                            <td>Rp. {{ format_uang($galian->total) }}</td>
+                                                                </td>
+                                                                <td>{{ $galian->keterangan }}</td>
+                                                                <td>Rp. {{ format_uang($galian->harga_satuan) }}</td>
+                                                                <td>Rp.
+                                                                    {{ format_uang($galian->volume_rekanan * $galian->harga_satuan) }}
+                                                                </td>
 
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <input type="text"
-                                                                    name="panjang_perencanaan[{{ $galian->id }}]"
-                                                                    id="panjang_perencanaan_{{ $galian->id }}"
-                                                                    placeholder="Panjang" class="form-control numberOnly"
-                                                                    value="{{ $galian->galian_asmen_pengawas_panjang }}">
-                                                            </td>
-                                                            <td>
-                                                                <input type="text"
-                                                                    name="lebar_perencanaan[{{ $galian->id }}]"
-                                                                    id="lebar_perencanaan_{{ $galian->id }}"
-                                                                    placeholder="Lebar" class="form-control numberOnly"
-                                                                    value="{{ $galian->galian_asmen_pengawas_lebar }}">
-                                                            </td>
-                                                            <td>
-                                                                <input type="text"
-                                                                    name="dalam_perencanaan[{{ $galian->id }}]"
-                                                                    id="dalam_perencanaan_{{ $galian->id }}"
-                                                                    placeholder="dalam" class="form-control numberOnly"
-                                                                    value="{{ $galian->galian_asmen_pengawas_dalam }}">
-                                                            </td>
-                                                            <td></td>
-                                                            <td>
-                                                                <input type="text" class="form-control"
-                                                                    id="keterangan_perencanaan_galian_{{ $galian->id }}{{ $key }}"
-                                                                    name="keterangan_perencanaan_galian[{{ $galian->id }}]"
-                                                                    placeholder="Keterangan Perencanaan">
-                                                            </td>
-                                                            <td>
-                                                                <div class="input-group mb-2 mr-sm-2">
-                                                                    <div class="input-group-prepend">
-                                                                        <div class="input-group-text">Rp.</div>
-                                                                    </div>
+                                                            </tr>
+
+                                                            <tr>
+                                                                <td>Pengawas</td>
+                                                                <td>
+                                                                    {{ $galian->galian_pengawas_panjang }}
+                                                                </td>
+                                                                <td>
+                                                                    {{ $galian->galian_pengawas_lebar }}
+                                                                </td>
+                                                                <td>
+                                                                    {{ $galian->galian_pengawas_dalam }}
+                                                                </td>
+                                                                <td>
+                                                                    {{ round($galian->volume, 3) }}
+                                                                    m<sup>2
+                                                                </td>
+                                                                <td>
+                                                                    {{ $galian->galian_pengawas_keterangan }}
+                                                                </td>
+                                                                <td>
+                                                                    Rp.
+                                                                    {{ format_uang($galian->galian_pengawas_harga_satuan) }}
+                                                                </td>
+
+                                                                <td>Rp.
+                                                                    {{ format_uang($galian->volume * $galian->galian_pengawas_harga_satuan) }}
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Asisten Manajer Pengawas</td>
+                                                                <td>
+                                                                    {{ $galian->galian_asmen_pengawas_panjang }}
+                                                                </td>
+                                                                <td>
+                                                                    {{ $galian->galian_asmen_pengawas_lebar }}
+                                                                </td>
+                                                                <td>
+                                                                    {{ $galian->galian_asmen_pengawas_dalam }}
+                                                                </td>
+                                                                <td>
+                                                                    {{ round($galian->volume_asmen, 3) }}
+                                                                    m<sup>2
+                                                                </td>
+                                                                <td>
+                                                                    {{ $galian->galian_asmen_pengawas_keterangan }}
+                                                                </td>
+                                                                <td>
+                                                                    Rp.
+                                                                    {{ format_uang($galian->galian_asmen_pengawas_harga_satuan) }}
+                                                                </td>
+                                                                <td>
+                                                                    Rp.
+                                                                    {{ format_uang($galian->galian_asmen_pengawas_harga_satuan * round($galian->volume_asmen, 3)) }}
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td rowspan="2">Perencanaan</td>
+                                                                <td>
+                                                                    {{ str_replace('.', ',', $galian->galian_asmen_pengawas_panjang) }}
+                                                                </td>
+                                                                <td>
+                                                                    {{ str_replace('.', ',', $galian->galian_asmen_pengawas_lebar) }}
+                                                                </td>
+                                                                <td>
+                                                                    {{ str_replace('.', ',', $galian->galian_asmen_pengawas_dalam) }}
+                                                                </td>
+                                                                <td>
+                                                                    {{ str_replace('.', ',', round($galian->volume_asmen, 3)) }}
+                                                                    @if ($galian->galian_asmen_pengawas_dalam === 0.0)
+                                                                        m<sup>2
+                                                                        @else
+                                                                            m<sup>3
+                                                                    @endif
+                                                                </td>
+                                                                <td> {{ $galian->galian_perencanaan_keterangan }}</td>
+                                                                <td>Rp.
+                                                                    {{ format_uang($galian->galian_perencanaan_harga_satuan) }}
+                                                                </td>
+                                                                <td>Rp. {{ format_uang($galian->total) }}</td>
+
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <input type="text"
+                                                                        name="panjang_perencanaan[{{ $galian->id }}]"
+                                                                        id="panjang_perencanaan_{{ $galian->id }}"
+                                                                        placeholder="Panjang" class="form-control numberOnly"
+                                                                        value="{{ $galian->galian_asmen_pengawas_panjang }}">
+                                                                </td>
+                                                                <td>
+                                                                    <input type="text"
+                                                                        name="lebar_perencanaan[{{ $galian->id }}]"
+                                                                        id="lebar_perencanaan_{{ $galian->id }}"
+                                                                        placeholder="Lebar" class="form-control numberOnly"
+                                                                        value="{{ $galian->galian_asmen_pengawas_lebar }}">
+                                                                </td>
+                                                                <td>
+                                                                    <input type="text"
+                                                                        name="dalam_perencanaan[{{ $galian->id }}]"
+                                                                        id="dalam_perencanaan_{{ $galian->id }}"
+                                                                        placeholder="dalam" class="form-control numberOnly"
+                                                                        value="{{ $galian->galian_asmen_pengawas_dalam }}">
+                                                                </td>
+                                                                <td></td>
+                                                                <td>
                                                                     <input type="text" class="form-control"
-                                                                        id="harga_satuan_galian_{{ $galian->id }}{{ $key }}"
-                                                                        name="harga_satuan_galian[{{ $galian->id }}]"
-                                                                        value="{{ $galian->galian_perencanaan_harga_satuan }}"
-                                                                        placeholder="Harga Perencanaan">
-                                                                </div>
-                                                                @push('script')
-                                                                    <script>
-                                                                        $("#harga_satuan_galian_{{ $galian->id }}{{ $key }}").on("input", function() {
+                                                                        id="keterangan_perencanaan_galian_{{ $galian->id }}{{ $key }}"
+                                                                        name="keterangan_perencanaan_galian[{{ $galian->id }}]"
+                                                                        placeholder="Keterangan Perencanaan">
+                                                                </td>
+                                                                <td>
+                                                                    <div class="input-group mb-2 mr-sm-2">
+                                                                        <div class="input-group-prepend">
+                                                                            <div class="input-group-text">Rp.</div>
+                                                                        </div>
+                                                                        <input type="text" class="form-control"
+                                                                            id="harga_satuan_galian_{{ $galian->id }}{{ $key }}"
+                                                                            name="harga_satuan_galian[{{ $galian->id }}]"
+                                                                            value="{{ format_uang($galian->galian_perencanaan_harga_satuan) }}"
+                                                                            placeholder="Harga Perencanaan">
+                                                                    </div>
+                                                                    @push('script')
+                                                                        <script>
+                                                                            $("#harga_satuan_galian_{{ $galian->id }}{{ $key }}").on("input", function() {
 
-                                                                            let val = formatRupiahTanpaRp(this.value, '')
-                                                                            $("#harga_satuan_galian_{{ $galian->id }}{{ $key }}").val(val)
-                                                                        });
-                                                                    </script>
-                                                                @endpush
-                                                            </td>
+                                                                                let val = formatRupiahTanpaRp(this.value, '')
+                                                                                $("#harga_satuan_galian_{{ $galian->id }}{{ $key }}").val(val)
+                                                                            });
+                                                                        </script>
+                                                                    @endpush
+                                                                </td>
 
 
-                                                        </tr>
-                                                    @empty
+                                                            </tr>
+                                                        @empty
+                                                            <tr class="galianTidakAda">
+                                                                <td colspan="10">Data galian tidak ada</td>
+                                                            </tr>
+                                                        @endforelse
+                                                    @else
                                                         <tr class="galianTidakAda">
                                                             <td colspan="10">Data galian tidak ada</td>
                                                         </tr>
-                                                    @endforelse
-                                                @else
-                                                    <tr class="galianTidakAda">
-                                                        <td colspan="10">Data galian tidak ada</td>
-                                                    </tr>
-                                                @endif
-                                            </tbody>
-                                            <tfoot>
-                                                @if (isset($daftarGalian))
-                                                    @if ($pekerjaanUtama->status === 'selesai koreksi')
-                                                        <tr>
-                                                            <th colspan="9" class="text-right"> Total
-                                                            </th>
-                                                            <th>Rp.
-                                                                {{ format_uang($daftarGalian->sum('total')) }}
-                                                            </th>
-                                                        </tr>
-                                                        <tr>
-                                                            <th colspan="9" class="text-right">
-                                                                Grand Total
-                                                            </th>
-                                                            <th>Rp.
-                                                                {{ format_uang($pekerjaanUtama->total_pekerjaan) }}
-                                                            </th>
-                                                        </tr>
                                                     @endif
-                                                @endif
-                                            </tfoot>
+                                                </tbody>
+                                                <tfoot>
+                                                    @if (isset($daftarGalian))
+                                                        @if ($pekerjaanUtama->status === 'selesai koreksi')
+                                                            <tr>
+                                                                <th colspan="9" class="text-right"> Total
+                                                                </th>
+                                                                <th>Rp.
+                                                                    {{ format_uang($daftarGalian->sum('total')) }}
+                                                                </th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th colspan="9" class="text-right">
+                                                                    Grand Total
+                                                                </th>
+                                                                <th>Rp.
+                                                                    {{ format_uang($pekerjaanUtama->total_pekerjaan) }}
+                                                                </th>
+                                                            </tr>
+                                                        @endif
+                                                    @endif
+                                                </tfoot>
 
-                                        </table>
-                                        {{-- End Galian --}}
+                                            </table>
+                                            {{-- End Galian --}}
+                                        </div>
                                     </div>
                                     <div class="card-footer">
                                         <div class="row">
@@ -1174,15 +1180,13 @@
             }
 
             $(document).on('keypress', '.numberOnly', function(event) {
-                if (event.which < 46 ||
-                    event.which > 59) {
-                    event.preventDefault();
-                } // prevent if not number/dot
+                if (/\d+|,+|[/b]+|-+/i.test(e.key)) {
 
-                if (event.which == 46 &&
-                    $(this).val().indexOf('.') != -1) {
-                    event.preventDefault();
-                } // prevent if already dot
+                    console.log("character accepted: " + e.key)
+                } else {
+                    console.log("illegal character detected: " + e.key)
+                    return false;
+                }
             })
 
             $(document).ready(function() {

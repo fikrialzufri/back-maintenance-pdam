@@ -107,7 +107,7 @@ class AduanController extends Controller
         }
 
         if ($kategori_aduan == 'pipa dinas') {
-            $dataAduan = Aduan::where('kategori_aduan', 'pipa dinas')->whereBetween(DB::raw('DATE(created_at)'), array($start, $end))->count();
+            $dataAduan = Aduan::where('kategori_aduan', 'pipa dinas')->where('wilayah_id', $id_wilayah)->where('kategori_nps',  Str::slug($divisi))->whereBetween(DB::raw('DATE(created_at)'), array($start, $end))->count();
             if ($dataAduan >= 1) {
                 $no = str_pad($dataAduan + 1, 4, "0", STR_PAD_LEFT);
                 $noAduan =  $no . "/" . "ADU-DS/" . $wilayah . "/" . $divisi . "/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
@@ -116,7 +116,7 @@ class AduanController extends Controller
                 $noAduan =  $no . "/" . "ADU-DS/" . $wilayah . "/" . $divisi . "/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
             }
         } else {
-            $dataAduan = Aduan::where('kategori_aduan', 'pipa premier / skunder')->whereBetween(DB::raw('DATE(created_at)'), array($start, $end))->count();
+            $dataAduan = Aduan::where('kategori_aduan', 'pipa premier / skunder')->where('wilayah_id', $id_wilayah)->where('kategori_nps',  Str::slug($divisi))->whereBetween(DB::raw('DATE(created_at)'), array($start, $end))->count();
             if ($dataAduan >= 1) {
                 $no = str_pad($dataAduan + 1, 4, "0", STR_PAD_LEFT);
                 $noAduan =  $no . "/" . "ADU-SK/" . $wilayah . "/" . $divisi . "/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
@@ -152,14 +152,21 @@ class AduanController extends Controller
             $divisi = "PKA";
         }
 
-        $dataAduan = Aduan::where('kategori_aduan', 'pipa dinas')->whereBetween(DB::raw('DATE(created_at)'), array($start, $end))->count();
+        $dataAduan = Aduan::where('kategori_aduan', 'pipa dinas')->where('wilayah_id', $id_wilayah)->where('kategori_nps',  Str::slug($divisi))->whereBetween(DB::raw('DATE(created_at)'), array($start, $end))->count();
+        $dataAduanNps = Aduan::where('kategori_nps',  Str::slug($divisi))->where('wilayah_id', $id_wilayah)->whereBetween(DB::raw('DATE(created_at)'), array($start, $end))->count();
+
         if ($dataAduan >= 1) {
             $no = str_pad($dataAduan + 1, 4, "0", STR_PAD_LEFT);
             $noAduan =  $no . "/" . "ADU-DS/" . $wilayah . "/" . $divisi . "/"  . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
-            $noAduanNps =  "NPS/" . $no . "/" . "ADU/" . $wilayah . "/" . $divisi . "/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
         } else {
             $no = str_pad(1, 4, "0", STR_PAD_LEFT);
             $noAduan =  $no . "/" . "ADU-DS/" . $wilayah . "/" . $divisi . "/"  . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
+        }
+        if ($dataAduanNps >= 1) {
+            $no = str_pad($dataAduanNps + 1, 4, "0", STR_PAD_LEFT);
+            $noAduanNps =  "NPS/" . $no . "/" . "ADU/" . $wilayah . "/" . $divisi . "/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
+        } else {
+            $no = str_pad(1, 4, "0", STR_PAD_LEFT);
             $noAduanNps =  "NPS/" . $no . "/" . "ADU/" . $wilayah . "/" . $divisi . "/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
         }
 
@@ -210,7 +217,7 @@ class AduanController extends Controller
             $divisi = "PKA";
         }
         if ($kategori_aduan == 'pipa dinas') {
-            $dataAduan = Aduan::where('kategori_aduan', 'pipa dinas')->whereBetween(DB::raw('DATE(created_at)'), array($start, $end))->count();
+            $dataAduan = Aduan::where('kategori_aduan', 'pipa dinas')->where('wilayah_id', $id_wilayah)->where('kategori_nps',  Str::slug($divisi))->whereBetween(DB::raw('DATE(created_at)'), array($start, $end))->count();
             if ($dataAduan >= 1) {
                 $no = str_pad($dataAduan + 1, 4, "0", STR_PAD_LEFT);
                 $noAduan =  $no . "/" . "ADU-DS/"  . $wilayah . "/" . $divisi . "/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
@@ -219,7 +226,7 @@ class AduanController extends Controller
                 $noAduan =  $no . "/" . "ADU-DS/"  . $wilayah . "/" . $divisi . "/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);
             }
         } else {
-            $dataAduan = Aduan::where('kategori_aduan', 'pipa premier / skunder')->whereBetween(DB::raw('DATE(created_at)'), array($start, $end))->count();
+            $dataAduan = Aduan::where('kategori_aduan', 'pipa premier / skunder')->where('wilayah_id', $id_wilayah)->where('kategori_nps',  Str::slug($divisi))->whereBetween(DB::raw('DATE(created_at)'), array($start, $end))->count();
             if ($dataAduan >= 1) {
                 $no = str_pad($dataAduan + 1, 4, "0", STR_PAD_LEFT);
                 $noAduan =  $no . "/" . "ADU-SK/"  . $wilayah . "/" . $divisi . "/" . date('Y')  . "/" . date('d') . "/" . date('m') . "/" . rand(0, 900);

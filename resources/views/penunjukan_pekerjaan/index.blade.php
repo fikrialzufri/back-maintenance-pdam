@@ -152,12 +152,12 @@
                                                         <i class="nav-icon fa fa-search"></i> Detail
                                                     @endif
                                                 @elseif (auth()->user()->hasRole('asisten-manajer-pengawas'))
-                                                    @if ($item->status_aduan == 'Dikoreksi pengawas')
+                                                    @if ($item->status_aduan == 'Dikoreksi Pengawas')
                                                         <i class="nav-icon fas fa-eye"></i> Koreksi
                                                     @else
                                                         <i class="nav-icon fa fa-search"></i> Detail
                                                     @endif
-                                                @elseif (auth()->user()->hasRole('manajer-pengawas'))
+                                                @elseif (auth()->user()->hasRole('manajer-perawatan'))
                                                     @if ($item->status_aduan == 'Dikoreksi Asmen Pengawas')
                                                         <i class="nav-icon fas fa-eye"></i> Koreksi
                                                     @else

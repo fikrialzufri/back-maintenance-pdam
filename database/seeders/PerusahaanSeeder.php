@@ -244,7 +244,7 @@ class PerusahaanSeeder extends Seeder
         $jabatanKeuangan->save();
 
         $jabatanManajerPengawas = new Jabatan();
-        $jabatanManajerPengawas->nama = 'Manajer Pengawas';
+        $jabatanManajerPengawas->nama = 'Manajer Perawatan';
         $jabatanManajerPengawas->divisi_id = $divisiPengawas->id;
         $jabatanManajerPengawas->wilayah_id = $WilayahSamarinda->id;
         $jabatanManajerPengawas->save();

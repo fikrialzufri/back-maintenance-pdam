@@ -153,67 +153,43 @@
                                     dan dapat dipergunakan sebagaimana mestinya..</span>
                             </p>
                             <div class="row">
-                                <div style='font-size: 20px;' class="col-3">
+                                <div style='font-size: 20px;' class="col-6 text-center">
                                     {{ $tagihan->rekanan }}
                                     <br>
                                     Samarinda, {{ $tanggal }}
                                     <br>
                                     @if ($tagihan->rekanan_url != null)
-                                        <img src="data:image/png;base64, {!! base64_encode(
-                                            QrCode::format('png')->size(100)->generate($tagihan->rekanan_url),
-                                        ) !!} " class="img-square">
+                                        {!! QrCode::size(100)->generate($tagihan->rekanan_url_tdd) !!}
                                     @else
-                                        <img src="data:image/png;base64, {!! base64_encode(
-                                            QrCode::format('png')->size(100)->generate($tagihan->rekanan_url_tdd),
-                                        ) !!} " class="img-square">
+                                        @if ($tagihan->rekanan_url_tdd != null)
+                                            {!! QrCode::size(100)->generate($tagihan->rekanan_url_tdd) !!}
+                                        @endif
                                     @endif
                                     <br>
                                     {{ $tagihan->direktur }}
                                 </div>
 
-                                <div style='font-size: 20px;' class="text-left col">
+                                <div style='font-size: 20px;' class="col-6 text-center">
                                     Samarinda, {{ $tanggal }}
                                     <br>
                                     Pemeriksa Pekerjaan,
                                     <br>
-                                    <div class="d-flex justify-content-start">
-                                        <div class="d">
-                                            @forelse ($tagihan->list_persetujuan as $index => $item)
-                                                @if ($item->jabatan === 'Manajer Perencanaan')
-                                                    @if ($item->url != null)
-                                                        <div class="d-flex align-items-start">
-                                                            <div class="mr-3">
-
-                                                                <img src="data:image/png;base64, {!! base64_encode(
-                                                                    QrCode::format('png')->size(100)->generate($item->url),
-                                                                ) !!} "
-                                                                    class="img-square">
-                                                            </div>
-                                                            <div>
-                                                                <span style=''>{{ ucfirst($item->nama) }}
-                                                                    sebagai {{ $item->jabatan }}</span>
-                                                            </div>
-                                                        </div>
-                                                    @else
-                                                        <div class="d-flex align-items-start">
-                                                            <div class="mr-3">
-
-                                                                <img src="data:image/png;base64, {!! base64_encode(
-                                                                    QrCode::format('png')->size(100)->generate(asset('storage/karyawan/' . $item->tdd)),
-                                                                ) !!} "
-                                                                    class="img-square">
-                                                            </div>
-                                                            <div>
-                                                                <span style=''>{{ ucfirst($item->nama) }}
-                                                                    sebagai {{ $item->jabatan }}</span>
-                                                            </div>
-                                                        </div>
-                                                    @endif
+                                    @forelse ($tagihan->list_persetujuan as $index => $item)
+                                        @if ($item->jabatan === 'Manajer Perencanaan')
+                                            <span>{{ $item->jabatan }}</span>
+                                            <br>
+                                            @if ($item->url != null)
+                                                {!! QrCode::size(100)->generate($item->url) !!}
+                                            @else
+                                                @if ($item->tdd != null)
+                                                    {!! QrCode::size(100)->generate(asset($item->tdd)) !!}
                                                 @endif
-                                            @empty
-                                            @endforelse
-                                        </div>
-                                    </div>
+                                            @endif
+                                            <br>
+                                            <span>{{ ucfirst($item->nama) }}</span>
+                                        @endif
+                                    @empty
+                                    @endforelse
                                 </div>
                             </div>
                             <div class="text-center">
@@ -225,15 +201,11 @@
                                         @if ($item->jabatan === 'Direktur Teknik')
                                             @if ($direktur)
                                                 @if ($direktur->url)
-                                                    <img src="data:image/png;base64, {!! base64_encode(
-                                                        QrCode::format('png')->size(100)->generate($direktur->url),
-                                                    ) !!} "
-                                                        class="img-square">
+                                                    {!! QrCode::size(100)->generate($direktur->url) !!}
                                                 @else
-                                                    <img src="data:image/png;base64, {!! base64_encode(
-                                                        QrCode::format('png')->size(100)->generate(asset('storage/karyawan/' . $direktur->tdd)),
-                                                    ) !!} "
-                                                        class="img-square">
+                                                    @if ($direktur->tdd)
+                                                        {!! QrCode::size(100)->generate(asset($direktur->tdd)) !!}
+                                                    @endif
                                                 @endif
                                             @endif
                                         @endif

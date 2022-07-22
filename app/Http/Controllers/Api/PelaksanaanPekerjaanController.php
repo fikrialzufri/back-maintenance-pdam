@@ -560,7 +560,7 @@ class PelaksanaanPekerjaanController extends Controller
 
             // notif ke karyawan bedasarkan jabatan
             // list jabatan
-            $listJabatan = Jabatan::Where('slug', 'manajer-perencanaan')->orWhere('slug', 'manajer-pengawas')->orWhere('slug', 'asisten-manajer-perencanaan')->orWhere('slug', 'asisten-manajer-pengawas')->orWhere('slug', 'direktur-teknik')->get()->pluck('id')->toArray();
+            $listJabatan = Jabatan::Where('slug', 'manajer-perencanaan')->orWhere('slug', 'manajer-perawatan')->orWhere('slug', 'asisten-manajer-perencanaan')->orWhere('slug', 'asisten-manajer-pengawas')->orWhere('slug', 'direktur-teknik')->get()->pluck('id')->toArray();
 
             // list karyawan bedasarkan jabatan
             $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get();

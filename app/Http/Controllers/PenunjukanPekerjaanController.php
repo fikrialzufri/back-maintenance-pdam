@@ -237,7 +237,7 @@ class PenunjukanPekerjaanController extends Controller
                                     return $pekerjaan->status_order_asem_pengawas;
                                 })
                             );
-                        } elseif (auth()->user()->hasRole('manajer-pengawas')) {
+                        } elseif (auth()->user()->hasRole('manajer-perawatan')) {
                             $penunjukan = $penunjukan->setCollection(
                                 $penunjukan->sortBy(function ($pekerjaan) {
                                     return $pekerjaan->status_order_manajer_pengawas;
@@ -439,7 +439,7 @@ class PenunjukanPekerjaanController extends Controller
                         $tombolEdit = 'bisa';
                         $asmenpengawas = true;
                     }
-                } elseif (auth()->user()->hasRole('manajer-pengawas')) {
+                } elseif (auth()->user()->hasRole('manajer-perawatan')) {
                     if ($pekerjaanUtama->status  === 'koreksi asmen') {
                         $tombolEdit = 'bisa';
                     }
@@ -632,7 +632,7 @@ class PenunjukanPekerjaanController extends Controller
                 // notif ke karyawan bedasarkan jabatan
                 // list jabatan
                 $listJabatan = Jabatan::Where('slug', 'manajer-perencanaan')
-                    ->orWhere('slug', 'manajer-pengawas')
+                    ->orWhere('slug', 'manajer-perawatan')
                     ->orWhere('slug', 'asisten-manajer-perencanaan')
                     ->orWhere('slug', 'asisten-manajer-pengawas')
                     ->orWhere('slug', 'direktur-teknik')
@@ -749,7 +749,7 @@ class PenunjukanPekerjaanController extends Controller
 
                 // notif ke karyawan bedasarkan jabatan
                 // list jabatan
-                $listJabatan = Jabatan::Where('slug', 'manajer-perencanaan')->orWhere('slug', 'manajer-pengawas')->orWhere('slug', 'asisten-manajer-perencanaan')->orWhere('slug', 'asisten-manajer-pengawas')->orWhere('slug', 'direktur-teknik')->get()->pluck('id')->toArray();
+                $listJabatan = Jabatan::Where('slug', 'manajer-perencanaan')->orWhere('slug', 'manajer-perawatan')->orWhere('slug', 'asisten-manajer-perencanaan')->orWhere('slug', 'asisten-manajer-pengawas')->orWhere('slug', 'direktur-teknik')->get()->pluck('id')->toArray();
 
                 // list karyawan bedasarkan jabatan
                 $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get();
@@ -843,7 +843,7 @@ class PenunjukanPekerjaanController extends Controller
 
                     // notif ke karyawan bedasarkan jabatan
                     // list jabatan
-                    $listJabatan = Jabatan::Where('slug', 'manajer-perencanaan')->orWhere('slug', 'manajer-pengendalian-kehilangan-air')->orWhere('slug', 'manajer-pengawas')->orWhere('slug', 'asisten-manajer-perencanaan')->orWhere('slug', 'asisten-manajer-pengawas')->orWhere('slug', 'direktur-teknik')->get()->pluck('id')->toArray();
+                    $listJabatan = Jabatan::Where('slug', 'manajer-perencanaan')->orWhere('slug', 'manajer-pengendalian-kehilangan-air')->orWhere('slug', 'manajer-perawatan')->orWhere('slug', 'asisten-manajer-perencanaan')->orWhere('slug', 'asisten-manajer-pengawas')->orWhere('slug', 'direktur-teknik')->get()->pluck('id')->toArray();
 
                     // list karyawan bedasarkan jabatan
                     $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get();
@@ -998,7 +998,7 @@ class PenunjukanPekerjaanController extends Controller
                             $status = 'koreksi asmen';
                         }
                         // $status = $PelaksanaanPekerjaan->status;
-                    } else if (auth()->user()->hasRole('manajer-pengawas')) {
+                    } else if (auth()->user()->hasRole('manajer-perawatan')) {
                         // pekerjaan
                         if ($PelaksanaanPekerjaan->status === 'koreksi asmen') {
                             $status =  'dikoreksi';
@@ -1342,7 +1342,7 @@ class PenunjukanPekerjaanController extends Controller
 
                                 $jabatanWilayah =  $jabatanWilayah->orWhere('wilayah_id', $aduan->wilayah_id)
                                     ->orWhere('slug', 'manajer-distribusi')
-                                    ->orWhere('slug', 'manajer-pengawas')
+                                    ->orWhere('slug', 'manajer-perawatan')
                                     ->orWhere('slug', 'asisten-manajer-perencanaan')
                                     ->orWhere('slug', 'asisten-manajer-pengawas')
                                     ->pluck('id')

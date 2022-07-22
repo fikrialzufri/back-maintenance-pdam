@@ -392,7 +392,7 @@ class Aduan extends Model
                         $btn  = "btn-danger";
                     }
                 } else if ($this->hasPenunjukanPekerjaan->status == 'koreksi asmen') {
-                    if (auth()->user()->hasRole('manajer-pengawas')) {
+                    if (auth()->user()->hasRole('manajer-perawatan')) {
                         $btn  = "btn-danger";
                     }
                 } else if ($this->hasPenunjukanPekerjaan->status == 'dikoreksi') {
