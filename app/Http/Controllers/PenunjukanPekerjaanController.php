@@ -193,9 +193,10 @@ class PenunjukanPekerjaanController extends Controller
                     }
 
                     if ($rekananid) {
-                        $PelaksanaanPekerjaan = PelaksanaanPekerjaan::where('rekanan_id', $rekananid)->get()->pluck('penunjukan_pekerjaan_id')->toArray();
 
-                        $penunjukanAduan = $penunjukanAduan->whereIn('id', $PelaksanaanPekerjaan);
+                        $penunjukanAduan = $penunjukanAduan->where('rekanan_id', $rekananid)->pluck('aduan_id')->toArray();
+
+                        $query->whereIn('id', $penunjukanAduan);
                     }
 
                     if (request()->spk != '' || request()->tanggal != '') {
