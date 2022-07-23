@@ -86,7 +86,17 @@ class PenunjukanPekerjaanController extends Controller
             $query->where('kategori_nps', 'pka');
         }
         if ($search) {
-            $query->where('no_ticket', 'like', "%" . $search . "%")->orWhere('no_aduan', 'like', "%" . $search . "%");
+            $query->where(function ($query) use ($search) {
+                $query->where('no_ticket', 'like', "%" . $search . "%")
+                    ->orWhere('no_aduan', 'like', "%" . $search . "%")
+                    ->orWhere('nama_pelanggan', 'like', "%" . $search . "%")
+                    ->orWhere('no_pelanggan', 'like', "%" . $search . "%")
+                    ->orWhere('detail_lokasi', 'like', "%" . $search . "%")
+                    ->orWhere('nps', 'like', "%" . $search . "%")
+                    ->orWhere('atas_nama', 'like', "%" . $search . "%")
+                    ->orWhere('sumber_informasi', 'like', "%" . $search . "%")
+                    ->orWhere('no_hp', 'like', "%" . $search . "%");
+            });
         }
         if ($kategori) {
             $query->where('kategori_aduan', 'like', "%" . $kategori . "%");
