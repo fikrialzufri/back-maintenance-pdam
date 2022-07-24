@@ -12,20 +12,22 @@
                         </h3>
                         {{ $data->appends(request()->input())->links() }}
                         <div class="">
-                            @if ($tambah == 'true')
-                                @canany(['edit-' . $route, 'delete-' . $route])
-                                    <a href="{{ route($route . '.create') }}"
-                                        class="btn btn-sm btn-primary float-right text-light">
-                                        <i class="fa fa-plus"></i> Tambah Data
-                                    </a>
-                                @endcan
-                            @endif
-                            @if ($upload == 'true')
-                                <a href="{{ route($route . '.upload') }}"
-                                    class="btn btn-sm btn-warning float-right text-light mr-5">
-                                    <i class="fa fa-file"></i> Upload
+                            @canany(['import-' . str_replace('_', '-', $route)])
+                                <a href="#" class="btn btn-sm btn-warning float-right text-light mr-5">
+                                    <i class="fa fa-file"></i> Import
                                 </a>
-                            @endif
+                            @endcan
+                            @canany(['download-' . str_replace('_', '-', $route)])
+                                <a href="#" class="btn btn-sm btn-danger float-right text-light mr-5">
+                                    <i class="fa fa-file"></i> Download
+                                </a>
+                            @endcan
+                            @canany(['create-' . str_replace('_', '-', $route)])
+                                <a href="{{ route($route . '.create') }}?element_id={{ $Element_id }}"
+                                    class="btn btn-sm btn-primary float-right text-light">
+                                    <i class="fa fa-plus"></i> Tambah Data
+                                </a>
+                            @endcan
                         </div>
                     </div>
                     <!-- /.card-header -->
