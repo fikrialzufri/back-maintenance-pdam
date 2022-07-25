@@ -2144,7 +2144,7 @@
                         id="keterangan_pengawas_${id}" value="${keterangan}"
                         placeholder="Keterangan Pengawas" class="form-control ">
                     </td>
-                    <td>
+                    <td width="10">
                             <button type="button"
                                 class="btn btn-danger btn-xs text-center btn-hapus"
                                 data-pekerjaanutama="${pekerjaanUtama}"
@@ -2333,7 +2333,7 @@
                         placeholder="Keterangan Pengawas" class="form-control ">
                         <input type="hidden" name="jenis_harga[${id}]" value="${jenis_harga}" />
                     </td>
-                    <td>
+                    <td width="10">
                         <button type="button"
                             class="btn btn-danger btn-xs text-center btn-hapus"
                             data-pekerjaanutama="${pekerjaanUtama}"
