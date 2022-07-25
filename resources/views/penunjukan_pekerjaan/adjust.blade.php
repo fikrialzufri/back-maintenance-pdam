@@ -1249,7 +1249,7 @@
                                 placeholder="Harga Perencanaan">
                         </div>
                     </td>
-                    <td>
+                    <td width="10">
                         <input type="text" name="keterangan_perencanaan[${id}]"
                         id="keterangan_perencanaan_${id}" value="${keterangan}"
                         placeholder="Keterangan Perencanaan" class="form-control ">
@@ -1473,7 +1473,7 @@
                                 placeholder="Harga Galian Perencanaan">
                         </div>
                     </td>
-                    <td>
+                    <td width="10">
                         <button type="button"
                             class="btn btn-danger btn-xs text-center btn-hapus"
                             data-pekerjaanutama="${pekerjaanUtama}"
