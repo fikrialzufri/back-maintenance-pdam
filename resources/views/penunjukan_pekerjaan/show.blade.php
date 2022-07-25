@@ -86,6 +86,7 @@
                                                     <div class="time">{{ $item->tanggal_disetujui }}</div>
                                                     <div class="desc">
                                                         <p>{{ $item->nama }} - {{ $item->jabatan }}</p>
+
                                                     </div>
                                                 </li>
                                             @empty
@@ -2081,15 +2082,11 @@
             }
 
             $(document).on('keypress', '.numberOnly', function(event) {
-                if (event.which < 46 ||
-                    event.which > 59) {
-                    event.preventDefault().toLocaleString("id");
-                } // prevent if not number/dot
-
-                if (event.which == 46 &&
-                    $(this).val().indexOf('.') != -1) {
-                    event.preventDefault().toLocaleString("id");;
-                } // prevent if already dot
+                if (/\d+|,+|[/b]+|-+/i.test(event.key)) {
+                    return true;
+                } else {
+                    return false;
+                }
             })
 
             $(document).ready(function() {

@@ -1180,11 +1180,9 @@
             }
 
             $(document).on('keypress', '.numberOnly', function(event) {
-                if (/\d+|,+|[/b]+|-+/i.test(e.key)) {
-
-                    console.log("character accepted: " + e.key)
+                if (/\d+|,+|[/b]+|-+/i.test(event.key)) {
+                    return true;
                 } else {
-                    console.log("illegal character detected: " + e.key)
                     return false;
                 }
             })

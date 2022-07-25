@@ -23,8 +23,7 @@
                                 </a>
                             @endcan
                             @canany(['create-' . str_replace('_', '-', $route)])
-                                <a href="{{ route($route . '.create') }}?element_id={{ $Element_id }}"
-                                    class="btn btn-sm btn-primary float-right text-light">
+                                <a href="{{ route($route . '.create') }}" class="btn btn-sm btn-primary float-right text-light">
                                     <i class="fa fa-plus"></i> Tambah Data
                                 </a>
                             @endcan

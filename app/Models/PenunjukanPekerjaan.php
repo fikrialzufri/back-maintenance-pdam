@@ -404,12 +404,13 @@ class PenunjukanPekerjaan extends Model
                         'tdd' => $value->karyawan->tdd,
                         'is_setuju' => true,
                         'created_at' => $value->pivot->created_at,
-                        'tanggal_disetujui' => isset($value->pivot->created_at) ? tanggal_indonesia($value->pivot->created_at) . " - " . Carbon::parse($value->pivot->created_at)->format('H:i') : ''
+                        'updated_at' => $value->pivot->updated_at,
+                        'tanggal_disetujui' => isset($value->pivot->updated_at) ? tanggal_indonesia($value->pivot->updated_at) . " - " . Carbon::parse($value->pivot->updated_at)->format('H:i') : ''
                     ];
                 }
             }
 
-            $collect = collect($hasUserMany)->sortBy('created_at');
+            $collect = collect($hasUserMany)->sortBy('updated_at');
             $nomor = 0;
             foreach ($collect as $key => $value) {
                 $result[$nomor] = (object) [
@@ -420,6 +421,7 @@ class PenunjukanPekerjaan extends Model
                     'tdd' => $value->tdd,
                     'is_setuju' => $value->is_setuju,
                     'created_at' => $value->created_at,
+                    'updated_at' => $value->updated_at,
                     'tanggal_disetujui' => $value->tanggal_disetujui
                 ];
                 $nomor++;
