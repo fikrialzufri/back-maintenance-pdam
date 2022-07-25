@@ -487,7 +487,7 @@ class TagihanController extends Controller
         // ->where('status', 'selesai koreksi');
         $query
             ->where(function ($sql) {
-                $sql->orWhere('status', 'selesai koreksi')->orWhere('status', 'diadjust');
+                $sql->where('status', 'selesai koreksi')->orWhere('status', 'diadjust');
             })
             ->where('tagihan', 'tidak')
             ->whereBetween(DB::raw('DATE(tanggal_selesai)'), array($start, $end));

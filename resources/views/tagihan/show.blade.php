@@ -230,7 +230,7 @@
                                                         <tbody>
                                                             @forelse ($item->hasItem as $nomor => $barang)
                                                                 <tr id="{{ $barang->slug }}_{{ $item->id }}"
-                                                                    class="{{ $barang->status === 'diadjust' ? 'bg-primary' : '' }} ">
+                                                                    class="{{ $barang->status === 'diadjust' ? 'table-danger' : '' }} ">
                                                                     <td>{{ $nomor + 1 }}
                                                                     </td>
                                                                     <td>{{ $barang->nama }}</td>
@@ -325,7 +325,7 @@
 
                                                             @forelse ($item->hasGalianPekerjaan as $key => $galian)
                                                                 <tr
-                                                                    class="{{ $item->status === 'diadjust' ? 'bg-primary' : '' }} ">
+                                                                    class="{{ $item->status === 'diadjust' ? 'table-danger' : '' }} ">
                                                                     <td>{{ $key + 1 }}
                                                                     </td>
                                                                     <td>
