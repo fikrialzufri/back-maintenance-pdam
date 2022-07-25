@@ -1088,7 +1088,6 @@ class PenunjukanPekerjaanController extends Controller
                             $datahargagalian = [];
                             $dataIdGalianPekerjaan = [];
                             if (isset($request->panjang_pengawas)) {
-                                # code...
                                 foreach ($request->panjang_pengawas as $in => $gal) {
                                     $cekItemGalian[$in] = GalianPekerjaan::where('item_id', $in)->where('pelaksanaan_pekerjaan_id', $PelaksanaanPekerjaan->id)->first();
 
@@ -1159,10 +1158,10 @@ class PenunjukanPekerjaanController extends Controller
                                     $newGajianPengawas[$in]->save();
                                 }
                                 // end galian
-                                if ($request->qty_pengawas) {
-                                    $PelaksanaanPekerjaan->hasItem()->sync($listitem);
-                                    $PelaksanaanPekerjaan->hasItemPengawas()->sync($listitemPengawas);
-                                }
+                            }
+                            if ($request->qty_pengawas) {
+                                $PelaksanaanPekerjaan->hasItem()->sync($listitem);
+                                $PelaksanaanPekerjaan->hasItemPengawas()->sync($listitemPengawas);
                             }
                         }
                         if (auth()->user()->hasRole('asisten-manajer-pengawas')) {

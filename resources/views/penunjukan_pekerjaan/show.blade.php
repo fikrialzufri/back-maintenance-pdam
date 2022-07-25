@@ -78,7 +78,7 @@
                                         </div>
                                     </div>
                                     <div class="col-12 timeline">
-                                        <h6>List Persetujuan Pekerjaan</h6>
+                                        <h6>List Persetujuan dan Koreksi Pekerjaan</h6>
                                         <ul>
                                             @forelse ($list_persetujuan as $item)
                                                 <li>
