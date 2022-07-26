@@ -553,7 +553,7 @@ class PelaksanaanPekerjaanController extends Controller
                 // notif ke staf pengawas
                 if ($rekanan->hasKaryawan) {
                     foreach (collect($rekanan->hasKaryawan) as $key => $value) {
-                        $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $value->user_id);
+                        $this->notification($penunjukanPekerjaan->id, $penunjukanPekerjaan->slug, $title, $body, $modul, auth()->user()->id, $value->user_id);
                     }
                 }
             }
