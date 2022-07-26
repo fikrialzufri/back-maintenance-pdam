@@ -470,7 +470,7 @@
                                                                         id="qty_perencanaan_{{ $pekerjaan->pivot->item_id }}"
                                                                         placeholder="Koreksi Perecanaan Adjust"
                                                                         class="form-control numberOnly"
-                                                                        @if (isset($daftarPekerjaan->hasItemAsmenPengawas[$key])) value="{{ $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty }}" @endif>
+                                                                        @if (isset($daftarPekerjaan->hasItemAsmenPengawas[$key])) value="{{ str_replace(',', '.', $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty) }}" @endif>
                                                                 </td>
                                                                 <td>
                                                                     <div class="input-group mb-2 mr-sm-2">
@@ -767,21 +767,21 @@
                                                                         name="panjang_perencanaan[{{ $galian->id }}]"
                                                                         id="panjang_perencanaan_{{ $galian->id }}"
                                                                         placeholder="Panjang" class="form-control numberOnly"
-                                                                        value="{{ $galian->galian_asmen_pengawas_panjang }}">
+                                                                        value="{{ str_replace(',', '.', $galian->galian_asmen_pengawas_panjang) }}">
                                                                 </td>
                                                                 <td>
                                                                     <input type="text"
                                                                         name="lebar_perencanaan[{{ $galian->id }}]"
                                                                         id="lebar_perencanaan_{{ $galian->id }}"
                                                                         placeholder="Lebar" class="form-control numberOnly"
-                                                                        value="{{ $galian->galian_asmen_pengawas_lebar }}">
+                                                                        value="{{ str_replace(',', '.', $galian->galian_asmen_pengawas_lebar) }}">
                                                                 </td>
                                                                 <td>
                                                                     <input type="text"
                                                                         name="dalam_perencanaan[{{ $galian->id }}]"
                                                                         id="dalam_perencanaan_{{ $galian->id }}"
                                                                         placeholder="dalam" class="form-control numberOnly"
-                                                                        value="{{ $galian->galian_asmen_pengawas_dalam }}">
+                                                                        value="{{ str_replace(',', '.', $galian->galian_asmen_pengawas_dalam) }}">
                                                                 </td>
                                                                 <td></td>
                                                                 <td>

@@ -1016,11 +1016,9 @@ class PenunjukanPekerjaanController extends Controller
                         // $status = $PelaksanaanPekerjaan->status;
                     } else if (auth()->user()->hasRole('manajer-perawatan')) {
                         // pekerjaan
-                        if ($PelaksanaanPekerjaan->status === 'koreksi asmen') {
-                            $status =  'dikoreksi';
-                        }
+                        $status =  'dikoreksi';
                         // $status = $PelaksanaanPekerjaan->status;
-                    } else {
+                    } else if (auth()->user()->hasRole('asisten-manajer-pengawas')) {
                         if ($PelaksanaanPekerjaan->status ===  'dikoreksi') {
                             $status = 'selesai koreksi';
                             $PelaksanaanPekerjaan->keterangan_barang = '';
