@@ -706,7 +706,7 @@ class PelaksanaanPekerjaanController extends Controller
             DB::commit();
             $slug = $request->slug;
             $keterangan = $request->keterangan;
-            $jumlah = $request->jumlah != '' ? $request->jumlah : 1;
+            $jumlah = $request->jumlah != '' ? (float) str_replace(",", ".", $request->jumlah) : 1;
 
             $id_barang = $request->id_barang;
             $listitem = [];
@@ -828,9 +828,9 @@ class PelaksanaanPekerjaanController extends Controller
         $message = 'Gagal Menyimpan Galian Pekerjaan';
         $user_id = auth()->user()->id;
         $slug = $request->slug;
-        $panjang = $request->panjang;
-        $lebar = $request->lebar;
-        $dalam = $request->dalam;
+        $panjang = str_replace(",", ".", $request->panjang);
+        $lebar = str_replace(",", ".", $request->lebar);
+        $dalam = str_replace(",", ".", $request->dalam);
         $item = $request->id_item;
 
         $dataItem = Item::find($item);

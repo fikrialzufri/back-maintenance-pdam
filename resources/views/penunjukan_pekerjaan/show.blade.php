@@ -1974,6 +1974,13 @@
             placeholder: '--- Pilih Pekerjaan ---',
             width: '100%'
         });
+        $(document).on('keypress', '.numberOnly', function(event) {
+            if (/\d+|,+|[/b]+|-+/i.test(event.key)) {
+                return true;
+            } else {
+                return false;
+            }
+        })
     </script>
     @if ($aduan->status != 'draft')
         <script>
@@ -2081,13 +2088,7 @@
                 })
             }
 
-            $(document).on('keypress', '.numberOnly', function(event) {
-                if (/\d+|,+|[/b]+|-+/i.test(event.key)) {
-                    return true;
-                } else {
-                    return false;
-                }
-            })
+
 
             $(document).ready(function() {
 
@@ -2102,15 +2103,7 @@
 
 
                 $('#jumlah_pekerjaan').keypress(function(event) {
-                    if (event.which < 46 ||
-                        event.which > 59) {
-                        event.preventDefault();
-                    } // prevent if not number/dot
 
-                    if (event.which == 46 &&
-                        $(this).val().indexOf('.') != -1) {
-                        event.preventDefault();
-                    } // prevent if already dot
                     $(this).removeClass("is-invalid");
                 })
 

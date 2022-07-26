@@ -928,18 +928,20 @@ class PenunjukanPekerjaanController extends Controller
                                 ];
                             } else {
 
-                                $listitem[$key] = [
-                                    'keterangan' => null,
-                                    'harga' => isset($request->jenis_harga[$key]) && $request->jenis_harga[$key] === "siang" ? $dataItem[$key]->harga : $dataItem[$key]->harga_malam,
-                                    'qty' => 0,
-                                    'total' => (float) $value * (float) isset($request->jenis_harga[$key]) && $request->jenis_harga[$key] === "siang" ? $dataItem[$key]->harga : $dataItem[$key]->harga_malam,
-                                ];
-                                $listitemPengawas[$key] = [
-                                    'keterangan' => isset($request->keterangan_pengawas[$key]) ? $request->keterangan_pengawas[$key] : null,
-                                    'harga' => isset($request->jenis_harga[$key]) && $request->jenis_harga[$key] === "siang" ? $dataItem[$key]->harga : $dataItem[$key]->harga_malam,
-                                    'qty' => str_replace(",", ".", $value),
-                                    'total' => (float) isset($request->jenis_harga[$key]) && $request->jenis_harga[$key] === "siang" ? $dataItem[$key]->harga : $dataItem[$key]->harga_malam * str_replace(",", ".", $value)
-                                ];
+                                if ($dataItem[$key]) {
+                                    $listitem[$key] = [
+                                        'keterangan' => null,
+                                        'harga' => isset($request->jenis_harga[$key]) && $request->jenis_harga[$key] === "siang" ? $dataItem[$key]->harga : $dataItem[$key]->harga_malam,
+                                        'qty' => 0,
+                                        'total' => (float) $value * (float) isset($request->jenis_harga[$key]) && $request->jenis_harga[$key] === "siang" ? $dataItem[$key]->harga : $dataItem[$key]->harga_malam,
+                                    ];
+                                    $listitemPengawas[$key] = [
+                                        'keterangan' => isset($request->keterangan_pengawas[$key]) ? $request->keterangan_pengawas[$key] : null,
+                                        'harga' => isset($request->jenis_harga[$key]) && $request->jenis_harga[$key] === "siang" ? $dataItem[$key]->harga : $dataItem[$key]->harga_malam,
+                                        'qty' => str_replace(",", ".", $value),
+                                        'total' => (float) isset($request->jenis_harga[$key]) && $request->jenis_harga[$key] === "siang" ? $dataItem[$key]->harga : $dataItem[$key]->harga_malam * str_replace(",", ".", $value)
+                                    ];
+                                }
                             }
                         }
                         // end pekerjaan
@@ -985,25 +987,26 @@ class PenunjukanPekerjaanController extends Controller
                                         ];
                                     }
                                 } else {
-                                    if ($dataItem[$key]) { }
-                                    $listitem[$key] = [
-                                        'keterangan' => null,
-                                        'harga' => isset($request->jenis_harga[$key]) && $request->jenis_harga[$key] === "siang" ? $dataItem[$key]->harga : $dataItem[$key]->harga_malam,
-                                        'qty' => 0,
-                                        'total' => (float) isset($request->jenis_harga[$key]) && $request->jenis_harga[$key] === "siang" ? $dataItem[$key]->harga : $dataItem[$key]->harga_malam * str_replace(",", ".", $value),
-                                    ];
-                                    $listitemPengawas[$key] = [
-                                        'keterangan' => null,
-                                        'harga' => isset($request->jenis_harga[$key]) && $request->jenis_harga[$key] === "siang" ? $dataItem[$key]->harga : $dataItem[$key]->harga_malam,
-                                        'qty' => 0,
-                                        'total' => (float) isset($request->jenis_harga[$key]) && $request->jenis_harga[$key] === "siang" ? $dataItem[$key]->harga : $dataItem[$key]->harga_malam * str_replace(",", ".", $value),
-                                    ];
-                                    $listitemAsmenPengawas[$key] = [
-                                        'keterangan' => isset($request->keterangan_pengawas[$key]) ? $request->keterangan_pengawas[$key] : null,
-                                        'harga' => isset($request->jenis_harga[$key]) && $request->jenis_harga[$key] === "siang" ? $dataItem[$key]->harga : $dataItem[$key]->harga_malam,
-                                        'qty' => str_replace(",", ".", $value),
-                                        'total' => (float) isset($request->jenis_harga[$key]) && $request->jenis_harga[$key] === "siang" ? $dataItem[$key]->harga : $dataItem[$key]->harga_malam * str_replace(",", ".", $value),
-                                    ];
+                                    if ($dataItem[$key]) {
+                                        $listitem[$key] = [
+                                            'keterangan' => null,
+                                            'harga' => isset($request->jenis_harga[$key]) && $request->jenis_harga[$key] === "siang" ? $dataItem[$key]->harga : $dataItem[$key]->harga_malam,
+                                            'qty' => 0,
+                                            'total' => (float) isset($request->jenis_harga[$key]) && $request->jenis_harga[$key] === "siang" ? $dataItem[$key]->harga : $dataItem[$key]->harga_malam * str_replace(",", ".", $value),
+                                        ];
+                                        $listitemPengawas[$key] = [
+                                            'keterangan' => null,
+                                            'harga' => isset($request->jenis_harga[$key]) && $request->jenis_harga[$key] === "siang" ? $dataItem[$key]->harga : $dataItem[$key]->harga_malam,
+                                            'qty' => 0,
+                                            'total' => (float) isset($request->jenis_harga[$key]) && $request->jenis_harga[$key] === "siang" ? $dataItem[$key]->harga : $dataItem[$key]->harga_malam * str_replace(",", ".", $value),
+                                        ];
+                                        $listitemAsmenPengawas[$key] = [
+                                            'keterangan' => isset($request->keterangan_pengawas[$key]) ? $request->keterangan_pengawas[$key] : null,
+                                            'harga' => isset($request->jenis_harga[$key]) && $request->jenis_harga[$key] === "siang" ? $dataItem[$key]->harga : $dataItem[$key]->harga_malam,
+                                            'qty' => str_replace(",", ".", $value),
+                                            'total' => (float) isset($request->jenis_harga[$key]) && $request->jenis_harga[$key] === "siang" ? $dataItem[$key]->harga : $dataItem[$key]->harga_malam * str_replace(",", ".", $value),
+                                        ];
+                                    }
                                 }
                             }
 
@@ -1106,7 +1109,7 @@ class PenunjukanPekerjaanController extends Controller
                                     if ($cekItemGalian[$in]) {
                                         $harga_satuan[$in] =  $cekItemGalian[$in]->harga_satuan;
 
-                                        $dataTotalGalian[$in] = $request->dalam_pengawas[$in] === "0" ? (str_replace(",", ".", $gal) * $datalebar[$in]) *  $harga_satuan[$in] : (str_replace(",", ".", $gal) * $datalebar[$in] * $request->dalam_pengawas[$in]) *  $harga_satuan[$in];
+                                        $dataTotalGalian[$in] = $request->dalam_pengawas[$in] === "0.00" ? (str_replace(",", ".", $gal) * $datalebar[$in]) *  $harga_satuan[$in] : (str_replace(",", ".", $gal) * $datalebar[$in] *  $datadalam[$in]) *  $harga_satuan[$in];
 
                                         // update galian
                                         $cekItemGalian[$in]->total = $dataTotalGalian[$in];
@@ -1116,7 +1119,7 @@ class PenunjukanPekerjaanController extends Controller
                                     } else {
 
                                         // data total
-                                        $dataTotalGalian[$in] = $request->dalam_pengawas[$in] === "0" ? (str_replace(",", ".", $gal) * $datalebar[$in]) *  $harga_satuan[$in] : (str_replace(",", ".", $gal) * $datalebar[$in] * $request->dalam_pengawas[$in]) *  $harga_satuan[$in];
+                                        $dataTotalGalian[$in] = $request->dalam_pengawas[$in] === "0.00" ? (str_replace(",", ".", $gal) * $datalebar[$in]) *  $harga_satuan[$in] : (str_replace(",", ".", $gal) * $datalebar[$in] *  $datadalam[$in]) *  $harga_satuan[$in];
 
                                         // create galian
                                         $newGajian[$in] = new GalianPekerjaan;
@@ -1159,7 +1162,7 @@ class PenunjukanPekerjaanController extends Controller
                                 }
                                 // end galian
                             }
-                            if ($request->qty_pengawas) {
+                            if ($listitem || $listitemPengawas) {
                                 $PelaksanaanPekerjaan->hasItem()->sync($listitem);
                                 $PelaksanaanPekerjaan->hasItemPengawas()->sync($listitemPengawas);
                             }
@@ -1181,9 +1184,9 @@ class PenunjukanPekerjaanController extends Controller
                                     $cekItemGalian[$in] = GalianPekerjaan::where('item_id', $in)->where('pelaksanaan_pekerjaan_id', $PelaksanaanPekerjaan->id)->first();
                                     $cekItemGalianPengawas[$in] = GalianPekerjaan::where('item_id', $in)->where('pelaksanaan_pekerjaan_id', $PelaksanaanPekerjaan->id)->first();
 
-                                    $datapanjang[$in] = $gal;
-                                    $datalebar[$in] = isset($request->lebar_pengawas[$in]) ? $request->lebar_pengawas[$in] : 0;
-                                    $datadalam[$in] = isset($request->dalam_pengawas[$in]) ? $request->dalam_pengawas[$in] : 0;
+                                    $datapanjang[$in] =  (float) str_replace(",", ".", $gal);
+                                    $datalebar[$in] = isset($request->lebar_pengawas[$in]) ?  (float) str_replace(",", ".", $request->lebar_pengawas[$in]) : 0;
+                                    $datadalam[$in] = isset($request->dalam_pengawas[$in]) ?  (float) str_replace(",", ".", $request->dalam_pengawas[$in]) : 0;
                                     $dataketerangan[$in] = isset($request->keterangan_pengawas_galian[$in]) ? $request->keterangan_pengawas_galian[$in] : null;
 
                                     $datahargagalian[$in] = isset($request->jenis_harga_galian[$in]) ? $request->jenis_harga_galian[$in] : null;
@@ -1194,9 +1197,10 @@ class PenunjukanPekerjaanController extends Controller
 
 
                                     if ($cekItemGalian[$in]) {
-                                        $harga_satuan[$in] =  $cekItemGalian[$in]->harga_satuan;
+                                        $harga_satuan[$in] =   (float)  $cekItemGalian[$in]->harga_satuan;
 
-                                        $dataTotalGalian[$in] = $request->dalam_pengawas[$in] === "0" ? ($gal * $datalebar[$in]) *  $harga_satuan[$in] : ($gal * $datalebar[$in] * $request->dalam_pengawas[$in]) *  $harga_satuan[$in];
+                                        $dataTotalGalian[$in] =
+                                            $request->dalam_pengawas[$in] === 0.00 ? ($datapanjang[$in] * $datalebar[$in]) *  $harga_satuan[$in] : ($datapanjang[$in] * $datalebar[$in] *  $datadalam[$in]) *  $harga_satuan[$in];
 
                                         // update galian
                                         $cekItemGalian[$in]->total = $dataTotalGalian[$in];
@@ -1209,7 +1213,7 @@ class PenunjukanPekerjaanController extends Controller
                                     } else {
 
                                         // data total
-                                        $dataTotalGalian[$in] = $request->dalam_pengawas[$in] === "0" ? ($gal * $datalebar[$in]) *  $harga_satuan[$in] : ($gal * $datalebar[$in] * $request->dalam_pengawas[$in]) *  $harga_satuan[$in];
+                                        $dataTotalGalian[$in] = $request->dalam_pengawas[$in] === "0" ? ($datapanjang[$in] * $datalebar[$in]) *  $harga_satuan[$in] : ($datapanjang[$in] * $datalebar[$in] *  $datadalam[$in]) *  $harga_satuan[$in];
 
                                         // create galian
                                         $newGajian[$in] = new GalianPekerjaan;
@@ -1252,7 +1256,7 @@ class PenunjukanPekerjaanController extends Controller
                                 }
                             }
                             // end galian
-                            if ($request->qty_pengawas) {
+                            if ($listitem || $listitemPengawas || $listitemAsmenPengawas) {
                                 $PelaksanaanPekerjaan->hasItem()->sync($listitem);
                                 $PelaksanaanPekerjaan->hasItemPengawas()->sync($listitemPengawas);
                                 $PelaksanaanPekerjaan->hasItemAsmenPengawas()->sync($listitemAsmenPengawas);
