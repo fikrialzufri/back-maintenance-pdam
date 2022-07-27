@@ -924,7 +924,18 @@
                                                                     @endif
 
                                                                 </tr>
-                                                                <tr>
+                                                                <tr @if (isset($daftarPekerjaan->hasItemPerencanaanAdujst[$key]) &&
+                                                                    isset($daftarPekerjaan->hasItemAsmenPengawas[$key])) @if ($daftarPekerjaan->hasItemPerencanaanAdujst[$key]->volume !=
+                                                                    $daftarPekerjaan->hasItemAsmenPengawas[$key]->volume)
+                                                                                class="table-danger"
+                                                                                {{ $daftarPekerjaan->hasItemPerencanaanAdujst[$key]->pivot->qty }}
+                                                                                {{ $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty }}
+                                                                                {{ $daftarPekerjaan->hasItemPerencanaan[$key]->pivot->harga }}
+                                                                                {{ $daftarPekerjaan->hasItemPerencanaanAdujst[$key]->pivot->harga }}
+                                                                            @elseif ($daftarPekerjaan->hasItemPerencanaanAdujst[$key]->pivot->harga !=
+                                                                                $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->harga)
+                                                                                class="table-danger" @endif
+                                                                    @endif>
 
                                                                     @if (isset($daftarPekerjaan->hasItemPerencanaanAdujst[$key]))
                                                                         <td> {{ str_replace('.', ',', $daftarPekerjaan->hasItemPerencanaanAdujst[$key]->pivot->qty) }}
@@ -1663,7 +1674,8 @@
                                                                     </td>
 
                                                                 </tr>
-                                                                <tr>
+                                                                <tr
+                                                                    class="{{ $galian->volume_adjust != $galian->volume_asmen ? 'table-danger' : '' }} {{ $galian->galian_perencanaan_harga_satuan != $galian->galian_perencanaan_adjust_harga_satuan ? 'table-danger' : '' }}">
                                                                     <td>{{ str_replace('.', ',', $galian->galian_perencanaan_adjust_panjang) }}
                                                                     </td>
                                                                     <td>{{ str_replace('.', ',', $galian->galian_perencanaan_adjust_lebar) }}

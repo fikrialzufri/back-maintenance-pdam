@@ -1018,7 +1018,7 @@ class PenunjukanPekerjaanController extends Controller
                         // pekerjaan
                         $status =  'dikoreksi';
                         // $status = $PelaksanaanPekerjaan->status;
-                    } else if (auth()->user()->hasRole('asisten-manajer-pengawas')) {
+                    } else if (auth()->user()->hasRole('asisten-manajer-perencanaan')) {
                         if ($PelaksanaanPekerjaan->status ===  'dikoreksi') {
                             $status = 'selesai koreksi';
                             $PelaksanaanPekerjaan->keterangan_barang = '';
@@ -1261,6 +1261,7 @@ class PenunjukanPekerjaanController extends Controller
                             }
                         }
                         if (auth()->user()->hasRole('asisten-manajer-perencanaan')) {
+
                             if ($request->harga_perencanaan_pekerjaan) {
                                 $PelaksanaanPekerjaan->hasItem()->sync($listitem);
                                 $PelaksanaanPekerjaan->hasItemPengawas()->sync($listitemPengawas);

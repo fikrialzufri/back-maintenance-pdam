@@ -203,6 +203,18 @@ class PelaksanaanPekerjaan extends Model
         return $total;
     }
 
+    public function getDangerAttribute()
+    {
+        $total = false;
+        if ($this->hasItem) {
+            foreach ($this->hasItem as $value) {
+                $total += $value->pivot->total;
+            }
+        }
+
+        return $total;
+    }
+
     public function getHargaItemAttribute()
     {
         $harga = 0;
