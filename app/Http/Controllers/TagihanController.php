@@ -498,9 +498,11 @@ class TagihanController extends Controller
         foreach ($penunjukan as $key => $value) {
             $totalPekerjaan += $value->total_pekerjaan;
         }
-
+        $totalPekerjaan = pembulatan($totalPekerjaan);
+        $totalPekerjaan = str_replace(".", "", $totalPekerjaan);
         $ppn = ($totalPekerjaan * 11) / 100;
         $grand_total = $totalPekerjaan + $ppn;
+
         return view('tagihan.form', compact(
             'title',
             'form',

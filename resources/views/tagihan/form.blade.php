@@ -96,17 +96,6 @@
                                             Rp. {{ format_uang($grand_total) }}
                                         </th>
                                     </tr>
-                                    @if ($grand_total > 0)
-                                        <tr>
-                                            <th colspan="8" class="text-right">
-
-                                                Pembulatan
-                                            </th>
-                                            <th>
-                                                Rp. {{ pembulatan($grand_total) }}
-                                            </th>
-                                        </tr>
-                                    @endif
                                 </tfoot>
                             </table>
                         </div>
