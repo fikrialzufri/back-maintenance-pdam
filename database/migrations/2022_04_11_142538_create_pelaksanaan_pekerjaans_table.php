@@ -39,7 +39,7 @@ class CreatePelaksanaanPekerjaansTable extends Migration
                     'selesai koreksi',
                     'diadjust'
                 ]
-            )->default('diterima');
+            )->default('draft');
             $table->enum('tagihan', ['tidak', 'ya'])->default('tidak');
             $table->enum('kategori_nps', ['dis', 'pka'])->default('dis');
 
