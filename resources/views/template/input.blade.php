@@ -1,15 +1,22 @@
 <div class="form-group form-textinput" id="form_{{ $item['name'] }}">
 
-    <div>
-        <label for="{{ $item['name'] }}" class=" form-control-label">{{ $item['alias'] }}</label>
-    </div>
-
+    @if (isset($item['input']) && $item['input'] !== 'hidden')
+        <div>
+            <label for="{{ $item['name'] }}" class=" form-control-label">{{ $item['alias'] }}</label>
+        </div>
+    @endif
     @if (!isset($item['input']))
         <input type="text" name="{{ $item['name'] }}" id="{{ $item['name'] }}" placeholder="{{ $item['alias'] }}"
             class="form-control {{ $errors->has($item['name']) ? 'is-invalid' : '' }}"
             @if ($store == 'update') value="{{ $data[$item['name']] }}" @else value="{{ old($item['name']) }}" @endif>
     @else
+        @if ($item['input'] == 'hidden')
+            <input type="hidden" name="{{ $item['name'] }}" id="{{ $item['name'] }}"
+                class="form-control {{ $errors->has($item['name']) ? 'is-invalid' : '' }}"
+                @if ($store == 'update') value="{{ $data[$item['name']] }}" @else value="{{ isset($item['value']) ? $item['value'] : '' }}" @endif>
+        @endif
         @if ($item['input'] == 'combo')
+            {{ gettype($data[$item['name']]) }}
             <select class="form-control {{ $errors->has($item['name']) ? 'is-invalid' : '' }} selected2"
                 @if (isset($item['multiple'])) name="{{ $item['name'] }}[]" multiple @else name="{{ $item['name'] }}" @endif
                 id="cmb{{ $item['name'] }}">
@@ -19,8 +26,9 @@
                     @foreach ($item['value'] as $key => $val)
                         @if (isset($val['id']))
                             <option value="{{ $val['id'] }}"
-                                @if ($store == 'update') @if (gettype($data[$item['name']]) == 'object')
-                                        {{ strpos($data[$item['name']], $val['id']) ? 'selected' : '' }}
+                                @if ($store == 'update') @if (gettype($data[$item['name']]) == 'array')
+                                        {{-- {{ strpos($data[$item['name']], $val['id']) ? 'selected' : '' }} --}}
+                                         {{ in_array($val['id'], $data[$item['name']]) ? 'selected' : '' }}
                                         @else
                                         @if (is_array($data[$item['name'] . 'id']))
                                         {{ in_array($val['id'], $data[$item['name'] . 'id']) ? 'selected' : '' }}
@@ -68,11 +76,21 @@
             <div class="input-group-prepend">
                 <div class="input-group-text">Rp.</div>
             </div>
+
             <input type="text" name="{{ $item['name'] }}" id="{{ $item['name'] }}"
                 placeholder="{{ $item['alias'] }}"
                 class="form-control {{ $errors->has($item['name']) ? 'is-invalid' : '' }}"
                 @if ($store == 'update') value="{{ format_uang($data[$item['name']]) }}" @else value="{{ old($item['name']) }}" @endif>
         </div>
+
+
+    @endif
+
+    @if ($item['input'] == 'warna')
+        {{ old($item['name']) }}
+        <input type="text" name="{{ $item['name'] }}" id="{{ $item['name'] }}" placeholder="{{ $item['alias'] }}"
+            id="text-field" class="form-control {{ $errors->has($item['name']) ? 'is-invalid' : '' }} warna"
+            @if ($store == 'update') value="{{ $data[$item['name']] }}" @else value="{{ old($item['name']) === old($item['name']) ? $item['default'] : old($item['name']) }}" @endif>
 
 
     @endif
@@ -103,7 +121,17 @@
             </div>
         </div>
     @endif
+    @if ($item['input'] == 'nominal')
+        <input type="text" name="{{ $item['name'] }}" id="{{ $item['name'] }}" placeholder="{{ $item['alias'] }}"
+            class="form-control {{ $errors->has($item['name']) ? 'is-invalid' : '' }}"
+            @if ($store == 'update') value="{{ $data[$item['name']] }}" @else value="{{ old($item['name']) }}" @endif>
+    @endif
     @if ($item['input'] == 'datetimepicker')
+        <input type="text" id="{{ $item['name'] }}" name="{{ $item['name'] }}"
+            @if ($store == 'update') value="{{ $data[$item['name']] }}" @else value="{{ old($item['name']) }}" @endif
+            class="form-control {{ $errors->has($item['name']) ? 'is-invalid' : '' }}">
+    @endif
+    @if ($item['input'] == 'year')
         <input type="text" id="{{ $item['name'] }}" name="{{ $item['name'] }}"
             @if ($store == 'update') value="{{ $data[$item['name']] }}" @else value="{{ old($item['name']) }}" @endif
             class="form-control {{ $errors->has($item['name']) ? 'is-invalid' : '' }}">
@@ -131,8 +159,8 @@
     @endif
     @if ($item['input'] == 'textarea')
         <textarea class="form-control" rows="3" placeholder="{{ $item['alias'] }}" name="{{ $item['name'] }}">
-@if ($store == 'update'){{ $data[$item['name']] }}@else{{ old($item['name']) }}@endif
-</textarea>
+        @if ($store == 'update'){{ $data[$item['name']] }}@else{{ old($item['name']) }}@endif
+        </textarea>
     @endif
 
     @if ($item['input'] == 'text' ||
@@ -142,6 +170,7 @@
         $item['input'] == 'time')
         <div>
             <input type="{{ $item['input'] }}" name="{{ $item['name'] }}" id="{{ $item['name'] }}"
+                @if (isset($item['required'])) {{ $item['required'] === true ? 'required' : '' }} @endif
                 @if ($item['input'] == 'password') autocomplete="on" @else placeholder="{{ $item['alias'] }}" @endif
                 class="form-control {{ $errors->has($item['name']) ? 'is-invalid' : '' }}"
                 @if ($store == 'update') value="{{ $data[$item['name']] }}" @else value="{{ old($item['name']) }}" @endif>
@@ -161,6 +190,8 @@
         </span>
     @endif
 </div>
+
+
 @push('head')
     @if (isset($item['input']))
         @if ($item['input'] == 'datetimepicker' || $item['input'] == 'year')
@@ -168,10 +199,57 @@
                 href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
         @endif
     @endif
+    @if (isset($item['input']))
+        @if ($item['input'] == 'warna')
+            <link rel="stylesheet"
+                href="{{ asset('plugins/tempusdominus-bootstrap-4/build/css/tempusdominus-bootstrap-4.min.css') }}">
+            <link rel="stylesheet" href="{{ asset('plugins/jquery-minicolors/jquery.minicolors.css') }}">
+            <link rel="stylesheet" href="{{ asset('plugins/datedropper/datedropper.min.css') }}">
+        @endif
+    @endif
 @endpush
 
 @push('scriptdinamis')
     <script script src="{{ asset('plugins/select2/dist/js/select2.min.js') }}"></script>
+
+    @if (isset($item['input']))
+        @if ($item['input'] == 'warna')
+            <script src="{{ asset('plugins/moment/moment.js') }}"></script>
+            <script src="{{ asset('plugins/tempusdominus-bootstrap-4/build/js/tempusdominus-bootstrap-4.min.js') }}"></script>
+            <script src="{{ asset('plugins/jquery-minicolors/jquery.minicolors.min.js') }}"></script>
+
+            <script>
+                $('.warna').each(function() {
+                    //
+                    // Dear reader, it's actually very easy to initialize MiniColors. For example:
+                    //
+                    //  $(selector).minicolors();
+                    //
+                    // The way I've done it below is just for the demo, so don't get confused
+                    // by it. Also, data- attributes aren't supported at this time...they're
+                    // only used for this demo.
+                    //
+                    $(this).minicolors({
+                        control: $(this).attr('data-control') || 'hue',
+                        defaultValue: $(this).attr('data-defaultValue') || '',
+                        format: $(this).attr('data-format') || 'hex',
+                        keywords: $(this).attr('data-keywords') || '',
+                        inline: $(this).attr('data-inline') === 'true',
+                        letterCase: $(this).attr('data-letterCase') || 'lowercase',
+                        opacity: $(this).attr('data-opacity'),
+                        position: $(this).attr('data-position') || 'bottom left',
+                        swatches: $(this).attr('data-swatches') ? $(this).attr('data-swatches').split('|') : [],
+                        change: function(value, opacity) {
+                            if (!value) return;
+                            if (opacity) value += ', ' + opacity;
+                        },
+                        theme: 'bootstrap'
+                    });
+
+                });
+            </script>
+        @endif
+    @endif
     <script type="text/javascript">
         $(function() {
             @if (isset($item['input']))
@@ -231,6 +309,13 @@
                         $("#text{{ $item['name'] }}").html("");
                     }
                 @endif
+                @if ($item['input'] == 'nominal')
+                    $("#{{ $item['name'] }}").keypress(function(e) {
+                        if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                            return false;
+                        }
+                    });
+                @endif
             @endif
         });
     </script>
@@ -269,6 +354,37 @@
                             locale: {
                                 format: 'DD/M/Y HH:mm:ss'
                             }
+                        })
+                    })
+                </script>
+            @endif
+        @endif
+        @if ($item['input'] == 'year')
+            <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+            <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css"
+                rel="stylesheet" />
+
+            @if ($store == 'update')
+                <script type="text/javascript">
+                    $(document).ready(function() {
+                        $("#{{ $item['name'] }}").datepicker({
+                            format: "yyyy",
+                            viewMode: "years",
+                            minViewMode: "years"
+                        })
+                    })
+                </script>
+            @else
+                <script type="text/javascript">
+                    $(document).ready(function() {
+
+                        $("#{{ $item['name'] }}").datepicker({
+                            format: " yyyy", // Notice the Extra space at the beginning
+                            viewMode: "years",
+                            minViewMode: "years"
+
                         })
                     })
                 </script>

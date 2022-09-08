@@ -81,4 +81,15 @@ class Karyawan extends Model
     {
         return $this->belongsToMany(Rekanan::class, 'karyawan_rekanan')->withTimestamps();
     }
+
+    public function getRekananIdAttribute()
+    {
+        $data = [];
+        if ($this->hasRekanan) {
+            foreach ($this->hasRekanan as $key => $value) {
+                $data[] =  [$value->id];
+            }
+        }
+        return array_merge([], ...$data);
+    }
 }
