@@ -16,7 +16,6 @@
                 @if ($store == 'update') value="{{ $data[$item['name']] }}" @else value="{{ isset($item['value']) ? $item['value'] : '' }}" @endif>
         @endif
         @if ($item['input'] == 'combo')
-            {{ gettype($data[$item['name']]) }}
             <select class="form-control {{ $errors->has($item['name']) ? 'is-invalid' : '' }} selected2"
                 @if (isset($item['multiple'])) name="{{ $item['name'] }}[]" multiple @else name="{{ $item['name'] }}" @endif
                 id="cmb{{ $item['name'] }}">
@@ -27,7 +26,6 @@
                         @if (isset($val['id']))
                             <option value="{{ $val['id'] }}"
                                 @if ($store == 'update') @if (gettype($data[$item['name']]) == 'array')
-                                        {{-- {{ strpos($data[$item['name']], $val['id']) ? 'selected' : '' }} --}}
                                          {{ in_array($val['id'], $data[$item['name']]) ? 'selected' : '' }}
                                         @else
                                         @if (is_array($data[$item['name'] . 'id']))
