@@ -57,6 +57,8 @@ class PenunjukanPekerjaanController extends Controller
         $tanggal = '';
         $spk = request()->spk;
 
+        $status = '';
+
         $rekanan = Rekanan::query();
 
         if (request()->tanggal != '') {
@@ -202,15 +204,9 @@ class PenunjukanPekerjaanController extends Controller
                         $penunjukanAduan = $penunjukanAduan->whereIn('id', $PelaksanaanPekerjaan);
                     }
 
-                    if ($rekananid) {
+                    if ($rekananid != 'all') {
 
                         $penunjukanAduan = $penunjukanAduan->where('rekanan_id', $rekananid)->pluck('aduan_id')->toArray();
-
-                        $query->whereIn('id', $penunjukanAduan);
-                    }
-
-                    if (request()->spk != '' || request()->tanggal != '') {
-                        $penunjukanAduan = $penunjukanAduan->get()->pluck('aduan_id')->toArray();
 
                         $query->whereIn('id', $penunjukanAduan);
                     }
@@ -306,7 +302,8 @@ class PenunjukanPekerjaanController extends Controller
             'kategori',
             'penunjukan',
             'search',
-            'limit'
+            'limit',
+            'status'
         ));
     }
 

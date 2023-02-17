@@ -51,6 +51,9 @@
                                         <label for="">Daftar Rekanan</label>
                                         <select name="rekanan_id" class="selected2 form-control" id="cmbrekanan">
                                             <option value="">Pilih Rekanan</option>
+                                            <option value="all" {{ $rekananid == 'all' ? 'selected' : '' }}>Semua
+                                            </option>
+
                                             @foreach ($rekanan as $rek)
                                                 <option value="{{ $rek->id }}"
                                                     {{ $rekananid == $rek->id ? 'selected' : '' }}>{{ $rek->nama }}
@@ -64,6 +67,16 @@
                                     <label for="">Tanggal Pekerjaan</label>
                                     <input type="text" id="daterange" name="tanggal" value="{{ $tanggal }}"
                                         class="form-control">
+                                </div>
+                                <div class="col-lg-2">
+                                    <label for="">Status</label>
+                                    <select name="status" class="selected2 form-control" id="cmbStatus">
+                                        <option value="">Pilih Status</option>
+                                        <option value="all" {{ $status == 'all' ? 'selected' : '' }}>Semua</option>
+                                        <option value="0" {{ $status == '1' ? 'selected' : '' }}>Belum Dikerjaka
+                                        </option>
+
+                                    </select>
                                 </div>
 
                                 <div class="col-lg-1">
@@ -125,10 +138,10 @@
                                                 @if (auth()->user()->hasRole('rekanan'))
                                                     <i class="nav-icon fa fa-search"></i> Detail
                                                 @elseif (auth()->user()->hasRole('admin-distribusi') ||
-                                                    auth()->user()->hasRole('admin-pengendalian-kehilangan-air'))
+                                                        auth()->user()->hasRole('admin-pengendalian-kehilangan-air'))
                                                     <i class="nav-icon fa fa-search"></i> Detail
                                                 @elseif (auth()->user()->hasRole('asisten-manajer-distribusi') ||
-                                                    auth()->user()->hasRole('asisten-manajer-pengendalian-kehilangan-air'))
+                                                        auth()->user()->hasRole('asisten-manajer-pengendalian-kehilangan-air'))
                                                     @if ($item->status_aduan == 'Selesai dikerjakan')
                                                         <i class="nav-icon fas fa-eye"></i> Setujui
                                                     @elseif ($item->status_aduan == 'Belum ditunjuk')
@@ -137,7 +150,7 @@
                                                         <i class="nav-icon fa fa-search"></i> Detail
                                                     @endif
                                                 @elseif (auth()->user()->hasRole('manajer-distribusi') ||
-                                                    auth()->user()->hasRole('manajer-pengendalian-kehilangan-air'))
+                                                        auth()->user()->hasRole('manajer-pengendalian-kehilangan-air'))
                                                     @if ($item->status_aduan == 'Approve Asisten Manajer')
                                                         <i class="nav-icon fas fa-eye"></i> Setujui
                                                     @else
@@ -200,7 +213,6 @@
                                         <td>{{ ucfirst($item->user) }}</td>
                                         <td>{{ $item->lokasi }}</td>
                                         <td>{{ ucfirst($item->status_aduan) }}</td>
-
 
                                     </tr>
                                 @empty
