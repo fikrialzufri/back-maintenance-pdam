@@ -1256,7 +1256,6 @@ class PenunjukanPekerjaanController extends Controller
                             $PelaksanaanPekerjaan->hasItem()->sync($listitem);
                             $PelaksanaanPekerjaan->hasItemPengawas()->sync($listitemPengawas);
                             $PelaksanaanPekerjaan->hasItemAsmenPengawas()->sync($listitemAsmenPengawas);
-                            return [$status, $PelaksanaanPekerjaan];
                         }
                         if (auth()->user()->hasRole('asisten-manajer-perencanaan')) {
 
@@ -1378,6 +1377,8 @@ class PenunjukanPekerjaanController extends Controller
                         }
                     }
                 }
+
+                return $PelaksanaanPekerjaan;
             }
         } catch (\Throwable $th) {
             DB::rollback();
