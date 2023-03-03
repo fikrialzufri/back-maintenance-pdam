@@ -946,11 +946,6 @@ class PenunjukanPekerjaanController extends Controller
                         }
                         // end pekerjaan
                         $status = 'koreksi pengawas';
-                    } else if (auth()->user()->hasRole('manajer-distribusi')) {
-                        // pekerjaan
-                        if ($PelaksanaanPekerjaan->status === 'koreksi asmen') {
-                            $status =  'dikoreksi';
-                        }
                         // $status = $PelaksanaanPekerjaan->status;
                     } else if (auth()->user()->hasRole('asisten-manajer-pengawas')) {
                         // pekerjaan
