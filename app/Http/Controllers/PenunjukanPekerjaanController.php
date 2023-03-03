@@ -72,21 +72,22 @@ class PenunjukanPekerjaanController extends Controller
             // $tanggal = $start . " - " . $end;
         }
 
+
         // $query = $query->whereBetween(DB::raw('DATE(' . $val['name'] . ')'), array($start, $end));
-        if (auth()->user()->hasRole('admin-distribusi') || auth()->user()->hasRole('asisten-manajer-distribusi')) {
+        // if (auth()->user()->hasRole('admin-distribusi') || auth()->user()->hasRole('asisten-manajer-distribusi')) {
 
-            $query->where('wilayah_id', auth()->user()->karyawan->id_wilayah)->where('kategori_nps', 'dis');
-        }
-        if (auth()->user()->hasRole('manajer-distribusi')) {
+        //     $query->where('wilayah_id', auth()->user()->karyawan->id_wilayah)->where('kategori_nps', 'dis');
+        // }
+        // if (auth()->user()->hasRole('manajer-distribusi')) {
 
-            $query->where('kategori_nps', 'dis');
-        }
-        if (auth()->user()->hasRole('admin-pengendalian-kehilangan-air') || auth()->user()->hasRole('asisten-manajer-pengendalian-kehilangan-air')) {
-            $query->where('wilayah_id', auth()->user()->karyawan->id_wilayah)->where('kategori_nps', 'pka');
-        }
-        if (auth()->user()->hasRole('manajer-pengendalian-kehilangan-air')) {
-            $query->where('kategori_nps', 'pka');
-        }
+        //     $query->where('kategori_nps', 'dis');
+        // }
+        // if (auth()->user()->hasRole('admin-pengendalian-kehilangan-air') || auth()->user()->hasRole('asisten-manajer-pengendalian-kehilangan-air')) {
+        //     $query->where('wilayah_id', auth()->user()->karyawan->id_wilayah)->where('kategori_nps', 'pka');
+        // }
+        // if (auth()->user()->hasRole('manajer-pengendalian-kehilangan-air')) {
+        //     $query->where('kategori_nps', 'pka');
+        // }
         if ($search) {
             $query->where(function ($query) use ($search) {
                 $query->where('no_ticket', 'like', "%" . $search . "%")
