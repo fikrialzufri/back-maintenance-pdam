@@ -444,7 +444,6 @@ class PenunjukanPekerjaanController extends Controller
                     }
                     $pengawas = true;
                 } elseif (auth()->user()->hasRole('asisten-manajer-pengawas')) {
-                    return $pekerjaanUtama;
                     if ($pekerjaanUtama->status  === 'koreksi pengawas') {
                         $tombolEdit = 'bisa';
                         $asmenpengawas = true;
@@ -951,7 +950,6 @@ class PenunjukanPekerjaanController extends Controller
                     } else if (auth()->user()->hasRole('asisten-manajer-pengawas')) {
                         // pekerjaan
                         if ($PelaksanaanPekerjaan->status === 'koreksi pengawas') {
-
                             if ($request->qty_pengawas) {
                                 foreach ($request->qty_pengawas as $key => $value) {
 
@@ -1009,8 +1007,8 @@ class PenunjukanPekerjaanController extends Controller
                             }
 
                             // end pekerjaan;
+                            $status = 'koreksi asmen';
                         }
-                        $status = 'koreksi asmen';
                         // $status = $PelaksanaanPekerjaan->status;
                     } else if (auth()->user()->hasRole('manajer-perawatan')) {
                         // pekerjaan
@@ -1072,8 +1070,7 @@ class PenunjukanPekerjaanController extends Controller
 
                     if ($PelaksanaanPekerjaan) {
 
-                        $PelaksanaanPekerjaan->status = $status;
-                        $PelaksanaanPekerjaan->save();
+
 
                         // koreksi yang ada angkanya
                         if (auth()->user()->hasRole('staf-pengawas')) {
@@ -1166,7 +1163,6 @@ class PenunjukanPekerjaanController extends Controller
                         if (auth()->user()->hasRole('asisten-manajer-pengawas')) {
                             // galian
                             // galian pengawas
-                            // return $listitemAsmenPengawas;
                             $cekItemGalian = [];
                             $cekItemGalianPengawas = [];
                             $datapanjang = [];
@@ -1253,10 +1249,11 @@ class PenunjukanPekerjaanController extends Controller
                                 }
                             }
                             // end galian
-                            if (isset($listitem) || isset($listitemPengawas) || $listitemAsmenPengawas) { }
-                            $PelaksanaanPekerjaan->hasItem()->sync($listitem);
-                            $PelaksanaanPekerjaan->hasItemPengawas()->sync($listitemPengawas);
-                            $PelaksanaanPekerjaan->hasItemAsmenPengawas()->sync($listitemAsmenPengawas);
+                            if (isset($listitem) || isset($listitemPengawas) || $listitemAsmenPengawas) {
+                                $PelaksanaanPekerjaan->hasItem()->sync($listitem);
+                                $PelaksanaanPekerjaan->hasItemPengawas()->sync($listitemPengawas);
+                                $PelaksanaanPekerjaan->hasItemAsmenPengawas()->sync($listitemAsmenPengawas);
+                            }
                         }
                         if (auth()->user()->hasRole('asisten-manajer-perencanaan')) {
 
@@ -1308,6 +1305,9 @@ class PenunjukanPekerjaanController extends Controller
                                 }
                             }
                         }
+
+                        $PelaksanaanPekerjaan->status = $status;
+                        $PelaksanaanPekerjaan->save();
 
                         $user[auth()->user()->id] = [
                             'keterangan' => $status,
