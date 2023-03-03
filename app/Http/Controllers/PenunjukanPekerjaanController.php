@@ -1165,7 +1165,7 @@ class PenunjukanPekerjaanController extends Controller
                         if (auth()->user()->hasRole('asisten-manajer-pengawas')) {
                             // galian
                             // galian pengawas
-                            return $listitemAsmenPengawas;
+                            // return $listitemAsmenPengawas;
                             $cekItemGalian = [];
                             $cekItemGalianPengawas = [];
                             $datapanjang = [];
@@ -1252,11 +1252,11 @@ class PenunjukanPekerjaanController extends Controller
                                 }
                             }
                             // end galian
-                            if (isset($listitem) || isset($listitemPengawas) || $listitemAsmenPengawas) {
-                                $PelaksanaanPekerjaan->hasItem()->sync($listitem);
-                                $PelaksanaanPekerjaan->hasItemPengawas()->sync($listitemPengawas);
-                                $PelaksanaanPekerjaan->hasItemAsmenPengawas()->sync($listitemAsmenPengawas);
-                            }
+                            if (isset($listitem) || isset($listitemPengawas) || $listitemAsmenPengawas) { }
+                            $PelaksanaanPekerjaan->hasItem()->sync($listitem);
+                            $PelaksanaanPekerjaan->hasItemPengawas()->sync($listitemPengawas);
+                            $PelaksanaanPekerjaan->hasItemAsmenPengawas()->sync($listitemAsmenPengawas);
+                            return [$status, $PelaksanaanPekerjaan];
                         }
                         if (auth()->user()->hasRole('asisten-manajer-perencanaan')) {
 
