@@ -444,6 +444,7 @@ class PenunjukanPekerjaanController extends Controller
                     }
                     $pengawas = true;
                 } elseif (auth()->user()->hasRole('asisten-manajer-pengawas')) {
+                    return $pekerjaanUtama;
                     if ($pekerjaanUtama->status  === 'koreksi pengawas') {
                         $tombolEdit = 'bisa';
                         $asmenpengawas = true;
