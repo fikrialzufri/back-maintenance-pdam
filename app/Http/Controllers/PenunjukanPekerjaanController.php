@@ -1159,6 +1159,7 @@ class PenunjukanPekerjaanController extends Controller
                         }
                         if (auth()->user()->hasRole('asisten-manajer-pengawas')) {
 
+
                             // galian
                             // galian pengawas
                             $cekItemGalian = [];
@@ -1247,11 +1248,11 @@ class PenunjukanPekerjaanController extends Controller
                                 }
                             }
                             // end galian
-                            // if (isset($listitem) || isset($listitemPengawas) || $listitemAsmenPengawas) {
-                            //     $PelaksanaanPekerjaan->hasItem()->sync($listitem);
-                            //     $PelaksanaanPekerjaan->hasItemPengawas()->sync($listitemPengawas);
-                            //     $PelaksanaanPekerjaan->hasItemAsmenPengawas()->sync($listitemAsmenPengawas);
-                            // }
+                            if (isset($listitem) || isset($listitemPengawas) || $listitemAsmenPengawas) {
+                                $PelaksanaanPekerjaan->hasItem()->sync($listitem);
+                                $PelaksanaanPekerjaan->hasItemPengawas()->sync($listitemPengawas);
+                                $PelaksanaanPekerjaan->hasItemAsmenPengawas()->sync($listitemAsmenPengawas);
+                            }
                         }
                         if (auth()->user()->hasRole('asisten-manajer-perencanaan')) {
 
@@ -1307,9 +1308,9 @@ class PenunjukanPekerjaanController extends Controller
                         $PelaksanaanPekerjaan->status = $status;
                         $PelaksanaanPekerjaan->save();
 
-                        if (auth()->user()->hasRole('asisten-manajer-pengawas')) {
-                            return [$PelaksanaanPekerjaan, $status];
-                        }
+                        // if (auth()->user()->hasRole('asisten-manajer-pengawas')) {
+                        //     return [$PelaksanaanPekerjaan, $status];
+                        // }
 
                         $user[auth()->user()->id] = [
                             'keterangan' => $status,
