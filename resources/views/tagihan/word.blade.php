@@ -183,8 +183,7 @@
                                                 {!! QrCode::size(100)->generate($item->url) !!}
                                             @else
                                                 @if ($item->tdd != null)
-                                                    {!! QrCode::size(100)->generate(asset($item->tdd)) !!}
-                                                    {{ $direktur->tdd }}
+                                                    {!! QrCode::size(100)->generate($item->tdd) !!}
                                                 @endif
                                             @endif
                                             <br>
@@ -206,8 +205,7 @@
                                                     {!! QrCode::size(100)->generate($direktur->url) !!}
                                                 @else
                                                     @if ($direktur->tdd)
-                                                        {!! QrCode::size(100)->generate(asset($direktur->tdd)) !!}
-                                                        {{ $direktur->tdd }}
+                                                        {!! QrCode::size(100)->generate($direktur->tdd) !!}
                                                     @endif
                                                 @endif
                                             @endif
