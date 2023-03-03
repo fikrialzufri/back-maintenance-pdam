@@ -217,22 +217,22 @@ class PenunjukanPekerjaanController extends Controller
                         $query->where('wilayah_id', auth()->user()->karyawan->id_wilayah)->orderBy('status', 'asc')->orderBy('updated_at', 'desc');
                         $penunjukan = $query->paginate($limit);
 
-                        // if (auth()->user()->hasRole('asisten-manajer-distribusi')) {
-                        //     $penunjukan = $penunjukan->setCollection(
-                        //         $penunjukan->sortBy(function ($pekerjaan) {
-                        //             return $pekerjaan->status_order_asmen;
-                        //         })
-                        //     );
-                        // } elseif (auth()->user()->hasRole('asisten-manajer-pengendalian-kehilangan-air')) {
+                        if (auth()->user()->hasRole('asisten-manajer-distribusi')) {
+                            $penunjukan = $penunjukan->setCollection(
+                                $penunjukan->sortBy(function ($pekerjaan) {
+                                    return $pekerjaan->status_order_asmen;
+                                })
+                            );
+                        } elseif (auth()->user()->hasRole('asisten-manajer-pengendalian-kehilangan-air')) {
 
-                        //     $penunjukan = $penunjukan->setCollection(
-                        //         $penunjukan->sortBy(function ($pekerjaan) {
-                        //             return $pekerjaan->status_order_asmen;
-                        //         })
-                        //     );
-                        // }
+                            $penunjukan = $penunjukan->setCollection(
+                                $penunjukan->sortBy(function ($pekerjaan) {
+                                    return $pekerjaan->status_order_asmen;
+                                })
+                            );
+                        }
                     } else {
-
+                        return 1;
                         $penunjukan = $query->where('status', '!=', 'draft')->with(['hasPenunjukanPekerjaan' => function ($query) {
                             $query->orderBy('status', 'desc');
                         }])->orderBy('status', 'desc')->orderBy('updated_at', 'desc');
