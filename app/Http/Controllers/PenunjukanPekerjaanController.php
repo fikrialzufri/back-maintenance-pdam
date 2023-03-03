@@ -713,6 +713,7 @@ class PenunjukanPekerjaanController extends Controller
 
 
         DB::beginTransaction();
+        return "update";
 
         try {
             DB::commit();
@@ -802,7 +803,7 @@ class PenunjukanPekerjaanController extends Controller
 
                 $PelaksanaanPekerjaan->status;
                 if ($PelaksanaanPekerjaan->status_mobile < 2) {
-                    return  1;
+
                     $id_penunjukan =  $PelaksanaanPekerjaan->penunjukan_pekerjaan_id;
                     $penunjukanPekerjaan = PenunjukanPekerjaan::find($id_penunjukan);
                     $rekanan_id = $request->rekanan_id;
@@ -1396,6 +1397,7 @@ class PenunjukanPekerjaanController extends Controller
         $PelaksanaanPekerjaan  = PelaksanaanPekerjaan::find($id);
         $PelaksanaanPekerjaan->status;
 
+        return "updateAdjust";
         // pekerjaan
         DB::beginTransaction();
         try {
