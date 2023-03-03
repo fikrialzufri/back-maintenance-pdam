@@ -1158,7 +1158,6 @@ class PenunjukanPekerjaanController extends Controller
                             }
                         }
                         if (auth()->user()->hasRole('asisten-manajer-pengawas')) {
-                            return $status;
 
                             // galian
                             // galian pengawas
