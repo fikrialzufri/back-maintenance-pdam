@@ -713,7 +713,6 @@ class PenunjukanPekerjaanController extends Controller
 
 
         DB::beginTransaction();
-        return "update";
 
         try {
             DB::commit();
@@ -1397,7 +1396,6 @@ class PenunjukanPekerjaanController extends Controller
         $PelaksanaanPekerjaan  = PelaksanaanPekerjaan::find($id);
         $PelaksanaanPekerjaan->status;
 
-        return "updateAdjust";
         // pekerjaan
         DB::beginTransaction();
         try {
