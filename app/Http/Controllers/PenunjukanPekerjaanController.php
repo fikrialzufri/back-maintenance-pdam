@@ -731,7 +731,7 @@ class PenunjukanPekerjaanController extends Controller
                         $penunjukanPekerjaan->karyawan_id = $karyawan_id;
                     }
                 }
-                $aduan = Aduan::find($penunjukanPekerjaan->aduan_id);
+                return $aduan = Aduan::find($penunjukanPekerjaan->aduan_id);
 
                 $penunjukanPekerjaan->status = 'draft';
                 $penunjukanPekerjaan->save();
@@ -1329,7 +1329,7 @@ class PenunjukanPekerjaanController extends Controller
 
                             // return  $penunjukanPekerjaan;
                             $message = 'Berhasil Mengoreksi Pelaksanaan Pekerjaan';
-                            return $aduan = Aduan::find($penunjukanPekerjaan->aduan_id);
+                            $aduan = Aduan::find($penunjukanPekerjaan->aduan_id);
 
                             if (!empty($rekanan)) {
                                 // notif ke reknanan
