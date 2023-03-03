@@ -1008,7 +1008,7 @@ class PenunjukanPekerjaanController extends Controller
 
                             // end pekerjaan;
                         }
-                        return $status = 'koreksi asmen';
+                        $status = 'koreksi asmen';
                         // $status = $PelaksanaanPekerjaan->status;
                     } else if (auth()->user()->hasRole('manajer-perawatan')) {
                         // pekerjaan
@@ -1070,7 +1070,7 @@ class PenunjukanPekerjaanController extends Controller
 
                     if ($PelaksanaanPekerjaan) {
 
-
+                        return $status;
 
                         // koreksi yang ada angkanya
                         if (auth()->user()->hasRole('staf-pengawas')) {
