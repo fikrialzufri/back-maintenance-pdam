@@ -257,7 +257,7 @@ class UsersTableSeedeer extends Seeder
             }
 
             foreach ($data as $induk) {
-                $Permission = Permission::Create($induk);
+                $Permission = Permission::updateOrCreate($induk);
             }
         }
     }
