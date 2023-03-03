@@ -1071,8 +1071,8 @@ class PenunjukanPekerjaanController extends Controller
 
                     if ($PelaksanaanPekerjaan) {
 
-                        // $PelaksanaanPekerjaan->status = $status;
-                        // $PelaksanaanPekerjaan->save();
+                        $PelaksanaanPekerjaan->status = $status;
+                        $PelaksanaanPekerjaan->save();
 
                         // koreksi yang ada angkanya
                         if (auth()->user()->hasRole('staf-pengawas')) {
