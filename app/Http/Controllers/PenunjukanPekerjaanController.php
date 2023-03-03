@@ -1309,7 +1309,7 @@ class PenunjukanPekerjaanController extends Controller
                         $PelaksanaanPekerjaan->status = $status;
                         $PelaksanaanPekerjaan->save();
 
-                        if (auth()->user()->hasRole('asisten-manajer-perencanaan')) {
+                        if (auth()->user()->hasRole('asisten-manajer-pengawas')) {
                             return [$PelaksanaanPekerjaan, $status];
                         }
 
