@@ -95,10 +95,11 @@
                             </p>
                             <ol style="font-size: 20px;">
                                 @forelse ($tagihan->list_persetujuan as $index => $item)
-                                    @if ($item->jabatan === 'Staf Pengawas' ||
-                                        str_contains($item->jabatan, 'Asisten Manajer Distribusi') ||
-                                        $item->jabatan === 'Asisten Manajer Pengawas' ||
-                                        $item->jabatan === 'Manajer Distribusi')
+                                    @if (
+                                        $item->jabatan === 'Staf Pengawas' ||
+                                            str_contains($item->jabatan, 'Asisten Manajer Distribusi') ||
+                                            $item->jabatan === 'Asisten Manajer Pengawas' ||
+                                            $item->jabatan === 'Manajer Distribusi')
                                         <li> <span style=''>{{ ucfirst($item->nama) }}
                                                 sebagai {{ $item->jabatan }}</span></li>
                                     @endif
@@ -183,6 +184,7 @@
                                             @else
                                                 @if ($item->tdd != null)
                                                     {!! QrCode::size(100)->generate(asset($item->tdd)) !!}
+                                                    {{ $direktur->tdd }}
                                                 @endif
                                             @endif
                                             <br>
@@ -205,6 +207,7 @@
                                                 @else
                                                     @if ($direktur->tdd)
                                                         {!! QrCode::size(100)->generate(asset($direktur->tdd)) !!}
+                                                        {{ $direktur->tdd }}
                                                     @endif
                                                 @endif
                                             @endif
