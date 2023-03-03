@@ -260,7 +260,7 @@ class Tagihan extends Model
                         'nama' => $value->karyawan->nama,
                         'jabatan' => $value->karyawan->nama_jabatan,
                         'url' =>  asset('storage/karyawan/' . $value->karyawan->url),
-                        'tdd' => $value->karyawan->tdd,
+                        'tdd' => asset('storage/karyawan/' . $value->karyawan->tdd),
                         'is_setuju' => true,
                         'created_at' => $value->pivot->created_at,
                         'tanggal_disetujui' => isset($value->pivot->created_at) ? tanggal_indonesia($value->pivot->created_at) . " - " . Carbon::parse($value->pivot->created_at)->format('H:i') : ''
@@ -276,7 +276,7 @@ class Tagihan extends Model
                     'nama' => $value->nama,
                     'jabatan' => $value->jabatan,
                     'url' => asset('storage/karyawan/' . $value->url),
-                    'tdd' => $value->tdd,
+                    'tdd' =>  asset('storage/karyawan/' . $value->tdd),
                     'is_setuju' => $value->is_setuju,
                     'created_at' => $value->created_at,
                     'tanggal_disetujui' => $value->tanggal_disetujui
@@ -333,7 +333,7 @@ class Tagihan extends Model
                         'jabatan' => $value->karyawan->nama_jabatan,
                         'is_setuju' => true,
                         'created_at' => $value->pivot->created_at,
-                        'tdd' => $value->karyawan->tdd,
+                        'tdd' => asset('storage/karyawan/' . $value->karyawan->tdd),
                         'tanggal_disetujui' => isset($value->pivot->created_at) ? tanggal_indonesia($value->pivot->created_at) . " - " . Carbon::parse($value->pivot->created_at)->format('H:i') : ''
                     ];
                 }
