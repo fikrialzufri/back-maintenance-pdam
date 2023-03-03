@@ -203,7 +203,6 @@ class PenunjukanPekerjaanController extends Controller
 
                         $penunjukanAduan = $penunjukanAduan->whereIn('id', $PelaksanaanPekerjaan);
                     }
-                    return $rekananid;
                     if ($rekananid != "" || $rekananid != null) {
                         if ($rekananid != 'all') {
 
