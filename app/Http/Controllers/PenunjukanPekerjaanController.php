@@ -731,7 +731,7 @@ class PenunjukanPekerjaanController extends Controller
                         $penunjukanPekerjaan->karyawan_id = $karyawan_id;
                     }
                 }
-                return $aduan = Aduan::find($penunjukanPekerjaan->aduan_id);
+                $aduan = Aduan::find($penunjukanPekerjaan->aduan_id);
 
                 $penunjukanPekerjaan->status = 'draft';
                 $penunjukanPekerjaan->save();
@@ -802,7 +802,7 @@ class PenunjukanPekerjaanController extends Controller
 
                 $PelaksanaanPekerjaan->status;
                 if ($PelaksanaanPekerjaan->status_mobile < 2) {
-
+                    return  1;
                     $id_penunjukan =  $PelaksanaanPekerjaan->penunjukan_pekerjaan_id;
                     $penunjukanPekerjaan = PenunjukanPekerjaan::find($id_penunjukan);
                     $rekanan_id = $request->rekanan_id;
