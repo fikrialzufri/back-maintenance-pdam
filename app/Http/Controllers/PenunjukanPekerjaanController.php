@@ -203,7 +203,7 @@ class PenunjukanPekerjaanController extends Controller
 
                         $penunjukanAduan = $penunjukanAduan->whereIn('id', $PelaksanaanPekerjaan);
                     }
-
+                    return $rekananid;
                     if ($rekananid != 'all' || $rekananid != '') {
 
                         $penunjukanAduan = $penunjukanAduan->where('rekanan_id', $rekananid)->pluck('aduan_id')->toArray();
