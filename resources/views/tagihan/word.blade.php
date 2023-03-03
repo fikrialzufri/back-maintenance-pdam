@@ -183,7 +183,7 @@
                                                 {!! QrCode::size(100)->generate($item->url) !!}
                                             @else
                                                 @if ($item->tdd != null)
-                                                    {!! QrCode::size(100)->generate($item->tdd) !!}
+                                                    {!! QrCode::size(100)->generate(asset('storage/karyawan/' . $item->tdd)) !!}
                                                 @endif
                                             @endif
                                             <br>
@@ -205,7 +205,7 @@
                                                     {!! QrCode::size(100)->generate($direktur->url) !!}
                                                 @else
                                                     @if ($direktur->tdd)
-                                                        {!! QrCode::size(100)->generate($direktur->tdd) !!}
+                                                        {!! QrCode::size(100)->generate(asset('storage/karyawan/' . $direktur->tdd)) !!}
                                                     @endif
                                                 @endif
                                             @endif
