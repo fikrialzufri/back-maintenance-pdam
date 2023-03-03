@@ -278,15 +278,14 @@ class PenunjukanPekerjaanController extends Controller
                     }
                 }
             }
-        } else {
-
-            $penunjukan = $query->paginate(50);
-            $penunjukan = $penunjukan->setCollection(
-                $penunjukan->sortBy(function ($pekerjaan) {
-                    return $pekerjaan->status_order_all;
-                })
-            );
         }
+
+        $penunjukan = $query->paginate(50);
+        $penunjukan = $penunjukan->setCollection(
+            $penunjukan->sortBy(function ($pekerjaan) {
+                return $pekerjaan->status_order_all;
+            })
+        );
 
         $rekanan = $rekanan->orderBy('nama')->get();
 
