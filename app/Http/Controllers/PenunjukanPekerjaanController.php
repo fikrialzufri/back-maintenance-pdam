@@ -72,7 +72,6 @@ class PenunjukanPekerjaanController extends Controller
             // $tanggal = $start . " - " . $end;
         }
 
-
         // $query = $query->whereBetween(DB::raw('DATE(' . $val['name'] . ')'), array($start, $end));
         if (auth()->user()->hasRole('admin-distribusi') || auth()->user()->hasRole('asisten-manajer-distribusi')) {
 
@@ -105,188 +104,189 @@ class PenunjukanPekerjaanController extends Controller
             $query->where('kategori_aduan', 'like', "%" . $kategori . "%");
         }
 
-        // if (!auth()->user()->hasRole('superadmin')) {
-        //     if (auth()->user()->hasRole('rekanan')) {
-        //         $rekanan_id = auth()->user()->id_rekanan;
-        //         $penunjukanAduan = PenunjukanPekerjaan::where('rekanan_id', $rekanan_id);
+        if (!auth()->user()->hasRole('superadmin')) {
+            if (auth()->user()->hasRole('rekanan')) {
+                $rekanan_id = auth()->user()->id_rekanan;
+                $penunjukanAduan = PenunjukanPekerjaan::where('rekanan_id', $rekanan_id);
 
-        //         if (request()->spk != '') {
-        //             $penunjukanAduan = $penunjukanAduan->where('nomor_pekerjaan', 'like', '%' . $spk . '%');
-        //         }
+                if (request()->spk != '') {
+                    $penunjukanAduan = $penunjukanAduan->where('nomor_pekerjaan', 'like', '%' . $spk . '%');
+                }
 
-        //         if (request()->tanggal != '') {
-        //             $PelaksanaanPekerjaan = PelaksanaanPekerjaan::whereBetween(DB::raw('DATE(created_at)'), array($start, $end))->get()->pluck('penunjukan_pekerjaan_id')->toArray();
+                if (request()->tanggal != '') {
+                    $PelaksanaanPekerjaan = PelaksanaanPekerjaan::whereBetween(DB::raw('DATE(created_at)'), array($start, $end))->get()->pluck('penunjukan_pekerjaan_id')->toArray();
 
-        //             $penunjukanAduan = $penunjukanAduan->whereIn('id', $PelaksanaanPekerjaan);
-        //         }
+                    $penunjukanAduan = $penunjukanAduan->whereIn('id', $PelaksanaanPekerjaan);
+                }
 
-        //         $penunjukanAduan = $penunjukanAduan->get()->pluck('aduan_id')->toArray();
-
-
-        //         $query->whereIn('id', $penunjukanAduan);
-        //         $penunjukan = $query->paginate($limit);
-
-        //         $penunjukan = $penunjukan->setCollection(
-        //             $penunjukan->sortBy(function ($pekerjaan) {
-        //                 return $pekerjaan->status_order;
-        //             })
-        //         );
-        //     } elseif (auth()->user()->hasRole('staf-distribusi')) {
-        //         $id_karyawan = auth()->user()->id_karyawan;
-        //         $penunjukanAduan = PenunjukanPekerjaan::where('karyawan_id', $id_karyawan);
-        //         if (request()->spk != '') {
-        //             $penunjukanAduan = $penunjukanAduan->where('nomor_pekerjaan', 'like', '%' . $spk . '%');
-        //         }
-
-        //         if (request()->tanggal != '') {
-        //             $PelaksanaanPekerjaan = PelaksanaanPekerjaan::whereBetween(DB::raw('DATE(created_at)'), array($start, $end))->get()->pluck('penunjukan_pekerjaan_id')->toArray();
-
-        //             $penunjukanAduan = $penunjukanAduan->whereIn('id', $PelaksanaanPekerjaan);
-        //         }
-        //         if ($rekananid) {
-        //             $PelaksanaanPekerjaan = PelaksanaanPekerjaan::where('rekanan_id', $rekananid)->get()->pluck('penunjukan_pekerjaan_id')->toArray();
-
-        //             $penunjukanAduan = $penunjukanAduan->whereIn('id', $PelaksanaanPekerjaan);
-        //         }
-
-        //         $penunjukanAduan = $penunjukanAduan->get()->pluck('aduan_id')->toArray();
-
-        //         $query->whereIn('id', $penunjukanAduan);
-        //         $penunjukan = $query->paginate($limit);
-
-        //         $penunjukan = $penunjukan->setCollection(
-        //             $penunjukan->sortBy(function ($pekerjaan) {
-        //                 return $pekerjaan->status_order;
-        //             })
-        //         );
-        //     } else {
-        //         $list_rekanan_id = auth()->user()->karyawan->hasRekanan->pluck('id');
-
-        //         if (count($list_rekanan_id) > 0) {
-        //             $rekanan = $rekanan->whereIn('id', $list_rekanan_id);
-
-        //             if ($rekananid) {
-        //                 $penunjukanAduan = PenunjukanPekerjaan::whereIn('rekanan_id', [$rekananid]);
-        //             } else {
-        //                 $penunjukanAduan = PenunjukanPekerjaan::whereIn('rekanan_id', $list_rekanan_id);
-        //             }
+                $penunjukanAduan = $penunjukanAduan->get()->pluck('aduan_id')->toArray();
 
 
-        //             if (request()->spk != '') {
-        //                 $penunjukanAduan = $penunjukanAduan->where('nomor_pekerjaan', 'like', '%' . $spk . '%');
-        //             }
+                $query->whereIn('id', $penunjukanAduan);
+                $penunjukan = $query->paginate($limit);
 
-        //             if (request()->tanggal != '') {
-        //                 $PelaksanaanPekerjaan = PelaksanaanPekerjaan::whereBetween(DB::raw('DATE(created_at)'), array($start, $end))->get()->pluck('penunjukan_pekerjaan_id')->toArray();
+                $penunjukan = $penunjukan->setCollection(
+                    $penunjukan->sortBy(function ($pekerjaan) {
+                        return $pekerjaan->status_order;
+                    })
+                );
+            } elseif (auth()->user()->hasRole('staf-distribusi')) {
+                $id_karyawan = auth()->user()->id_karyawan;
+                $penunjukanAduan = PenunjukanPekerjaan::where('karyawan_id', $id_karyawan);
+                if (request()->spk != '') {
+                    $penunjukanAduan = $penunjukanAduan->where('nomor_pekerjaan', 'like', '%' . $spk . '%');
+                }
 
-        //                 $penunjukanAduan = $penunjukanAduan->whereIn('id', $PelaksanaanPekerjaan);
-        //             }
+                if (request()->tanggal != '') {
+                    $PelaksanaanPekerjaan = PelaksanaanPekerjaan::whereBetween(DB::raw('DATE(created_at)'), array($start, $end))->get()->pluck('penunjukan_pekerjaan_id')->toArray();
 
-        //             $penunjukanAduan = $penunjukanAduan->get()->pluck('aduan_id')->toArray();
+                    $penunjukanAduan = $penunjukanAduan->whereIn('id', $PelaksanaanPekerjaan);
+                }
+                if ($rekananid) {
+                    $PelaksanaanPekerjaan = PelaksanaanPekerjaan::where('rekanan_id', $rekananid)->get()->pluck('penunjukan_pekerjaan_id')->toArray();
 
-        //             $query->whereIn('id', $penunjukanAduan)->orderBy('updated_at', 'desc');
-        //             $penunjukan = $query->paginate($limit);
-        //             $penunjukan = $penunjukan->setCollection(
-        //                 $penunjukan->sortBy(function ($pekerjaan) {
-        //                     return $pekerjaan->status_order_pengawas;
-        //                 })
-        //             );
-        //         } else {
-        //             $id_wilayah = auth()->user()->karyawan->id_wilayah;
-        //             $wilayah = Wilayah::find($id_wilayah);
-        //             $penunjukanAduan = PenunjukanPekerjaan::query();
+                    $penunjukanAduan = $penunjukanAduan->whereIn('id', $PelaksanaanPekerjaan);
+                }
 
-        //             if (request()->spk != '') {
-        //                 $penunjukanAduan = $penunjukanAduan->where('nomor_pekerjaan', 'like', '%' . $spk . '%');
-        //             }
-        //             if (request()->tanggal != '') {
-        //                 $PelaksanaanPekerjaan = PelaksanaanPekerjaan::whereBetween(DB::raw('DATE(created_at)'), array($start, $end))->get()->pluck('penunjukan_pekerjaan_id')->toArray();
+                $penunjukanAduan = $penunjukanAduan->get()->pluck('aduan_id')->toArray();
 
-        //                 $penunjukanAduan = $penunjukanAduan->whereIn('id', $PelaksanaanPekerjaan);
-        //             }
+                $query->whereIn('id', $penunjukanAduan);
+                $penunjukan = $query->paginate($limit);
 
-        //             if ($rekananid != 'all') {
+                $penunjukan = $penunjukan->setCollection(
+                    $penunjukan->sortBy(function ($pekerjaan) {
+                        return $pekerjaan->status_order;
+                    })
+                );
+            } else {
+                $list_rekanan_id = auth()->user()->karyawan->hasRekanan->pluck('id');
 
-        //                 $penunjukanAduan = $penunjukanAduan->where('rekanan_id', $rekananid)->pluck('aduan_id')->toArray();
+                if (count($list_rekanan_id) > 0) {
+                    $rekanan = $rekanan->whereIn('id', $list_rekanan_id);
 
-        //                 $query->whereIn('id', $penunjukanAduan);
-        //             }
+                    if ($rekananid) {
+                        $penunjukanAduan = PenunjukanPekerjaan::whereIn('rekanan_id', [$rekananid]);
+                    } else {
+                        $penunjukanAduan = PenunjukanPekerjaan::whereIn('rekanan_id', $list_rekanan_id);
+                    }
 
 
-        //             // $query->whereStatus('selesai');
-        //             if ($wilayah->nama !== 'Wilayah Samarinda') {
-        //                 $query->where('wilayah_id', auth()->user()->karyawan->id_wilayah)->orderBy('status', 'asc')->orderBy('updated_at', 'desc');
-        //                 $penunjukan = $query->paginate($limit);
+                    if (request()->spk != '') {
+                        $penunjukanAduan = $penunjukanAduan->where('nomor_pekerjaan', 'like', '%' . $spk . '%');
+                    }
 
-        //                 if (auth()->user()->hasRole('asisten-manajer-distribusi')) {
-        //                     $penunjukan = $penunjukan->setCollection(
-        //                         $penunjukan->sortBy(function ($pekerjaan) {
-        //                             return $pekerjaan->status_order_asmen;
-        //                         })
-        //                     );
-        //                 } elseif (auth()->user()->hasRole('asisten-manajer-pengendalian-kehilangan-air')) {
+                    if (request()->tanggal != '') {
+                        $PelaksanaanPekerjaan = PelaksanaanPekerjaan::whereBetween(DB::raw('DATE(created_at)'), array($start, $end))->get()->pluck('penunjukan_pekerjaan_id')->toArray();
 
-        //                     $penunjukan = $penunjukan->setCollection(
-        //                         $penunjukan->sortBy(function ($pekerjaan) {
-        //                             return $pekerjaan->status_order_asmen;
-        //                         })
-        //                     );
-        //                 }
-        //             } else {
+                        $penunjukanAduan = $penunjukanAduan->whereIn('id', $PelaksanaanPekerjaan);
+                    }
 
-        //                 $penunjukan = $query->where('status', '!=', 'draft')->with(['hasPenunjukanPekerjaan' => function ($query) {
-        //                     $query->orderBy('status', 'desc');
-        //                 }])->orderBy('status', 'desc')->orderBy('updated_at', 'desc');
-        //                 $penunjukan = $query->paginate($limit);
+                    $penunjukanAduan = $penunjukanAduan->get()->pluck('aduan_id')->toArray();
 
-        //                 if (auth()->user()->hasRole('asisten-manajer-pengawas')) {
-        //                     $penunjukan = $penunjukan->setCollection(
-        //                         $penunjukan->sortBy(function ($pekerjaan) {
-        //                             return $pekerjaan->status_order_asem_pengawas;
-        //                         })
-        //                     );
-        //                 } elseif (auth()->user()->hasRole('manajer-perawatan')) {
-        //                     $penunjukan = $penunjukan->setCollection(
-        //                         $penunjukan->sortBy(function ($pekerjaan) {
-        //                             return $pekerjaan->status_order_manajer_pengawas;
-        //                         })
-        //                     );
-        //                 } elseif (auth()->user()->hasRole('manajer-distribusi')) {
-        //                     $penunjukan = $penunjukan->setCollection(
-        //                         $penunjukan->sortBy(function ($pekerjaan) {
-        //                             return $pekerjaan->status_order_manajer;
-        //                         })
-        //                     );
-        //                 } elseif (auth()->user()->hasRole('manajer-pengendalian-kehilangan-air')) {
-        //                     $penunjukan = $penunjukan->setCollection(
-        //                         $penunjukan->sortBy(function ($pekerjaan) {
-        //                             return $pekerjaan->status_order_manajer;
-        //                         })
-        //                     );
-        //                 } elseif (auth()->user()->hasRole('asisten-manajer-perencanaan')) {
-        //                     $penunjukan = $penunjukan->setCollection(
-        //                         $penunjukan->sortBy(function ($pekerjaan) {
-        //                             return $pekerjaan->status_order_perencanaan;
-        //                         })
-        //                     );
-        //                 } else {
-        //                     $penunjukan = $penunjukan->setCollection(
-        //                         $penunjukan->sortBy(function ($pekerjaan) {
-        //                             return $pekerjaan->status_order;
-        //                         })
-        //                     );
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
+                    $query->whereIn('id', $penunjukanAduan)->orderBy('updated_at', 'desc');
+                    $penunjukan = $query->paginate($limit);
+                    $penunjukan = $penunjukan->setCollection(
+                        $penunjukan->sortBy(function ($pekerjaan) {
+                            return $pekerjaan->status_order_pengawas;
+                        })
+                    );
+                } else {
+                    $id_wilayah = auth()->user()->karyawan->id_wilayah;
+                    $wilayah = Wilayah::find($id_wilayah);
+                    $penunjukanAduan = PenunjukanPekerjaan::query();
 
-        $penunjukan = $query->paginate(50);
-        $penunjukan = $penunjukan->setCollection(
-            $penunjukan->sortBy(function ($pekerjaan) {
-                return $pekerjaan->status_order_all;
-            })
-        );
+                    if (request()->spk != '') {
+                        $penunjukanAduan = $penunjukanAduan->where('nomor_pekerjaan', 'like', '%' . $spk . '%');
+                    }
+                    if (request()->tanggal != '') {
+                        $PelaksanaanPekerjaan = PelaksanaanPekerjaan::whereBetween(DB::raw('DATE(created_at)'), array($start, $end))->get()->pluck('penunjukan_pekerjaan_id')->toArray();
+
+                        $penunjukanAduan = $penunjukanAduan->whereIn('id', $PelaksanaanPekerjaan);
+                    }
+
+                    if ($rekananid != 'all') {
+
+                        $penunjukanAduan = $penunjukanAduan->where('rekanan_id', $rekananid)->pluck('aduan_id')->toArray();
+
+                        $query->whereIn('id', $penunjukanAduan);
+                    }
+
+
+                    // $query->whereStatus('selesai');
+                    if ($wilayah->nama !== 'Wilayah Samarinda') {
+                        $query->where('wilayah_id', auth()->user()->karyawan->id_wilayah)->orderBy('status', 'asc')->orderBy('updated_at', 'desc');
+                        $penunjukan = $query->paginate($limit);
+
+                        // if (auth()->user()->hasRole('asisten-manajer-distribusi')) {
+                        //     $penunjukan = $penunjukan->setCollection(
+                        //         $penunjukan->sortBy(function ($pekerjaan) {
+                        //             return $pekerjaan->status_order_asmen;
+                        //         })
+                        //     );
+                        // } elseif (auth()->user()->hasRole('asisten-manajer-pengendalian-kehilangan-air')) {
+
+                        //     $penunjukan = $penunjukan->setCollection(
+                        //         $penunjukan->sortBy(function ($pekerjaan) {
+                        //             return $pekerjaan->status_order_asmen;
+                        //         })
+                        //     );
+                        // }
+                    } else {
+
+                        $penunjukan = $query->where('status', '!=', 'draft')->with(['hasPenunjukanPekerjaan' => function ($query) {
+                            $query->orderBy('status', 'desc');
+                        }])->orderBy('status', 'desc')->orderBy('updated_at', 'desc');
+                        $penunjukan = $query->paginate($limit);
+
+                        if (auth()->user()->hasRole('asisten-manajer-pengawas')) {
+                            $penunjukan = $penunjukan->setCollection(
+                                $penunjukan->sortBy(function ($pekerjaan) {
+                                    return $pekerjaan->status_order_asem_pengawas;
+                                })
+                            );
+                        } elseif (auth()->user()->hasRole('manajer-perawatan')) {
+                            $penunjukan = $penunjukan->setCollection(
+                                $penunjukan->sortBy(function ($pekerjaan) {
+                                    return $pekerjaan->status_order_manajer_pengawas;
+                                })
+                            );
+                        } elseif (auth()->user()->hasRole('manajer-distribusi')) {
+                            $penunjukan = $penunjukan->setCollection(
+                                $penunjukan->sortBy(function ($pekerjaan) {
+                                    return $pekerjaan->status_order_manajer;
+                                })
+                            );
+                        } elseif (auth()->user()->hasRole('manajer-pengendalian-kehilangan-air')) {
+                            $penunjukan = $penunjukan->setCollection(
+                                $penunjukan->sortBy(function ($pekerjaan) {
+                                    return $pekerjaan->status_order_manajer;
+                                })
+                            );
+                        } elseif (auth()->user()->hasRole('asisten-manajer-perencanaan')) {
+                            $penunjukan = $penunjukan->setCollection(
+                                $penunjukan->sortBy(function ($pekerjaan) {
+                                    return $pekerjaan->status_order_perencanaan;
+                                })
+                            );
+                        } else {
+                            $penunjukan = $penunjukan->setCollection(
+                                $penunjukan->sortBy(function ($pekerjaan) {
+                                    return $pekerjaan->status_order;
+                                })
+                            );
+                        }
+                    }
+                }
+            }
+        } else {
+
+            $penunjukan = $query->paginate(50);
+            $penunjukan = $penunjukan->setCollection(
+                $penunjukan->sortBy(function ($pekerjaan) {
+                    return $pekerjaan->status_order_all;
+                })
+            );
+        }
 
         $rekanan = $rekanan->orderBy('nama')->get();
 
