@@ -558,10 +558,11 @@
                                                         @if ($perencaan == false && $pekerjaanUtama->status === 'dikoreksi')
                                                             <th width="300">Keterangan</th>
                                                         @endif
-                                                        @if ($pekerjaanUtama->status === 'approve' ||
-                                                            $pekerjaanUtama->status === 'approve manajer' ||
-                                                            $pekerjaanUtama->status === 'koreksi pengawas' ||
-                                                            $pekerjaanUtama->status === 'koreksi asmen')
+                                                        @if (
+                                                            $pekerjaanUtama->status === 'approve' ||
+                                                                $pekerjaanUtama->status === 'approve manajer' ||
+                                                                $pekerjaanUtama->status === 'koreksi pengawas' ||
+                                                                $pekerjaanUtama->status === 'koreksi asmen')
                                                             <th width="300">Keterangan</th>
                                                         @endif
                                                         @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
@@ -614,10 +615,11 @@
                                                                 <td>Rekanan</td>
                                                                 <td>{{ str_replace('.', ',', $pekerjaan->pivot->qty) }}</td>
 
-                                                                @if ($pekerjaanUtama->status === 'approve' ||
-                                                                    $pekerjaanUtama->status === 'approve manajer' ||
-                                                                    $pekerjaanUtama->status === 'koreksi pengawas' ||
-                                                                    $pekerjaanUtama->status === 'koreksi asmen')
+                                                                @if (
+                                                                    $pekerjaanUtama->status === 'approve' ||
+                                                                        $pekerjaanUtama->status === 'approve manajer' ||
+                                                                        $pekerjaanUtama->status === 'koreksi pengawas' ||
+                                                                        $pekerjaanUtama->status === 'koreksi asmen')
                                                                     <td>{{ $pekerjaan->pivot->keterangan }}</td>
                                                                 @endif
                                                                 @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
@@ -687,19 +689,21 @@
                                                                                 {{ format_uang($daftarPekerjaan->hasItemPengawas[$key]->pivot->qty * $daftarPekerjaan->hasItemPengawas[$key]->pivot->harga) }}
                                                                             </td>
                                                                         @endif
-                                                                        @if ($pekerjaanUtama->status === 'approve' ||
-                                                                            $pekerjaanUtama->status === 'approve manajer' ||
-                                                                            $pekerjaanUtama->status === 'koreksi pengawas' ||
-                                                                            $pekerjaanUtama->status === 'koreksi asmen')
+                                                                        @if (
+                                                                            $pekerjaanUtama->status === 'approve' ||
+                                                                                $pekerjaanUtama->status === 'approve manajer' ||
+                                                                                $pekerjaanUtama->status === 'koreksi pengawas' ||
+                                                                                $pekerjaanUtama->status === 'koreksi asmen')
                                                                             <td>
                                                                                 {{ $daftarPekerjaan->hasItemPengawas[$key]->pivot->keterangan }}
                                                                             </td>
                                                                         @endif
                                                                     @else
-                                                                        @if ($pekerjaanUtama->status === 'approve' ||
-                                                                            $pekerjaanUtama->status === 'approve manajer' ||
-                                                                            $pekerjaanUtama->status === 'koreksi pengawas' ||
-                                                                            $pekerjaanUtama->status === 'koreksi asmen')
+                                                                        @if (
+                                                                            $pekerjaanUtama->status === 'approve' ||
+                                                                                $pekerjaanUtama->status === 'approve manajer' ||
+                                                                                $pekerjaanUtama->status === 'koreksi pengawas' ||
+                                                                                $pekerjaanUtama->status === 'koreksi asmen')
                                                                             <td>
 
                                                                             </td>
@@ -707,6 +711,7 @@
                                                                     @endif
                                                                 @endif
                                                             </tr>
+                                                            {{ $pekerjaanUtama->status }}
                                                             @if ($pekerjaanUtama->status === 'koreksi pengawas')
                                                                 <tr>
                                                                     <td>Asisten Manajer Pengawas</td>
@@ -755,10 +760,11 @@
                                                                                 {{ format_uang($daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty * $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->harga) }}
                                                                             </td>
                                                                         @else
-                                                                            @if ($pekerjaanUtama->status === 'approve' ||
-                                                                                $pekerjaanUtama->status === 'koreksi pengawas' ||
-                                                                                $pekerjaanUtama->status === 'approve manajer' ||
-                                                                                $pekerjaanUtama->status === 'koreksi asmen')
+                                                                            @if (
+                                                                                $pekerjaanUtama->status === 'approve' ||
+                                                                                    $pekerjaanUtama->status === 'koreksi pengawas' ||
+                                                                                    $pekerjaanUtama->status === 'approve manajer' ||
+                                                                                    $pekerjaanUtama->status === 'koreksi asmen')
                                                                                 <td>
                                                                                     {{ $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->keterangan }}
                                                                                 </td>
@@ -924,16 +930,15 @@
                                                                     @endif
 
                                                                 </tr>
-                                                                <tr @if (isset($daftarPekerjaan->hasItemPerencanaanAdujst[$key]) &&
-                                                                    isset($daftarPekerjaan->hasItemAsmenPengawas[$key])) @if ($daftarPekerjaan->hasItemPerencanaanAdujst[$key]->volume !=
-                                                                    $daftarPekerjaan->hasItemAsmenPengawas[$key]->volume)
+                                                                <tr @if (isset($daftarPekerjaan->hasItemPerencanaanAdujst[$key]) && isset($daftarPekerjaan->hasItemAsmenPengawas[$key])) @if ($daftarPekerjaan->hasItemPerencanaanAdujst[$key]->volume != $daftarPekerjaan->hasItemAsmenPengawas[$key]->volume)
                                                                                 class="table-danger"
                                                                                 {{ $daftarPekerjaan->hasItemPerencanaanAdujst[$key]->pivot->qty }}
                                                                                 {{ $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty }}
                                                                                 {{ $daftarPekerjaan->hasItemPerencanaan[$key]->pivot->harga }}
                                                                                 {{ $daftarPekerjaan->hasItemPerencanaanAdujst[$key]->pivot->harga }}
-                                                                            @elseif ($daftarPekerjaan->hasItemPerencanaanAdujst[$key]->pivot->harga !=
-                                                                                $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->harga)
+                                                                            @elseif (
+                                                                                $daftarPekerjaan->hasItemPerencanaanAdujst[$key]->pivot->harga !=
+                                                                                    $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->harga)
                                                                                 class="table-danger" @endif
                                                                     @endif>
 
@@ -1343,8 +1348,9 @@
                                                                             {{ $galian->galian_pengawas_keterangan }}
                                                                         </td>
                                                                     @endif
-                                                                    @if (($perencaan == false && $pekerjaanUtama->status === 'koreksi pengawas') ||
-                                                                        $pekerjaanUtama->status === 'koreksi asmen')
+                                                                    @if (
+                                                                        ($perencaan == false && $pekerjaanUtama->status === 'koreksi pengawas') ||
+                                                                            $pekerjaanUtama->status === 'koreksi asmen')
                                                                         <td>
                                                                             {{ $galian->galian_pengawas_keterangan }}
                                                                         </td>
@@ -1754,8 +1760,8 @@
                                                             value="{{ $aduan->no_spk }}">
                                                         <div class="card">
                                                             @if (auth()->user()->hasRole('asisten-manajer-distribusi') ||
-                                                                auth()->user()->hasRole('asisten-manajer-pengendalian-kehilangan-air') ||
-                                                                auth()->user()->hasRole('manajer-perawatan'))
+                                                                    auth()->user()->hasRole('asisten-manajer-pengendalian-kehilangan-air') ||
+                                                                    auth()->user()->hasRole('manajer-perawatan'))
                                                                 <button type="button" id="simpan_koreksi"
                                                                     class="btn btn-primary">Setujui Pekerjaan</button>
                                                             @else
