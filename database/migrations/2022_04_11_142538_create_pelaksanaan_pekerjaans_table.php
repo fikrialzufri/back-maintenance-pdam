@@ -35,6 +35,7 @@ class CreatePelaksanaanPekerjaansTable extends Migration
                     'disetujui',
                     'koreksi manajer',
                     'koreksi pengawas',
+                    'koreksi asmen',
                     'dikoreksi',
                     'selesai koreksi',
                     'diadjust'
