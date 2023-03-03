@@ -643,7 +643,7 @@
 
                                                             </tr>
                                                             <tr>
-                                                                <td>Pengawas</td>
+                                                                <td>Pengawas 1 {{ $pekerjaanUtama->status }}</td>
                                                                 @if ($pengawas === true && $pekerjaanUtama->status === 'approve manajer')
                                                                     <td><input type="text"
                                                                             name="qty_pengawas[{{ $pekerjaan->pivot->item_id }}]"
@@ -711,7 +711,7 @@
                                                                     @endif
                                                                 @endif
                                                             </tr>
-                                                            {{ $pekerjaanUtama->status }}
+
                                                             @if ($pekerjaanUtama->status === 'koreksi pengawas')
                                                                 <tr>
                                                                     <td>Asisten Manajer Pengawas</td>
