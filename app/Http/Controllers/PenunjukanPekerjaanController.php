@@ -949,65 +949,65 @@ class PenunjukanPekerjaanController extends Controller
                         // $status = $PelaksanaanPekerjaan->status;
                     } else if (auth()->user()->hasRole('asisten-manajer-pengawas')) {
                         // pekerjaan
-                        if ($PelaksanaanPekerjaan->status === 'koreksi pengawas') {
-                            if ($request->qty_pengawas) {
-                                foreach ($request->qty_pengawas as $key => $value) {
+                        // if ($PelaksanaanPekerjaan->status === 'koreksi pengawas') {
+                        //     if ($request->qty_pengawas) {
+                        //         foreach ($request->qty_pengawas as $key => $value) {
 
-                                    $cekItem[$key] = PelakasanaanItem::where('item_id', $key)->where('pelaksanaan_pekerjaan_id', $PelaksanaanPekerjaan->id)->first();
+                        //             $cekItem[$key] = PelakasanaanItem::where('item_id', $key)->where('pelaksanaan_pekerjaan_id', $PelaksanaanPekerjaan->id)->first();
 
-                                    $dataItem[$key] = Item::find($key);
+                        //             $dataItem[$key] = Item::find($key);
 
-                                    if ($cekItem[$key]) {
-                                        $cekItemPengawas[$key] = PelakasanaanPengawas::where('item_id', $key)->where('pelaksanaan_pekerjaan_id', $PelaksanaanPekerjaan->id)->first();
+                        //             if ($cekItem[$key]) {
+                        //                 $cekItemPengawas[$key] = PelakasanaanPengawas::where('item_id', $key)->where('pelaksanaan_pekerjaan_id', $PelaksanaanPekerjaan->id)->first();
 
-                                        if ($cekItemPengawas[$key]) {
+                        //                 if ($cekItemPengawas[$key]) {
 
-                                            $listitem[$key] = [
-                                                'keterangan' => $cekItem[$key]->keterangan,
-                                                'harga' => $cekItem[$key]->harga,
-                                                'qty' => $cekItem[$key]->qty,
-                                                'total' => str_replace(",", ".", $value) *  $cekItemPengawas[$key]->harga,
-                                            ];
-                                            $listitemPengawas[$key] = [
-                                                'keterangan' => $cekItemPengawas[$key]->keterangan,
-                                                'harga' => $cekItemPengawas[$key]->harga,
-                                                'qty' => $cekItemPengawas[$key]->qty,
-                                                'total' => str_replace(",", ".", $value) *  $cekItemPengawas[$key]->harga,
-                                            ];
-                                            $listitemAsmenPengawas[$key] = [
-                                                'keterangan' => isset($request->keterangan_pengawas[$key]) ? $request->keterangan_pengawas[$key] : null,
-                                                'harga' => $cekItemPengawas[$key]->harga,
-                                                'qty' => str_replace(",", ".", $value),
-                                                'total' => str_replace(",", ".", $value) *  $cekItemPengawas[$key]->harga,
-                                            ];
-                                        }
-                                    } else {
-                                        if ($dataItem[$key]) {
-                                            $listitem[$key] = [
-                                                'keterangan' => null,
-                                                'harga' => isset($request->jenis_harga[$key]) && $request->jenis_harga[$key] === "siang" ? $dataItem[$key]->harga : $dataItem[$key]->harga_malam,
-                                                'qty' => 0,
-                                                'total' => (float) isset($request->jenis_harga[$key]) && $request->jenis_harga[$key] === "siang" ? $dataItem[$key]->harga : $dataItem[$key]->harga_malam * str_replace(",", ".", $value),
-                                            ];
-                                            $listitemPengawas[$key] = [
-                                                'keterangan' => null,
-                                                'harga' => isset($request->jenis_harga[$key]) && $request->jenis_harga[$key] === "siang" ? $dataItem[$key]->harga : $dataItem[$key]->harga_malam,
-                                                'qty' => 0,
-                                                'total' => (float) isset($request->jenis_harga[$key]) && $request->jenis_harga[$key] === "siang" ? $dataItem[$key]->harga : $dataItem[$key]->harga_malam * str_replace(",", ".", $value),
-                                            ];
-                                            $listitemAsmenPengawas[$key] = [
-                                                'keterangan' => isset($request->keterangan_pengawas[$key]) ? $request->keterangan_pengawas[$key] : null,
-                                                'harga' => isset($request->jenis_harga[$key]) && $request->jenis_harga[$key] === "siang" ? $dataItem[$key]->harga : $dataItem[$key]->harga_malam,
-                                                'qty' => str_replace(",", ".", $value),
-                                                'total' => (float) isset($request->jenis_harga[$key]) && $request->jenis_harga[$key] === "siang" ? $dataItem[$key]->harga : $dataItem[$key]->harga_malam * str_replace(",", ".", $value),
-                                            ];
-                                        }
-                                    }
-                                }
-                            }
+                        //                     $listitem[$key] = [
+                        //                         'keterangan' => $cekItem[$key]->keterangan,
+                        //                         'harga' => $cekItem[$key]->harga,
+                        //                         'qty' => $cekItem[$key]->qty,
+                        //                         'total' => str_replace(",", ".", $value) *  $cekItemPengawas[$key]->harga,
+                        //                     ];
+                        //                     $listitemPengawas[$key] = [
+                        //                         'keterangan' => $cekItemPengawas[$key]->keterangan,
+                        //                         'harga' => $cekItemPengawas[$key]->harga,
+                        //                         'qty' => $cekItemPengawas[$key]->qty,
+                        //                         'total' => str_replace(",", ".", $value) *  $cekItemPengawas[$key]->harga,
+                        //                     ];
+                        //                     $listitemAsmenPengawas[$key] = [
+                        //                         'keterangan' => isset($request->keterangan_pengawas[$key]) ? $request->keterangan_pengawas[$key] : null,
+                        //                         'harga' => $cekItemPengawas[$key]->harga,
+                        //                         'qty' => str_replace(",", ".", $value),
+                        //                         'total' => str_replace(",", ".", $value) *  $cekItemPengawas[$key]->harga,
+                        //                     ];
+                        //                 }
+                        //             } else {
+                        //                 if ($dataItem[$key]) {
+                        //                     $listitem[$key] = [
+                        //                         'keterangan' => null,
+                        //                         'harga' => isset($request->jenis_harga[$key]) && $request->jenis_harga[$key] === "siang" ? $dataItem[$key]->harga : $dataItem[$key]->harga_malam,
+                        //                         'qty' => 0,
+                        //                         'total' => (float) isset($request->jenis_harga[$key]) && $request->jenis_harga[$key] === "siang" ? $dataItem[$key]->harga : $dataItem[$key]->harga_malam * str_replace(",", ".", $value),
+                        //                     ];
+                        //                     $listitemPengawas[$key] = [
+                        //                         'keterangan' => null,
+                        //                         'harga' => isset($request->jenis_harga[$key]) && $request->jenis_harga[$key] === "siang" ? $dataItem[$key]->harga : $dataItem[$key]->harga_malam,
+                        //                         'qty' => 0,
+                        //                         'total' => (float) isset($request->jenis_harga[$key]) && $request->jenis_harga[$key] === "siang" ? $dataItem[$key]->harga : $dataItem[$key]->harga_malam * str_replace(",", ".", $value),
+                        //                     ];
+                        //                     $listitemAsmenPengawas[$key] = [
+                        //                         'keterangan' => isset($request->keterangan_pengawas[$key]) ? $request->keterangan_pengawas[$key] : null,
+                        //                         'harga' => isset($request->jenis_harga[$key]) && $request->jenis_harga[$key] === "siang" ? $dataItem[$key]->harga : $dataItem[$key]->harga_malam,
+                        //                         'qty' => str_replace(",", ".", $value),
+                        //                         'total' => (float) isset($request->jenis_harga[$key]) && $request->jenis_harga[$key] === "siang" ? $dataItem[$key]->harga : $dataItem[$key]->harga_malam * str_replace(",", ".", $value),
+                        //                     ];
+                        //                 }
+                        //             }
+                        //         }
+                        //     }
 
-                            // end pekerjaan;
-                        }
+                        //     // end pekerjaan;
+                        // }
                         $status = 'koreksi asmen';
                         // $status = $PelaksanaanPekerjaan->status;
                     } else if (auth()->user()->hasRole('manajer-perawatan')) {
@@ -1249,11 +1249,11 @@ class PenunjukanPekerjaanController extends Controller
                             //     }
                             // }
                             // end galian
-                            if (isset($listitem) || isset($listitemPengawas) || $listitemAsmenPengawas) {
-                                $PelaksanaanPekerjaan->hasItem()->sync($listitem);
-                                $PelaksanaanPekerjaan->hasItemPengawas()->sync($listitemPengawas);
-                                $PelaksanaanPekerjaan->hasItemAsmenPengawas()->sync($listitemAsmenPengawas);
-                            }
+                            // if (isset($listitem) || isset($listitemPengawas) || $listitemAsmenPengawas) {
+                            //     $PelaksanaanPekerjaan->hasItem()->sync($listitem);
+                            //     $PelaksanaanPekerjaan->hasItemPengawas()->sync($listitemPengawas);
+                            //     $PelaksanaanPekerjaan->hasItemAsmenPengawas()->sync($listitemAsmenPengawas);
+                            // }
                         }
                         if (auth()->user()->hasRole('asisten-manajer-perencanaan')) {
 
