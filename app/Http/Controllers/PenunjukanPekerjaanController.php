@@ -950,7 +950,7 @@ class PenunjukanPekerjaanController extends Controller
                     } else if (auth()->user()->hasRole('asisten-manajer-pengawas')) {
                         // pekerjaan
                         if ($PelaksanaanPekerjaan->status === 'koreksi pengawas') {
-                            return $request;
+
                             if ($request->qty_pengawas) {
                                 foreach ($request->qty_pengawas as $key => $value) {
 
@@ -959,7 +959,7 @@ class PenunjukanPekerjaanController extends Controller
                                     $dataItem[$key] = Item::find($key);
 
                                     if ($cekItem[$key]) {
-                                        $cekItemPengawas[$key] = PelakasanaanPengawas::where('item_id', $key)->where('pelaksanaan_pekerjaan_id', $PelaksanaanPekerjaan->id)->first();
+                                        return $cekItemPengawas[$key] = PelakasanaanPengawas::where('item_id', $key)->where('pelaksanaan_pekerjaan_id', $PelaksanaanPekerjaan->id)->first();
 
                                         if ($cekItemPengawas[$key]) {
 
