@@ -1313,7 +1313,7 @@ class PenunjukanPekerjaanController extends Controller
                             'keterangan' => $status,
                         ];
                         $PelaksanaanPekerjaan->hasUserMany()->attach($user);
-                        return $PelaksanaanPekerjaan;
+                        // return $PelaksanaanPekerjaan;
                         // $penunjukanPekerjaan = PenunjukanPekerjaan::find($PelaksanaanPekerjaan->penunjukan_pekerjaan_id);
 
                         // if ($penunjukanPekerjaan) {
