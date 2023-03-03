@@ -950,7 +950,7 @@ class PenunjukanPekerjaanController extends Controller
                     } else if (auth()->user()->hasRole('asisten-manajer-pengawas')) {
                         // pekerjaan
                         if ($PelaksanaanPekerjaan->status === 'koreksi pengawas') {
-                            return $request;
+
                             if ($request->qty_pengawas) {
                                 foreach ($request->qty_pengawas as $key => $value) {
 
@@ -1005,6 +1005,8 @@ class PenunjukanPekerjaanController extends Controller
                                         }
                                     }
                                 }
+
+                                return $listitem;
                             }
 
                             // end pekerjaan;
