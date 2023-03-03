@@ -254,6 +254,11 @@ class PerusahaanSeeder extends Seeder
         $jabatanStafPengawas->divisi_id = $divisiPengawas->id;
         $jabatanStafPengawas->wilayah_id = $WilayahSamarinda->id;
         $jabatanStafPengawas->save();
+        $jabatanAsistenManajerPengawas = new Jabatan();
+        $jabatanAsistenManajerPengawas->nama = 'Asisten Manajer Pengawas';
+        $jabatanAsistenManajerPengawas->divisi_id = $divisiPengawas->id;
+        $jabatanAsistenManajerPengawas->wilayah_id = $WilayahSamarinda->id;
+        $jabatanAsistenManajerPengawas->save();
 
         $jabatanAsistenManajerPerencaan = new Jabatan();
         $jabatanAsistenManajerPerencaan->nama = 'Asisten Manajer Perencanaan';
