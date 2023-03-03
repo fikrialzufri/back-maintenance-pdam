@@ -32,34 +32,20 @@
                                 @endif
                             </div>
                             <div class="form-group">
-                                <table class="table table-bordered table-striped" border='10' style=" text-align:center;">
+                                <table class="table table-bordered table-striped" border='10'
+                                    style=" text-align:center;">
                                     <thead>
                                         <tr>
                                             <th scope="col" rowspan="2" class="text-center"
                                                 style="vertical-align:middle">Tugas</th>
-                                            <th scope="col" colspan="5" class="text-center">Hak Akses</th>
+                                            <th scope="col" colspan="6" class="text-center">Hak Akses</th>
                                         </tr>
                                         <tr>
                                             <th scope="col" class="text-center">
 
                                                 Pilih Semua
                                             </th>
-                                            <th scope="col" class="text-center">
-
-                                                Tambah
-                                            </th>
-                                            <th scope="col" class="text-center">
-
-                                                Hapus
-                                            </th>
-                                            <th scope="col" class="text-center">
-
-                                                Edit
-                                            </th>
-                                            <th scope="col" class="text-center">
-
-                                                Lihat
-                                            </th>
+                                            <th scope="col" colspan="5" class="text-center">Modul</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -79,6 +65,7 @@
                                                                 value="{{ $permission->id }}"
                                                                 class="check{{ $task->slug }} hakakses"
                                                                 id="{{ $permission->name }}" />
+                                                                {{ $permission->slug }}
                                                         </div>
                                                     </td>
                                                 @endforeach

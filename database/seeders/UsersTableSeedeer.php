@@ -180,25 +180,52 @@ class UsersTableSeedeer extends Seeder
 
         foreach ($tasks as $task) {
             $name = $task->name;
-            $data = array(
+            if ($name == 'Item') {
 
-                [
-                    'name'    => 'View ' . $name,
-                    'task_id' => $task->id
-                ],
-                [
-                    'name'    => 'Create ' . $name,
-                    'task_id' => $task->id
-                ],
-                [
-                    'name'    => 'Edit ' . $name,
-                    'task_id' => $task->id
-                ],
-                [
-                    'name'    => 'Delete ' . $name,
-                    'task_id' => $task->id
-                ],
-            );
+                $data = array(
+
+                    [
+                        'name'    => 'View ' . $name,
+                        'task_id' => $task->id
+                    ],
+                    [
+                        'name'    => 'Create ' . $name,
+                        'task_id' => $task->id
+                    ],
+                    [
+                        'name'    => 'Edit ' . $name,
+                        'task_id' => $task->id
+                    ],
+                    [
+                        'name'    => 'Delete ' . $name,
+                        'task_id' => $task->id
+                    ],
+                    [
+                        'name'    => 'Upload ' . $name,
+                        'task_id' => $task->id
+                    ],
+                );
+            } else {
+                $data = array(
+
+                    [
+                        'name'    => 'View ' . $name,
+                        'task_id' => $task->id
+                    ],
+                    [
+                        'name'    => 'Create ' . $name,
+                        'task_id' => $task->id
+                    ],
+                    [
+                        'name'    => 'Edit ' . $name,
+                        'task_id' => $task->id
+                    ],
+                    [
+                        'name'    => 'Delete ' . $name,
+                        'task_id' => $task->id
+                    ],
+                );
+            }
 
             foreach ($data as $induk) {
                 $Permission = Permission::Create($induk);

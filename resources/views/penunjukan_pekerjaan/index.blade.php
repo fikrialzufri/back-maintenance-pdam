@@ -68,7 +68,7 @@
                                     <input type="text" id="daterange" name="tanggal" value="{{ $tanggal }}"
                                         class="form-control">
                                 </div>
-                                <div class="col-lg-2">
+                                {{-- <div class="col-lg-2">
                                     <label for="">Status</label>
                                     <select name="status" class="selected2 form-control" id="cmbStatus">
                                         <option value="">Pilih Status</option>
@@ -77,7 +77,7 @@
                                         </option>
 
                                     </select>
-                                </div>
+                                </div> --}}
 
                                 <div class="col-lg-1">
                                     <label for="">Aksi</label>
@@ -118,7 +118,7 @@
                                     <th>Pelapor</th>
                                     <th>Admin</th>
                                     <th width="20%">Lokasi</th>
-                                    <th>Status</th>
+                                    {{-- <th>Status</th> --}}
                                 </tr>
                             </thead>
                             <tbody>
@@ -212,7 +212,7 @@
                                         <td>{{ $item->atas_nama }}</td>
                                         <td>{{ ucfirst($item->user) }}</td>
                                         <td>{{ $item->lokasi }}</td>
-                                        <td>{{ ucfirst($item->status_aduan) }}</td>
+                                        {{-- <td>{{ ucfirst($item->status_aduan) }}</td> --}}
 
                                     </tr>
                                 @empty

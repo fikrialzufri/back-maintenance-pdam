@@ -33,12 +33,13 @@
                                 @endif
                             </div>
                             <div class="form-group">
-                                <table class="table table-bordered table-striped" border='10' style=" text-align:center;">
+                                <table class="table table-bordered table-striped" border='10'
+                                    style=" text-align:center;">
                                     <thead>
                                         <tr>
                                             <th scope="col" rowspan="2" class="text-center"
                                                 style="vertical-align:middle">Tugas</th>
-                                            <th scope="col" colspan="5" class="text-center">Hak Akses</th>
+                                            <th scope="col" colspan="6" class="text-center">Hak Akses</th>
                                         </tr>
                                         <tr>
                                             <th scope="col" class="text-center">
