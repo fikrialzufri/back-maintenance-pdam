@@ -195,14 +195,14 @@ class PenunjukanPekerjaanController extends Controller
                     $wilayah = Wilayah::find($id_wilayah);
                     $penunjukanAduan = PenunjukanPekerjaan::query();
 
-                    // if (request()->spk != '') {
-                    //     $penunjukanAduan = $penunjukanAduan->where('nomor_pekerjaan', 'like', '%' . $spk . '%');
-                    // }
-                    // if (request()->tanggal != '') {
-                    //     $PelaksanaanPekerjaan = PelaksanaanPekerjaan::whereBetween(DB::raw('DATE(created_at)'), array($start, $end))->get()->pluck('penunjukan_pekerjaan_id')->toArray();
+                    if (request()->spk != '') {
+                        $penunjukanAduan = $penunjukanAduan->where('nomor_pekerjaan', 'like', '%' . $spk . '%');
+                    }
+                    if (request()->tanggal != '') {
+                        $PelaksanaanPekerjaan = PelaksanaanPekerjaan::whereBetween(DB::raw('DATE(created_at)'), array($start, $end))->get()->pluck('penunjukan_pekerjaan_id')->toArray();
 
-                    //     $penunjukanAduan = $penunjukanAduan->whereIn('id', $PelaksanaanPekerjaan);
-                    // }
+                        $penunjukanAduan = $penunjukanAduan->whereIn('id', $PelaksanaanPekerjaan);
+                    }
 
                     // if ($rekananid != 'all') {
 
