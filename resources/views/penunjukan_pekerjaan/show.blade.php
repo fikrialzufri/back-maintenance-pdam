@@ -196,9 +196,9 @@
                         @if ($penunjukan->status_mobile < 3 && $penunjukan->status !== 'approve')
                             @if ($pekerjaanUtama)
                                 @if ($pekerjaanUtama->status_mobile < 2)
-                                    @canany(['edit-penunjukan-pekerjaan', 'create-penunjukan-pekerjaan'])
+                                    @canany(['pilih-rekanan'])
                                         <div class="card-header">
-                                            <div class="card-title">Pilih Pekerja</div>
+                                            <div class="card-title">Pilih Rekanan</div>
                                         </div>
                                         <form action="{{ $action }}" method="post" role="form"
                                             enctype="multipart/form-data">
