@@ -215,7 +215,7 @@ class PenunjukanPekerjaanController extends Controller
                     // $query->whereStatus('selesai');
                     if ($wilayah->nama !== 'Wilayah Samarinda') {
                         $query->where('wilayah_id', auth()->user()->karyawan->id_wilayah)->orderBy('status', 'asc')->orderBy('updated_at', 'desc');
-                        $penunjukan = $query->paginate($limit);
+                        return $penunjukan = $query->paginate($limit);
 
                         if (auth()->user()->hasRole('asisten-manajer-distribusi')) {
                             $penunjukan = $penunjukan->setCollection(
@@ -232,7 +232,6 @@ class PenunjukanPekerjaanController extends Controller
                             );
                         }
                     } else {
-                        return 1;
                         $penunjukan = $query->where('status', '!=', 'draft')->with(['hasPenunjukanPekerjaan' => function ($query) {
                             $query->orderBy('status', 'desc');
                         }])->orderBy('status', 'desc')->orderBy('updated_at', 'desc');
