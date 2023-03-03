@@ -444,7 +444,7 @@ class PenunjukanPekerjaanController extends Controller
                     }
                     $pengawas = true;
                 } elseif (auth()->user()->hasRole('asisten-manajer-pengawas')) {
-                    // return $pekerjaanUtama;
+                    return $pekerjaanUtama;
                     if ($pekerjaanUtama->status  === 'koreksi pengawas') {
                         $tombolEdit = 'bisa';
                         $asmenpengawas = true;
@@ -1313,70 +1313,69 @@ class PenunjukanPekerjaanController extends Controller
                             'keterangan' => $status,
                         ];
                         $PelaksanaanPekerjaan->hasUserMany()->attach($user);
-                        // return $PelaksanaanPekerjaan;
-                        // $penunjukanPekerjaan = PenunjukanPekerjaan::find($PelaksanaanPekerjaan->penunjukan_pekerjaan_id);
 
-                        // if ($penunjukanPekerjaan) {
-                        //     $nomor_pekerjaan = $penunjukanPekerjaan->nomor_pekerjaan;
-                        //     $penunjukanPekerjaan->status = $status;
-                        //     $penunjukanPekerjaan->save();
+                        $penunjukanPekerjaan = PenunjukanPekerjaan::find($PelaksanaanPekerjaan->penunjukan_pekerjaan_id);
 
-                        //     $penunjukanPekerjaan->hasUserMany()->attach($user);
-                        //     $rekanan = Rekanan::find($PelaksanaanPekerjaan->rekanan_id)->first();
-                        //     $title = "Pekerjaan Telah dikoreksi";
-                        //     $body = "SPK " . $nomor_pekerjaan . " telah dikoreksi";
-                        //     $modul = "penunjukan-pekerjaan";
+                        if ($penunjukanPekerjaan) {
+                            $nomor_pekerjaan = $penunjukanPekerjaan->nomor_pekerjaan;
+                            $penunjukanPekerjaan->status = $status;
+                            $penunjukanPekerjaan->save();
+
+                            $penunjukanPekerjaan->hasUserMany()->attach($user);
+                            $rekanan = Rekanan::find($PelaksanaanPekerjaan->rekanan_id)->first();
+                            $title = "Pekerjaan Telah dikoreksi";
+                            $body = "SPK " . $nomor_pekerjaan . " telah dikoreksi";
+                            $modul = "penunjukan-pekerjaan";
 
 
 
-                        //     // return  $penunjukanPekerjaan;
-                        //     $message = 'Berhasil Mengoreksi Pelaksanaan Pekerjaan';
-                        //     $aduan = Aduan::find($penunjukanPekerjaan->aduan_id);
+                            // return  $penunjukanPekerjaan;
+                            $message = 'Berhasil Mengoreksi Pelaksanaan Pekerjaan';
+                            $aduan = Aduan::find($penunjukanPekerjaan->aduan_id);
 
-                        //     if (!empty($rekanan)) {
-                        //         // notif ke reknanan
-                        //         $this->notification($penunjukanPekerjaan->aduan_id, $penunjukanPekerjaan->slug, $title, $body, $modul, auth()->user()->id, $rekanan->hasUser->id);
+                            if (!empty($rekanan)) {
+                                // notif ke reknanan
+                                $this->notification($penunjukanPekerjaan->aduan_id, $penunjukanPekerjaan->slug, $title, $body, $modul, auth()->user()->id, $rekanan->hasUser->id);
 
-                        //         // notif ke staf pengawas
-                        //         if ($rekanan->hasKaryawan) {
-                        //             foreach (collect($rekanan->hasKaryawan) as $key => $value) {
-                        //                 $this->notification($penunjukanPekerjaan->id, $penunjukanPekerjaan->slug, $title, $body, $modul, auth()->user()->id, $value->user_id);
-                        //             }
-                        //         }
-                        //     }
+                                // notif ke staf pengawas
+                                if ($rekanan->hasKaryawan) {
+                                    foreach (collect($rekanan->hasKaryawan) as $key => $value) {
+                                        $this->notification($penunjukanPekerjaan->id, $penunjukanPekerjaan->slug, $title, $body, $modul, auth()->user()->id, $value->user_id);
+                                    }
+                                }
+                            }
 
-                        //     // notif ke admin distribusi sesuai wilyah
-                        //     if ($aduan->wilayah_id) {
-                        //         $jabatanWilayah = Jabatan::query();
+                            // notif ke admin distribusi sesuai wilyah
+                            if ($aduan->wilayah_id) {
+                                $jabatanWilayah = Jabatan::query();
 
-                        //         if ($aduan->kategori_nps === "dis") {
-                        //             $jabatanWilayah = $jabatanWilayah->orwhere('slug', "like", "admin-distribusi%")->orWhere('slug', 'manajer-distribusi');
-                        //         }
-                        //         if ($aduan->kategori_nps === "pka") {
-                        //             $jabatanWilayah = $jabatanWilayah->orWhere('slug', "like", "admin-pengendalian-kehilangan-air%")->orWhere('slug', 'manajer-pengendalian-kehilangan-air%');
-                        //         }
+                                if ($aduan->kategori_nps === "dis") {
+                                    $jabatanWilayah = $jabatanWilayah->orwhere('slug', "like", "admin-distribusi%")->orWhere('slug', 'manajer-distribusi');
+                                }
+                                if ($aduan->kategori_nps === "pka") {
+                                    $jabatanWilayah = $jabatanWilayah->orWhere('slug', "like", "admin-pengendalian-kehilangan-air%")->orWhere('slug', 'manajer-pengendalian-kehilangan-air%');
+                                }
 
-                        //         $jabatanWilayah =  $jabatanWilayah->orWhere('wilayah_id', $aduan->wilayah_id)
-                        //             ->orWhere('slug', 'manajer-perawatan')
-                        //             ->orWhere('slug', 'asisten-manajer-perencanaan')
-                        //             ->orWhere('slug', 'asisten-manajer-pengawas')
-                        //             ->pluck('id')
-                        //             ->toArray();
+                                $jabatanWilayah =  $jabatanWilayah->orWhere('wilayah_id', $aduan->wilayah_id)
+                                    ->orWhere('slug', 'manajer-perawatan')
+                                    ->orWhere('slug', 'asisten-manajer-perencanaan')
+                                    ->orWhere('slug', 'asisten-manajer-pengawas')
+                                    ->pluck('id')
+                                    ->toArray();
 
-                        //         if ($jabatanWilayah) {
-                        //             $karyawanwilayah = Karyawan::whereIn('jabatan_id', $jabatanWilayah)->get();
+                                if ($jabatanWilayah) {
+                                    $karyawanwilayah = Karyawan::whereIn('jabatan_id', $jabatanWilayah)->get();
 
-                        //             if ($karyawanwilayah) {
-                        //                 foreach (collect($karyawanwilayah) as $in => $krw) {
-                        //                     $this->notification($penunjukanPekerjaan->id, $penunjukanPekerjaan->slug, $title, $body, $modul, auth()->user()->id, $krw->user_id);
-                        //                 }
-                        //             }
-                        //         }
-                        //     }
+                                    if ($karyawanwilayah) {
+                                        foreach (collect($karyawanwilayah) as $in => $krw) {
+                                            $this->notification($penunjukanPekerjaan->id, $penunjukanPekerjaan->slug, $title, $body, $modul, auth()->user()->id, $krw->user_id);
+                                        }
+                                    }
+                                }
+                            }
 
-                        //     return redirect()->route('penunjukan_pekerjaan.show', $aduan->slug)->with('message', $message)->with('Class', 'primary');
-                        // }
-                        return redirect()->route('penunjukan_pekerjaan.show', $aduan->slug)->with('message', $message)->with('Class', 'primary');
+                            return redirect()->route('penunjukan_pekerjaan.show', $aduan->slug)->with('message', $message)->with('Class', 'primary');
+                        }
                     }
                 }
             }
