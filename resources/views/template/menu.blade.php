@@ -31,8 +31,7 @@
                         <a href="#"><i class="ik ik-box"></i><span>{{ __('Item') }}</span></a>
                         <div class="submenu-content">
                             @can('view-item')
-                                <a href="{{ route('item.index') }}"
-                                    class="menu-item {{ $segment1 == 'item' ? 'active' : '' }}">
+                                <a href="{{ route('item.index') }}" class="menu-item {{ $segment1 == 'item' ? 'active' : '' }}">
                                     Item
                                 </a>
                             @endcan
