@@ -195,26 +195,26 @@ class PenunjukanPekerjaanController extends Controller
                     $wilayah = Wilayah::find($id_wilayah);
                     $penunjukanAduan = PenunjukanPekerjaan::query();
 
-                    if (request()->spk != '') {
-                        $penunjukanAduan = $penunjukanAduan->where('nomor_pekerjaan', 'like', '%' . $spk . '%');
-                    }
-                    if (request()->tanggal != '') {
-                        $PelaksanaanPekerjaan = PelaksanaanPekerjaan::whereBetween(DB::raw('DATE(created_at)'), array($start, $end))->get()->pluck('penunjukan_pekerjaan_id')->toArray();
+                    // if (request()->spk != '') {
+                    //     $penunjukanAduan = $penunjukanAduan->where('nomor_pekerjaan', 'like', '%' . $spk . '%');
+                    // }
+                    // if (request()->tanggal != '') {
+                    //     $PelaksanaanPekerjaan = PelaksanaanPekerjaan::whereBetween(DB::raw('DATE(created_at)'), array($start, $end))->get()->pluck('penunjukan_pekerjaan_id')->toArray();
 
-                        $penunjukanAduan = $penunjukanAduan->whereIn('id', $PelaksanaanPekerjaan);
-                    }
+                    //     $penunjukanAduan = $penunjukanAduan->whereIn('id', $PelaksanaanPekerjaan);
+                    // }
 
-                    if ($rekananid != 'all') {
+                    // if ($rekananid != 'all') {
 
-                        $penunjukanAduan = $penunjukanAduan->where('rekanan_id', $rekananid)->pluck('aduan_id')->toArray();
+                    //     $penunjukanAduan = $penunjukanAduan->where('rekanan_id', $rekananid)->pluck('aduan_id')->toArray();
 
-                        $query->whereIn('id', $penunjukanAduan);
-                    }
+                    //     $query->whereIn('id', $penunjukanAduan);
+                    // }
 
 
                     // $query->whereStatus('selesai');
                     if ($wilayah->nama !== 'Wilayah Samarinda') {
-                        // $query->where('wilayah_id', auth()->user()->karyawan->id_wilayah)->orderBy('status', 'asc')->orderBy('updated_at', 'desc');
+                        $query->where('wilayah_id', auth()->user()->karyawan->id_wilayah)->orderBy('status', 'asc')->orderBy('updated_at', 'desc');
                         $penunjukan = $query->paginate($limit);
 
                         if (auth()->user()->hasRole('asisten-manajer-distribusi')) {
