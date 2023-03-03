@@ -214,8 +214,8 @@ class PenunjukanPekerjaanController extends Controller
 
                     // $query->whereStatus('selesai');
                     if ($wilayah->nama !== 'Wilayah Samarinda') {
-                        $query->where('wilayah_id', auth()->user()->karyawan->id_wilayah)->orderBy('status', 'asc')->orderBy('updated_at', 'desc');
-                        return $penunjukan = $query->paginate($limit);
+                        // $query->where('wilayah_id', auth()->user()->karyawan->id_wilayah)->orderBy('status', 'asc')->orderBy('updated_at', 'desc');
+                        $penunjukan = $query->paginate($limit);
 
                         if (auth()->user()->hasRole('asisten-manajer-distribusi')) {
                             $penunjukan = $penunjukan->setCollection(
