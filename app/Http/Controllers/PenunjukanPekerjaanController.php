@@ -950,6 +950,7 @@ class PenunjukanPekerjaanController extends Controller
                     } else if (auth()->user()->hasRole('asisten-manajer-pengawas')) {
                         // pekerjaan
                         if ($PelaksanaanPekerjaan->status === 'koreksi pengawas') {
+                            return $PelaksanaanPekerjaan;
                             if ($request->qty_pengawas) {
                                 foreach ($request->qty_pengawas as $key => $value) {
 
@@ -1164,6 +1165,7 @@ class PenunjukanPekerjaanController extends Controller
                         if (auth()->user()->hasRole('asisten-manajer-pengawas')) {
                             // galian
                             // galian pengawas
+                            return $listitem;
                             $cekItemGalian = [];
                             $cekItemGalianPengawas = [];
                             $datapanjang = [];
