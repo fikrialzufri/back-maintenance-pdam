@@ -1069,9 +1069,6 @@ class PenunjukanPekerjaanController extends Controller
                     }
 
                     if ($PelaksanaanPekerjaan) {
-
-                        return $status;
-
                         // koreksi yang ada angkanya
                         if (auth()->user()->hasRole('staf-pengawas')) {
                             // galian pengawas
@@ -1161,6 +1158,8 @@ class PenunjukanPekerjaanController extends Controller
                             }
                         }
                         if (auth()->user()->hasRole('asisten-manajer-pengawas')) {
+                            return $status;
+
                             // galian
                             // galian pengawas
                             $cekItemGalian = [];
