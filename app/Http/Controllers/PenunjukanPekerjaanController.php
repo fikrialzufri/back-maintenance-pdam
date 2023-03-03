@@ -204,12 +204,12 @@ class PenunjukanPekerjaanController extends Controller
                         $penunjukanAduan = $penunjukanAduan->whereIn('id', $PelaksanaanPekerjaan);
                     }
 
-                    // if ($rekananid != 'all') {
+                    if ($rekananid != 'all' || $rekananid != '') {
 
-                    //     $penunjukanAduan = $penunjukanAduan->where('rekanan_id', $rekananid)->pluck('aduan_id')->toArray();
+                        $penunjukanAduan = $penunjukanAduan->where('rekanan_id', $rekananid)->pluck('aduan_id')->toArray();
 
-                    //     $query->whereIn('id', $penunjukanAduan);
-                    // }
+                        $query->whereIn('id', $penunjukanAduan);
+                    }
 
 
                     // $query->whereStatus('selesai');
