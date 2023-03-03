@@ -452,11 +452,12 @@ class PenunjukanPekerjaanController extends Controller
                     if ($pekerjaanUtama->status  === 'koreksi asmen') {
                         $tombolEdit = 'bisa';
                     }
-                } else {
-                    if ($pekerjaanUtama->status === 'dikoreksi') {
-                        $tombolEdit = 'bisa';
-                    }
                 }
+                // else {
+                //     if ($pekerjaanUtama->status === 'dikoreksi') {
+                //         $tombolEdit = 'bisa';
+                //     }
+                // }
 
                 $list_persetujuan = $penunjukan->list_persetujuan;
             }
