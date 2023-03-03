@@ -1008,7 +1008,7 @@ class PenunjukanPekerjaanController extends Controller
 
                         //     // end pekerjaan;
                         // }
-                        $status = 'koreksi asmen';
+                        return $status = 'koreksi asmen';
                         // $status = $PelaksanaanPekerjaan->status;
                     } else if (auth()->user()->hasRole('manajer-perawatan')) {
                         // pekerjaan
