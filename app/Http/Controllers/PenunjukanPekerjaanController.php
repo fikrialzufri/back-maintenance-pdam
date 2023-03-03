@@ -959,7 +959,7 @@ class PenunjukanPekerjaanController extends Controller
                                     $dataItem[$key] = Item::find($key);
 
                                     if ($cekItem[$key]) {
-                                        return $cekItemPengawas[$key] = PelakasanaanPengawas::where('item_id', $key)->where('pelaksanaan_pekerjaan_id', $PelaksanaanPekerjaan->id)->first();
+                                        $cekItemPengawas[$key] = PelakasanaanPengawas::where('item_id', $key)->where('pelaksanaan_pekerjaan_id', $PelaksanaanPekerjaan->id)->first();
 
                                         if ($cekItemPengawas[$key]) {
 
@@ -1005,8 +1005,6 @@ class PenunjukanPekerjaanController extends Controller
                                         }
                                     }
                                 }
-
-                                return $listitem;
                             }
 
                             // end pekerjaan;
@@ -1073,8 +1071,8 @@ class PenunjukanPekerjaanController extends Controller
 
                     if ($PelaksanaanPekerjaan) {
 
-                        $PelaksanaanPekerjaan->status = $status;
-                        $PelaksanaanPekerjaan->save();
+                        // $PelaksanaanPekerjaan->status = $status;
+                        // $PelaksanaanPekerjaan->save();
 
                         // koreksi yang ada angkanya
                         if (auth()->user()->hasRole('staf-pengawas')) {
@@ -1167,7 +1165,7 @@ class PenunjukanPekerjaanController extends Controller
                         if (auth()->user()->hasRole('asisten-manajer-pengawas')) {
                             // galian
                             // galian pengawas
-                            return $listitem;
+                            return [$listitem, $listitemPengawas, $listitemAsmenPengawas];
                             $cekItemGalian = [];
                             $cekItemGalianPengawas = [];
                             $datapanjang = [];
