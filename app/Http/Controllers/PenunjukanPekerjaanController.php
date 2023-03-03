@@ -384,7 +384,7 @@ class PenunjukanPekerjaanController extends Controller
                 $perencaan = true;
             }
             $action = route('penunjukan_pekerjaan.update', $penunjukan->id);
-            return $pekerjaanUtama = $query->first();
+            $pekerjaanUtama = $query->first();
             if ($pekerjaanUtama) {
 
                 $fotoBahan = (object) $penunjukan->foto_bahan;
