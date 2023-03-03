@@ -1165,7 +1165,7 @@ class PenunjukanPekerjaanController extends Controller
                         if (auth()->user()->hasRole('asisten-manajer-pengawas')) {
                             // galian
                             // galian pengawas
-                            return [$listitem, $listitemPengawas, $listitemAsmenPengawas];
+                            return $listitemAsmenPengawas;
                             $cekItemGalian = [];
                             $cekItemGalianPengawas = [];
                             $datapanjang = [];
