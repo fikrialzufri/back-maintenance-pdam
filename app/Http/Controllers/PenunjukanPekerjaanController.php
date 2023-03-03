@@ -448,11 +448,22 @@ class PenunjukanPekerjaanController extends Controller
                         $tombolEdit = 'bisa';
                         $asmenpengawas = true;
                     }
+                } elseif (auth()->user()->hasRole('asisten-manajer')) {
+                    if ($pekerjaanUtama->status  === 'koreksi pengawas') {
+                        $tombolEdit = 'bisa';
+                        $asmenpengawas = true;
+                    }
                 } elseif (auth()->user()->hasRole('manajer-perawatan')) {
                     if ($pekerjaanUtama->status  === 'koreksi asmen') {
                         $tombolEdit = 'bisa';
                     }
+                } elseif (auth()->user()->hasRole('asisten-manajer-perencanaan')) {
+                    if ($pekerjaanUtama->status  === 'dikoreksi') {
+                        $tombolEdit = 'bisa';
+                        $asmenpengawas = true;
+                    }
                 }
+
                 // else {
                 //     if ($pekerjaanUtama->status === 'dikoreksi') {
                 //         $tombolEdit = 'bisa';
