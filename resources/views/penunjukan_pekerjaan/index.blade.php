@@ -36,8 +36,10 @@
                                         <option value="pipa dinas" {{ $kategori == 'pipa dinas' ? 'selected' : '' }}>Pipa
                                             dinas
                                         </option>
-                                        <option value="pipa premier / skunder">Pipa Premier / skunder
-                                            {{ $kategori == 'pipa premier / skunder' ? 'selected' : '' }}</option>
+                                        <option value="pipa premier / skunder"
+                                            {{ $kategori == 'pipa premier / skunder' ? 'selected' : '' }}>Pipa Premier
+                                            /Sskunder
+                                        </option>
 
                                     </select>
                                     @if ($errors->has('rule'))
@@ -73,7 +75,30 @@
                                     <select name="status" class="selected2 form-control" id="cmbStatus">
                                         <option value="">Pilih Status</option>
                                         <option value="all" {{ $status == 'all' ? 'selected' : '' }}>Semua</option>
-                                        <option value="0" {{ $status == '1' ? 'selected' : '' }}>Belum Dikerjaka
+                                        <option value="draft" {{ $status == 'draft' ? 'selected' : '' }}>Belum dikerjakan
+                                        </option>
+                                        <option value="proses" {{ $status == 'proses' ? 'selected' : '' }}>Sedang
+                                            dikerjakan
+                                        </option>
+                                        <option value="selesai" {{ $status == 'selesai' ? 'selected' : '' }}>Selesai
+                                            dikerjakan
+                                        </option>
+                                        <option value="approve" {{ $status == 'selesai' ? 'selected' : '' }}>Selesai
+                                            Approve Asisten Manajer
+                                        </option>
+                                        <option value="koreksi pengawas"
+                                            {{ $status == 'koreksi pengawas' ? 'selected' : '' }}>Dikoreksi
+                                            Pengawas
+                                        </option>
+                                        <option value="koreksi asmen" {{ $status == 'koreksi asmen' ? 'selected' : '' }}>
+                                            Dikoreksi Asmen Pengawas
+                                        </option>
+                                        <option value="dikoreksi" {{ $status == 'selesai koreksi' ? 'selected' : '' }}>
+                                            Disetujui Manajer
+                                        </option>
+                                        <option value="selesai koreksi"
+                                            {{ $status == 'selesai koreksi' ? 'selected' : '' }}>Selesai
+                                            Dikoreksi
                                         </option>
 
                                     </select>
@@ -244,6 +269,10 @@
     <script>
         $('#cmbrekanan').select2({
             placeholder: '--- Pilih Rekanan ---',
+            width: '100%'
+        });
+        $('#cmbStatus').select2({
+            placeholder: '--- Pilih Status ---',
             width: '100%'
         });
     </script>

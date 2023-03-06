@@ -48,6 +48,7 @@ class PenunjukanPekerjaanController extends Controller
         $route = 'penunjukan_pekerjaan';
         $search = request()->search;
         $kategori = request()->kategori;
+        $status = request()->status;
         $rekananid = request()->rekanan_id;
         $limit = request()->limit ?? 50;
         $rekanan_id  = null;
@@ -56,8 +57,6 @@ class PenunjukanPekerjaanController extends Controller
         $query = Aduan::query();
         $tanggal = '';
         $spk = request()->spk;
-
-        $status = '';
 
         $rekanan = Rekanan::query();
 
@@ -104,6 +103,7 @@ class PenunjukanPekerjaanController extends Controller
             $query->where('kategori_aduan', 'like', "%" . $kategori . "%");
         }
 
+
         if (!auth()->user()->hasRole('superadmin')) {
             if (auth()->user()->hasRole('rekanan')) {
                 $rekanan_id = auth()->user()->id_rekanan;
@@ -117,6 +117,10 @@ class PenunjukanPekerjaanController extends Controller
                     $PelaksanaanPekerjaan = PelaksanaanPekerjaan::whereBetween(DB::raw('DATE(created_at)'), array($start, $end))->get()->pluck('penunjukan_pekerjaan_id')->toArray();
 
                     $penunjukanAduan = $penunjukanAduan->whereIn('id', $PelaksanaanPekerjaan);
+                }
+
+                if ($status) {
+                    $penunjukanAduan = $penunjukanAduan->whereStatus($status);
                 }
 
                 $penunjukanAduan = $penunjukanAduan->get()->pluck('aduan_id')->toArray();
@@ -142,10 +146,14 @@ class PenunjukanPekerjaanController extends Controller
 
                     $penunjukanAduan = $penunjukanAduan->whereIn('id', $PelaksanaanPekerjaan);
                 }
-                if ($rekananid) {
-                    $PelaksanaanPekerjaan = PelaksanaanPekerjaan::where('rekanan_id', $rekananid)->get()->pluck('penunjukan_pekerjaan_id')->toArray();
+                if ($rekananid != 'all') {
+                    if ($rekananid) {
+                        $penunjukanAduan = $penunjukanAduan->where('rekanan_id', $rekananid);
+                    }
+                }
 
-                    $penunjukanAduan = $penunjukanAduan->whereIn('id', $PelaksanaanPekerjaan);
+                if ($status) {
+                    $penunjukanAduan = $penunjukanAduan->whereStatus($status);
                 }
 
                 $penunjukanAduan = $penunjukanAduan->get()->pluck('aduan_id')->toArray();
@@ -181,6 +189,10 @@ class PenunjukanPekerjaanController extends Controller
                         $penunjukanAduan = $penunjukanAduan->whereIn('id', $PelaksanaanPekerjaan);
                     }
 
+                    if ($status) {
+                        $penunjukanAduan = $penunjukanAduan->whereStatus($status);
+                    }
+
                     $penunjukanAduan = $penunjukanAduan->get()->pluck('aduan_id')->toArray();
 
                     $query->whereIn('id', $penunjukanAduan)->orderBy('updated_at', 'desc');
@@ -198,19 +210,25 @@ class PenunjukanPekerjaanController extends Controller
                     if (request()->spk != '') {
                         $penunjukanAduan = $penunjukanAduan->where('nomor_pekerjaan', 'like', '%' . $spk . '%');
                     }
+
                     if (request()->tanggal != '') {
                         $PelaksanaanPekerjaan = PelaksanaanPekerjaan::whereBetween(DB::raw('DATE(created_at)'), array($start, $end))->get()->pluck('penunjukan_pekerjaan_id')->toArray();
 
                         $penunjukanAduan = $penunjukanAduan->whereIn('id', $PelaksanaanPekerjaan);
                     }
-                    if ($rekananid != "" || $rekananid != null) {
-                        if ($rekananid != 'all') {
-
-                            $penunjukanAduan = $penunjukanAduan->where('rekanan_id', $rekananid)->pluck('aduan_id')->toArray();
-
-                            $query->whereIn('id', $penunjukanAduan);
+                    if ($rekananid != 'all') {
+                        if ($rekananid) {
+                            $penunjukanAduan = $penunjukanAduan->where('rekanan_id', $rekananid);
                         }
                     }
+
+                    if ($status) {
+                        $penunjukanAduan = $penunjukanAduan->whereStatus($status);
+                    }
+
+                    $penunjukanAduan = $penunjukanAduan->get()->pluck('aduan_id')->toArray();
+
+                    $query->whereIn('id', $penunjukanAduan);
 
 
                     // $query->whereStatus('selesai');
