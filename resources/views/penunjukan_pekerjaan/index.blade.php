@@ -83,8 +83,8 @@
                                         <option value="selesai" {{ $status == 'selesai' ? 'selected' : '' }}>Selesai
                                             dikerjakan
                                         </option>
-                                        <option value="approve" {{ $status == 'selesai' ? 'selected' : '' }}>Selesai
-                                            Approve Asisten Manajer
+                                        <option value="approve" {{ $status == 'selesai' ? 'selected' : '' }}>
+                                            DiApprove Asisten Manajer
                                         </option>
                                         <option value="koreksi pengawas"
                                             {{ $status == 'koreksi pengawas' ? 'selected' : '' }}>Dikoreksi
