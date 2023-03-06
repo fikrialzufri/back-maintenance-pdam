@@ -238,7 +238,13 @@ class PenunjukanPekerjaanController extends Controller
                         }])->orderBy('status', 'desc')->orderBy('updated_at', 'desc');
                         $penunjukan = $query->paginate($limit);
 
-                        if (auth()->user()->hasRole('asisten-manajer-pengawas')) {
+                        if (auth()->user()->hasRole('staf-pengawas')) {
+                            $penunjukan = $penunjukan->setCollection(
+                                $penunjukan->sortBy(function ($pekerjaan) {
+                                    return $pekerjaan->status_order_pengawas;
+                                })
+                            );
+                        } elseif (auth()->user()->hasRole('asisten-manajer-pengawas')) {
                             $penunjukan = $penunjukan->setCollection(
                                 $penunjukan->sortBy(function ($pekerjaan) {
                                     return $pekerjaan->status_order_asem_pengawas;
