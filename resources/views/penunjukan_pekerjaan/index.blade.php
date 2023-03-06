@@ -75,6 +75,7 @@
                                     <select name="status" class="selected2 form-control" id="cmbStatus">
                                         <option value="">Pilih Status</option>
                                         <option value="all" {{ $status == 'all' ? 'selected' : '' }}>Semua</option>
+                                        {{-- Mulai --}}
                                         <option value="draft" {{ $status == 'draft' ? 'selected' : '' }}>Belum dikerjakan
                                         </option>
                                         <option value="proses" {{ $status == 'proses' ? 'selected' : '' }}>Sedang
@@ -83,8 +84,12 @@
                                         <option value="selesai" {{ $status == 'selesai' ? 'selected' : '' }}>Selesai
                                             dikerjakan
                                         </option>
-                                        <option value="approve" {{ $status == 'selesai' ? 'selected' : '' }}>
+                                        <option value="approve" {{ $status == 'approve' ? 'selected' : '' }}>
                                             DiApprove Asisten Manajer
+                                        </option>
+                                        <option value="approve manajer"
+                                            {{ $status == 'approve manajer' ? 'selected' : '' }}>
+                                            Diapprove Manajer
                                         </option>
                                         <option value="koreksi pengawas"
                                             {{ $status == 'koreksi pengawas' ? 'selected' : '' }}>Dikoreksi
