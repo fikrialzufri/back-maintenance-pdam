@@ -121,8 +121,16 @@ class KaryawanController extends Controller
                 'multiple'    =>  true,
             ],
             [
+                'name'    => 'email',
+                'alias'    => 'Email',
+                'input'    => 'email',
+                'validasi'    => ['required',  'plural', 'unique', 'email'],
+                'extraForm' => 'user',
+            ],
+            [
                 'name'    => 'username',
                 'alias'    => 'Username',
+                'input'    => 'text',
                 'validasi'    => ['required', 'unique', 'min:3', 'plural'],
                 'extraForm' => 'user',
             ],
@@ -133,13 +141,7 @@ class KaryawanController extends Controller
                 'validasi'    => ['required', 'min:8'],
                 'extraForm' => 'user',
             ],
-            [
-                'name'    => 'email',
-                'alias'    => 'Email',
-                'input'    => 'email',
-                'validasi'    => ['required',  'plural', 'unique', 'email'],
-                'extraForm' => 'user',
-            ],
+
             [
                 'name'    => 'role_id',
                 'input'    => 'combo',

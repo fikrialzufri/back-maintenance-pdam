@@ -99,9 +99,25 @@ class RekananController extends Controller
                 'alias'    => 'Alamat',
                 'validasi'    => ['required'],
             ],
+            // [
+            //     'name'    => 'pkp',
+            //     'input'    => 'radio',
+            //     'alias'    => 'Perusahaan Kena Pajak',
+            //     'value' => ['ya', 'tidak'],
+            //     'default' => 'tidak',
+            //     'multiple'    =>  true,
+            // ],
+            [
+                'name'    => 'email',
+                'alias'    => 'Email',
+                'input'    => 'email',
+                'validasi'    => ['required',  'plural', 'unique', 'email'],
+                'extraForm' => 'user',
+            ],
             [
                 'name'    => 'username',
                 'alias'    => 'Username',
+                'input'    => 'text',
                 'validasi'    => ['required', 'unique', 'min:3', 'plural'],
                 'extraForm' => 'user',
             ],
@@ -112,13 +128,7 @@ class RekananController extends Controller
                 'validasi'    => ['required', 'min:8'],
                 'extraForm' => 'user',
             ],
-            [
-                'name'    => 'email',
-                'alias'    => 'Email',
-                'input'    => 'email',
-                'validasi'    => ['required',  'plural', 'unique', 'email'],
-                'extraForm' => 'user',
-            ],
+
             [
                 'name'    => 'role_id',
                 'input'    => 'combo',
