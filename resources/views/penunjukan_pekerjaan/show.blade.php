@@ -33,7 +33,7 @@
                 <div class="card">
                     @if ($aduan->status != 'draft')
                         <div class="card-header">
-                            <div class="card-title">Detail Pekerjaan {{ $pekerjaanUtama->status }}</div>
+                            <div class="card-title">Detail Pekerjaan</div>
                         </div>
                         <div class="card-body">
                             <div class="row">
@@ -372,7 +372,7 @@
                                     <div class="row">
 
                                         <div class="col-12">
-                                            <h3 class="card-title">Daftar Pekerjaan {{ $pekerjaanUtama->status }}</h3>
+                                            <h3 class="card-title">Daftar Pekerjaan</h3>
                                             <hr>
                                         </div>
                                         @if ($pengawas === true && $pekerjaanUtama->status === 'approve manajer')
