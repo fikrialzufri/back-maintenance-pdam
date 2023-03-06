@@ -234,6 +234,35 @@ class UsersTableSeedeer extends Seeder
                         'task_id' => $task->id
                     ],
                 );
+            } elseif ($name == 'Rekanan') {
+
+                $data = array(
+
+                    [
+                        'name'    => 'View ' . $name,
+                        'task_id' => $task->id
+                    ],
+                    [
+                        'name'    => 'Create ' . $name,
+                        'task_id' => $task->id
+                    ],
+                    [
+                        'name'    => 'Edit ' . $name,
+                        'task_id' => $task->id
+                    ],
+                    [
+                        'name'    => 'Delete ' . $name,
+                        'task_id' => $task->id
+                    ],
+                    [
+                        'name'    => 'Edit ' . $name,
+                        'task_id' => $task->id
+                    ],
+                    [
+                        'name'    => 'Upload Rekanan',
+                        'task_id' => $task->id
+                    ],
+                );
             } else {
                 $data = array(
 
