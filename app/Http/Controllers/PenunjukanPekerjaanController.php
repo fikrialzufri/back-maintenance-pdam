@@ -119,8 +119,10 @@ class PenunjukanPekerjaanController extends Controller
                     $penunjukanAduan = $penunjukanAduan->whereIn('id', $PelaksanaanPekerjaan);
                 }
 
-                if ($status) {
-                    $penunjukanAduan = $penunjukanAduan->whereStatus($status);
+                if ($status != '') {
+                    if ($status != 'all') {
+                        $penunjukanAduan = $penunjukanAduan->whereStatus($status);
+                    }
                 }
 
                 $penunjukanAduan = $penunjukanAduan->get()->pluck('aduan_id')->toArray();
@@ -152,8 +154,10 @@ class PenunjukanPekerjaanController extends Controller
                     }
                 }
 
-                if ($status) {
-                    $penunjukanAduan = $penunjukanAduan->whereStatus($status);
+                if ($status != '') {
+                    if ($status != 'all') {
+                        $penunjukanAduan = $penunjukanAduan->whereStatus($status);
+                    }
                 }
 
                 $penunjukanAduan = $penunjukanAduan->get()->pluck('aduan_id')->toArray();
@@ -189,8 +193,10 @@ class PenunjukanPekerjaanController extends Controller
                         $penunjukanAduan = $penunjukanAduan->whereIn('id', $PelaksanaanPekerjaan);
                     }
 
-                    if ($status) {
-                        $penunjukanAduan = $penunjukanAduan->whereStatus($status);
+                    if ($status != '') {
+                        if ($status != 'all') {
+                            $penunjukanAduan = $penunjukanAduan->whereStatus($status);
+                        }
                     }
 
                     $penunjukanAduan = $penunjukanAduan->get()->pluck('aduan_id')->toArray();
@@ -222,8 +228,10 @@ class PenunjukanPekerjaanController extends Controller
                         }
                     }
 
-                    if ($status) {
-                        $penunjukanAduan = $penunjukanAduan->whereStatus($status);
+                    if ($status != '') {
+                        if ($status != 'all') {
+                            $penunjukanAduan = $penunjukanAduan->whereStatus($status);
+                        }
                     }
 
                     $penunjukanAduan = $penunjukanAduan->get()->pluck('aduan_id')->toArray();
