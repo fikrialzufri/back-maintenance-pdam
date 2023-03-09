@@ -236,7 +236,7 @@ class PenunjukanPekerjaanController extends Controller
                             $penunjukanAduan = $penunjukanAduan->whereStatus($status);
                         }
                     }
-                    if (request()->spk != '' || request()->tanggal != '' || $status != '') {
+                    if (request()->spk != '' || request()->tanggal != '' || $status != '' || $rekananid) {
                         $penunjukanAduan = $penunjukanAduan->get()->pluck('aduan_id')->toArray();
                         $query->whereIn('id', $penunjukanAduan);
                     }
