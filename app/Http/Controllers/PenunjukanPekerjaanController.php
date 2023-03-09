@@ -228,11 +228,11 @@ class PenunjukanPekerjaanController extends Controller
                         }
                     }
 
-                    if ($status != '') {
-                        if ($status != 'all') {
-                            $penunjukanAduan = $penunjukanAduan->whereStatus($status);
-                        }
-                    }
+                    // if ($status != '') {
+                    //     if ($status != 'all') {
+                    //         $penunjukanAduan = $penunjukanAduan->whereStatus($status);
+                    //     }
+                    // }
 
                     $penunjukanAduan = $penunjukanAduan->get()->pluck('aduan_id')->toArray();
 
