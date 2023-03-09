@@ -200,8 +200,11 @@ class PenunjukanPekerjaanController extends Controller
                     }
 
                     $penunjukanAduan = $penunjukanAduan->get()->pluck('aduan_id')->toArray();
+                    if (count($penunjukanAduan) > 1) {
+                        $query->whereIn('id', $penunjukanAduan);
+                    }
 
-                    $query->whereIn('id', $penunjukanAduan)->orderBy('updated_at', 'desc');
+                    $query->orderBy('updated_at', 'desc');
                     $penunjukan = $query->paginate($limit);
                     $penunjukan = $penunjukan->setCollection(
                         $penunjukan->sortBy(function ($pekerjaan) {
@@ -228,17 +231,17 @@ class PenunjukanPekerjaanController extends Controller
                         }
                     }
 
-                    // if ($status != '') {
-                    //     if ($status != 'all') {
-                    //         $penunjukanAduan = $penunjukanAduan->whereStatus($status);
-                    //     }
-                    // }
-
-                    $penunjukanAduan = $penunjukanAduan->get()->pluck('aduan_id')->toArray();
-
-                    if (count($penunjukanAduan) > 1) {
-                        $query->whereIn('id', $penunjukanAduan);
+                    if ($status != '') {
+                        if ($status != 'all') {
+                            $penunjukanAduan = $penunjukanAduan->whereStatus($status);
+                        }
                     }
+
+                    // $penunjukanAduan = $penunjukanAduan->get()->pluck('aduan_id')->toArray();
+
+                    // if (count($penunjukanAduan) > 1) {
+                    //     $query->whereIn('id', $penunjukanAduan);
+                    // }
 
 
                     // $query->whereStatus('selesai');
