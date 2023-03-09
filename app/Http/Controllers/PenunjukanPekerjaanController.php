@@ -237,11 +237,11 @@ class PenunjukanPekerjaanController extends Controller
                         }
                     }
 
-                    // $penunjukanAduan = $penunjukanAduan->get()->pluck('aduan_id')->toArray();
+                    $penunjukanAduan = $penunjukanAduan->get()->pluck('aduan_id')->toArray();
 
-                    // if (count($penunjukanAduan) > 1) {
-                    //     $query->whereIn('id', $penunjukanAduan);
-                    // }
+                    if (count($penunjukanAduan) > 1) {
+                        $query->whereIn('id', $penunjukanAduan);
+                    }
 
 
                     // $query->whereStatus('selesai');
