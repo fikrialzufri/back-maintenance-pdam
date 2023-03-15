@@ -78,6 +78,7 @@
                                             Rp. {{ format_uang($totalPekerjaan) }}
                                         </th>
                                     </tr>
+                                    @if ($pkp == 'ya')
                                     <tr>
                                         <th colspan="8" class="text-right">
 
@@ -96,6 +97,7 @@
                                             Rp. {{ format_uang($grand_total) }}
                                         </th>
                                     </tr>
+                                    @endif
                                 </tfoot>
                             </table>
                         </div>

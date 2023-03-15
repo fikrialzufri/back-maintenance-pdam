@@ -142,7 +142,7 @@
                                         <td style="width: 41.52%;padding: 0cm 5.4pt;vertical-align: top;">
                                             <p
                                                 style='margin-right:0cm;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;margin:0cm;margin-top:0cm;margin-bottom:8.0pt;text-align:center;line-height:105%;'>
-                                                Samarinda,{{ $now }}</p>
+                                                Samarinda, {{ $now }}</p>
                                         </td>
                                     </tr>
                                     <tr>

@@ -171,7 +171,7 @@
                                 </div>
 
                                 <div style='font-size: 20px;' class="col-6 text-center">
-                                    Samarinda, {{ $tanggal }}
+                                    Samarinda , {{ $tanggal }}
                                     <br>
                                     Pemeriksa Pekerjaan,
                                     <br>

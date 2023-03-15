@@ -476,19 +476,30 @@ class TagihanController extends Controller
 
         $rekanan_id = auth()->user()->id_rekanan;
 
+        $pkp = 'tidak';
+
         $query =  PelaksanaanPekerjaan::query();
         if (!auth()->user()->hasRole('superadmin')) {
             if (auth()->user()->hasRole('rekanan')) {
                 $rekanan_id = auth()->user()->id_rekanan;
                 $query->where('rekanan_id', $rekanan_id);
-            } else {
-                $list_rekanan_id = auth()->user()->karyawan->hasRekanan->pluck('id');
+                $rekanan = Rekanan::find( $rekanan_id);
 
-                if (count($list_rekanan_id) > 0) {
-                    $query->whereIn('rekanan_id', $list_rekanan_id);
+                if ($rekanan->pkp) {
+                    if ($rekanan->pkp == 'ya') {
+                        $pkp = 'ya';
+                    }
                 }
             }
+            //  else {
+            //     $list_rekanan_id = auth()->user()->karyawan->hasRekanan->pluck('id');
+
+            //     if (count($list_rekanan_id) > 0) {
+            //         $query->whereIn('rekanan_id', $list_rekanan_id);
+            //     }
+            // }
         }
+
 
         // $hasValue = $this->hasValue;
         $start = Carbon::now()->subMonths(2)->startOfMonth()->format('Y-m-d') . ' 00:00:01';
@@ -505,12 +516,15 @@ class TagihanController extends Controller
         $penunjukan =  $query->with('hasItem')->get();
 
         $totalPekerjaan = 0;
+        $ppn = 0;
         foreach ($penunjukan as $key => $value) {
             $totalPekerjaan += $value->total_pekerjaan;
         }
         $totalPekerjaan = pembulatan($totalPekerjaan);
         $totalPekerjaan = str_replace(".", "", $totalPekerjaan);
-        $ppn = ($totalPekerjaan * 11) / 100;
+        if ($pkp == 'ya') {
+            $ppn = ($totalPekerjaan * 11) / 100;
+        }
         $grand_total = $totalPekerjaan + $ppn;
 
         return view('tagihan.form', compact(
@@ -522,6 +536,7 @@ class TagihanController extends Controller
             'countColomFooter',
             'totalPekerjaan',
             'grand_total',
+            'pkp',
             'ppn',
             'store',
             'route'
@@ -1093,7 +1108,7 @@ class TagihanController extends Controller
 
     public function wordtagihan()
     {
-        $now = capital_tanggal_indonesia(Carbon::now());
+         $now = tanggal_indonesia(Carbon::now(),true,false);
 
         $id = request()->get('id') ?: "";
         $word = request()->get('word') ?: "";
@@ -1121,7 +1136,14 @@ class TagihanController extends Controller
         $tanggal = tanggal_indonesia(Carbon::parse($tagihan->tanggal_adjust), false);
 
         $total = $tagihan->tagihan + $tagihan->galian;
-        $ppn = ($total * 11) / 100;
+
+        $ppn = 0;
+
+        if ($tagihan->hasRekanan->pkp) {
+            if ($tagihan->hasRekanan->pkp == 'ya') {
+                    $ppn = ($total * 11) / 100;
+            }
+        }
         $total_tagihan = $total + $ppn;
         $total_lokasi = $tagihan->total_lokasi_pekerjaan;
 
@@ -1191,7 +1213,13 @@ class TagihanController extends Controller
         $tanggal = tanggal_indonesia(Carbon::parse($tagihan->tanggal_adjust), false);
 
         $total = $tagihan->tagihan + $tagihan->galian;
-        $ppn = ($total * 11) / 100;
+        $ppn = 0;
+
+        if ($tagihan->hasRekanan->pkp) {
+            if ($tagihan->hasRekanan->pkp== 'ya') {
+                    $ppn = ($total * 11) / 100;
+            }
+        }
         $total_tagihan = $total + $ppn;
         $total_lokasi = $tagihan->total_lokasi_pekerjaan;
 

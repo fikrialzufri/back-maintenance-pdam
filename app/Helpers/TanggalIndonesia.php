@@ -1,5 +1,5 @@
 <?php
-function tanggal_indonesia($tgl, $tampil_hari = true)
+function tanggal_indonesia($tgl, $tampil_hari = true,$koma= true)
 {
     $nama_hari = array("Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jum'at", "Sabtu");
     $nama_bulan = array(
@@ -13,7 +13,12 @@ function tanggal_indonesia($tgl, $tampil_hari = true)
     if ($tampil_hari) {
         $urutan_hari = date('w', mktime(0, 0, 0, substr($tgl, 5, 2), $tanggal, $tahun));
         $hari = $nama_hari[$urutan_hari];
-        $text .= $hari . ", ";
+        $text .= $hari ;
+    }
+    if ($koma === true) {
+         $text .= ", ";
+    }else{
+        $text .= " ";
     }
     $text .= $tanggal . " " . $bulan . " " . $tahun;
     return $text;
