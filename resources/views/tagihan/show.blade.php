@@ -83,6 +83,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    @if ($pkp == 'ya')
                                     <div class="col-12">
                                         <div class="form-group">
                                             <div>
@@ -112,6 +113,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    @endif
 
                                     @if ($tagihan->kode_vocher != '')
                                         <div class="col-12">
@@ -480,6 +482,27 @@
 
                                     </div>
                                 @endif
+                                    <div>
+                                        <label for="rekanan" class=" form-control-label">
+                                            <h3>Total Tagihan : Rp. {{ pembulatan($total) }} </h3>
+                                        </label>
+
+                                    </div>
+                                    @if ($pkp == 'ya')
+                                    <div>
+                                        <label for="rekanan" class=" form-control-label">
+                                            <h3>PPN 11% : Rp. {{ format_uang($ppn) }} </h3>
+                                        </label>
+
+                                    </div>
+                                    <div>
+                                        <label for="rekanan" class=" form-control-label">
+                                            <h3>Grandtotal Tagihan : Rp. {{ format_uang($grand_total) }} </h3>
+                                        </label>
+
+                                    </div>
+                                    @endif
+
                             </div>
 
                             <!-- /.card-body -->

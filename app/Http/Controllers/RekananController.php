@@ -99,14 +99,14 @@ class RekananController extends Controller
                 'alias'    => 'Alamat',
                 'validasi'    => ['required'],
             ],
-            // [
-            //     'name'    => 'pkp',
-            //     'input'    => 'radio',
-            //     'alias'    => 'Perusahaan Kena Pajak',
-            //     'value' => ['ya', 'tidak'],
-            //     'default' => 'tidak',
-            //     'multiple'    =>  true,
-            // ],
+            [
+                'name'    => 'pkp',
+                'input'    => 'radio',
+                'alias'    => 'Perusahaan Kena Pajak',
+                'value' => ['ya', 'tidak'],
+                'default' => 'tidak',
+                'multiple'    =>  true,
+            ],
             [
                 'name'    => 'email',
                 'alias'    => 'Email',

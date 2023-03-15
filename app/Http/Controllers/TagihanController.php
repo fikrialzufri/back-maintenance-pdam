@@ -268,6 +268,7 @@ class TagihanController extends Controller
         if ($this->index) {
             $template = $this->index . '.index';
         }
+
         // return  $export;
 
         return view($template,  compact(
@@ -330,6 +331,14 @@ class TagihanController extends Controller
                 $notifikasi->status = 'baca';
                 $notifikasi->delete();
             }
+
+            $pkp = 'tidak';
+            if ($tagihan->hasRekanan->pkp) {
+                if ($tagihan->hasRekanan->pkp== 'ya') {
+                     $pkp = 'ya';
+                }
+            }
+
 
             $title =  "Proses Tagihan Nomor :" .  $nomor_tagihan;
             $filename =  "Tagihan Nomor :" .  $nomor_tagihan;
@@ -435,6 +444,7 @@ class TagihanController extends Controller
                 'tagihanItem',
                 'keuangan',
                 'tanggal_tagihan',
+                'pkp',
                 'tagihan'
             ));
         }

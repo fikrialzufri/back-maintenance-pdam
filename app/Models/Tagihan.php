@@ -219,7 +219,18 @@ class Tagihan extends Model
         }
         $total = pembulatan($total);
         $total = str_replace(".", "", $total);
-        $ppn = ($total * 11) / 100;
+        $pkp = 'tidak';
+        $ppn = 0;
+
+
+        if ($this->hasRekanan) {
+           if ($this->hasRekanan->pkp) {
+                if ($this->hasRekanan->pkp === 'ya') {
+                    $ppn = ($total * 11) / 100;
+                }
+           }
+        }
+
         return $total + $ppn;
     }
 

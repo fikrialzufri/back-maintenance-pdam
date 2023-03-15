@@ -110,6 +110,7 @@
 
                                         </td>
                                     </tr>
+
                                 @empty
                                     <tr>
                                         <td colspan="10">Data

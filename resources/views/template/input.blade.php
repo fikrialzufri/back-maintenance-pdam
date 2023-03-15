@@ -156,9 +156,7 @@
         @endif
     @endif
     @if ($item['input'] == 'textarea')
-        <textarea class="form-control" rows="3" placeholder="{{ $item['alias'] }}" name="{{ $item['name'] }}">
-        @if ($store == 'update'){{ $data[$item['name']] }}@else{{ old($item['name']) }}@endif
-        </textarea>
+        <textarea class="form-control" rows="3" placeholder="{{ $item['alias'] }}" name="{{ $item['name'] }}">@if ($store == 'update'){{ $data[$item['name']] }}@else{{ old($item['name']) }}@endif</textarea>
     @endif
 
     @if ($item['input'] == 'text' ||
