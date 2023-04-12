@@ -1476,6 +1476,8 @@ class PenunjukanPekerjaanController extends Controller
         // pekerjaan
         DB::beginTransaction();
         try {
+            DB::commit();
+            return "salah";
             if ($request->qty_perencanaan) {
                 foreach ($request->qty_perencanaan as $key => $value) {
 
@@ -1643,7 +1645,7 @@ class PenunjukanPekerjaanController extends Controller
                 }
             }
 
-            DB::commit();
+
         } catch (\Throwable $th) {
             DB::rollback();
             return redirect()->route('penunjukan_pekerjaan.index')->with('message', 'Pekerjaan gagal ditambah')->with('Class', 'danger');
