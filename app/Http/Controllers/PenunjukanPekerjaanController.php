@@ -1084,66 +1084,58 @@ class PenunjukanPekerjaanController extends Controller
                         // $status = $PelaksanaanPekerjaan->status;
                     } else if (auth()->user()->hasRole('asisten-manajer-perencanaan')) {
                         if ($PelaksanaanPekerjaan->status ===  'dikoreksi') {
-                            if ($PelaksanaanPekerjaan->status === 'dikoreksi') {
-                                $status = 'selesai koreksi';
-                                $PelaksanaanPekerjaan->keterangan_barang = '';
-                                if ($request->harga_perencanaan_pekerjaan) {
-                                    foreach ($request->harga_perencanaan_pekerjaan as $key => $value) {
 
-                                        $cekItem[$key] = PelakasanaanItem::where('item_id', $key)->where('pelaksanaan_pekerjaan_id', $PelaksanaanPekerjaan->id)->first();
-                                        if ($cekItem[$key]) {
+                            $status = 'selesai koreksi';
+                            $PelaksanaanPekerjaan->keterangan_barang = '';
+                            if ($request->harga_perencanaan_pekerjaan) {
+                                foreach ($request->harga_perencanaan_pekerjaan as $key => $value) {
+
+                                    $cekItem[$key] = PelakasanaanItem::where('item_id', $key)->where('pelaksanaan_pekerjaan_id', $PelaksanaanPekerjaan->id)->first();
+                                    if ($cekItem[$key]) {
 
 
-                                            $cekItemPengawas[$key] = PelakasanaanPengawas::where('item_id', $key)->where('pelaksanaan_pekerjaan_id', $PelaksanaanPekerjaan->id)->first();
+                                        $cekItemPengawas[$key] = PelakasanaanPengawas::where('item_id', $key)->where('pelaksanaan_pekerjaan_id', $PelaksanaanPekerjaan->id)->first();
 
-                                            $cekItemAsmenPengawas[$key] = PelakasanaanAsmen::where('item_id', $key)->where('pelaksanaan_pekerjaan_id', $PelaksanaanPekerjaan->id)->first();
-                                            if ($cekItemAsmenPengawas[$key]) {
+                                        $cekItemAsmenPengawas[$key] = PelakasanaanAsmen::where('item_id', $key)->where('pelaksanaan_pekerjaan_id', $PelaksanaanPekerjaan->id)->first();
+                                        if ($cekItemAsmenPengawas[$key]) {
 
-                                                // rekanan
-                                                $listitem[$key] = [
-                                                    'keterangan' => $cekItem[$key]->keterangan,
-                                                    'harga' => $cekItem[$key]->harga,
-                                                    'qty' => $cekItem[$key]->qty,
-                                                    'total' =>  str_replace(".", "", $value) *  $cekItemAsmenPengawas[$key]->qty,
-                                                ];
+                                            // rekanan
+                                            $listitem[$key] = [
+                                                'keterangan' => $cekItem[$key]->keterangan,
+                                                'harga' => $cekItem[$key]->harga,
+                                                'qty' => $cekItem[$key]->qty,
+                                                'total' =>  str_replace(".", "", $value) *  $cekItemAsmenPengawas[$key]->qty,
+                                            ];
 
-                                                // harga pengawas
-                                                $listitemPengawas[$key] = [
-                                                    'keterangan' => $cekItemPengawas[$key]->keterangan,
-                                                    'harga' => $cekItemPengawas[$key]->harga,
-                                                    'qty' => $cekItemPengawas[$key]->qty,
-                                                    'total' => str_replace(".", "", $value) *  $cekItemAsmenPengawas[$key]->qty,
-                                                ];
-                                                $listitemAsmenPengawas[$key] = [
-                                                    'keterangan' => $cekItemAsmenPengawas[$key]->keterangan,
-                                                    'harga' => $cekItemAsmenPengawas[$key]->harga,
-                                                    'qty' => $cekItemAsmenPengawas[$key]->qty,
-                                                    'total' => str_replace(".", "", $value) *  $cekItemAsmenPengawas[$key]->qty,
-                                                ];
-                                                // harga perencanaan
-                                                $listitemPerencanaan[$key] = [
-                                                    'keterangan' => isset($request->keterangan_perencanaan_pekerjaan[$key]) ? $request->keterangan_perencanaan_pekerjaan[$key] : null,
-                                                    'harga' => str_replace(".", "", $value),
-                                                    'total' => str_replace(".", "", $value) * $cekItemAsmenPengawas[$key]->qty,
-                                                ];
-                                            }
+                                            // harga pengawas
+                                            $listitemPengawas[$key] = [
+                                                'keterangan' => $cekItemPengawas[$key]->keterangan,
+                                                'harga' => $cekItemPengawas[$key]->harga,
+                                                'qty' => $cekItemPengawas[$key]->qty,
+                                                'total' => str_replace(".", "", $value) *  $cekItemAsmenPengawas[$key]->qty,
+                                            ];
+                                            $listitemAsmenPengawas[$key] = [
+                                                'keterangan' => $cekItemAsmenPengawas[$key]->keterangan,
+                                                'harga' => $cekItemAsmenPengawas[$key]->harga,
+                                                'qty' => $cekItemAsmenPengawas[$key]->qty,
+                                                'total' => str_replace(".", "", $value) *  $cekItemAsmenPengawas[$key]->qty,
+                                            ];
+                                            // harga perencanaan
+                                            $listitemPerencanaan[$key] = [
+                                                'keterangan' => isset($request->keterangan_perencanaan_pekerjaan[$key]) ? $request->keterangan_perencanaan_pekerjaan[$key] : null,
+                                                'harga' => str_replace(".", "", $value),
+                                                'total' => str_replace(".", "", $value) * $cekItemAsmenPengawas[$key]->qty,
+                                            ];
                                         }
                                     }
                                 }
                             }
-                            else{
-                                return redirect()->route('penunjukan_pekerjaan.index')->with('message', 'Pekerjaan gagal disetujui')->with('Class', 'danger');
-                            }
-                        }
-                        if ($PelaksanaanPekerjaan->status === 'selesai koreksi') {
-                            if ($PelaksanaanPekerjaan->status === 'selesai koreksi') {
+                        }else if ($PelaksanaanPekerjaan->status === 'selesai koreksi') {
                             $status = 'diadjust';
                             $PelaksanaanPekerjaan->keterangan_barang = '';
-                            }
-                            else{
-                                return redirect()->route('penunjukan_pekerjaan.index')->with('message', 'Pekerjaan gagal disetujui')->with('Class', 'danger');
-                            }
 
+                        }else{
+                            return redirect()->route('penunjukan_pekerjaan.index')->with('message', 'Pekerjaan gagal disetujui')->with('Class', 'danger');
                         }
 
 
