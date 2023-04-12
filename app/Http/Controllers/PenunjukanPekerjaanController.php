@@ -1006,7 +1006,7 @@ class PenunjukanPekerjaanController extends Controller
                             $status = 'koreksi pengawas';
                             // $status = $PelaksanaanPekerjaan->status;
                         }else{
-                            return redirect()->route('penunjukan_pekerjaan.index')->with('message', 'Penunjukan pekerjaan gagal ditambah')->with('Class', 'danger');
+                            return redirect()->route('penunjukan_pekerjaan.index')->with('message', 'Pekerjaan gagal disetujui')->with('Class', 'danger');
                         }
                     } else if (auth()->user()->hasRole('asisten-manajer-pengawas')) {
                         // pekerjaan
@@ -1070,7 +1070,7 @@ class PenunjukanPekerjaanController extends Controller
                             // end pekerjaan;
                             $status = 'koreksi asmen';
                         }else{
-                            return redirect()->route('penunjukan_pekerjaan.index')->with('message', 'Penunjukan pekerjaan gagal ditambah')->with('Class', 'danger');
+                            return redirect()->route('penunjukan_pekerjaan.index')->with('message', 'Pekerjaan gagal disetujui')->with('Class', 'danger');
                         }
                         // $status = $PelaksanaanPekerjaan->status;
                     } else if (auth()->user()->hasRole('manajer-perawatan')) {
@@ -1079,7 +1079,7 @@ class PenunjukanPekerjaanController extends Controller
 
                              $status =  'dikoreksi';
                         }else{
-                            return redirect()->route('penunjukan_pekerjaan.index')->with('message', 'Penunjukan pekerjaan gagal ditambah')->with('Class', 'danger');
+                            return redirect()->route('penunjukan_pekerjaan.index')->with('message', 'Pekerjaan gagal disetujui')->with('Class', 'danger');
                         }
                         // $status = $PelaksanaanPekerjaan->status;
                     } else if (auth()->user()->hasRole('asisten-manajer-perencanaan')) {
@@ -1134,7 +1134,7 @@ class PenunjukanPekerjaanController extends Controller
                             $PelaksanaanPekerjaan->keterangan_barang = '';
                         }
                         else{
-                            return redirect()->route('penunjukan_pekerjaan.index')->with('message', 'Penunjukan pekerjaan gagal ditambah')->with('Class', 'danger');
+                            return redirect()->route('penunjukan_pekerjaan.index')->with('message', 'Pekerjaan gagal disetujui')->with('Class', 'danger');
                         }
                     }
 
@@ -1453,7 +1453,7 @@ class PenunjukanPekerjaanController extends Controller
             }
         } catch (\Throwable $th) {
             DB::rollback();
-            return redirect()->route('penunjukan_pekerjaan.index')->with('message', 'Penunjukan pekerjaan gagal ditambah')->with('Class', 'danger');
+            return redirect()->route('penunjukan_pekerjaan.index')->with('message', 'Pekerjaan gagal ditambah')->with('Class', 'danger');
         }
     }
 
@@ -1643,7 +1643,7 @@ class PenunjukanPekerjaanController extends Controller
             DB::commit();
         } catch (\Throwable $th) {
             DB::rollback();
-            return redirect()->route('penunjukan_pekerjaan.index')->with('message', 'Penunjukan pekerjaan gagal ditambah')->with('Class', 'danger');
+            return redirect()->route('penunjukan_pekerjaan.index')->with('message', 'Pekerjaan gagal ditambah')->with('Class', 'danger');
         }
     }
 
