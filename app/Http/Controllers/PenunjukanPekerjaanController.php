@@ -1476,8 +1476,6 @@ class PenunjukanPekerjaanController extends Controller
         // pekerjaan
         DB::beginTransaction();
         try {
-            DB::commit();
-            return "salah";
             if ($request->qty_perencanaan) {
                 foreach ($request->qty_perencanaan as $key => $value) {
 
@@ -1517,7 +1515,13 @@ class PenunjukanPekerjaanController extends Controller
             // return $listitem;
 
             if (auth()->user()->hasRole('asisten-manajer-perencanaan')) {
-                $status = 'diadjust';
+                if ($PelaksanaanPekerjaan->status === 'selesai koreksi') {
+                    $status = 'diadjust';
+                    $PelaksanaanPekerjaan->keterangan_barang = '';
+
+                }else{
+                    return redirect()->route('penunjukan_pekerjaan.index')->with('message', 'Pekerjaan gagal diadjust')->with('Class', 'danger');
+                }
             }
 
             // return $request;
@@ -1641,6 +1645,7 @@ class PenunjukanPekerjaanController extends Controller
                     $message = 'Berhasil Mengoreksi Pelaksanaan Pekerjaan';
                     $aduan = Aduan::find($penunjukanPekerjaan->aduan_id);
 
+                    DB::commit();
                     return redirect()->route('penunjukan_pekerjaan.show', $aduan->slug)->with('message', $message)->with('Class', 'primary');
                 }
             }
