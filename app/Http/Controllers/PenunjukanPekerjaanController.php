@@ -1394,6 +1394,7 @@ class PenunjukanPekerjaanController extends Controller
                         if ($penunjukanPekerjaan) {
                             $nomor_pekerjaan = $penunjukanPekerjaan->nomor_pekerjaan;
                             $penunjukanPekerjaan->status = $status;
+                            $penunjukanPekerjaan->updated_at =  Carbon::now();
                             $penunjukanPekerjaan->save();
 
                             $penunjukanPekerjaan->hasUserMany()->attach($user);
@@ -1407,6 +1408,10 @@ class PenunjukanPekerjaanController extends Controller
                             // return  $penunjukanPekerjaan;
                             $message = 'Berhasil Mengoreksi Pelaksanaan Pekerjaan';
                             $aduan = Aduan::find($penunjukanPekerjaan->aduan_id);
+                            if ($aduan) {
+                                $aduan->updated_at =  Carbon::now();
+                                $aduan->save();
+                            }
 
                             if (!empty($rekanan)) {
                                 // notif ke reknanan
@@ -1448,6 +1453,7 @@ class PenunjukanPekerjaanController extends Controller
                                     }
                                 }
                             }
+
                             DB::commit();
                             return redirect()->route('penunjukan_pekerjaan.show', $aduan->slug)->with('message', $message)->with('Class', 'primary');
                         }
@@ -1456,7 +1462,7 @@ class PenunjukanPekerjaanController extends Controller
             }
         } catch (\Throwable $th) {
             DB::rollback();
-            return redirect()->route('penunjukan_pekerjaan.index')->with('message', 'Pekerjaan gagal ditambah')->with('Class', 'danger');
+            return redirect()->route('penunjukan_pekerjaan.index')->with('message', $th)->with('Class', 'danger');
         }
     }
 

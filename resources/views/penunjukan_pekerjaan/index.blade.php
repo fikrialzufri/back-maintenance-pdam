@@ -160,7 +160,7 @@
                                         ++$nomor;
                                     @endphp
                                     <tr
-                                        class="{{ $item->keterangan_barang != null && $item->id_rekanan != '' ? 'bg-danger' : '' }} ">
+                                        class="">
                                         <td class="text-center">
                                             <a href="{{ route('penunjukan_pekerjaan.show', $item->slug) }}"
                                                 class="btn btn-sm {{ $item->btn }}   text-light m-1">

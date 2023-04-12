@@ -346,7 +346,7 @@ class Aduan extends Model
     }
     public function getStatusOrderPerencanaanAttribute()
     {
-        $status = 8;
+        $status = 4;
         if ($this->hasPenunjukanPekerjaan) {;
             if ($this->hasPenunjukanPekerjaan->status) {
                 if ($this->hasPenunjukanPekerjaan->status == 'dikoreksi' && $this->hasPenunjukanPekerjaan->tagihan = 'tidak') {
