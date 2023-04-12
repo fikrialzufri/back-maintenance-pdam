@@ -1129,13 +1129,18 @@ class PenunjukanPekerjaanController extends Controller
                                     }
                                 }
                             }
-                        }else if ($PelaksanaanPekerjaan->status === 'selesai koreksi') {
+                        }else{
+                            return redirect()->route('penunjukan_pekerjaan.index')->with('message', 'Pekerjaan gagal disetujui')->with('Class', 'danger');
+                        }
+                        if ($PelaksanaanPekerjaan->status === 'selesai koreksi') {
                             $status = 'diadjust';
                             $PelaksanaanPekerjaan->keterangan_barang = '';
+
                         }
                         else{
                             return redirect()->route('penunjukan_pekerjaan.index')->with('message', 'Pekerjaan gagal disetujui')->with('Class', 'danger');
                         }
+
                     }
 
                     if ($PelaksanaanPekerjaan) {
