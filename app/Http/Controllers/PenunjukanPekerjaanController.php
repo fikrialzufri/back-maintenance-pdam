@@ -769,7 +769,7 @@ class PenunjukanPekerjaanController extends Controller
         DB::beginTransaction();
 
         try {
-            DB::commit();
+
             if ($PelaksanaanPekerjaan === null) {
 
                 $penunjukanPekerjaan = PenunjukanPekerjaan::find($id);
@@ -850,6 +850,7 @@ class PenunjukanPekerjaanController extends Controller
                 }
 
                 $message = "Pekerjaan dari SPK " . $penunjukanPekerjaan->nomor_pekerjaan . " berhasil diubah";
+                DB::commit();
 
                 return redirect()->route('penunjukan_pekerjaan.show', $aduan->slug)->with('message', $message)->with('Class', 'primary');
             } else {
@@ -946,6 +947,7 @@ class PenunjukanPekerjaanController extends Controller
                     }
 
                     $message = "Rekanan atau pekerja dari SPK " . $nomor_pekerjaan . " berhasil diubah";
+                    DB::commit();
 
                     return redirect()->route('penunjukan_pekerjaan.show', $aduan->slug)->with('message', $message)->with('Class', 'primary');
                 } else {
@@ -959,48 +961,53 @@ class PenunjukanPekerjaanController extends Controller
                         $status = 'approve manajer';
                     } elseif (auth()->user()->hasRole('staf-pengawas')) {
                         // pekerjaan
-                        if ($request->qty_pengawas) {
-                            foreach ($request->qty_pengawas as $key => $value) {
+                        if ($PelaksanaanPekerjaan->status === 'approve manajer') {
 
-                                $cekItem[$key] = PelakasanaanItem::where('item_id', $key)->where('pelaksanaan_pekerjaan_id', $PelaksanaanPekerjaan->id)->first();
+                            if ($request->qty_pengawas) {
+                                foreach ($request->qty_pengawas as $key => $value) {
 
-                                $dataItem[$key] = Item::find($key);
+                                    $cekItem[$key] = PelakasanaanItem::where('item_id', $key)->where('pelaksanaan_pekerjaan_id', $PelaksanaanPekerjaan->id)->first();
 
-                                if ($cekItem[$key]) {
-                                    $listitem[$key] = [
-                                        'keterangan' => $cekItem[$key]->keterangan,
-                                        'harga' => $cekItem[$key]->harga,
-                                        'qty' =>  $cekItem[$key]->qty,
-                                        'total' => str_replace(",", ".", $value) *  $cekItem[$key]->harga,
-                                    ];
-                                    $listitemPengawas[$key] = [
-                                        'keterangan' => isset($request->keterangan_pengawas[$key]) ? $request->keterangan_pengawas[$key] : null,
-                                        'harga' => $cekItem[$key]->harga,
-                                        'qty' =>  str_replace(",", ".", $value),
-                                        'total' => str_replace(",", ".", $value) *  $cekItem[$key]->harga,
-                                    ];
-                                } else {
+                                    $dataItem[$key] = Item::find($key);
 
-                                    if ($dataItem[$key]) {
+                                    if ($cekItem[$key]) {
                                         $listitem[$key] = [
-                                            'keterangan' => null,
-                                            'harga' => isset($request->jenis_harga[$key]) && $request->jenis_harga[$key] === "siang" ? $dataItem[$key]->harga : $dataItem[$key]->harga_malam,
-                                            'qty' => 0,
-                                            'total' => (float) $value * (float) isset($request->jenis_harga[$key]) && $request->jenis_harga[$key] === "siang" ? $dataItem[$key]->harga : $dataItem[$key]->harga_malam,
+                                            'keterangan' => $cekItem[$key]->keterangan,
+                                            'harga' => $cekItem[$key]->harga,
+                                            'qty' =>  $cekItem[$key]->qty,
+                                            'total' => str_replace(",", ".", $value) *  $cekItem[$key]->harga,
                                         ];
                                         $listitemPengawas[$key] = [
                                             'keterangan' => isset($request->keterangan_pengawas[$key]) ? $request->keterangan_pengawas[$key] : null,
-                                            'harga' => isset($request->jenis_harga[$key]) && $request->jenis_harga[$key] === "siang" ? $dataItem[$key]->harga : $dataItem[$key]->harga_malam,
-                                            'qty' => str_replace(",", ".", $value),
-                                            'total' => (float) isset($request->jenis_harga[$key]) && $request->jenis_harga[$key] === "siang" ? $dataItem[$key]->harga : $dataItem[$key]->harga_malam * str_replace(",", ".", $value)
+                                            'harga' => $cekItem[$key]->harga,
+                                            'qty' =>  str_replace(",", ".", $value),
+                                            'total' => str_replace(",", ".", $value) *  $cekItem[$key]->harga,
                                         ];
+                                    } else {
+
+                                        if ($dataItem[$key]) {
+                                            $listitem[$key] = [
+                                                'keterangan' => null,
+                                                'harga' => isset($request->jenis_harga[$key]) && $request->jenis_harga[$key] === "siang" ? $dataItem[$key]->harga : $dataItem[$key]->harga_malam,
+                                                'qty' => 0,
+                                                'total' => (float) $value * (float) isset($request->jenis_harga[$key]) && $request->jenis_harga[$key] === "siang" ? $dataItem[$key]->harga : $dataItem[$key]->harga_malam,
+                                            ];
+                                            $listitemPengawas[$key] = [
+                                                'keterangan' => isset($request->keterangan_pengawas[$key]) ? $request->keterangan_pengawas[$key] : null,
+                                                'harga' => isset($request->jenis_harga[$key]) && $request->jenis_harga[$key] === "siang" ? $dataItem[$key]->harga : $dataItem[$key]->harga_malam,
+                                                'qty' => str_replace(",", ".", $value),
+                                                'total' => (float) isset($request->jenis_harga[$key]) && $request->jenis_harga[$key] === "siang" ? $dataItem[$key]->harga : $dataItem[$key]->harga_malam * str_replace(",", ".", $value)
+                                            ];
+                                        }
                                     }
                                 }
                             }
+                            // end pekerjaan
+                            $status = 'koreksi pengawas';
+                            // $status = $PelaksanaanPekerjaan->status;
+                        }else{
+                            return redirect()->route('penunjukan_pekerjaan.index')->with('message', 'Penunjukan pekerjaan gagal ditambah')->with('Class', 'danger');
                         }
-                        // end pekerjaan
-                        $status = 'koreksi pengawas';
-                        // $status = $PelaksanaanPekerjaan->status;
                     } else if (auth()->user()->hasRole('asisten-manajer-pengawas')) {
                         // pekerjaan
                         if ($PelaksanaanPekerjaan->status === 'koreksi pengawas') {
@@ -1062,11 +1069,18 @@ class PenunjukanPekerjaanController extends Controller
 
                             // end pekerjaan;
                             $status = 'koreksi asmen';
+                        }else{
+                            return redirect()->route('penunjukan_pekerjaan.index')->with('message', 'Penunjukan pekerjaan gagal ditambah')->with('Class', 'danger');
                         }
                         // $status = $PelaksanaanPekerjaan->status;
                     } else if (auth()->user()->hasRole('manajer-perawatan')) {
                         // pekerjaan
-                        $status =  'dikoreksi';
+                        if ($PelaksanaanPekerjaan->status === 'koreksi asmen') {
+
+                             $status =  'dikoreksi';
+                        }else{
+                            return redirect()->route('penunjukan_pekerjaan.index')->with('message', 'Penunjukan pekerjaan gagal ditambah')->with('Class', 'danger');
+                        }
                         // $status = $PelaksanaanPekerjaan->status;
                     } else if (auth()->user()->hasRole('asisten-manajer-perencanaan')) {
                         if ($PelaksanaanPekerjaan->status ===  'dikoreksi') {
@@ -1115,10 +1129,12 @@ class PenunjukanPekerjaanController extends Controller
                                     }
                                 }
                             }
-                        }
-                        if ($PelaksanaanPekerjaan->status === 'selesai koreksi') {
+                        }else if ($PelaksanaanPekerjaan->status === 'selesai koreksi') {
                             $status = 'diadjust';
                             $PelaksanaanPekerjaan->keterangan_barang = '';
+                        }
+                        else{
+                            return redirect()->route('penunjukan_pekerjaan.index')->with('message', 'Penunjukan pekerjaan gagal ditambah')->with('Class', 'danger');
                         }
                     }
 
@@ -1214,10 +1230,13 @@ class PenunjukanPekerjaanController extends Controller
                                 $PelaksanaanPekerjaan->hasItem()->sync($listitem);
                                 $PelaksanaanPekerjaan->hasItemPengawas()->sync($listitemPengawas);
                             }
+
                         }
+
                         if (auth()->user()->hasRole('asisten-manajer-pengawas')) {
                             // galian
                             // galian pengawas
+
                             $cekItemGalian = [];
                             $cekItemGalianPengawas = [];
                             $datapanjang = [];
@@ -1309,6 +1328,7 @@ class PenunjukanPekerjaanController extends Controller
                                 $PelaksanaanPekerjaan->hasItemPengawas()->sync($listitemPengawas);
                                 $PelaksanaanPekerjaan->hasItemAsmenPengawas()->sync($listitemAsmenPengawas);
                             }
+
                         }
                         if (auth()->user()->hasRole('asisten-manajer-perencanaan')) {
 
@@ -1425,7 +1445,7 @@ class PenunjukanPekerjaanController extends Controller
                                     }
                                 }
                             }
-
+                            DB::commit();
                             return redirect()->route('penunjukan_pekerjaan.show', $aduan->slug)->with('message', $message)->with('Class', 'primary');
                         }
                     }
@@ -1453,7 +1473,6 @@ class PenunjukanPekerjaanController extends Controller
         // pekerjaan
         DB::beginTransaction();
         try {
-            DB::commit();
             if ($request->qty_perencanaan) {
                 foreach ($request->qty_perencanaan as $key => $value) {
 
@@ -1620,6 +1639,8 @@ class PenunjukanPekerjaanController extends Controller
                     return redirect()->route('penunjukan_pekerjaan.show', $aduan->slug)->with('message', $message)->with('Class', 'primary');
                 }
             }
+
+            DB::commit();
         } catch (\Throwable $th) {
             DB::rollback();
             return redirect()->route('penunjukan_pekerjaan.index')->with('message', 'Penunjukan pekerjaan gagal ditambah')->with('Class', 'danger');
