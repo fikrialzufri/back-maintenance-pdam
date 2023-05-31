@@ -1906,7 +1906,7 @@
                                         <label for="keterangan" class=" form-control-label">Keterangan</label>
                                     </div>
                                     <div>
-                                        <strong>{!! $aduan->sumber_informasi !!}</strong>
+                                        <strong>{!! $aduan->keterangan !!}</strong>
                                     </div>
                                 </div>
                             </div>
