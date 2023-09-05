@@ -226,7 +226,7 @@ class PenunjukanPekerjaanController extends Controller
                         $penunjukanAduan = $penunjukanAduan->whereIn('id', $PelaksanaanPekerjaan);
                     }
                     if ($rekananid != 'all') {
-                        if ($rekananid) {
+                        if (isset($rekananid)) {
                             $penunjukanAduan = $penunjukanAduan->where('rekanan_id', $rekananid);
                         }
                     }
@@ -244,8 +244,11 @@ class PenunjukanPekerjaanController extends Controller
                     if ($status != '') {
                         if ($status != 'all') {
                             // return $penunjukanAduan->get();
-                            // $penunjukanAduan = $penunjukanAduan->get()->pluck('aduan_id')->toArray();
-                            $query->whereIn('id', $penunjukanAduan);
+                            // $penunjukanAduan = $penunjukanAduan->get();
+                            if ($penunjukanAduan) {
+                                // $penunjukanAduan = $penunjukanAduan->get()->pluck('aduan_id')->toArray();
+                                $query->whereIn('id', $penunjukanAduan);
+                            }
                         }
                     }
 
