@@ -239,18 +239,20 @@ class PenunjukanPekerjaanController extends Controller
                     if (request()->spk != '' || request()->tanggal != '' || $rekananid) {
                         $penunjukanAduan = $penunjukanAduan->get()->pluck('aduan_id')->toArray();
                         $query->whereIn('id', $penunjukanAduan);
-                    }
+                    } else {
 
-                    if ($status != '') {
-                        if ($status != 'all') {
-                            // return $penunjukanAduan->get();
-                            // $penunjukanAduan = $penunjukanAduan->get();
-                            if ($penunjukanAduan) {
-                                // $penunjukanAduan = $penunjukanAduan->get()->pluck('aduan_id')->toArray();
-                                $query->whereIn('id', $penunjukanAduan);
+                        if ($status != '') {
+                            if ($status != 'all') {
+                                // return $penunjukanAduan->get();
+                                // $penunjukanAduan = $penunjukanAduan->get();
+                                if ($penunjukanAduan) {
+                                    $penunjukanAduan = $penunjukanAduan->get()->pluck('aduan_id')->toArray();
+                                    $query->whereIn('id', $penunjukanAduan);
+                                }
                             }
                         }
                     }
+
 
 
                     // $query->whereStatus('selesai');
