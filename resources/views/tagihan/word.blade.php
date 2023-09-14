@@ -80,7 +80,7 @@
                                     </strong>
                                     <br>
                                     <strong>
-                                        <u> Nomor : {{ $tagihan->nomor_tagihan }}</u>
+                                        <u> Nomor : 672.2/{{ $tagihan->nomor_tagihan }}</u>
                                     </strong>
                                     <br>
                                 </span>
@@ -111,11 +111,10 @@
                                     <span style=''>Telah mengadakan pemeriksaan pekerjaan, service kebocoran pipa
                                         periode pulan {{ $bulan }} tahun {{ date('Y') }} di wilayah
                                         {{ $wilayah }} Sebanyak
-                                        {{ $total_lokasi }} lokasi. Dengan jumlah tagihan sebesar Rp.
-                                        {{ pembulatan($total_tagihan) }}.
+                                        {{ $total_lokasi }} lokasi. Dengan jumlah tagihan sebesar Rp{{ pembulatan($total_tagihan) }}.00
                                         <i>
                                             (
-                                            {{ strtoupper(terbilang(ceil($total_tagihan) - substr(ceil($total_tagihan), -3))) }}
+                                            {{ terbilang(ceil($total_tagihan) - substr(ceil($total_tagihan), -3)) }}
                                             RUPIAH)
                                         </i>
                                     </span>
@@ -171,7 +170,7 @@
                                 </div>
 
                                 <div style='font-size: 20px;' class="col-6 text-center">
-                                    Samarinda , {{ $tanggal }}
+                                    Samarinda, {{ $tanggal }}
                                     <br>
                                     Pemeriksa Pekerjaan,
                                     <br>
@@ -195,11 +194,11 @@
                             </div>
                             <div class="text-center">
                                 <span style=' font-size: 20px;'>
-                                    <p style=' font-size: 20px;'> Mengetahui, <br> Direktur Teknik
-                                        <br> Perumdam Tirta Kencana Kota Samarinda
-                                    </p>
                                     @forelse ($tagihan->list_persetujuan as $index => $item)
-                                        @if ($item->jabatan === 'Direktur Teknik')
+                                    @if ($item->jabatan === 'Direktur Teknik')
+                                        <p style=' font-size: 20px;'> Mengetahui, <br> {{ $direktur->nama }}
+                                            <br> Perumdam Tirta Kencana Kota Samarinda
+                                        </p>
                                             @if ($direktur)
                                                 @if ($direktur->url)
                                                     {!! QrCode::size(100)->generate($direktur->url) !!}
@@ -213,7 +212,7 @@
                                     @empty
                                     @endforelse
 
-                                    <p> <strong style=' font-size: 20px;'> Ali Rachman AS, S.T.</strong></p>
+
                                 </span>
                             </div>
                         </page>
