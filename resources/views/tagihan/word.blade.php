@@ -114,8 +114,7 @@
                                         {{ $total_lokasi }} lokasi. Dengan jumlah tagihan sebesar Rp{{ pembulatan($total_tagihan) }}.00
                                         <i>
                                             (
-                                            {{ terbilang(ceil($total_tagihan) - substr(ceil($total_tagihan), -3)) }}
-                                            RUPIAH)
+                                            {{ terbilang(ceil($total_tagihan) - substr(ceil($total_tagihan), -3)) }} rupiah)
                                         </i>
                                     </span>
                                 </p>
@@ -156,7 +155,7 @@
                                 <div style='font-size: 20px;' class="col-6 text-center">
                                     {{ $tagihan->rekanan }}
                                     <br>
-                                    Samarinda, {{ $tanggal }}
+                                    Samarinda{{ $tanggal }}
                                     <br>
                                     @if ($tagihan->rekanan_url != null)
                                         {!! QrCode::size(100)->generate($tagihan->rekanan_url_tdd) !!}
@@ -170,7 +169,7 @@
                                 </div>
 
                                 <div style='font-size: 20px;' class="col-6 text-center">
-                                    Samarinda, {{ $tanggal }}
+                                    Samarinda{{ $tanggal }}
                                     <br>
                                     Pemeriksa Pekerjaan,
                                     <br>
