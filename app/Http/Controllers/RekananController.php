@@ -32,25 +32,25 @@ class RekananController extends Controller
     {
         return [
             [
-                'name'    => 'nama',
-                'alias'    => 'Nama CV',
+                'name' => 'nama',
+                'alias' => 'Nama CV',
             ],
             [
-                'name'    => 'nama_penangung_jawab',
-                'alias'    => 'Nama Penanggung Jawab',
+                'name' => 'nama_penangung_jawab',
+                'alias' => 'Nama Penanggung Jawab',
 
             ],
             [
-                'name'    => 'nik',
-                'alias'    => 'Nomor KTP',
+                'name' => 'nik',
+                'alias' => 'Nomor KTP',
             ],
             [
-                'name'    => 'no_hp',
-                'alias'    => 'No HP',
+                'name' => 'no_hp',
+                'alias' => 'No HP',
             ],
             [
-                'name'    => 'alamat',
-                'alias'    => 'Alamat',
+                'name' => 'alamat',
+                'alias' => 'Alamat',
             ],
         ];
     }
@@ -58,10 +58,10 @@ class RekananController extends Controller
     {
         return [
             [
-                'name'    => 'nama',
-                'input'    => 'text',
-                'alias'    => 'Nama Rekanan',
-                'value'    => null
+                'name' => 'nama',
+                'input' => 'text',
+                'alias' => 'Nama Rekanan',
+                'value' => null
             ],
         ];
     }
@@ -70,84 +70,84 @@ class RekananController extends Controller
 
         return [
             [
-                'name'    => 'nama',
-                'input'    => 'text',
-                'alias'    => 'Nama CV',
-                'validasi'    => ['required', 'min:1'],
+                'name' => 'nama',
+                'input' => 'text',
+                'alias' => 'Nama CV',
+                'validasi' => ['required', 'min:1'],
             ],
             [
-                'name'    => 'nama_penangung_jawab',
-                'input'    => 'text',
-                'alias'    => 'Nama Penanggung Jawab',
-                'validasi'    => ['required', 'min:1'],
+                'name' => 'nama_penangung_jawab',
+                'input' => 'text',
+                'alias' => 'Nama Penanggung Jawab',
+                'validasi' => ['required', 'min:1'],
             ],
             [
-                'name'    => 'nik',
-                'input'    => 'text',
-                'alias'    => 'Nomor KTP / NIK',
-                'validasi'    => ['required', 'min:1', 'unique'],
+                'name' => 'nik',
+                'input' => 'text',
+                'alias' => 'Nomor KTP / NIK',
+                'validasi' => ['required', 'min:1', 'unique'],
             ],
             [
-                'name'    => 'no_hp',
-                'input'    => 'text',
-                'alias'    => 'No HP',
-                'validasi'    => ['required', 'min:1', 'unique'],
+                'name' => 'no_hp',
+                'input' => 'text',
+                'alias' => 'No HP',
+                'validasi' => ['required', 'min:1', 'unique'],
             ],
             [
-                'name'    => 'alamat',
-                'input'    => 'textarea',
-                'alias'    => 'Alamat',
-                'validasi'    => ['required'],
+                'name' => 'alamat',
+                'input' => 'textarea',
+                'alias' => 'Alamat',
+                'validasi' => ['required'],
             ],
             [
-                'name'    => 'pkp',
-                'input'    => 'radio',
-                'alias'    => 'Perusahaan Kena Pajak',
+                'name' => 'pkp',
+                'input' => 'radio',
+                'alias' => 'Perusahaan Kena Pajak',
                 'value' => ['ya', 'tidak'],
                 'default' => 'tidak',
-                'multiple'    =>  true,
+                'multiple' => true,
             ],
             [
-                'name'    => 'email',
-                'alias'    => 'Email',
-                'input'    => 'email',
-                'validasi'    => ['required',  'plural', 'unique', 'email'],
+                'name' => 'email',
+                'alias' => 'Email',
+                'input' => 'email',
+                'validasi' => ['required', 'plural', 'unique', 'email'],
                 'extraForm' => 'user',
             ],
             [
-                'name'    => 'username',
-                'alias'    => 'Username',
-                'input'    => 'text',
-                'validasi'    => ['required', 'unique', 'min:3', 'plural'],
+                'name' => 'username',
+                'alias' => 'Username',
+                'input' => 'text',
+                'validasi' => ['required', 'unique', 'min:3', 'plural'],
                 'extraForm' => 'user',
             ],
             [
-                'name'    => 'password',
-                'alias'    => 'Password',
-                'input'    => 'password',
-                'validasi'    => ['required', 'min:8'],
+                'name' => 'password',
+                'alias' => 'Password',
+                'input' => 'password',
+                'validasi' => ['min:8'],
                 'extraForm' => 'user',
             ],
 
             [
-                'name'    => 'role_id',
-                'input'    => 'combo',
-                'alias'    => 'Hak Akses',
+                'name' => 'role_id',
+                'input' => 'combo',
+                'alias' => 'Hak Akses',
                 'value' => $this->combobox('Role', 'slug', 'rekanan', '='),
-                'validasi'    => ['required'],
+                'validasi' => ['required'],
                 'extraForm' => 'user',
-                'hasMany'    => ['role'],
+                'hasMany' => ['role'],
             ],
             [
-                'name'    => 'url',
-                'input'    => 'text',
-                'alias'    => 'Url Tanda tangan'
+                'name' => 'url',
+                'input' => 'text',
+                'alias' => 'Url Tanda tangan'
             ],
             [
-                'name'    => 'tdd',
-                'input'    => 'image',
-                'alias'    => 'Tanda Tangan',
-                'validasi'    => ['mimes:jpeg,bmp,png,jpg'],
+                'name' => 'tdd',
+                'input' => 'image',
+                'alias' => 'Tanda Tangan',
+                'validasi' => ['mimes:jpeg,bmp,png,jpg'],
             ],
         ];
     }
@@ -159,7 +159,7 @@ class RekananController extends Controller
      */
     public function upload()
     {
-        $title =  "Upload Data rekanan";
+        $title = "Upload Data rekanan";
         $route = $this->route;
         $action = route('rekanan.upload');
 
@@ -167,7 +167,8 @@ class RekananController extends Controller
             "title",
             "route",
             "action",
-        ));
+        )
+        );
     }
     /**
      * upload data
@@ -212,13 +213,13 @@ class RekananController extends Controller
                     $dataEmail[$index] = $item[8];
 
                     if ($index > 2) {
-                        $dataUser[$index] = User::where('username', 'LIKE', '%' .  $dataCV[$index] . "%")->first();
+                        $dataUser[$index] = User::where('username', 'LIKE', '%' . $dataCV[$index] . "%")->first();
                         if (!$dataUser[$index]) {
                             $dataUser[$index] = new User;
-                            $dataUser[$index]->name =  $dataUserName[$index];
-                            $dataUser[$index]->username =  $dataUserName[$index];
-                            $dataUser[$index]->password =  bcrypt($dataPassword[$index]);
-                            $dataUser[$index]->email =  $dataEmail[$index];
+                            $dataUser[$index]->name = $dataUserName[$index];
+                            $dataUser[$index]->username = $dataUserName[$index];
+                            $dataUser[$index]->password = bcrypt($dataPassword[$index]);
+                            $dataUser[$index]->email = $dataEmail[$index];
                             $dataUser[$index]->save();
                             if ($roles) {
                                 $dataUser[$index]->role()->attach($roles->id);
@@ -228,12 +229,12 @@ class RekananController extends Controller
                         if (!$dataRekanan[$index]) {
                             if ($dataNama[$index] != null) {
                                 $Rekanan = new Rekanan;
-                                $Rekanan->nama =  $dataCV[$index];
-                                $Rekanan->nama_penangung_jawab =  $dataNama[$index];
-                                $Rekanan->nik =  $dataKtp[$index];
-                                $Rekanan->no_hp =  $dataNoHp[$index];
-                                $Rekanan->alamat =  $dataAlamat[$index];
-                                $Rekanan->user_id =  $dataUser[$index]->id;
+                                $Rekanan->nama = $dataCV[$index];
+                                $Rekanan->nama_penangung_jawab = $dataNama[$index];
+                                $Rekanan->nik = $dataKtp[$index];
+                                $Rekanan->no_hp = $dataNoHp[$index];
+                                $Rekanan->alamat = $dataAlamat[$index];
+                                $Rekanan->user_id = $dataUser[$index]->id;
                                 $Rekanan->save();
                                 $total = ++$index;
                             }
