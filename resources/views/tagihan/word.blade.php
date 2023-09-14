@@ -65,7 +65,7 @@
                         <page id="content" size="A4">
                             <div style=" d-flex justify-content-center align-items-center align-items-center">
                                 <div class="text-center">
-                                    <img src="{{ asset('img/kopsurat.png') }}" class="img-responsive" width="50%">
+                                    <img src="{{ asset('img/kopsurat.png') }}" class="img-responsive" width="98%">
                                 </div>
                             </div>
                             <div class="text-center" style="margin-bottom:24px;">
