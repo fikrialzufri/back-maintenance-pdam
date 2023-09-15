@@ -109,9 +109,9 @@
                             <div>
                                 <p style='font-size: 20px;'>
                                     <span style=''>Telah mengadakan pemeriksaan pekerjaan, service kebocoran pipa
-                                        periode pulan {{ $bulan }} tahun {{ date('Y') }} di wilayah
+                                        periode bulan {{ $bulan }} tahun {{ date('Y') }} di wilayah
                                         {{ $wilayah }} Sebanyak
-                                        {{ $total_lokasi }} lokasi. Dengan jumlah tagihan sebesar Rp{{ pembulatan($total_tagihan) }}.00
+                                        {{ $total_lokasi }} lokasi. Dengan jumlah tagihan sebesar Rp{{ pembulatan($total_tagihan) }},00
                                         <i>
                                             (
                                             {{ terbilang(ceil($total_tagihan) - substr(ceil($total_tagihan), -3)) }} rupiah)
@@ -154,8 +154,6 @@
                             <div class="row">
                                 <div style='font-size: 20px;' class="col-6 text-center">
                                     {{ $tagihan->rekanan }}
-                                    <br>
-                                    Samarinda{{ $tanggal }}
                                     <br>
                                     @if ($tagihan->rekanan_url != null)
                                         {!! QrCode::size(100)->generate($tagihan->rekanan_url_tdd) !!}
