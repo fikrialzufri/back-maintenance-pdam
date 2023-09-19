@@ -175,10 +175,11 @@ class PenunjukanPekerjaanController extends Controller
 
                 if (count($list_rekanan_id) > 0) {
                     $rekanan = $rekanan->whereIn('id', $list_rekanan_id);
-
-                    if ($rekananid) {
+                    // return $rekananid;
+                    if (isset($rekananid)) {
                         $penunjukanAduan = PenunjukanPekerjaan::whereIn('rekanan_id', [$rekananid]);
                     } else {
+                        // return 1;
                         $penunjukanAduan = PenunjukanPekerjaan::whereIn('rekanan_id', $list_rekanan_id);
                     }
 
@@ -202,9 +203,6 @@ class PenunjukanPekerjaanController extends Controller
                     $penunjukanAduan = $penunjukanAduan->get()->pluck('aduan_id')->toArray();
 
                     if (isset($penunjukanAduan)) {
-                        # code...
-                    }
-                    if (count($penunjukanAduan) > 1) {
                         $query->whereIn('id', $penunjukanAduan);
                     }
 
@@ -333,7 +331,7 @@ class PenunjukanPekerjaanController extends Controller
                 }
             }
         } else {
-
+            // return 1;
             $penunjukan = $query->paginate(50);
             $penunjukan = $penunjukan->setCollection(
                 $penunjukan->sortBy(function ($pekerjaan) {
