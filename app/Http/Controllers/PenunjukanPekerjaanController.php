@@ -1478,7 +1478,7 @@ class PenunjukanPekerjaanController extends Controller
             }
         } catch (\Throwable $th) {
             DB::rollback();
-            return redirect()->route('penunjukan_pekerjaan.index')->with('message', "Jaringan Tidak Ada")->with('Class', 'danger');
+            return redirect()->route('penunjukan_pekerjaan.index')->with('message', "Jaringan Bermasalah")->with('Class', 'danger');
         }
     }
 
