@@ -71,6 +71,8 @@
                                         class="form-control">
                                 </div>
                                 <div class="col-lg-2">
+                                    @if ($status)
+
                                     <label for="">Status</label>
                                     <select name="status" class="selected2 form-control" id="cmbStatus">
                                         <option value="">Pilih Status</option>
@@ -107,6 +109,7 @@
                                         </option>
 
                                     </select>
+                                    @endif
                                 </div>
 
                                 <div class="col-lg-1">
