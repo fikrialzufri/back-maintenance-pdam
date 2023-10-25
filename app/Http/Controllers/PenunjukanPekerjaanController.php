@@ -48,7 +48,7 @@ class PenunjukanPekerjaanController extends Controller
         $route = 'penunjukan_pekerjaan';
         $search = request()->search;
         $kategori = request()->kategori;
-        $status = request()->status;
+        $status = request()->status != '' ? request()->status : '';
         $rekananid = request()->rekanan_id;
         $limit = request()->limit ?? 50;
         $rekanan_id = null;
