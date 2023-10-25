@@ -340,8 +340,6 @@ class PenunjukanPekerjaanController extends Controller
             );
         }
 
-        return $status;
-
         $rekanan = $rekanan->orderBy('nama')->get();
 
         return view(
