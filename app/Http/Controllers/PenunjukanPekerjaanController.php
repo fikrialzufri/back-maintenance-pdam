@@ -340,7 +340,7 @@ class PenunjukanPekerjaanController extends Controller
             );
         }
 
-        // return $status;
+        return $status;
 
         $rekanan = $rekanan->orderBy('nama')->get();
 
@@ -358,8 +358,8 @@ class PenunjukanPekerjaanController extends Controller
                 'kategori',
                 'penunjukan',
                 'search',
+                'status',
                 'limit',
-                'status'
             )
         );
     }
