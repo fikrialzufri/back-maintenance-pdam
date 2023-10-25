@@ -6,6 +6,7 @@ use App\Http\Controllers\JenisController;
 use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\JenisAduanController;
+use App\Http\Controllers\PenunjukanPekerjaanController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SatuanController;
 use App\Http\Controllers\TaskController;
@@ -15,7 +16,7 @@ use App\Http\Controllers\DivisiController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\AduanController;
 use App\Http\Controllers\PelaksanaanPekerjaanController;
-use App\Http\Controllers\PenunjukanPekerjaanController;
+
 use App\Http\Controllers\RekananController;
 use App\Http\Controllers\WilayahController;
 use App\Http\Controllers\NotifikasiController;
