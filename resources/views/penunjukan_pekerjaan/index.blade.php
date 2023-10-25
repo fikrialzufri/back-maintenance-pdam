@@ -71,7 +71,7 @@
                                         class="form-control">
                                 </div>
                                 <div class="col-lg-2">
-                                    @if ($status)
+                                    @if (isset($status) )
 
                                     <label for="">Status</label>
                                     <select name="status" class="selected2 form-control" id="cmbStatus">
