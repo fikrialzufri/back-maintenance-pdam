@@ -1,10 +1,20 @@
 <?php
-function tanggal_indonesia($tgl, $tampil_hari = true,$koma= true)
+function tanggal_indonesia($tgl, $tampil_hari = true, $koma = true)
 {
     $nama_hari = array("Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jum'at", "Sabtu");
     $nama_bulan = array(
-        1 => "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus",
-        "September", "Oktober", "November", "Desember"
+        1 => "Januari",
+        "Februari",
+        "Maret",
+        "April",
+        "Mei",
+        "Juni",
+        "Juli",
+        "Agustus",
+        "September",
+        "Oktober",
+        "November",
+        "Desember"
     );
     $tahun = substr($tgl, 0, 4);
     $bulan = $nama_bulan[(int) substr($tgl, 5, 2)];
@@ -13,22 +23,66 @@ function tanggal_indonesia($tgl, $tampil_hari = true,$koma= true)
     if ($tampil_hari) {
         $urutan_hari = date('w', mktime(0, 0, 0, substr($tgl, 5, 2), $tanggal, $tahun));
         $hari = $nama_hari[$urutan_hari];
-        $text .= $hari ;
+        $text .= $hari;
     }
     if ($koma === true) {
-         $text .= ", ";
-    }else{
+        $text .= ", ";
+    } else {
         $text .= " ";
     }
     $text .= $tanggal . " " . $bulan . " " . $tahun;
+    return $text;
+}
+function tanggal_indonesia_terbilang($tgl, $tampil_hari = true, $koma = true)
+{
+    $nama_hari = array("minggu", "senin", "selasa", "rabu", "kamis", "jumat", "sabtu");
+    $nama_bulan = array(
+        1 => "januari",
+        "februari",
+        "maret",
+        "april",
+        "mei",
+        "juni",
+        "juli",
+        "agustus",
+        "september",
+        "oktober",
+        "november",
+        "desember"
+    );
+    $tahun = substr($tgl, 0, 4);
+    $bulan = $nama_bulan[(int) substr($tgl, 5, 2)];
+    $tanggal = substr($tgl, 8, 2);
+    $text = "";
+    if ($tampil_hari) {
+        $urutan_hari = date('w', mktime(0, 0, 0, substr($tgl, 5, 2), $tanggal, $tahun));
+        $hari = $nama_hari[$urutan_hari];
+        $text .= $hari;
+    }
+    if ($koma === true) {
+        $text .= ", ";
+    } else {
+        $text .= " ";
+    }
+    $text .= terbilang($tanggal) . " " . $bulan . " " . $tahun;
     return $text;
 }
 function capital_tanggal_indonesia($tgl, $tampil_hari = true)
 {
     $nama_hari = array("minggu", "senin", "selasa", "rabu", "kamis", "jum'at", "sabtu");
     $nama_bulan = array(
-        1 => "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus",
-        "September", "Oktober", "November", "Desember"
+        1 => "Januari",
+        "Februari",
+        "Maret",
+        "April",
+        "Mei",
+        "Juni",
+        "Juli",
+        "Agustus",
+        "September",
+        "Oktober",
+        "November",
+        "Desember"
     );
     $tahun = substr($tgl, 0, 4);
     $bulan = $nama_bulan[(int) substr($tgl, 5, 2)];
@@ -45,8 +99,18 @@ function capital_tanggal_indonesia($tgl, $tampil_hari = true)
 function bulan_indonesia($tgl)
 {
     $nama_bulan = array(
-        1 => "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus",
-        "September", "Oktober", "November", "Desember"
+        1 => "Januari",
+        "Februari",
+        "Maret",
+        "April",
+        "Mei",
+        "Juni",
+        "Juli",
+        "Agustus",
+        "September",
+        "Oktober",
+        "November",
+        "Desember"
     );
     $bulan = $nama_bulan[(int) substr($tgl, 5, 2)];
 

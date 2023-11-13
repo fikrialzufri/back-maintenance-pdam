@@ -1143,7 +1143,7 @@ class TagihanController extends Controller
 
     public function wordtagihan()
     {
-        $now = tanggal_indonesia(Carbon::now(), true, false);
+        $now = tanggal_indonesia_terbilang(Carbon::now(), true, false);
 
         $id = request()->get('id') ?: "";
         $word = request()->get('word') ?: "";
