@@ -125,7 +125,8 @@ class RekananController extends Controller
                 'name' => 'password',
                 'alias' => 'Password',
                 'input' => 'password',
-                'validasi' => ['min:8'],
+                // 'validasi' => ['min:8'],
+                'validasi' => null,
                 'extraForm' => 'user',
             ],
 
@@ -163,11 +164,13 @@ class RekananController extends Controller
         $route = $this->route;
         $action = route('rekanan.upload');
 
-        return view('rekanan.upload', compact(
-            "title",
-            "route",
-            "action",
-        )
+        return view(
+            'rekanan.upload',
+            compact(
+                "title",
+                "route",
+                "action",
+            )
         );
     }
     /**
