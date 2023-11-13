@@ -216,7 +216,7 @@
                                                                     @foreach ($rekanan as $rek)
                                                                         <option value="{{ $rek->id }}"
                                                                             {{ old('rekanan_id') == $rek->id ? 'selected' : '' }}>
-                                                                            {{ $rek->nama }} | {{ $rek->nama_penangung_jawab }}
+                                                                            {{ $rek->nama }} | {{ $rek->nama_penangung_jawab }} {{ $rek->opr }}
                                                                         </option>
                                                                     @endforeach
                                                                     @foreach ($karyawanPekerja as $kary)
@@ -266,7 +266,7 @@
                                                                 @foreach ($rekanan as $rek)
                                                                     <option value="{{ $rek->id }}"
                                                                         {{ old('rekanan_id') == $rek->id ? 'selected' : '' }}>
-                                                                        {{ $rek->nama }} | {{ $rek->nama_penangung_jawab }}
+                                                                        {{ $rek->nama }} | {{ $rek->nama_penangung_jawab }} {{ $rek->opr }}
                                                                     </option>
                                                                 @endforeach
                                                                 @foreach ($karyawanPekerja as $kary)
