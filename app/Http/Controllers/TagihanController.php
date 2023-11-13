@@ -1143,11 +1143,17 @@ class TagihanController extends Controller
 
     public function wordtagihan()
     {
-        $now = tanggal_indonesia_terbilang(Carbon::now(), true, false);
 
         $id = request()->get('id') ?: "";
         $word = request()->get('word') ?: "";
         $tagihan = Tagihan::find($id);
+        $now = '';
+        $tanggal = '';
+        if ($tagihan->list_persetujuan_direktur_teknik['created_at']) {
+            $tanggal = $tagihan->list_persetujuan_direktur_teknik['created_at'];
+            $now = tanggal_indonesia_terbilang($tanggal, true, false);
+            $tanggal = tanggal_indonesia(Carbon::parse($tanggal), false);
+        }
 
         $wilayah = [];
 
@@ -1170,7 +1176,6 @@ class TagihanController extends Controller
         $filename = "Tagihan Rekenan " . $tagihan->rekanan . " Nomor " . $tagihan->nomor_tagihan;
         $title = "Tagihan : " . $tagihan->nomor_tagihan;
         $bulan = bulan_indonesia(Carbon::parse($tagihan->tanggal_adjust));
-        $tanggal = tanggal_indonesia(Carbon::parse($tagihan->tanggal_adjust), false);
 
         $total = $tagihan->tagihan + $tagihan->galian;
 
