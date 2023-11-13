@@ -80,169 +80,177 @@
                                     </strong>
                                     <br>
                                     <strong>
-                                        <u> Nomor : 672.2/{{ $tagihan->nomor_tagihan }}</u>
-                                    </strong>
-                                    <br>
-                                </span>
-                            </div>
-
-                            <ol style="font-size: 20px;">
-                                @forelse ($tagihan->list_persetujuan as $index => $item)
-                                    @if (
-                                        $item->jabatan === 'Staf Pengawas' ||
-                                            str_contains($item->jabatan, 'Asisten Manajer Distribusi') ||
-                                            $item->jabatan === 'Asisten Manajer Pengawas' ||
-                                            $item->jabatan === 'Manajer Distribusi')
-                                        <li> <span style=''>{{ ucfirst($item->nama) }}
-                                                sebagai {{ $item->jabatan }}</span></li>
-                                    @endif
-                                @empty
-                                @endforelse
-                            </ol>
-                            <div>
-                                <p style='font-size: 20px; text-align: justify;'>
-                                    <span style=''>Pada hari ini, {{ $now }} telah diadakan pemeriksaan pekerjaan service kebocoran pipa periode bulan {{ $bulan }} tahun {{ date('Y') }} di wilayah {{ $wilayah }} sebanyak {{ $total_lokasi }} lokasi. Dengan jumlah tagihan sebesar Rp{{ pembulatan($total_tagihan) }},00 ({{ ltrim(terbilang(ceil($total_tagihan) - substr(ceil($total_tagihan), -3)))}}rupiah). Pekerjaan tersebut dilaksanakan oleh :
+                                        <u> Nomor : 672.2/{{ $tagihan->nomor_tagihan }}{{ getRomawi($tagihan->list_persetujuan_direktur_teknik['created_at']->format('m')) }}/{{ $tagihan->list_persetujuan_direktur_teknik['created_at']->format('Y') }}
+                                            </u>
+                                        </strong>
+                                        <br>
                                     </span>
-                                </p>
-                            </div>
-
-                            <p id="text">
-                                <span class="child"> Nama &nbsp;&nbsp; :
-                                </span>
-                                <span class="child child2">
-                                    {{ $tagihan->rekanan }}
-                                </span>
-                                <br>
-                                <span class="child">
-                                    Alamat  &nbsp;:
-                                </span>
-                                <span class="child child2">
-                                    {{ $tagihan->alamat_rekanan }}
-                                </span>
-
-                            </p>
-                            <p style="text-align: justify;">
-                                <span style='font-size: 20px;'>Berdasarkan surat perintah pelaksanaan pekerjaan tersebut dan persyaratan bahan maupun pelaksanaannya, dengan ini menyatakan bahwa pekerjaan tersebut telah selesai dikerjakan dan memenuhi prosedur serta persyaratan yang ditetapkan oleh Perumdam Tirta Kencana Kota Samarinda.</span>
-                            </p>
-                            <p style="text-align: justify;">
-                                <span style='font-size: 20px;'>Demikian Berita Acara Pemeriksaan Pekerjaan ini dibuat dengan penuh tanggung jawab dan dapat dipergunakan sebagaimana mestinya.</span>
-                            </p>
-                            <div class="row">
-                                <div style='font-size: 20px;' class="col-6 text-center">
-                                    <br>
-                                    {{ $tagihan->rekanan }}
-                                    <br>
-                                    Direktur
-                                    <br>
-                                    @if ($tagihan->rekanan_url != null)
-                                        {!! QrCode::size(100)->generate($tagihan->rekanan_url_tdd) !!}
-
-                                    @else
-                                        @if ($tagihan->rekanan_url_tdd != null)
-                                            {!! QrCode::size(100)->generate($tagihan->rekanan_url_tdd) !!}
-                                        @endif
-                                    @endif
-                                    <br>
-                                    {{ $tagihan->direktur }}
                                 </div>
 
-                                <div style='font-size: 20px;' class="col-6 text-center">
-                                    Samarinda{{ $tanggal }}
-                                    <br>
-                                    Pemeriksa Pekerjaan,
-                                    <br>
+                                <ol style="font-size: 20px;">
                                     @forelse ($tagihan->list_persetujuan as $index => $item)
-                                        @if ($item->jabatan === 'Manajer Perencanaan')
-                                            <span>{{ $item->jabatan }}</span>
-                                            <br>
-                                            @if ($item->url != null)
-                                                {!! QrCode::size(100)->generate($item->url) !!}
-                                            @else
-                                                @if ($item->tdd != null)
-                                                    {!! QrCode::size(100)->generate(url('tddkaryawan/'. $item->karyawan_id)) !!}
-
-                                                @endif
-                                            @endif
-                                            <br>
-                                            <span>{{ ucfirst($item->nama) }}</span>
+                                        @if (
+                                            $item->jabatan === 'Staf Pengawas' ||
+                                                str_contains($item->jabatan, 'Asisten Manajer Distribusi') ||
+                                                $item->jabatan === 'Asisten Manajer Pengawas' ||
+                                                $item->jabatan === 'Manajer Distribusi')
+                                            <li> <span style=''>{{ ucfirst($item->nama) }}
+                                                    sebagai {{ $item->jabatan }}</span></li>
                                         @endif
                                     @empty
                                     @endforelse
+                                </ol>
+                                <div>
+                                    <p style='font-size: 20px; text-align: justify;'>
+                                        <span style=''>Pada hari ini, {{ $now }} telah diadakan pemeriksaan
+                                            pekerjaan service kebocoran pipa periode bulan {{ $bulan }} tahun
+                                            {{ date('Y') }} di wilayah {{ $wilayah }} sebanyak {{ $total_lokasi }}
+                                            lokasi. Dengan jumlah tagihan sebesar Rp{{ pembulatan($total_tagihan) }},00
+                                            ({{ ltrim(terbilang(ceil($total_tagihan) - substr(ceil($total_tagihan), -3))) }}rupiah).
+                                            Pekerjaan tersebut dilaksanakan oleh :
+                                        </span>
+                                    </p>
                                 </div>
-                            </div>
-                            <div class="text-center">
-                                <span style=' font-size: 20px;'>
-                                    @forelse ($tagihan->list_persetujuan as $index => $item)
-                                    @if ($item->jabatan === 'Direktur Teknik')
-                                        <p style=' font-size: 20px;'> Mengetahui, <br> {{ $direktur->nama }}
-                                            <br> Perumdam Tirta Kencana Kota Samarinda
-                                        </p>
-                                            @if ($direktur)
-                                                @if ($direktur->url)
-                                                    {!! QrCode::size(100)->generate($direktur->url) !!}
+
+                                <p id="text">
+                                    <span class="child"> Nama &nbsp;&nbsp; :
+                                    </span>
+                                    <span class="child child2">
+                                        {{ $tagihan->rekanan }}
+                                    </span>
+                                    <br>
+                                    <span class="child">
+                                        Alamat &nbsp;:
+                                    </span>
+                                    <span class="child child2">
+                                        {{ $tagihan->alamat_rekanan }}
+                                    </span>
+
+                                </p>
+                                <p style="text-align: justify;">
+                                    <span style='font-size: 20px;'>Berdasarkan surat perintah pelaksanaan pekerjaan tersebut dan
+                                        persyaratan bahan maupun pelaksanaannya, dengan ini menyatakan bahwa pekerjaan tersebut
+                                        telah selesai dikerjakan dan memenuhi prosedur serta persyaratan yang ditetapkan oleh
+                                        Perumdam Tirta Kencana Kota Samarinda.</span>
+                                </p>
+                                <p style="text-align: justify;">
+                                    <span style='font-size: 20px;'>Demikian Berita Acara Pemeriksaan Pekerjaan ini dibuat dengan
+                                        penuh tanggung jawab dan dapat dipergunakan sebagaimana mestinya.</span>
+                                </p>
+                                <div class="row">
+                                    <div style='font-size: 20px;' class="col-6 text-center">
+                                        <br>
+                                        {{ $tagihan->rekanan }}
+                                        <br>
+                                        Direktur
+                                        <br>
+                                        @if ($tagihan->rekanan_url != null)
+                                            {!! QrCode::size(100)->generate($tagihan->rekanan_url_tdd) !!}
+                                        @else
+                                            @if ($tagihan->rekanan_url_tdd != null)
+                                                {!! QrCode::size(100)->generate($tagihan->rekanan_url_tdd) !!}
+                                            @endif
+                                        @endif
+                                        <br>
+                                        {{ $tagihan->direktur }}
+                                    </div>
+
+                                    <div style='font-size: 20px;' class="col-6 text-center">
+                                        Samarinda{{ $tanggal }}
+                                        <br>
+                                        Pemeriksa Pekerjaan,
+                                        <br>
+                                        @forelse ($tagihan->list_persetujuan as $index => $item)
+                                            @if ($item->jabatan === 'Manajer Perencanaan')
+                                                <span>{{ $item->jabatan }}</span>
+                                                <br>
+                                                @if ($item->url != null)
+                                                    {!! QrCode::size(100)->generate($item->url) !!}
                                                 @else
-                                                    @if ($direktur->tdd)
-                                                        {!! QrCode::size(100)->generate(url('tddkaryawan/'. $direktur->id)) !!}
+                                                    @if ($item->tdd != null)
+                                                        {!! QrCode::size(100)->generate(url('tddkaryawan/' . $item->karyawan_id)) !!}
+                                                    @endif
+                                                @endif
+                                                <br>
+                                                <span>{{ ucfirst($item->nama) }}</span>
+                                            @endif
+                                        @empty
+                                        @endforelse
+                                    </div>
+                                </div>
+                                <div class="text-center">
+                                    <span style=' font-size: 20px;'>
+                                        @forelse ($tagihan->list_persetujuan as $index => $item)
+                                            @if ($item->jabatan === 'Direktur Teknik')
+                                                <p style=' font-size: 20px;'> Mengetahui, <br> {{ $direktur->nama }}
+                                                    <br> Perumdam Tirta Kencana Kota Samarinda
+                                                </p>
+                                                @if ($direktur)
+                                                    @if ($direktur->url)
+                                                        {!! QrCode::size(100)->generate($direktur->url) !!}
+                                                    @else
+                                                        @if ($direktur->tdd)
+                                                            {!! QrCode::size(100)->generate(url('tddkaryawan/' . $direktur->id)) !!}
+                                                        @endif
                                                     @endif
                                                 @endif
                                             @endif
-                                        @endif
-                                    @empty
-                                    @endforelse
+                                        @empty
+                                        @endforelse
 
 
-                                </span>
-                            </div>
-                        </page>
+                                    </span>
+                                </div>
+                            </page>
+                        </div>
+
                     </div>
-
+                    <!-- ./col -->
                 </div>
-                <!-- ./col -->
-            </div>
-            <!-- /.row -->
-            <!-- Main row -->
-            <!-- /.row (main row) -->
+                <!-- /.row -->
+                <!-- Main row -->
+                <!-- /.row (main row) -->
+            </div><!-- /.container-fluid -->
         </div><!-- /.container-fluid -->
-    </div><!-- /.container-fluid -->
-    <div class="card-footer">
-        <btn class="btn btn-primary" id="word-export"><span class="nav-icon fa fa-file-pdf" aria-hidden="true"></span>
-            Print Surat Berita Acara</btn>
-    </div>
-@stop
+        <div class="card-footer">
+            <btn class="btn btn-primary" id="word-export"><span class="nav-icon fa fa-file-pdf" aria-hidden="true"></span>
+                Print Surat Berita Acara</btn>
+        </div>
+    @stop
 
-@push('scriptdinamis')
-    {{-- <script src="{{ asset('js/FileSaver.js') }}"></script>
+    @push('scriptdinamis')
+        {{-- <script src="{{ asset('js/FileSaver.js') }}"></script>
     <script src="{{ asset('js/jquery.wordexport.js') }}"></script> --}}
 
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
-    <script>
-        // window.jsPDF = window.jspdf.jsPDF; // add this line of code
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
+        <script>
+            // window.jsPDF = window.jspdf.jsPDF; // add this line of code
 
-        // window.jsPDF = window.jspdf.jsPDF;
-        function createPdf() {
-            var printContents = document.getElementById('content').innerHTML;
-            var originalContents = document.body.innerHTML;
+            // window.jsPDF = window.jspdf.jsPDF;
+            function createPdf() {
+                var printContents = document.getElementById('content').innerHTML;
+                var originalContents = document.body.innerHTML;
 
-            document.body.innerHTML = printContents;
+                document.body.innerHTML = printContents;
 
-            window.print();
+                window.print();
 
-            document.body.innerHTML = originalContents;
-        }
+                document.body.innerHTML = originalContents;
+            }
 
-        $('#word-export').click(function() {
-            createPdf()
-        });
+            $('#word-export').click(function() {
+                createPdf()
+            });
 
-        window.onafterprint = function() {
-            window.location.reload(true);
-        };
+            window.onafterprint = function() {
+                window.location.reload(true);
+            };
 
-        // let title = "{{ $filename }}";
-        // $("#word-export").click(function(event) {
-        //     $("#exportContent").wordExport(title);
-        // });
-    </script>
-@endpush
+            // let title = "{{ $filename }}";
+            // $("#word-export").click(function(event) {
+            //     $("#exportContent").wordExport(title);
+            // });
+        </script>
+    @endpush

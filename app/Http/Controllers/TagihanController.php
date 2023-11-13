@@ -45,7 +45,7 @@ class TagihanController extends Controller
     {
         return [
             [
-                'name' => 'nomor_tagihan',
+                'name' => 'nomor_tagihan_setujuh',
                 'alias' => 'Nomor Tagihan',
             ],
             [
