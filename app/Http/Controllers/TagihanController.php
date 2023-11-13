@@ -699,10 +699,10 @@ class TagihanController extends Controller
 
             if ($tagihan >= 1) {
                 $no = str_pad($tagihan + 1, 4, "0", STR_PAD_LEFT);
-                $nomor_tagihan = $no . "/" . rand(0, 900) . "/" . "BAPP-" . $singkatan . "/" . getRomawi($bulan) . "/" . date('Y');
+                $nomor_tagihan = $no . "/" . rand(0, 900) . "/" . "BAPP-" . $singkatan . "/";
             } else {
                 $no = str_pad(1, 4, "0", STR_PAD_LEFT);
-                $nomor_tagihan = $no . "/" . rand(0, 900) . "/" . "BAPP-" . $singkatan . "/" . getRomawi($bulan) . "/" . date('Y');
+                $nomor_tagihan = $no . "/" . rand(0, 900) . "/" . "BAPP-" . $singkatan . "/";
             }
 
             $data = $this->model();
