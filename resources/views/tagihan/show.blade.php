@@ -523,11 +523,11 @@
                                                 @endif
                                                 <div class="col">
                                                     @if ($tagihan->status === 'disetujui' || $tagihan->status === 'dibayar')
+                                                        <a href="{{ route('tagihan.word') }}?id={{ $tagihan->id }}"
+                                                            target="_blank" class="btn btn-success"><span
+                                                                class="nav-icon fa fa-file-word" aria-hidden="true"></span>
+                                                            Privew Tagihan BAP</a>
                                                     @endif
-                                                    <a href="{{ route('tagihan.word') }}?id={{ $tagihan->id }}"
-                                                        target="_blank" class="btn btn-success"><span
-                                                            class="nav-icon fa fa-file-word" aria-hidden="true"></span>
-                                                        Privew Tagihan BAP</a>
                                                 </div>
                                             </div>
 
