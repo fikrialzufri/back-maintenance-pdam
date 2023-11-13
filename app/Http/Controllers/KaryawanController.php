@@ -28,24 +28,24 @@ class KaryawanController extends Controller
     {
         return [
             [
-                'name'    => 'nama',
-                'alias'    => 'Nama Karyawan',
+                'name' => 'nama',
+                'alias' => 'Nama Karyawan',
             ],
             [
-                'name'    => 'nama_jabatan',
-                'alias'    => 'Jabatan',
+                'name' => 'nama_jabatan',
+                'alias' => 'Jabatan',
             ],
             [
-                'name'    => 'divisi',
-                'alias'    => 'Divisi',
+                'name' => 'divisi',
+                'alias' => 'Divisi',
             ],
             [
-                'name'    => 'wilayah',
-                'alias'    => 'Wilayah',
+                'name' => 'wilayah',
+                'alias' => 'Wilayah',
             ],
             [
-                'name'    => 'departemen',
-                'alias'    => 'Departemen',
+                'name' => 'departemen',
+                'alias' => 'Departemen',
             ],
         ];
     }
@@ -53,10 +53,10 @@ class KaryawanController extends Controller
     {
         return [
             [
-                'name'    => 'nama',
-                'input'    => 'text',
-                'alias'    => 'Nama Karyawan',
-                'value'    => null
+                'name' => 'nama',
+                'input' => 'text',
+                'alias' => 'Nama Karyawan',
+                'value' => null
             ],
         ];
     }
@@ -65,27 +65,27 @@ class KaryawanController extends Controller
 
         return [
             [
-                'name'    => 'nama',
-                'input'    => 'text',
-                'alias'    => 'Nama Karyawan',
-                'validasi'    => ['required', 'min:1'],
+                'name' => 'nama',
+                'input' => 'text',
+                'alias' => 'Nama Karyawan',
+                'validasi' => ['required', 'min:1'],
             ],
             [
-                'name'    => 'nip',
-                'input'    => 'text',
-                'alias'    => 'NIP',
-                'validasi'    => ['required', 'min:1', 'unique'],
+                'name' => 'nip',
+                'input' => 'text',
+                'alias' => 'NIP',
+                'validasi' => ['required', 'min:1', 'unique'],
             ],
             [
-                'name'    => 'nik',
-                'input'    => 'text',
-                'alias'    => 'Nomor KTP',
-                'validasi'    => ['required', 'min:1', 'unique'],
+                'name' => 'nik',
+                'input' => 'text',
+                'alias' => 'Nomor KTP',
+                'validasi' => ['required', 'min:1', 'unique'],
             ],
             [
-                'name'    => 'jabatan_id',
-                'input'    => 'combo',
-                'alias'    => 'Jabatan',
+                'name' => 'jabatan_id',
+                'input' => 'combo',
+                'alias' => 'Jabatan',
                 'value' => $this->combobox(
                     'Jabatan',
                     null,
@@ -101,68 +101,90 @@ class KaryawanController extends Controller
                     null,
                     ['divisi', 'wilayah', 'departemen'],
                 ),
-                'validasi'    => ['required'],
+                'validasi' => ['required'],
             ],
             [
-                'name'    => 'rekanan_id',
-                'input'    => 'combo',
-                'alias'    => 'Rekanan',
+                'name' => 'rekanan_id',
+                'input' => 'combo',
+                'alias' => 'Rekanan',
                 'value' => $this->combobox(
                     'Rekanan'
                 ),
-                'multiple'    =>  true,
+                'multiple' => true,
             ],
             [
-                'name'    => 'pekerjaan',
-                'input'    => 'radio',
-                'alias'    => 'Melakukan Pekerjaan',
+                'name' => 'pekerjaan',
+                'input' => 'radio',
+                'alias' => 'Melakukan Pekerjaan',
                 'value' => ['ya', 'tidak'],
                 'default' => 'tidak',
-                'multiple'    =>  true,
+                'multiple' => true,
             ],
             [
-                'name'    => 'email',
-                'alias'    => 'Email',
-                'input'    => 'email',
-                'validasi'    => ['required',  'plural', 'unique', 'email'],
+                'name' => 'email',
+                'alias' => 'Email',
+                'input' => 'email',
+                'validasi' => ['required', 'plural', 'unique', 'email'],
                 'extraForm' => 'user',
             ],
             [
-                'name'    => 'username',
-                'alias'    => 'Username',
-                'input'    => 'text',
-                'validasi'    => ['required', 'unique', 'min:3', 'plural'],
+                'name' => 'username',
+                'alias' => 'Username',
+                'input' => 'text',
+                'validasi' => ['required', 'unique', 'min:3', 'plural'],
                 'extraForm' => 'user',
             ],
             [
-                'name'    => 'password',
-                'alias'    => 'Password',
-                'input'    => 'password',
-                'validasi'    => ['required', 'min:8'],
+                'name' => 'password',
+                'alias' => 'Password',
+                'input' => 'password',
+                'validasi' => ['required', 'min:8'],
                 'extraForm' => 'user',
             ],
 
             [
-                'name'    => 'role_id',
-                'input'    => 'combo',
-                'alias'    => 'Hak Akses',
+                'name' => 'role_id',
+                'input' => 'combo',
+                'alias' => 'Hak Akses',
                 'value' => $this->combobox('Role', 'slug', ['superadmin', 'rekanan'], '!=', 'slug'),
-                'validasi'    => ['required'],
+                'validasi' => ['required'],
                 'extraForm' => 'user',
-                'hasMany'    => ['role'],
+                'hasMany' => ['role'],
             ],
             [
-                'name'    => 'url',
-                'input'    => 'text',
-                'alias'    => 'Url Tanda Tangan',
+                'name' => 'url',
+                'input' => 'text',
+                'alias' => 'Url Tanda Tangan',
             ],
             [
-                'name'    => 'tdd',
-                'input'    => 'image',
-                'alias'    => 'Tanda Tangan',
-                'validasi'    => ['mimes:jpeg,bmp,png,jpg'],
+                'name' => 'tdd',
+                'input' => 'image',
+                'alias' => 'Tanda Tangan',
+                'validasi' => ['mimes:jpeg,bmp,png,jpg'],
             ],
         ];
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function tdd($id)
+    {
+        $route = $this->route;
+        $karyawan = Karyawan::find($id);
+        $title = "Tanda Tangan " . $karyawan->nama;
+
+
+        return view(
+            'karyawan.tdd',
+            compact(
+                "title",
+                "route",
+                "karyawan"
+            )
+        );
     }
 
     public function model()

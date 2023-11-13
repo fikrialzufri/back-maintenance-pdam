@@ -47,10 +47,16 @@ class Tagihan extends Model
             return $this->hasRekanan->url;
         }
     }
+    public function getOprAttribute()
+    {
+        if ($this->hasRekanan) {
+            return $this->hasRekanan->opr;
+        }
+    }
     public function getRekananUrlTddAttribute()
     {
         if ($this->hasRekanan) {
-            return asset('storage/rekanan/' . $this->hasRekanan->tdd);
+            return url('tddrekanan/' . $this->hasRekanan->id);
         }
     }
     public function getAlamatRekananAttribute()
@@ -87,12 +93,12 @@ class Tagihan extends Model
 
     public function hasPelaksanaanPekerjaan()
     {
-        return $this->belongsToMany(PelaksanaanPekerjaan::class,  'tagihan_pelaksanaan')->withPivot('total')->withTimestamps();
+        return $this->belongsToMany(PelaksanaanPekerjaan::class, 'tagihan_pelaksanaan')->withPivot('total')->withTimestamps();
     }
 
     public function hasItem()
     {
-        return $this->belongsToMany(Item::class,  'tagihan_item')
+        return $this->belongsToMany(Item::class, 'tagihan_item')
             ->withPivot(
                 'uraian',
                 'master',
@@ -151,7 +157,7 @@ class Tagihan extends Model
             $danger = 'bg-danger';
             if ($this->hasUserMany) {
                 foreach ($this->hasUserMany as $key => $value) {
-                    if ($value->id ==  $user) {
+                    if ($value->id == $user) {
                         $danger = '';
                     }
                 }
@@ -224,11 +230,11 @@ class Tagihan extends Model
 
 
         if ($this->hasRekanan) {
-           if ($this->hasRekanan->pkp) {
+            if ($this->hasRekanan->pkp) {
                 if ($this->hasRekanan->pkp === 'ya') {
                     $ppn = ($total * 11) / 100;
                 }
-           }
+            }
         }
 
         return $total + $ppn;
@@ -268,6 +274,7 @@ class Tagihan extends Model
                 if ($value->karyawan) {
                     $hasUserMany[$key] = (object) [
                         'id' => $value->karyawan->user_id,
+                        'karyawan_id' => $value->karyawan->id,
                         'nama' => $value->karyawan->nama,
                         'jabatan' => $value->karyawan->nama_jabatan,
                         'url' => $value->karyawan->url,
@@ -284,6 +291,7 @@ class Tagihan extends Model
             foreach ($collect as $key => $value) {
                 $result[$nomor] = (object) [
                     'id' => $value->id,
+                    'karyawan_id' => $value->karyawan_id,
                     'nama' => $value->nama,
                     'jabatan' => $value->jabatan,
                     'url' => $value->url,
@@ -307,6 +315,8 @@ class Tagihan extends Model
                 if ($value->karyawan) {
                     $hasUserMany[$key] = (object) [
                         'id' => $value->karyawan->user_id,
+                        'karyawan_id' => $value->karyawan->id,
+
                         'nama' => $value->karyawan->nama,
                         'jabatan' => $value->karyawan->nama_jabatan,
                         'is_setuju' => true,
@@ -321,6 +331,7 @@ class Tagihan extends Model
             foreach ($collect as $key => $value) {
                 $result[$nomor] = (object) [
                     'id' => $value->id,
+                    'karyawan_id' => $value->karyawan_id,
                     'nama' => $value->nama,
                     'jabatan' => $value->jabatan,
                     'is_setuju' => $value->is_setuju,

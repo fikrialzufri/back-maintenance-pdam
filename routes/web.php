@@ -110,12 +110,14 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('divisi', DivisiController::class);
     Route::resource('jabatan', JabatanController::class);
     Route::resource('karyawan', KaryawanController::class);
+    Route::get('tddkaryawan/{id}', [KaryawanController::class, 'tdd'])->name('karyawan.tdd');
 
     // Rekanan
     Route::resource('rekanan', RekananController::class);
     Route::get('upload/rekanan', [RekananController::class, 'upload'])->name('rekanan.upload');
-    Route::post('upload/rekanan', [RekananController::class, 'uploaddata'])->name('rekanan.uploaddata');
+    Route::get('upload/rekanan', [RekananController::class, 'upload'])->name('rekanan.upload');
 
+    Route::get('tddrekanan/{id}', [RekananController::class, 'tdd'])->name('rekanan.tdd');
     // Notifikasi
     Route::get('notification', [NotifikasiController::class, 'index'])->name('notification');
 

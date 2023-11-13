@@ -191,6 +191,28 @@ class RekananController extends Controller
         );
     }
     /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function tdd($id)
+    {
+        $route = $this->route;
+        $rekanan = Rekanan::find($id);
+        $title = "Tanda Tangan Rekanan " . $rekanan->nama . ' | ' . $rekanan->opr;
+        $action = route('rekanan.upload');
+
+        return view(
+            'rekanan.tdd',
+            compact(
+                "title",
+                "route",
+                "rekanan",
+                "action",
+            )
+        );
+    }
+    /**
      * upload data
      *
      * @return \Illuminate\Http\Response

@@ -157,6 +157,7 @@
                                     <br>
                                     @if ($tagihan->rekanan_url != null)
                                         {!! QrCode::size(100)->generate($tagihan->rekanan_url_tdd) !!}
+
                                     @else
                                         @if ($tagihan->rekanan_url_tdd != null)
                                             {!! QrCode::size(100)->generate($tagihan->rekanan_url_tdd) !!}
@@ -179,7 +180,8 @@
                                                 {!! QrCode::size(100)->generate($item->url) !!}
                                             @else
                                                 @if ($item->tdd != null)
-                                                    {!! QrCode::size(100)->generate(asset('storage/karyawan/' . $item->tdd)) !!}
+                                                    {!! QrCode::size(100)->generate(url('tddkaryawan/'. $item->karyawan_id)) !!}
+
                                                 @endif
                                             @endif
                                             <br>
@@ -201,7 +203,7 @@
                                                     {!! QrCode::size(100)->generate($direktur->url) !!}
                                                 @else
                                                     @if ($direktur->tdd)
-                                                        {!! QrCode::size(100)->generate(asset('storage/karyawan/' . $direktur->tdd)) !!}
+                                                        {!! QrCode::size(100)->generate(url('tddkaryawan/'. $direktur->id)) !!}
                                                     @endif
                                                 @endif
                                             @endif
