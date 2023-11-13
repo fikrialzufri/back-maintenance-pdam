@@ -202,6 +202,7 @@ class TagihanController extends Controller
                         $query->where($queryArray);
                     }
                 } else {
+
                     $date = explode(' - ', request()->input($val['name']));
                     $start = Carbon::parse($date[0])->format('Y-m-d') . ' 00:00:01';
                     $end = Carbon::parse($date[1])->format('Y-m-d') . ' 23:59:59';
