@@ -117,7 +117,7 @@
                                 </span>
                                 <br>
                                 <span class="child">
-                                    Alamat  :
+                                    Alamat  &nbsp;:
                                 </span>
                                 <span class="child child2">
                                     {{ $tagihan->alamat_rekanan }}
