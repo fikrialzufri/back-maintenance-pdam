@@ -14,7 +14,7 @@
                 <div class="card-body">
                     {{-- show image --}}
                     <img src="{{asset('storage/karyawan/' . $karyawan->tdd)}}" alt="{{ $karyawan->nama }}."
-                        class="responsive border-0">
+                        class="card-img-top">
 
                 </div>
 
