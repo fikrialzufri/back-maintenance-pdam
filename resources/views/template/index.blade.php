@@ -147,6 +147,7 @@
 @endpush
 @push('script')
     <!-- DataTables -->
+    <script script src="{{ asset('plugins/select2/dist/js/select2.min.js') }}"></script>
     <script src="{{ asset('plugins/DataTables/datatables.js') }}"></script>
     <script>
         // $('#example').DataTable({

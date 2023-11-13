@@ -108,10 +108,7 @@
                             </ol>
                             <div>
                                 <p style='font-size: 20px;'>
-                                    <span style=''>Telah mengadakan pemeriksaan pekerjaan, service kebocoran pipa
-                                        periode bulan {{ $bulan }} tahun {{ date('Y') }} di wilayah
-                                        {{ $wilayah }} Sebanyak
-                                        {{ $total_lokasi }} lokasi. Dengan jumlah tagihan sebesar Rp{{ pembulatan($total_tagihan) }},00
+                                    <span style=''>telah diadakan pemeriksaan pekerjaan service kebocoran pipa periode bulan {{ $bulan }} tahun {{ date('Y') }} di wilayah {{ $wilayah }} sebanyak {{ $total_lokasi }} lokasi. Dengan jumlah tagihan sebesar Rp{{ pembulatan($total_tagihan) }},00
                                         <i>
                                             (
                                             {{ terbilang(ceil($total_tagihan) - substr(ceil($total_tagihan), -3)) }} rupiah)
@@ -140,16 +137,10 @@
 
                             </p>
                             <p>
-                                <span style='font-size: 20px;'>Berdasarkan surat perintah pelaksanaan pekerjaan tersebut
-                                    dari persyaratan-persyaratan, bahan-bahan maupun pelaksanaannya, dengan ini menyatakan
-                                    bahwa
-                                    pekerjaan (terlampir), telah selesai dikerjakan dan memenuhi prosedur serta persyaratan
-                                    yang ditetapkan oleh Perumdam Tirta Kencana Kota Samarindaa.</span>
+                                <span style='font-size: 20px;'>Berdasarkan surat perintah pelaksanaan pekerjaan tersebut dan persyaratan bahan maupun pelaksanaannya, dengan ini menyatakan bahwa pekerjaan tersebut telah selesai dikerjakan dan memenuhi prosedur serta persyaratan yang ditetapkan oleh Perumdam Tirta Kencana Kota Samarinda.</span>
                             </p>
                             <p>
-                                <span style='font-size: 20px;'>Demikian Berita Acara Pemeriksaan Pekerjaan ini dibuat dengan
-                                    penuh tanggung jawab
-                                    dan dapat dipergunakan sebagaimana mestinya..</span>
+                                <span style='font-size: 20px;'>Demikian Berita Acara Pemeriksaan Pekerjaan ini dibuat dengan penuh tanggung jawab dan dapat dipergunakan sebagaimana mestinya.</span>
                             </p>
                             <div class="row">
                                 <div style='font-size: 20px;' class="col-6 text-center">

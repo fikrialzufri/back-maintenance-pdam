@@ -81,6 +81,14 @@ class TagihanController extends Controller
                 'value' => null
             ],
             [
+                'name' => 'rekanan_id',
+                'input' => 'combo',
+                'alias' => 'Rekanan',
+                'value' => $this->combobox(
+                    'Rekanan',
+                )
+            ],
+            [
                 'name' => 'created_at',
                 'input' => 'daterange',
                 'alias' => 'Tanggal',
