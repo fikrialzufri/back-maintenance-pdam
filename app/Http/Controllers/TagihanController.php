@@ -45,29 +45,29 @@ class TagihanController extends Controller
     {
         return [
             [
-                'name'    => 'nomor_tagihan',
-                'alias'    => 'Nomor Tagihan',
+                'name' => 'nomor_tagihan',
+                'alias' => 'Nomor Tagihan',
             ],
             [
-                'name'    => 'rekanan',
-                'alias'    => 'Nama Rekanan',
+                'name' => 'rekanan',
+                'alias' => 'Nama Rekanan',
             ],
             [
-                'name'    => 'tanggal',
-                'alias'    => 'Tanggal',
+                'name' => 'tanggal',
+                'alias' => 'Tanggal',
             ],
             [
-                'name'    => 'kode_vocher',
-                'alias'    => 'Kode Voucher',
+                'name' => 'kode_vocher',
+                'alias' => 'Kode Voucher',
             ],
             [
-                'name'    => 'total_lokasi_pekerjaan',
-                'alias'    => 'Total Lokasi',
+                'name' => 'total_lokasi_pekerjaan',
+                'alias' => 'Total Lokasi',
             ],
             [
-                'name'    => 'total_tagihan',
+                'name' => 'total_tagihan',
                 'input' => 'rupiah',
-                'alias'    => 'Total Tagihan',
+                'alias' => 'Total Tagihan',
             ],
         ];
     }
@@ -75,16 +75,16 @@ class TagihanController extends Controller
     {
         return [
             [
-                'name'    => 'nomor_tagihan',
-                'input'    => 'text',
-                'alias'    => 'Nomor Tagihan',
-                'value'    => null
+                'name' => 'nomor_tagihan',
+                'input' => 'text',
+                'alias' => 'Nomor Tagihan',
+                'value' => null
             ],
             [
-                'name'    => 'created_at',
-                'input'    => 'daterange',
-                'alias'    => 'Tanggal',
-                'value'    => null
+                'name' => 'created_at',
+                'input' => 'daterange',
+                'alias' => 'Tanggal',
+                'value' => null
             ],
         ];
     }
@@ -97,19 +97,19 @@ class TagihanController extends Controller
     {
         //nama title
         if (!isset($this->title)) {
-            $title =  ucwords($this->route);
+            $title = ucwords($this->route);
         } else {
-            $title =  ucwords($this->title);
+            $title = ucwords($this->title);
         }
 
         //nama route
-        $route =  $this->route;
+        $route = $this->route;
 
         //nama relation
-        $relations =  $this->relations;
+        $relations = $this->relations;
 
         //nama jumlah pagination
-        $paginate =  $this->paginate;
+        $paginate = $this->paginate;
 
         //declare nilai serch pertama
         $search = null;
@@ -164,7 +164,7 @@ class TagihanController extends Controller
                             if (preg_match("/^[a-zA-Z0-9]+$/", $word) == 1) {
 
                                 if ($queryRaw) {
-                                    $count =  $this->model()->whereRaw(rtrim($queryRaw, " and"))->count();
+                                    $count = $this->model()->whereRaw(rtrim($queryRaw, " and"))->count();
                                     if ($count > 0) {
                                         $countAll = $countAll + 1;
                                         $lastquery = $queryRaw;
@@ -175,7 +175,7 @@ class TagihanController extends Controller
                                         }
                                     }
                                 } else {
-                                    $count =  $this->model()->where($val['name'], 'like', "%{$word}%")->count();
+                                    $count = $this->model()->where($val['name'], 'like', "%{$word}%")->count();
                                     if ($count > 0) {
                                         $countAll = $countAll + 1;
 
@@ -204,7 +204,7 @@ class TagihanController extends Controller
                 }
 
                 if ($countAll == 0) {
-                    $query->where('id',  "");
+                    $query->where('id', "");
                 }
             }
             $export .= $val['name'] . '=' . $search[$key] . '&';
@@ -271,24 +271,27 @@ class TagihanController extends Controller
 
         // return  $export;
 
-        return view($template,  compact(
-            "title",
-            "data",
-            'searches',
-            'hasilSearch',
-            'button',
-            'tambah',
-            'upload',
-            'search',
-            'export',
-            'configHeaders',
-            'route'
-        ));
+        return view(
+            $template,
+            compact(
+                "title",
+                "data",
+                'searches',
+                'hasilSearch',
+                'button',
+                'tambah',
+                'upload',
+                'search',
+                'export',
+                'configHeaders',
+                'route'
+            )
+        );
     }
 
     public function show($slug)
     {
-        $query =  Tagihan::whereSlug($slug);
+        $query = Tagihan::whereSlug($slug);
 
         $nomor_tagihan = '';
         $rekanan = '';
@@ -326,7 +329,7 @@ class TagihanController extends Controller
             $tanggal_tagihan = tanggal_indonesia($tagihan->tanggal_tagihan);
             $rekanan = $tagihan->rekanan;
 
-            $notifikasi = Notifikasi::where('modul_id', $tagihan->id)->where('to_user_id',  auth()->user()->id)->first();
+            $notifikasi = Notifikasi::where('modul_id', $tagihan->id)->where('to_user_id', auth()->user()->id)->first();
             if ($notifikasi) {
                 $notifikasi->status = 'baca';
                 $notifikasi->delete();
@@ -334,14 +337,14 @@ class TagihanController extends Controller
 
             $pkp = 'tidak';
             if ($tagihan->hasRekanan->pkp) {
-                if ($tagihan->hasRekanan->pkp== 'ya') {
-                     $pkp = 'ya';
+                if ($tagihan->hasRekanan->pkp == 'ya') {
+                    $pkp = 'ya';
                 }
             }
 
 
-            $title =  "Proses Tagihan Nomor :" .  $nomor_tagihan;
-            $filename =  "Tagihan Nomor :" .  $nomor_tagihan;
+            $title = "Proses Tagihan Nomor :" . $nomor_tagihan;
+            $filename = "Tagihan Nomor :" . $nomor_tagihan;
 
             $dataitem = Item::all();
             $bntSetuju = true;
@@ -401,8 +404,8 @@ class TagihanController extends Controller
                 // list karyawan bedasarkan jabatan
                 $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get()->pluck('user_id')->toArray();
 
-                $list_persetujuan =  $query->whereHas('hasUserMany', function ($q) use ($listKaryawan) {
-                    $q->whereIn('tagihan_user.user_id',  $listKaryawan);
+                $list_persetujuan = $query->whereHas('hasUserMany', function ($q) use ($listKaryawan) {
+                    $q->whereIn('tagihan_user.user_id', $listKaryawan);
                 })->count();
 
                 if ($list_persetujuan > 0) {
@@ -422,31 +425,34 @@ class TagihanController extends Controller
             if (isset($tagihan->list_persetujuan)) {
                 $list_persetujuan = (object) $tagihan->list_persetujuan;
                 foreach ($tagihan->list_persetujuan as $key => $value) {
-                    if ($value->id ===  $user) {
+                    if ($value->id === $user) {
                         $bntSetuju = true;
                     }
                 }
             }
-            return view('tagihan.show', compact(
-                'action',
-                'title',
-                'dataitem',
-                'total',
-                'rekanan',
-                'filename',
-                'list_persetujuan',
-                'bntSetuju',
-                'perencaan',
-                'total_lokasi',
-                'ppn',
-                'grand_total',
-                'nomor_tagihan',
-                'tagihanItem',
-                'keuangan',
-                'tanggal_tagihan',
-                'pkp',
-                'tagihan'
-            ));
+            return view(
+                'tagihan.show',
+                compact(
+                    'action',
+                    'title',
+                    'dataitem',
+                    'total',
+                    'rekanan',
+                    'filename',
+                    'list_persetujuan',
+                    'bntSetuju',
+                    'perencaan',
+                    'total_lokasi',
+                    'ppn',
+                    'grand_total',
+                    'nomor_tagihan',
+                    'tagihanItem',
+                    'keuangan',
+                    'tanggal_tagihan',
+                    'pkp',
+                    'tagihan'
+                )
+            );
         }
         return redirect()->route($this->route . '.index')->with('message', ucwords(str_replace('-', ' ', $this->route)) . ' tidak ada')->with('Class', 'success');
     }
@@ -455,14 +461,14 @@ class TagihanController extends Controller
     {
         //nama title
         if (!isset($this->title)) {
-            $title =  "Tambah " . ucwords($this->route);
+            $title = "Tambah " . ucwords($this->route);
         } else {
-            $title =  "Tambah " . ucwords($this->title);
+            $title = "Tambah " . ucwords($this->title);
         }
 
         //nama route dan action route
-        $route =  $this->route;
-        $store =  "store";
+        $route = $this->route;
+        $store = "store";
 
         //memanggil config form
         $form = $this->configform();
@@ -478,12 +484,12 @@ class TagihanController extends Controller
 
         $pkp = 'tidak';
 
-        $query =  PelaksanaanPekerjaan::query();
+        $query = PelaksanaanPekerjaan::query();
         if (!auth()->user()->hasRole('superadmin')) {
             if (auth()->user()->hasRole('rekanan')) {
                 $rekanan_id = auth()->user()->id_rekanan;
                 $query->where('rekanan_id', $rekanan_id);
-                $rekanan = Rekanan::find( $rekanan_id);
+                $rekanan = Rekanan::find($rekanan_id);
 
                 if ($rekanan->pkp) {
                     if ($rekanan->pkp == 'ya') {
@@ -503,7 +509,7 @@ class TagihanController extends Controller
 
         // $hasValue = $this->hasValue;
         $start = Carbon::now()->subMonths(2)->startOfMonth()->format('Y-m-d') . ' 00:00:01';
-        $end =  Carbon::now()->endOfMonth()->format('Y-m-d') . ' 23:59:59';
+        $end = Carbon::now()->endOfMonth()->format('Y-m-d') . ' 23:59:59';
 
         // ->where('status', 'selesai koreksi');
         $query
@@ -513,7 +519,7 @@ class TagihanController extends Controller
             ->where('tagihan', 'tidak')
             ->whereBetween(DB::raw('DATE(tanggal_selesai)'), array($start, $end));
 
-        $penunjukan =  $query->with('hasItem')->get();
+        $penunjukan = $query->with('hasItem')->get();
 
         $totalPekerjaan = 0;
         $ppn = 0;
@@ -527,21 +533,24 @@ class TagihanController extends Controller
         }
         $grand_total = $totalPekerjaan + $ppn;
 
-        return view('tagihan.form', compact(
-            'title',
-            'form',
-            'countColom',
-            'colomField',
-            'penunjukan',
-            'countColomFooter',
-            'totalPekerjaan',
-            'grand_total',
-            'pkp',
-            'ppn',
-            'store',
-            'route'
-            // 'hasValue'
-        ));
+        return view(
+            'tagihan.form',
+            compact(
+                'title',
+                'form',
+                'countColom',
+                'colomField',
+                'penunjukan',
+                'countColomFooter',
+                'totalPekerjaan',
+                'grand_total',
+                'pkp',
+                'ppn',
+                'store',
+                'route'
+                // 'hasValue'
+            )
+        );
     }
 
     /**
@@ -554,7 +563,7 @@ class TagihanController extends Controller
     {
         DB::beginTransaction();
 
-        $data  = $this->model()->find($id);
+        $data = $this->model()->find($id);
 
         $PelaksanaanPekerjaan = $data->hasPelaksanaanPekerjaan();
         // list jabatan
@@ -566,14 +575,14 @@ class TagihanController extends Controller
             $katagori_nps_unique = array_unique($katagori_nps);
 
             if (in_array('dis', $katagori_nps_unique)) {
-                $listJabatan =   $listJabatan->orWhere('slug', 'manajer-distribusi');
+                $listJabatan = $listJabatan->orWhere('slug', 'manajer-distribusi');
             }
             if (in_array('pka', $katagori_nps_unique)) {
-                $listJabatan =   $listJabatan->orWhere('slug', 'manajer-pengendalian-kehilangan-air');
+                $listJabatan = $listJabatan->orWhere('slug', 'manajer-pengendalian-kehilangan-air');
             }
         }
 
-        $listJabatan =   $listJabatan->orWhere('slug', 'manajer-perencanaan')->orWhere('slug', 'direktur-teknik')->pluck('id')->toArray();
+        $listJabatan = $listJabatan->orWhere('slug', 'manajer-perencanaan')->orWhere('slug', 'direktur-teknik')->pluck('id')->toArray();
         // list karyawan bedasarkan jabatan
         $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get();
 
@@ -658,13 +667,7 @@ class TagihanController extends Controller
         DB::beginTransaction();
         try {
             DB::commit();
-            if ($tagihan >= 1) {
-                $no = str_pad($tagihan + 1, 4, "0", STR_PAD_LEFT);
-                $nomor_tagihan =  $no . "/"  . rand(0, 900) . "/" . "BAPP-KJB/" . getRomawi($bulan) . "/" . date('Y');
-            } else {
-                $no = str_pad(1, 4, "0", STR_PAD_LEFT);
-                $nomor_tagihan =  $no . "/"  . rand(0, 900) . "/" . "BAPP-KJB/" . getRomawi($bulan) . "/" . date('Y');
-            }
+
 
             $PelaksanaanPekerjaan = PelaksanaanPekerjaan::whereIn('id', $pelaksanaan)
                 ->where('tagihan', 'tidak')->first();
@@ -673,9 +676,27 @@ class TagihanController extends Controller
                 if (auth()->user()->hasRole('rekanan')) {
                     $rekanan_id = auth()->user()->id_rekanan;
                 } else {
-                    $rekanan_id =  $PelaksanaanPekerjaan->rekanan_id;
+                    $rekanan_id = $PelaksanaanPekerjaan->rekanan_id;
                 }
             }
+
+            $rekanan = Rekanan::find($rekanan_id);
+
+            $singkatan = "";
+
+            if ($rekanan) {
+
+                $singkatan = $rekanan->singkatan;
+            }
+
+            if ($tagihan >= 1) {
+                $no = str_pad($tagihan + 1, 4, "0", STR_PAD_LEFT);
+                $nomor_tagihan = $no . "/" . rand(0, 900) . "/" . "BAPP-" . $singkatan . "/" . getRomawi($bulan) . "/" . date('Y');
+            } else {
+                $no = str_pad(1, 4, "0", STR_PAD_LEFT);
+                $nomor_tagihan = $no . "/" . rand(0, 900) . "/" . "BAPP-" . $singkatan . "/" . getRomawi($bulan) . "/" . date('Y');
+            }
+
             $data = $this->model();
             $data->nomor_tagihan = $nomor_tagihan;
             $data->tanggal_tagihan = $tanggal_tagihan;
@@ -698,14 +719,14 @@ class TagihanController extends Controller
                 $katagori_nps_unique = array_unique($katagori_nps);
 
                 if (in_array('dis', $katagori_nps_unique)) {
-                    $listJabatan =   $listJabatan->orWhere('slug', 'manajer-distribusi');
+                    $listJabatan = $listJabatan->orWhere('slug', 'manajer-distribusi');
                 }
                 if (in_array('pka', $katagori_nps_unique)) {
-                    $listJabatan =   $listJabatan->orWhere('slug', 'manajer-pengendalian-kehilangan-air');
+                    $listJabatan = $listJabatan->orWhere('slug', 'manajer-pengendalian-kehilangan-air');
                 }
             }
 
-            $listJabatan =   $listJabatan->orWhere('slug', 'manajer-perencanaan')->orWhere('slug', 'direktur-teknik')->pluck('id')->toArray();
+            $listJabatan = $listJabatan->orWhere('slug', 'manajer-perencanaan')->orWhere('slug', 'direktur-teknik')->pluck('id')->toArray();
             // list karyawan bedasarkan jabatan
             $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get();
 
@@ -761,7 +782,7 @@ class TagihanController extends Controller
      */
     public function upload()
     {
-        $title =  "Upload Data Tagihan";
+        $title = "Upload Data Tagihan";
         $route = $this->route;
         $dataRekanan = Rekanan::get();
         $action = route('tagihan.uploaddata');
@@ -771,13 +792,16 @@ class TagihanController extends Controller
             $month[] = date('F', mktime(0, 0, 0, $m, 1, date('Y')));
         }
 
-        return view('tagihan.upload', compact(
-            "title",
-            "route",
-            "month",
-            "dataRekanan",
-            "action",
-        ));
+        return view(
+            'tagihan.upload',
+            compact(
+                "title",
+                "route",
+                "month",
+                "dataRekanan",
+                "action",
+            )
+        );
     }
     /**
      * upload data
@@ -799,7 +823,8 @@ class TagihanController extends Controller
         $rekanan_id = $request->rekanan_id;
 
         $this->validate(request(), [
-            'nomor_tagihan' => 'required', 'unique:tagihan,nomor_tagihan,' . $nomor_tagihan . ',NULL,id,rekanan_id,' . $rekanan_id,
+            'nomor_tagihan' => 'required',
+            'unique:tagihan,nomor_tagihan,' . $nomor_tagihan . ',NULL,id,rekanan_id,' . $rekanan_id,
             'nomor_tagihan' => 'required',
             'rekanan_id' => 'required',
             'bulan' => 'required',
@@ -809,7 +834,7 @@ class TagihanController extends Controller
         $tanggal = Carbon::now()->daysInMonth;
         $bulan = $request->bulan;
 
-        $tanggal_tagihan = Carbon::parse($tahun . '-' . $bulan . "-"  . $tanggal)->format('Y-m-d');
+        $tanggal_tagihan = Carbon::parse($tahun . '-' . $bulan . "-" . $tanggal)->format('Y-m-d');
 
 
 
@@ -867,20 +892,20 @@ class TagihanController extends Controller
             foreach ($dataItem as $index => $item) {
                 if ($index > 3) {
 
-                    $dataNoPekerjaan[$index] = $item[1]  == null ? '' : $item[1];
-                    $dataNama[$index] = $item[2]  == null ? '' : $item[2];
+                    $dataNoPekerjaan[$index] = $item[1] == null ? '' : $item[1];
+                    $dataNama[$index] = $item[2] == null ? '' : $item[2];
                     $dataJenisHarga[$index] = $item[3];
-                    $dataJumlah[$index] = $item[4]  == null ? 0 : $item[4];
+                    $dataJumlah[$index] = $item[4] == null ? 0 : $item[4];
                     $dataHarga[$index] = $item[5] == null ? 0 : $item[5];
 
                     $ListItem[$nomor] = [
-                        'no_pekerjaan' =>  $dataNoPekerjaan[$index],
-                        'uraian' =>  $dataNama[$index],
+                        'no_pekerjaan' => $dataNoPekerjaan[$index],
+                        'uraian' => $dataNama[$index],
                         // 'master' =>  $dataMaster[$index],
-                        'harga_uraian' =>  $dataHarga[$index],
+                        'harga_uraian' => $dataHarga[$index],
                         // 'harga_master' =>  $itemExist[$index]->harga,
-                        'jumlah' =>  number_format($dataJumlah[$index], 2),
-                        'jenis_harga' =>  $dataJenisHarga[$index]
+                        'jumlah' => number_format($dataJumlah[$index], 2),
+                        'jenis_harga' => $dataJenisHarga[$index]
                         // 'total_master' =>  $item[2] * $hargaItem[$index],
                     ];
                     $nomor++;
@@ -909,7 +934,7 @@ class TagihanController extends Controller
                     foreach ($searchValues[$key] as $i => $word) {
                         if (preg_match("/^[a-zA-Z0-9]+$/", $word) == 1) {
                             if ($queryRaw) {
-                                $count =  Item::whereRaw(rtrim($queryRaw, " and"))->count();
+                                $count = Item::whereRaw(rtrim($queryRaw, " and"))->count();
                                 if ($count > 0) {
                                     $lastquery = $queryRaw;
 
@@ -948,43 +973,43 @@ class TagihanController extends Controller
                 }
 
                 if ($countAll[$key] == 0) {
-                    $dataListItem[$key]->where('id',  "");
+                    $dataListItem[$key]->where('id', "");
                 }
 
                 if ($dataListItem[$key]->first()) {
-                    $itemExist[$key] =    $dataListItem[$key]->first();
+                    $itemExist[$key] = $dataListItem[$key]->first();
                     if ($val['jenis_harga'] === 'malam') {
-                        $hargaItem[$key] =  $itemExist[$key]->harga_malam;
+                        $hargaItem[$key] = $itemExist[$key]->harga_malam;
                     } else {
-                        $hargaItem[$key] =  $itemExist[$key]->harga;
+                        $hargaItem[$key] = $itemExist[$key]->harga;
                     }
                     $total_master++;
                     $dataMaster[$key] = $itemExist[$key]->nama;
 
                     $dataListItem[$key] = [
-                        'uraian' =>  $val['uraian'],
-                        'count' =>  $countAll[$key],
-                        'master' =>  $itemExist[$key]->nama,
-                        'harga_uraian' =>  $val['harga_uraian'],
-                        'harga_master' =>  $itemExist[$key]->harga,
-                        'jumlah' =>   $val['jumlah'],
-                        'jenis_harga' =>  $val['jenis_harga'],
+                        'uraian' => $val['uraian'],
+                        'count' => $countAll[$key],
+                        'master' => $itemExist[$key]->nama,
+                        'harga_uraian' => $val['harga_uraian'],
+                        'harga_master' => $itemExist[$key]->harga,
+                        'jumlah' => $val['jumlah'],
+                        'jenis_harga' => $val['jenis_harga'],
                         // 'total_master' =>  $item[2] * $hargaItem[$index],
-                        'grand_total' =>  $itemExist[$key]->harga * $val['jumlah'],
+                        'grand_total' => $itemExist[$key]->harga * $val['jumlah'],
                     ];
                     $total_master++;
                 } else {
                     $dataListItem[$key] = [
-                        'uraian' =>  $val['uraian'],
-                        'count' =>  $countAll[$key],
-                        'master' =>  '',
+                        'uraian' => $val['uraian'],
+                        'count' => $countAll[$key],
+                        'master' => '',
                         'harga_uraian' => $val['harga_uraian'],
-                        'harga_master' =>  0,
-                        'jumlah' =>   $val['jumlah'],
-                        'jenis_harga' =>  $val['jenis_harga'],
-                        'grand_total' =>  0,
+                        'harga_master' => 0,
+                        'jumlah' => $val['jumlah'],
+                        'jenis_harga' => $val['jenis_harga'],
+                        'grand_total' => 0,
                     ];
-                    $itemExist[$key] =  new Item;
+                    $itemExist[$key] = new Item;
                     $itemExist[$key]->nama = $val['uraian'];
                     $itemExist[$key]->harga = 0;
                     $itemExist[$key]->harga_malam = 0;
@@ -1006,44 +1031,45 @@ class TagihanController extends Controller
                 $tagihanItem[$key]->uraian = $val['uraian'];
                 $tagihanItem[$key]->no_pekerjaan = $val['no_pekerjaan'];
                 $tagihanItem[$key]->master = $dataMaster[$key];
-                $tagihanItem[$key]->jumlah =  $val['jumlah'];
-                $tagihanItem[$key]->harga_uraian =  $val['harga_uraian'];
+                $tagihanItem[$key]->jumlah = $val['jumlah'];
+                $tagihanItem[$key]->harga_uraian = $val['harga_uraian'];
                 $tagihanItem[$key]->harga_master = $itemExist[$key]->harga;
-                $tagihanItem[$key]->total_uraian =  $val['harga_uraian'] *  $val['jumlah'];
-                $tagihanItem[$key]->total_master = $itemExist[$key]->harga *  $val['jumlah'];
+                $tagihanItem[$key]->total_uraian = $val['harga_uraian'] * $val['jumlah'];
+                $tagihanItem[$key]->total_master = $itemExist[$key]->harga * $val['jumlah'];
                 $tagihanItem[$key]->jenis_harga = 'malam';
 
-                if ($val['jenis_harga'] === 'malam') { } else {
+                if ($val['jenis_harga'] === 'malam') {
+                } else {
                     $tagihanItem[$key]->jenis_harga = 'siang';
                 }
 
                 if ($val['harga_uraian'] >= $itemExist[$key]->harga) {
-                    $tagihanItem[$key]->grand_total  =  $itemExist[$key]->harga *  $val['jumlah'];
+                    $tagihanItem[$key]->grand_total = $itemExist[$key]->harga * $val['jumlah'];
                 } elseif ($val['harga_uraian'] <= $itemExist[$key]->harga) {
-                    $tagihanItem[$key]->grand_total  =  $val['harga_uraian'] *  $val['jumlah'];
+                    $tagihanItem[$key]->grand_total = $val['harga_uraian'] * $val['jumlah'];
                 }
 
                 if ($val['harga_uraian'] != $itemExist[$key]->harga) {
-                    $tagihanItem[$key]->selisih  = 'ya';
+                    $tagihanItem[$key]->selisih = 'ya';
                     if ($val['harga_uraian'] >= $itemExist[$key]->harga) {
-                        $tagihanItem[$key]->grand_total_adjust  =  $itemExist[$key]->harga *  $val['jumlah'];
-                        $tagihanItem[$key]->total_adjust  = $itemExist[$key]->harga;
+                        $tagihanItem[$key]->grand_total_adjust = $itemExist[$key]->harga * $val['jumlah'];
+                        $tagihanItem[$key]->total_adjust = $itemExist[$key]->harga;
                     } elseif ($val['harga_uraian'] <= $itemExist[$key]->harga) {
-                        $tagihanItem[$key]->grand_total_adjust  =  $val['harga_uraian'] *  $val['jumlah'];
-                        $tagihanItem[$key]->total_adjust  = $val['harga_uraian'];
+                        $tagihanItem[$key]->grand_total_adjust = $val['harga_uraian'] * $val['jumlah'];
+                        $tagihanItem[$key]->total_adjust = $val['harga_uraian'];
                     }
                 } else {
-                    $tagihanItem[$key]->selisih  = 'tidak';
+                    $tagihanItem[$key]->selisih = 'tidak';
                     if ($val['harga_uraian'] >= $itemExist[$key]->harga) {
-                        $tagihanItem[$key]->grand_total_adjust  =  $itemExist[$key]->harga *  $val['jumlah'];
-                        $tagihanItem[$key]->total_adjust  = $itemExist[$key]->harga;
+                        $tagihanItem[$key]->grand_total_adjust = $itemExist[$key]->harga * $val['jumlah'];
+                        $tagihanItem[$key]->total_adjust = $itemExist[$key]->harga;
                     } elseif ($val['harga_uraian'] <= $itemExist[$key]->harga) {
-                        $tagihanItem[$key]->grand_total_adjust  =  $val['harga_uraian'] *  $val['jumlah'];
-                        $tagihanItem[$key]->total_adjust  = $val['harga_uraian'];
+                        $tagihanItem[$key]->grand_total_adjust = $val['harga_uraian'] * $val['jumlah'];
+                        $tagihanItem[$key]->total_adjust = $val['harga_uraian'];
                     }
                 }
 
-                $tagihanItem[$key]->urutan =  $urutan;
+                $tagihanItem[$key]->urutan = $urutan;
                 $tagihanItem[$key]->item_id = $itemExist[$key]->id;
                 $tagihanItem[$key]->tagihan_id = $tagihan->id;
                 $tagihanItem[$key]->save();
@@ -1054,7 +1080,8 @@ class TagihanController extends Controller
 
             return redirect()->route($this->route . '.show', $tagihan->slug)->with('message', ucwords(str_replace('-', ' ', $this->route)) . ' berhasil diupload dengan total item dari kamus data sebanyak : ' . $total_master . ' dan data yang baru sebanyak : ' . $total_uraian)->with('Class', 'success');
         }
-        try { } catch (\Throwable $th) {
+        try {
+        } catch (\Throwable $th) {
             //throw $th;
             return redirect()->route($this->route . '.index')->with('message', ucwords(str_replace('-', ' ', $this->route)) . ' gagal diupload')->with('Class', 'success');
         }
@@ -1074,11 +1101,11 @@ class TagihanController extends Controller
         try {
             $query = TagihanItem::find($id);
             $query->total_adjust = str_replace(".", "", $harga);
-            $query->tanggal_adjust =  date('Y-m-d H:i:s');
-            $query->selisih =  'tidak';
-            $query->item_id =  $item_id;
-            $query->grand_total =  $grand_total;
-            $query->master =    $itemData->nama;
+            $query->tanggal_adjust = date('Y-m-d H:i:s');
+            $query->selisih = 'tidak';
+            $query->item_id = $item_id;
+            $query->grand_total = $grand_total;
+            $query->master = $itemData->nama;
             $query->save();
 
             $result = [
@@ -1108,7 +1135,7 @@ class TagihanController extends Controller
 
     public function wordtagihan()
     {
-         $now = tanggal_indonesia(Carbon::now(),true,false);
+        $now = tanggal_indonesia(Carbon::now(), true, false);
 
         $id = request()->get('id') ?: "";
         $word = request()->get('word') ?: "";
@@ -1124,14 +1151,16 @@ class TagihanController extends Controller
 
         $rekanan = Rekanan::find($tagihan->rekanan_id);
 
+        $singkatan = $rekanan->singkatan;
+
         $stafPengawas = $rekanan->hasKaryawan;
 
         $wilayah = array_unique($wilayah);
         $wilayah = implode(", ", $wilayah);
         $wilayah = rtrim($wilayah, ", ");
 
-        $filename =  "Tagihan Rekenan " . $tagihan->rekanan . " Nomor " . $tagihan->nomor_tagihan;
-        $title =  "Tagihan : " . $tagihan->nomor_tagihan;
+        $filename = "Tagihan Rekenan " . $tagihan->rekanan . " Nomor " . $tagihan->nomor_tagihan;
+        $title = "Tagihan : " . $tagihan->nomor_tagihan;
         $bulan = bulan_indonesia(Carbon::parse($tagihan->tanggal_adjust));
         $tanggal = tanggal_indonesia(Carbon::parse($tagihan->tanggal_adjust), false);
 
@@ -1141,7 +1170,7 @@ class TagihanController extends Controller
 
         if ($tagihan->hasRekanan->pkp) {
             if ($tagihan->hasRekanan->pkp == 'ya') {
-                    $ppn = ($total * 11) / 100;
+                $ppn = ($total * 11) / 100;
             }
         }
         $total_tagihan = $total + $ppn;
@@ -1155,10 +1184,33 @@ class TagihanController extends Controller
         $preview = $tagihan->slug;
 
         if ($word === "rekanan") {
-            return view('tagihan.wordrekanan', compact(
+            return view(
+                'tagihan.wordrekanan',
+                compact(
+                    "title",
+                    "wilayah",
+                    "singkatan",
+                    "total_tagihan",
+                    "total_lokasi",
+                    "filename",
+                    "bulan",
+                    "preview",
+                    "stafPengawas",
+                    "now",
+                    "tanggal",
+                    "tagihan"
+                )
+            );
+        }
+
+        return view(
+            'tagihan.word',
+            compact(
                 "title",
                 "wilayah",
+                "singkatan",
                 "total_tagihan",
+                "direktur",
                 "total_lokasi",
                 "filename",
                 "bulan",
@@ -1167,23 +1219,8 @@ class TagihanController extends Controller
                 "now",
                 "tanggal",
                 "tagihan"
-            ));
-        }
-
-        return view('tagihan.word', compact(
-            "title",
-            "wilayah",
-            "total_tagihan",
-            "direktur",
-            "total_lokasi",
-            "filename",
-            "bulan",
-            "preview",
-            "stafPengawas",
-            "now",
-            "tanggal",
-            "tagihan"
-        ));
+            )
+        );
     }
 
     public function preview($slug)
@@ -1207,8 +1244,8 @@ class TagihanController extends Controller
 
         $wilayah = rtrim($wilayah, ", ");
 
-        $filename =  "Tagihan Rekenan " . $tagihan->rekanan . " Nomor " . $tagihan->nomor_tagihan;
-        $title =  "Tagihan : " . $tagihan->nomor_tagihan;
+        $filename = "Tagihan Rekenan " . $tagihan->rekanan . " Nomor " . $tagihan->nomor_tagihan;
+        $title = "Tagihan : " . $tagihan->nomor_tagihan;
         $bulan = bulan_indonesia(Carbon::parse($tagihan->tanggal_adjust));
         $tanggal = tanggal_indonesia(Carbon::parse($tagihan->tanggal_adjust), false);
 
@@ -1216,8 +1253,8 @@ class TagihanController extends Controller
         $ppn = 0;
 
         if ($tagihan->hasRekanan->pkp) {
-            if ($tagihan->hasRekanan->pkp== 'ya') {
-                    $ppn = ($total * 11) / 100;
+            if ($tagihan->hasRekanan->pkp == 'ya') {
+                $ppn = ($total * 11) / 100;
             }
         }
         $total_tagihan = $total + $ppn;
@@ -1225,19 +1262,22 @@ class TagihanController extends Controller
 
         $preview = $tagihan->slug;
 
-        return view('tagihan.preview', compact(
-            "title",
-            "wilayah",
-            "total_tagihan",
-            "total_lokasi",
-            "filename",
-            "stafPengawas",
-            "bulan",
-            "preview",
-            "now",
-            "tanggal",
-            "tagihan"
-        ));
+        return view(
+            'tagihan.preview',
+            compact(
+                "title",
+                "wilayah",
+                "total_tagihan",
+                "total_lokasi",
+                "filename",
+                "stafPengawas",
+                "bulan",
+                "preview",
+                "now",
+                "tanggal",
+                "tagihan"
+            )
+        );
     }
 
     public function model()

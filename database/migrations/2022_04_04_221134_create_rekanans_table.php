@@ -21,6 +21,7 @@ class CreateRekanansTable extends Migration
             $table->string('nik');
             $table->string('no_hp');
             $table->string('singkatan')->nullable();
+            $table->string('opr')->nullable();
             $table->string('tdd')->nullable();
             $table->string('url')->nullable();
             $table->longText('alamat');
