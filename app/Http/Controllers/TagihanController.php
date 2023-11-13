@@ -324,7 +324,7 @@ class TagihanController extends Controller
                     $wilayahId = array_unique($wilayahId);
                 }
             }
-            $nomor_tagihan = $tagihan->nomor_tagihan;
+            $nomor_tagihan = $tagihan->nomor_tagihan_setujuh;
             $action = route('tagihan.update', $tagihan->id);
 
             $total = $tagihan->tagihan + $tagihan->galian;
@@ -351,8 +351,8 @@ class TagihanController extends Controller
             }
 
 
-            $title = "Proses Tagihan Nomor :" . $nomor_tagihan_setujuh;
-            $filename = "Tagihan Nomor :" . $nomor_tagihan_setujuh;
+            $title = "Proses Tagihan Nomor :" . $tagihan->nomor_tagihan_setujuh_setujuh;
+            $filename = "Tagihan Nomor :" . $tagihan->nomor_tagihan_setujuh_setujuh;
 
             $dataitem = Item::all();
             $bntSetuju = true;
@@ -611,15 +611,15 @@ class TagihanController extends Controller
                     $status = 'dibayar';
                     $data->kode_vocher = $request->kode_voucher;
                     $data->total_bayar = str_replace(".", "", $request->total_bayar);
-                    $message = 'Berhasil Membayar Tagihan : ' . $data->nomor_tagihan;
+                    $message = 'Berhasil Membayar Tagihan : ' . $data->nomor_tagihan_setujuh_setujuh;
                     $title = "Tagihan telah dibayar";
-                    $body = "Nomor Tagihan " . $data->nomor_tagihan . " telah disetujui oleh " . $namakaryawan;
+                    $body = "Nomor Tagihan " . $data->nomor_tagihan_setujuh . " telah disetujui oleh " . $namakaryawan;
                     $modul = "tagihan";
                 } else {
-                    $message = 'Berhasil Menyetujui Tagihan : ' . $data->nomor_tagihan;
+                    $message = 'Berhasil Menyetujui Tagihan : ' . $data->nomor_tagihan_setujuh;
 
                     $title = "Tagihan telah setujui";
-                    $body = "Nomor Tagihan " . $data->nomor_tagihan . " telah disetujui oleh " . $namakaryawan;
+                    $body = "Nomor Tagihan " . $data->nomor_tagihan_setujuh . " telah disetujui oleh " . $namakaryawan;
                     $modul = "tagihan";
                 }
                 $data->status = $status;
@@ -635,7 +635,7 @@ class TagihanController extends Controller
 
 
                 $title = "Tagihan telah setujui";
-                $body = "Nomor Tagihan " . $data->nomor_tagihan . " telah disetujui oleh " . $namakaryawan;
+                $body = "Nomor Tagihan " . $data->nomor_tagihan_setujuh . " telah disetujui oleh " . $namakaryawan;
                 $modul = "tagihan";
 
                 $rekanan = Rekanan::find($data->rekanan_id);
@@ -706,7 +706,7 @@ class TagihanController extends Controller
             }
 
             $data = $this->model();
-            $data->nomor_tagihan = $nomor_tagihan;
+            $data->nomor_tagihan_setujuh = $nomor_tagihan;
             $data->tanggal_tagihan = $tanggal_tagihan;
             $data->rekanan_id = $rekanan_id;
             $data->user_id = auth()->user()->id;
@@ -826,7 +826,7 @@ class TagihanController extends Controller
             'same' => 'Password dan konfirmasi password harus sama',
         ];
 
-        $nomor_tagihan = $request->nomor_tagihan;
+        $nomor_tagihan = $request->nomor_tagihan_setujuh;
         $total_lokasi = $request->total_lokasi;
         $rekanan_id = $request->rekanan_id;
 
@@ -876,7 +876,7 @@ class TagihanController extends Controller
             if (empty($tagihan)) {
                 $tagihan = new Tagihan;
             }
-            $tagihan->nomor_tagihan = $nomor_tagihan;
+            $tagihan->nomor_tagihan_setujuh = $nomor_tagihan;
             $tagihan->rekanan_id = $rekanan_id;
             $tagihan->total_lokasi = $total_lokasi;
             $tagihan->tanggal_tagihan = $tanggal_tagihan;
@@ -1138,7 +1138,7 @@ class TagihanController extends Controller
     {
         $id = request()->get('id') ?: "";
         $tagihan = Tagihan::find($id);
-        return Excel::download(new ExportTagihan($id), 'Export Tagihan ' . $tagihan->nomor_tagihan . ' - Rekanan ' . $tagihan->rekanan . '.xlsx');
+        return Excel::download(new ExportTagihan($id), 'Export Tagihan ' . $tagihan->nomor_tagihan_setujuh . ' - Rekanan ' . $tagihan->rekanan . '.xlsx');
     }
 
     public function wordtagihan()
@@ -1173,8 +1173,8 @@ class TagihanController extends Controller
         $wilayah = implode(", ", $wilayah);
         $wilayah = rtrim($wilayah, ", ");
 
-        $filename = "Tagihan Rekenan " . $tagihan->rekanan . " Nomor " . $tagihan->nomor_tagihan;
-        $title = "Tagihan : " . $tagihan->nomor_tagihan;
+        $filename = "Tagihan Rekenan " . $tagihan->rekanan . " Nomor " . $tagihan->nomor_tagihan_setujuh;
+        $title = "Tagihan : " . $tagihan->nomor_tagihan_setujuh;
         $bulan = bulan_indonesia(Carbon::parse($tagihan->tanggal_adjust));
 
         $total = $tagihan->tagihan + $tagihan->galian;
@@ -1257,8 +1257,8 @@ class TagihanController extends Controller
 
         $wilayah = rtrim($wilayah, ", ");
 
-        $filename = "Tagihan Rekenan " . $tagihan->rekanan . " Nomor " . $tagihan->nomor_tagihan;
-        $title = "Tagihan : " . $tagihan->nomor_tagihan;
+        $filename = "Tagihan Rekenan " . $tagihan->rekanan . " Nomor " . $tagihan->nomor_tagihan_setujuh;
+        $title = "Tagihan : " . $tagihan->nomor_tagihan_setujuh;
         $bulan = bulan_indonesia(Carbon::parse($tagihan->tanggal_adjust));
         $tanggal = tanggal_indonesia(Carbon::parse($tagihan->tanggal_adjust), false);
 
