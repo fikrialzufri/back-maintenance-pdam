@@ -351,8 +351,8 @@ class TagihanController extends Controller
             }
 
 
-            $title = "Proses Tagihan Nomor :" . $tagihan->nomor_tagihan_setujuh_setujuh;
-            $filename = "Tagihan Nomor :" . $tagihan->nomor_tagihan_setujuh_setujuh;
+            $title = "Proses Tagihan Nomor :" . $tagihan->nomor_tagihan_setujuh;
+            $filename = "Tagihan Nomor :" . $tagihan->nomor_tagihan_setujuh;
 
             $dataitem = Item::all();
             $bntSetuju = true;
@@ -611,7 +611,7 @@ class TagihanController extends Controller
                     $status = 'dibayar';
                     $data->kode_vocher = $request->kode_voucher;
                     $data->total_bayar = str_replace(".", "", $request->total_bayar);
-                    $message = 'Berhasil Membayar Tagihan : ' . $data->nomor_tagihan_setujuh_setujuh;
+                    $message = 'Berhasil Membayar Tagihan : ' . $data->nomor_tagihan_setujuh;
                     $title = "Tagihan telah dibayar";
                     $body = "Nomor Tagihan " . $data->nomor_tagihan_setujuh . " telah disetujui oleh " . $namakaryawan;
                     $modul = "tagihan";
