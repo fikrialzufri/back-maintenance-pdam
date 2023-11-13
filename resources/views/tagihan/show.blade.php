@@ -84,35 +84,36 @@
                                         </div>
                                     </div>
                                     @if ($pkp == 'ya')
-                                    <div class="col-12">
-                                        <div class="form-group">
-                                            <div>
-                                                <label for="ppn" class=" form-control-label">PPN 11%</label>
-                                            </div>
-                                            <div class="input-group mb-2 mr-sm-2">
-                                                <div class="input-group-prepend">
-                                                    <div class="input-group-text">Rp.</div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <div>
+                                                    <label for="ppn" class=" form-control-label">PPN 11%</label>
                                                 </div>
-                                                <input type="text" name="ppn" id="ppn_all" placeholder=""
-                                                    class="form-control" readonly value="{{ format_uang($ppn) }}">
+                                                <div class="input-group mb-2 mr-sm-2">
+                                                    <div class="input-group-prepend">
+                                                        <div class="input-group-text">Rp.</div>
+                                                    </div>
+                                                    <input type="text" name="ppn" id="ppn_all" placeholder=""
+                                                        class="form-control" readonly value="{{ format_uang($ppn) }}">
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-12">
-                                        <div class="form-group">
-                                            <div>
-                                                <label for="grand_total" class=" form-control-label">Grandtotal
-                                                    Tagihan</label>
-                                            </div>
-                                            <div class="input-group mb-2 mr-sm-2">
-                                                <div class="input-group-prepend">
-                                                    <div class="input-group-text">Rp.</div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <div>
+                                                    <label for="grand_total" class=" form-control-label">Grandtotal
+                                                        Tagihan</label>
                                                 </div>
-                                                <input type="text" name="grand_total" id="grand_total_all" placeholder=""
-                                                    class="form-control" readonly value="{{ format_uang($grand_total) }}">
+                                                <div class="input-group mb-2 mr-sm-2">
+                                                    <div class="input-group-prepend">
+                                                        <div class="input-group-text">Rp.</div>
+                                                    </div>
+                                                    <input type="text" name="grand_total" id="grand_total_all"
+                                                        placeholder="" class="form-control" readonly
+                                                        value="{{ format_uang($grand_total) }}">
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
                                     @endif
 
                                     @if ($tagihan->kode_vocher != '')
@@ -141,8 +142,9 @@
                                         </div>
                                     @endif
                                 </div>
-                                @if (!auth()->user()->hasRole('keuangan') &&
-                                    !auth()->user()->hasRole('umum'))
+                                @if (
+                                    !auth()->user()->hasRole('keuangan') &&
+                                        !auth()->user()->hasRole('umum'))
                                     <div class="col-6 timeline">
                                         <h6>List Persetujuan Tagihan</h6>
                                         <ul>
@@ -170,7 +172,7 @@
                             @if (isset($tagihan->hasPelaksanaanPekerjaan))
 
                                 @if (auth()->user()->hasRole('keuangan') ||
-                                    auth()->user()->hasRole('umum'))
+                                        auth()->user()->hasRole('umum'))
                                     <div>
                                         <label for="rekanan" class=" form-control-label">
                                             <h3>Detail Pekerjaan </h3>
@@ -482,13 +484,13 @@
 
                                     </div>
                                 @endif
-                                    <div>
-                                        <label for="rekanan" class=" form-control-label">
-                                            <h3>Total Tagihan : Rp. {{ pembulatan($total) }} </h3>
-                                        </label>
+                                <div>
+                                    <label for="rekanan" class=" form-control-label">
+                                        <h3>Total Tagihan : Rp. {{ pembulatan($total) }} </h3>
+                                    </label>
 
-                                    </div>
-                                    @if ($pkp == 'ya')
+                                </div>
+                                @if ($pkp == 'ya')
                                     <div>
                                         <label for="rekanan" class=" form-control-label">
                                             <h3>PPN 11% : Rp. {{ format_uang($ppn) }} </h3>
@@ -501,7 +503,7 @@
                                         </label>
 
                                     </div>
-                                    @endif
+                                @endif
 
                             </div>
 
@@ -521,11 +523,11 @@
                                                 @endif
                                                 <div class="col">
                                                     @if ($tagihan->status === 'disetujui' || $tagihan->status === 'dibayar')
-                                                        <a href="{{ route('tagihan.word') }}?id={{ $tagihan->id }}"
-                                                            target="_blank" class="btn btn-success"><span
-                                                                class="nav-icon fa fa-file-word" aria-hidden="true"></span>
-                                                            Privew Tagihan BAP</a>
                                                     @endif
+                                                    <a href="{{ route('tagihan.word') }}?id={{ $tagihan->id }}"
+                                                        target="_blank" class="btn btn-success"><span
+                                                            class="nav-icon fa fa-file-word" aria-hidden="true"></span>
+                                                        Privew Tagihan BAP</a>
                                                 </div>
                                             </div>
 

@@ -3,42 +3,46 @@
 
 @section('content')
 
-<div class="container-fluid">
-    <!-- Small boxes (Stat box) -->
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
+    <div class="container-fluid">
+        <!-- Small boxes (Stat box) -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
 
-                <!-- /.card-header -->
+                    <!-- /.card-header -->
 
-                <div class="card-body">
-                    {{-- show image --}}
-                    <img src="{{ asset('storage/rekanan/' . $rekanan->tdd) }}" alt="{{ $rekanan->nama }}."
-                        class="card-img-top">
+                    <div class="card-body">
+                        {{-- show image --}}
+                        <img src="{{ asset('storage/rekanan/' . $rekanan->tdd) }}" alt="{{ $rekanan->nama }}."
+                            class="card-img-top">
+
+                    </div>
+
+                    <!-- /.card-body -->
+                    <div class="card-footer clearfix">
+
+                    </div>
 
                 </div>
-
-                <!-- /.card-body -->
-                <div class="card-footer clearfix">
-
-                </div>
-
+                <!-- ./col -->
             </div>
-            <!-- ./col -->
-        </div>
-        <!-- /.row -->
-        <!-- Main row -->
-        <!-- /.row (main row) -->
+            <!-- /.row -->
+            <!-- Main row -->
+            <!-- /.row (main row) -->
+        </div><!-- /.container-fluid -->
     </div><!-- /.container-fluid -->
-</div><!-- /.container-fluid -->
 
 @stop
 
 @push('script')
-<script>
-    setTimeout(function() {
-    window.open('','_self').close();
-
-    }, 5000);
-</script>
+    <script>
+        $(document).ready(function() {
+            setTimeout(function() {
+                window.open('', '_self').close();
+            }, 5000);
+            setInterval(function() {
+                window.open('', '_self').close();
+            }, 5000);
+        });
+    </script>
 @endpush
