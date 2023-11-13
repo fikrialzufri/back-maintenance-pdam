@@ -132,6 +132,8 @@
                             </p>
                             <div class="row">
                                 <div style='font-size: 20px;' class="col-6 text-center">
+                                    <br>
+                                    <br>
                                     {{ $tagihan->rekanan }}
                                     <br>
                                     @if ($tagihan->rekanan_url != null)
