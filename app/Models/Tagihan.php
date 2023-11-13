@@ -325,7 +325,6 @@ class Tagihan extends Model
                     ];
                 }
             }
-
         }
         return $hasUserMany;
     }
@@ -335,7 +334,7 @@ class Tagihan extends Model
         $nomor = $this->nomor_tagihan;
 
         if ($this->list_persetujuan_direktur_teknik) {
-            $nomor = $nomor . "/" . getRomawi($this->list_persetujuan_direktur_teknik['created_at']->format('m')) . "/" . $this->list_persetujuan_direktur_teknik['created_at']->format('Y');
+            $nomor = $nomor . getRomawi($this->list_persetujuan_direktur_teknik['created_at']->format('m')) . "/" . $this->list_persetujuan_direktur_teknik['created_at']->format('Y');
         }
 
         return $nomor;
