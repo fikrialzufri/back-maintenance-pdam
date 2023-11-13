@@ -209,8 +209,10 @@
                                     @foreach ($tagihan->hasPelaksanaanPekerjaan as $key => $item)
                                         <div>
                                             <label for="rekanan" class=" form-control-label">
-                                                <h3>Pekerjaan :
-                                                    {{ $item->No_Spk }} </h3>
+                                                <h3>Pekerjaan : <a
+                                                        href="{{ route('penunjukan_pekerjaan.show', $item->hasAduan->slug) }}"
+                                                        target="_blank"> {{ $item->No_Spk }} </a>
+                                                </h3>
                                                 </h3>
                                             </label>
 
