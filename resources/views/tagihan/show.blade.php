@@ -539,7 +539,7 @@
                                 <div class="row">
                                     @if ($ktp != null)
 
-                                        <div class="col-md-6">
+                                        <div class="col-md-3">
                                             <div class="card">
                                                 <!-- /.card-header -->
 
@@ -547,7 +547,7 @@
                                                     <h1>KTP Rekanaan</h1>
                                                     {{-- show image --}}
                                                     <img src="{{ asset('storage/rekanan/' . $ktp) }}"
-                                                        alt="{{ $rekanan }}." class="card-img-top responsive">
+                                                        alt="{{ $rekanan }}." class="card-img-top img-thumbnail">
 
                                                 </div>
 
@@ -563,7 +563,7 @@
                                     @endif
                                     @if ($npwp != null)
 
-                                        <div class="col-md-6">
+                                        <div class="col-md-3">
                                             <div class="card">
                                                 <!-- /.card-header -->
 
@@ -571,7 +571,7 @@
                                                     <h1>NPWP Rekanaan</h1>
                                                     {{-- show image --}}
                                                     <img src="{{ asset('storage/rekanan/' . $npwp) }}"
-                                                        alt="{{ $rekanan }}." class="card-img-top responsive">
+                                                        alt="{{ $rekanan }}." class="card-img-top float-start">
 
                                                 </div>
 

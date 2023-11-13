@@ -587,7 +587,7 @@ trait CrudTrait
                     if (Storage::disk('public')->exists($route . '/thumbnail' . '/' . $data->$file)) {
                         Storage::disk('public')->delete($route . '/thumbnail' . '/' . $data->$file);
                     }
-                    $thumbnail = Image::make($request->file($file))->resize(720, 720)->save($path);
+                    $thumbnail = Image::make($request->file($file))->save($path);
                     Storage::disk('public')->put($route . '/thumbnail' . '/' . $nama_gambar, $thumbnail);
 
                     $data->$file = $nama_gambar;
@@ -727,7 +727,8 @@ trait CrudTrait
 
 
         foreach ($this->configForm() as $index =>  $value) {
-            if (isset($value['extraForm'])) { }
+            if (isset($value['extraForm'])) {
+            }
 
             if (isset($value['validasi'])) {
                 $validasi = $value['validasi'];
