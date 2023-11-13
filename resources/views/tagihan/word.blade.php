@@ -130,8 +130,9 @@
                             <div class="row">
                                 <div style='font-size: 20px;' class="col-6 text-center">
                                     <br>
-                                    <br>
                                     {{ $tagihan->rekanan }}
+                                    <br>
+                                    Direktur
                                     <br>
                                     @if ($tagihan->rekanan_url != null)
                                         {!! QrCode::size(100)->generate($tagihan->rekanan_url_tdd) !!}
