@@ -20,6 +20,8 @@ class CreateRekanansTable extends Migration
             $table->string('nama_penangung_jawab');
             $table->string('nik');
             $table->string('no_hp');
+            $table->string('npwp')->nullable();
+            $table->string('ktp')->nullable();
             $table->string('singkatan')->nullable();
             $table->string('opr')->nullable();
             $table->string('tdd')->nullable();

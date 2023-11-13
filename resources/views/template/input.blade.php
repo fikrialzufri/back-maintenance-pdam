@@ -146,24 +146,28 @@
             @if ($store == 'update') value="{{ $data[$item['name']] }}" @else value="{{ old($item['name']) }}" @endif>
 
         <br>
-        <div class="preview"></div>
         @if ($store == 'update')
-            <img class="img-profile img-responsive" width="20%"
-                @if ($data[$item['name']] == null) src="{{ asset('img/default-icon.png') }}"
+            <img class="img-profile img-responsive" id="img_{{ $item['name'] }}" width="20%"
+                @if ($data[$item['name']] == null) src=""
                         @else
                         src="{{ asset('storage/' . $route . '/thumbnail/' . $data[$item['name']]) }}" @endif>
 
         @endif
+        <div id="preview{{ $item['name'] }}"></div>
+
     @endif
     @if ($item['input'] == 'textarea')
-        <textarea class="form-control" rows="3" placeholder="{{ $item['alias'] }}" name="{{ $item['name'] }}">@if ($store == 'update'){{ $data[$item['name']] }}@else{{ old($item['name']) }}@endif</textarea>
+        <textarea class="form-control" rows="3" placeholder="{{ $item['alias'] }}" name="{{ $item['name'] }}">
+@if ($store == 'update'){{ $data[$item['name']] }}@else{{ old($item['name']) }}@endif
+</textarea>
     @endif
 
-    @if ($item['input'] == 'text' ||
-        $item['input'] == 'number' ||
-        $item['input'] == 'email' ||
-        $item['input'] == 'password' ||
-        $item['input'] == 'time')
+    @if (
+        $item['input'] == 'text' ||
+            $item['input'] == 'number' ||
+            $item['input'] == 'email' ||
+            $item['input'] == 'password' ||
+            $item['input'] == 'time')
         <div>
             <input type="{{ $item['input'] }}" name="{{ $item['name'] }}" id="{{ $item['name'] }}"
                 @if (isset($item['required'])) {{ $item['required'] === true ? 'required' : '' }} @endif
@@ -388,12 +392,14 @@
         @endif
         @if ($item['input'] == 'image')
             <script>
-                function readURL(input) {
+                function readURL(input, id) {
                     if (input.files && input.files[0]) {
                         var reader = new FileReader();
+                        // console.log("{{ $item['name'] }}");
 
                         reader.onload = function(e) {
-                            $(".preview").html("<img src='" + e.target.result +
+                            console.log(e);
+                            $("#preview" + id).html("<img src='" + e.target.result +
                                 "' width='310' id='image_{{ $item['name'] }}'>");
                         }
 
@@ -402,11 +408,13 @@
                 }
 
                 $("#{{ $item['name'] }}").change(function() {
-                    readURL(this);
-                    $('.img-responsive').remove();
+                    readURL(this, "{{ $item['name'] }}");
+                    console.log("{{ $item['name'] }}");
+                    $('#img_{{ $item['name'] }}').remove();
                 });
 
                 $('.close').on('click', function() {
+                    // console.log("{{ $item['name'] }}");
                     $('#image_{{ $item['name'] }}').remove();
                 });
             </script>

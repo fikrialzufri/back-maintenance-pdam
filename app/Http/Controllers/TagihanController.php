@@ -350,6 +350,9 @@ class TagihanController extends Controller
                 }
             }
 
+            $ktp = $tagihan->hasRekanan->ktp;
+
+            $npwp = $tagihan->hasRekanan->npwp;
 
             $title = "Proses Tagihan Nomor :" . $tagihan->nomor_tagihan_setujuh;
             $filename = "Tagihan Nomor :" . $tagihan->nomor_tagihan_setujuh;
@@ -451,6 +454,8 @@ class TagihanController extends Controller
                     'bntSetuju',
                     'perencaan',
                     'total_lokasi',
+                    'ktp',
+                    'npwp',
                     'ppn',
                     'grand_total',
                     'nomor_tagihan',

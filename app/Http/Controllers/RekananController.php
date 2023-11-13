@@ -117,6 +117,18 @@ class RekananController extends Controller
                 'validasi' => ['required'],
             ],
             [
+                'name' => 'npwp',
+                'input' => 'image',
+                'alias' => 'NPWP',
+                'validasi' => ['mimes:jpeg,bmp,png,jpg'],
+            ],
+            [
+                'name' => 'ktp',
+                'input' => 'image',
+                'alias' => 'KTP',
+                'validasi' => ['mimes:jpeg,bmp,png,jpg'],
+            ],
+            [
                 'name' => 'pkp',
                 'input' => 'radio',
                 'alias' => 'Perusahaan Kena Pajak',

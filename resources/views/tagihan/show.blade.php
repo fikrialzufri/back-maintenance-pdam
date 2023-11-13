@@ -536,8 +536,59 @@
                                         </div>
                                     @endif
                                 </div>
+                                <div class="row">
+                                    @if ($ktp != null)
 
+                                        <div class="col-md-6">
+                                            <div class="card">
+                                                <!-- /.card-header -->
+
+                                                <div class="card-body">
+                                                    <h1>KTP Rekanaan</h1>
+                                                    {{-- show image --}}
+                                                    <img src="{{ asset('storage/rekanan/' . $ktp) }}"
+                                                        alt="{{ $rekanan }}." class="card-img-top responsive">
+
+                                                </div>
+
+                                                <!-- /.card-body -->
+                                                <div class="card-footer clearfix">
+
+                                                </div>
+
+                                            </div>
+                                            <!-- ./col -->
+
+                                        </div>
+                                    @endif
+                                    @if ($npwp != null)
+
+                                        <div class="col-md-6">
+                                            <div class="card">
+                                                <!-- /.card-header -->
+
+                                                <div class="card-body">
+                                                    <h1>NPWP Rekanaan</h1>
+                                                    {{-- show image --}}
+                                                    <img src="{{ asset('storage/rekanan/' . $npwp) }}"
+                                                        alt="{{ $rekanan }}." class="card-img-top responsive">
+
+                                                </div>
+
+                                                <!-- /.card-body -->
+                                                <div class="card-footer clearfix">
+
+                                                </div>
+
+                                            </div>
+                                            <!-- ./col -->
+
+                                        </div>
+                                    @endif
+                                </div>
                             </div>
+
+
                         </form>
                     </div>
                     <!-- ./col -->
