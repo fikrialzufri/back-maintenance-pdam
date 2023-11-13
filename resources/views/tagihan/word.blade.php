@@ -85,14 +85,7 @@
                                     <br>
                                 </span>
                             </div>
-                            <p style=' font-size: 20px;'>
-                                <span style=''>Pada hari ini,
-                                    {{ $now }}</span>
-                            </p>
-                            <p style=' font-size: 20px;'>
-                                <span style=''>Kami masing-masing adalah
-                                    :</span>
-                            </p>
+
                             <ol style="font-size: 20px;">
                                 @forelse ($tagihan->list_persetujuan as $index => $item)
                                     @if (
@@ -107,20 +100,15 @@
                                 @endforelse
                             </ol>
                             <div>
-                                <p style='font-size: 20px;'>
-                                    <span style=''>telah diadakan pemeriksaan pekerjaan service kebocoran pipa periode bulan {{ $bulan }} tahun {{ date('Y') }} di wilayah {{ $wilayah }} sebanyak {{ $total_lokasi }} lokasi. Dengan jumlah tagihan sebesar Rp{{ pembulatan($total_tagihan) }},00
-                                        <i>
+                                <p style='font-size: 20px; text-align: justify;'>
+                                    <span style=''>Pada hari ini, {{ $now }} telah diadakan pemeriksaan pekerjaan service kebocoran pipa periode bulan {{ $bulan }} tahun {{ date('Y') }} di wilayah {{ $wilayah }} sebanyak {{ $total_lokasi }} lokasi. Dengan jumlah tagihan sebesar Rp{{ pembulatan($total_tagihan) }},00 <i>
                                             (
-                                            {{ terbilang(ceil($total_tagihan) - substr(ceil($total_tagihan), -3)) }} rupiah)
-                                        </i>
+                                            {{ terbilang(ceil($total_tagihan) - substr(ceil($total_tagihan), -3)) }} rupiah).
+                                        </i> Pekerjaan tersebut dilaksanakan oleh :
                                     </span>
                                 </p>
                             </div>
 
-                            <p style=' font-size: 20px;'>
-                                <span style=''>Pekerjaan tersebut
-                                    dilaksanakan oleh :</span>
-                            </p>
                             <p id="text">
                                 <span class="child"> Nama &nbsp;&nbsp; :
                                 </span>
@@ -137,10 +125,10 @@
 
                             </p>
                             <p>
-                                <span style='font-size: 20px;'>Berdasarkan surat perintah pelaksanaan pekerjaan tersebut dan persyaratan bahan maupun pelaksanaannya, dengan ini menyatakan bahwa pekerjaan tersebut telah selesai dikerjakan dan memenuhi prosedur serta persyaratan yang ditetapkan oleh Perumdam Tirta Kencana Kota Samarinda.</span>
+                                <span style='font-size: 20px;text-align: justify;'>Berdasarkan surat perintah pelaksanaan pekerjaan tersebut dan persyaratan bahan maupun pelaksanaannya, dengan ini menyatakan bahwa pekerjaan tersebut telah selesai dikerjakan dan memenuhi prosedur serta persyaratan yang ditetapkan oleh Perumdam Tirta Kencana Kota Samarinda.</span>
                             </p>
                             <p>
-                                <span style='font-size: 20px;'>Demikian Berita Acara Pemeriksaan Pekerjaan ini dibuat dengan penuh tanggung jawab dan dapat dipergunakan sebagaimana mestinya.</span>
+                                <span style='font-size: 20px;text-align: justify;'>Demikian Berita Acara Pemeriksaan Pekerjaan ini dibuat dengan penuh tanggung jawab dan dapat dipergunakan sebagaimana mestinya.</span>
                             </p>
                             <div class="row">
                                 <div style='font-size: 20px;' class="col-6 text-center">
