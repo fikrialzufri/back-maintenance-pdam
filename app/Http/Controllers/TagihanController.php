@@ -351,8 +351,8 @@ class TagihanController extends Controller
             }
 
 
-            $title = "Proses Tagihan Nomor :" . $nomor_tagihan;
-            $filename = "Tagihan Nomor :" . $nomor_tagihan;
+            $title = "Proses Tagihan Nomor :" . $nomor_tagihan_setujuh;
+            $filename = "Tagihan Nomor :" . $nomor_tagihan_setujuh;
 
             $dataitem = Item::all();
             $bntSetuju = true;
