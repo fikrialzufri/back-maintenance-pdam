@@ -82,6 +82,12 @@ class RekananController extends Controller
                 'validasi' => ['required', 'min:1'],
             ],
             [
+                'name' => 'singkatan',
+                'input' => 'text',
+                'alias' => 'Singkatan CV',
+                'validasi' => ['required', 'min:1'],
+            ],
+            [
                 'name' => 'nik',
                 'input' => 'text',
                 'alias' => 'Nomor KTP / NIK',
