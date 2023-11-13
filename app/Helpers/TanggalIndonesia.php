@@ -64,7 +64,7 @@ function tanggal_indonesia_terbilang($tgl, $tampil_hari = true, $koma = true)
     } else {
         $text .= " ";
     }
-    $text .= terbilang($tanggal) . " " . $bulan . " " . $tahun;
+    $text .= terbilang($tanggal) . " " . $bulan . " tahun " . $tahun;
     return $text;
 }
 function capital_tanggal_indonesia($tgl, $tampil_hari = true)
