@@ -146,10 +146,10 @@
                                     <th>Nomor NPS</th>
                                     <th>Nomor Tiket</th>
                                     <th>Pekerja</th>
-                                    <th>OPR</th>
                                     <th>Kategori Aduan</th>
                                     <th>Tanggal Aduan</th>
                                     <th>Tanggal Pekerjaan</th>
+                                    <th>OPR</th>
                                     <th>Pelapor</th>
                                     <th>Admin</th>
                                     <th width="20%">Lokasi</th>
@@ -240,10 +240,10 @@
                                         <td>{{ $item->nps }}</td>
                                         <td>{{ $item->no_ticket }}</td>
                                         <td>{{ $item->rekanan }}</td>
-                                        <td>{{ $item->opr }}</td>
                                         <td>{{ ucfirst($item->kategori_aduan) }}</td>
                                         <td>{{ tanggal_indonesia($item->created_at) }}</td>
                                         <td>{{ $item->tanggal_pekerjaan }}</td>
+                                        <td>{{ $item->opr }}</td>
                                         <td>{{ $item->atas_nama }}</td>
                                         <td>{{ ucfirst($item->user) }}</td>
                                         <td>{{ $item->lokasi }}</td>
