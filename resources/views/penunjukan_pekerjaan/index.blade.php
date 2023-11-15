@@ -58,7 +58,8 @@
 
                                             @foreach ($rekanan as $rek)
                                                 <option value="{{ $rek->id }}"
-                                                    {{ $rekananid == $rek->id ? 'selected' : '' }}>{{ $rek->nama }}
+                                                    {{ $rekananid == $rek->id ? 'selected' : '' }}>{{ $rek->nama }} |
+                                                    {{ $rek->opr }}
                                                 </option>
                                             @endforeach
 
@@ -71,7 +72,7 @@
                                         class="form-control">
                                 </div>
                                 <div class="col-lg-2">
-                                    {{-- @if (isset($status) )
+                                    {{-- @if (isset($status))
 
                                     @endif --}}
                                     <label for="">Status</label>
@@ -145,6 +146,7 @@
                                     <th>Nomor NPS</th>
                                     <th>Nomor Tiket</th>
                                     <th>Pekerja</th>
+                                    <th>OPR</th>
                                     <th>Kategori Aduan</th>
                                     <th>Tanggal Aduan</th>
                                     <th>Tanggal Pekerjaan</th>
@@ -162,8 +164,7 @@
                                     @php
                                         ++$nomor;
                                     @endphp
-                                    <tr
-                                        class="">
+                                    <tr class="">
                                         <td class="text-center">
                                             <a href="{{ route('penunjukan_pekerjaan.show', $item->slug) }}"
                                                 class="btn btn-sm {{ $item->btn }}   text-light m-1">
@@ -239,6 +240,7 @@
                                         <td>{{ $item->nps }}</td>
                                         <td>{{ $item->no_ticket }}</td>
                                         <td>{{ $item->rekanan }}</td>
+                                        <td>{{ $item->opr }}</td>
                                         <td>{{ ucfirst($item->kategori_aduan) }}</td>
                                         <td>{{ tanggal_indonesia($item->created_at) }}</td>
                                         <td>{{ $item->tanggal_pekerjaan }}</td>

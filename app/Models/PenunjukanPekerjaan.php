@@ -117,6 +117,12 @@ class PenunjukanPekerjaan extends Model
             return $this->hasKaryawan->nama;
         }
     }
+    public function getOprAttribute()
+    {
+        if ($this->hasRekanan) {
+            return $this->hasRekanan->opr;
+        }
+    }
     public function getMediaAttribute()
     {
         if ($this->hasPelaksanaanPekerjaan) {

@@ -124,6 +124,12 @@ class Aduan extends Model
             return $this->hasPenunjukanPekerjaan->rekanan;
         }
     }
+    public function getOprAttribute()
+    {
+        if ($this->hasPenunjukanPekerjaan) {
+            return $this->hasPenunjukanPekerjaan->opr;
+        }
+    }
 
     public function getNoSpkAttribute()
     {
