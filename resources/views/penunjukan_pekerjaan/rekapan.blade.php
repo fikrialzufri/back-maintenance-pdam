@@ -20,8 +20,7 @@
                                         </div>
                                         <div>
                                             <input type="text" name="name" placeholder="Name User"
-                                                class="form-control " value="{{ $rekanan->nama }}" disabled
-                                                id="nama">
+                                                class="form-control " value="{{ $rekanan->nama }}" disabled id="nama">
                                         </div>
                                     </div>
                                 </div>
@@ -60,6 +59,18 @@
                                             <input type="text" name="nama_penangung_jawab" class="form-control"
                                                 id="nama_penangung_jawab" value="{{ $rekanan->nama_penangung_jawab }}"
                                                 disabled>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+
+                                    <div class="form-group">
+                                        <div>
+                                            <label for="opr" class=" form-control-label">OPR</label>
+                                        </div>
+                                        <div>
+                                            <input type="text" name="opr" class="form-control" id="opr"
+                                                value="{{ $rekanan->opr }}" disabled>
                                         </div>
                                     </div>
                                 </div>

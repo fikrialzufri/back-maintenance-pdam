@@ -36,6 +36,7 @@
                                     <th>Nama CV</th>
                                     <th>Penanggung Jawab</th>
                                     <th>Nomor No Hp</th>
+                                    <th>OPR</th>
                                     <th class="text-center" width="10%">Proses</th>
                                 </tr>
                             </thead>
@@ -48,9 +49,10 @@
                                         <td>{{ $item->nama }}</td>
                                         <td>{{ $item->nama_penangung_jawab }}</td>
                                         <td>{{ $item->no_hp }}</td>
+                                        <td>{{ $item->opr }}</td>
 
                                         <td class="text-center">
-                                            <a href="{{ route('penunjukan_pekerjaan.rekapan', $item->slug) }}"
+                                            <a href="{{ route('penunjukan_pekerjaan.rekapan', $item->id) }}"
                                                 class="btn btn-sm btn-primary text-light m-1">
                                                 <i class="nav-icon fas fa-edit"></i>
                                                 Proses

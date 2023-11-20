@@ -1149,12 +1149,9 @@ class PenunjukanPekerjaanController extends Controller
                         } else if ($PelaksanaanPekerjaan->status === 'selesai koreksi') {
                             $status = 'diadjust';
                             $PelaksanaanPekerjaan->keterangan_barang = '';
-
                         } else {
                             return redirect()->route('penunjukan_pekerjaan.index')->with('message', 'Pekerjaan gagal disetujui')->with('Class', 'danger');
                         }
-
-
                     }
 
                     if ($PelaksanaanPekerjaan) {
@@ -1249,7 +1246,6 @@ class PenunjukanPekerjaanController extends Controller
                                 $PelaksanaanPekerjaan->hasItem()->sync($listitem);
                                 $PelaksanaanPekerjaan->hasItemPengawas()->sync($listitemPengawas);
                             }
-
                         }
 
                         if (auth()->user()->hasRole('asisten-manajer-pengawas')) {
@@ -1347,7 +1343,6 @@ class PenunjukanPekerjaanController extends Controller
                                 $PelaksanaanPekerjaan->hasItemPengawas()->sync($listitemPengawas);
                                 $PelaksanaanPekerjaan->hasItemAsmenPengawas()->sync($listitemAsmenPengawas);
                             }
-
                         }
                         if (auth()->user()->hasRole('asisten-manajer-perencanaan')) {
 
@@ -1540,7 +1535,6 @@ class PenunjukanPekerjaanController extends Controller
                 if ($PelaksanaanPekerjaan->status === 'selesai koreksi') {
                     $status = 'diadjust';
                     $PelaksanaanPekerjaan->keterangan_barang = '';
-
                 } else {
                     return redirect()->route('penunjukan_pekerjaan.index')->with('message', 'Pekerjaan gagal diadjust')->with('Class', 'danger');
                 }
@@ -1671,8 +1665,6 @@ class PenunjukanPekerjaanController extends Controller
                     return redirect()->route('penunjukan_pekerjaan.show', $aduan->slug)->with('message', $message)->with('Class', 'primary');
                 }
             }
-
-
         } catch (\Throwable $th) {
             DB::rollback();
             return redirect()->route('penunjukan_pekerjaan.index')->with('message', 'Pekerjaan gagal ditambah')->with('Class', 'danger');
@@ -2127,7 +2119,7 @@ class PenunjukanPekerjaanController extends Controller
     public function rekapan($slug)
     {
         //nama title
-        $rekanan = Rekanan::whereSlug($slug)->first();
+        $rekanan = Rekanan::find($slug);
 
         $title = "Rekapan Rekanan - " . $rekanan->nama;
         $route = $this->route;
