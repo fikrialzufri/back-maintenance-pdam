@@ -2109,6 +2109,7 @@ class PenunjukanPekerjaanController extends Controller
         if ($search) {
             $query->where('nama', 'like', "%" . $search . "%")->orWhere('nama_penangung_jawab', 'like', "%" . $search . "%")->orWhere('no_hp', 'like', "%" . $search . "%");
         }
+        $query->orderBy('nama', 'asc');
 
         $rekanan = $query->paginate(50);
 
