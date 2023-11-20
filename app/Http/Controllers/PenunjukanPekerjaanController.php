@@ -1851,6 +1851,9 @@ class PenunjukanPekerjaanController extends Controller
         $aduan = Aduan::find($notifikasi->modul_id);
         if ($notifikasi) {
             $notifikasi->status = 'baca';
+            $notifikasi->save();
+            // return $notifikasi;
+
             if ($notifikasi->modul === 'tagihan') {
                 $tagihan = Tagihan::find($notifikasi->modul_id);
                 if ($tagihan) {
@@ -1891,7 +1894,6 @@ class PenunjukanPekerjaanController extends Controller
                     return redirect()->route('penunjukan_pekerjaan.show', $aduan->slug);
                 }
             }
-            // $notifikasi->delete();
         }
 
 
