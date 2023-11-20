@@ -2134,6 +2134,8 @@ class PenunjukanPekerjaanController extends Controller
             $query->where('status', 'selesai koreksi')
                 ->orWhere('status', 'diadjust');
         })->where('tagihan', 'tidak')->whereBetween(DB::raw('DATE(tanggal_selesai)'), array($start, $end));
+        // order by
+        $query->orderBy('nomor_pelaksanaan_pekerjaan', 'desc');
         $penunjukan = $query->get();
 
         $total_lokasi = $query->count();
