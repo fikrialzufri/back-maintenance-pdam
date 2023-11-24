@@ -52,7 +52,7 @@
                             </div>
                         </form>
                         <br>
-                        <table class="table table-bordered " id="example">
+                        <table class="table table-bordered table-responsive" id="example">
                             <thead>
                                 <tr>
                                     <th width="5%">No</th>
