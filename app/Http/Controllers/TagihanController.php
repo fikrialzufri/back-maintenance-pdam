@@ -1159,7 +1159,7 @@ class TagihanController extends Controller
         if ($tagihan->list_persetujuan_direktur_teknik['created_at']) {
             $tanggal = $tagihan->list_persetujuan_direktur_teknik['created_at'];
             $now = tanggal_indonesia_terbilang($tanggal, true, false);
-            $nowRekanan = tanggal_indonesia($tanggal, true, false);
+            $nowRekanan = tanggal_indonesia($tanggal, false, false);
             $tanggal = tanggal_indonesia(Carbon::parse($tanggal), false);
         }
 
