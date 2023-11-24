@@ -142,28 +142,26 @@
                                         </div>
                                     @endif
                                 </div>
-                                @if (
-                                    !auth()->user()->hasRole('keuangan') &&
-                                        !auth()->user()->hasRole('umum'))
-                                    <div class="col-6 timeline">
-                                        <h6>List Persetujuan Tagihan</h6>
-                                        <ul>
-                                            @forelse ($list_persetujuan as $item)
-                                                <li>
-                                                    <div class="bullet bg-primary"></div>
-                                                    <div class="time">{{ $item->tanggal_disetujui }}</div>
-                                                    <div class="desc">
-                                                        <h3>{{ $item->nama }}</h3>
-                                                        <h4>{{ $item->jabatan }}</h4>
-                                                    </div>
-                                                </li>
-                                            @empty
-                                            @endforelse
+
+                                <div class="col-6 timeline">
+                                    <h6>List Persetujuan Tagihan</h6>
+                                    <ul>
+                                        @forelse ($list_persetujuan as $item)
+                                            <li>
+                                                <div class="bullet bg-primary"></div>
+                                                <div class="time">{{ $item->tanggal_disetujui }}</div>
+                                                <div class="desc">
+                                                    <h3>{{ $item->nama }}</h3>
+                                                    <h4>{{ $item->jabatan }}</h4>
+                                                </div>
+                                            </li>
+                                        @empty
+                                        @endforelse
 
 
-                                        </ul>
-                                    </div>
-                                @endif
+                                    </ul>
+                                </div>
+
 
 
                             </div>
@@ -194,7 +192,8 @@
                                                     @forelse ($tagihan->hasPelaksanaanPekerjaan as $index => $item)
                                                         <tr>
                                                             <td>{{ $index + 1 }}</td>
-                                                            <td>{{ $item->no_spk }}</td>
+                                                            <td><a href="{{ route('penunjukan_pekerjaan.show', $item->hasAduan->slug) }}"
+                                                                    target="_blank"> {{ $item->No_Spk }} </a></td>
                                                             <th>
                                                                 Rp. {{ format_uang($item->total_pekerjaan) }}
                                                             </th>
@@ -212,7 +211,6 @@
                                                 <h3>Pekerjaan : <a
                                                         href="{{ route('penunjukan_pekerjaan.show', $item->hasAduan->slug) }}"
                                                         target="_blank"> {{ $item->No_Spk }} </a>
-                                                </h3>
                                                 </h3>
                                             </label>
 
@@ -513,24 +511,27 @@
                             <div class="card-footer clearfix">
                                 <div class="row">
                                     @if ($tagihan)
-                                        <div class="col-3">
-                                            <div class="row">
-                                                @if (auth()->user()->hasRole('rekanan'))
-                                                    <div class="col mb-4">
-                                                        <a href="{{ route('tagihan.word') }}?id={{ $tagihan->id }}&word=rekanan"
-                                                            target="_blank" class="btn btn-danger"><span
-                                                                class="nav-icon fa fa-file-word" aria-hidden="true"></span>
-                                                            Privew Tagihan</a>
+                                        <div class="col-12">
+                                            <div class="d-flex flex-row">
+
+                                                <div class="p-2">
+                                                    <a href="{{ route('tagihan.word') }}?id={{ $tagihan->id }}&word=rekanan"
+                                                        target="_blank" class="btn btn-danger"><span
+                                                            class="nav-icon fa fa-file-word" aria-hidden="true"></span>
+                                                        Privew Tagihan</a>
+                                                </div>
+
+                                                @if (!auth()->user()->hasRole('rekanan'))
+                                                    <div class="p-2">
+                                                        @if ($tagihan->status === 'disetujui' || $tagihan->status === 'dibayar')
+                                                            <a href="{{ route('tagihan.word') }}?id={{ $tagihan->id }}"
+                                                                target="_blank" class="btn btn-success"><span
+                                                                    class="nav-icon fa fa-file-word"
+                                                                    aria-hidden="true"></span>
+                                                                Privew Tagihan BAPPB</a>
+                                                        @endif
                                                     </div>
                                                 @endif
-                                                <div class="col">
-                                                    @if ($tagihan->status === 'disetujui' || $tagihan->status === 'dibayar')
-                                                        <a href="{{ route('tagihan.word') }}?id={{ $tagihan->id }}"
-                                                            target="_blank" class="btn btn-success"><span
-                                                                class="nav-icon fa fa-file-word" aria-hidden="true"></span>
-                                                            Privew Tagihan BAP</a>
-                                                    @endif
-                                                </div>
                                             </div>
 
                                         </div>

@@ -2107,7 +2107,7 @@ class PenunjukanPekerjaanController extends Controller
         $query = Rekanan::query();
 
         if ($search) {
-            $query->where('nama', 'like', "%" . $search . "%")->orWhere('nama_penangung_jawab', 'like', "%" . $search . "%")->orWhere('no_hp', 'like', "%" . $search . "%");
+            $query->where('nama', 'like', "%" . $search . "%")->orWhere('nama_penangung_jawab', 'like', "%" . $search . "%")->orWhere('no_hp', 'like', "%" . $search . "%")->orWhere('opr', 'like', "%" . $search . "%");
         }
         $query->orderBy('nama', 'asc');
 
