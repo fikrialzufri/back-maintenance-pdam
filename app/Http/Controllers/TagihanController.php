@@ -57,10 +57,6 @@ class TagihanController extends Controller
                 'alias' => 'Tanggal',
             ],
             [
-                'name' => 'status',
-                'alias' => 'Status',
-            ],
-            [
                 'name' => 'kode_vocher',
                 'alias' => 'Kode Voucher',
             ],
