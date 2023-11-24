@@ -329,6 +329,29 @@ class Tagihan extends Model
         }
         return $hasUserMany;
     }
+    public function getListPersetujuanDirekturUtamaAttribute()
+    {
+        $result = [];
+        $hasUserMany = [];
+        if ($this->hasUserMany) {
+            foreach ($this->hasUserMany as $key => $value) {
+                if ($value->karyawan && $value->karyawan->nama_jabatan === 'Direktur Utama') {
+                    $hasUserMany = [
+                        'id' => $value->karyawan->user_id,
+                        'karyawan_id' => $value->karyawan->id,
+                        'nama' => $value->karyawan->nama,
+                        'jabatan' => $value->karyawan->nama_jabatan,
+                        'url' => $value->karyawan->url,
+                        'tdd' => $value->karyawan->tdd,
+                        'is_setuju' => true,
+                        'created_at' => $value->pivot->created_at,
+                        'tanggal_disetujui' => isset($value->pivot->created_at) ? tanggal_indonesia($value->pivot->created_at) . " - " . Carbon::parse($value->pivot->created_at)->format('H:i') : ''
+                    ];
+                }
+            }
+        }
+        return $hasUserMany;
+    }
     public function getNomorTagihanSetujuhAttribute()
     {
         $result = [];

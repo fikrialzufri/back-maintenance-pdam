@@ -1150,14 +1150,23 @@ class TagihanController extends Controller
         $now = '';
         $nowRekanan = '';
         $tanggal = '';
+        $tanggalDirut = '';
         if ($tagihan->list_persetujuan_direktur_teknik['created_at']) {
             $tanggal = $tagihan->list_persetujuan_direktur_teknik['created_at'];
             $now = tanggal_indonesia_terbilang($tanggal, true, false);
             $nowRekanan = tanggal_indonesia($tanggal, false, false);
             $tanggal = tanggal_indonesia(Carbon::parse($tanggal), false);
-        }
 
-        $wilayah = [];
+            $wilayah = [];
+        }
+        if ($tagihan->list_persetujuan_direktur_utama['created_at']) {
+            $tanggalDirut = $tagihan->list_persetujuan_direktur_utama['created_at'];
+            $now = tanggal_indonesia_terbilang($tanggalDirut, true, false);
+
+            $tanggalDirut = tanggal_indonesia(Carbon::parse($tanggalDirut), false);
+
+            $wilayah = [];
+        }
 
         if ($tagihan->hasPelaksanaanPekerjaan) {
             foreach ($tagihan->hasPelaksanaanPekerjaan as $key => $value) {
@@ -1244,6 +1253,7 @@ class TagihanController extends Controller
                     "stafPengawas",
                     "now",
                     "tanggal",
+                    "tanggalDirut",
                     "tagihan"
                 )
             );

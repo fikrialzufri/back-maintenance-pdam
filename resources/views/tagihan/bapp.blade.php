@@ -158,7 +158,7 @@
                                 </div>
 
                                 <div style='font-size: 20px;' class="col-6 text-center">
-                                    Samarinda{{ $tanggal }}
+                                    Samarinda{{ $tanggalDirut }}
                                     <br>
 
                                     @forelse ($tagihan->list_persetujuan as $index => $dirut)
