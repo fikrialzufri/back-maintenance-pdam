@@ -523,9 +523,19 @@
 
                                                 @if (!auth()->user()->hasRole('rekanan'))
                                                     <div class="p-2">
-                                                        @if ($tagihan->status === 'disetujui' || $tagihan->status === 'dibayar')
+                                                        @if ($tagihan->status === 'disetujui' || $tagihan->status === 'dibayar' || $tagihan->status === 'disetujui dirut')
                                                             <a href="{{ route('tagihan.word') }}?id={{ $tagihan->id }}"
                                                                 target="_blank" class="btn btn-success"><span
+                                                                    class="nav-icon fa fa-file-word"
+                                                                    aria-hidden="true"></span>
+                                                                Privew Tagihan BAPPB</a>
+                                                        @endif
+                                                    </div>
+                                                    <div class="p-2">
+                                                        {{-- @if ($tagihan->status === 'disetujui dirut') --}}
+                                                        @if ($tagihan->status === 'disetujui' || $tagihan->status === 'dibayar' || $tagihan->status === 'disetujui dirut')
+                                                            <a href="{{ route('tagihan.word') }}?id={{ $tagihan->id }}&word=bapp"
+                                                                target="_blank" class="btn btn-warning"><span
                                                                     class="nav-icon fa fa-file-word"
                                                                     aria-hidden="true"></span>
                                                                 Privew Tagihan BAPPB</a>

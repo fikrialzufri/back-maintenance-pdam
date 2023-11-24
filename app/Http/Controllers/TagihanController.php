@@ -57,6 +57,10 @@ class TagihanController extends Controller
                 'alias' => 'Tanggal',
             ],
             [
+                'name' => 'status',
+                'alias' => 'Status',
+            ],
+            [
                 'name' => 'kode_vocher',
                 'alias' => 'Kode Voucher',
             ],
@@ -372,38 +376,10 @@ class TagihanController extends Controller
             if (auth()->user()->hasRole('superadmin')) {
                 $perencaan = true;
             }
-            // if (auth()->user()->hasRole('manajer-distribusi')) {
 
-            //     if (in_array('dis', $katagori_nps_unique)) {
-            //         $bntSetuju = false;
-            //     }
-            // }
-            // if (auth()->user()->hasRole('manajer-pengendalian-kehilangan-air')) {
-            //     if (in_array('pka', $katagori_nps_unique)) {
-            //         $bntSetuju = false;
-            //     }
-            // }
 
             if (auth()->user()->hasRole('manajer-perencanaan')) {
-                // $listJabatan = Jabatan::query();
 
-                // if (in_array('dis', $katagori_nps_unique)) {
-                //     $listJabatan = $listJabatan->where('slug', 'manajer-distribusi');
-                // }
-                // if (in_array('pka', $katagori_nps_unique)) {
-                //     $listJabatan = $listJabatan->orWhere('slug', 'manajer-pengendalian-kehilangan-air');
-                // }
-                // $listJabatan = $listJabatan->pluck('id')->toArray();
-                // // list karyawan bedasarkan jabatan
-                // $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get()->pluck('user_id')->toArray();
-
-                // $list_persetujuan =  $query->whereHas('hasUserMany', function ($q) use ($listKaryawan) {
-                //     $q->whereIn('tagihan_user.user_id',  $listKaryawan);
-                // })->count();
-
-                // if ($list_persetujuan > 0) {
-                //     $bntSetuju = false;
-                // }
                 $bntSetuju = false;
             }
 
@@ -412,6 +388,22 @@ class TagihanController extends Controller
 
                 // list jabatan
                 $listJabatan = Jabatan::where('slug', 'manajer-perencanaan')->pluck('id')->toArray();
+
+                // list karyawan bedasarkan jabatan
+                $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get()->pluck('user_id')->toArray();
+
+                $list_persetujuan = $query->whereHas('hasUserMany', function ($q) use ($listKaryawan) {
+                    $q->whereIn('tagihan_user.user_id', $listKaryawan);
+                })->count();
+
+                if ($list_persetujuan > 0) {
+                    $bntSetuju = false;
+                }
+            }
+            if (auth()->user()->hasRole('direktur-utama')) {
+
+                // list jabatan
+                $listJabatan = Jabatan::where('slug', 'direktur-teknik')->pluck('id')->toArray();
 
                 // list karyawan bedasarkan jabatan
                 $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get()->pluck('user_id')->toArray();
@@ -442,6 +434,7 @@ class TagihanController extends Controller
                     }
                 }
             }
+
             return view(
                 'tagihan.show',
                 compact(
@@ -575,7 +568,6 @@ class TagihanController extends Controller
      */
     public function update(Request $request, $id)
     {
-        DB::beginTransaction();
 
         $data = $this->model()->find($id);
 
@@ -600,9 +592,11 @@ class TagihanController extends Controller
         // list karyawan bedasarkan jabatan
         $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get();
 
+        DB::beginTransaction();
         try {
-            DB::commit();
             $user = [];
+
+
 
             if ($data) {
                 $status = 'dikoreksi';
@@ -612,6 +606,9 @@ class TagihanController extends Controller
 
                 if (auth()->user()->hasRole('direktur-teknik')) {
                     $status = 'disetujui';
+                }
+                if (auth()->user()->hasRole('direktur-utama')) {
+                    $status = 'disetujui dirut';
                 }
                 if (auth()->user()->hasRole('keuangan')) {
                     $status = 'dibayar';
@@ -656,6 +653,7 @@ class TagihanController extends Controller
                         }
                     }
                 }
+                DB::commit();
 
                 return redirect()->route('tagihan.index')->with('message', $message)->with('Class', 'primary');
             }
@@ -1228,6 +1226,26 @@ class TagihanController extends Controller
                     "preview",
                     "stafPengawas",
                     "nowRekanan",
+                    "now",
+                    "tanggal",
+                    "tagihan"
+                )
+            );
+        }
+        if ($word === "bapp") {
+            return view(
+                'tagihan.bapp',
+                compact(
+                    "title",
+                    "wilayah",
+                    "singkatan",
+                    "total_tagihan",
+                    "direktur",
+                    "total_lokasi",
+                    "filename",
+                    "bulan",
+                    "preview",
+                    "stafPengawas",
                     "now",
                     "tanggal",
                     "tagihan"

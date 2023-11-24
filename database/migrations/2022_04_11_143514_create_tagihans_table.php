@@ -31,7 +31,8 @@ class CreateTagihansTable extends Migration
                 'step4',
                 'step5',
                 'disetujui',
-                'dibayar'
+                'dibayar',
+                'disetujui dirut',
             ])->default('dikirim');
             $table->foreignUuid('rekanan_id')->references('id')->on('rekanan')->nullable();
             $table->foreignUuid('user_id')->references('id')->on('users');

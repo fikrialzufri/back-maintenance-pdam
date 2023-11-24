@@ -88,6 +88,9 @@
                                                 <td>{{ $item[$header['name']] }}</td>
                                             @endif
                                         @endforeach
+                                        {{-- <td>
+                                            {{ auth()->user()->role[0]->name }}
+                                        </td> --}}
                                         <td class="text-center">
                                             <a href="{{ route($route . '.show', $item->slug) }}"
                                                 class="btn btn-sm btn-primary text-light" data-toggle="tooltip"
@@ -96,10 +99,11 @@
                                                 @if ($item->belum_persetujuan === 'bg-danger')
                                                     <i class="nav-icon fas fa-eye"></i>
                                                     @if (auth()->user()->hasRole('manajer-distribusi') ||
-                                                        auth()->user()->hasRole('manajer-pengendalian-kehilangan-air') ||
-                                                        auth()->user()->hasRole('keuangan') ||
-                                                        auth()->user()->hasRole('manajer-perencanaan') ||
-                                                        auth()->user()->hasRole('direktur-teknik'))
+                                                            auth()->user()->hasRole('manajer-pengendalian-kehilangan-air') ||
+                                                            auth()->user()->hasRole('keuangan') ||
+                                                            auth()->user()->hasRole('manajer-perencanaan') ||
+                                                            auth()->user()->hasRole('direktur-teknik') ||
+                                                            auth()->user()->hasRole('direktur-utama'))
                                                         Proses
                                                     @endif
                                                 @else
