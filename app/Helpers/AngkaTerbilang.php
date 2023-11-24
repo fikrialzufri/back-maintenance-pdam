@@ -24,3 +24,46 @@ function terbilang($angka)
     }
     return $terbilang;
 }
+
+function romanToNumber($roman)
+{
+    $romans = [
+        'I' => 1,
+        'V' => 5,
+        'X' => 10,
+        'L' => 50,
+        'C' => 100,
+        'D' => 500,
+        'M' => 1000,
+    ];
+
+    $result = 0;
+    $prevValue = 0;
+
+    for ($i = strlen($roman) - 1; $i >= 0; $i--) {
+        $currentValue = $romans[$roman[$i]];
+        if ($currentValue < $prevValue) {
+            $result -= $currentValue;
+        } else {
+            $result += $currentValue;
+        }
+        $prevValue = $currentValue;
+    }
+
+    return $result;
+}
+
+function sortByRoman($array)
+{
+    usort($array, function ($a, $b) {
+        $romanA = strtoupper($a);
+        $romanB = strtoupper($b);
+
+        $numberA = romanToNumber($romanA);
+        $numberB = romanToNumber($romanB);
+
+        return $numberA - $numberB;
+    });
+
+    return $array;
+}

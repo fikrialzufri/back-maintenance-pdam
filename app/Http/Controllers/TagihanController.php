@@ -1154,10 +1154,12 @@ class TagihanController extends Controller
         $word = request()->get('word') ?: "";
         $tagihan = Tagihan::find($id);
         $now = '';
+        $nowRekanan = '';
         $tanggal = '';
         if ($tagihan->list_persetujuan_direktur_teknik['created_at']) {
             $tanggal = $tagihan->list_persetujuan_direktur_teknik['created_at'];
             $now = tanggal_indonesia_terbilang($tanggal, true, false);
+            $nowRekanan = tanggal_indonesia($tanggal, true, false);
             $tanggal = tanggal_indonesia(Carbon::parse($tanggal), false);
         }
 
@@ -1165,6 +1167,7 @@ class TagihanController extends Controller
 
         if ($tagihan->hasPelaksanaanPekerjaan) {
             foreach ($tagihan->hasPelaksanaanPekerjaan as $key => $value) {
+
                 $wilayah[$key] = $value->wilayah;
             }
         }
@@ -1176,8 +1179,17 @@ class TagihanController extends Controller
         $stafPengawas = $rekanan->hasKaryawan;
 
         $wilayah = array_unique($wilayah);
-        $wilayah = implode(", ", $wilayah);
-        $wilayah = rtrim($wilayah, ", ");
+
+        $wilayah = sortByRoman($wilayah);
+
+        if (count($wilayah) == 2) {
+            $wilayah = implode(" dan ", $wilayah);
+        } else {
+            $last = array_slice($wilayah, -1);
+            $wilayah = implode(', ', array_slice($wilayah, 0, -1)) . (count($wilayah) > 1 ? ', dan ' : '') . implode('', $last);
+        }
+
+
 
         $filename = "Tagihan Rekenan " . $tagihan->rekanan . " Nomor " . $tagihan->nomor_tagihan_setujuh;
         $title = "Tagihan : " . $tagihan->nomor_tagihan_setujuh;
@@ -1215,6 +1227,7 @@ class TagihanController extends Controller
                     "bulan",
                     "preview",
                     "stafPengawas",
+                    "nowRekanan",
                     "now",
                     "tanggal",
                     "tagihan"
