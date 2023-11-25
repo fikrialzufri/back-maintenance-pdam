@@ -128,7 +128,7 @@ class TaskController extends Controller
      */
     public function edit(Task $task)
     {
-        $title =  "Ubah Task " . $task->nama;
+        $title =  "Task " . $task->name;
         $action = route('task.update', $task->id);
         $route = "task";
         return view('task.edit', compact(
@@ -148,6 +148,10 @@ class TaskController extends Controller
      */
     public function update(Request $request, Task $task)
     {
+
+        $permission = $request->permission;
+        $permission_name = $request->permission_name;
+
         $messages = [
             'required' => ':attribute tidak boleh kosong',
             'unique' => ':attribute tidak boleh sama',
@@ -166,15 +170,24 @@ class TaskController extends Controller
         $task->description = $description;
         $task->slug = $slug;
         $task->save();
-        $permission = Permission::where('task_id', $task->id)->get();
 
-        foreach ($permission as $key => $v) {
-            $p = Permission::find($v->id);
-            $p->name = \explode(' ', $p->name)[0] . " " . $name;
-            $p->slug = \explode('-', $p->slug)[0] . "-" . $slug;
-            $p->save();
+        // cek apakah permission kosong
+        if ($permission != null) {
+            // lewat kan apabila permission sama
+            foreach ($permission as $key => $value) {
+                $list_permission = Permission::whereSlug(Str::slug($permission_name[$key]))->first();
+                if ($list_permission == null) {
+                    $task->permissions()->create([
+                        'name' => $permission_name[$key],
+                        'slug' => Str::slug($permission_name[$key]),
+                        'task_id' => $task->id
+                    ]);
+                }
+                // yg tidak ada di list maka di hapus
+                $task->permissions()->whereNotIn('slug', $permission)->delete();
+            }
         }
-        return redirect()->route('task.index')->with('message', 'Task Berhasil Ditambahkan')->with('Class', 'success');
+        return redirect()->route('task.index')->with('message', 'Task Berhasil Diubah')->with('Class', 'success');
     }
 
     /**
