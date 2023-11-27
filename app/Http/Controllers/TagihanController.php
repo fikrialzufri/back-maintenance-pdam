@@ -1155,7 +1155,7 @@ class TagihanController extends Controller
             $tanggal = $tagihan->list_persetujuan_direktur_teknik['created_at'];
             $now = tanggal_indonesia_terbilang($tanggal, true, false);
             $nowRekanan = tanggal_indonesia($tanggal, false, false);
-            $tanggal = tanggal_indonesia(Carbon::parse($tanggal), false);
+            $tanggal = tanggal_indonesia(Carbon::parse($tanggal), false, false);
 
             $wilayah = [];
         }
@@ -1165,7 +1165,7 @@ class TagihanController extends Controller
                 $tanggalDirut = $tagihan->list_persetujuan_direktur_utama['created_at'];
                 $now = tanggal_indonesia_terbilang($tanggalDirut, true, false);
 
-                $tanggalDirut = tanggal_indonesia(Carbon::parse($tanggalDirut), false);
+                $tanggalDirut = tanggal_indonesia(Carbon::parse($tanggalDirut), false, false);
 
                 $wilayah = [];
             }
@@ -1200,6 +1200,7 @@ class TagihanController extends Controller
         $filename = "Tagihan Rekenan " . $tagihan->rekanan . " Nomor " . $tagihan->nomor_tagihan_setujuh;
         $title = "Tagihan : " . $tagihan->nomor_tagihan_setujuh;
         $bulan = bulan_indonesia(Carbon::parse($tagihan->tanggal_adjust));
+        $tahun = tahun_indonesia(Carbon::parse($tagihan->tanggal_adjust));
 
         $total = $tagihan->tagihan + $tagihan->galian;
 
@@ -1231,6 +1232,7 @@ class TagihanController extends Controller
                     "total_lokasi",
                     "filename",
                     "bulan",
+                    "tahun",
                     "preview",
                     "stafPengawas",
                     "nowRekanan",
@@ -1252,6 +1254,7 @@ class TagihanController extends Controller
                     "total_lokasi",
                     "filename",
                     "bulan",
+                    "tahun",
                     "preview",
                     "stafPengawas",
                     "now",
@@ -1273,6 +1276,7 @@ class TagihanController extends Controller
                 "total_lokasi",
                 "filename",
                 "bulan",
+                "tahun",
                 "preview",
                 "stafPengawas",
                 "now",
@@ -1337,6 +1341,11 @@ class TagihanController extends Controller
                 "tagihan"
             )
         );
+    }
+
+    public function dokumen(Request $request, $id)
+    {
+        return $request;
     }
 
     public function model()

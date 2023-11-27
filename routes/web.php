@@ -103,6 +103,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('exxceltagihan', [TagihanController::class, 'exxceltagihan'])->name('tagihan.excel');
     Route::get('wordtagihan', [TagihanController::class, 'wordtagihan'])->name('tagihan.word');
 
+    Route::put('upload-dokumen/{id}', [TagihanController::class, 'dokumen'])->name('tagihan.dokumen');
+
 
     // Karyawan
     Route::resource('departemen', DepartemenController::class);

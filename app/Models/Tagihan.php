@@ -65,6 +65,12 @@ class Tagihan extends Model
             return $this->hasRekanan->alamat;
         }
     }
+    public function getNoHpRekananAttribute()
+    {
+        if ($this->hasRekanan) {
+            return $this->hasRekanan->no_hp;
+        }
+    }
     public function getTddRekananAttribute()
     {
         if ($this->hasRekanan) {
@@ -82,7 +88,7 @@ class Tagihan extends Model
     public function getTanggalAttribute()
     {
         if ($this->created_at) {
-            return tanggal_indonesia($this->created_at);
+            return tanggal_indonesia($this->created_at, false, false);
         }
     }
 

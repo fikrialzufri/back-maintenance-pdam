@@ -604,90 +604,99 @@
                         <!-- ./col -->
                     </div>
                     @if ($pkp == 'ya' && $tagihan->status == 'disetujui')
-                        <div class="card">
-                            {{-- Upload Ebiling --}}
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <h6>Upload Dokument Pajak</h6>
-                                    </div>
-                                    <div class="col-12">
-                                        <div class="form-group">
-                                            <div>
-                                                <label for="no_faktur_pajak" class=" form-control-label">No Faktur
-                                                    Pajak</label>
-                                            </div>
-                                            <div>
-                                                <input type="text" name="no_faktur_pajak" id="No Faktur Pajak"
-                                                    placeholder="No Faktur Pajak " class="form-control" value="">
-                                            </div>
-                                            <div class="">
-                                                <input type="file" value="no_faktur_pajak_image"
-                                                    name="no_faktur_pajak_image" placeholder="" id=""
-                                                    class="form-control">
-                                                <br>
-                                                <div id="preview_no_faktur_pajak_image"></div>
+                        <form action="{{ route('tagihan.dokumen', $tagihan->id) }}" method="POST" role="form"
+                            enctype="multipart/form-data">
+                            {{ csrf_field() }}
+                            {{ method_field('PUT') }}
+                            <div class="card">
+                                {{-- Upload Ebiling --}}
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <h6>Upload Dokument Pajak</h6>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <div>
+                                                    <label for="no_faktur_pajak" class=" form-control-label">No Faktur
+                                                        Pajak</label>
+                                                </div>
+                                                <div>
+                                                    <input type="text" name="no_faktur_pajak" id="No Faktur Pajak"
+                                                        placeholder="No Faktur Pajak " class="form-control" value="">
+                                                </div>
+                                                <div class="">
+                                                    <input type="file" value="no_faktur_pajak_image"
+                                                        name="no_faktur_pajak_image" placeholder="" id=""
+                                                        class="form-control">
+                                                    <br>
+                                                    <div id="preview_no_faktur_pajak_image"></div>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-12">
-                                        <div class="form-group">
-                                            <div>
-                                                <label for="e_billing" class=" form-control-label">E-Billing</label>
-                                            </div>
-                                            <div>
-                                                <input type="text" name="e_billing" id="e_billing"
-                                                    placeholder="E-Billing " class="form-control" value="">
-                                            </div>
-                                            <div class="">
-                                                <input type="file" value="e_billing_pajak_image"
-                                                    name="e_billing_pajak_image" placeholder="" id="e_billing_pajak_image"
-                                                    class="form-control">
-                                                <br>
-                                                <div id="preview_e_billing_pajak_image"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-12">
-                                        <div class="form-group">
-                                            <div>
-                                                <label for="bukti_pembayaran" class=" form-control-label">Bukti Pembayaraan
-                                                    PPN atas tagihan</label>
-                                            </div>
-                                            <div>
-                                                <input type="text" name="bukti_pembayaran" id="bukti_pembayaran"
-                                                    placeholder="Bukti Pembayaran" placeholder="e-spt " class="form-control"
-                                                    value="">
-                                            </div>
-                                            <div class="">
-                                                <input type="file" value="bukti_pembayaran_image"
-                                                    name="bukti_pembayaran_image" placeholder="" id="bukti_pembayaran_image"
-                                                    class="form-control">
-                                                <br>
-                                                <div id="preview_bukti_pembayaran_image"></div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <div>
+                                                    <label for="e_billing" class=" form-control-label">E-Billing</label>
+                                                </div>
+                                                <div>
+                                                    <input type="text" name="e_billing" id="e_billing"
+                                                        placeholder="E-Billing " class="form-control" value="">
+                                                </div>
+                                                <div class="">
+                                                    <input type="file" value="e_billing_pajak_image"
+                                                        name="e_billing_pajak_image" placeholder=""
+                                                        id="e_billing_pajak_image" class="form-control">
+                                                    <br>
+                                                    <div id="preview_e_billing_pajak_image"></div>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-12">
-                                        <div class="form-group">
-                                            <div>
-                                                <label for="e_spt" class=" form-control-label">E-SPT PPN</label>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <div>
+                                                    <label for="bukti_pembayaran" class=" form-control-label">Bukti
+                                                        Pembayaraan
+                                                        PPN atas tagihan</label>
+                                                </div>
+                                                <div>
+                                                    <input type="text" name="bukti_pembayaran" id="bukti_pembayaran"
+                                                        placeholder="Bukti Pembayaran" placeholder="e-spt "
+                                                        class="form-control" value="">
+                                                </div>
+                                                <div class="">
+                                                    <input type="file" value="bukti_pembayaran_image"
+                                                        name="bukti_pembayaran_image" placeholder=""
+                                                        id="bukti_pembayaran_image" class="form-control">
+                                                    <br>
+                                                    <div id="preview_bukti_pembayaran_image"></div>
+                                                </div>
                                             </div>
-                                            <div>
-                                                <input type="text" name="e_spt" id="e_spt" placeholder="e-spt "
-                                                    class="form-control" value="">
-                                            </div>
-                                            <div class="">
-                                                <input type="file" value="e_spt_image" name="e_spt_image" placeholder=""
-                                                    id="e_spt_image" class="form-control">
-                                                <br>
-                                                <div id="preview_e_spt_image"></div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <div>
+                                                    <label for="e_spt" class=" form-control-label">E-SPT PPN</label>
+                                                </div>
+                                                <div>
+                                                    <input type="text" name="e_spt" id="e_spt" placeholder="e-spt "
+                                                        class="form-control" value="">
+                                                </div>
+                                                <div class="">
+                                                    <input type="file" value="e_spt_image" name="e_spt_image"
+                                                        placeholder="" id="e_spt_image" class="form-control">
+                                                    <br>
+                                                    <div id="preview_e_spt_image"></div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                                <div class="card-footer">
+                                    <button type="submit" class="btn btn-primary">Upload Dokument Pembayaran</button>
+                                </div>
                             </div>
-                        </div>
+                        </form>
                     @endif
 
                     <!-- /.row -->

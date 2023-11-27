@@ -116,6 +116,12 @@ function bulan_indonesia($tgl)
 
     return $bulan;
 }
+function tahun_indonesia($tgl)
+{
+    $tahun = substr($tgl, 0, 4);
+
+    return $tahun;
+}
 function bulan_indonesia_romawi($tgl)
 {
     return getRomawi((int) substr($tgl, 5, 2));

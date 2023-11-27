@@ -22,12 +22,7 @@
                             </p>
                             <p
                                 style='margin-top:0cm;margin-right:0cm;margin-bottom:4.0pt;margin-left:0cm;line-height:normal;font-size:15px;font-family:"Calibri",sans-serif;'>
-                                <span style='font-size:16px;font-family:"Times New Roman",serif;'>Nama Rekanan :
-                                    {{ $tagihan->rekanan }}</span>
-                            </p>
-                            <p
-                                style='margin-top:0cm;margin-right:0cm;margin-bottom:4.0pt;margin-left:0cm;line-height:normal;font-size:15px;font-family:"Calibri",sans-serif;'>
-                                <span style='font-size:16px;font-family:"Times New Roman",serif;'>Lapiran : &nbsp;</span>
+                                <span style='font-size:16px;font-family:"Times New Roman",serif;'>Lampiran : &nbsp;</span>
                             </p>
                             <p
                                 style='margin-top:0cm;margin-right:0cm;margin-bottom:4.0pt;margin-left:0cm;line-height:normal;font-size:15px;font-family:"Calibri",sans-serif;'>
@@ -82,34 +77,55 @@
                             </p>
                             <p
                                 style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:150%;font-size:15px;font-family:"Calibri",sans-serif;text-align:justify;'>
-                                <span
-                                    style='font-size:16px;line-height:150%;font-family:"Times New Roman",serif;'>Dehubungan
-                                    dengan
-                                    selesainya
-                                    pekerjaan service Kebocoran, Rehab Pipa dan Pemasangan Pipa Sekunder PERUMDAM Tirta
-                                    Kencana
-                                    Samarinda
-                                    Periode bulan, {{ $bulan }} {{ date('Y') }} di wilayah {{ $wilayah }}
-                                    sebanyak
-                                    {{ $total_lokasi }}
-                                    Lokasi, kami mengajukan Permohonan
-                                    Pembayaran atas pekerjaan tersebut senilai Rp. {{ pembulatan($total_tagihan) }}.
-                                    <i>
+                                <span style='font-size:16px;line-height:150%;font-family:"Times New Roman",serif;'>
+                                    Pada hari ini, {{ $now }} </span>
+                            </p>
 
-                                        ({{ strtoupper(terbilang(ceil($total_tagihan) - substr(ceil($total_tagihan), -3))) }}
-                                        RUPIAH)
-                                    </i>
-                                    Demikian
-                                    Permohonan
-                                    ini
-                                    kami
-                                    sampaikan.
-                                    Atas perhatian dan kerjasamanya diucapkan terimakasih.</span>
+                            <p>
+                                <span class="child"
+                                    style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:15px;font-family:"Calibri",sans-serif;text-align:justify;'>
+                                    Nama &nbsp;&nbsp;&nbsp;:
+                                </span>
+                                <span class="child child2"
+                                    style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:15px;font-family:"Calibri",sans-serif;text-align:justify;'>
+                                    {{ $tagihan->rekanan }}
+                                </span>
+                                <br>
+                                <span class="child"
+                                    style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:15px;font-family:"Calibri",sans-serif;text-align:justify;'>
+                                    Alamat &nbsp;:
+                                </span>
+                                <span class="child child2"
+                                    style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:15px;font-family:"Calibri",sans-serif;text-align:justify;'>
+                                    {{ $tagihan->alamat_rekanan }}
+                                </span>
+                                <br>
+                                <span class="child"
+                                    style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:15px;font-family:"Calibri",sans-serif;text-align:justify;'>
+                                    No Hp &nbsp;&nbsp;:
+                                </span>
+                                <span class="child child2"
+                                    style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:15px;font-family:"Calibri",sans-serif;text-align:justify;'>
+                                    {{ $tagihan->no_hp_rekanan }}
+                                </span>
+                            </p>
+
+                            <p
+                                style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:150%;font-size:15px;font-family:"Calibri",sans-serif;text-align:justify;'>
+                                <span style='font-size:16px;line-height:150%;font-family:"Times New Roman",serif;'>
+                                    Sehubungan dengan selesainya pekerjaan service Kebocoran, Rehab Pipa dan Pemasangan Pipa
+                                    Sekunder PERUMDAM Tirta Kencana Samarinda Periode bulan {{ $bulan }} tahun
+                                    {{ $tahun }} di wilayah {{ $wilayah }} sebanyak {{ $total_lokasi }} Lokasi,
+                                    kami mengajukan Permohonan Pembayaran atas pekerjaan tersebut
+                                    senilai Rp{{ pembulatan($total_tagihan) }},00
+                                    ({{ ltrim(terbilang(ceil($total_tagihan) - substr(ceil($total_tagihan), -3))) }}rupiah).
+
                             </p>
                             <p
                                 style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:107%;font-size:15px;font-family:"Calibri",sans-serif;'>
-                                <span
-                                    style='font-size:16px;line-height:107%;font-family:"Times New Roman",serif;'>&nbsp;</span>
+                                <span style='font-size:16px;line-height:107%;font-family:"Times New Roman",serif;'>Demikian
+                                    Permohonan ini kami sampaikan. Atas perhatian dan kerjasamanya diucapkan terimakasih.
+                                </span>
                             </p>
                             <p
                                 style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:107%;font-size:15px;font-family:"Calibri",sans-serif;'>

@@ -19,6 +19,15 @@ class CreateTagihansTable extends Migration
             $table->string('slug');
             $table->string('nomor_bap')->nullable();
             $table->string('kode_vocher')->nullable();
+            $table->string('no_faktur_pajak')->nullable();
+            $table->string('no_faktur_pajak_image')->nullable();
+            $table->string('e_billing')->nullable();
+            $table->string('e_billing_image')->nullable();
+            $table->string('bukti_pembayaran')->nullable();
+            $table->string('bukti_pembayaran_image')->nullable();
+            $table->string('e_spt')->nullable();
+            $table->string('e_spt_image')->nullable();
+
             $table->date('tanggal_tagihan');
             $table->integer('total')->default(0);
             $table->integer('total_bayar')->default(0);
