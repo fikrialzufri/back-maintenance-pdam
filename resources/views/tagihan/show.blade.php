@@ -505,109 +505,144 @@
                                     </div>
                                 @endif
 
-                            </div>
 
-                            <!-- /.card-body -->
-                            <div class="card-footer clearfix">
-                                <div class="row">
-                                    @if ($tagihan)
-                                        <div class="col-12">
-                                            <div class="d-flex flex-row">
+                                <!-- /.card-body -->
+                                <div class="card-footer clearfix">
+                                    <div class="row">
+                                        @if ($tagihan)
+                                            <div class="col-12">
+                                                <div class="d-flex flex-row">
 
-                                                <div class="p-2">
-                                                    <a href="{{ route('tagihan.word') }}?id={{ $tagihan->id }}&word=rekanan"
-                                                        target="_blank" class="btn btn-danger"><span
-                                                            class="nav-icon fa fa-file-word" aria-hidden="true"></span>
-                                                        Privew Tagihan</a>
-                                                </div>
-
-                                                @if (!auth()->user()->hasRole('rekanan'))
                                                     <div class="p-2">
-                                                        @if ($tagihan->status === 'disetujui' || $tagihan->status === 'dibayar' || $tagihan->status === 'disetujui dirut')
-                                                            <a href="{{ route('tagihan.word') }}?id={{ $tagihan->id }}"
-                                                                target="_blank" class="btn btn-success"><span
-                                                                    class="nav-icon fa fa-file-word"
-                                                                    aria-hidden="true"></span>
-                                                                Privew Tagihan BAPPB</a>
-                                                        @endif
+                                                        <a href="{{ route('tagihan.word') }}?id={{ $tagihan->id }}&word=rekanan"
+                                                            target="_blank" class="btn btn-danger"><span
+                                                                class="nav-icon fa fa-file-word" aria-hidden="true"></span>
+                                                            Privew Tagihan</a>
                                                     </div>
-                                                    <div class="p-2">
-                                                        {{-- @if ($tagihan->status === 'disetujui dirut') --}}
-                                                        @if ($tagihan->status === 'disetujui' || $tagihan->status === 'dibayar' || $tagihan->status === 'disetujui dirut')
-                                                            <a href="{{ route('tagihan.word') }}?id={{ $tagihan->id }}&word=bapp"
-                                                                target="_blank" class="btn btn-warning"><span
-                                                                    class="nav-icon fa fa-file-word"
-                                                                    aria-hidden="true"></span>
-                                                                Privew Tagihan BAPPB</a>
-                                                        @endif
+
+                                                    @if (!auth()->user()->hasRole('rekanan'))
+                                                        <div class="p-2">
+                                                            @if ($tagihan->status === 'disetujui' || $tagihan->status === 'dibayar' || $tagihan->status === 'disetujui dirut')
+                                                                <a href="{{ route('tagihan.word') }}?id={{ $tagihan->id }}"
+                                                                    target="_blank" class="btn btn-success"><span
+                                                                        class="nav-icon fa fa-file-word"
+                                                                        aria-hidden="true"></span>
+                                                                    Privew Tagihan BAPPB</a>
+                                                            @endif
+                                                        </div>
+                                                        <div class="p-2">
+                                                            {{-- @if ($tagihan->status === 'disetujui dirut') --}}
+                                                            @if ($tagihan->status === 'disetujui' || $tagihan->status === 'dibayar' || $tagihan->status === 'disetujui dirut')
+                                                                <a href="{{ route('tagihan.word') }}?id={{ $tagihan->id }}&word=bapp"
+                                                                    target="_blank" class="btn btn-warning"><span
+                                                                        class="nav-icon fa fa-file-word"
+                                                                        aria-hidden="true"></span>
+                                                                    Privew Tagihan BAPPB</a>
+                                                            @endif
+                                                        </div>
+                                                    @endif
+                                                </div>
+
+                                            </div>
+                                        @endif
+                                    </div>
+                                    <div class="row">
+                                        @if ($ktp != null)
+
+                                            <div class="col-md-3">
+                                                <div class="card">
+                                                    <!-- /.card-header -->
+
+                                                    <div class="card-body">
+                                                        <h1>KTP Rekanaan</h1>
+                                                        {{-- show image --}}
+                                                        <img src="{{ asset('storage/rekanan/' . $ktp) }}"
+                                                            alt="{{ $rekanan }}." class="card-img-top img-thumbnail">
+
                                                     </div>
-                                                @endif
-                                            </div>
 
-                                        </div>
-                                    @endif
+                                                    <!-- /.card-body -->
+                                                    <div class="card-footer clearfix">
+
+                                                    </div>
+
+                                                </div>
+                                                <!-- ./col -->
+
+                                            </div>
+                                        @endif
+                                        @if ($npwp != null)
+
+                                            <div class="col-md-3">
+                                                <div class="card">
+                                                    <!-- /.card-header -->
+
+                                                    <div class="card-body">
+                                                        <h1>NPWP Rekanaan</h1>
+                                                        {{-- show image --}}
+                                                        <img src="{{ asset('storage/rekanan/' . $npwp) }}"
+                                                            alt="{{ $rekanan }}." class="card-img-top float-start">
+
+                                                    </div>
+
+                                                    <!-- /.card-body -->
+                                                    <div class="card-footer clearfix">
+
+                                                    </div>
+
+                                                </div>
+                                                <!-- ./col -->
+
+                                            </div>
+                                        @endif
+                                    </div>
                                 </div>
-                                <div class="row">
-                                    @if ($ktp != null)
 
-                                        <div class="col-md-3">
-                                            <div class="card">
-                                                <!-- /.card-header -->
 
-                                                <div class="card-body">
-                                                    <h1>KTP Rekanaan</h1>
-                                                    {{-- show image --}}
-                                                    <img src="{{ asset('storage/rekanan/' . $ktp) }}"
-                                                        alt="{{ $rekanan }}." class="card-img-top img-thumbnail">
-
-                                                </div>
-
-                                                <!-- /.card-body -->
-                                                <div class="card-footer clearfix">
-
-                                                </div>
-
-                                            </div>
-                                            <!-- ./col -->
-
-                                        </div>
-                                    @endif
-                                    @if ($npwp != null)
-
-                                        <div class="col-md-3">
-                                            <div class="card">
-                                                <!-- /.card-header -->
-
-                                                <div class="card-body">
-                                                    <h1>NPWP Rekanaan</h1>
-                                                    {{-- show image --}}
-                                                    <img src="{{ asset('storage/rekanan/' . $npwp) }}"
-                                                        alt="{{ $rekanan }}." class="card-img-top float-start">
-
-                                                </div>
-
-                                                <!-- /.card-body -->
-                                                <div class="card-footer clearfix">
-
-                                                </div>
-
-                                            </div>
-                                            <!-- ./col -->
-
-                                        </div>
-                                    @endif
-                                </div>
                             </div>
-
-
                         </form>
+                        <!-- ./col -->
                     </div>
-                    <!-- ./col -->
-                </div>
+                    @if ($pkp == 'ya')
+                        <div class="card">
+                            {{-- Upload Ebiling --}}
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <h6>Upload Dokument Pajak</h6>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <div>
+                                                <label for="no_faktur_pajak" class=" form-control-label">No Faktur
+                                                    Pajak</label>
+                                            </div>
+                                            <div>
+                                                <input type="text" name="no_faktur_pajak" id="No Faktur Pajak"
+                                                    placeholder="No Faktur Pajak " class="form-control" value="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <div>
+                                                <label for="e_billing" class=" form-control-label">E-Billing</label>
+                                            </div>
+                                            <div>
+                                                <input type="text" name="e_billing" id="e_billing"
+                                                    placeholder="E-Billing " class="form-control" value="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
 
-                <!-- /.row -->
-                <!-- Main row  dataitem-->
-                <!-- /.row (main row) -->
+                    <!-- /.row -->
+                    <!-- Main row  dataitem-->
+                    <!-- /.row (main row) -->
+                </div><!-- /.container-fluid -->
             </div><!-- /.container-fluid -->
         </div><!-- /.container-fluid -->
     @stop

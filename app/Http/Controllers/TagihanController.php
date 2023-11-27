@@ -673,10 +673,8 @@ class TagihanController extends Controller
         $bulan = date('m');
 
         DB::beginTransaction();
+
         try {
-            DB::commit();
-
-
             $PelaksanaanPekerjaan = PelaksanaanPekerjaan::whereIn('id', $pelaksanaan)
                 ->where('tagihan', 'tidak')->first();
 
@@ -706,7 +704,7 @@ class TagihanController extends Controller
             }
 
             $data = $this->model();
-            $data->nomor_tagihan_setujuh = $nomor_tagihan;
+            $data->nomor_tagihan = $nomor_tagihan;
             $data->tanggal_tagihan = $tanggal_tagihan;
             $data->rekanan_id = $rekanan_id;
             $data->user_id = auth()->user()->id;
@@ -775,6 +773,8 @@ class TagihanController extends Controller
             }
 
             $data->hasPelaksanaanPekerjaan()->sync($pelaksanaan);
+            DB::commit();
+
 
             return redirect()->route($this->route . '.index')->with('message', ucwords(str_replace('-', ' ', $this->route)) . " " . $nomor_tagihan . ' Berhasil Ditambahkan')->with('Class', 'success');
         } catch (\Throwable $th) {
