@@ -1159,13 +1159,16 @@ class TagihanController extends Controller
 
             $wilayah = [];
         }
-        if ($tagihan->list_persetujuan_direktur_utama['created_at']) {
-            $tanggalDirut = $tagihan->list_persetujuan_direktur_utama['created_at'];
-            $now = tanggal_indonesia_terbilang($tanggalDirut, true, false);
+        if (isset($tagihan->list_persetujuan_direktur_utama['created_at'])) {
 
-            $tanggalDirut = tanggal_indonesia(Carbon::parse($tanggalDirut), false);
+            if ($tagihan->list_persetujuan_direktur_utama['created_at']) {
+                $tanggalDirut = $tagihan->list_persetujuan_direktur_utama['created_at'];
+                $now = tanggal_indonesia_terbilang($tanggalDirut, true, false);
 
-            $wilayah = [];
+                $tanggalDirut = tanggal_indonesia(Carbon::parse($tanggalDirut), false);
+
+                $wilayah = [];
+            }
         }
 
         if ($tagihan->hasPelaksanaanPekerjaan) {
