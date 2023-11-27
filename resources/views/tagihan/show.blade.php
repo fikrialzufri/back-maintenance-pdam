@@ -537,7 +537,7 @@
                                                                     target="_blank" class="btn btn-warning"><span
                                                                         class="nav-icon fa fa-file-word"
                                                                         aria-hidden="true"></span>
-                                                                    Privew Tagihan BAPPB</a>
+                                                                    Privew Tagihan BAPP</a>
                                                             @endif
                                                         </div>
                                                     @endif
@@ -621,6 +621,13 @@
                                                 <input type="text" name="no_faktur_pajak" id="No Faktur Pajak"
                                                     placeholder="No Faktur Pajak " class="form-control" value="">
                                             </div>
+                                            <div class="">
+                                                <input type="file" value="no_faktur_pajak_image"
+                                                    name="no_faktur_pajak_image" placeholder="" id=""
+                                                    class="form-control">
+                                                <br>
+                                                <div id="preview_no_faktur_pajak_image"></div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-12">
@@ -631,6 +638,17 @@
                                             <div>
                                                 <input type="text" name="e_billing" id="e_billing"
                                                     placeholder="E-Billing " class="form-control" value="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <div>
+                                                <label for="e_spt" class=" form-control-label">E-SPT PPN</label>
+                                            </div>
+                                            <div>
+                                                <input type="text" name="e_spt" id="e_spt" placeholder="e-spt "
+                                                    class="form-control" value="">
                                             </div>
                                         </div>
                                     </div>
