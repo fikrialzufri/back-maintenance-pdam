@@ -159,13 +159,22 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td
-                                            style="width: 58.48%;padding: 0cm 5.4pt;border-image: initial;vertical-align: top;">
+                                        <td style="width: 58.48%;padding: 0cm 5.4pt;vertical-align: top;">
                                             <p
                                                 style='margin-right:0cm;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;margin:0cm;margin-top:0cm;margin-bottom:8.0pt;text-align:center;line-height:105%;'>
                                                 &nbsp;</p>
                                         </td>
                                         <td style="width: 41.52%;padding: 0cm 5.4pt;vertical-align: top;">
+                                            <div
+                                                style='margin-right:0cm;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;margin:0cm;text-align:center;'>
+                                                @if ($tagihan->rekanan_url != null)
+                                                    {!! QrCode::size(100)->generate($tagihan->rekanan_url_tdd) !!}
+                                                @else
+                                                    @if ($tagihan->rekanan_url_tdd != null)
+                                                        {!! QrCode::size(100)->generate($tagihan->rekanan_url_tdd) !!}
+                                                    @endif
+                                                @endif
+                                            </div>
                                             <p
                                                 style='margin-right:0cm;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;margin:0cm;margin-top:0cm;margin-bottom:8.0pt;text-align:center;line-height:105%;'>
                                                 &nbsp;</p>
@@ -182,6 +191,7 @@
                                                 style='margin-right:0cm;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;margin:0cm;margin-top:0cm;margin-bottom:8.0pt;text-align:center;line-height:105%;'>
                                                 Direktur</p>
                                         </td>
+
                                     </tr>
                                     <tr>
                                         <td style="width: 58.48%;padding: 0cm 5.4pt;vertical-align: top;">
