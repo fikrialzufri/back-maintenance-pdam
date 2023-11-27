@@ -656,7 +656,8 @@
                                             </div>
                                             <div>
                                                 <input type="text" name="bukti_pembayaran" id="bukti_pembayaran"
-                                                    placeholder="e-spt " class="form-control" value="">
+                                                    placeholder="Bukti Pembayaran" placeholder="e-spt " class="form-control"
+                                                    value="">
                                             </div>
                                             <div class="">
                                                 <input type="file" value="bukti_pembayaran_image"
