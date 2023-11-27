@@ -603,7 +603,7 @@
                         </form>
                         <!-- ./col -->
                     </div>
-                    @if ($pkp == 'ya')
+                    @if ($pkp == 'ya' && $tagihan->status == 'disetujui')
                         <div class="card">
                             {{-- Upload Ebiling --}}
                             <div class="card-body">
