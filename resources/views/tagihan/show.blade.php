@@ -639,6 +639,32 @@
                                                 <input type="text" name="e_billing" id="e_billing"
                                                     placeholder="E-Billing " class="form-control" value="">
                                             </div>
+                                            <div class="">
+                                                <input type="file" value="e_billing_pajak_image"
+                                                    name="e_billing_pajak_image" placeholder="" id="e_billing_pajak_image"
+                                                    class="form-control">
+                                                <br>
+                                                <div id="preview_e_billing_pajak_image"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <div>
+                                                <label for="bukti_pembayaran" class=" form-control-label">Bukti Pembayaraan
+                                                    PPN atas tagihan</label>
+                                            </div>
+                                            <div>
+                                                <input type="text" name="bukti_pembayaran" id="bukti_pembayaran"
+                                                    placeholder="e-spt " class="form-control" value="">
+                                            </div>
+                                            <div class="">
+                                                <input type="file" value="bukti_pembayaran_image"
+                                                    name="bukti_pembayaran_image" placeholder="" id="bukti_pembayaran_image"
+                                                    class="form-control">
+                                                <br>
+                                                <div id="preview_bukti_pembayaran_image"></div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-12">
@@ -649,6 +675,12 @@
                                             <div>
                                                 <input type="text" name="e_spt" id="e_spt" placeholder="e-spt "
                                                     class="form-control" value="">
+                                            </div>
+                                            <div class="">
+                                                <input type="file" value="e_spt_image" name="e_spt_image" placeholder=""
+                                                    id="e_spt_image" class="form-control">
+                                                <br>
+                                                <div id="preview_e_spt_image"></div>
                                             </div>
                                         </div>
                                     </div>
