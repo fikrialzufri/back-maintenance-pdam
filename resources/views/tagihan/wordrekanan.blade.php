@@ -78,7 +78,7 @@
                             <p
                                 style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:150%;font-size:15px;font-family:"Calibri",sans-serif;text-align:justify;'>
                                 <span style='font-size:16px;line-height:150%;font-family:"Times New Roman",serif;'>
-                                    Pada hari ini, tanggal {{ $now }} </span>
+                                    Pada hari ini, {{ $now }} </span>
                             </p>
 
                             <p>

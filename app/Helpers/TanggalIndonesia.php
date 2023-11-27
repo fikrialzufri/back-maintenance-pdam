@@ -57,7 +57,7 @@ function tanggal_indonesia_terbilang($tgl, $tampil_hari = true, $koma = true)
     if ($tampil_hari) {
         $urutan_hari = date('w', mktime(0, 0, 0, substr($tgl, 5, 2), $tanggal, $tahun));
         $hari = $nama_hari[$urutan_hari];
-        $text .= $hari;
+        $text .= $hari . " tanggal ";
     }
     if ($koma === true) {
         $text .= ", ";
