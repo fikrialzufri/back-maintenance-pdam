@@ -596,6 +596,104 @@
                                             </div>
                                         @endif
                                     </div>
+                                    @if (
+                                        $pkp == 'ya' &&
+                                            $tagihan->status == 'disetujui' &&
+                                            $tagihan->e_billing != null &&
+                                            $tagihan->e_spt != null &&
+                                            $tagihan->no_faktur_pajak != null &&
+                                            $tagihan->bukti_pembayaran != null)
+                                        <div class="row">
+                                            <div class="col-12">
+
+                                                <h6>Dokument Pajak</h6>
+                                            </div>
+                                            <div class="col-3">
+                                                <div class="form-group">
+                                                    <div>
+                                                        <label for="no_faktur_view" class=" form-control-label">No Faktur
+                                                            Pajak</label>
+                                                    </div>
+                                                    <div>
+
+                                                        <div class="input-group input-group-button">
+                                                            <div class="input-group-prepend">
+                                                                <a class="btn btn-primary"
+                                                                    href="{{ asset('storage/tagihan/' . $tagihan->no_faktur_pajak_image) }}"
+                                                                    target="_blank">
+                                                                    <i class="ik ik-arrow-down"></i>
+                                                                </a>
+                                                            </div>
+                                                            <input type="text" class="form-control" placeholder=""
+                                                                value="{{ $tagihan->no_faktur_pajak }}" readonly>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div>
+                                                        <label for="e_billing_view"
+                                                            class=" form-control-label">E-Billing</label>
+                                                    </div>
+                                                    <div>
+
+                                                        <div class="input-group input-group-button">
+                                                            <div class="input-group-prepend">
+                                                                <a class="btn btn-success"
+                                                                    href="{{ asset('storage/tagihan/' . $tagihan->e_billing_image) }}"
+                                                                    target="_blank">
+                                                                    <i class="ik ik-arrow-down"></i>
+                                                                </a>
+                                                            </div>
+                                                            <input type="text" class="form-control" placeholder=""
+                                                                value="{{ $tagihan->e_billing }}" readonly>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div>
+                                                        <label for="bukti_pembayaran_view" class=" form-control-label">Bukti
+                                                            Pembayaraan
+                                                            PPN atas tagihan</label>
+                                                    </div>
+                                                    <div>
+
+                                                        <div class="input-group input-group-button">
+                                                            <div class="input-group-prepend">
+                                                                <a class="btn btn-danger"
+                                                                    href="{{ asset('storage/tagihan/' . $tagihan->bukti_pembayaran_image) }}"
+                                                                    target="_blank">
+                                                                    <i class="ik ik-arrow-down"></i>
+                                                                </a>
+                                                            </div>
+                                                            <input type="text" class="form-control" placeholder=""
+                                                                value="{{ $tagihan->bukti_pembayaran }}" readonly>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div>
+                                                        <label for="e_spt_view" class=" form-control-label">E-SPT
+                                                            PPN</label>
+                                                    </div>
+                                                    <div>
+
+                                                        <div class="input-group input-group-button">
+                                                            <div class="input-group-prepend">
+                                                                <a class="btn btn-warning"
+                                                                    href="{{ asset('storage/tagihan/' . $tagihan->e_spt_image) }}"
+                                                                    target="_blank">
+                                                                    <i class="ik ik-arrow-down"></i>
+                                                                </a>
+                                                            </div>
+                                                            <input type="text" class="form-control" placeholder=""
+                                                                value="{{ $tagihan->e_spt }}" readonly>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    @endif
                                 </div>
 
 
@@ -603,7 +701,10 @@
                         </form>
                         <!-- ./col -->
                     </div>
-                    @if ($pkp == 'ya' && $tagihan->status == 'disetujui')
+                    @if (
+                        $pkp == 'ya' &&
+                            $tagihan->status == 'disetujui' &&
+                            auth()->user()->hasRole('rekanan'))
                         <form action="{{ route('tagihan.dokumen', $tagihan->id) }}" method="POST" role="form"
                             enctype="multipart/form-data">
                             {{ csrf_field() }}
@@ -614,6 +715,7 @@
                                     <div class="row">
                                         <div class="col-12">
                                             <h6>Upload Dokument Pajak</h6>
+                                            <br>
                                         </div>
                                         <div class="col-12">
                                             <div class="form-group">
@@ -623,15 +725,37 @@
                                                 </div>
                                                 <div>
                                                     <input type="text" name="no_faktur_pajak" id="No Faktur Pajak"
-                                                        placeholder="No Faktur Pajak " class="form-control" value="">
+                                                        placeholder="No Faktur Pajak " class="form-control"
+                                                        value="{{ $tagihan->no_faktur_pajak }}">
                                                 </div>
+                                                @if ($errors->has('no_faktur_pajak'))
+                                                    <div class=" container-fluid alert alert-warning alert-dismissible fade show"
+                                                        role="alert">
+                                                        {{ $errors->first('no_faktur_pajak') }}
+                                                        <button type="button" class="close" data-dismiss="alert"
+                                                            aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                @endif
                                                 <div class="">
                                                     <input type="file" value="no_faktur_pajak_image"
                                                         name="no_faktur_pajak_image" placeholder="" id=""
                                                         class="form-control">
                                                     <br>
+
                                                     <div id="preview_no_faktur_pajak_image"></div>
                                                 </div>
+                                                @if ($errors->has('no_faktur_pajak_image'))
+                                                    <div class=" container-fluid alert alert-warning alert-dismissible fade show"
+                                                        role="alert">
+                                                        {{ $errors->first('no_faktur_pajak_image') }}
+                                                        <button type="button" class="close" data-dismiss="alert"
+                                                            aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                @endif
                                             </div>
                                         </div>
                                         <div class="col-12">
@@ -641,14 +765,34 @@
                                                 </div>
                                                 <div>
                                                     <input type="text" name="e_billing" id="e_billing"
-                                                        placeholder="E-Billing " class="form-control" value="">
+                                                        placeholder="E-Billing " class="form-control"
+                                                        value="{{ $tagihan->e_billing }}">
+                                                    @if ($errors->has('e_billing'))
+                                                        <div class=" container-fluid alert alert-warning alert-dismissible fade show"
+                                                            role="alert">
+                                                            {{ $errors->first('e_billing') }}
+                                                            <button type="button" class="close" data-dismiss="alert"
+                                                                aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                    @endif
                                                 </div>
                                                 <div class="">
-                                                    <input type="file" value="e_billing_pajak_image"
-                                                        name="e_billing_pajak_image" placeholder=""
-                                                        id="e_billing_pajak_image" class="form-control">
+                                                    <input type="file" value="e_billing_image" name="e_billing_image"
+                                                        placeholder="" id="e_billing_image" class="form-control">
                                                     <br>
-                                                    <div id="preview_e_billing_pajak_image"></div>
+                                                    @if ($errors->has('e_billing_image'))
+                                                        <div class=" container-fluid alert alert-warning alert-dismissible fade show"
+                                                            role="alert">
+                                                            {{ $errors->first('e_billing_image') }}
+                                                            <button type="button" class="close" data-dismiss="alert"
+                                                                aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                    @endif
+                                                    <div id="preview_e_billing_image"></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -661,14 +805,34 @@
                                                 </div>
                                                 <div>
                                                     <input type="text" name="bukti_pembayaran" id="bukti_pembayaran"
-                                                        placeholder="Bukti Pembayaran" placeholder="e-spt "
-                                                        class="form-control" value="">
+                                                        placeholder="Bukti Pembayaran" placeholder="Bukti Pembayaran "
+                                                        class="form-control" value="{{ $tagihan->bukti_pembayaran }}">
+                                                    @if ($errors->has('bukti_pembayaran'))
+                                                        <div class=" container-fluid alert alert-warning alert-dismissible fade show"
+                                                            role="alert">
+                                                            {{ $errors->first('bukti_pembayaran') }}
+                                                            <button type="button" class="close" data-dismiss="alert"
+                                                                aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                    @endif
                                                 </div>
                                                 <div class="">
                                                     <input type="file" value="bukti_pembayaran_image"
                                                         name="bukti_pembayaran_image" placeholder=""
                                                         id="bukti_pembayaran_image" class="form-control">
                                                     <br>
+                                                    @if ($errors->has('bukti_pembayaran_image'))
+                                                        <div class=" container-fluid alert alert-warning alert-dismissible fade show"
+                                                            role="alert">
+                                                            {{ $errors->first('bukti_pembayaran_image') }}
+                                                            <button type="button" class="close" data-dismiss="alert"
+                                                                aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                    @endif
                                                     <div id="preview_bukti_pembayaran_image"></div>
                                                 </div>
                                             </div>
@@ -680,12 +844,32 @@
                                                 </div>
                                                 <div>
                                                     <input type="text" name="e_spt" id="e_spt" placeholder="e-spt "
-                                                        class="form-control" value="">
+                                                        class="form-control" value="{{ $tagihan->e_spt }}">
+                                                    @if ($errors->has('e_spt'))
+                                                        <div class=" container-fluid alert alert-warning alert-dismissible fade show"
+                                                            role="alert">
+                                                            {{ $errors->first('e_spt') }}
+                                                            <button type="button" class="close" data-dismiss="alert"
+                                                                aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                    @endif
                                                 </div>
                                                 <div class="">
                                                     <input type="file" value="e_spt_image" name="e_spt_image"
                                                         placeholder="" id="e_spt_image" class="form-control">
                                                     <br>
+                                                    @if ($errors->has('e_spt_image'))
+                                                        <div class=" container-fluid alert alert-warning alert-dismissible fade show"
+                                                            role="alert">
+                                                            {{ $errors->first('e_spt_image') }}
+                                                            <button type="button" class="close" data-dismiss="alert"
+                                                                aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                    @endif
                                                     <div id="preview_e_spt_image"></div>
                                                 </div>
                                             </div>

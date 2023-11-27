@@ -21,7 +21,7 @@ use Illuminate\Http\Request;
 use Excel;
 use Carbon\Carbon;
 use DB;
-
+use Storage;
 
 class TagihanController extends Controller
 {
@@ -1345,7 +1345,93 @@ class TagihanController extends Controller
 
     public function dokumen(Request $request, $id)
     {
-        return $request;
+
+        DB::beginTransaction();
+        $route = $this->route;
+        $data = $this->model()->find($id);
+        $nomor_tagihan = $data->nomor_tagihan;
+        $slug_nomor_tagihan = $data->slug;
+        $rekanan = $data->rekanan;
+
+        $no_faktur_pajak = $request->no_faktur_pajak;
+        $no_faktur_pajak_image = $request->no_faktur_pajak_image;
+        $e_billing = $request->e_billing;
+        $e_billing_image = $request->e_billing_image;
+        $bukti_pembayaran = $request->bukti_pembayaran;
+        $bukti_pembayaran_image = $request->bukti_pembayaran_image;
+        $e_spt = $request->e_spt;
+        $e_spt_image = $request->e_spt_image;
+        $messages = [
+            'required' => ':attribute tidak boleh kosong',
+            'unique' => ':attribute tidak boleh sama',
+            'same' => 'Password dan konfirmasi password harus sama',
+        ];
+
+        $this->validate(request(), [
+            'no_faktur_pajak' => 'required|unique:tagihan,no_faktur_pajak,' . $id,
+            'no_faktur_pajak_image' => 'required|mimes:jpeg,bmp,png,jpg,pdf',
+            'bukti_pembayaran' => 'required|unique:tagihan,bukti_pembayaran,' . $id,
+            'bukti_pembayaran_image' => 'required|mimes:jpeg,bmp,png,jpg,pdf',
+            'e_billing' => 'required|unique:tagihan,e_billing,' . $id,
+            'e_billing_image' => 'required|mimes:jpeg,bmp,png,jpg,pdf',
+            'e_spt' => 'required|unique:tagihan,e_spt,' . $id,
+            'e_spt_image' => 'required|mimes:jpeg,bmp,png,jpg,pdf',
+        ], $messages);
+
+
+
+
+        $data->no_faktur_pajak = $no_faktur_pajak;
+        // upload file no_faktur_pajak ke storage
+        if ($request->hasFile('no_faktur_pajak_image')) {
+            $file = $request->file('no_faktur_pajak_image');
+            $filename = $slug_nomor_tagihan . '.' . $file->getClientOriginalName();
+            // ganti nama file
+            $file->storeAs('public/' . $route . '/', $filename);
+            $data->no_faktur_pajak_image = $filename;
+        }
+
+        $data->bukti_pembayaran = $bukti_pembayaran;
+        // upload file bukti_pembayaran ke storage
+        if ($request->hasFile('bukti_pembayaran_image')) {
+            $file = $request->file('bukti_pembayaran_image');
+            $filename = $slug_nomor_tagihan . '.' . $file->getClientOriginalName();
+            // ganti nama file
+            $file->storeAs('public/' . $route . '/', $filename);
+            $data->bukti_pembayaran_image = $filename;
+        }
+
+        $data->e_billing = $e_billing;
+        // upload file e_billing ke storage
+        if ($request->hasFile('e_billing_image')) {
+            $file = $request->file('e_billing_image');
+            $filename = $slug_nomor_tagihan . '.' . $file->getClientOriginalName();
+            // ganti nama file
+            $file->storeAs('public/' . $route . '/', $filename);
+            $data->e_billing_image = $filename;
+        }
+
+        $data->e_spt = $e_spt;
+        // upload file e_spt ke storage
+        if ($request->hasFile('e_spt_image')) {
+            $file = $request->file('e_spt_image');
+            $filename = $slug_nomor_tagihan . '.' . $file->getClientOriginalName();
+            // ganti nama file
+            $file->storeAs('public/' . $route . '/', $filename);
+            $data->e_spt_image = $filename;
+        }
+
+        $data->save();
+
+        DB::commit();
+
+        return redirect()->route($this->route . '.index')->with('message', ucwords(str_replace('-', ' ', $this->route)) . " " . $nomor_tagihan . ' Berhasil Ditambahkan')->with('Class', 'success');
+        try {
+        } catch (\Throwable $th) {
+            DB::rollback();
+
+            return redirect()->route($this->route . '.index')->with('message', ucwords(str_replace('-', ' ', $this->route)) . ' gagal Ditambahkan')->with('Class', 'success');
+        }
     }
 
     public function model()
