@@ -1221,6 +1221,8 @@ class TagihanController extends Controller
 
         $preview = $tagihan->slug;
 
+        $logo = asset('img/logo.png');
+
         if ($word === "rekanan") {
             return view(
                 'tagihan.wordrekanan',
@@ -1253,6 +1255,7 @@ class TagihanController extends Controller
                     "direktur",
                     "total_lokasi",
                     "filename",
+                    "logo",
                     "bulan",
                     "tahun",
                     "preview",
@@ -1272,6 +1275,7 @@ class TagihanController extends Controller
                 "wilayah",
                 "singkatan",
                 "total_tagihan",
+                "logo",
                 "direktur",
                 "total_lokasi",
                 "filename",
