@@ -603,6 +603,16 @@ class TagihanController extends Controller
                 if (auth()->user()->hasRole('direktur-teknik')) {
                     $status = 'disetujui';
                 }
+
+                if (auth()->user()->hasRole('asisten-manajer-tata-usaha')) {
+                    $status = 'disetujui asmentu';
+                }
+                if (auth()->user()->hasRole('manajer-umum-dan-kesekretariatan')) {
+                    $status = 'disetujui mu';
+                }
+                if (auth()->user()->hasRole('direktur-umum')) {
+                    $status = 'disetujui dirum';
+                }
                 if (auth()->user()->hasRole('direktur-utama')) {
                     $status = 'disetujui dirut';
                 }
@@ -1220,8 +1230,6 @@ class TagihanController extends Controller
         $direktur = Karyawan::where('jabatan_id', $listJabatan)->first();
 
         $preview = $tagihan->slug;
-
-        $logo = asset('img/logo.png');
 
         if ($word === "rekanan") {
             return view(

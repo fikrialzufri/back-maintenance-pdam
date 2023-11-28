@@ -158,6 +158,9 @@ class Tagihan extends Model
             auth()->user()->hasRole('keuangan') ||
             auth()->user()->hasRole('staf-keuangan') ||
             auth()->user()->hasRole('manajer-pengendalian-kehilangan-air') ||
+            auth()->user()->hasRole('asisten-manajer-tata-usaha') ||
+            auth()->user()->hasRole('manajer-umum-dan-kesekretariatan') ||
+            auth()->user()->hasRole('direktur-umum') ||
             auth()->user()->hasRole('direktur-utama') ||
             auth()->user()->hasRole('manajer-perencanaan') || auth()->user()->hasRole('direktur-teknik')
         ) {
