@@ -380,10 +380,58 @@ class TagihanController extends Controller
             }
 
 
-            if (auth()->user()->hasRole('direktur-teknik')) {
+            if (auth()->user()->hasRole('asisten-manajer-tata-usaha')) {
 
                 // list jabatan
                 $listJabatan = Jabatan::where('slug', 'manajer-perencanaan')->pluck('id')->toArray();
+
+                // list karyawan bedasarkan jabatan
+                $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get()->pluck('user_id')->toArray();
+
+                $list_persetujuan = $query->whereHas('hasUserMany', function ($q) use ($listKaryawan) {
+                    $q->whereIn('tagihan_user.user_id', $listKaryawan);
+                })->count();
+
+                if ($list_persetujuan > 0) {
+                    $bntSetuju = false;
+                }
+            }
+            if (auth()->user()->hasRole('manajer-umum-dan-kesekretariatan')) {
+
+                // list jabatan
+                $listJabatan = Jabatan::where('slug', 'asisten-manajer-tata-usaha')->pluck('id')->toArray();
+
+                // list karyawan bedasarkan jabatan
+                $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get()->pluck('user_id')->toArray();
+
+                $list_persetujuan = $query->whereHas('hasUserMany', function ($q) use ($listKaryawan) {
+                    $q->whereIn('tagihan_user.user_id', $listKaryawan);
+                })->count();
+
+                if ($list_persetujuan > 0) {
+                    $bntSetuju = false;
+                }
+            }
+            if (auth()->user()->hasRole('direktur-umum')) {
+
+                // list jabatan
+                $listJabatan = Jabatan::where('slug', 'manajer-umum-dan-kesekretariatan')->pluck('id')->toArray();
+
+                // list karyawan bedasarkan jabatan
+                $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get()->pluck('user_id')->toArray();
+
+                $list_persetujuan = $query->whereHas('hasUserMany', function ($q) use ($listKaryawan) {
+                    $q->whereIn('tagihan_user.user_id', $listKaryawan);
+                })->count();
+
+                if ($list_persetujuan > 0) {
+                    $bntSetuju = false;
+                }
+            }
+            if (auth()->user()->hasRole('direktur-utama')) {
+
+                // list jabatan
+                $listJabatan = Jabatan::where('slug', 'direktur-umum')->pluck('id')->toArray();
 
                 // list karyawan bedasarkan jabatan
                 $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get()->pluck('user_id')->toArray();
