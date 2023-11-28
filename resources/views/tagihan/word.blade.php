@@ -166,10 +166,14 @@
                                             <span>{{ $item->jabatan }}</span>
                                             <br>
                                             @if ($item->url != null)
-                                                {!! QrCode::size(100)->generate($item->url) !!}
+                                                <img src="data:image/png;base64, {!! base64_encode(
+                                                    QrCode::format('png')->merge('https://sip.pdamsamarinda.id/img/logo-pdam.png', 0.5, true)->size(100)->generate($item->url),
+                                                ) !!} ">
                                             @else
                                                 @if ($item->tdd != null)
-                                                    {!! QrCode::size(100)->generate(url('tddkaryawan/' . $item->karyawan_id)) !!}
+                                                    <img src="data:image/png;base64, {!! base64_encode(
+                                                        QrCode::format('png')->merge('https://sip.pdamsamarinda.id/img/logo-pdam.png', 0.5, true)->size(100)->generate(url('tddkaryawan/' . $item->karyawan_id)),
+                                                    ) !!} ">
                                                 @endif
                                             @endif
                                             <br>
@@ -189,12 +193,12 @@
                                             @if ($direktur)
                                                 @if ($direktur->url)
                                                     <img src="data:image/png;base64, {!! base64_encode(
-                                                        QrCode::format('png')->merge('https://sip.pdamsamarinda.id/img/logo-pdam.png', 0.3, true)->size(100)->generate($direktur->url),
+                                                        QrCode::format('png')->merge('https://sip.pdamsamarinda.id/img/logo-pdam.png', 0.5, true)->size(100)->generate($direktur->url),
                                                     ) !!} ">
                                                 @else
                                                     @if ($direktur->tdd)
                                                         <img src="data:image/png;base64, {!! base64_encode(
-                                                            QrCode::format('png')->merge('https://sip.pdamsamarinda.id/img/logo-pdam.png', 0.3, true)->size(100)->generate(url('tddkaryawan/' . $direktur->id)),
+                                                            QrCode::format('png')->merge('https://sip.pdamsamarinda.id/img/logo-pdam.png', 0.5, true)->size(100)->generate(url('tddkaryawan/' . $direktur->id)),
                                                         ) !!} ">
                                                     @endif
                                                 @endif
