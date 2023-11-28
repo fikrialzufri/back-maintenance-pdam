@@ -188,10 +188,14 @@
                                             </p>
                                             @if ($direktur)
                                                 @if ($direktur->url)
-                                                    {!! QrCode::size(100)->generate($direktur->url) !!}
+                                                    <img src="data:image/png;base64, {!! base64_encode(
+                                                        QrCode::format('png')->merge('https://sip.pdamsamarinda.id/img/logo-pdam.png', 0.3, true)->size(100)->generate($direktur->url),
+                                                    ) !!} ">
                                                 @else
                                                     @if ($direktur->tdd)
-                                                        {!! QrCode::size(100)->generate(url('tddkaryawan/' . $direktur->id)) !!}
+                                                        <img src="data:image/png;base64, {!! base64_encode(
+                                                            QrCode::format('png')->merge('https://sip.pdamsamarinda.id/img/logo-pdam.png', 0.3, true)->size(100)->generate(url('tddkaryawan/' . $direktur->id)),
+                                                        ) !!} ">
                                                     @endif
                                                 @endif
                                             @endif
