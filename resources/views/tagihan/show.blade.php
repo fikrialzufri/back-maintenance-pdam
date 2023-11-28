@@ -515,7 +515,7 @@
 
                                                     <div class="p-2">
                                                         <a href="{{ route('tagihan.word') }}?id={{ $tagihan->id }}&word=rekanan"
-                                                            target="_blank" class="btn btn-danger"><span
+                                                            target="_blank" class="btn btn-primary"><span
                                                                 class="nav-icon fa fa-file-word" aria-hidden="true"></span>
                                                             Privew Tagihan</a>
                                                     </div>
@@ -534,7 +534,7 @@
                                                             {{-- @if ($tagihan->status === 'disetujui dirut') --}}
                                                             @if ($tagihan->status === 'disetujui' || $tagihan->status === 'dibayar' || $tagihan->status === 'disetujui dirut')
                                                                 <a href="{{ route('tagihan.word') }}?id={{ $tagihan->id }}&word=bapp"
-                                                                    target="_blank" class="btn btn-warning"><span
+                                                                    target="_blank" class="btn btn-success"><span
                                                                         class="nav-icon fa fa-file-word"
                                                                         aria-hidden="true"></span>
                                                                     Privew Tagihan BAPP</a>
