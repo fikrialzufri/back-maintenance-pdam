@@ -168,14 +168,16 @@
                                             </p>
                                             @if ($dirut)
                                                 @if ($dirut->url)
-                                                    <img src="data:image/png;base64, {!! base64_encode(
+                                                    {{-- <img src="data:image/png;base64, {!! base64_encode(
                                                         QrCode::format('png')->size(100)->generate($dirut->url),
-                                                    ) !!} ">
+                                                    ) !!} "> --}}
+                                                    {!! QrCode::size(100)->generate($dirut->url) !!}
                                                 @else
                                                     @if ($dirut->tdd)
-                                                        <img src="data:image/png;base64, {!! base64_encode(
+                                                        {{-- <img src="data:image/png;base64, {!! base64_encode(
                                                             QrCode::format('png')->size(100)->generate(url('tddkaryawan/' . $dirut->id)),
-                                                        ) !!} ">
+                                                        ) !!} "> --}}
+                                                        {!! QrCode::size(100)->generate(url('tddkaryawan/' . $dirut->id)) !!}
                                                     @endif
                                                 @endif
                                             @endif
