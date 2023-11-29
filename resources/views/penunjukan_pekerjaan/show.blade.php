@@ -376,7 +376,7 @@
                                     <div class="row">
 
                                         <div class="col-12">
-                                            <h3 class="card-title">Daftar Pekerjaan</h3>
+                                            <h3 class="card-title">Daftar Pekerjaan {{ $pekerjaanUtama->status }}</h3>
                                             <hr>
                                         </div>
                                         @if ($pengawas === true && $pekerjaanUtama->status === 'approve manajer')
@@ -584,6 +584,7 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
+
                                                     @if (isset($daftarPekerjaan->hasItem))
                                                         @forelse ($daftarPekerjaan->hasItem as $key => $pekerjaan)
                                                             <tr id="listPekerjaan_{{ $pekerjaan->pivot->item_id }}"
@@ -637,10 +638,10 @@
                                                                 @endif
 
                                                                 @if ($pekerjaanUtama->status === 'selesai koreksi' || $pekerjaanUtama->status === 'diadjust')
-                                                                    <td>Rp. {{ format_uang($pekerjaan->pivot->harga) }}</td>
+                                                                    <td></td>
                                                                     <td>{{ $pekerjaan->pivot->keterangan }}</td>
                                                                     <td>
-                                                                        Rp.{{ format_uang($pekerjaan->pivot->qty * $pekerjaan->pivot->harga) }}
+
                                                                     </td>
                                                                 @endif
 
@@ -682,15 +683,13 @@
 
                                                                         @if ($pekerjaanUtama->status === 'selesai koreksi' || $pekerjaanUtama->status === 'diadjust')
                                                                             <td>
-                                                                                Rp.
-                                                                                {{ format_uang($daftarPekerjaan->hasItemPengawas[$key]->pivot->harga) }}
+
                                                                             </td>
                                                                             <td>
                                                                                 {{ $daftarPekerjaan->hasItemPengawas[$key]->pivot->keterangan }}
                                                                             </td>
                                                                             <td>
-                                                                                Rp.
-                                                                                {{ format_uang($daftarPekerjaan->hasItemPengawas[$key]->pivot->qty * $daftarPekerjaan->hasItemPengawas[$key]->pivot->harga) }}
+
                                                                             </td>
                                                                         @endif
                                                                         @if (
@@ -861,14 +860,12 @@
                                                                         <td>
                                                                             {{ str_replace('.', ',', $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty) }}
                                                                         </td>
-                                                                        <td>Rp.
-                                                                            {{ format_uang($daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->harga) }}
+                                                                        <td>
                                                                         </td>
                                                                         <td>
                                                                             {{ $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->keterangan }}
                                                                         </td>
-                                                                        <td>Rp.
-                                                                            {{ format_uang($daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty * $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->harga) }}
+                                                                        <td>
                                                                         </td>
                                                                     @endif
                                                                 </tr>
@@ -901,14 +898,12 @@
                                                                         <td>
                                                                             {{ str_replace('.', ',', $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty) }}
                                                                         </td>
-                                                                        <td>Rp.
-                                                                            {{ format_uang($daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->harga) }}
+                                                                        <td>
                                                                         </td>
                                                                         <td>
                                                                             {{ $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->keterangan }}
                                                                         </td>
-                                                                        <td>Rp.
-                                                                            {{ format_uang($daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty * $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->harga) }}
+                                                                        <td>
                                                                         </td>
                                                                     @endif
                                                                 </tr>
@@ -1258,18 +1253,16 @@
                                                                     @endif
                                                                 </td>
                                                                 @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
-                                                                    <td>Rp. {{ format_uang($galian->harga_satuan) }}</td>
+                                                                    <td></td>
                                                                 @endif
                                                                 <td>{{ $galian->keterangan }}</td>
                                                                 @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
-                                                                    <td>Rp.
-                                                                        {{ format_uang($galian->volume_rekanan * $galian->harga_satuan) }}
+                                                                    <td>
                                                                     </td>
                                                                 @endif
                                                                 @if ($pekerjaanUtama->status === 'selesai koreksi' || $pekerjaanUtama->status === 'diadjust')
-                                                                    <td>Rp. {{ format_uang($galian->harga_satuan) }}</td>
-                                                                    <td>Rp.
-                                                                        {{ format_uang($galian->volume_rekanan * $galian->harga_satuan) }}
+                                                                    <td></td>
+                                                                    <td>
                                                                     </td>
                                                                 @endif
 
@@ -1335,8 +1328,7 @@
                                                                         </td>
                                                                     @endif
                                                                     @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
-                                                                        <td>Rp.
-                                                                            {{ format_uang($galian->galian_pengawas_harga_satuan) }}
+                                                                        <td>
                                                                         </td>
                                                                         <td>
                                                                             {{ $galian->galian_pengawas_keterangan }}
@@ -1364,11 +1356,9 @@
                                                                             {{ $galian->galian_pengawas_keterangan }}
                                                                         </td>
                                                                         <td>
-                                                                            Rp.
-                                                                            {{ format_uang($galian->galian_pengawas_harga_satuan) }}
+
                                                                         </td>
-                                                                        <td>Rp.
-                                                                            {{ format_uang($galian->galian_pengawas_harga_satuan * $galian->volume) }}
+                                                                        <td>
                                                                         </td>
                                                                     @endif
                                                                 @endif
@@ -1473,14 +1463,12 @@
                                                                         @endif
                                                                     </td>
                                                                     @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
-                                                                        <td>Rp.
-                                                                            {{ format_uang($galian->galian_asmen_pengawas_harga_satuan) }}
+                                                                        <td>
                                                                         </td>
                                                                         <td>
                                                                             {{ $galian->galian_asmen_pengawas_keterangan }}
                                                                         </td>
-                                                                        <td>Rp.
-                                                                            {{ format_uang($galian->galian_asmen_pengawas_total) }}
+                                                                        <td>
                                                                         </td>
                                                                     @endif
                                                                     @if ($perencaan == false && $pekerjaanUtama->status === 'dikoreksi')
@@ -1498,11 +1486,9 @@
                                                                             {{ $galian->galian_asmen_pengawas_keterangan }}
                                                                         </td>
                                                                         <td>
-                                                                            Rp.
-                                                                            {{ format_uang($galian->galian_asmen_pengawas_harga_satuan) }}
+
                                                                         </td>
-                                                                        <td>Rp.
-                                                                            {{ format_uang($galian->galian_asmen_pengawas_total) }}
+                                                                        <td>
                                                                         </td>
                                                                     @endif
                                                                 </tr>
@@ -1581,12 +1567,10 @@
                                                                         {{ $galian->galian_asmen_pengawas_keterangan }}
                                                                     </td>
                                                                     <td>
-                                                                        Rp.
-                                                                        {{ format_uang($galian->galian_asmen_pengawas_harga_satuan) }}
+
                                                                     </td>
                                                                     <td>
-                                                                        Rp.
-                                                                        {{ format_uang($galian->volume_asmen * $galian->galian_asmen_pengawas_harga_satuan) }}
+
                                                                     </td>
 
 
@@ -1644,13 +1628,11 @@
                                                                         {{ $galian->galian_asmen_pengawas_keterangan }}
                                                                     </td>
                                                                     <td>
-                                                                        Rp.
-                                                                        {{ format_uang($galian->galian_asmen_pengawas_harga_satuan) }}
+
                                                                     </td>
 
                                                                     <td>
-                                                                        Rp.
-                                                                        {{ format_uang($galian->galian_asmen_pengawas_harga_satuan * $galian->volume_asmen) }}
+
                                                                     </td>
 
                                                                 </tr>
