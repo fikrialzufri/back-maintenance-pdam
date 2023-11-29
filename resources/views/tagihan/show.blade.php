@@ -147,7 +147,7 @@
                                     <h6>List Persetujuan Tagihan</h6>
                                     <ul>
                                         @forelse ($list_persetujuan as $item)
-                                            @if ($item->jabatan == 'Direktur Teknk')
+                                            @if ($item->jabatan == 'Direktur Teknik')
                                                 <li>
                                                     <div class="bullet bg-primary"></div>
                                                     <div class="time">{{ $item->tanggal_disetujui }}</div>
