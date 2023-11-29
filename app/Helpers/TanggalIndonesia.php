@@ -57,14 +57,14 @@ function tanggal_indonesia_terbilang($tgl, $tampil_hari = true, $koma = true)
     if ($tampil_hari) {
         $urutan_hari = date('w', mktime(0, 0, 0, substr($tgl, 5, 2), $tanggal, $tahun));
         $hari = $nama_hari[$urutan_hari];
-        $text .= $hari . " tanggal ";
+        $text .= ucwords($hari) . " tanggal ";
     }
     if ($koma === true) {
         $text .= ", ";
     } else {
         $text .= " ";
     }
-    $text .= terbilang($tanggal) . " bulan " . $bulan . " tahun " . $tahun;
+    $text .= ucwords(terbilang($tanggal)) . " bulan " . ucwords($bulan) . " tahun " . ucwords(terbilang($tahun));
     return $text;
 }
 function capital_tanggal_indonesia($tgl, $tampil_hari = true)
