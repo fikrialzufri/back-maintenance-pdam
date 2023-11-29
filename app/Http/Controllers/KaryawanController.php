@@ -28,13 +28,14 @@ class KaryawanController extends Controller
     {
         return [
             [
-                'name' => 'nama',
-                'alias' => 'Nama Karyawan',
-            ],
-            [
                 'name' => 'nama_jabatan',
                 'alias' => 'Jabatan',
             ],
+            [
+                'name' => 'nama',
+                'alias' => 'Nama Karyawan',
+            ],
+
             [
                 'name' => 'divisi',
                 'alias' => 'Divisi',
