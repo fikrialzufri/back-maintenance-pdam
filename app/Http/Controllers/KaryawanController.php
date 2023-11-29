@@ -116,7 +116,7 @@ class KaryawanController extends Controller
             [
                 'name' => 'pekerjaan',
                 'input' => 'radio',
-                'alias' => 'Melakukan Pekerjaan Galian',
+                'alias' => 'Melakukan Pekerjaan & Perbaikan',
                 'value' => ['ya', 'tidak'],
                 'default' => 'tidak',
                 'multiple' => true,
