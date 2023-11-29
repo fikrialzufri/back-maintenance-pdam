@@ -376,7 +376,7 @@
                                     <div class="row">
 
                                         <div class="col-12">
-                                            <h3 class="card-title">Daftar Pekerjaan {{ $pekerjaanUtama->status }}</h3>
+                                            <h3 class="card-title">Daftar Pekerjaan</h3>
                                             <hr>
                                         </div>
                                         @if ($pengawas === true && $pekerjaanUtama->status === 'approve manajer')
