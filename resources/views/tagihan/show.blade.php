@@ -147,14 +147,25 @@
                                     <h6>List Persetujuan Tagihan</h6>
                                     <ul>
                                         @forelse ($list_persetujuan as $item)
-                                            <li>
-                                                <div class="bullet bg-primary"></div>
-                                                <div class="time">{{ $item->tanggal_disetujui }}</div>
-                                                <div class="desc">
-                                                    <h3>{{ $item->jabatan }}</h3>
-                                                    <h4>{{ $item->nama }}</h4>
-                                                </div>
-                                            </li>
+                                            @if ($item->jabatan == 'Direktur Teknk')
+                                                <li>
+                                                    <div class="bullet bg-primary"></div>
+                                                    <div class="time">{{ $item->tanggal_disetujui }}</div>
+                                                    <div class="desc">
+                                                        <h3>Plt. {{ $item->jabatan }}</h3>
+                                                        <h4>{{ $item->nama }}</h4>
+                                                    </div>
+                                                </li>
+                                            @else
+                                                <li>
+                                                    <div class="bullet bg-primary"></div>
+                                                    <div class="time">{{ $item->tanggal_disetujui }}</div>
+                                                    <div class="desc">
+                                                        <h3>{{ $item->jabatan }}</h3>
+                                                        <h4>{{ $item->nama }}</h4>
+                                                    </div>
+                                                </li>
+                                            @endif
                                         @empty
                                         @endforelse
 
