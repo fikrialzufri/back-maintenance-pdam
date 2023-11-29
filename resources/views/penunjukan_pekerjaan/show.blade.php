@@ -85,7 +85,8 @@
                                                     <div class="bullet bg-primary"></div>
                                                     <div class="time">{{ $item->tanggal_disetujui }}</div>
                                                     <div class="desc">
-                                                        <p>{{ $item->nama }} - {{ $item->jabatan }}</p>
+                                                        <h3> {{ $item->jabatan }}</h3>
+                                                        <h4> {{ $item->nama }}</h4>
 
                                                     </div>
                                                 </li>
@@ -216,7 +217,9 @@
                                                                     @foreach ($rekanan as $rek)
                                                                         <option value="{{ $rek->id }}"
                                                                             {{ old('rekanan_id') == $rek->id ? 'selected' : '' }}>
-                                                                            {{ $rek->nama }} | {{ $rek->nama_penangung_jawab }} | {{ $rek->opr }}
+                                                                            {{ $rek->nama }} |
+                                                                            {{ $rek->nama_penangung_jawab }} |
+                                                                            {{ $rek->opr }}
                                                                         </option>
                                                                     @endforeach
                                                                     @foreach ($karyawanPekerja as $kary)
@@ -266,7 +269,8 @@
                                                                 @foreach ($rekanan as $rek)
                                                                     <option value="{{ $rek->id }}"
                                                                         {{ old('rekanan_id') == $rek->id ? 'selected' : '' }}>
-                                                                        {{ $rek->nama }} | {{ $rek->nama_penangung_jawab }} | {{ $rek->opr }}
+                                                                        {{ $rek->nama }} | {{ $rek->nama_penangung_jawab }}
+                                                                        | {{ $rek->opr }}
                                                                     </option>
                                                                 @endforeach
                                                                 @foreach ($karyawanPekerja as $kary)
