@@ -151,8 +151,8 @@
                                                 <div class="bullet bg-primary"></div>
                                                 <div class="time">{{ $item->tanggal_disetujui }}</div>
                                                 <div class="desc">
-                                                    <h3>{{ $item->nama }}</h3>
-                                                    <h4>{{ $item->jabatan }}</h4>
+                                                    <h3>{{ $item->jabatan }}</h3>
+                                                    <h4>{{ $item->nama }}</h4>
                                                 </div>
                                             </li>
                                         @empty

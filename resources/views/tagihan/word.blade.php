@@ -195,13 +195,13 @@
                                             @if ($direktur)
                                                 @if ($direktur->url)
                                                     <img src="data:image/png;base64, {!! base64_encode(
-                                                        QrCode::format('png')->merge('https://sip.pdamsamarinda.id/img/logo-pdam.png', 0.3, true)->size(100)->generate($direktur->url),
+                                                        QrCode::format('png')->merge('https://sip.pdamsamarinda.id/img/logo-pdam.png', 0.6, true)->size(100)->generate($direktur->url),
                                                     ) !!} ">
                                                     {{-- {!! QrCode::size(100)->generate(url('tddkaryawan/' . $direktur->url)) !!} --}}
                                                 @else
                                                     @if ($direktur->tdd)
                                                         <img src="data:image/png;base64, {!! base64_encode(
-                                                            QrCode::format('png')->size(100)->merge('https://sip.pdamsamarinda.id/img/logo-pdam.png', 0.3, true)->generate(url('tddkaryawan/' . $direktur->id)),
+                                                            QrCode::format('png')->size(100)->merge('https://sip.pdamsamarinda.id/img/logo-pdam.png', 0.6, true)->generate(url('tddkaryawan/' . $direktur->id)),
                                                         ) !!} ">
                                                         {{-- {!! QrCode::size(100)->generate(url('tddkaryawan/' . $direktur->id)) !!} --}}
                                                     @endif
