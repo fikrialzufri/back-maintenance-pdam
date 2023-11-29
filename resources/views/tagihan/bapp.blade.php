@@ -105,7 +105,7 @@
                                 <p style='font-size: 20px; text-align: justify;'>
                                     <span style=''>Pada hari ini, {{ $now }} telah diadakan penyerahan
                                         pekerjaan service kebocoran pipa periode bulan {{ $bulan }} tahun
-                                        {{ date('Y') }} di wilayah {{ $wilayah }} sebanyak {{ $total_lokasi }}
+                                        {{ $tahun }} di wilayah {{ $wilayah }} sebanyak {{ $total_lokasi }}
                                         lokasi. Dengan jumlah tagihan sebesar Rp{{ pembulatan($total_tagihan) }},00
                                         ({{ ltrim(terbilang(ceil($total_tagihan) - substr(ceil($total_tagihan), -3))) }}rupiah).
                                         Pekerjaan tersebut dilaksanakan oleh :
