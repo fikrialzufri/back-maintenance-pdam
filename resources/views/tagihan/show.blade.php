@@ -462,7 +462,8 @@
                                                             anggaran</label>
                                                     </div>
                                                     <div>
-                                                        <input type="text" name="kode_anggaran" placeholder="Kode anggaran"
+                                                        <input type="text" name="kode_anggaran"
+                                                            placeholder="Kode anggaran"
                                                             class="form-control  {{ $errors->has('kode_anggaran') ? 'form-control is-invalid' : 'form-control' }}"
                                                             value="{{ old('kode_anggaran') }}" required>
                                                     </div>
@@ -568,7 +569,7 @@
                                                     <div class="p-2">
                                                         <button class="btn btn-primary" id="word-export" type="button"><span
                                                                 class="nav-icon fa fa-file-pdf" aria-hidden="true"></span>
-                                                            Print Surat Berita Acara</button>
+                                                            Print Detail Tagihan</button>
                                                     </div>
                                                     <div class="p-2">
                                                         <a href="{{ route('tagihan.word') }}?id={{ $tagihan->id }}&word=rekanan"
@@ -1069,7 +1070,8 @@
             }
 
             $('#word-export').click(function() {
-                createPdf()
+                createPdf();
+                console.log("apa");
             });
 
             window.onafterprint = function() {
