@@ -526,7 +526,7 @@
                                     @if (auth()->user()->hasRole('asisten-manajer-tata-usaha'))
                                     @endif
 
-                                    @if (auth()->user()->hasRole('asisten-manajer-anggaran') && $tagihan->status === 'disetujui dirut')
+                                    @if (auth()->user()->hasRole('asisten-manajer-perencanaan-keuangan') && $tagihan->status === 'disetujui dirut')
                                         <div class="row mb-5">
                                             <div class="col-12">
                                                 <div>

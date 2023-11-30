@@ -469,7 +469,7 @@ class TagihanController extends Controller
                     $bntSetuju = false;
                 }
             }
-            if (auth()->user()->hasRole('asisten-manajer-anggaran')) {
+            if (auth()->user()->hasRole('asisten-manajer-perencanaan-keuangan')) {
 
                 // list jabatan
                 $listJabatan = Jabatan::where('slug', 'direktur-utama')->pluck('id')->toArray();
@@ -488,7 +488,7 @@ class TagihanController extends Controller
             if (auth()->user()->hasRole('asisten-manajer-akuntansi')) {
 
                 // list jabatan
-                $listJabatan = Jabatan::where('slug', 'asisten-manajer-anggaran')->pluck('id')->toArray();
+                $listJabatan = Jabatan::where('slug', 'asisten-manajer-perencanaan-keuangan')->pluck('id')->toArray();
 
                 // list karyawan bedasarkan jabatan
                 $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get()->pluck('user_id')->toArray();
@@ -728,7 +728,7 @@ class TagihanController extends Controller
                     $status = 'disetujui dirut';
                 }
 
-                if (auth()->user()->hasRole('asisten-manajer-anggaran')) {
+                if (auth()->user()->hasRole('asisten-manajer-perencanaan-keuangan')) {
                     $status = 'disetujui asmenanggaran';
                     $data->kode_anggaran = $request->kode_anggaran;
                 }
