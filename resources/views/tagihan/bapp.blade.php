@@ -81,7 +81,10 @@
                                     <br>
                                     <strong>
                                         <u> Nomor :
-                                            672.2/{{ $tagihan->nomor_tagihan }}/{{ getRomawi($tagihan->list_persetujuan_direktur_teknik['created_at']->format('m')) }}/{{ $tagihan->list_persetujuan_direktur_teknik['created_at']->format('Y') }}
+                                            672.2/{{ $tagihan->nomor_tagihan }}/
+                                            @if (isset($tagihan->list_persetujuan_direktur_utama['created_at']))
+                                                {{ getRomawi($tagihan->list_persetujuan_direktur_utama['created_at']->format('m')) }}/{{ $tagihan->list_persetujuan_direktur_utama['created_at']->format('Y') }}
+                                            @endif
                                         </u>
                                     </strong>
                                     <br>
