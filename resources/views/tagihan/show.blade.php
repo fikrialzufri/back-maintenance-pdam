@@ -540,7 +540,7 @@
                                                                     target="_blank" class="btn btn-success"><span
                                                                         class="nav-icon fa fa-file-word"
                                                                         aria-hidden="true"></span>
-                                                                    Privew Tagihan BAPPB</a>
+                                                                    Privew Tagihan BAPP</a>
                                                             @endif
                                                         </div>
                                                         <div class="p-2">

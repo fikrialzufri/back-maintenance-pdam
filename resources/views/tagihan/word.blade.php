@@ -178,8 +178,6 @@
                                                     {!! QrCode::size(100)->generate(url('tddkaryawan/' . $item->karyawan_id)) !!}
                                                 @endif
                                             @endif
-                                            <br>
-                                            <span>{{ ucfirst($item->nama) }}</span>
                                         @endif
                                     @empty
                                     @endforelse
@@ -189,7 +187,7 @@
                                 <span style=' font-size: 20px;'>
                                     @forelse ($tagihan->list_persetujuan as $index => $item)
                                         @if ($item->jabatan === 'Direktur Teknik')
-                                            <p style=' font-size: 20px;'> Mengetahui, <br> {{ $direktur->nama }}
+                                            <p style=' font-size: 20px;'> Mengetahui, <br> Plt. {{ $item->jabatan }}
                                                 <br> Perumdam Tirta Kencana Kota Samarinda
                                             </p>
                                             @if ($direktur)

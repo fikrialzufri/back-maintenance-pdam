@@ -316,6 +316,14 @@ class TagihanController extends Controller
 
             if (isset($tagihan->hasPelaksanaanPekerjaan)) {
                 $PelaksanaanPekerjaan = $tagihan->hasPelaksanaanPekerjaan();
+                $tanggalSelesai = $PelaksanaanPekerjaan->pluck('tanggal_selesai')->toArray();;
+                $tanggalPertama = min(array_map(function ($item) {
+                    return $item;
+                }, $tanggalSelesai));
+                $tanggalAkhir = min(array_map(function ($item) {
+                    return $item;
+                }, $tanggalSelesai));
+
                 if ($PelaksanaanPekerjaan) {
                     $pelaksanaan = $PelaksanaanPekerjaan->pluck('id')->toArray();
                     $aduanId = $PelaksanaanPekerjaan->pluck('aduan_id')->toArray();
@@ -1209,7 +1217,27 @@ class TagihanController extends Controller
         $nowRekanan = '';
         $tanggal = '';
         $tanggalDirut = '';
-        if ($tagihan->list_persetujuan_direktur_teknik['created_at']) {
+        $bulan = bulan_indonesia(Carbon::parse($tagihan->tanggal_adjust));
+        if ($tagihan->hasPelaksanaanPekerjaan()) {
+            $PelaksanaanPekerjaan = $tagihan->hasPelaksanaanPekerjaan();
+            $tanggalSelesai = $PelaksanaanPekerjaan->pluck('tanggal_selesai')->toArray();;
+            $tanggalPertama = min(array_map(function ($item) {
+                return $item;
+            }, $tanggalSelesai));
+            $tanggalAkhir = max(array_map(function ($item) {
+                return $item;
+            }, $tanggalSelesai));
+
+            $bulanAwal = bulan_indonesia(Carbon::parse($tanggalPertama));
+            $bulanAkhir = bulan_indonesia(Carbon::parse($tanggalAkhir));
+
+            if ($bulanAwal == $bulanAkhir) {
+                $bulan = $bulanAwal;
+            } else {
+                $bulan = $bulanAwal . ' s/d ' . $bulanAkhir;
+            }
+        }
+        if (isset($tagihan->list_persetujuan_direktur_teknik['created_at'])) {
             $tanggal = $tagihan->list_persetujuan_direktur_teknik['created_at'];
             $now = tanggal_indonesia_terbilang($tanggal, true, false);
             $nowRekanan = tanggal_indonesia($tanggal, false, false);
@@ -1257,7 +1285,7 @@ class TagihanController extends Controller
 
         $filename = "Tagihan Rekenan " . $tagihan->rekanan . " Nomor " . $tagihan->nomor_tagihan_setujuh;
         $title = "Tagihan : " . $tagihan->nomor_tagihan_setujuh;
-        $bulan = bulan_indonesia(Carbon::parse($tagihan->tanggal_adjust));
+
         $tahun = tahun_indonesia(Carbon::parse($tagihan->tanggal_adjust));
 
         $total = $tagihan->tagihan + $tagihan->galian;

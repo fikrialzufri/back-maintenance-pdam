@@ -163,7 +163,7 @@
 
                                     @forelse ($tagihan->list_persetujuan as $index => $dirut)
                                         @if ($dirut->jabatan === 'Direktur Utama')
-                                            <p style=' font-size: 20px;'> Mengetahui, <br> {{ $dirut->nama }}
+                                            <p style=' font-size: 20px;'> Mengetahui, <br> {{ $dirut->jabatan }}
                                                 <br> Perumdam Tirta Kencana Kota Samarinda
                                             </p>
                                             @if ($dirut)
