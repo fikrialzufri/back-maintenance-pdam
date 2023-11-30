@@ -584,16 +584,24 @@
                                     @endif
                                     @if ($bntSetuju === false)
                                         <div class="row">
-                                            <div class="col-12 mt-30">
-                                                <div>
-                                                    @if ($keuangan === true)
-                                                        <button type="submit" class="btn btn-primary">Simpan
-                                                            Pembayaran</button>
-                                                    @else
-                                                        <button type="submit" class="btn btn-primary" id="btn_setujui"
-                                                            @if (auth()->user()->hasRole('asisten-manajer-tata-usaha')) disabled @endif>Setujui
-                                                            Tagihan</button>
-                                                    @endif
+                                            <div class="col-12">
+
+                                                <div class="d-flex flex-row">
+                                                    <div class="p-2">
+                                                        <button class="btn btn-primary" id="word-export" type="button"><span
+                                                                class="nav-icon fa fa-file-pdf" aria-hidden="true"></span>
+                                                            Print Detail Tagihan</button>
+                                                    </div>
+                                                    <div class="p-2">
+                                                        @if ($keuangan === true)
+                                                            <button type="submit" class="btn btn-primary">Simpan
+                                                                Pembayaran</button>
+                                                        @else
+                                                            <button type="submit" class="btn btn-primary" id="btn_setujui"
+                                                                @if (auth()->user()->hasRole('asisten-manajer-tata-usaha')) disabled @endif>Setujui
+                                                                Tagihan</button>
+                                                        @endif
+                                                    </div>
                                                 </div>
                                             </div>
 
@@ -611,11 +619,7 @@
                                         @if ($tagihan)
                                             <div class="col-12">
                                                 <div class="d-flex flex-row">
-                                                    <div class="p-2">
-                                                        <button class="btn btn-primary" id="word-export" type="button"><span
-                                                                class="nav-icon fa fa-file-pdf" aria-hidden="true"></span>
-                                                            Print Detail Tagihan</button>
-                                                    </div>
+
                                                     <div class="p-2">
                                                         <a href="{{ route('tagihan.word') }}?id={{ $tagihan->id }}&word=rekanan"
                                                             target="_blank" class="btn btn-primary"><span
