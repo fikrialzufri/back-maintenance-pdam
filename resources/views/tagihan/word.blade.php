@@ -224,8 +224,8 @@
         </div><!-- /.container-fluid -->
     </div><!-- /.container-fluid -->
     <div class="card-footer">
-        <btn class="btn btn-primary" id="word-export"><span class="nav-icon fa fa-file-pdf" aria-hidden="true"></span>
-            Print Surat Berita Acara</btn>
+        <button class="btn btn-primary" id="word-export"><span class="nav-icon fa fa-file-pdf" aria-hidden="true"></span>
+            Print Surat Berita Acara</button>
     </div>
 @stop
 

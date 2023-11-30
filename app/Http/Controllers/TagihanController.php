@@ -468,6 +468,54 @@ class TagihanController extends Controller
                     $bntSetuju = false;
                 }
             }
+            if (auth()->user()->hasRole('asisten-manajer-anggaran')) {
+
+                // list jabatan
+                $listJabatan = Jabatan::where('slug', 'direktur-utama')->pluck('id')->toArray();
+
+                // list karyawan bedasarkan jabatan
+                $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get()->pluck('user_id')->toArray();
+
+                $list_persetujuan = $query->whereHas('hasUserMany', function ($q) use ($listKaryawan) {
+                    $q->whereIn('tagihan_user.user_id', $listKaryawan);
+                })->count();
+
+                if ($list_persetujuan > 0) {
+                    $bntSetuju = false;
+                }
+            }
+            if (auth()->user()->hasRole('asisten-manajer-akuntansi')) {
+
+                // list jabatan
+                $listJabatan = Jabatan::where('slug', 'asisten-manajer-anggaran')->pluck('id')->toArray();
+
+                // list karyawan bedasarkan jabatan
+                $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get()->pluck('user_id')->toArray();
+
+                $list_persetujuan = $query->whereHas('hasUserMany', function ($q) use ($listKaryawan) {
+                    $q->whereIn('tagihan_user.user_id', $listKaryawan);
+                })->count();
+
+                if ($list_persetujuan > 0) {
+                    $bntSetuju = false;
+                }
+            }
+            if (auth()->user()->hasRole('manajer-keuangan')) {
+
+                // list jabatan
+                $listJabatan = Jabatan::where('slug', 'asisten-manajer-akuntansi')->pluck('id')->toArray();
+
+                // list karyawan bedasarkan jabatan
+                $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get()->pluck('user_id')->toArray();
+
+                $list_persetujuan = $query->whereHas('hasUserMany', function ($q) use ($listKaryawan) {
+                    $q->whereIn('tagihan_user.user_id', $listKaryawan);
+                })->count();
+
+                if ($list_persetujuan > 0) {
+                    $bntSetuju = false;
+                }
+            }
 
 
             if (auth()->user()->hasRole('keuangan')) {
@@ -673,20 +721,34 @@ class TagihanController extends Controller
                 if (auth()->user()->hasRole('direktur-utama')) {
                     $status = 'disetujui dirut';
                 }
-                if (auth()->user()->hasRole('keuangan')) {
-                    $status = 'dibayar';
+                // if (auth()->user()->hasRole('keuangan')) {
+                //     $status = 'dibayar';
+                //     $data->kode_vocher = $request->kode_voucher;
+                //     $data->total_bayar = str_replace(".", "", $request->total_bayar);
+                //     $message = 'Berhasil Membayar Tagihan : ' . $data->nomor_tagihan_setujuh;
+                //     $title = "Tagihan telah dibayar";
+                //     $body = "Nomor Tagihan " . $data->nomor_tagihan_setujuh . " telah disetujui oleh " . $namakaryawan;
+                //     $modul = "tagihan";
+                // }
+                if (auth()->user()->hasRole('asisten-manajer-anggaran')) {
+                    $status = 'disetujui asmenanggaran';
+                    $data->kode_anggaran = $request->kode_anggaran;
+                    $message = 'Berhasil Membayar Tagihan : ' . $data->nomor_tagihan_setujuh;
+                    $title = "Tagihan telah dibayar";
+                    $body = "Nomor Tagihan " . $data->nomor_tagihan_setujuh . " telah disetujui oleh " . $namakaryawan;
+                    $modul = "tagihan";
+                }
+                if (auth()->user()->hasRole('asisten-manajer-akuntansi')) {
+                    $status = 'disetujui asmenakuntan';
                     $data->kode_vocher = $request->kode_voucher;
                     $data->total_bayar = str_replace(".", "", $request->total_bayar);
                     $message = 'Berhasil Membayar Tagihan : ' . $data->nomor_tagihan_setujuh;
                     $title = "Tagihan telah dibayar";
                     $body = "Nomor Tagihan " . $data->nomor_tagihan_setujuh . " telah disetujui oleh " . $namakaryawan;
                     $modul = "tagihan";
-                } else {
-                    $message = 'Berhasil Menyetujui Tagihan : ' . $data->nomor_tagihan_setujuh;
-
-                    $title = "Tagihan telah setujui";
-                    $body = "Nomor Tagihan " . $data->nomor_tagihan_setujuh . " telah disetujui oleh " . $namakaryawan;
-                    $modul = "tagihan";
+                }
+                if (auth()->user()->hasRole('manajer-keuangan')) {
+                    $status = 'disetujui mankeu';
                 }
                 $data->status = $status;
                 $data->save();
@@ -1441,6 +1503,7 @@ class TagihanController extends Controller
         $nomor_tagihan = $data->nomor_tagihan;
         $slug_nomor_tagihan = $data->slug;
         $rekanan = $data->rekanan;
+        $rekanan_pkp = $data->rekanan_pkp;
 
         $no_faktur_pajak = $request->no_faktur_pajak;
         $no_faktur_pajak_image = $request->no_faktur_pajak_image;
@@ -1450,22 +1513,34 @@ class TagihanController extends Controller
         $bukti_pembayaran_image = $request->bukti_pembayaran_image;
         $e_spt = $request->e_spt;
         $e_spt_image = $request->e_spt_image;
+        $no_kwitansi = $request->no_kwitansi;
+        $no_kwitansi_image = $request->no_kwitansi_image;
+
         $messages = [
             'required' => ':attribute tidak boleh kosong',
             'unique' => ':attribute tidak boleh sama',
             'same' => 'Password dan konfirmasi password harus sama',
         ];
 
-        $this->validate(request(), [
-            'no_faktur_pajak' => 'required|unique:tagihan,no_faktur_pajak,' . $id,
-            'no_faktur_pajak_image' => 'required|mimes:jpeg,bmp,png,jpg,pdf',
-            'bukti_pembayaran' => 'required|unique:tagihan,bukti_pembayaran,' . $id,
-            'bukti_pembayaran_image' => 'required|mimes:jpeg,bmp,png,jpg,pdf',
-            'e_billing' => 'required|unique:tagihan,e_billing,' . $id,
-            'e_billing_image' => 'required|mimes:jpeg,bmp,png,jpg,pdf',
-            'e_spt' => 'required|unique:tagihan,e_spt,' . $id,
-            'e_spt_image' => 'required|mimes:jpeg,bmp,png,jpg,pdf',
-        ], $messages);
+        if ($rekanan_pkp == 'ya') {
+            $this->validate(request(), [
+                'no_faktur_pajak' => 'required|unique:tagihan,no_faktur_pajak,' . $id,
+                'no_faktur_pajak_image' => 'required|mimes:jpeg,bmp,png,jpg,pdf',
+                'bukti_pembayaran' => 'required|unique:tagihan,bukti_pembayaran,' . $id,
+                'bukti_pembayaran_image' => 'required|mimes:jpeg,bmp,png,jpg,pdf',
+                'e_billing' => 'required|unique:tagihan,e_billing,' . $id,
+                'e_billing_image' => 'required|mimes:jpeg,bmp,png,jpg,pdf',
+                'e_spt' => 'required|unique:tagihan,e_spt,' . $id,
+                'e_spt_image' => 'required|mimes:jpeg,bmp,png,jpg,pdf',
+                'no_kwitansi' => 'required|unique:tagihan,no_kwitansi,' . $id,
+                'no_kwitansi_image' => 'required|mimes:jpeg,bmp,png,jpg,pdf',
+            ], $messages);
+        } else {
+            $this->validate(request(), [
+                'no_kwitansi' => 'required|unique:tagihan,no_kwitansi,' . $id,
+                'no_kwitansi_image' => 'required|mimes:jpeg,bmp,png,jpg,pdf',
+            ], $messages);
+        }
 
 
 
@@ -1508,6 +1583,16 @@ class TagihanController extends Controller
             // ganti nama file
             $file->storeAs('public/' . $route . '/', $filename);
             $data->e_spt_image = $filename;
+        }
+
+        $data->no_kwitansi = $no_kwitansi;
+        // upload file no_kwitansi ke storage
+        if ($request->hasFile('no_kwitansi_image')) {
+            $file = $request->file('no_kwitansi_image');
+            $filename = $slug_nomor_tagihan . '.' . $file->getClientOriginalName();
+            // ganti nama file
+            $file->storeAs('public/' . $route . '/', $filename);
+            $data->no_kwitansi_image = $filename;
         }
 
         $data->save();

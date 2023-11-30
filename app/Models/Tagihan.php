@@ -21,7 +21,17 @@ class Tagihan extends Model
         'aduan_id',
         'rekanan_id',
         'penunjukan_pekerjaan_id',
-        'user_id'
+        'user_id',
+        'no_faktur_pajak',
+        'no_faktur_pajak_image',
+        'e_billing',
+        'e_billing_image',
+        'bukti_pembayaran',
+        'bukti_pembayaran_image',
+        'e_spt',
+        'e_spt_image',
+        'no_kwitansi',
+        'no_kwitansi_image',
     ];
 
     public function setNomorTagihanAttribute($value)
@@ -51,6 +61,12 @@ class Tagihan extends Model
     {
         if ($this->hasRekanan) {
             return $this->hasRekanan->opr;
+        }
+    }
+    public function getPkpAttribute()
+    {
+        if ($this->hasRekanan) {
+            return $this->hasRekanan->pkp;
         }
     }
     public function getRekananUrlTddAttribute()
@@ -162,6 +178,9 @@ class Tagihan extends Model
             auth()->user()->hasRole('manajer-umum-dan-kesekretariatan') ||
             auth()->user()->hasRole('direktur-umum') ||
             auth()->user()->hasRole('direktur-utama') ||
+            auth()->user()->hasRole('asisten-manajer-anggaran') ||
+            auth()->user()->hasRole('asisten-manajer-akuntansi') ||
+            auth()->user()->hasRole('manajer-keuangan') ||
             auth()->user()->hasRole('manajer-perencanaan') || auth()->user()->hasRole('direktur-teknik')
         ) {
             $danger = 'bg-danger';

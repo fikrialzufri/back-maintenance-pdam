@@ -6,6 +6,8 @@
 @section('content')`
     <div class="container-fluid">
         <!-- Small boxes (Stat box) -->
+
+
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
@@ -15,237 +17,243 @@
                         {{ csrf_field() }}
                         {{ method_field('PUT') }}
                         <div class="card-body">
-                            <div class="row">
-                                <div class="col-6">
-                                    <div class="col-12">
-                                        <h6>Detail Tagihan</h6>
-                                    </div>
-                                    <div class="col-12">
-                                        <div class="form-group">
-                                            <div>
-                                                <label for="NoTagihan" class=" form-control-label">Nomor Tagihan </label>
-                                            </div>
-                                            <div>
-                                                <input type="text" name="no_tagihan" id="No Tagihan"
-                                                    placeholder="No Tagihan " class="form-control" readonly
-                                                    value="{{ $nomor_tagihan }}">
+                            <page id="content" size="A4">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="col-12">
+                                            <h6>Detail Tagihan</h6>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <div>
+                                                    <label for="NoTagihan" class=" form-control-label">Nomor Tagihan
+                                                    </label>
+                                                </div>
+                                                <div>
+                                                    <input type="text" name="no_tagihan" id="No Tagihan"
+                                                        placeholder="No Tagihan " class="form-control" readonly
+                                                        value="{{ $nomor_tagihan }}">
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-12">
-                                        <div class="form-group">
-                                            <div>
-                                                <label for="NoTagihan" class=" form-control-label">Total Lokasi</label>
-                                            </div>
-                                            <div>
-                                                <input type="text" name="no_tagihan" id="No Tagihan"
-                                                    placeholder="No Tagihan " class="form-control" readonly
-                                                    value="{{ $total_lokasi }}">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-12">
-                                        <div class="form-group">
-                                            <div>
-                                                <label for="NoTagihan" class=" form-control-label">Tanggal Tagihan</label>
-                                            </div>
-                                            <div>
-                                                <input type="text" name="no_tagihan" id="No Tagihan"
-                                                    placeholder="No Tagihan " class="form-control" readonly
-                                                    value="{{ $tanggal_tagihan }}">
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <div>
+                                                    <label for="NoTagihan" class=" form-control-label">Total Lokasi</label>
+                                                </div>
+                                                <div>
+                                                    <input type="text" name="no_tagihan" id="No Tagihan"
+                                                        placeholder="No Tagihan " class="form-control" readonly
+                                                        value="{{ $total_lokasi }}">
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-12">
-                                        <div class="form-group">
-                                            <div>
-                                                <label for="rekanan" class=" form-control-label">Rekanan</label>
-                                            </div>
-                                            <div>
-                                                <input type="text" name="rekanan" id="rekanan" placeholder="Rekanan "
-                                                    class="form-control" readonly value="{{ $rekanan }}">
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <div>
+                                                    <label for="NoTagihan" class=" form-control-label">Tanggal
+                                                        Tagihan</label>
+                                                </div>
+                                                <div>
+                                                    <input type="text" name="no_tagihan" id="No Tagihan"
+                                                        placeholder="No Tagihan " class="form-control" readonly
+                                                        value="{{ $tanggal_tagihan }}">
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <div>
+                                                    <label for="rekanan" class=" form-control-label">Rekanan</label>
+                                                </div>
+                                                <div>
+                                                    <input type="text" name="rekanan" id="rekanan"
+                                                        placeholder="Rekanan " class="form-control" readonly
+                                                        value="{{ $rekanan }}">
+                                                </div>
+                                            </div>
+                                        </div>
 
-                                    <div class="col-12">
-                                        <div class="form-group">
-                                            <div>
-                                                <label for="total_tagihan" class=" form-control-label">Total Tagihan</label>
-                                            </div>
-                                            <div class="input-group mb-2 mr-sm-2">
-                                                <div class="input-group-prepend">
-                                                    <div class="input-group-text">Rp.</div>
-                                                </div>
-                                                <input type="text" name="total_tagihan" id="total_tagihan_all"
-                                                    placeholder="" class="form-control" readonly
-                                                    value="{{ pembulatan($total) }}">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    @if ($pkp == 'ya')
                                         <div class="col-12">
                                             <div class="form-group">
                                                 <div>
-                                                    <label for="ppn" class=" form-control-label">PPN 11%</label>
-                                                </div>
-                                                <div class="input-group mb-2 mr-sm-2">
-                                                    <div class="input-group-prepend">
-                                                        <div class="input-group-text">Rp.</div>
-                                                    </div>
-                                                    <input type="text" name="ppn" id="ppn_all" placeholder=""
-                                                        class="form-control" readonly value="{{ format_uang($ppn) }}">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-12">
-                                            <div class="form-group">
-                                                <div>
-                                                    <label for="grand_total" class=" form-control-label">Grandtotal
+                                                    <label for="total_tagihan" class=" form-control-label">Total
                                                         Tagihan</label>
                                                 </div>
                                                 <div class="input-group mb-2 mr-sm-2">
                                                     <div class="input-group-prepend">
                                                         <div class="input-group-text">Rp.</div>
                                                     </div>
-                                                    <input type="text" name="grand_total" id="grand_total_all"
+                                                    <input type="text" name="total_tagihan" id="total_tagihan_all"
                                                         placeholder="" class="form-control" readonly
-                                                        value="{{ format_uang($grand_total) }}">
+                                                        value="{{ pembulatan($total) }}">
                                                 </div>
                                             </div>
                                         </div>
-                                    @endif
+                                        @if ($pkp == 'ya')
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <div>
+                                                        <label for="ppn" class=" form-control-label">PPN 11%</label>
+                                                    </div>
+                                                    <div class="input-group mb-2 mr-sm-2">
+                                                        <div class="input-group-prepend">
+                                                            <div class="input-group-text">Rp.</div>
+                                                        </div>
+                                                        <input type="text" name="ppn" id="ppn_all" placeholder=""
+                                                            class="form-control" readonly value="{{ format_uang($ppn) }}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <div>
+                                                        <label for="grand_total" class=" form-control-label">Grandtotal
+                                                            Tagihan</label>
+                                                    </div>
+                                                    <div class="input-group mb-2 mr-sm-2">
+                                                        <div class="input-group-prepend">
+                                                            <div class="input-group-text">Rp.</div>
+                                                        </div>
+                                                        <input type="text" name="grand_total" id="grand_total_all"
+                                                            placeholder="" class="form-control" readonly
+                                                            value="{{ format_uang($grand_total) }}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endif
 
-                                    @if ($tagihan->kode_vocher != '')
-                                        <div class="col-12">
-                                            <div class="form-group">
-                                                <div>
-                                                    <label for="voucher" class=" form-control-label">Voucher</label>
-                                                </div>
-                                                <div>
-                                                    <input type="text" placeholder="voucher " class="form-control"
-                                                        readonly value="{{ $tagihan->kode_vocher }}">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-12">
-                                            <div class="form-group">
-                                                <div>
-                                                    <label for="total_bayar" class=" form-control-label">Total
-                                                        Bayar</label>
-                                                </div>
-                                                <div>
-                                                    <input type="text" placeholder="total_bayar " class="form-control"
-                                                        readonly value="Rp. {{ format_uang($tagihan->total_bayar) }}">
+                                        @if ($tagihan->kode_vocher != '')
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <div>
+                                                        <label for="voucher" class=" form-control-label">Voucher</label>
+                                                    </div>
+                                                    <div>
+                                                        <input type="text" placeholder="voucher " class="form-control"
+                                                            readonly value="{{ $tagihan->kode_vocher }}">
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    @endif
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <div>
+                                                        <label for="total_bayar" class=" form-control-label">Total
+                                                            Bayar</label>
+                                                    </div>
+                                                    <div>
+                                                        <input type="text" placeholder="total_bayar "
+                                                            class="form-control" readonly
+                                                            value="Rp. {{ format_uang($tagihan->total_bayar) }}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    </div>
+
+                                    <div class="col-6 timeline">
+                                        <h6>List Persetujuan Tagihan</h6>
+                                        <ul>
+                                            @forelse ($list_persetujuan as $item)
+                                                @if ($item->jabatan == 'Direktur Teknik')
+                                                    <li>
+                                                        <div class="bullet bg-primary"></div>
+                                                        <div class="time">{{ $item->tanggal_disetujui }}</div>
+                                                        <div class="desc">
+                                                            <h3>Plt. {{ $item->jabatan }}</h3>
+                                                            <h4>{{ $item->nama }}</h4>
+                                                        </div>
+                                                    </li>
+                                                @else
+                                                    <li>
+                                                        <div class="bullet bg-primary"></div>
+                                                        <div class="time">{{ $item->tanggal_disetujui }}</div>
+                                                        <div class="desc">
+                                                            <h3>{{ $item->jabatan }}</h3>
+                                                            <h4>{{ $item->nama }}</h4>
+                                                        </div>
+                                                    </li>
+                                                @endif
+                                            @empty
+                                            @endforelse
+
+
+                                        </ul>
+                                    </div>
+
+
+
                                 </div>
 
-                                <div class="col-6 timeline">
-                                    <h6>List Persetujuan Tagihan</h6>
-                                    <ul>
-                                        @forelse ($list_persetujuan as $item)
-                                            @if ($item->jabatan == 'Direktur Teknik')
-                                                <li>
-                                                    <div class="bullet bg-primary"></div>
-                                                    <div class="time">{{ $item->tanggal_disetujui }}</div>
-                                                    <div class="desc">
-                                                        <h3>Plt. {{ $item->jabatan }}</h3>
-                                                        <h4>{{ $item->nama }}</h4>
-                                                    </div>
-                                                </li>
-                                            @else
-                                                <li>
-                                                    <div class="bullet bg-primary"></div>
-                                                    <div class="time">{{ $item->tanggal_disetujui }}</div>
-                                                    <div class="desc">
-                                                        <h3>{{ $item->jabatan }}</h3>
-                                                        <h4>{{ $item->nama }}</h4>
-                                                    </div>
-                                                </li>
-                                            @endif
-                                        @empty
-                                        @endforelse
+                                <hr>
+                                @if (isset($tagihan->hasPelaksanaanPekerjaan))
 
-
-                                    </ul>
-                                </div>
-
-
-
-                            </div>
-
-                            <hr>
-                            @if (isset($tagihan->hasPelaksanaanPekerjaan))
-
-                                @if (auth()->user()->hasRole('keuangan') ||
-                                        auth()->user()->hasRole('umum'))
-                                    <div>
-                                        <label for="rekanan" class=" form-control-label">
-                                            <h3>Detail Pekerjaan </h3>
-                                            </h3>
-                                        </label>
-
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <table class="table table-bordered " width="100%">
-                                                <thead>
-                                                    <tr>
-                                                        <th width="5">#</th>
-                                                        <th>SPK</th>
-                                                        <th>Total Harga</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @forelse ($tagihan->hasPelaksanaanPekerjaan as $index => $item)
-                                                        <tr>
-                                                            <td>{{ $index + 1 }}</td>
-                                                            <td><a href="{{ route('penunjukan_pekerjaan.show', $item->hasAduan->slug) }}"
-                                                                    target="_blank"> {{ $item->No_Spk }} </a></td>
-                                                            <th>
-                                                                Rp. {{ format_uang($item->total_pekerjaan) }}
-                                                            </th>
-                                                        </tr>
-                                                    @empty
-                                                    @endforelse
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                @else
-                                    @foreach ($tagihan->hasPelaksanaanPekerjaan as $key => $item)
+                                    @if (auth()->user()->hasRole('keuangan') ||
+                                            auth()->user()->hasRole('umum'))
                                         <div>
                                             <label for="rekanan" class=" form-control-label">
-                                                <h3>Pekerjaan : <a
-                                                        href="{{ route('penunjukan_pekerjaan.show', $item->hasAduan->slug) }}"
-                                                        target="_blank"> {{ $item->No_Spk }} </a>
+                                                <h3>Detail Pekerjaan </h3>
                                                 </h3>
                                             </label>
 
                                         </div>
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <div>
-                                                    <span>Daftar Pekerjaan</span>
-                                                    <table class="table table-bordered " width="100%">
-                                                        <thead>
+                                                <table class="table table-bordered " width="100%">
+                                                    <thead>
+                                                        <tr>
+                                                            <th width="5">#</th>
+                                                            <th>SPK</th>
+                                                            <th>Total Harga</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @forelse ($tagihan->hasPelaksanaanPekerjaan as $index => $item)
                                                             <tr>
-                                                                <th width="5">#</th>
-                                                                <th>Nama</th>
-                                                                <th>Jenis Pekerjaan</th>
-                                                                <th width="10">Volume</th>
-                                                                <th>Harga Satuan </th>
-
-                                                                <th>Total Harga</th>
+                                                                <td>{{ $index + 1 }}</td>
+                                                                <td><a href="{{ route('penunjukan_pekerjaan.show', $item->hasAduan->slug) }}"
+                                                                        target="_blank"> {{ $item->No_Spk }} </a></td>
+                                                                <th>
+                                                                    Rp. {{ format_uang($item->total_pekerjaan) }}
+                                                                </th>
                                                             </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            @forelse ($item->hasItem as $nomor => $barang)
-                                                                <tr id="{{ $barang->slug }}_{{ $item->id }}"
-                                                                    @if (isset($item->hasItemPerencanaanAdujst[$nomor]) && isset($item->hasItemAsmenPengawas[$nomor])) @if ($item->hasItemPerencanaanAdujst[$nomor]->volume != $item->hasItemAsmenPengawas[$nomor]->volume)
+                                                        @empty
+                                                        @endforelse
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    @else
+                                        @foreach ($tagihan->hasPelaksanaanPekerjaan as $key => $item)
+                                            <div>
+                                                <label for="rekanan" class=" form-control-label">
+                                                    <h3>Pekerjaan : <a
+                                                            href="{{ route('penunjukan_pekerjaan.show', $item->hasAduan->slug) }}"
+                                                            target="_blank"> {{ $item->No_Spk }} </a>
+                                                    </h3>
+                                                </label>
+
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div>
+                                                        <span>Daftar Pekerjaan</span>
+                                                        <table class="table table-bordered " width="100%">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th width="5">#</th>
+                                                                    <th>Nama</th>
+                                                                    <th>Jenis Pekerjaan</th>
+                                                                    <th width="10">Volume</th>
+                                                                    <th>Harga Satuan </th>
+
+                                                                    <th>Total Harga</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @forelse ($item->hasItem as $nomor => $barang)
+                                                                    <tr id="{{ $barang->slug }}_{{ $item->id }}"
+                                                                        @if (isset($item->hasItemPerencanaanAdujst[$nomor]) && isset($item->hasItemAsmenPengawas[$nomor])) @if ($item->hasItemPerencanaanAdujst[$nomor]->volume != $item->hasItemAsmenPengawas[$nomor]->volume)
                                                                                 class="table-danger"
                                                                                 {{ $item->hasItemPerencanaanAdujst[$nomor]->pivot->qty }}
                                                                                 {{ $item->hasItemAsmenPengawas[$nomor]->pivot->qty }}
@@ -253,22 +261,39 @@
                                                                                 {{ $item->hasItemPerencanaanAdujst[$nomor]->pivot->harga }}
                                                                             @elseif ($item->hasItemPerencanaanAdujst[$nomor]->pivot->harga != $item->hasItemAsmenPengawas[$nomor]->pivot->harga)
                                                                                 class="table-danger" @endif
-                                                                    @endif
-                                                                    >
-                                                                    <td>{{ $nomor + 1 }}
-                                                                    </td>
-                                                                    <td>{{ $barang->nama }}</td>
-                                                                    <td>{{ $barang->jenis }}
-                                                                    </td>
+                                                                        @endif
+                                                                        >
+                                                                        <td>{{ $nomor + 1 }}
+                                                                        </td>
+                                                                        <td>{{ $barang->nama }}</td>
+                                                                        <td>{{ $barang->jenis }}
+                                                                        </td>
 
-                                                                    @if ($item->status === 'diadjust')
-                                                                        @if (isset($item->hasItemPerencanaanAdujst[$nomor]))
-                                                                            <td>{{ $item->hasItemPerencanaanAdujst[$nomor]->pivot->qty }}
-                                                                            </td>
-                                                                            <td>
-                                                                                Rp.
-                                                                                {{ format_uang($item->hasItemPerencanaanAdujst[$nomor]->pivot->harga) }}
-                                                                            </td>
+                                                                        @if ($item->status === 'diadjust')
+                                                                            @if (isset($item->hasItemPerencanaanAdujst[$nomor]))
+                                                                                <td>{{ $item->hasItemPerencanaanAdujst[$nomor]->pivot->qty }}
+                                                                                </td>
+                                                                                <td>
+                                                                                    Rp.
+                                                                                    {{ format_uang($item->hasItemPerencanaanAdujst[$nomor]->pivot->harga) }}
+                                                                                </td>
+                                                                            @else
+                                                                                @if (isset($item->hasItemAsmenPengawas[$nomor]))
+                                                                                    <td>{{ round($item->hasItemAsmenPengawas[$nomor]->pivot->qty, 3) }}
+                                                                                    </td>
+                                                                                    @if (isset($item->hasItemPerencanaan[$nomor]))
+                                                                                        <td> Rp.
+                                                                                            {{ format_uang($item->hasItemPerencanaan[$nomor]->pivot->harga) }}
+                                                                                        </td>
+                                                                                    @endif
+                                                                                @else
+                                                                                    <td>{{ round($barang->pivot->qty, 3) }}
+                                                                                    </td>
+                                                                                    <td>Rp.
+                                                                                        {{ format_uang($barang->pivot->harga) }}
+                                                                                    </td>
+                                                                                @endif
+                                                                            @endif
                                                                         @else
                                                                             @if (isset($item->hasItemAsmenPengawas[$nomor]))
                                                                                 <td>{{ round($item->hasItemAsmenPengawas[$nomor]->pivot->qty, 3) }}
@@ -278,139 +303,125 @@
                                                                                         {{ format_uang($item->hasItemPerencanaan[$nomor]->pivot->harga) }}
                                                                                     </td>
                                                                                 @endif
-                                                                            @else
-                                                                                <td>{{ round($barang->pivot->qty, 3) }}
+                                                                            @endif
+                                                                        @endif
+
+                                                                        <td>
+                                                                            Rp.
+                                                                            {{ format_uang($barang->pivot->total) }}
+                                                                        </td>
+
+                                                                    </tr>
+                                                                    @empty
+                                                                        <tr>
+                                                                            <td colspan="10">Data Item tidak ada</td>
+                                                                        </tr>
+                                                                    @endforelse
+                                                                </tbody>
+                                                                <tfoot>
+                                                                    <tr>
+                                                                        <th colspan="3" class="text-right">Total
+                                                                        </th>
+                                                                        @if ($item->status === 'diadjust')
+                                                                            <th>{{ round($item->hasItemPerencanaanAdujst->sum('pivot.qty'), 3) }}
+                                                                            </th>
+                                                                        @else
+                                                                            <th>{{ round($item->hasItemAsmenPengawas->sum('pivot.qty'), 3) }}
+                                                                            </th>
+                                                                        @endif
+                                                                        <th></th>
+                                                                        <th>Rp.
+                                                                            {{ format_uang($item->hasItem()->sum('total')) }}
+                                                                        </th>
+                                                                    </tr>
+                                                                </tfoot>
+
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <div>
+
+                                                            <table class="table table-bordered " width="100%">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th width="5">#</th>
+                                                                        <th width="700">Galian</th>
+                                                                        <th width="10">Panjang</th>
+                                                                        <th width="10">Lebar</th>
+                                                                        <th width="10">Dalam</th>
+                                                                        <th width="10">Volume</th>
+                                                                        <th width="200">Harga Satuan</th>
+                                                                        <th width="250">Total Harga</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+
+                                                                    @forelse ($item->hasGalianPekerjaan as $key => $galian)
+                                                                        <tr
+                                                                            @if ($item->status === 'diadjust') class="{{ $galian->volume_adjust != $galian->volume_asmen ? 'table-danger' : '' }} {{ $galian->galian_perencanaan_harga_satuan != $galian->galian_perencanaan_adjust_harga_satuan ? 'table-danger' : '' }}" @endif>
+                                                                            <td>{{ $key + 1 }}
+                                                                            </td>
+                                                                            <td>
+                                                                                {{ $galian->pekerjaan }}
+                                                                            </td>
+
+                                                                            @if ($item->status === 'diadjust')
+                                                                                <td>{{ $galian->galian_perencanaan_adjust_panjang }}
+                                                                                    m
+                                                                                </td>
+                                                                                <td>{{ $galian->galian_perencanaan_adjust_lebar }}
+                                                                                    m
+                                                                                </td>
+                                                                                <td>{{ $galian->galian_perencanaan_adjust_dalam }}
+                                                                                    m
+                                                                                </td>
+                                                                                <td>{{ round($galian->volume_adjust, 3) }}
+                                                                                    m<sup>2
                                                                                 </td>
                                                                                 <td>Rp.
-                                                                                    {{ format_uang($barang->pivot->harga) }}
+                                                                                    {{ format_uang($galian->galian_perencanaan_adjust_harga_satuan) }}
+                                                                                </td>
+                                                                            @else
+                                                                                <td>
+                                                                                    {{ $galian->galian_asmen_pengawas_panjang }}
+                                                                                    m
+                                                                                </td>
+                                                                                <td>
+                                                                                    {{ $galian->galian_asmen_pengawas_lebar }}
+                                                                                    m
+                                                                                </td>
+                                                                                <td>
+                                                                                    {{ $galian->galian_asmen_pengawas_dalam }}
+                                                                                    m
+                                                                                </td>
+                                                                                <td>
+                                                                                    {{ round($galian->volume_asmen, 3) }}
+                                                                                    m<sup>2</sup>
+                                                                                </td>
+                                                                                <td>
+                                                                                    Rp.
+                                                                                    {{ format_uang($galian->galian_perencanaan_harga_satuan) }}
                                                                                 </td>
                                                                             @endif
-                                                                        @endif
-                                                                    @else
-                                                                        @if (isset($item->hasItemAsmenPengawas[$nomor]))
-                                                                            <td>{{ round($item->hasItemAsmenPengawas[$nomor]->pivot->qty, 3) }}
+
+
                                                                             </td>
-                                                                            @if (isset($item->hasItemPerencanaan[$nomor]))
-                                                                                <td> Rp.
-                                                                                    {{ format_uang($item->hasItemPerencanaan[$nomor]->pivot->harga) }}
-                                                                                </td>
-                                                                            @endif
-                                                                        @endif
-                                                                    @endif
+                                                                            <td>Rp. {{ format_uang($galian->total) }}</td>
 
-                                                                    <td>
-                                                                        Rp.
-                                                                        {{ format_uang($barang->pivot->total) }}
-                                                                    </td>
-
-                                                                </tr>
-                                                                @empty
+                                                                        </tr>
+                                                                    @empty
+                                                                        <tr>
+                                                                            <td colspan="10">Data Item Galian ada</td>
+                                                                        </tr>
+                                                                    @endforelse
+                                                                </tbody>
+                                                                <tfoot>
                                                                     <tr>
-                                                                        <td colspan="10">Data Item tidak ada</td>
-                                                                    </tr>
-                                                                @endforelse
-                                                            </tbody>
-                                                            <tfoot>
-                                                                <tr>
-                                                                    <th colspan="3" class="text-right">Total
-                                                                    </th>
-                                                                    @if ($item->status === 'diadjust')
-                                                                        <th>{{ round($item->hasItemPerencanaanAdujst->sum('pivot.qty'), 3) }}
+                                                                        <th colspan="7" class="text-right"> Total
                                                                         </th>
-                                                                    @else
-                                                                        <th>{{ round($item->hasItemAsmenPengawas->sum('pivot.qty'), 3) }}
-                                                                        </th>
-                                                                    @endif
-                                                                    <th></th>
-                                                                    <th>Rp. {{ format_uang($item->hasItem()->sum('total')) }}
-                                                                    </th>
-                                                                </tr>
-                                                            </tfoot>
 
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-12">
-                                                    <div>
-
-                                                        <table class="table table-bordered " width="100%">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th width="5">#</th>
-                                                                    <th width="700">Galian</th>
-                                                                    <th width="10">Panjang</th>
-                                                                    <th width="10">Lebar</th>
-                                                                    <th width="10">Dalam</th>
-                                                                    <th width="10">Volume</th>
-                                                                    <th width="200">Harga Satuan</th>
-                                                                    <th width="250">Total Harga</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-
-                                                                @forelse ($item->hasGalianPekerjaan as $key => $galian)
-                                                                    <tr
-                                                                        @if ($item->status === 'diadjust') class="{{ $galian->volume_adjust != $galian->volume_asmen ? 'table-danger' : '' }} {{ $galian->galian_perencanaan_harga_satuan != $galian->galian_perencanaan_adjust_harga_satuan ? 'table-danger' : '' }}" @endif>
-                                                                        <td>{{ $key + 1 }}
-                                                                        </td>
-                                                                        <td>
-                                                                            {{ $galian->pekerjaan }}
-                                                                        </td>
-
-                                                                        @if ($item->status === 'diadjust')
-                                                                            <td>{{ $galian->galian_perencanaan_adjust_panjang }}
-                                                                                m
-                                                                            </td>
-                                                                            <td>{{ $galian->galian_perencanaan_adjust_lebar }}
-                                                                                m
-                                                                            </td>
-                                                                            <td>{{ $galian->galian_perencanaan_adjust_dalam }}
-                                                                                m
-                                                                            </td>
-                                                                            <td>{{ round($galian->volume_adjust, 3) }}
-                                                                                m<sup>2
-                                                                            </td>
-                                                                            <td>Rp.
-                                                                                {{ format_uang($galian->galian_perencanaan_adjust_harga_satuan) }}
-                                                                            </td>
-                                                                        @else
-                                                                            <td>
-                                                                                {{ $galian->galian_asmen_pengawas_panjang }}
-                                                                                m
-                                                                            </td>
-                                                                            <td>
-                                                                                {{ $galian->galian_asmen_pengawas_lebar }} m
-                                                                            </td>
-                                                                            <td>
-                                                                                {{ $galian->galian_asmen_pengawas_dalam }} m
-                                                                            </td>
-                                                                            <td>
-                                                                                {{ round($galian->volume_asmen, 3) }}
-                                                                                m<sup>2</sup>
-                                                                            </td>
-                                                                            <td>
-                                                                                Rp.
-                                                                                {{ format_uang($galian->galian_perencanaan_harga_satuan) }}
-                                                                            </td>
-                                                                        @endif
-
-
-                                                                        </td>
-                                                                        <td>Rp. {{ format_uang($galian->total) }}</td>
-
-                                                                    </tr>
-                                                                @empty
-                                                                    <tr>
-                                                                        <td colspan="10">Data Item Galian ada</td>
-                                                                    </tr>
-                                                                @endforelse
-                                                            </tbody>
-                                                            <tfoot>
-                                                                <tr>
-                                                                    <th colspan="7" class="text-right"> Total
-                                                                    </th>
-
-                                                                    {{-- @if ($item->status === 'diadjust')
+                                                                        {{-- @if ($item->status === 'diadjust')
                                                                 <th>
                                                                     {{ $item->total_volume_galian }}
                                                                     m<sup>2</sup>
@@ -421,103 +432,132 @@
                                                                 </th>
                                                             @endif
                                                             <th></th> --}}
-                                                                    <th>Rp.
-                                                                        {{ format_uang($item->hasGalianPekerjaan->sum('total')) }}
-                                                                    </th>
-                                                                </tr>
-                                                                <tr>
-                                                                    <th colspan="7" class="text-right">
-                                                                        Grand Total
-                                                                    </th>
-                                                                    <th>Rp.
-                                                                        {{ format_uang($item->total_pekerjaan) }}
-                                                                    </th>
-                                                                </tr>
-                                                            </tfoot>
+                                                                        <th>Rp.
+                                                                            {{ format_uang($item->hasGalianPekerjaan->sum('total')) }}
+                                                                        </th>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th colspan="7" class="text-right">
+                                                                            Grand Total
+                                                                        </th>
+                                                                        <th>Rp.
+                                                                            {{ format_uang($item->total_pekerjaan) }}
+                                                                        </th>
+                                                                    </tr>
+                                                                </tfoot>
 
-                                                        </table>
+                                                            </table>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        @endforeach
+                                            @endforeach
+                                        @endif
                                     @endif
-                                @endif
-                                @if (!auth()->user()->hasRole('rekanan'))
-                                    @if ($keuangan === true)
-                                        <div class="row mb-5">
-                                            <div class="col-12">
-                                                <div>
-                                                    <label for="kode_voucher" class=" form-control-label">Kode Voucher</label>
+                                    @if (!auth()->user()->hasRole('rekanan'))
+                                        @if (auth()->user()->hasRole('asisten-manajer-anggaran'))
+                                            <div class="row mb-5">
+                                                <div class="col-12">
+                                                    <div>
+                                                        <label for="kode_anggaran" class=" form-control-label">Kode
+                                                            anggaran</label>
+                                                    </div>
+                                                    <div>
+                                                        <input type="text" name="kode_anggaran" placeholder="Kode anggaran"
+                                                            class="form-control  {{ $errors->has('kode_anggaran') ? 'form-control is-invalid' : 'form-control' }}"
+                                                            value="{{ old('kode_anggaran') }}" required>
+                                                    </div>
+
+                                                    @if ($errors->has('kode_anggaran'))
+                                                        <span class="text-danger">
+                                                            <strong
+                                                                id="textkk">{{ $errors->first('kode_anggaran') }}</strong>
+                                                        </span>
+                                                    @endif
                                                 </div>
-                                                <div>
-                                                    <input type="text" name="kode_voucher" placeholder="Kode Voucher"
-                                                        class="form-control  {{ $errors->has('kode_voucher') ? 'form-control is-invalid' : 'form-control' }}"
-                                                        value="{{ old('kode_voucher') }}" required>
+                                            </div>
+                                        @endif
+                                        @if (auth()->user()->hasRole('asisten-manajer-akuntansi'))
+                                            <div class="row mb-5">
+                                                <div class="col-12">
+                                                    <div>
+                                                        <label for="kode_voucher" class=" form-control-label">Kode
+                                                            Voucher</label>
+                                                    </div>
+                                                    <div>
+                                                        <input type="text" name="kode_voucher" placeholder="Kode Voucher"
+                                                            class="form-control  {{ $errors->has('kode_voucher') ? 'form-control is-invalid' : 'form-control' }}"
+                                                            value="{{ old('kode_voucher') }}" required>
+                                                    </div>
+
+                                                    @if ($errors->has('kode_voucher'))
+                                                        <span class="text-danger">
+                                                            <strong
+                                                                id="textkk">{{ $errors->first('kode_voucher') }}</strong>
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                                <div class="col-12">
+                                                    <div>
+                                                        <label for="total_bayar" class=" form-control-label">Total
+                                                            Bayar</label>
+                                                    </div>
+                                                    <div>
+                                                        <input type="text" name="total_bayar" id="total_bayar"
+                                                            placeholder="Total Bayar"
+                                                            class="form-control  {{ $errors->has('total_bayar') ? 'form-control is-invalid' : 'form-control' }}"
+                                                            value="{{ old('total_bayar') }}" required>
+                                                    </div>
+
+                                                    @if ($errors->has('total_bayar'))
+                                                        <span class="text-danger">
+                                                            <strong
+                                                                id="textkk">{{ $errors->first('total_bayar') }}</strong>
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        @endif
+                                        @if ($bntSetuju === false)
+                                            <div class="row">
+                                                <div class="col-12 mt-30">
+                                                    <div>
+                                                        @if ($keuangan === true)
+                                                            <button type="submit" class="btn btn-primary">Simpan
+                                                                Pembayaran</button>
+                                                        @else
+                                                            <button type="submit" class="btn btn-primary" id="btn_setujui"
+                                                                @if (auth()->user()->hasRole('asisten-manajer-tata-usaha')) disabled @endif>Setujui
+                                                                Tagihan</button>
+                                                        @endif
+                                                    </div>
                                                 </div>
 
-                                                @if ($errors->has('kode_voucher'))
-                                                    <span class="text-danger">
-                                                        <strong id="textkk">{{ $errors->first('kode_voucher') }}</strong>
-                                                    </span>
-                                                @endif
                                             </div>
-                                            <div class="col-12">
-                                                <div>
-                                                    <label for="total_bayar" class=" form-control-label">Total Bayar</label>
-                                                </div>
-                                                <div>
-                                                    <input type="text" name="total_bayar" id="total_bayar"
-                                                        placeholder="Total Bayar"
-                                                        class="form-control  {{ $errors->has('total_bayar') ? 'form-control is-invalid' : 'form-control' }}"
-                                                        value="{{ old('total_bayar') }}" required>
-                                                </div>
-
-                                                @if ($errors->has('total_bayar'))
-                                                    <span class="text-danger">
-                                                        <strong id="textkk">{{ $errors->first('total_bayar') }}</strong>
-                                                    </span>
-                                                @endif
-                                            </div>
-                                        </div>
+                                            <br>
+                                            <br>
+                                        @endif
                                     @endif
-                                @endif
-                                @if ($bntSetuju === false)
-                                    <div class="row">
-                                        <div class="col-12 mt-30">
-                                            <div>
-                                                @if ($keuangan === true)
-                                                    <button type="submit" class="btn btn-primary">Simpan Pembayaran</button>
-                                                @else
-                                                    <button type="submit" class="btn btn-primary">Setujui Tagihan</button>
-                                                @endif
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    <br>
-                                    <br>
-                                @endif
-                                <div>
-                                    <label for="rekanan" class=" form-control-label">
-                                        <h3>Total Tagihan : Rp. {{ pembulatan($total) }} </h3>
-                                    </label>
-
-                                </div>
-                                @if ($pkp == 'ya')
                                     <div>
                                         <label for="rekanan" class=" form-control-label">
-                                            <h3>PPN 11% : Rp. {{ format_uang($ppn) }} </h3>
+                                            <h3>Total Tagihan : Rp. {{ pembulatan($total) }} </h3>
                                         </label>
 
                                     </div>
-                                    <div>
-                                        <label for="rekanan" class=" form-control-label">
-                                            <h3>Grandtotal Tagihan : Rp. {{ format_uang($grand_total) }} </h3>
-                                        </label>
+                                    @if ($pkp == 'ya')
+                                        <div>
+                                            <label for="rekanan" class=" form-control-label">
+                                                <h3>PPN 11% : Rp. {{ format_uang($ppn) }} </h3>
+                                            </label>
 
-                                    </div>
-                                @endif
+                                        </div>
+                                        <div>
+                                            <label for="rekanan" class=" form-control-label">
+                                                <h3>Grandtotal Tagihan : Rp. {{ format_uang($grand_total) }} </h3>
+                                            </label>
 
+                                        </div>
+                                    @endif
+                                </page>
 
                                 <!-- /.card-body -->
                                 <div class="card-footer clearfix">
@@ -525,7 +565,11 @@
                                         @if ($tagihan)
                                             <div class="col-12">
                                                 <div class="d-flex flex-row">
-
+                                                    <div class="p-2">
+                                                        <button class="btn btn-primary" id="word-export" type="button"><span
+                                                                class="nav-icon fa fa-file-pdf" aria-hidden="true"></span>
+                                                            Print Surat Berita Acara</button>
+                                                    </div>
                                                     <div class="p-2">
                                                         <a href="{{ route('tagihan.word') }}?id={{ $tagihan->id }}&word=rekanan"
                                                             target="_blank" class="btn btn-primary"><span
@@ -609,100 +653,131 @@
                                             </div>
                                         @endif
                                     </div>
-                                    @if (
-                                        $pkp == 'ya' &&
-                                            $tagihan->status == 'disetujui' &&
-                                            $tagihan->e_billing != null &&
-                                            $tagihan->e_spt != null &&
-                                            $tagihan->no_faktur_pajak != null &&
-                                            $tagihan->bukti_pembayaran != null)
+                                    @if ($tagihan->status == 'disetujui')
                                         <div class="row">
                                             <div class="col-12">
 
-                                                <h6>Dokument Pajak</h6>
+                                                <h6>Dokument Pembayaran</h6>
                                             </div>
-                                            <div class="col-3">
+                                            <div class="col-5">
                                                 <div class="form-group">
                                                     <div>
-                                                        <label for="no_faktur_view" class=" form-control-label">No Faktur
-                                                            Pajak</label>
+                                                        <label for="no_kwitansi_view" class=" form-control-label">No Kwitansi
+                                                        </label>
                                                     </div>
                                                     <div>
 
                                                         <div class="input-group input-group-button">
                                                             <div class="input-group-prepend">
                                                                 <a class="btn btn-primary"
-                                                                    href="{{ asset('storage/tagihan/' . $tagihan->no_faktur_pajak_image) }}"
+                                                                    href="{{ asset('storage/tagihan/' . $tagihan->no_kwitansi_image) }}"
                                                                     target="_blank">
-                                                                    <i class="ik ik-arrow-down"></i>
+                                                                    <i class="ik ik-arrow-down"></i> Download Kwitansi
                                                                 </a>
                                                             </div>
                                                             <input type="text" class="form-control" placeholder=""
-                                                                value="{{ $tagihan->no_faktur_pajak }}" readonly>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div>
-                                                        <label for="e_billing_view"
-                                                            class=" form-control-label">E-Billing</label>
-                                                    </div>
-                                                    <div>
-
-                                                        <div class="input-group input-group-button">
+                                                                value="{{ $tagihan->no_kwitansi }}" readonly>
                                                             <div class="input-group-prepend">
-                                                                <a class="btn btn-success"
-                                                                    href="{{ asset('storage/tagihan/' . $tagihan->e_billing_image) }}"
-                                                                    target="_blank">
-                                                                    <i class="ik ik-arrow-down"></i>
-                                                                </a>
+                                                                <div class="input-group-text">
+                                                                    <input type="checkbox" class="btn btn-danger"
+                                                                        aria-label="Persyaratan Sesuai" id="check_no_kwitansi"
+                                                                        name="check_no_kwitansi">
+                                                                    <span class="pl-2">Persyaratan Sesuai</span>
+                                                                </div>
                                                             </div>
-                                                            <input type="text" class="form-control" placeholder=""
-                                                                value="{{ $tagihan->e_billing }}" readonly>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="form-group">
-                                                    <div>
-                                                        <label for="bukti_pembayaran_view" class=" form-control-label">Bukti
-                                                            Pembayaraan
-                                                            PPN atas tagihan</label>
-                                                    </div>
-                                                    <div>
+                                                @if (
+                                                    $tagihan->e_billing != null &&
+                                                        $tagihan->e_spt != null &&
+                                                        $tagihan->no_faktur_pajak != null &&
+                                                        $tagihan->bukti_pembayaran != null &&
+                                                        $pkp == 'ya')
 
-                                                        <div class="input-group input-group-button">
-                                                            <div class="input-group-prepend">
-                                                                <a class="btn btn-danger"
-                                                                    href="{{ asset('storage/tagihan/' . $tagihan->bukti_pembayaran_image) }}"
-                                                                    target="_blank">
-                                                                    <i class="ik ik-arrow-down"></i>
-                                                                </a>
-                                                            </div>
-                                                            <input type="text" class="form-control" placeholder=""
-                                                                value="{{ $tagihan->bukti_pembayaran }}" readonly>
+                                                    <div class="form-group">
+                                                        <div>
+                                                            <label for="no_faktur_view" class=" form-control-label">No Faktur
+                                                                Pajak</label>
                                                         </div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div>
-                                                        <label for="e_spt_view" class=" form-control-label">E-SPT
-                                                            PPN</label>
-                                                    </div>
-                                                    <div>
+                                                        <div>
 
-                                                        <div class="input-group input-group-button">
-                                                            <div class="input-group-prepend">
-                                                                <a class="btn btn-warning"
-                                                                    href="{{ asset('storage/tagihan/' . $tagihan->e_spt_image) }}"
-                                                                    target="_blank">
-                                                                    <i class="ik ik-arrow-down"></i>
-                                                                </a>
+                                                            <div class="input-group input-group-button">
+                                                                <div class="input-group-prepend">
+                                                                    <a class="btn btn-primary"
+                                                                        href="{{ asset('storage/tagihan/' . $tagihan->no_faktur_pajak_image) }}"
+                                                                        target="_blank">
+                                                                        <i class="ik ik-arrow-down"></i>
+                                                                    </a>
+                                                                </div>
+                                                                <input type="text" class="form-control" placeholder=""
+                                                                    value="{{ $tagihan->no_faktur_pajak }}" readonly>
                                                             </div>
-                                                            <input type="text" class="form-control" placeholder=""
-                                                                value="{{ $tagihan->e_spt }}" readonly>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                    <div class="form-group">
+                                                        <div>
+                                                            <label for="e_billing_view"
+                                                                class=" form-control-label">E-Billing</label>
+                                                        </div>
+                                                        <div>
+
+                                                            <div class="input-group input-group-button">
+                                                                <div class="input-group-prepend">
+                                                                    <a class="btn btn-success"
+                                                                        href="{{ asset('storage/tagihan/' . $tagihan->e_billing_image) }}"
+                                                                        target="_blank">
+                                                                        <i class="ik ik-arrow-down"></i>
+                                                                    </a>
+                                                                </div>
+                                                                <input type="text" class="form-control" placeholder=""
+                                                                    value="{{ $tagihan->e_billing }}" readonly>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div>
+                                                            <label for="bukti_pembayaran_view"
+                                                                class=" form-control-label">Bukti
+                                                                Pembayaraan
+                                                                PPN atas tagihan</label>
+                                                        </div>
+                                                        <div>
+
+                                                            <div class="input-group input-group-button">
+                                                                <div class="input-group-prepend">
+                                                                    <a class="btn btn-danger"
+                                                                        href="{{ asset('storage/tagihan/' . $tagihan->bukti_pembayaran_image) }}"
+                                                                        target="_blank">
+                                                                        <i class="ik ik-arrow-down"></i>
+                                                                    </a>
+                                                                </div>
+                                                                <input type="text" class="form-control" placeholder=""
+                                                                    value="{{ $tagihan->bukti_pembayaran }}" readonly>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div>
+                                                            <label for="e_spt_view" class=" form-control-label">E-SPT
+                                                                PPN</label>
+                                                        </div>
+                                                        <div>
+
+                                                            <div class="input-group input-group-button">
+                                                                <div class="input-group-prepend">
+                                                                    <a class="btn btn-warning"
+                                                                        href="{{ asset('storage/tagihan/' . $tagihan->e_spt_image) }}"
+                                                                        target="_blank">
+                                                                        <i class="ik ik-arrow-down"></i>
+                                                                    </a>
+                                                                </div>
+                                                                <input type="text" class="form-control" placeholder=""
+                                                                    value="{{ $tagihan->e_spt }}" readonly>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @endif
 
                                             </div>
                                         </div>
@@ -726,8 +801,48 @@
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-12">
-                                            <h6>Upload Dokument Pajak</h6>
+                                            <h6>Upload Dokument {{ $errors }}</h6>
                                             <br>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <div>
+                                                    <label for="no_kwitansi" class=" form-control-label">No
+                                                        Kwitansi</label>
+                                                </div>
+                                                <div>
+                                                    <input type="text" name="no_kwitansi" id="no_kwitansi"
+                                                        placeholder="No Kwitansi" class="form-control"
+                                                        value="{{ $tagihan->no_kwitansi }}">
+                                                </div>
+                                                @if ($errors->has('no_kwitansi'))
+                                                    <div class=" container-fluid alert alert-warning alert-dismissible fade show"
+                                                        role="alert">
+                                                        {{ $errors->first('no_kwitansi') }}
+                                                        <button type="button" class="close" data-dismiss="alert"
+                                                            aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                @endif
+                                                <div class="">
+                                                    <input type="file" value="no_kwitansi_image" name="no_kwitansi_image"
+                                                        placeholder="" id="" class="form-control">
+                                                    <br>
+
+                                                    <div id="preview_no_kwitansi_image"></div>
+                                                </div>
+                                                @if ($errors->has('no_kwitansi_image'))
+                                                    <div class=" container-fluid alert alert-warning alert-dismissible fade show"
+                                                        role="alert">
+                                                        {{ $errors->first('no_kwitansi_image') }}
+                                                        <button type="button" class="close" data-dismiss="alert"
+                                                            aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                @endif
+                                            </div>
                                         </div>
                                         @if ($pkp == 'ya')
 
@@ -854,7 +969,8 @@
                                             <div class="col-12">
                                                 <div class="form-group">
                                                     <div>
-                                                        <label for="e_spt" class=" form-control-label">E-SPT PPN</label>
+                                                        <label for="e_spt" class=" form-control-label">E-SPT
+                                                            PPN</label>
                                                     </div>
                                                     <div>
                                                         <input type="text" name="e_spt" id="e_spt"
@@ -905,6 +1021,8 @@
                 </div><!-- /.container-fluid -->
             </div><!-- /.container-fluid -->
         </div><!-- /.container-fluid -->
+        </div><!-- /.container-fluid -->
+
     @stop
 
     @push('script')
@@ -938,6 +1056,38 @@
                 rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
                 return prefix == undefined ? rupiah : (rupiah ? '' + rupiah : '');
             }
+
+            function createPdf() {
+                var printContents = document.getElementById('content').innerHTML;
+                var originalContents = document.body.innerHTML;
+
+                document.body.innerHTML = printContents;
+
+                window.print();
+
+                document.body.innerHTML = originalContents;
+            }
+
+            $('#word-export').click(function() {
+                createPdf()
+            });
+
+            window.onafterprint = function() {
+                window.location.reload(true);
+            };
+
+            // check check_no_kwitansi
+            @if (auth()->user()->hasRole('asisten-manajer-tata-usaha'))
+                $('#check_no_kwitansi').on('click', function() {
+                    if ($(this).is(':checked')) {
+                        // btn_setujui_tagihan diasble false
+                        $('#btn_setujui').prop('disabled', false);
+                    } else {
+                        $('#btn_setujui').prop('disabled', true);
+
+                    }
+                });
+            @endif
         </script>
         <script>
             $(function() {

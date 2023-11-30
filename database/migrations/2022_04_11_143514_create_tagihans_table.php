@@ -19,6 +19,7 @@ class CreateTagihansTable extends Migration
             $table->string('slug');
             $table->string('nomor_bap')->nullable();
             $table->string('kode_vocher')->nullable();
+            $table->string('kode_anggaran')->nullable();
             $table->string('no_faktur_pajak')->nullable();
             $table->string('no_faktur_pajak_image')->nullable();
             $table->string('e_billing')->nullable();
@@ -27,6 +28,8 @@ class CreateTagihansTable extends Migration
             $table->string('bukti_pembayaran_image')->nullable();
             $table->string('e_spt')->nullable();
             $table->string('e_spt_image')->nullable();
+            $table->string('no_kwitansi')->nullable();
+            $table->string('no_kwitansi_image')->nullable();
 
             $table->date('tanggal_tagihan');
             $table->integer('total')->default(0);
@@ -45,6 +48,9 @@ class CreateTagihansTable extends Migration
                 'disetujui mu',
                 'disetujui dirum',
                 'disetujui dirut',
+                'disetujui asmenanggaran',
+                'disetujui asmenakuntan',
+                'disetujui mankeu',
             ])->default('dikirim');
             $table->foreignUuid('rekanan_id')->references('id')->on('rekanan')->nullable();
             $table->foreignUuid('user_id')->references('id')->on('users');
