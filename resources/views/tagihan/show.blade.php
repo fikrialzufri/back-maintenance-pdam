@@ -283,9 +283,17 @@
                                                                 </th>
                                                                 @if (auth()->user()->hasRole('asisten-manajer-perencanaan-keuangan') && $tagihan->status === 'disetujui dirut')
                                                                     <th>
-                                                                        <input type="text" name="kode_anggaran[]"
+                                                                        {{-- <input type="text" name="kode_anggaran[]"
                                                                             value="" placeholder="Kode Anggaran"
-                                                                            class="form-control" required>
+                                                                            class="form-control" required> --}}
+
+                                                                        <select name="kode_anggaran[]"required>
+                                                                            <option value="">Pilih Kode Anggaran
+                                                                            </option>
+                                                                            <option value="31.05.30">31.05.30</option>
+                                                                            <option value="93.02.30">93.02.30</option>
+                                                                            <option value="93.02.40">93.02.40</option>
+                                                                        </select>
                                                                         <input type="hidden"
                                                                             name="pelaksanaan_pekerjaan_id[]"
                                                                             value="{{ $item->id }}">
