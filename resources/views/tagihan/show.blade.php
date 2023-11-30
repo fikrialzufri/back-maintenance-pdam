@@ -231,8 +231,8 @@
                                 <hr>
                                 @if (isset($tagihan->hasPelaksanaanPekerjaan))
 
-                                    @if (auth()->user()->hasRole('keuangan') ||
-                                            auth()->user()->hasRole('umum'))
+                                    @if (auth()->user()->hasRole('asisten-manajer-perencanaan-keuangan') ||
+                                            auth()->user()->hasRole('asisten-manajer-akuntansi'))
                                         <div>
                                             <label for="rekanan" class=" form-control-label">
                                                 <h3>Detail Pekerjaan </h3>
