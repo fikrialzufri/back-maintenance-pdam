@@ -22,6 +22,7 @@ use Excel;
 use Carbon\Carbon;
 use DB;
 use Storage;
+use Str;
 
 class TagihanController extends Controller
 {
@@ -45,7 +46,7 @@ class TagihanController extends Controller
     {
         return [
             [
-                'name' => 'nomor_tagihan_setujuh',
+                'name' => 'nomor_tagihan',
                 'alias' => 'Nomor Tagihan',
             ],
             [
@@ -694,11 +695,14 @@ class TagihanController extends Controller
         $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get();
 
         DB::beginTransaction();
+        $user = [];
+
+
+        $bulan = getRomawi(date('m'));
+        $tahun = date('Y');
+
+        $nomor_tagihan = $data->nomor_tagihan . $bulan . '/' . $tahun;
         try {
-            $user = [];
-
-
-
             if ($data) {
                 $status = 'dikoreksi';
                 if (auth()->user()->karyawan) {
@@ -707,6 +711,8 @@ class TagihanController extends Controller
 
                 if (auth()->user()->hasRole('direktur-teknik')) {
                     $status = 'disetujui';
+                    $data->nomor_tagihan = $nomor_tagihan;
+                    $data->slug = Str::slug($nomor_tagihan);
                 }
 
                 if (auth()->user()->hasRole('asisten-manajer-tata-usaha')) {
@@ -721,35 +727,25 @@ class TagihanController extends Controller
                 if (auth()->user()->hasRole('direktur-utama')) {
                     $status = 'disetujui dirut';
                 }
-                // if (auth()->user()->hasRole('keuangan')) {
-                //     $status = 'dibayar';
-                //     $data->kode_vocher = $request->kode_voucher;
-                //     $data->total_bayar = str_replace(".", "", $request->total_bayar);
-                //     $message = 'Berhasil Membayar Tagihan : ' . $data->nomor_tagihan_setujuh;
-                //     $title = "Tagihan telah dibayar";
-                //     $body = "Nomor Tagihan " . $data->nomor_tagihan_setujuh . " telah disetujui oleh " . $namakaryawan;
-                //     $modul = "tagihan";
-                // }
+
                 if (auth()->user()->hasRole('asisten-manajer-anggaran')) {
                     $status = 'disetujui asmenanggaran';
                     $data->kode_anggaran = $request->kode_anggaran;
-                    $message = 'Berhasil Membayar Tagihan : ' . $data->nomor_tagihan_setujuh;
-                    $title = "Tagihan telah dibayar";
-                    $body = "Nomor Tagihan " . $data->nomor_tagihan_setujuh . " telah disetujui oleh " . $namakaryawan;
-                    $modul = "tagihan";
                 }
                 if (auth()->user()->hasRole('asisten-manajer-akuntansi')) {
                     $status = 'disetujui asmenakuntan';
                     $data->kode_vocher = $request->kode_voucher;
                     $data->total_bayar = str_replace(".", "", $request->total_bayar);
-                    $message = 'Berhasil Membayar Tagihan : ' . $data->nomor_tagihan_setujuh;
-                    $title = "Tagihan telah dibayar";
-                    $body = "Nomor Tagihan " . $data->nomor_tagihan_setujuh . " telah disetujui oleh " . $namakaryawan;
-                    $modul = "tagihan";
                 }
                 if (auth()->user()->hasRole('manajer-keuangan')) {
                     $status = 'disetujui mankeu';
                 }
+
+                $message = 'Berhasil Membayar Tagihan : ' . $data->nomor_tagihan_setujuh;
+                $title = "Tagihan telah dibayar";
+                $body = "Nomor Tagihan " . $data->nomor_tagihan_setujuh . " telah disetujui oleh " . $namakaryawan;
+                $modul = "tagihan";
+
                 $data->status = $status;
                 $data->save();
 
