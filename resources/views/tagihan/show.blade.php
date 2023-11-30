@@ -751,9 +751,9 @@
                                                             <div class="input-group-prepend">
                                                                 <div class="input-group-text">
                                                                     <input type="checkbox" aria-label="Persyaratan Sesuai"
-                                                                        id="check_no_kwitansi"
+                                                                        id="checkbok_no_kwitansi"
                                                                         @if (!auth()->user()->hasRole('asisten-manajer-tata-usaha')) onclick="return false;" @endif
-                                                                        name="check_no_kwitansi">
+                                                                        name="checkbok_no_kwitansi">
                                                                     <span class="pl-2">Persyaratan Sesuai</span>
                                                                 </div>
                                                             </div>
@@ -783,9 +783,9 @@
                                                                 <div class="input-group-prepend">
                                                                     <div class="input-group-text">
                                                                         <input type="checkbox" aria-label="Persyaratan Sesuai"
-                                                                            id="check_no_faktur_pajak"
+                                                                            id="checkbok_no_faktur_pajak"
                                                                             @if (!auth()->user()->hasRole('asisten-manajer-tata-usaha')) onclick="return false;" @endif
-                                                                            name="check_no_faktur_pajak">
+                                                                            name="checkbok_no_faktur_pajak">
                                                                         <span class="pl-2">Persyaratan Sesuai</span>
                                                                     </div>
                                                                 </div>
@@ -812,9 +812,9 @@
                                                                 <div class="input-group-prepend">
                                                                     <div class="input-group-text">
                                                                         <input type="checkbox" aria-label="Persyaratan Sesuai"
-                                                                            id="check_e_billing"
+                                                                            id="checkbok_e_billing"
                                                                             @if (!auth()->user()->hasRole('asisten-manajer-tata-usaha')) onclick="return false;" @endif
-                                                                            name="check_e_billing">
+                                                                            name="checkbok_e_billing">
                                                                         <span class="pl-2">Persyaratan Sesuai</span>
                                                                     </div>
                                                                 </div>
@@ -844,9 +844,9 @@
                                                                 <div class="input-group-prepend">
                                                                     <div class="input-group-text">
                                                                         <input type="checkbox" aria-label="Persyaratan Sesuai"
-                                                                            id="check_bukti_pembayaran"
+                                                                            id="checkbok_bukti_pembayaran"
                                                                             @if (!auth()->user()->hasRole('asisten-manajer-tata-usaha')) onclick="return false;" @endif
-                                                                            name="check_bukti_pembayaran">
+                                                                            name="checkbok_bukti_pembayaran">
                                                                         <span class="pl-2">Persyaratan Sesuai</span>
                                                                     </div>
                                                                 </div>
@@ -873,9 +873,9 @@
                                                                 <div class="input-group-prepend">
                                                                     <div class="input-group-text">
                                                                         <input type="checkbox" aria-label="Persyaratan Sesuai"
-                                                                            id="check_e_spt"
+                                                                            id="checkbok_e_spt"
                                                                             @if (!auth()->user()->hasRole('asisten-manajer-tata-usaha')) onclick="return false;" @endif
-                                                                            name="check_e_spt">
+                                                                            name="checkbok_e_spt">
                                                                         <span class="pl-2">Persyaratan Sesuai</span>
                                                                     </div>
                                                                 </div>
@@ -917,7 +917,7 @@
                                                 </div>
                                                 <div>
                                                     <input type="text" name="no_kwitansi" id="no_kwitansi"
-                                                        placeholder="Contoh 111023 - Terdiri dari tanggal bulan dan tahun "
+                                                        placeholder="Contoh 301123 - Terdiri dari tanggal bulan dan tahun "
                                                         class="form-control" value="{{ $tagihan->no_kwitansi }}">
                                                 </div>
                                                 @if ($errors->has('no_kwitansi'))
@@ -1195,12 +1195,12 @@
                 window.location.reload(true);
             };
 
-            // check check_no_kwitansi
+            // check checkbok_no_kwitansi
             @if (auth()->user()->hasRole('asisten-manajer-tata-usaha') && $pkp == 'ya')
 
-                $('#check_no_kwitansi').on('click', function() {
-                    if ($('#check_e_billing').is(':checked') && $('#check_no_faktur_pajak').is(':checked') && $(
-                            '#check_bukti_pembayaran').is(':checked') && $('#check_e_spt').is(':checked')) {
+                $('#checkbok_no_kwitansi').on('click', function() {
+                    if ($('#checkbok_e_billing').is(':checked') && $('#checkbok_no_faktur_pajak').is(':checked') && $(
+                            '#checkbok_bukti_pembayaran').is(':checked') && $('#checkbok_e_spt').is(':checked')) {
                         if ($(this).is(':checked')) {
                             $('#btn_setujui').prop('disabled', false);
                         } else {
@@ -1211,10 +1211,10 @@
                         $('#btn_setujui').prop('disabled', true);
                     }
                 });
-                // check check_e_billing
-                $('#check_e_billing').on('click', function() {
-                    if ($('#check_no_kwitansi').is(':checked') && $('#check_no_faktur_pajak').is(':checked') && $(
-                            '#check_bukti_pembayaran').is(':checked') && $('#check_e_spt').is(':checked')) {
+                // check checkbok_e_billing
+                $('#checkbok_e_billing').on('click', function() {
+                    if ($('#checkbok_no_kwitansi').is(':checked') && $('#checkbok_no_faktur_pajak').is(':checked') && $(
+                            '#checkbok_bukti_pembayaran').is(':checked') && $('#checkbok_e_spt').is(':checked')) {
                         if ($(this).is(':checked')) {
                             $('#btn_setujui').prop('disabled', false);
                         } else {
@@ -1225,10 +1225,10 @@
                         $('#btn_setujui').prop('disabled', true);
                     }
                 });
-                // check check_no_faktur_pajak
-                $('#check_no_faktur_pajak').on('click', function() {
-                    if ($('#check_no_kwitansi').is(':checked') && $('#check_e_billing').is(':checked') && $(
-                            '#check_bukti_pembayaran').is(':checked') && $('#check_e_spt').is(':checked')) {
+                // check checkbok_no_faktur_pajak
+                $('#checkbok_no_faktur_pajak').on('click', function() {
+                    if ($('#checkbok_no_kwitansi').is(':checked') && $('#checkbok_e_billing').is(':checked') && $(
+                            '#checkbok_bukti_pembayaran').is(':checked') && $('#checkbok_e_spt').is(':checked')) {
                         if ($(this).is(':checked')) {
                             $('#btn_setujui').prop('disabled', false);
                         } else {
@@ -1239,10 +1239,10 @@
                         $('#btn_setujui').prop('disabled', true);
                     }
                 });
-                // check check_bukti_pembayaran
-                $('#check_bukti_pembayaran').on('click', function() {
-                    if ($('#check_no_kwitansi').is(':checked') && $('#check_e_billing').is(':checked') && $(
-                            '#check_no_faktur_pajak').is(':checked') && $('#check_e_spt').is(':checked')) {
+                // check checkbok_bukti_pembayaran
+                $('#checkbok_bukti_pembayaran').on('click', function() {
+                    if ($('#checkbok_no_kwitansi').is(':checked') && $('#checkbok_e_billing').is(':checked') && $(
+                            '#checkbok_no_faktur_pajak').is(':checked') && $('#checkbok_e_spt').is(':checked')) {
                         if ($(this).is(':checked')) {
                             $('#btn_setujui').prop('disabled', false);
                         } else {
@@ -1253,10 +1253,11 @@
                         $('#btn_setujui').prop('disabled', true);
                     }
                 });
-                // check check_e_spt
-                $('#check_e_spt').on('click', function() {
-                    if ($('#check_no_kwitansi').is(':checked') && $('#check_e_billing').is(':checked') && $(
-                            '#check_no_faktur_pajak').is(':checked') && $('#check_bukti_pembayaran').is(':checked')) {
+                // check checkbok_e_spt
+                $('#checkbok_e_spt').on('click', function() {
+                    if ($('#checkbok_no_kwitansi').is(':checked') && $('#checkbok_e_billing').is(':checked') && $(
+                            '#checkbok_no_faktur_pajak').is(':checked') && $('#checkbok_bukti_pembayaran').is(
+                            ':checked')) {
                         if ($(this).is(':checked')) {
                             $('#btn_setujui').prop('disabled', false);
                         } else {
@@ -1268,7 +1269,7 @@
                     }
                 });
             @elseif (auth()->user()->hasRole('asisten-manajer-tata-usaha'))
-                $('#check_no_kwitansi').on('click', function() {
+                $('#checkbok_no_kwitansi').on('click', function() {
                     if ($(this).is(':checked')) {
                         $('#btn_setujui').prop('disabled', false);
                     } else {
