@@ -402,7 +402,7 @@ class PenunjukanPekerjaan extends Model
         if ($this->hasUserMany) {
             foreach ($this->hasUserMany as $key => $value) {
                 if ($value->karyawan) {
-                    $hasUserMany[$key] = (object) [
+                    $hasUserMany[$value->karyawan->nama] = (object) [
                         'id' => $value->karyawan->user_id,
                         'nama' => $value->karyawan->nama,
                         'jabatan' => $value->karyawan->nama_jabatan,
@@ -416,7 +416,7 @@ class PenunjukanPekerjaan extends Model
                 }
             }
 
-            $collect = collect($hasUserMany)->sortBy('updated_at');
+            $collect = collect($hasUserMany)->unique()->sortBy('updated_at');
             $nomor = 0;
             foreach ($collect as $key => $value) {
                 $result[$nomor] = (object) [

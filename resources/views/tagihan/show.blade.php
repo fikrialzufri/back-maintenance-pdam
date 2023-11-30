@@ -266,6 +266,10 @@
                                                             <th width="5">#</th>
                                                             <th>SPK</th>
                                                             <th>Total Harga</th>
+                                                            <th>
+                                                                Kode Anggaran
+                                                            </th>
+
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -277,6 +281,15 @@
                                                                 <th>
                                                                     Rp. {{ format_uang($item->total_pekerjaan) }}
                                                                 </th>
+                                                                @if (auth()->user()->hasRole('asisten-manajer-perencanaan-keuangan'))
+                                                                    <th>
+                                                                        Kode Anggaran
+                                                                    </th>
+                                                                @else
+                                                                    <th>
+                                                                        Kode Anggaran
+                                                                    </th>
+                                                                @endif
                                                             </tr>
                                                         @empty
                                                         @endforelse
