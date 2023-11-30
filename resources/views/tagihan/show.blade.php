@@ -74,6 +74,20 @@
                                             </div>
                                         </div>
 
+                                        {{-- nomor hp rekanan --}}
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <div>
+                                                    <label for="rekanan" class=" form-control-label">Hp Rekanan</label>
+                                                </div>
+                                                <div>
+                                                    <input type="text" name="no_hp_rekanan" id="Hp Rekanan"
+                                                        placeholder="no_hp_rekanan " class="form-control" readonly
+                                                        value="{{ $tagihan->no_hp_rekanan }}">
+                                                </div>
+                                            </div>
+                                        </div>
+
                                         <div class="col-12">
                                             <div class="form-group">
                                                 <div>
@@ -888,7 +902,7 @@
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-12">
-                                            <h6>Upload Dokument {{ $errors }}</h6>
+                                            <h6>Upload Dokument</h6>
                                             <br>
                                         </div>
                                         <div class="col-12">
@@ -899,8 +913,8 @@
                                                 </div>
                                                 <div>
                                                     <input type="text" name="no_kwitansi" id="no_kwitansi"
-                                                        placeholder="No Kwitansi Tagihan" class="form-control"
-                                                        value="{{ $tagihan->no_kwitansi }}">
+                                                        placeholder="Contoh 111023 - Terdiri dari tanggal bulan dan tahun "
+                                                        class="form-control" value="{{ $tagihan->no_kwitansi }}">
                                                 </div>
                                                 @if ($errors->has('no_kwitansi'))
                                                     <div class=" container-fluid alert alert-warning alert-dismissible fade show"
@@ -940,8 +954,8 @@
                                                             Pajak</label>
                                                     </div>
                                                     <div>
-                                                        <input type="text" name="no_faktur_pajak" id="No Faktur Pajak"
-                                                            placeholder="No Faktur Pajak " class="form-control"
+                                                        <input type="text" name="no_faktur_pajak" id=" Faktur Pajak"
+                                                            placeholder="Faktur Pajak " class="form-control"
                                                             value="{{ $tagihan->no_faktur_pajak }}">
                                                     </div>
                                                     @if ($errors->has('no_faktur_pajak'))
@@ -1178,7 +1192,78 @@
             };
 
             // check check_no_kwitansi
-            @if (auth()->user()->hasRole('asisten-manajer-tata-usaha'))
+            @if (auth()->user()->hasRole('asisten-manajer-tata-usaha') && $pkp == 'ya')
+
+                $('#check_no_kwitansi').on('click', function() {
+                    if ($('#check_e_billing').is(':checked') && $('#check_no_faktur_pajak').is(':checked') && $(
+                            '#check_bukti_pembayaran').is(':checked') && $('#check_e_spt').is(':checked')) {
+                        if ($(this).is(':checked')) {
+                            $('#btn_setujui').prop('disabled', false);
+                        } else {
+                            $('#btn_setujui').prop('disabled', true);
+
+                        }
+                    } else {
+                        $('#btn_setujui').prop('disabled', true);
+                    }
+                });
+                // check check_e_billing
+                $('#check_e_billing').on('click', function() {
+                    if ($('#check_no_kwitansi').is(':checked') && $('#check_no_faktur_pajak').is(':checked') && $(
+                            '#check_bukti_pembayaran').is(':checked') && $('#check_e_spt').is(':checked')) {
+                        if ($(this).is(':checked')) {
+                            $('#btn_setujui').prop('disabled', false);
+                        } else {
+                            $('#btn_setujui').prop('disabled', true);
+
+                        }
+                    } else {
+                        $('#btn_setujui').prop('disabled', true);
+                    }
+                });
+                // check check_no_faktur_pajak
+                $('#check_no_faktur_pajak').on('click', function() {
+                    if ($('#check_no_kwitansi').is(':checked') && $('#check_e_billing').is(':checked') && $(
+                            '#check_bukti_pembayaran').is(':checked') && $('#check_e_spt').is(':checked')) {
+                        if ($(this).is(':checked')) {
+                            $('#btn_setujui').prop('disabled', false);
+                        } else {
+                            $('#btn_setujui').prop('disabled', true);
+
+                        }
+                    } else {
+                        $('#btn_setujui').prop('disabled', true);
+                    }
+                });
+                // check check_bukti_pembayaran
+                $('#check_bukti_pembayaran').on('click', function() {
+                    if ($('#check_no_kwitansi').is(':checked') && $('#check_e_billing').is(':checked') && $(
+                            '#check_no_faktur_pajak').is(':checked') && $('#check_e_spt').is(':checked')) {
+                        if ($(this).is(':checked')) {
+                            $('#btn_setujui').prop('disabled', false);
+                        } else {
+                            $('#btn_setujui').prop('disabled', true);
+
+                        }
+                    } else {
+                        $('#btn_setujui').prop('disabled', true);
+                    }
+                });
+                // check check_e_spt
+                $('#check_e_spt').on('click', function() {
+                    if ($('#check_no_kwitansi').is(':checked') && $('#check_e_billing').is(':checked') && $(
+                            '#check_no_faktur_pajak').is(':checked') && $('#check_bukti_pembayaran').is(':checked')) {
+                        if ($(this).is(':checked')) {
+                            $('#btn_setujui').prop('disabled', false);
+                        } else {
+                            $('#btn_setujui').prop('disabled', true);
+
+                        }
+                    } else {
+                        $('#btn_setujui').prop('disabled', true);
+                    }
+                });
+            @elseif (auth()->user()->hasRole('asisten-manajer-tata-usaha'))
                 $('#check_no_kwitansi').on('click', function() {
                     if ($(this).is(':checked')) {
                         $('#btn_setujui').prop('disabled', false);
