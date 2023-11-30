@@ -1276,8 +1276,7 @@ class TagihanController extends Controller
         $nowRekanan = '';
         $tanggal = '';
         $tanggalDirut = '';
-        $bulan = "";
-        $tahun = tahun_indonesia(Carbon::parse($tagihan->tanggal_adjust));
+        $bulan = bulan_indonesia(Carbon::parse($tagihan->tanggal_adjust));
         if ($tagihan->hasPelaksanaanPekerjaan()) {
             $PelaksanaanPekerjaan = $tagihan->hasPelaksanaanPekerjaan();
             $tanggalSelesai = $PelaksanaanPekerjaan->pluck('tanggal_selesai')->toArray();;
@@ -1297,7 +1296,7 @@ class TagihanController extends Controller
                 $bulan = $bulanAwal . ' s/d ' . $bulanAkhir;
             }
         }
-        if (isset($tagihan->list_persetujuan_direktur_teknik['created_at'])) {
+        if (isset($tagihan->list_persetujuan_direktur_teknik['created_at']) && $word != "bapp") {
             $tanggal = $tagihan->list_persetujuan_direktur_teknik['created_at'];
             $now = tanggal_indonesia_terbilang($tanggal, true, false);
             $nowRekanan = tanggal_indonesia($tanggal, false, false);
@@ -1305,7 +1304,7 @@ class TagihanController extends Controller
 
             $wilayah = [];
         }
-        if (isset($tagihan->list_persetujuan_direktur_utama['created_at'])) {
+        if (isset($tagihan->list_persetujuan_direktur_utama['created_at']) && $word == "bapp") {
 
             if ($tagihan->list_persetujuan_direktur_utama['created_at']) {
                 $tanggalDirut = $tagihan->list_persetujuan_direktur_utama['created_at'];
@@ -1346,7 +1345,7 @@ class TagihanController extends Controller
         $filename = "Tagihan Rekenan " . $tagihan->rekanan . " Nomor " . $tagihan->nomor_tagihan_setujuh;
         $title = "Tagihan : " . $tagihan->nomor_tagihan_setujuh;
 
-
+        $tahun = tahun_indonesia(Carbon::parse($tagihan->tanggal_adjust));
 
         $total = $tagihan->tagihan + $tagihan->galian;
 
