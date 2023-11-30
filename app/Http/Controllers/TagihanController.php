@@ -364,8 +364,8 @@ class TagihanController extends Controller
 
             $npwp = $tagihan->hasRekanan->npwp;
 
-            $title = "Proses Tagihan Nomor :" . $tagihan->nomor_tagihan_setujuh;
-            $filename = "Tagihan Nomor :" . $tagihan->nomor_tagihan_setujuh;
+            $title = "Proses Tagihan Nomor :" . $tagihan->nomor_tagihan;
+            $filename = "Tagihan Nomor :" . $tagihan->nomor_tagihan;
 
             $dataitem = Item::all();
             $bntSetuju = true;
@@ -764,15 +764,15 @@ class TagihanController extends Controller
 
                 $rekanan = Rekanan::find($data->rekanan_id);
                 if ($rekanan) {
-                    $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $rekanan->user_id);
+                    // $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $rekanan->user_id);
 
-                    if ($listKaryawan) {
-                        foreach (collect($listKaryawan) as $i => $kr) {
-                            if (auth()->user()->id !== $kr->user_id) {
-                                $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $kr->user_id);
-                            }
-                        }
-                    }
+                    // if ($listKaryawan) {
+                    //     foreach (collect($listKaryawan) as $i => $kr) {
+                    //         if (auth()->user()->id !== $kr->user_id) {
+                    //             $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $kr->user_id);
+                    //         }
+                    //     }
+                    // }
                 }
                 DB::commit();
 
