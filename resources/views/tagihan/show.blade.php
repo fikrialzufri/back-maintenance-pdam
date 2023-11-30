@@ -714,7 +714,8 @@
                                             <div class="col-7">
                                                 <div class="form-group">
                                                     <div>
-                                                        <label for="no_kwitansi_view" class=" form-control-label">No Kwitansi
+                                                        <label for="no_kwitansi_view" class=" form-control-label">Kwitansi
+                                                            Tagihan
                                                         </label>
                                                     </div>
                                                     <div>
@@ -894,11 +895,11 @@
                                             <div class="form-group">
                                                 <div>
                                                     <label for="no_kwitansi" class=" form-control-label">No
-                                                        Kwitansi</label>
+                                                        Kwitansi Tagihan</label>
                                                 </div>
                                                 <div>
                                                     <input type="text" name="no_kwitansi" id="no_kwitansi"
-                                                        placeholder="No Kwitansi" class="form-control"
+                                                        placeholder="No Kwitansi Tagihan" class="form-control"
                                                         value="{{ $tagihan->no_kwitansi }}">
                                                 </div>
                                                 @if ($errors->has('no_kwitansi'))
