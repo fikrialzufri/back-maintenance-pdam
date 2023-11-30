@@ -24,6 +24,7 @@ class CreatePelaksanaanPekerjaansTable extends Migration
             $table->longText('keterangan_penagawas')->nullable();
             $table->longText('lokasi')->nullable();
             $table->string('lat_long')->nullable();
+            $table->string('kode_anggaran')->nullable();
             $table->enum(
                 'status',
                 [

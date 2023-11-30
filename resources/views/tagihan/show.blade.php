@@ -253,7 +253,7 @@
                                             auth()->user()->hasRole('manajer-keuangan'))
                                         <div>
                                             <label for="rekanan" class=" form-control-label">
-                                                <h3>Detail Pekerjaan </h3>
+                                                <h3>Detail Pekerjaan {{ $tagihan->status }}</h3>
                                                 </h3>
                                             </label>
 
@@ -281,13 +281,18 @@
                                                                 <th>
                                                                     Rp. {{ format_uang($item->total_pekerjaan) }}
                                                                 </th>
-                                                                @if (auth()->user()->hasRole('asisten-manajer-perencanaan-keuangan'))
+                                                                @if (auth()->user()->hasRole('asisten-manajer-perencanaan-keuangan') && $tagihan->status === 'disetujui dirut')
                                                                     <th>
-                                                                        Kode Anggaran
+                                                                        <input type="text" name="kode_anggaran[]"
+                                                                            value="" placeholder="Kode Anggaran"
+                                                                            class="form-control" required>
+                                                                        <input type="hidden"
+                                                                            name="pelaksanaan_pekerjaan_id[]"
+                                                                            value="{{ $item->id }}">
                                                                     </th>
                                                                 @else
                                                                     <th>
-                                                                        Kode Anggaran
+                                                                        {{ $item->kode_anggaran }}
                                                                     </th>
                                                                 @endif
                                                             </tr>

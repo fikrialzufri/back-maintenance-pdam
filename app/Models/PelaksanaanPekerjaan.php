@@ -22,6 +22,7 @@ class PelaksanaanPekerjaan extends Model
         'rekanan_id',
         'tanggal_mulai',
         'tanggal_selesai',
+        'kode_anggaran',
         'user_id'
     ];
 

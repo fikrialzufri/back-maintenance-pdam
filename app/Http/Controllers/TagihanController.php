@@ -702,6 +702,15 @@ class TagihanController extends Controller
         $bulan = getRomawi(date('m'));
         $tahun = date('Y');
 
+        // if (auth()->user()->hasRole('asisten-manajer-perencanaan-keuangan')) {
+        //     // $status = 'disetujui asmenanggaran';
+        //     $this->validate($request, [
+        //         "kode_anggaran"    => "required|array|min:3",
+        //         "kode_anggaran.*"  => "required|string|distinct|min:3",
+        //     ]);
+        //     // $data->kode_anggaran = $request->kode_anggaran;
+        // }
+
         // $nomor_tagihan = $data->nomor_tagihan . $bulan . '/' . $tahun;
         try {
             if ($data) {
@@ -731,7 +740,18 @@ class TagihanController extends Controller
 
                 if (auth()->user()->hasRole('asisten-manajer-perencanaan-keuangan')) {
                     $status = 'disetujui asmenanggaran';
-                    $data->kode_anggaran = $request->kode_anggaran;
+
+                    $kode_anggaran = $request->kode_anggaran;
+                    $pelaksanaan_pekerjaan_id = $request->pelaksanaan_pekerjaan_id;
+
+                    // loop pelaksanaan_pekerjaan_id
+                    foreach ($pelaksanaan_pekerjaan_id as $key => $value) {
+                        $pelaksanaan = PelaksanaanPekerjaan::find($value);
+                        $pelaksanaan->kode_anggaran = $kode_anggaran[$key];
+                        $pelaksanaan->save();
+                    }
+
+                    // $data->kode_anggaran = $request->kode_anggaran;
                 }
                 if (auth()->user()->hasRole('asisten-manajer-akuntansi')) {
                     $status = 'disetujui asmenakuntan';
