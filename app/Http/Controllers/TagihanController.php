@@ -386,12 +386,28 @@ class TagihanController extends Controller
 
                 $bntSetuju = false;
             }
+            if (auth()->user()->hasRole('direktur-teknik')) {
+
+                // list jabatan
+                $listJabatan = Jabatan::where('slug', 'manajer-perencanaan')->pluck('id')->toArray();
+
+                // list karyawan bedasarkan jabatan
+                $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get()->pluck('user_id')->toArray();
+
+                $list_persetujuan = $query->whereHas('hasUserMany', function ($q) use ($listKaryawan) {
+                    $q->whereIn('tagihan_user.user_id', $listKaryawan);
+                })->count();
+
+                if ($list_persetujuan > 0) {
+                    $bntSetuju = false;
+                }
+            }
 
 
             if (auth()->user()->hasRole('asisten-manajer-tata-usaha')) {
 
                 // list jabatan
-                $listJabatan = Jabatan::where('slug', 'manajer-perencanaan')->pluck('id')->toArray();
+                $listJabatan = Jabatan::where('slug', 'direktur-teknik')->pluck('id')->toArray();
 
                 // list karyawan bedasarkan jabatan
                 $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get()->pluck('user_id')->toArray();
@@ -452,22 +468,7 @@ class TagihanController extends Controller
                     $bntSetuju = false;
                 }
             }
-            if (auth()->user()->hasRole('direktur-utama')) {
 
-                // list jabatan
-                $listJabatan = Jabatan::where('slug', 'direktur-teknik')->pluck('id')->toArray();
-
-                // list karyawan bedasarkan jabatan
-                $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get()->pluck('user_id')->toArray();
-
-                $list_persetujuan = $query->whereHas('hasUserMany', function ($q) use ($listKaryawan) {
-                    $q->whereIn('tagihan_user.user_id', $listKaryawan);
-                })->count();
-
-                if ($list_persetujuan > 0) {
-                    $bntSetuju = false;
-                }
-            }
 
             if (auth()->user()->hasRole('keuangan')) {
                 $bntSetuju = true;
@@ -567,7 +568,7 @@ class TagihanController extends Controller
 
 
         // $hasValue = $this->hasValue;
-        $start = Carbon::now()->subMonths(2)->startOfMonth()->format('Y-m-d') . ' 00:00:01';
+        $start = Carbon::now()->subMonths(5)->startOfMonth()->format('Y-m-d') . ' 00:00:01';
         $end = Carbon::now()->endOfMonth()->format('Y-m-d') . ' 23:59:59';
 
         // ->where('status', 'selesai koreksi');
