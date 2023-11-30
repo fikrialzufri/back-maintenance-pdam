@@ -287,7 +287,8 @@
                                                                             value="" placeholder="Kode Anggaran"
                                                                             class="form-control" required> --}}
 
-                                                                        <select name="kode_anggaran[]"required>
+                                                                        <select name="kode_anggaran[]"
+                                                                            class="form-control" required>
                                                                             <option value="">Pilih Kode Anggaran
                                                                             </option>
                                                                             <option value="31.05.30">31.05.30</option>
