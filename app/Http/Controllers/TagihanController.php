@@ -334,7 +334,7 @@ class TagihanController extends Controller
                     $wilayahId = array_unique($wilayahId);
                 }
             }
-            $nomor_tagihan = $tagihan->nomor_tagihan_setujuh;
+            $nomor_tagihan = $tagihan->nomor_tagihan;
             $action = route('tagihan.update', $tagihan->id);
 
             $total = $tagihan->tagihan + $tagihan->galian;
@@ -701,7 +701,7 @@ class TagihanController extends Controller
         $bulan = getRomawi(date('m'));
         $tahun = date('Y');
 
-        $nomor_tagihan = $data->nomor_tagihan . $bulan . '/' . $tahun;
+        // $nomor_tagihan = $data->nomor_tagihan . $bulan . '/' . $tahun;
         try {
             if ($data) {
                 $status = 'dikoreksi';
@@ -711,8 +711,8 @@ class TagihanController extends Controller
 
                 if (auth()->user()->hasRole('direktur-teknik')) {
                     $status = 'disetujui';
-                    $data->nomor_tagihan = $nomor_tagihan;
-                    $data->slug = Str::slug($nomor_tagihan);
+                    // $data->nomor_tagihan = $nomor_tagihan;
+                    // $data->slug = Str::slug($nomor_tagihan);
                 }
 
                 if (auth()->user()->hasRole('asisten-manajer-tata-usaha')) {
@@ -822,10 +822,10 @@ class TagihanController extends Controller
 
             if ($tagihan >= 1) {
                 $no = str_pad($tagihan + 1, 4, "0", STR_PAD_LEFT);
-                $nomor_tagihan = $no . "/" . rand(0, 900) . "/" . "BAPP-" . $singkatan . "/";
+                $nomor_tagihan = $no . "/" . rand(0, 900) . "/" . "BAPP-" . $singkatan;
             } else {
                 $no = str_pad(1, 4, "0", STR_PAD_LEFT);
-                $nomor_tagihan = $no . "/" . rand(0, 900) . "/" . "BAPP-" . $singkatan . "/";
+                $nomor_tagihan = $no . "/" . rand(0, 900) . "/" . "BAPP-" . $singkatan;
             }
 
             $data = $this->model();
