@@ -266,9 +266,17 @@
                                                             <th width="5">#</th>
                                                             <th>SPK</th>
                                                             <th>Total Harga</th>
-                                                            <th>
-                                                                Kode Anggaran
-                                                            </th>
+                                                            @if (auth()->user()->hasRole('asisten-manajer-perencanaan-keuangan') ||
+                                                                    auth()->user()->hasRole('direktur-umum') ||
+                                                                    auth()->user()->hasRole('direktur-utama') ||
+                                                                    auth()->user()->hasRole('asisten-manajer-perencanaan-keuangan') ||
+                                                                    auth()->user()->hasRole('asisten-manajer-akuntansi') ||
+                                                                    auth()->user()->hasRole('manajer-keuangan'))
+                                                                )
+                                                                <th>
+                                                                    Kode Anggaran
+                                                                </th>
+                                                            @endif
 
                                                         </tr>
                                                     </thead>
@@ -281,7 +289,12 @@
                                                                 <th>
                                                                     Rp. {{ format_uang($item->total_pekerjaan) }}
                                                                 </th>
-                                                                @if (auth()->user()->hasRole('asisten-manajer-perencanaan-keuangan') && $tagihan->status === 'disetujui dirut')
+                                                                @if (auth()->user()->hasRole('asisten-manajer-perencanaan-keuangan') ||
+                                                                        auth()->user()->hasRole('direktur-umum') ||
+                                                                        auth()->user()->hasRole('direktur-utama') ||
+                                                                        auth()->user()->hasRole('asisten-manajer-perencanaan-keuangan') ||
+                                                                        auth()->user()->hasRole('asisten-manajer-akuntansi') ||
+                                                                        auth()->user()->hasRole('manajer-keuangan'))
                                                                     <th>
                                                                         {{-- <input type="text" name="kode_anggaran[]"
                                                                             value="" placeholder="Kode Anggaran"

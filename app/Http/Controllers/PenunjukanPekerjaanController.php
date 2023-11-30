@@ -36,7 +36,8 @@ class PenunjukanPekerjaanController extends Controller
     {
         $this->tambah = 'false';
         $this->route = 'penunjukan_pekerjaan';
-        $this->middleware('permission:view-penunjukan-pekerjaan', ['only' => ['index', 'show']]);
+        $this->middleware('permission:view-penunjukan-pekerjaan', ['only' => ['index']]);
+        $this->middleware('permission:detail-penunjukan-pekerjaan', ['only' => ['show']]);
         $this->middleware('permission:create-penunjukan-pekerjaan', ['only' => ['create', 'store']]);
         $this->middleware('permission:edit-penunjukan-pekerjaan', ['only' => ['edit', 'update']]);
         $this->middleware('permission:delete-penunjukan-pekerjaan', ['only' => ['delete']]);
