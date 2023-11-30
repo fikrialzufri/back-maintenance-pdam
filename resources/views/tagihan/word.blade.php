@@ -81,7 +81,7 @@
                                     <br>
                                     <strong>
                                         <u> Nomor :
-                                            602.694.2/{{ $tagihan->nomor_tagihan }}{{ getRomawi($tagihan->list_persetujuan_direktur_teknik['created_at']->format('m')) }}/{{ $tagihan->list_persetujuan_direktur_teknik['created_at']->format('Y') }}
+                                            602.694.2/{{ $tagihan->nomor_tagihan }}
                                         </u>
                                     </strong>
                                     <br>
