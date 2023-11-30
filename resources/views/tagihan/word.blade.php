@@ -108,8 +108,11 @@
                                         {{ $tahun }} di wilayah {{ $wilayah }} sebanyak {{ $total_lokasi }}
                                         lokasi. Dengan jumlah tagihan sebesar Rp{{ pembulatan($total_tagihan) }},00
                                         ({{ ltrim(terbilang(ceil($total_tagihan) - substr(ceil($total_tagihan), -3))) }}rupiah).
-                                        Pekerjaan tersebut dilaksanakan oleh :
+
                                     </span>
+                                </p>
+                                <p style='font-size: 20px; text-align: justify;'>
+                                    Pekerjaan tersebut dilaksanakan oleh :
                                 </p>
                             </div>
 
