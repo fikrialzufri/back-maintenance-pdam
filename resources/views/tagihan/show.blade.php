@@ -272,7 +272,7 @@
                                                                     auth()->user()->hasRole('asisten-manajer-perencanaan-keuangan') ||
                                                                     auth()->user()->hasRole('asisten-manajer-akuntansi') ||
                                                                     auth()->user()->hasRole('manajer-keuangan'))
-                                                                )
+
                                                                 <th>
                                                                     Kode Anggaran
                                                                 </th>
@@ -289,12 +289,7 @@
                                                                 <th>
                                                                     Rp. {{ format_uang($item->total_pekerjaan) }}
                                                                 </th>
-                                                                @if (auth()->user()->hasRole('asisten-manajer-perencanaan-keuangan') ||
-                                                                        auth()->user()->hasRole('direktur-umum') ||
-                                                                        auth()->user()->hasRole('direktur-utama') ||
-                                                                        auth()->user()->hasRole('asisten-manajer-perencanaan-keuangan') ||
-                                                                        auth()->user()->hasRole('asisten-manajer-akuntansi') ||
-                                                                        auth()->user()->hasRole('manajer-keuangan'))
+                                                                @if (auth()->user()->hasRole('asisten-manajer-perencanaan-keuangan') && $tagihan->status === 'disetujui dirut')
                                                                     <th>
                                                                         {{-- <input type="text" name="kode_anggaran[]"
                                                                             value="" placeholder="Kode Anggaran"
@@ -313,9 +308,16 @@
                                                                             value="{{ $item->id }}">
                                                                     </th>
                                                                 @else
-                                                                    <th>
-                                                                        {{ $item->kode_anggaran }}
-                                                                    </th>
+                                                                    @if (auth()->user()->hasRole('asisten-manajer-perencanaan-keuangan') ||
+                                                                            auth()->user()->hasRole('direktur-umum') ||
+                                                                            auth()->user()->hasRole('direktur-utama') ||
+                                                                            auth()->user()->hasRole('asisten-manajer-perencanaan-keuangan') ||
+                                                                            auth()->user()->hasRole('asisten-manajer-akuntansi') ||
+                                                                            auth()->user()->hasRole('manajer-keuangan'))
+                                                                        <th>
+                                                                            {{ $item->kode_anggaran }}
+                                                                        </th>
+                                                                    @endif
                                                                 @endif
                                                             </tr>
                                                         @empty
