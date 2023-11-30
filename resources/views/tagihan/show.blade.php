@@ -244,8 +244,13 @@
                                 <hr>
                                 @if (isset($tagihan->hasPelaksanaanPekerjaan))
 
-                                    @if (auth()->user()->hasRole('asisten-manajer-perencanaan-keuangan') ||
-                                            auth()->user()->hasRole('asisten-manajer-akuntansi'))
+                                    @if (auth()->user()->hasRole('asisten-manajer-tata-usaha') ||
+                                            auth()->user()->hasRole('manajer-umum-dan-kesekretariatan') ||
+                                            auth()->user()->hasRole('direktur-umum') ||
+                                            auth()->user()->hasRole('direktur-utama') ||
+                                            auth()->user()->hasRole('asisten-manajer-perencanaan-keuangan') ||
+                                            auth()->user()->hasRole('asisten-manajer-akuntansi') ||
+                                            auth()->user()->hasRole('manajer-keuangan'))
                                         <div>
                                             <label for="rekanan" class=" form-control-label">
                                                 <h3>Detail Pekerjaan </h3>
