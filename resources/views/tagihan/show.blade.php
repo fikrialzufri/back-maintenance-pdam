@@ -650,16 +650,11 @@
                                                         <div class="p-2">
                                                             {{-- @if ($tagihan->status === 'disetujui dirut') --}}
                                                             @if (
-                                                                $tagihan->status === 'disetujui' ||
-                                                                    $tagihan->status === 'dibayar' ||
-                                                                    ($tagihan->status === 'disetujui dirut' ||
-                                                                        $tagihan->status === 'disetujui asmentu' ||
-                                                                        $tagihan->status === 'disetujui mu' ||
-                                                                        $tagihan->status === 'disetujui dirum' ||
-                                                                        $tagihan->status === 'disetujui dirut' ||
-                                                                        $tagihan->status === 'disetujui asmenakuntan' ||
-                                                                        $tagihan->status === 'disetujui asmenanggaran' ||
-                                                                        $tagihan->status === 'disetujui mankeu'))
+                                                                $tagihan->status === 'disetujui dirum' ||
+                                                                    $tagihan->status === 'disetujui dirut' ||
+                                                                    $tagihan->status === 'disetujui asmenakuntan' ||
+                                                                    $tagihan->status === 'disetujui asmenanggaran' ||
+                                                                    $tagihan->status === 'disetujui mankeu'))
                                                                 <a href="{{ route('tagihan.word') }}?id={{ $tagihan->id }}&word=bapp"
                                                                     target="_blank" class="btn btn-success"><span
                                                                         class="nav-icon fa fa-file-word"
