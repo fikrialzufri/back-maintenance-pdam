@@ -22,14 +22,19 @@ class CreateTagihansTable extends Migration
             $table->string('kode_anggaran')->nullable();
             $table->string('no_faktur_pajak')->nullable();
             $table->string('no_faktur_pajak_image')->nullable();
+            $table->enum('no_faktur_pajak_check', ['ya', 'tidak'])->default('ya');
             $table->string('e_billing')->nullable();
             $table->string('e_billing_image')->nullable();
+            $table->enum('e_billing_check', ['ya', 'tidak'])->default('ya');
             $table->string('bukti_pembayaran')->nullable();
             $table->string('bukti_pembayaran_image')->nullable();
+            $table->enum('bukti_pembayaran_check', ['ya', 'tidak'])->default('ya');
             $table->string('e_spt')->nullable();
             $table->string('e_spt_image')->nullable();
+            $table->enum('e_spt_check', ['ya', 'tidak'])->default('ya');
             $table->string('no_kwitansi')->nullable();
             $table->string('no_kwitansi_image')->nullable();
+            $table->enum('no_kwitansi_check', ['ya', 'tidak'])->default('ya');
 
             $table->date('tanggal_tagihan');
             $table->integer('total')->default(0);

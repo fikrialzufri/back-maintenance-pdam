@@ -453,7 +453,50 @@
                                             @endforeach
                                         @endif
                                     @endif
+                                    <div class="card-body p-0 table-border-style">
+                                        <div class="table-responsive">
+                                            <table class="table">
+                                                <thead>
+
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <th>
+                                                            <label for="rekanan" class=" form-control-label">
+                                                                <h4>Total Tagihan : Rp. {{ pembulatan($total) }} </h4>
+                                                            </label>
+                                                        </th>
+                                                    </tr>
+                                                    @if ($pkp == 'ya')
+                                                        <tr>
+                                                            <th>
+                                                                <label for="rekanan" class=" form-control-label">
+                                                                    <h4>PPN 11% : Rp. {{ format_uang($ppn) }} </h4>
+                                                                </label>
+                                                            </th>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>
+                                                                <label for="rekanan" class=" form-control-label">
+                                                                    <h4>Grandtotal Tagihan : Rp.
+                                                                        {{ format_uang($grand_total) }}
+                                                                    </h4>
+                                                                </label>
+                                                            </th>
+                                                        </tr>
+                                                    @endif
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </page>
+
+
                                     @if (!auth()->user()->hasRole('rekanan'))
+                                        @if (auth()->user()->hasRole('asisten-manajer-tata-usaha'))
+                                        @endif
+
                                         @if (auth()->user()->hasRole('asisten-manajer-anggaran'))
                                             <div class="row mb-5">
                                                 <div class="col-12">
@@ -538,27 +581,8 @@
                                             <br>
                                         @endif
                                     @endif
-                                    <div>
-                                        <label for="rekanan" class=" form-control-label">
-                                            <h3>Total Tagihan : Rp. {{ pembulatan($total) }} </h3>
-                                        </label>
 
-                                    </div>
-                                    @if ($pkp == 'ya')
-                                        <div>
-                                            <label for="rekanan" class=" form-control-label">
-                                                <h3>PPN 11% : Rp. {{ format_uang($ppn) }} </h3>
-                                            </label>
 
-                                        </div>
-                                        <div>
-                                            <label for="rekanan" class=" form-control-label">
-                                                <h3>Grandtotal Tagihan : Rp. {{ format_uang($grand_total) }} </h3>
-                                            </label>
-
-                                        </div>
-                                    @endif
-                                </page>
 
                                 <!-- /.card-body -->
                                 <div class="card-footer clearfix">
@@ -604,7 +628,7 @@
                                             </div>
                                         @endif
                                     </div>
-                                    <div class="row">
+                                    <div class="row mt-10">
                                         @if ($ktp != null)
 
                                             <div class="col-md-3">
@@ -660,7 +684,7 @@
 
                                                 <h6>Dokument Pembayaran</h6>
                                             </div>
-                                            <div class="col-5">
+                                            <div class="col-7">
                                                 <div class="form-group">
                                                     <div>
                                                         <label for="no_kwitansi_view" class=" form-control-label">No Kwitansi
@@ -710,6 +734,15 @@
                                                                 </div>
                                                                 <input type="text" class="form-control" placeholder=""
                                                                     value="{{ $tagihan->no_faktur_pajak }}" readonly>
+                                                                <div class="input-group-prepend">
+                                                                    <div class="input-group-text">
+                                                                        <input type="checkbox" aria-label="Persyaratan Sesuai"
+                                                                            id="check_no_faktur_pajak"
+                                                                            @if (!auth()->user()->hasRole('asisten-manajer-tata-usaha')) onclick="return false;" @endif
+                                                                            name="check_no_faktur_pajak">
+                                                                        <span class="pl-2">Persyaratan Sesuai</span>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -730,6 +763,15 @@
                                                                 </div>
                                                                 <input type="text" class="form-control" placeholder=""
                                                                     value="{{ $tagihan->e_billing }}" readonly>
+                                                                <div class="input-group-prepend">
+                                                                    <div class="input-group-text">
+                                                                        <input type="checkbox" aria-label="Persyaratan Sesuai"
+                                                                            id="check_e_billing"
+                                                                            @if (!auth()->user()->hasRole('asisten-manajer-tata-usaha')) onclick="return false;" @endif
+                                                                            name="check_e_billing">
+                                                                        <span class="pl-2">Persyaratan Sesuai</span>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -753,6 +795,15 @@
                                                                 </div>
                                                                 <input type="text" class="form-control" placeholder=""
                                                                     value="{{ $tagihan->bukti_pembayaran }}" readonly>
+                                                                <div class="input-group-prepend">
+                                                                    <div class="input-group-text">
+                                                                        <input type="checkbox" aria-label="Persyaratan Sesuai"
+                                                                            id="check_bukti_pembayaran"
+                                                                            @if (!auth()->user()->hasRole('asisten-manajer-tata-usaha')) onclick="return false;" @endif
+                                                                            name="check_bukti_pembayaran">
+                                                                        <span class="pl-2">Persyaratan Sesuai</span>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -773,6 +824,15 @@
                                                                 </div>
                                                                 <input type="text" class="form-control" placeholder=""
                                                                     value="{{ $tagihan->e_spt }}" readonly>
+                                                                <div class="input-group-prepend">
+                                                                    <div class="input-group-text">
+                                                                        <input type="checkbox" aria-label="Persyaratan Sesuai"
+                                                                            id="check_e_spt"
+                                                                            @if (!auth()->user()->hasRole('asisten-manajer-tata-usaha')) onclick="return false;" @endif
+                                                                            name="check_e_spt">
+                                                                        <span class="pl-2">Persyaratan Sesuai</span>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
