@@ -39,7 +39,7 @@
                                         <tr>
                                             <th scope="col" rowspan="2" class="text-center"
                                                 style="vertical-align:middle">Tugas</th>
-                                            <th scope="col" colspan="6" class="text-center">Hak Akses</th>
+                                            <th scope="col" colspan="7" class="text-center">Hak Akses</th>
                                         </tr>
                                         <tr>
                                             <th scope="col" class="text-center">
