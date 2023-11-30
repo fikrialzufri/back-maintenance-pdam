@@ -723,11 +723,11 @@
                                             </div>
                                         @endif
                                     </div>
-                                    @if ($tagihan->status == 'disetujui')
+                                    @if ($tagihan->status != 'disetujui' || $tagihan->status != 'dikirim' || $tagihan->status != 'disetujui')
                                         <div class="row">
                                             <div class="col-12">
 
-                                                <h6>Dokument Pembayaran</h6>
+                                                <h6>Dokumen Pembayaran</h6>
                                             </div>
                                             <div class="col-7">
                                                 <div class="form-group">
