@@ -357,6 +357,7 @@ class Tagihan extends Model
         }
         return $hasUserMany;
     }
+
     public function getListPersetujuanDirekturUtamaAttribute()
     {
         $result = [];
@@ -380,16 +381,55 @@ class Tagihan extends Model
         }
         return $hasUserMany;
     }
+    public function getListPersetujuanAsistenManajerAkuntansiAttribute()
+    {
+        $result = [];
+        $hasUserMany = [];
+        if ($this->hasUserMany) {
+            foreach ($this->hasUserMany as $key => $value) {
+                if ($value->karyawan && $value->karyawan->nama_jabatan === 'Asisten Manajer Akuntansi') {
+                    $hasUserMany = [
+                        'id' => $value->karyawan->user_id,
+                        'karyawan_id' => $value->karyawan->id,
+                        'nama' => $value->karyawan->nama,
+                        'jabatan' => $value->karyawan->nama_jabatan,
+                        'url' => $value->karyawan->url,
+                        'tdd' => $value->karyawan->tdd,
+                        'is_setuju' => true,
+                        'created_at' => $value->pivot->created_at,
+                        'tanggal_disetujui' => isset($value->pivot->created_at) ? tanggal_indonesia($value->pivot->created_at) . " - " . Carbon::parse($value->pivot->created_at)->format('H:i') : ''
+                    ];
+                }
+            }
+        }
+        return $hasUserMany;
+    }
+
     public function getNomorTagihanSetujuhAttribute()
     {
         $result = [];
         $nomor = $this->nomor_tagihan;
 
         if ($this->list_persetujuan_direktur_teknik) {
-            $nomor = $nomor . getRomawi($this->list_persetujuan_direktur_teknik['created_at']->format('m')) . "/" . $this->list_persetujuan_direktur_teknik['created_at']->format('Y');
+            if (isset($this->list_persetujuan_direktur_teknik['created_at'])) {
+                $nomor = $nomor . getRomawi($this->list_persetujuan_direktur_teknik['created_at']->format('m')) . "/" . $this->list_persetujuan_direktur_teknik['created_at']->format('Y');
+            }
         }
 
         return $nomor;
+    }
+
+    public function getTanggalVourcherAttribute()
+    {
+        $tanggal = 'apa';
+
+        if ($this->list_persetujuan_asisten_manajer_akuntansi) {
+            if (isset($this->list_persetujuan_asisten_manajer_akuntansi['created_at'])) {
+                $tanggal = tanggal_indonesia($this->list_persetujuan_asisten_manajer_akuntansi['created_at'], false, false);
+            }
+        }
+
+        return $tanggal;
     }
 
     public function getListPersetujuanPekerjaanAttribute()

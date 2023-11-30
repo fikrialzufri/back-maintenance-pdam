@@ -127,11 +127,25 @@
                                             <div class="col-12">
                                                 <div class="form-group">
                                                     <div>
-                                                        <label for="voucher" class=" form-control-label">Voucher</label>
+                                                        <label for="voucher" class=" form-control-label">Kode
+                                                            Voucher</label>
                                                     </div>
                                                     <div>
                                                         <input type="text" placeholder="voucher " class="form-control"
                                                             readonly value="{{ $tagihan->kode_vocher }}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <div>
+                                                        <label for="voucher" class=" form-control-label">Tanggal
+                                                            Voucher</label>
+                                                    </div>
+                                                    <div>
+                                                        <input type="text" placeholder="Tanggal Voucher "
+                                                            class="form-control" readonly
+                                                            value="{{ $tagihan->tanggal_vourcher }}">
                                                     </div>
                                                 </div>
                                             </div>
@@ -533,7 +547,7 @@
                                             </div>
                                         </div>
                                     @endif
-                                    @if (auth()->user()->hasRole('asisten-manajer-akuntansi'))
+                                    @if (auth()->user()->hasRole('asisten-manajer-akuntansi') && $tagihan->status === 'disetujui asmenanggaran')
                                         <div class="row mb-5">
                                             <div class="col-12">
                                                 <div>
