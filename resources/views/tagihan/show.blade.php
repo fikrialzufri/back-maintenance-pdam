@@ -135,7 +135,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-12">
+                                            {{-- <div class="col-12">
                                                 <div class="form-group">
                                                     <div>
                                                         <label for="total_bayar" class=" form-control-label">Total
@@ -147,7 +147,7 @@
                                                             value="Rp. {{ format_uang($tagihan->total_bayar) }}">
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div> --}}
                                         @endif
                                         @if ($tagihan->kode_anggaran != '')
                                             <div class="col-12">
@@ -549,24 +549,6 @@
                                                 @if ($errors->has('kode_voucher'))
                                                     <span class="text-danger">
                                                         <strong id="textkk">{{ $errors->first('kode_voucher') }}</strong>
-                                                    </span>
-                                                @endif
-                                            </div>
-                                            <div class="col-12">
-                                                <div>
-                                                    <label for="total_bayar" class=" form-control-label">Total
-                                                        Bayar</label>
-                                                </div>
-                                                <div>
-                                                    <input type="text" name="total_bayar" id="total_bayar"
-                                                        placeholder="Total Bayar"
-                                                        class="form-control  {{ $errors->has('total_bayar') ? 'form-control is-invalid' : 'form-control' }}"
-                                                        value="{{ old('total_bayar') }}" required>
-                                                </div>
-
-                                                @if ($errors->has('total_bayar'))
-                                                    <span class="text-danger">
-                                                        <strong id="textkk">{{ $errors->first('total_bayar') }}</strong>
                                                     </span>
                                                 @endif
                                             </div>
