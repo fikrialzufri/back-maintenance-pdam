@@ -160,8 +160,8 @@
                                                         <div class="bullet bg-primary"></div>
                                                         <div class="time">{{ $item->tanggal_disetujui }}</div>
                                                         <div class="desc">
-                                                            <h3>Plt. {{ $item->jabatan }}</h3>
-                                                            <h4>{{ $item->nama }}</h4>
+                                                            <h3 class="persetujuan_jabatan">Plt. {{ $item->jabatan }}</h3>
+                                                            <h4 class="persetujuan_nama">{{ $item->nama }}</h4>
                                                         </div>
                                                     </li>
                                                 @else
@@ -169,8 +169,8 @@
                                                         <div class="bullet bg-primary"></div>
                                                         <div class="time">{{ $item->tanggal_disetujui }}</div>
                                                         <div class="desc">
-                                                            <h3>{{ $item->jabatan }}</h3>
-                                                            <h4>{{ $item->nama }}</h4>
+                                                            <h3 class="persetujuan_jabatan">{{ $item->jabatan }}</h3>
+                                                            <h4 class="persetujuan_nama">{{ $item->nama }}</h4>
                                                         </div>
                                                     </li>
                                                 @endif
@@ -680,8 +680,9 @@
                                                                 value="{{ $tagihan->no_kwitansi }}" readonly>
                                                             <div class="input-group-prepend">
                                                                 <div class="input-group-text">
-                                                                    <input type="checkbox" class="btn btn-danger"
-                                                                        aria-label="Persyaratan Sesuai" id="check_no_kwitansi"
+                                                                    <input type="checkbox" aria-label="Persyaratan Sesuai"
+                                                                        id="check_no_kwitansi"
+                                                                        @if (!auth()->user()->hasRole('asisten-manajer-tata-usaha')) onclick="return false;" @endif
                                                                         name="check_no_kwitansi">
                                                                     <span class="pl-2">Persyaratan Sesuai</span>
                                                                 </div>
@@ -689,12 +690,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                @if (
-                                                    $tagihan->e_billing != null &&
-                                                        $tagihan->e_spt != null &&
-                                                        $tagihan->no_faktur_pajak != null &&
-                                                        $tagihan->bukti_pembayaran != null &&
-                                                        $pkp == 'ya')
+                                                @if ($pkp == 'ya')
 
                                                     <div class="form-group">
                                                         <div>
@@ -708,7 +704,8 @@
                                                                     <a class="btn btn-primary"
                                                                         href="{{ asset('storage/tagihan/' . $tagihan->no_faktur_pajak_image) }}"
                                                                         target="_blank">
-                                                                        <i class="ik ik-arrow-down"></i>
+                                                                        <i class="ik ik-arrow-down"></i> Download Faktur
+                                                                        Pajak
                                                                     </a>
                                                                 </div>
                                                                 <input type="text" class="form-control" placeholder=""
@@ -728,7 +725,7 @@
                                                                     <a class="btn btn-success"
                                                                         href="{{ asset('storage/tagihan/' . $tagihan->e_billing_image) }}"
                                                                         target="_blank">
-                                                                        <i class="ik ik-arrow-down"></i>
+                                                                        <i class="ik ik-arrow-down"></i> Download E-Billing
                                                                     </a>
                                                                 </div>
                                                                 <input type="text" class="form-control" placeholder=""
@@ -750,7 +747,8 @@
                                                                     <a class="btn btn-danger"
                                                                         href="{{ asset('storage/tagihan/' . $tagihan->bukti_pembayaran_image) }}"
                                                                         target="_blank">
-                                                                        <i class="ik ik-arrow-down"></i>
+                                                                        <i class="ik ik-arrow-down"></i> Download Bukti
+                                                                        Pembayaraan
                                                                     </a>
                                                                 </div>
                                                                 <input type="text" class="form-control" placeholder=""
@@ -770,7 +768,7 @@
                                                                     <a class="btn btn-warning"
                                                                         href="{{ asset('storage/tagihan/' . $tagihan->e_spt_image) }}"
                                                                         target="_blank">
-                                                                        <i class="ik ik-arrow-down"></i>
+                                                                        <i class="ik ik-arrow-down"></i> Download E-SPT PPN
                                                                     </a>
                                                                 </div>
                                                                 <input type="text" class="form-control" placeholder=""
@@ -1070,8 +1068,21 @@
             }
 
             $('#word-export').click(function() {
+
+                $('.desc h3').replaceWith(function() {
+                    return $("<span>", {
+                        class: this.className,
+                        html: $(this).html() + '<br>'
+                    });
+                });
+                $('.desc h4').replaceWith(function() {
+                    return $("<span>", {
+                        class: this.className,
+                        html: $(this).html()
+                    });
+                });
                 createPdf();
-                console.log("apa");
+
             });
 
             window.onafterprint = function() {
@@ -1082,7 +1093,6 @@
             @if (auth()->user()->hasRole('asisten-manajer-tata-usaha'))
                 $('#check_no_kwitansi').on('click', function() {
                     if ($(this).is(':checked')) {
-                        // btn_setujui_tagihan diasble false
                         $('#btn_setujui').prop('disabled', false);
                     } else {
                         $('#btn_setujui').prop('disabled', true);
