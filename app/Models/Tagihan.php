@@ -404,6 +404,29 @@ class Tagihan extends Model
         }
         return $hasUserMany;
     }
+    public function getListPersetujuanManajerKeuanganAttribute()
+    {
+        $result = [];
+        $hasUserMany = [];
+        if ($this->hasUserMany) {
+            foreach ($this->hasUserMany as $key => $value) {
+                if ($value->karyawan && $value->karyawan->nama_jabatan === 'Manajer Keuangan') {
+                    $hasUserMany = [
+                        'id' => $value->karyawan->user_id,
+                        'karyawan_id' => $value->karyawan->id,
+                        'nama' => $value->karyawan->nama,
+                        'jabatan' => $value->karyawan->nama_jabatan,
+                        'url' => $value->karyawan->url,
+                        'tdd' => $value->karyawan->tdd,
+                        'is_setuju' => true,
+                        'created_at' => $value->pivot->created_at,
+                        'tanggal_disetujui' => isset($value->pivot->created_at) ? tanggal_indonesia($value->pivot->created_at) . " - " . Carbon::parse($value->pivot->created_at)->format('H:i') : ''
+                    ];
+                }
+            }
+        }
+        return $hasUserMany;
+    }
 
     public function getNomorTagihanSetujuhAttribute()
     {
@@ -421,11 +444,24 @@ class Tagihan extends Model
 
     public function getTanggalVourcherAttribute()
     {
-        $tanggal = 'apa';
+        $tanggal = '';
 
         if ($this->list_persetujuan_asisten_manajer_akuntansi) {
             if (isset($this->list_persetujuan_asisten_manajer_akuntansi['created_at'])) {
                 $tanggal = tanggal_indonesia($this->list_persetujuan_asisten_manajer_akuntansi['created_at'], false, false);
+            }
+        }
+
+        return $tanggal;
+    }
+
+    public function getTanggalBayarAttribute()
+    {
+        $tanggal = '';
+
+        if ($this->list_persetujuan_manajer_keuangan) {
+            if (isset($this->list_persetujuan_manajer_keuangan['created_at'])) {
+                $tanggal = tanggal_indonesia($this->list_persetujuan_manajer_keuangan['created_at'], false, false);
             }
         }
 

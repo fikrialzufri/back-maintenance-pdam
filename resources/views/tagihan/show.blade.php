@@ -163,6 +163,19 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <div>
+                                                        <label for="Bayar" class=" form-control-label">Tanggal
+                                                            Bayar</label>
+                                                    </div>
+                                                    <div>
+                                                        <input type="text" placeholder="Tanggal Bayar "
+                                                            class="form-control" readonly
+                                                            value="{{ $tagihan->tanggal_bayar }}">
+                                                    </div>
+                                                </div>
+                                            </div>
                                             {{-- <div class="col-12">
                                                 <div class="form-group">
                                                     <div>
@@ -177,7 +190,7 @@
                                                 </div>
                                             </div> --}}
                                         @endif
-                                        @if ($tagihan->kode_anggaran != '')
+                                        {{-- @if ($tagihan->kode_anggaran != '')
                                             <div class="col-12">
                                                 <div class="form-group">
                                                     <div>
@@ -191,7 +204,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        @endif
+                                        @endif --}}
                                     </div>
 
                                     <div class="col-6 timeline">
@@ -541,7 +554,7 @@
                                     @endif
 
                                     @if (auth()->user()->hasRole('asisten-manajer-perencanaan-keuangan') && $tagihan->status === 'disetujui dirut')
-                                        <div class="row mb-5">
+                                        {{-- <div class="row mb-5">
                                             <div class="col-12">
                                                 <div>
                                                     <label for="kode_anggaran" class=" form-control-label">Kode
@@ -559,7 +572,7 @@
                                                     </span>
                                                 @endif
                                             </div>
-                                        </div>
+                                        </div> --}}
                                     @endif
                                     @if (auth()->user()->hasRole('asisten-manajer-akuntansi') && $tagihan->status === 'disetujui asmenanggaran')
                                         <div class="row mb-5">
