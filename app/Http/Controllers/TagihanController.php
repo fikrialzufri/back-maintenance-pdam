@@ -1276,7 +1276,8 @@ class TagihanController extends Controller
         $nowRekanan = '';
         $tanggal = '';
         $tanggalDirut = '';
-        $bulan = bulan_indonesia(Carbon::parse($tagihan->tanggal_adjust));
+        $bulan = "";
+        $tahun = tahun_indonesia(Carbon::parse($tagihan->tanggal_adjust));
         if ($tagihan->hasPelaksanaanPekerjaan()) {
             $PelaksanaanPekerjaan = $tagihan->hasPelaksanaanPekerjaan();
             $tanggalSelesai = $PelaksanaanPekerjaan->pluck('tanggal_selesai')->toArray();;
@@ -1345,7 +1346,7 @@ class TagihanController extends Controller
         $filename = "Tagihan Rekenan " . $tagihan->rekanan . " Nomor " . $tagihan->nomor_tagihan_setujuh;
         $title = "Tagihan : " . $tagihan->nomor_tagihan_setujuh;
 
-        $tahun = tahun_indonesia(Carbon::parse($tagihan->tanggal_adjust));
+
 
         $total = $tagihan->tagihan + $tagihan->galian;
 
