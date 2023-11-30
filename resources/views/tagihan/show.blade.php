@@ -141,7 +141,7 @@
                                             <div class="col-12">
                                                 <div class="form-group">
                                                     <div>
-                                                        <label for="voucher" class=" form-control-label">Kode
+                                                        <label for="voucher" class=" form-control-label">Nomor
                                                             Voucher</label>
                                                     </div>
                                                     <div>
@@ -565,11 +565,11 @@
                                         <div class="row mb-5">
                                             <div class="col-12">
                                                 <div>
-                                                    <label for="kode_voucher" class=" form-control-label">Kode
+                                                    <label for="kode_voucher" class=" form-control-label">Nomor
                                                         Voucher</label>
                                                 </div>
                                                 <div>
-                                                    <input type="text" name="kode_voucher" placeholder="Kode Voucher"
+                                                    <input type="text" name="kode_voucher" placeholder="Nomor Voucher"
                                                         class="form-control  {{ $errors->has('kode_voucher') ? 'form-control is-invalid' : 'form-control' }}"
                                                         value="{{ old('kode_voucher') }}" required>
                                                 </div>
