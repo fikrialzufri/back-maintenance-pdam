@@ -69,6 +69,14 @@ class ItemController extends Controller
                     $hasColom = 'nama_kategori'
                 )
             ],
+            [
+                'name'    => 'satuan_id',
+                'input'    => 'combo',
+                'alias'    => 'Satuan',
+                'value' => $this->combobox(
+                    'satuan',
+                )
+            ],
         ];
     }
     public function configForm()
