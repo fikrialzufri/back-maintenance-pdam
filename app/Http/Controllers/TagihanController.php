@@ -35,6 +35,7 @@ class TagihanController extends Controller
         $this->index = 'tagihan';
         $this->sort = 'created_at';
         $this->desc = 'desc';
+        $this->paginate = 25;
         $this->middleware('permission:view-' . $this->route, ['only' => ['index', 'show']]);
         $this->middleware('permission:create-' . $this->route, ['only' => ['create', 'store']]);
         $this->middleware('permission:edit-' . $this->route, ['only' => ['edit', 'update']]);
