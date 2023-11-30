@@ -149,6 +149,21 @@
                                                 </div>
                                             </div>
                                         @endif
+                                        @if ($tagihan->kode_anggaran != '')
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <div>
+                                                        <label for="kode_anggaran" class=" form-control-label">Kode
+                                                            Anggaran</label>
+                                                    </div>
+                                                    <div>
+                                                        <input type="text" placeholder="kode_anggaran"
+                                                            class="form-control" readonly
+                                                            value="{{ $tagihan->kode_anggaran }}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endif
                                     </div>
 
                                     <div class="col-6 timeline">
@@ -493,94 +508,90 @@
                                 </page>
 
 
-                                    @if (!auth()->user()->hasRole('rekanan'))
-                                        @if (auth()->user()->hasRole('asisten-manajer-tata-usaha'))
-                                        @endif
-
-                                        @if (auth()->user()->hasRole('asisten-manajer-anggaran'))
-                                            <div class="row mb-5">
-                                                <div class="col-12">
-                                                    <div>
-                                                        <label for="kode_anggaran" class=" form-control-label">Kode
-                                                            anggaran</label>
-                                                    </div>
-                                                    <div>
-                                                        <input type="text" name="kode_anggaran"
-                                                            placeholder="Kode anggaran"
-                                                            class="form-control  {{ $errors->has('kode_anggaran') ? 'form-control is-invalid' : 'form-control' }}"
-                                                            value="{{ old('kode_anggaran') }}" required>
-                                                    </div>
-
-                                                    @if ($errors->has('kode_anggaran'))
-                                                        <span class="text-danger">
-                                                            <strong
-                                                                id="textkk">{{ $errors->first('kode_anggaran') }}</strong>
-                                                        </span>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        @endif
-                                        @if (auth()->user()->hasRole('asisten-manajer-akuntansi'))
-                                            <div class="row mb-5">
-                                                <div class="col-12">
-                                                    <div>
-                                                        <label for="kode_voucher" class=" form-control-label">Kode
-                                                            Voucher</label>
-                                                    </div>
-                                                    <div>
-                                                        <input type="text" name="kode_voucher" placeholder="Kode Voucher"
-                                                            class="form-control  {{ $errors->has('kode_voucher') ? 'form-control is-invalid' : 'form-control' }}"
-                                                            value="{{ old('kode_voucher') }}" required>
-                                                    </div>
-
-                                                    @if ($errors->has('kode_voucher'))
-                                                        <span class="text-danger">
-                                                            <strong
-                                                                id="textkk">{{ $errors->first('kode_voucher') }}</strong>
-                                                        </span>
-                                                    @endif
-                                                </div>
-                                                <div class="col-12">
-                                                    <div>
-                                                        <label for="total_bayar" class=" form-control-label">Total
-                                                            Bayar</label>
-                                                    </div>
-                                                    <div>
-                                                        <input type="text" name="total_bayar" id="total_bayar"
-                                                            placeholder="Total Bayar"
-                                                            class="form-control  {{ $errors->has('total_bayar') ? 'form-control is-invalid' : 'form-control' }}"
-                                                            value="{{ old('total_bayar') }}" required>
-                                                    </div>
-
-                                                    @if ($errors->has('total_bayar'))
-                                                        <span class="text-danger">
-                                                            <strong
-                                                                id="textkk">{{ $errors->first('total_bayar') }}</strong>
-                                                        </span>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        @endif
-                                        @if ($bntSetuju === false)
-                                            <div class="row">
-                                                <div class="col-12 mt-30">
-                                                    <div>
-                                                        @if ($keuangan === true)
-                                                            <button type="submit" class="btn btn-primary">Simpan
-                                                                Pembayaran</button>
-                                                        @else
-                                                            <button type="submit" class="btn btn-primary" id="btn_setujui"
-                                                                @if (auth()->user()->hasRole('asisten-manajer-tata-usaha')) disabled @endif>Setujui
-                                                                Tagihan</button>
-                                                        @endif
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                            <br>
-                                            <br>
-                                        @endif
+                                @if (!auth()->user()->hasRole('rekanan'))
+                                    @if (auth()->user()->hasRole('asisten-manajer-tata-usaha'))
                                     @endif
+
+                                    @if (auth()->user()->hasRole('asisten-manajer-anggaran') && $tagihan->status === 'disetujui dirut')
+                                        <div class="row mb-5">
+                                            <div class="col-12">
+                                                <div>
+                                                    <label for="kode_anggaran" class=" form-control-label">Kode
+                                                        anggaran</label>
+                                                </div>
+                                                <div>
+                                                    <input type="text" name="kode_anggaran" placeholder="Kode anggaran"
+                                                        class="form-control  {{ $errors->has('kode_anggaran') ? 'form-control is-invalid' : 'form-control' }}"
+                                                        value="{{ old('kode_anggaran') }}" required>
+                                                </div>
+
+                                                @if ($errors->has('kode_anggaran'))
+                                                    <span class="text-danger">
+                                                        <strong id="textkk">{{ $errors->first('kode_anggaran') }}</strong>
+                                                    </span>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    @endif
+                                    @if (auth()->user()->hasRole('asisten-manajer-akuntansi'))
+                                        <div class="row mb-5">
+                                            <div class="col-12">
+                                                <div>
+                                                    <label for="kode_voucher" class=" form-control-label">Kode
+                                                        Voucher</label>
+                                                </div>
+                                                <div>
+                                                    <input type="text" name="kode_voucher" placeholder="Kode Voucher"
+                                                        class="form-control  {{ $errors->has('kode_voucher') ? 'form-control is-invalid' : 'form-control' }}"
+                                                        value="{{ old('kode_voucher') }}" required>
+                                                </div>
+
+                                                @if ($errors->has('kode_voucher'))
+                                                    <span class="text-danger">
+                                                        <strong id="textkk">{{ $errors->first('kode_voucher') }}</strong>
+                                                    </span>
+                                                @endif
+                                            </div>
+                                            <div class="col-12">
+                                                <div>
+                                                    <label for="total_bayar" class=" form-control-label">Total
+                                                        Bayar</label>
+                                                </div>
+                                                <div>
+                                                    <input type="text" name="total_bayar" id="total_bayar"
+                                                        placeholder="Total Bayar"
+                                                        class="form-control  {{ $errors->has('total_bayar') ? 'form-control is-invalid' : 'form-control' }}"
+                                                        value="{{ old('total_bayar') }}" required>
+                                                </div>
+
+                                                @if ($errors->has('total_bayar'))
+                                                    <span class="text-danger">
+                                                        <strong id="textkk">{{ $errors->first('total_bayar') }}</strong>
+                                                    </span>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    @endif
+                                    @if ($bntSetuju === false)
+                                        <div class="row">
+                                            <div class="col-12 mt-30">
+                                                <div>
+                                                    @if ($keuangan === true)
+                                                        <button type="submit" class="btn btn-primary">Simpan
+                                                            Pembayaran</button>
+                                                    @else
+                                                        <button type="submit" class="btn btn-primary" id="btn_setujui"
+                                                            @if (auth()->user()->hasRole('asisten-manajer-tata-usaha')) disabled @endif>Setujui
+                                                            Tagihan</button>
+                                                    @endif
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <br>
+                                        <br>
+                                    @endif
+                                @endif
 
 
 
@@ -604,7 +615,17 @@
 
                                                     @if (!auth()->user()->hasRole('rekanan'))
                                                         <div class="p-2">
-                                                            @if ($tagihan->status === 'disetujui' || $tagihan->status === 'dibayar' || $tagihan->status === 'disetujui dirut')
+                                                            @if (
+                                                                $tagihan->status === 'disetujui' ||
+                                                                    $tagihan->status === 'dibayar' ||
+                                                                    ($tagihan->status === 'disetujui dirut' ||
+                                                                        $tagihan->status === 'disetujui asmentu' ||
+                                                                        $tagihan->status === 'disetujui mu' ||
+                                                                        $tagihan->status === 'disetujui dirum' ||
+                                                                        $tagihan->status === 'disetujui dirut' ||
+                                                                        $tagihan->status === 'disetujui asmenakuntan' ||
+                                                                        $tagihan->status === 'disetujui asmenanggaran' ||
+                                                                        $tagihan->status === 'disetujui mankeu'))
                                                                 <a href="{{ route('tagihan.word') }}?id={{ $tagihan->id }}"
                                                                     target="_blank" class="btn btn-success"><span
                                                                         class="nav-icon fa fa-file-word"
@@ -614,7 +635,17 @@
                                                         </div>
                                                         <div class="p-2">
                                                             {{-- @if ($tagihan->status === 'disetujui dirut') --}}
-                                                            @if ($tagihan->status === 'disetujui' || $tagihan->status === 'dibayar' || $tagihan->status === 'disetujui dirut')
+                                                            @if (
+                                                                $tagihan->status === 'disetujui' ||
+                                                                    $tagihan->status === 'dibayar' ||
+                                                                    ($tagihan->status === 'disetujui dirut' ||
+                                                                        $tagihan->status === 'disetujui asmentu' ||
+                                                                        $tagihan->status === 'disetujui mu' ||
+                                                                        $tagihan->status === 'disetujui dirum' ||
+                                                                        $tagihan->status === 'disetujui dirut' ||
+                                                                        $tagihan->status === 'disetujui asmenakuntan' ||
+                                                                        $tagihan->status === 'disetujui asmenanggaran' ||
+                                                                        $tagihan->status === 'disetujui mankeu'))
                                                                 <a href="{{ route('tagihan.word') }}?id={{ $tagihan->id }}&word=bapp"
                                                                     target="_blank" class="btn btn-success"><span
                                                                         class="nav-icon fa fa-file-word"
