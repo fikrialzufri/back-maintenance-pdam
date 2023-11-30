@@ -56,11 +56,11 @@ class TagihanController extends Controller
             ],
             [
                 'name' => 'tanggal',
-                'alias' => 'Tanggal',
+                'alias' => 'Tanggal Tagihan',
             ],
             [
                 'name' => 'kode_vocher',
-                'alias' => 'Kode Voucher',
+                'alias' => 'Nomor Voucher',
             ],
             [
                 'name' => 'total_lokasi_pekerjaan',
@@ -80,6 +80,12 @@ class TagihanController extends Controller
                 'name' => 'nomor_tagihan',
                 'input' => 'text',
                 'alias' => 'Nomor Tagihan',
+                'value' => null
+            ],
+            [
+                'name' => 'kode_vocher',
+                'input' => 'text',
+                'alias' => 'Nomor Voucher',
                 'value' => null
             ],
             [
