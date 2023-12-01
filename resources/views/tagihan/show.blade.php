@@ -81,7 +81,7 @@
                                                     <label for="rekanan" class=" form-control-label">Hp Rekanan</label>
                                                 </div>
                                                 <div>
-                                                    <input type="text" name="no_hp_rekanan" id="Hp Rekanan"
+                                                    <input type="text" name="no_hp_rekanan" id="no_hp_rekanan"
                                                         placeholder="no_hp_rekanan " class="form-control" readonly
                                                         value="{{ $tagihan->no_hp_rekanan }}">
                                                 </div>
@@ -1306,6 +1306,41 @@
                 $("#total_bayar").val(val)
             });
 
+            function send_handle() {
+
+                let no_hp_rekanan = $('#no_hp_rekanan').val();
+
+                no_hp_rekanan = no_hp_rekanan.replace(/^0+/, '');
+                console.log(no_hp_rekanan);
+                let namarekanan = $('#rekanan').val();
+
+                let urlTagihan = "{{ route('tagihan.show', $tagihan->id) }}";
+
+                var no_kwitanasi_check = $('#checkbok_no_kwitansi').is(':checked') ? 'ya' : 'tidak';
+                var no_faktur_pajak_check = $('#checkbok_no_faktur_pajak').is(':checked') ? 'ya' : 'tidak';
+                var e_billing_check = $('#checkbok_e_billing').is(':checked') ? 'ya' : 'tidak';
+                var bukti_pembayaran_check = $('#checkbok_bukti_pembayaran').is(':checked') ? 'ya' : 'tidak';
+                var e_spt_check = $('#checkbok_e_spt').is(':checked') ? 'ya' : 'tidak';
+
+                let textMessage =
+                    `Kepada yang terhormat Bapak/Ibu direktur ${namarekanan} \n\nBerikut kami kirimkan link tagihan ${urlTagihan} \n\nTerima Kasih \n\n
+                    Persyaratan yang harus dipenuhi : \n\n\
+                    1. Kwitansi Tagihan : ${no_kwitanasi_check} \n\
+                    2. Faktur Pajak : ${no_faktur_pajak_check} \n\
+                    3. E-Billing : ${e_billing_check} \n\
+                    4. Bukti Pembayaran PPN atas tagihan : ${bukti_pembayaran_check} \n\
+                    5. E-SPT PPN : ${e_spt_check} \n\
+                    `;
+                window.open(`https://api.whatsapp.com/send?phone=62${no_hp_rekanan}&text=` + encodeURI(textMessage));
+                // win.focus();
+            }
+
+            // if session wa makan send wa
+            @if (Session::has('wa'))
+                console.log("apa");
+                send_handle();
+            @endif
+
             function formatRupiahTanpaRp(angka, prefix) {
                 let number_string = angka.replace(/[^,\d]/g, '').toString(),
                     split = number_string.split(','),
@@ -1360,18 +1395,18 @@
             @if (auth()->user()->hasRole('asisten-manajer-tata-usaha'))
                 // btnkirimwa
                 $('#btnkirimwa').on('click', function() {
-                    $no_kwitanasi_check = $('#no_kwitansi_check').val();
-                    $no_faktur_pajak_check = $('#no_faktur_pajak_check').val();
-                    $e_billing_check = $('#e_billing_check').val();
-                    $bukti_pembayaran_check = $('#bukti_pembayaran_check').val();
-                    $e_spt_check = $('#e_spt_check').val();
-                    $('#no_kwitansi_kirim').val($no_kwitanasi_check);
-                    $('#no_faktur_pajak_kirim').val($no_faktur_pajak_check);
-                    $('#e_billing_kirim').val($e_billing_check);
-                    $('#bukti_pembayaran_kirim').val($bukti_pembayaran_check);
-                    $('#e_spt_kirim').val($e_spt_check);
+                    var no_kwitanasi_check = $('#checkbok_no_kwitansi').is(':checked') ? 'ya' : 'tidak';
+                    var no_faktur_pajak_check = $('#checkbok_no_faktur_pajak').is(':checked') ? 'ya' : 'tidak';
+                    var e_billing_check = $('#checkbok_e_billing').is(':checked') ? 'ya' : 'tidak';
+                    var bukti_pembayaran_check = $('#checkbok_bukti_pembayaran').is(':checked') ? 'ya' : 'tidak';
+                    var e_spt_check = $('#checkbok_e_spt').is(':checked') ? 'ya' : 'tidak';
 
-                    console.log($no_kwitanasi_check);
+                    $('#no_kwitansi_kirim').val(no_kwitanasi_check);
+                    $('#no_faktur_pajak_kirim').val(no_faktur_pajak_check);
+                    $('#e_billing_kirim').val(e_billing_check);
+                    $('#bukti_pembayaran_kirim').val(bukti_pembayaran_check);
+                    $('#e_spt_kirim').val(e_spt_check);
+
                     $('#form-kirim-wa').submit();
 
                 });

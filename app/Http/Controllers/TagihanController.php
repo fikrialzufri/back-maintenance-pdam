@@ -1585,7 +1585,7 @@ class TagihanController extends Controller
 
             DB::commit();
 
-            return redirect()->route($this->route . '.show', $data->slug)->with('Class', 'success');
+            return redirect()->route($this->route . '.show', $data->slug)->with('wa', 'kirim')->with('Class', 'success');
         } else {
 
             if ($rekanan_pkp == 'ya') {
