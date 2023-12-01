@@ -1395,15 +1395,10 @@
                 var bukti_pembayaran_check = $('#checkbok_bukti_pembayaran').is(':checked') ? emoji_check : emoji;
                 var e_spt_check = $('#checkbok_e_spt').is(':checked') ? emoji_check : emoji;
 
-
+                // spasi enter
+                var spasi = String.fromCharCode(13, 10);
                 let textMessage =
-                    `Kepada yang terhormat Bapak/Ibu direktur ${namarekanan} \n\nBerikut kami kirimkan link tagihan ${urlTagihan} \n\nTerima Kasih \n\n
-                    Persyaratan yang harus dipenuhi : \n
-                    1. Kwitansi Tagihan : ${no_kwitanasi_check} \n\
-                    2. Faktur Pajak : ${no_faktur_pajak_check} \n\
-                    3. E-Billing : ${e_billing_check} \n\
-                    4. Bukti Pembayaran PPN atas tagihan : ${bukti_pembayaran_check} \n\
-                    5. E-SPT PPN : ${e_spt_check} \n\
+                    `Kepada yang terhormat Bapak/Ibu direktur ${namarekanan} ${spasi}Berikut kami kirimkan link tagihan ${urlTagihan} ${spasi}Terima Kasih ${spasi}${spasi}Persyaratan yang harus dipenuhi : ${spasi}1. Kwitansi Tagihan : ${no_kwitanasi_check}${spasi}2. Faktur Pajak : ${no_faktur_pajak_check} ${spasi}3. E-Billing : ${e_billing_check}${spasi}4. Bukti Pembayaran PPN atas tagihan : ${bukti_pembayaran_check}${spasi}5. E-SPT PPN : ${e_spt_check}
                     `;
                 window.open(`https://api.whatsapp.com/send?phone=62${no_hp_rekanan}&text=` + encodeURI(textMessage));
                 // win.focus();
