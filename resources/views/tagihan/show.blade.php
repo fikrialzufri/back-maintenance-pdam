@@ -1384,15 +1384,21 @@
 
                 let urlTagihan = "{{ route('tagihan.show', $tagihan->id) }}";
 
-                var no_kwitanasi_check = $('#checkbok_no_kwitansi').is(':checked') ? 'ya' : 'tidak';
-                var no_faktur_pajak_check = $('#checkbok_no_faktur_pajak').is(':checked') ? 'ya' : 'tidak';
-                var e_billing_check = $('#checkbok_e_billing').is(':checked') ? 'ya' : 'tidak';
-                var bukti_pembayaran_check = $('#checkbok_bukti_pembayaran').is(':checked') ? 'ya' : 'tidak';
-                var e_spt_check = $('#checkbok_e_spt').is(':checked') ? 'ya' : 'tidak';
+                // emoji checkbox x
+                var emoji = String.fromCodePoint(0x274C);
+                // emoji checkbox check
+                var emoji_check = String.fromCodePoint(0x2705);
+
+                var no_kwitanasi_check = $('#checkbok_no_kwitansi').is(':checked') ? emoji_check : emoji;
+                var no_faktur_pajak_check = $('#checkbok_no_faktur_pajak').is(':checked') ? emoji_check : emoji;
+                var e_billing_check = $('#checkbok_e_billing').is(':checked') ? emoji_check : emoji;
+                var bukti_pembayaran_check = $('#checkbok_bukti_pembayaran').is(':checked') ? emoji_check : emoji;
+                var e_spt_check = $('#checkbok_e_spt').is(':checked') ? emoji_check : emoji;
+
 
                 let textMessage =
                     `Kepada yang terhormat Bapak/Ibu direktur ${namarekanan} \n\nBerikut kami kirimkan link tagihan ${urlTagihan} \n\nTerima Kasih \n\n
-                    Persyaratan yang harus dipenuhi : \n\n\
+                    Persyaratan yang harus dipenuhi : \n
                     1. Kwitansi Tagihan : ${no_kwitanasi_check} \n\
                     2. Faktur Pajak : ${no_faktur_pajak_check} \n\
                     3. E-Billing : ${e_billing_check} \n\
