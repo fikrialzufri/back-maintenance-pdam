@@ -710,25 +710,25 @@ class TagihanController extends Controller
         // return $request;
         if (auth()->user()->hasRole('asisten-manajer-tata-usaha')) {
 
-            // $messages = [
-            //     'required' => ':attribute tidak boleh kosong',
-            //     'unique' => ':attribute tidak boleh sama',
-            //     'same' => 'Password dan konfirmasi password harus sama',
-            // ];
+            $messages = [
+                'required' => ':attribute tidak boleh kosong',
+                'unique' => ':attribute tidak boleh sama',
+                'same' => 'Password dan konfirmasi password harus sama',
+            ];
 
-            // if ($data->pkp == 'ya') {
-            //     $this->validate(request(), [
-            //         'no_faktur_pajak_rekanan' => 'required|unique:tagihan,no_faktur_pajak,' . $id,
-            //         'bukti_pembayaran_rekanan' => 'required|unique:tagihan,bukti_pembayaran,' . $id,
-            //         'e_billing_rekanan' => 'required|unique:tagihan,e_billing,' . $id,
-            //         'e_spt_rekanan' => 'required|unique:tagihan,e_spt,' . $id,
-            //         'no_kwitansi_rekanan' => 'required|unique:tagihan,no_kwitansi,' . $id,
-            //     ], $messages);
-            // } else {
-            //     $this->validate(request(), [
-            //         'no_kwitansi_rekanan' => 'required|unique:tagihan,no_kwitansi,' . $id,
-            //     ], $messages);
-            // }
+            if ($data->pkp == 'ya') {
+                $this->validate(request(), [
+                    'no_faktur_pajak_rekanan' => 'required|unique:tagihan,no_faktur_pajak,' . $id,
+                    'bukti_pembayaran_rekanan' => 'required|unique:tagihan,bukti_pembayaran,' . $id,
+                    'e_billing_rekanan' => 'required|unique:tagihan,e_billing,' . $id,
+                    'e_spt_rekanan' => 'required|unique:tagihan,e_spt,' . $id,
+                    'no_kwitansi_rekanan' => 'required|unique:tagihan,no_kwitansi,' . $id,
+                ], $messages);
+            } else {
+                $this->validate(request(), [
+                    'no_kwitansi_rekanan' => 'required|unique:tagihan,no_kwitansi,' . $id,
+                ], $messages);
+            }
 
             // return $status = 'disetujui asmentu';
         }

@@ -818,9 +818,9 @@
                                                                         id="checkbok_no_kwitansi"
                                                                         @if (!auth()->user()->hasRole('asisten-manajer-tata-usaha')) onclick="return false;" @endif
                                                                         name="checkbok_no_kwitansi"
-                                                                        {{ old('checkbok_no_kwitansi') ? 'checked' : '' }}
-                                                                        {{ $tagihan->no_kwitansi_check ? 'checked' : '' }}>
-                                                                    <span class="pl-2">Persyaratan Sesuai</span>
+                                                                        {{ $tagihan->no_kwitansi_check == 'ya' ? 'checked' : '' }}>
+                                                                    <span class="pl-2">Persyaratan Sesuai
+                                                                        {{ $tagihan->no_kwitansi_check }}</span>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -865,7 +865,7 @@
                                                                             @if (!auth()->user()->hasRole('asisten-manajer-tata-usaha')) onclick="return false;" @endif
                                                                             name="checkbok_no_faktur_pajak"
                                                                             {{ old('checkbok_no_faktur_pajak') ? 'checked' : '' }}
-                                                                            {{ $tagihan->no_faktur_pajak_check ? 'checked' : '' }}>
+                                                                            {{ $tagihan->no_faktur_pajak_check == 'ya' ? 'checked' : '' }}>
                                                                         <span class="pl-2">Persyaratan Sesuai</span>
                                                                     </div>
                                                                 </div>
@@ -908,7 +908,7 @@
                                                                             @if (!auth()->user()->hasRole('asisten-manajer-tata-usaha')) onclick="return false;" @endif
                                                                             name="checkbok_e_billing"
                                                                             {{ old('checkbok_e_billing') ? 'checked' : '' }}
-                                                                            {{ $tagihan->e_billing_check ? 'checked' : '' }}>
+                                                                            {{ $tagihan->e_billing_check == 'ya' ? 'checked' : '' }}>
                                                                         <span class="pl-2">Persyaratan Sesuai</span>
                                                                     </div>
                                                                 </div>
@@ -954,7 +954,7 @@
                                                                             @if (!auth()->user()->hasRole('asisten-manajer-tata-usaha')) onclick="return false;" @endif
                                                                             name="checkbok_bukti_pembayaran"
                                                                             {{ old('checkbok_bukti_pembayaran') ? 'checked' : '' }}
-                                                                            {{ $tagihan->bukti_pembayaran_check ? 'checked' : '' }}>
+                                                                            {{ $tagihan->bukti_pembayaran_check == 'ya' ? 'checked' : '' }}>
                                                                         <span class="pl-2">Persyaratan Sesuai</span>
                                                                     </div>
                                                                 </div>
@@ -997,7 +997,7 @@
                                                                             @if (!auth()->user()->hasRole('asisten-manajer-tata-usaha')) onclick="return false;" @endif
                                                                             name="checkbok_e_spt"
                                                                             {{ old('checkbok_e_spt') ? 'checked' : '' }}
-                                                                            {{ $tagihan->e_spt_check ? 'checked' : '' }}>
+                                                                            {{ $tagihan->e_spt_check == 'ya' ? 'checked' : '' }}>
                                                                         <span class="pl-2">Persyaratan Sesuai
                                                                         </span>
                                                                     </div>
