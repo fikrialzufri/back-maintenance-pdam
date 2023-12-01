@@ -707,40 +707,30 @@ class TagihanController extends Controller
 
         $bulan = getRomawi(date('m'));
         $tahun = date('Y');
-
-        // if (auth()->user()->hasRole('asisten-manajer-perencanaan-keuangan')) {
-        //     // $status = 'disetujui asmenanggaran';
-        //     $this->validate($request, [
-        //         "kode_anggaran"    => "required|array|min:3",
-        //         "kode_anggaran.*"  => "required|string|distinct|min:3",
-        //     ]);
-        //     // $data->kode_anggaran = $request->kode_anggaran;
-        // }
-
-        // $nomor_tagihan = $data->nomor_tagihan . $bulan . '/' . $tahun;
+        // return $request;
         if (auth()->user()->hasRole('asisten-manajer-tata-usaha')) {
 
-            $messages = [
-                'required' => ':attribute tidak boleh kosong',
-                'unique' => ':attribute tidak boleh sama',
-                'same' => 'Password dan konfirmasi password harus sama',
-            ];
+            // $messages = [
+            //     'required' => ':attribute tidak boleh kosong',
+            //     'unique' => ':attribute tidak boleh sama',
+            //     'same' => 'Password dan konfirmasi password harus sama',
+            // ];
 
-            if ($data->pkp == 'ya') {
-                $this->validate(request(), [
-                    'no_faktur_pajak_rekanan' => 'required|unique:tagihan,no_faktur_pajak,' . $id,
-                    'bukti_pembayaran_rekanan' => 'required|unique:tagihan,bukti_pembayaran,' . $id,
-                    'e_billing_rekanan' => 'required|unique:tagihan,e_billing,' . $id,
-                    'e_spt_rekanan' => 'required|unique:tagihan,e_spt,' . $id,
-                    'no_kwitansi_rekanan' => 'required|unique:tagihan,no_kwitansi,' . $id,
-                ], $messages);
-            } else {
-                $this->validate(request(), [
-                    'no_kwitansi_rekanan' => 'required|unique:tagihan,no_kwitansi,' . $id,
-                ], $messages);
-            }
+            // if ($data->pkp == 'ya') {
+            //     $this->validate(request(), [
+            //         'no_faktur_pajak_rekanan' => 'required|unique:tagihan,no_faktur_pajak,' . $id,
+            //         'bukti_pembayaran_rekanan' => 'required|unique:tagihan,bukti_pembayaran,' . $id,
+            //         'e_billing_rekanan' => 'required|unique:tagihan,e_billing,' . $id,
+            //         'e_spt_rekanan' => 'required|unique:tagihan,e_spt,' . $id,
+            //         'no_kwitansi_rekanan' => 'required|unique:tagihan,no_kwitansi,' . $id,
+            //     ], $messages);
+            // } else {
+            //     $this->validate(request(), [
+            //         'no_kwitansi_rekanan' => 'required|unique:tagihan,no_kwitansi,' . $id,
+            //     ], $messages);
+            // }
 
-            return $status = 'disetujui asmentu';
+            // return $status = 'disetujui asmentu';
         }
         try {
             if ($data) {
