@@ -1021,7 +1021,8 @@
 
                                             </div>
                                             <div class="col-12">
-                                                <button class="btn btn-success" type="button">Kirim ke Rekanan</button>
+                                                <button class="btn btn-success" id="btnkirimwa" type="button">Kirim ke
+                                                    Rekanan</button>
                                             </div>
                                         </div>
                                     @endif
@@ -1258,13 +1259,22 @@
                             </div>
                         </form>
                     @endif
+                    @if (!auth()->user()->hasRole('rekanan'))
+                        @if (auth()->user()->hasRole('asisten-manajer-tata-usaha'))
+                            <form action="{{ route('tagihan.dokumen', $tagihan->id) }}" method="POST" role="form"
+                                id="form-kirim-wa">
+                                {{ csrf_field() }}
+                                {{ method_field('PUT') }}
+                                <input type="text" name="kirim_wa" value="kirim">
+                            </form>
+                        @endif
+                    @endif
 
                     <!-- /.row -->
                     <!-- Main row  dataitem-->
                     <!-- /.row (main row) -->
                 </div><!-- /.container-fluid -->
             </div><!-- /.container-fluid -->
-        </div><!-- /.container-fluid -->
         </div><!-- /.container-fluid -->
 
     @stop
@@ -1335,118 +1345,126 @@
             };
 
             // check checkbok_no_kwitansi
-            @if (auth()->user()->hasRole('asisten-manajer-tata-usaha') && $pkp == 'ya')
+            @if (auth()->user()->hasRole('asisten-manajer-tata-usaha'))
+                // btnkirimwa
+                $('#btnkirimwa').on('click', function() {
+                    $('#form-kirim-wa').submit();
+                });
+                @if ($pkp == 'ya')
 
-                $('#checkbok_no_kwitansi').on('click', function() {
+                    $('#checkbok_no_kwitansi').on('click', function() {
 
-                    if ($(this).is(':checked')) {
-                        $('#no_kwitansi_check').val('ya');
-                    } else {
-                        $('#no_kwitansi_check').val('tidak');
-                    }
-                    if ($('#checkbok_e_billing').is(':checked') && $('#checkbok_no_faktur_pajak').is(':checked') && $(
-                            '#checkbok_bukti_pembayaran').is(':checked') && $('#checkbok_e_spt').is(':checked')) {
                         if ($(this).is(':checked')) {
+                            $('#no_kwitansi_check').val('ya');
+                        } else {
+                            $('#no_kwitansi_check').val('tidak');
+                        }
+                        if ($('#checkbok_e_billing').is(':checked') && $('#checkbok_no_faktur_pajak').is(':checked') &&
+                            $(
+                                '#checkbok_bukti_pembayaran').is(':checked') && $('#checkbok_e_spt').is(':checked')) {
+                            if ($(this).is(':checked')) {
+                                $('#btn_setujui').prop('disabled', false);
+                            } else {
+                                $('#btn_setujui').prop('disabled', true);
+
+                            }
+                        } else {
+                            $('#btn_setujui').prop('disabled', true);
+                        }
+                    });
+                    // check checkbok_e_billing
+                    $('#checkbok_e_billing').on('click', function() {
+                        if ($(this).is(':checked')) {
+                            $('#e_billing_check').val('ya');
+                        } else {
+                            $('#e_billing_check').val('tidak');
+                        }
+                        if ($('#checkbok_no_kwitansi').is(':checked') && $('#checkbok_no_faktur_pajak').is(
+                                ':checked') && $(
+                                '#checkbok_bukti_pembayaran').is(':checked') && $('#checkbok_e_spt').is(':checked')) {
+                            if ($(this).is(':checked')) {
+                                $('#btn_setujui').prop('disabled', false);
+                            } else {
+                                $('#btn_setujui').prop('disabled', true);
+
+                            }
+                        } else {
+                            $('#btn_setujui').prop('disabled', true);
+                        }
+                    });
+                    // check checkbok_no_faktur_pajak
+                    $('#checkbok_no_faktur_pajak').on('click', function() {
+                        if ($(this).is(':checked')) {
+                            $('#no_faktur_pajak_check').val('ya');
+                        } else {
+                            $('#no_faktur_pajak_check').val('tidak');
+                        }
+                        if ($('#checkbok_no_kwitansi').is(':checked') && $('#checkbok_e_billing').is(':checked') && $(
+                                '#checkbok_bukti_pembayaran').is(':checked') && $('#checkbok_e_spt').is(':checked')) {
+                            if ($(this).is(':checked')) {
+                                $('#btn_setujui').prop('disabled', false);
+                            } else {
+                                $('#btn_setujui').prop('disabled', true);
+
+                            }
+                        } else {
+                            $('#btn_setujui').prop('disabled', true);
+                        }
+                    });
+                    // check checkbok_bukti_pembayaran
+                    $('#checkbok_bukti_pembayaran').on('click', function() {
+                        if ($(this).is(':checked')) {
+                            $('#bukti_pembayaran_check').val('ya');
+                        } else {
+                            $('#bukti_pembayaran_check').val('tidak');
+                        }
+                        if ($('#checkbok_no_kwitansi').is(':checked') && $('#checkbok_e_billing').is(':checked') && $(
+                                '#checkbok_no_faktur_pajak').is(':checked') && $('#checkbok_e_spt').is(':checked')) {
+                            if ($(this).is(':checked')) {
+                                $('#btn_setujui').prop('disabled', false);
+                            } else {
+                                $('#btn_setujui').prop('disabled', true);
+
+                            }
+                        } else {
+                            $('#btn_setujui').prop('disabled', true);
+                        }
+                    });
+                    // check checkbok_e_spt
+                    $('#checkbok_e_spt').on('click', function() {
+                        if ($(this).is(':checked')) {
+                            $('#e_spt_check').val('ya');
+                        } else {
+                            $('#e_spt_check').val('tidak');
+                        }
+                        if ($('#checkbok_no_kwitansi').is(':checked') && $('#checkbok_e_billing').is(':checked') && $(
+                                '#checkbok_no_faktur_pajak').is(':checked') && $('#checkbok_bukti_pembayaran').is(
+                                ':checked')) {
+                            if ($(this).is(':checked')) {
+                                $('#btn_setujui').prop('disabled', false);
+                            } else {
+                                $('#btn_setujui').prop('disabled', true);
+
+                            }
+                        } else {
+                            $('#btn_setujui').prop('disabled', true);
+                        }
+                    });
+                @else
+                    $('#checkbok_no_kwitansi').on('click', function() {
+                        if ($(this).is(':checked')) {
+                            $('#no_kwitansi_check').val('ya');
                             $('#btn_setujui').prop('disabled', false);
                         } else {
+                            $('#no_kwitansi_check').val('tidak');
                             $('#btn_setujui').prop('disabled', true);
 
                         }
-                    } else {
-                        $('#btn_setujui').prop('disabled', true);
-                    }
-                });
-                // check checkbok_e_billing
-                $('#checkbok_e_billing').on('click', function() {
-                    if ($(this).is(':checked')) {
-                        $('#e_billing_check').val('ya');
-                    } else {
-                        $('#e_billing_check').val('tidak');
-                    }
-                    if ($('#checkbok_no_kwitansi').is(':checked') && $('#checkbok_no_faktur_pajak').is(':checked') && $(
-                            '#checkbok_bukti_pembayaran').is(':checked') && $('#checkbok_e_spt').is(':checked')) {
-                        if ($(this).is(':checked')) {
-                            $('#btn_setujui').prop('disabled', false);
-                        } else {
-                            $('#btn_setujui').prop('disabled', true);
-
-                        }
-                    } else {
-                        $('#btn_setujui').prop('disabled', true);
-                    }
-                });
-                // check checkbok_no_faktur_pajak
-                $('#checkbok_no_faktur_pajak').on('click', function() {
-                    if ($(this).is(':checked')) {
-                        $('#no_faktur_pajak_check').val('ya');
-                    } else {
-                        $('#no_faktur_pajak_check').val('tidak');
-                    }
-                    if ($('#checkbok_no_kwitansi').is(':checked') && $('#checkbok_e_billing').is(':checked') && $(
-                            '#checkbok_bukti_pembayaran').is(':checked') && $('#checkbok_e_spt').is(':checked')) {
-                        if ($(this).is(':checked')) {
-                            $('#btn_setujui').prop('disabled', false);
-                        } else {
-                            $('#btn_setujui').prop('disabled', true);
-
-                        }
-                    } else {
-                        $('#btn_setujui').prop('disabled', true);
-                    }
-                });
-                // check checkbok_bukti_pembayaran
-                $('#checkbok_bukti_pembayaran').on('click', function() {
-                    if ($(this).is(':checked')) {
-                        $('#bukti_pembayaran_check').val('ya');
-                    } else {
-                        $('#bukti_pembayaran_check').val('tidak');
-                    }
-                    if ($('#checkbok_no_kwitansi').is(':checked') && $('#checkbok_e_billing').is(':checked') && $(
-                            '#checkbok_no_faktur_pajak').is(':checked') && $('#checkbok_e_spt').is(':checked')) {
-                        if ($(this).is(':checked')) {
-                            $('#btn_setujui').prop('disabled', false);
-                        } else {
-                            $('#btn_setujui').prop('disabled', true);
-
-                        }
-                    } else {
-                        $('#btn_setujui').prop('disabled', true);
-                    }
-                });
-                // check checkbok_e_spt
-                $('#checkbok_e_spt').on('click', function() {
-                    if ($(this).is(':checked')) {
-                        $('#e_spt_check').val('ya');
-                    } else {
-                        $('#e_spt_check').val('tidak');
-                    }
-                    if ($('#checkbok_no_kwitansi').is(':checked') && $('#checkbok_e_billing').is(':checked') && $(
-                            '#checkbok_no_faktur_pajak').is(':checked') && $('#checkbok_bukti_pembayaran').is(
-                            ':checked')) {
-                        if ($(this).is(':checked')) {
-                            $('#btn_setujui').prop('disabled', false);
-                        } else {
-                            $('#btn_setujui').prop('disabled', true);
-
-                        }
-                    } else {
-                        $('#btn_setujui').prop('disabled', true);
-                    }
-                });
-            @elseif (auth()->user()->hasRole('asisten-manajer-tata-usaha'))
-                $('#checkbok_no_kwitansi').on('click', function() {
-                    if ($(this).is(':checked')) {
-                        $('#no_kwitansi_check').val('ya');
-                        $('#btn_setujui').prop('disabled', false);
-                    } else {
-                        $('#no_kwitansi_check').val('tidak');
-                        $('#btn_setujui').prop('disabled', true);
-
-                    }
-                });
+                    });
+                @endif
             @endif
         </script>
-        <script>
+        {{-- <script>
             $(function() {
                 $("#nama").keypress(function() {
                     $("#nama").removeClass("is-invalid");
@@ -1765,5 +1783,5 @@
                     });
                 });
             });
-        </script>
+        </script> --}}
     @endpush

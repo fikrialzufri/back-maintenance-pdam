@@ -707,7 +707,7 @@ class TagihanController extends Controller
 
         $bulan = getRomawi(date('m'));
         $tahun = date('Y');
-        // return $request;
+        // return $request->no_kwitansi_check;
         if (auth()->user()->hasRole('asisten-manajer-tata-usaha')) {
 
             $messages = [
@@ -1548,6 +1548,7 @@ class TagihanController extends Controller
         $slug_nomor_tagihan = $data->slug;
         $rekanan = $data->rekanan;
         $rekanan_pkp = $data->rekanan_pkp;
+        return $kirim_wa = $data->kirim_wa;
 
         $no_faktur_pajak = $request->no_faktur_pajak;
         $no_faktur_pajak_image = $request->no_faktur_pajak_image;
@@ -1565,25 +1566,29 @@ class TagihanController extends Controller
             'unique' => ':attribute tidak boleh sama',
             'same' => 'Password dan konfirmasi password harus sama',
         ];
-
-        if ($rekanan_pkp == 'ya') {
-            $this->validate(request(), [
-                'no_faktur_pajak' => 'required|unique:tagihan,no_faktur_pajak,' . $id,
-                'no_faktur_pajak_image' => 'required|mimes:jpeg,bmp,png,jpg,pdf',
-                'bukti_pembayaran' => 'required|unique:tagihan,bukti_pembayaran,' . $id,
-                'bukti_pembayaran_image' => 'required|mimes:jpeg,bmp,png,jpg,pdf',
-                'e_billing' => 'required|unique:tagihan,e_billing,' . $id,
-                'e_billing_image' => 'required|mimes:jpeg,bmp,png,jpg,pdf',
-                'e_spt' => 'required|unique:tagihan,e_spt,' . $id,
-                'e_spt_image' => 'required|mimes:jpeg,bmp,png,jpg,pdf',
-                'no_kwitansi' => 'required|unique:tagihan,no_kwitansi,' . $id,
-                'no_kwitansi_image' => 'required|mimes:jpeg,bmp,png,jpg,pdf',
-            ], $messages);
+        if ($kirim_wa) {
+            # code...
         } else {
-            $this->validate(request(), [
-                'no_kwitansi' => 'required|unique:tagihan,no_kwitansi,' . $id,
-                'no_kwitansi_image' => 'required|mimes:jpeg,bmp,png,jpg,pdf',
-            ], $messages);
+
+            if ($rekanan_pkp == 'ya') {
+                $this->validate(request(), [
+                    'no_faktur_pajak' => 'required|unique:tagihan,no_faktur_pajak,' . $id,
+                    'no_faktur_pajak_image' => 'required|mimes:jpeg,bmp,png,jpg,pdf',
+                    'bukti_pembayaran' => 'required|unique:tagihan,bukti_pembayaran,' . $id,
+                    'bukti_pembayaran_image' => 'required|mimes:jpeg,bmp,png,jpg,pdf',
+                    'e_billing' => 'required|unique:tagihan,e_billing,' . $id,
+                    'e_billing_image' => 'required|mimes:jpeg,bmp,png,jpg,pdf',
+                    'e_spt' => 'required|unique:tagihan,e_spt,' . $id,
+                    'e_spt_image' => 'required|mimes:jpeg,bmp,png,jpg,pdf',
+                    'no_kwitansi' => 'required|unique:tagihan,no_kwitansi,' . $id,
+                    'no_kwitansi_image' => 'required|mimes:jpeg,bmp,png,jpg,pdf',
+                ], $messages);
+            } else {
+                $this->validate(request(), [
+                    'no_kwitansi' => 'required|unique:tagihan,no_kwitansi,' . $id,
+                    'no_kwitansi_image' => 'required|mimes:jpeg,bmp,png,jpg,pdf',
+                ], $messages);
+            }
         }
 
 
