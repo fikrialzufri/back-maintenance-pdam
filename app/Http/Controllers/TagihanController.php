@@ -1575,28 +1575,50 @@ class TagihanController extends Controller
             'same' => 'Password dan konfirmasi password harus sama',
         ];
         if ($kirim_wa == 'kirim') {
-            if ($data->pkp == 'ya') {
-                $this->validate(request(), [
-                    'no_faktur_pajak_rekanan' => 'required|unique:tagihan,no_faktur_pajak,' . $id,
-                    'bukti_pembayaran_rekanan' => 'required|unique:tagihan,bukti_pembayaran,' . $id,
-                    'e_billing_rekanan' => 'required|unique:tagihan,e_billing,' . $id,
-                    'e_spt_rekanan' => 'required|unique:tagihan,e_spt,' . $id,
-                    'no_kwitansi_rekanan' => 'required|unique:tagihan,no_kwitansi,' . $id,
-                ], $messages);
+            $erros = [];
+            if ($data->no_kwitansi == null) {
+                $data->no_kwitansi_check = 'tidak';
+                $erros[] = 'no_kwitansi';
             } else {
-                $this->validate(request(), [
-                    'no_kwitansi_rekanan' => 'required|unique:tagihan,no_kwitansi,' . $id,
-                ], $messages);
+                $data->no_kwitansi_check = $request->no_kwitansi_kirim != null ? $request->no_kwitansi_kirim : "tidak";
             }
-            // return $request;
-            $data->no_kwitansi_check = $request->no_kwitansi_kirim != null ? $request->no_kwitansi_kirim : "tidak";
-            $data->no_faktur_pajak_check = $request->no_faktur_pajak_kirim != null ? $request->no_faktur_pajak_kirim : "tidak";
-            $data->bukti_pembayaran_check = $request->bukti_pembayaran_kirim != null ? $request->bukti_pembayaran_kirim : "tidak";
-            $data->e_billing_check = $request->e_billing_kirim != null ? $request->e_billing_kirim : "tidak";
-            $data->e_spt_check = $request->e_spt_kirim != null ? $request->e_spt_kirim : "tidak";
+            if ($data->pkp == 'ya') {
+
+                if ($data->no_faktur_pajak == null) {
+                    $data->no_faktur_pajak_check = 'tidak';
+                    $erros[] = 'no_faktur_pajak_rekanan';
+                } else {
+                    $data->no_faktur_pajak_check = $request->no_faktur_pajak_kirim != null ? $request->no_faktur_pajak_kirim : "tidak";
+                }
+
+                if ($data->bukti_pembayaran == null) {
+                    $data->bukti_pembayaran_check = 'tidak';
+                    $erros[] = 'bukti_pembayaran';
+                } else {
+                    $data->bukti_pembayaran_check = $request->bukti_pembayaran_kirim != null ? $request->bukti_pembayaran_kirim : "tidak";
+                }
+                if ($data->e_billing == null) {
+                    $data->e_billing_check = 'tidak';
+                    $erros[] = 'e_billing';
+                } else {
+                    $data->e_billing_check = $request->e_billing_kirim != null ? $request->e_billing_kirim : "tidak";
+                }
+                if ($data->e_spt == null) {
+                    $data->e_spt_check = 'tidak';
+                    $erros[] = 'e_spt';
+                } else {
+                    $data->e_spt_check = $request->e_spt_kirim != null ? $request->e_spt_kirim : "tidak";
+                }
+            }
+
             $data->save();
 
             DB::commit();
+
+            if (count($erros) > 0) {
+                return redirect()->route($this->route . '.show', $data->slug)->with('message', ucwords(str_replace('-', ' ', $this->route)) . ' Persyaratan tidak sesuai')->with('Class', 'success')->with('wa', 'kirim')->with('erros', $erros);
+            }
+
 
             return redirect()->route($this->route . '.show', $data->slug)->with('wa', 'kirim')->with('Class', 'success');
         } else {

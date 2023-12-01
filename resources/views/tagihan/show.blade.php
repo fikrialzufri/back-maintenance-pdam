@@ -825,6 +825,19 @@
                                                             </div>
                                                         </div>
                                                         <div class="">
+                                                            @if (Session::has('erros'))
+                                                                @if (in_array('no_kwitansi', session('erros')))
+                                                                    <div class=" container-fluid alert alert-warning alert-dismissible fade show"
+                                                                        role="alert">
+                                                                        Kwitansi tagihan tidak boleh kosong
+                                                                        <button type="button" class="close"
+                                                                            data-dismiss="alert" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                @endif
+
+                                                            @endif
                                                             @if ($errors->has('no_kwitansi_rekanan'))
                                                                 <div class=" container-fluid alert alert-warning alert-dismissible fade show"
                                                                     role="alert">
@@ -871,6 +884,20 @@
                                                                 </div>
                                                             </div>
                                                             <div class="">
+                                                                @if (Session::has('erros'))
+
+                                                                    @if (in_array('no_faktur_pajak_rekanan', session('erros')))
+                                                                        <div class=" container-fluid alert alert-warning alert-dismissible fade show"
+                                                                            role="alert">
+                                                                            Faktur Pajak tidak boleh kosong
+                                                                            <button type="button" class="close"
+                                                                                data-dismiss="alert" aria-label="Close">
+                                                                                <span aria-hidden="true">&times;</span>
+                                                                            </button>
+                                                                        </div>
+                                                                    @endif
+
+                                                                @endif
                                                                 @if ($errors->has('no_faktur_pajak_rekanan'))
                                                                     <div class=" container-fluid alert alert-warning alert-dismissible fade show"
                                                                         role="alert">
@@ -914,6 +941,21 @@
                                                                 </div>
                                                             </div>
                                                             <div class="">
+                                                                @if (Session::has('erros'))
+
+                                                                    @if (in_array('e_billing', session('erros')))
+                                                                        <div class=" container-fluid alert alert-warning alert-dismissible fade show"
+                                                                            role="alert">
+                                                                            E-Billing tidak boleh kosong
+                                                                            <button type="button" class="close"
+                                                                                data-dismiss="alert" aria-label="Close">
+                                                                                <span aria-hidden="true">&times;</span>
+                                                                            </button>
+                                                                        </div>
+                                                                    @endif
+
+                                                                @endif
+
                                                                 @if ($errors->has('e_billing_rekanan'))
                                                                     <div class=" container-fluid alert alert-warning alert-dismissible fade show"
                                                                         role="alert">
@@ -960,6 +1002,19 @@
                                                                 </div>
                                                             </div>
                                                             <div class="">
+                                                                @if (Session::has('erros'))
+                                                                    @if (in_array('bukti_pembayaran', session('erros')))
+                                                                        <div class=" container-fluid alert alert-warning alert-dismissible fade show"
+                                                                            role="alert">
+                                                                            Bukti Pembayaran tidak boleh kosong
+                                                                            <button type="button" class="close"
+                                                                                data-dismiss="alert" aria-label="Close">
+                                                                                <span aria-hidden="true">&times;</span>
+                                                                            </button>
+                                                                        </div>
+                                                                    @endif
+
+                                                                @endif
                                                                 @if ($errors->has('bukti_pembayaran_rekanan'))
                                                                     <div class=" container-fluid alert alert-warning alert-dismissible fade show"
                                                                         role="alert">
@@ -1004,6 +1059,19 @@
                                                                 </div>
                                                             </div>
                                                             <div class="">
+                                                                @if (Session::has('erros'))
+                                                                    @if (in_array('e_spt', session('erros')))
+                                                                        <div class=" container-fluid alert alert-warning alert-dismissible fade show"
+                                                                            role="alert">
+                                                                            E-SPT PPN tidak boleh kosong
+                                                                            <button type="button" class="close"
+                                                                                data-dismiss="alert" aria-label="Close">
+                                                                                <span aria-hidden="true">&times;</span>
+                                                                            </button>
+                                                                        </div>
+                                                                    @endif
+
+                                                                @endif
                                                                 @if ($errors->has('e_spt_rekanan'))
                                                                     <div class=" container-fluid alert alert-warning alert-dismissible fade show"
                                                                         role="alert">
@@ -1337,7 +1405,6 @@
 
             // if session wa makan send wa
             @if (Session::has('wa'))
-                console.log("apa");
                 send_handle();
             @endif
 
