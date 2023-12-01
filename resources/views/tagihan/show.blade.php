@@ -1265,7 +1265,19 @@
                                 id="form-kirim-wa">
                                 {{ csrf_field() }}
                                 {{ method_field('PUT') }}
-                                <input type="text" name="kirim_wa" value="kirim">
+                                <input type="hidden" name="kirim_wa" value="kirim">
+                                <input type="hidden" name="no_kwitansi_kirim" value="" id="no_kwitansi_kirim">
+
+                                <input type="hidden" name="no_faktur_pajak_kirim" value=""
+                                    id="no_faktur_pajak_kirim">
+
+                                <input type="hidden" name="e_billing_kirim" value="" id="e_billing_kirim">
+
+                                <input type="hidden" name="bukti_pembayaran_kirim" value=""
+                                    id="bukti_pembayaran_kirim">
+
+                                <input type="hidden" name="e_spt_kirim" value="" id="e_spt_kirim">
+
                             </form>
                         @endif
                     @endif
@@ -1348,7 +1360,20 @@
             @if (auth()->user()->hasRole('asisten-manajer-tata-usaha'))
                 // btnkirimwa
                 $('#btnkirimwa').on('click', function() {
+                    $no_kwitanasi_check = $('#no_kwitansi_check').val();
+                    $no_faktur_pajak_check = $('#no_faktur_pajak_check').val();
+                    $e_billing_check = $('#e_billing_check').val();
+                    $bukti_pembayaran_check = $('#bukti_pembayaran_check').val();
+                    $e_spt_check = $('#e_spt_check').val();
+                    $('#no_kwitansi_kirim').val($no_kwitanasi_check);
+                    $('#no_faktur_pajak_kirim').val($no_faktur_pajak_check);
+                    $('#e_billing_kirim').val($e_billing_check);
+                    $('#bukti_pembayaran_kirim').val($bukti_pembayaran_check);
+                    $('#e_spt_kirim').val($e_spt_check);
+
+                    console.log($no_kwitanasi_check);
                     $('#form-kirim-wa').submit();
+
                 });
                 @if ($pkp == 'ya')
 
@@ -1464,324 +1489,4 @@
                 @endif
             @endif
         </script>
-        {{-- <script>
-            $(function() {
-                $("#nama").keypress(function() {
-                    $("#nama").removeClass("is-invalid");
-                    $("#textNama").html("");
-                });
-                $("#description").keypress(function() {
-                    $("#description").removeClass("is-invalid");
-                    $("#textdescription").html("");
-                });
-
-                var $rows = $('#tableItem tr');
-                $('#search').keyup(function() {
-                    var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
-
-                    $rows.show().filter(function() {
-                        var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
-                        return !~text.indexOf(val);
-                    }).hide();
-                });
-
-                $("#tableDokumentasi tr td").click(function() {
-                    //get <td> element values here!!??
-                });
-                $(".ubah_pekerjaan").click(function() {
-                    // let item_id = $(this).val();
-                    let item_id = $(this).data('item_id');
-                    let id = $(this).data('tagihan_id');
-                    let jumlah = $(this).data('jumlah');
-                    let master = $(this).data('master');
-                    let jenis_harga = $(this).data('jenis_harga');
-
-                    let harga = $('#harga_adjus_' + id).val();
-                    $('#master_nama').text($(this).data('master'));
-
-                    $('#list_item_modal').modal('toggle');
-                    $('#tagihan_id_ganti').val(id);
-                    $('#pekerjaan_label').val(master);
-
-                    $(".ganti_pekerjaan").attr('data-tagihan', id);
-                    $(".ganti_pekerjaan").attr('data-item_id', item_id);
-                    $(".ganti_pekerjaan").attr('data-jumlah', jumlah);
-                    $(".ganti_pekerjaan").attr('data-jenis_harga',
-                        jenis_harga);
-
-                });
-
-                $(".btn_adjust").on("click", function(e) {
-                    let item_id = $(this).data('item_id');;
-                    let id = $(this).data('tagihan_id');
-                    let jumlah = $(this).data('jumlah');
-                    let jenis_harga = $(this).data('jenis_harga');
-                    let harga = $('#harga_adjus_' + id).val();
-
-
-                    $.when($.ajax({
-                        type: 'POST',
-                        url: "{{ route('tagihan.adjust') }}",
-                        data: {
-                            "_token": "{{ csrf_token() }}",
-                            id,
-                            item_id,
-                            jumlah,
-                            jenis_harga,
-                            harga,
-                        },
-                        success: function(data) {
-
-                            const {
-                                id,
-                                nama,
-                                harga,
-                                harga_malam,
-                                tanggal,
-                                grand_total
-                            } = data.data;
-
-                            $.toast({
-                                heading: 'Success',
-                                text: "Mengubahan pekerjaan",
-                                showHideTransition: 'slide',
-                                icon: 'success',
-                                loaderBg: '#f2a654',
-                                position: 'top-right'
-                            })
-
-
-                            $('#listtagihan_' + id).removeClass('bg-danger');
-                            $("#tanggal_adjust_" + id).text(tanggal);
-
-                            $("#total_tagihan_" + id).text("Rp. " + formatRupiah(
-                                grand_total.toString(),
-                                ' '));
-
-                            $("#total_tagihan_value_" + id).val(grand_total);
-                        },
-                        error: function(data) {
-                            Swal.fire({
-                                title: 'Oops...',
-                                text: "gagal mengubah tagihan ",
-                                footer: '<a href="">terdapat data yang kosong</a>'
-                            })
-                        }
-                    })).then(function(data, textStatus, jqXHR) {
-                        // totalHarga(modul)
-                        const {
-                            id,
-                            nama,
-                            harga,
-                            harga_malam,
-                        } = data.data;
-                        $('#nama_master_tagihan_' + id).text(nama);
-
-                        let sumTotal = 0;
-
-                        $('.total_tagihan_value').each(function() {
-                            sumTotal += parseFloat($(this)
-                                .val());
-                        });
-                        $('#grand_total_tagihan_value_' + id).val(sumTotal);
-                        $('#grand_total_tagihan_tampil_' + id).text(formatRupiah(
-                            Math
-                            .floor(
-                                sumTotal).toString(), 'Rp. '));
-
-                        $('#total_tagihan_all').val(formatRupiah(
-                            Math
-                            .floor(
-                                sumTotal).toString(), 'Rp. '));
-
-                        $('#grand_total_tagihan_tampil').text('Rp. ' + formatRupiah(
-                            Math
-                            .floor(
-                                sumTotal).toString(), 'Rp. '));
-                        $('#grand_total_tagihan_value').val(sumTotal);
-                    });
-                });
-
-                $(".ganti_pekerjaan").on("click", function(e) {
-                    e.stopPropagation();
-                    let id = $(this).data('item');
-                    let master = $(this).data('master');
-                    let tagihan_id = $(this).data('tagihan');
-                    let jumlah = $(this).data('jumlah');
-                    let jenis_harga = $(this).data('jenis_harga');
-                    let totalharga = 0;
-                    $.when($.ajax({
-                        type: 'GET',
-                        url: "{{ route('item.detail') }}",
-                        data: {
-                            "_token": "{{ csrf_token() }}",
-                            id,
-                            jenis_harga,
-                        },
-                        success: function(data) {
-
-                            const {
-                                id,
-                                nama,
-                                harga,
-                                jenis,
-                                harga_malam,
-                            } = data.data;
-
-                            if (jenis_harga == 'malam') {
-                                $("#harga_adjus_" + tagihan_id).val(formatRupiah(harga_malam
-                                    .toString(),
-                                    ' '));
-
-                                totalharga = jumlah * harga_malam;
-                            } else {
-                                $("#harga_adjus_" + tagihan_id).val(formatRupiah(harga
-                                    .toString(),
-                                    ' '));
-
-                                totalharga = jumlah * harga;
-                            }
-
-                            $("#total_tagihan_" + tagihan_id).text("Rp. " + formatRupiah(
-                                totalharga
-                                .toString(),
-                                ' '));
-
-                            $("#total_tagihan_value_" + tagihan_id).val(totalharga);
-
-                            $("#tagihan_master_" + tagihan_id).attr('data-tagihan', tagihan_id);
-                            $("#tagihan_master_" + tagihan_id).attr('data-jumlah', jumlah);
-                            $("#tagihan_master_" + tagihan_id).attr('data-item_id', id);
-                            $("#tagihan_master_" + tagihan_id).attr('data-jenis_harga',
-                                jenis_harga);
-
-                            $("#btn_adjust_" + tagihan_id).attr('data-tagihan', tagihan_id);
-                            $("#btn_adjust_" + tagihan_id).attr('data-jumlah', jumlah);
-                            $("#btn_adjust_" + tagihan_id).attr('data-item_id', id);
-                            $("#btn_adjust_" + tagihan_id).attr('data-jenis_harga',
-                                jenis_harga);
-                            $("#jenis_" + tagihan_id).text(jenis);
-
-
-
-                        },
-                        error: function(data) {
-                            Swal.fire({
-                                title: 'Oops...',
-                                text: "gagal Mengahapus " +
-                                    modul,
-                                footer: '<a href="">terdapat data yang kosong</a>'
-                            })
-                        }
-                    })).then(function(data, textStatus, jqXHR) {
-                        // totalHarga(modul)
-                        const {
-                            id,
-                            nama,
-                            harga,
-                            harga_malam,
-                        } = data.data;
-                        $('#nama_master_tagihan_' + tagihan_id).text(nama);
-                        $('#list_item_modal').modal('toggle');
-
-                        let sumTotal = 0;
-
-                        $('.total_tagihan_value').each(function() {
-                            sumTotal += parseFloat($(this)
-                                .val());
-                        });
-                        $('#grand_total_tagihan_value_' + tagihan_id).val(sumTotal);
-                        $('#grand_total_tagihan_tampil_' + tagihan_id).text(formatRupiah(
-                            Math
-                            .floor(
-                                sumTotal).toString(), 'Rp. '));
-
-                        $('#total_tagihan_all').val(formatRupiah(
-                            Math
-                            .floor(
-                                sumTotal).toString(), 'Rp. '));
-
-                        $('#grand_total_tagihan_tampil').text('Rp. ' + formatRupiah(
-                            Math
-                            .floor(
-                                sumTotal).toString(), 'Rp. '));
-                        $('#grand_total_tagihan_value').val(sumTotal);
-                    });
-
-                });
-
-                function totalharga(tagihan_id) {
-                    let sumTotal = 0;
-
-                    $('.total_tagihan_value').each(function() {
-                        sumTotal += parseFloat($(this)
-                            .val());
-                    });
-                    $('#grand_total_tagihan_value_' + tagihan_id).val(sumTotal);
-                    $('#grand_total_tagihan_tampil_' + tagihan_id).text(formatRupiah(
-                        Math
-                        .floor(
-                            sumTotal).toString(), 'Rp. '));
-
-                    $('#total_tagihan_all').val(formatRupiah(
-                        Math
-                        .floor(
-                            sumTotal).toString(), 'Rp. '));
-
-                    $('#grand_total_tagihan_tampil').text(formatRupiah(
-                        Math
-                        .floor(
-                            sumTotal).toString(), 'Rp. '));
-                    $('#grand_total_tagihan_value').val(sumTotal);
-                }
-
-                // $('.prevSpan').on('click', function() {
-                //     $(".prevSpan").text("«");
-                // });
-                $(".cmbItem").on("change", function(e) {
-                    let item_id = $(this).val();
-                    let tagihan_id = $(this).data('tagihan_id');
-                    let jenis_harga = $(this).data('jenis_harga');
-                    let getharga = 0;
-                    let total_harga = 0;
-                    $.when($.ajax({
-                        type: 'GET',
-                        url: "{{ route('item.detail') }}",
-                        data: {
-                            "_token": "{{ csrf_token() }}",
-                            id: item_id,
-                            jenis_harga,
-                        },
-                        success: function(data) {
-
-                            const {
-                                harga,
-                                harga_malam,
-                            } = data.data;
-
-                            if (jenis_harga == 'malam') {
-                                $("#harga_adjus_" + tagihan_id).val(formatRupiah(harga_malam
-                                    .toString(),
-                                    ' '));
-                            } else {
-                                $("#harga_adjus_" + tagihan_id).val(formatRupiah(harga
-                                    .toString(),
-                                    ' '));
-                            }
-
-                        },
-                        error: function(data) {
-                            Swal.fire({
-                                title: 'Oops...',
-                                text: "gagal Mengahapus " +
-                                    modul,
-                                footer: '<a href="">terdapat data yang kosong</a>'
-                            })
-                        }
-                    })).then(function(data, textStatus, jqXHR) {
-                        // totalHarga(modul)
-                    });
-                });
-            });
-        </script> --}}
     @endpush

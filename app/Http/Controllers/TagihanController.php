@@ -55,6 +55,14 @@ class TagihanController extends Controller
                 'alias' => 'Nama Rekanan',
             ],
             [
+                'name' => 'rekanan_no_hp',
+                'alias' => 'Nomor Hp Rekanan',
+            ],
+            [
+                'name' => 'pkp',
+                'alias' => 'PKP',
+            ],
+            [
                 'name' => 'tanggal',
                 'alias' => 'Tanggal Tagihan',
             ],
@@ -1548,7 +1556,7 @@ class TagihanController extends Controller
         $slug_nomor_tagihan = $data->slug;
         $rekanan = $data->rekanan;
         $rekanan_pkp = $data->rekanan_pkp;
-        return $kirim_wa = $data->kirim_wa;
+        $kirim_wa = $request->kirim_wa;
 
         $no_faktur_pajak = $request->no_faktur_pajak;
         $no_faktur_pajak_image = $request->no_faktur_pajak_image;
@@ -1566,8 +1574,18 @@ class TagihanController extends Controller
             'unique' => ':attribute tidak boleh sama',
             'same' => 'Password dan konfirmasi password harus sama',
         ];
-        if ($kirim_wa) {
-            # code...
+        if ($kirim_wa == 'kirim') {
+            // return $request;
+            $data->no_kwitansi_check = $request->no_kwitansi_kirim != null ? $request->no_kwitansi_kirim : "tidak";
+            $data->no_faktur_pajak_check = $request->no_faktur_pajak_kirim != null ? $request->no_faktur_pajak_kirim : "tidak";
+            $data->bukti_pembayaran_check = $request->bukti_pembayaran_kirim != null ? $request->bukti_pembayaran_kirim : "tidak";
+            $data->e_billing_check = $request->e_billing_kirim != null ? $request->e_billing_kirim : "tidak";
+            $data->e_spt_check = $request->e_spt_kirim != null ? $request->e_spt_kirim : "tidak";
+            $data->save();
+
+            DB::commit();
+
+            return redirect()->route($this->route . '.show', $data->slug)->with('Class', 'success');
         } else {
 
             if ($rekanan_pkp == 'ya') {
@@ -1591,7 +1609,7 @@ class TagihanController extends Controller
             }
         }
 
-
+        return "stipo";
 
 
         $data->no_faktur_pajak = $no_faktur_pajak;
