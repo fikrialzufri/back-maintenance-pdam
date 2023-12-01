@@ -598,29 +598,31 @@
 
                                 @if (!auth()->user()->hasRole('rekanan'))
                                     @if (auth()->user()->hasRole('asisten-manajer-tata-usaha'))
+                                        {{-- CheckBok Rekanan --}}
+                                        <input type="hidden" name="no_kwitansi_check" value=""
+                                            id="no_kwitansi_check">
+                                        <input type="hidden" name="no_kwitansi_rekanan" value="{{ $tagihan->no_kwitansi }}"
+                                            id="no_kwitansi_rekanan">
+                                        <input type="hidden" name="no_faktur_pajak_check" value=""
+                                            id="no_faktur_pajak_check">
+                                        <input type="hidden" name="no_faktur_pajak_rekanan"
+                                            value="{{ $tagihan->no_faktur_pajak }}" id="no_faktur_pajak_rekanan">
+                                        <input type="hidden" name="e_billing_check" value="" id="e_billing_check">
+                                        <input type="hidden" name="e_billing_rekanan" value="{{ $tagihan->e_billing }}"
+                                            id="e_billing_rekanan">
+                                        <input type="hidden" name="bukti_pembayaran_check" value=""
+                                            id="bukti_pembayaran_check">
+                                        <input type="hidden" name="bukti_pembayaran_rekanan"
+                                            value="{{ $tagihan->bukti_pembayaran }}" id="bukti_pembayaran_rekanan">
+                                        <input type="hidden" name="e_spt_check" value="" id="e_spt_check">
+                                        <input type="hidden" name="e_spt_rekanan" value="{{ $tagihan->e_spt }}"
+                                            id="e_spt_rekanan">
+
+
+
                                     @endif
 
-                                    @if (auth()->user()->hasRole('asisten-manajer-perencanaan-keuangan') && $tagihan->status === 'disetujui dirut')
-                                        {{-- <div class="row mb-5">
-                                            <div class="col-12">
-                                                <div>
-                                                    <label for="kode_anggaran" class=" form-control-label">Kode
-                                                        anggaran</label>
-                                                </div>
-                                                <div>
-                                                    <input type="text" name="kode_anggaran" placeholder="Kode anggaran"
-                                                        class="form-control  {{ $errors->has('kode_anggaran') ? 'form-control is-invalid' : 'form-control' }}"
-                                                        value="{{ old('kode_anggaran') }}" required>
-                                                </div>
 
-                                                @if ($errors->has('kode_anggaran'))
-                                                    <span class="text-danger">
-                                                        <strong id="textkk">{{ $errors->first('kode_anggaran') }}</strong>
-                                                    </span>
-                                                @endif
-                                            </div>
-                                        </div> --}}
-                                    @endif
                                     @if (auth()->user()->hasRole('asisten-manajer-akuntansi') && $tagihan->status === 'disetujui asmenanggaran')
                                         <div class="row mb-5">
                                             <div class="col-12">
@@ -813,10 +815,22 @@
                                                                     <input type="checkbox" aria-label="Persyaratan Sesuai"
                                                                         id="checkbok_no_kwitansi"
                                                                         @if (!auth()->user()->hasRole('asisten-manajer-tata-usaha')) onclick="return false;" @endif
-                                                                        name="checkbok_no_kwitansi">
+                                                                        name="checkbok_no_kwitansi" {{ old('checkbok_no_kwitansi') ? 'checked' : '' }}>
                                                                     <span class="pl-2">Persyaratan Sesuai</span>
                                                                 </div>
                                                             </div>
+                                                        </div>
+                                                        <div class="">
+                                                            @if ($errors->has('no_kwitansi_rekanan'))
+                                                                <div class=" container-fluid alert alert-warning alert-dismissible fade show"
+                                                                    role="alert">
+                                                                    {{ $errors->first('no_kwitansi_rekanan') }}
+                                                                    <button type="button" class="close"
+                                                                        data-dismiss="alert" aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                </div>
+                                                            @endif
                                                         </div>
                                                     </div>
                                                 </div>
@@ -845,10 +859,23 @@
                                                                         <input type="checkbox" aria-label="Persyaratan Sesuai"
                                                                             id="checkbok_no_faktur_pajak"
                                                                             @if (!auth()->user()->hasRole('asisten-manajer-tata-usaha')) onclick="return false;" @endif
-                                                                            name="checkbok_no_faktur_pajak">
+                                                                            name="checkbok_no_faktur_pajak"
+                                                                            {{ old('checkbok_no_faktur_pajak') ? 'checked' : '' }}>
                                                                         <span class="pl-2">Persyaratan Sesuai</span>
                                                                     </div>
                                                                 </div>
+                                                            </div>
+                                                            <div class="">
+                                                                @if ($errors->has('no_faktur_pajak_rekanan'))
+                                                                    <div class=" container-fluid alert alert-warning alert-dismissible fade show"
+                                                                        role="alert">
+                                                                        {{ $errors->first('no_faktur_pajak_rekanan') }}
+                                                                        <button type="button" class="close"
+                                                                            data-dismiss="alert" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                @endif
                                                             </div>
                                                         </div>
                                                     </div>
@@ -874,10 +901,23 @@
                                                                         <input type="checkbox" aria-label="Persyaratan Sesuai"
                                                                             id="checkbok_e_billing"
                                                                             @if (!auth()->user()->hasRole('asisten-manajer-tata-usaha')) onclick="return false;" @endif
-                                                                            name="checkbok_e_billing">
+                                                                            name="checkbok_e_billing"
+                                                                            {{ old('checkbok_e_billing') ? 'checked' : '' }}>
                                                                         <span class="pl-2">Persyaratan Sesuai</span>
                                                                     </div>
                                                                 </div>
+                                                            </div>
+                                                            <div class="">
+                                                                @if ($errors->has('e_billing_rekanan'))
+                                                                    <div class=" container-fluid alert alert-warning alert-dismissible fade show"
+                                                                        role="alert">
+                                                                        {{ $errors->first('e_billing_rekanan') }}
+                                                                        <button type="button" class="close"
+                                                                            data-dismiss="alert" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                @endif
                                                             </div>
                                                         </div>
                                                     </div>
@@ -906,10 +946,23 @@
                                                                         <input type="checkbox" aria-label="Persyaratan Sesuai"
                                                                             id="checkbok_bukti_pembayaran"
                                                                             @if (!auth()->user()->hasRole('asisten-manajer-tata-usaha')) onclick="return false;" @endif
-                                                                            name="checkbok_bukti_pembayaran">
+                                                                            name="checkbok_bukti_pembayaran"
+                                                                            {{ old('checkbok_bukti_pembayaran') ? 'checked' : '' }}>
                                                                         <span class="pl-2">Persyaratan Sesuai</span>
                                                                     </div>
                                                                 </div>
+                                                            </div>
+                                                            <div class="">
+                                                                @if ($errors->has('bukti_pembayaran_rekanan'))
+                                                                    <div class=" container-fluid alert alert-warning alert-dismissible fade show"
+                                                                        role="alert">
+                                                                        {{ $errors->first('bukti_pembayaran_rekanan') }}
+                                                                        <button type="button" class="close"
+                                                                            data-dismiss="alert" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                @endif
                                                             </div>
                                                         </div>
                                                     </div>
@@ -935,15 +988,32 @@
                                                                         <input type="checkbox" aria-label="Persyaratan Sesuai"
                                                                             id="checkbok_e_spt"
                                                                             @if (!auth()->user()->hasRole('asisten-manajer-tata-usaha')) onclick="return false;" @endif
-                                                                            name="checkbok_e_spt">
-                                                                        <span class="pl-2">Persyaratan Sesuai</span>
+                                                                            name="checkbok_e_spt"
+                                                                            {{ old('checkbok_e_spt') ? 'checked' : '' }}>
+                                                                        <span class="pl-2">Persyaratan Sesuai
+                                                                        </span>
                                                                     </div>
                                                                 </div>
+                                                            </div>
+                                                            <div class="">
+                                                                @if ($errors->has('e_spt_rekanan'))
+                                                                    <div class=" container-fluid alert alert-warning alert-dismissible fade show"
+                                                                        role="alert">
+                                                                        {{ $errors->first('e_spt_rekanan') }}
+                                                                        <button type="button" class="close"
+                                                                            data-dismiss="alert" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                @endif
                                                             </div>
                                                         </div>
                                                     </div>
                                                 @endif
 
+                                            </div>
+                                            <div class="col-12">
+                                                <button class="btn btn-success">Kirim ke Rekanan</button>
                                             </div>
                                         </div>
                                     @endif
@@ -990,6 +1060,7 @@
                                                         </button>
                                                     </div>
                                                 @endif
+
                                                 <div class="">
                                                     <input type="file" value="no_kwitansi_image" name="no_kwitansi_image"
                                                         placeholder="" id="" class="form-control">
@@ -1259,6 +1330,12 @@
             @if (auth()->user()->hasRole('asisten-manajer-tata-usaha') && $pkp == 'ya')
 
                 $('#checkbok_no_kwitansi').on('click', function() {
+
+                    if ($(this).is(':checked')) {
+                        $('#no_kwitansi_check').val('ya');
+                    } else {
+                        $('#no_kwitansi_check').val('tidak');
+                    }
                     if ($('#checkbok_e_billing').is(':checked') && $('#checkbok_no_faktur_pajak').is(':checked') && $(
                             '#checkbok_bukti_pembayaran').is(':checked') && $('#checkbok_e_spt').is(':checked')) {
                         if ($(this).is(':checked')) {
@@ -1273,6 +1350,11 @@
                 });
                 // check checkbok_e_billing
                 $('#checkbok_e_billing').on('click', function() {
+                    if ($(this).is(':checked')) {
+                        $('#e_billing_check').val('ya');
+                    } else {
+                        $('#e_billing_check').val('tidak');
+                    }
                     if ($('#checkbok_no_kwitansi').is(':checked') && $('#checkbok_no_faktur_pajak').is(':checked') && $(
                             '#checkbok_bukti_pembayaran').is(':checked') && $('#checkbok_e_spt').is(':checked')) {
                         if ($(this).is(':checked')) {
@@ -1287,6 +1369,11 @@
                 });
                 // check checkbok_no_faktur_pajak
                 $('#checkbok_no_faktur_pajak').on('click', function() {
+                    if ($(this).is(':checked')) {
+                        $('#no_faktur_pajak_check').val('ya');
+                    } else {
+                        $('#no_faktur_pajak_check').val('tidak');
+                    }
                     if ($('#checkbok_no_kwitansi').is(':checked') && $('#checkbok_e_billing').is(':checked') && $(
                             '#checkbok_bukti_pembayaran').is(':checked') && $('#checkbok_e_spt').is(':checked')) {
                         if ($(this).is(':checked')) {
@@ -1301,6 +1388,11 @@
                 });
                 // check checkbok_bukti_pembayaran
                 $('#checkbok_bukti_pembayaran').on('click', function() {
+                    if ($(this).is(':checked')) {
+                        $('#bukti_pembayaran_check').val('ya');
+                    } else {
+                        $('#bukti_pembayaran_check').val('tidak');
+                    }
                     if ($('#checkbok_no_kwitansi').is(':checked') && $('#checkbok_e_billing').is(':checked') && $(
                             '#checkbok_no_faktur_pajak').is(':checked') && $('#checkbok_e_spt').is(':checked')) {
                         if ($(this).is(':checked')) {
@@ -1315,6 +1407,11 @@
                 });
                 // check checkbok_e_spt
                 $('#checkbok_e_spt').on('click', function() {
+                    if ($(this).is(':checked')) {
+                        $('#e_spt_check').val('ya');
+                    } else {
+                        $('#e_spt_check').val('tidak');
+                    }
                     if ($('#checkbok_no_kwitansi').is(':checked') && $('#checkbok_e_billing').is(':checked') && $(
                             '#checkbok_no_faktur_pajak').is(':checked') && $('#checkbok_bukti_pembayaran').is(
                             ':checked')) {
@@ -1331,8 +1428,10 @@
             @elseif (auth()->user()->hasRole('asisten-manajer-tata-usaha'))
                 $('#checkbok_no_kwitansi').on('click', function() {
                     if ($(this).is(':checked')) {
+                        $('#no_kwitansi_check').val('ya');
                         $('#btn_setujui').prop('disabled', false);
                     } else {
+                        $('#no_kwitansi_check').val('tidak');
                         $('#btn_setujui').prop('disabled', true);
 
                     }

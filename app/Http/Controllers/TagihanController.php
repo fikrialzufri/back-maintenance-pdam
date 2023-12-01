@@ -718,6 +718,30 @@ class TagihanController extends Controller
         // }
 
         // $nomor_tagihan = $data->nomor_tagihan . $bulan . '/' . $tahun;
+        if (auth()->user()->hasRole('asisten-manajer-tata-usaha')) {
+
+            $messages = [
+                'required' => ':attribute tidak boleh kosong',
+                'unique' => ':attribute tidak boleh sama',
+                'same' => 'Password dan konfirmasi password harus sama',
+            ];
+
+            if ($data->pkp == 'ya') {
+                $this->validate(request(), [
+                    'no_faktur_pajak_rekanan' => 'required|unique:tagihan,no_faktur_pajak,' . $id,
+                    'bukti_pembayaran_rekanan' => 'required|unique:tagihan,bukti_pembayaran,' . $id,
+                    'e_billing_rekanan' => 'required|unique:tagihan,e_billing,' . $id,
+                    'e_spt_rekanan' => 'required|unique:tagihan,e_spt,' . $id,
+                    'no_kwitansi_rekanan' => 'required|unique:tagihan,no_kwitansi,' . $id,
+                ], $messages);
+            } else {
+                $this->validate(request(), [
+                    'no_kwitansi_rekanan' => 'required|unique:tagihan,no_kwitansi,' . $id,
+                ], $messages);
+            }
+
+            return $status = 'disetujui asmentu';
+        }
         try {
             if ($data) {
                 $status = 'dikoreksi';
@@ -731,9 +755,7 @@ class TagihanController extends Controller
                     // $data->slug = Str::slug($nomor_tagihan);
                 }
 
-                if (auth()->user()->hasRole('asisten-manajer-tata-usaha')) {
-                    $status = 'disetujui asmentu';
-                }
+
                 if (auth()->user()->hasRole('manajer-umum-dan-kesekretariatan')) {
                     $status = 'disetujui mu';
                 }
@@ -742,6 +764,15 @@ class TagihanController extends Controller
                 }
                 if (auth()->user()->hasRole('direktur-utama')) {
                     $status = 'disetujui dirut';
+                }
+                if (auth()->user()->hasRole('asisten-manajer-tata-usaha')) {
+
+                    $status = 'disetujui asmentu';
+                    $data->no_kwitansi_check = $request->no_kwitansi_check;
+                    $data->no_faktur_pajak_check = $request->no_faktur_pajak_check;
+                    $data->bukti_pembayaran_check = $request->bukti_pembayaran_check;
+                    $data->e_billing_check = $request->e_billing_check;
+                    $data->e_spt_check = $request->e_spt_check;
                 }
 
                 if (auth()->user()->hasRole('asisten-manajer-perencanaan-keuangan')) {
