@@ -820,7 +820,7 @@
                                                                         name="checkbok_no_kwitansi"
                                                                         {{ $tagihan->no_kwitansi_check == 'ya' ? 'checked' : '' }}>
                                                                     <span class="pl-2">Persyaratan Sesuai
-                                                                        {{ $tagihan->no_kwitansi_check }}</span>
+                                                                    </span>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -828,7 +828,7 @@
                                                             @if ($errors->has('no_kwitansi_rekanan'))
                                                                 <div class=" container-fluid alert alert-warning alert-dismissible fade show"
                                                                     role="alert">
-                                                                    {{ $errors->first('no_kwitansi_rekanan') }}
+                                                                    Kwitansi tagihan tidak boleh kosong
                                                                     <button type="button" class="close"
                                                                         data-dismiss="alert" aria-label="Close">
                                                                         <span aria-hidden="true">&times;</span>
@@ -874,7 +874,7 @@
                                                                 @if ($errors->has('no_faktur_pajak_rekanan'))
                                                                     <div class=" container-fluid alert alert-warning alert-dismissible fade show"
                                                                         role="alert">
-                                                                        {{ $errors->first('no_faktur_pajak_rekanan') }}
+                                                                        Faktur Pajak tidak boleh kosong
                                                                         <button type="button" class="close"
                                                                             data-dismiss="alert" aria-label="Close">
                                                                             <span aria-hidden="true">&times;</span>
@@ -917,7 +917,7 @@
                                                                 @if ($errors->has('e_billing_rekanan'))
                                                                     <div class=" container-fluid alert alert-warning alert-dismissible fade show"
                                                                         role="alert">
-                                                                        {{ $errors->first('e_billing_rekanan') }}
+                                                                        E-Billing tidak boleh kosong
                                                                         <button type="button" class="close"
                                                                             data-dismiss="alert" aria-label="Close">
                                                                             <span aria-hidden="true">&times;</span>
@@ -963,7 +963,7 @@
                                                                 @if ($errors->has('bukti_pembayaran_rekanan'))
                                                                     <div class=" container-fluid alert alert-warning alert-dismissible fade show"
                                                                         role="alert">
-                                                                        {{ $errors->first('bukti_pembayaran_rekanan') }}
+                                                                        Bukti Pembayaran tidak boleh kosong
                                                                         <button type="button" class="close"
                                                                             data-dismiss="alert" aria-label="Close">
                                                                             <span aria-hidden="true">&times;</span>
@@ -1007,7 +1007,7 @@
                                                                 @if ($errors->has('e_spt_rekanan'))
                                                                     <div class=" container-fluid alert alert-warning alert-dismissible fade show"
                                                                         role="alert">
-                                                                        {{ $errors->first('e_spt_rekanan') }}
+                                                                        E-SPT PPN tidak boleh kosong
                                                                         <button type="button" class="close"
                                                                             data-dismiss="alert" aria-label="Close">
                                                                             <span aria-hidden="true">&times;</span>

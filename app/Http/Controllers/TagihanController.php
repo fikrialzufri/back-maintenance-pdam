@@ -1575,6 +1575,19 @@ class TagihanController extends Controller
             'same' => 'Password dan konfirmasi password harus sama',
         ];
         if ($kirim_wa == 'kirim') {
+            if ($data->pkp == 'ya') {
+                $this->validate(request(), [
+                    'no_faktur_pajak_rekanan' => 'required|unique:tagihan,no_faktur_pajak,' . $id,
+                    'bukti_pembayaran_rekanan' => 'required|unique:tagihan,bukti_pembayaran,' . $id,
+                    'e_billing_rekanan' => 'required|unique:tagihan,e_billing,' . $id,
+                    'e_spt_rekanan' => 'required|unique:tagihan,e_spt,' . $id,
+                    'no_kwitansi_rekanan' => 'required|unique:tagihan,no_kwitansi,' . $id,
+                ], $messages);
+            } else {
+                $this->validate(request(), [
+                    'no_kwitansi_rekanan' => 'required|unique:tagihan,no_kwitansi,' . $id,
+                ], $messages);
+            }
             // return $request;
             $data->no_kwitansi_check = $request->no_kwitansi_kirim != null ? $request->no_kwitansi_kirim : "tidak";
             $data->no_faktur_pajak_check = $request->no_faktur_pajak_kirim != null ? $request->no_faktur_pajak_kirim : "tidak";
