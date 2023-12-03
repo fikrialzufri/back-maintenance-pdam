@@ -662,699 +662,696 @@
                                                                 Pembayaran</button>
                                                         @else
                                                             <button type="submit" class="btn btn-primary" id="btn_setujui"
-                                                                @if (auth()->user()->hasRole('asisten-manajer-tata-usaha')) disabled @endif>Setujui
-                                                                Tagihan</button>
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                        <br>
-                                        <br>
+                                                                @if (auth()->user()->hasRole('asisten-manajer-tata-usaha')) @if ($pkp == 'ya')
+                                                                    @if (
+                                                                        $tagihan->no_kwitansi_check == 'tidak' ||
+                                                                            $tagihan->no_faktur_pajak_check == 'tidak' ||
+                                                                            $tagihan->e_billing_check == 'tidak' ||
+                                                                            $tagihan->bukti_pembayaran_check == 'tidak' ||
+                                                                            $tagihan->e_spt_check == 'tidak')
+                                                                        disabled @endif
+                                                            @else @if ($tagihan->no_kwitansi_check == 'tidak') disabled @endif
+                                                                @endif
+                                                        @endif>SetujuiTagihan</button>
                                     @endif
+                            </div>
+                    </div>
+                </div>
+
+            </div>
+            <br>
+            <br>
+            @endif
+            @endif
+
+
+
+            <!-- /.card-body -->
+            <div class="card-footer clearfix">
+                <div class="row">
+                    @if ($tagihan)
+                        <div class="col-12">
+                            <div class="d-flex flex-row">
+
+                                <div class="p-2">
+                                    <a href="{{ route('tagihan.word') }}?id={{ $tagihan->id }}&word=rekanan"
+                                        target="_blank" class="btn btn-primary"><span class="nav-icon fa fa-file-word"
+                                            aria-hidden="true"></span>
+                                        Privew Tagihan</a>
+                                </div>
+
+                                @if (!auth()->user()->hasRole('rekanan'))
+                                    <div class="p-2">
+                                        @if (
+                                            $tagihan->status === 'disetujui' ||
+                                                $tagihan->status === 'dibayar' ||
+                                                ($tagihan->status === 'disetujui dirut' ||
+                                                    $tagihan->status === 'disetujui asmentu' ||
+                                                    $tagihan->status === 'disetujui mu' ||
+                                                    $tagihan->status === 'disetujui dirum' ||
+                                                    $tagihan->status === 'disetujui dirut' ||
+                                                    $tagihan->status === 'disetujui asmenakuntan' ||
+                                                    $tagihan->status === 'disetujui asmenanggaran' ||
+                                                    $tagihan->status === 'disetujui mankeu'))
+                                            <a href="{{ route('tagihan.word') }}?id={{ $tagihan->id }}" target="_blank"
+                                                class="btn btn-success"><span class="nav-icon fa fa-file-word"
+                                                    aria-hidden="true"></span>
+                                                Privew Tagihan BAPP</a>
+                                        @endif
+                                    </div>
+                                    <div class="p-2">
+                                        {{-- @if ($tagihan->status === 'disetujui dirut') --}}
+                                        @if (
+                                            $tagihan->status === 'disetujui' ||
+                                                $tagihan->status === 'dibayar' ||
+                                                ($tagihan->status === 'disetujui dirut' ||
+                                                    $tagihan->status === 'disetujui asmentu' ||
+                                                    $tagihan->status === 'disetujui mu' ||
+                                                    $tagihan->status === 'disetujui dirum' ||
+                                                    $tagihan->status === 'disetujui dirut' ||
+                                                    $tagihan->status === 'disetujui asmenakuntan' ||
+                                                    $tagihan->status === 'disetujui asmenanggaran' ||
+                                                    $tagihan->status === 'disetujui mankeu'))
+                                            <a href="{{ route('tagihan.word') }}?id={{ $tagihan->id }}&word=bapp"
+                                                target="_blank" class="btn btn-success"><span
+                                                    class="nav-icon fa fa-file-word" aria-hidden="true"></span>
+                                                Privew Tagihan BAPP</a>
+                                        @endif
+                                    </div>
                                 @endif
+                            </div>
 
+                        </div>
+                    @endif
+                </div>
+                <div class="row mt-10">
+                    @if ($ktp != null)
 
+                        <div class="col-md-3">
+                            <div class="card">
+                                <!-- /.card-header -->
+
+                                <div class="card-body">
+                                    <h1>KTP Rekanaan</h1>
+                                    {{-- show image --}}
+                                    <img src="{{ asset('storage/rekanan/' . $ktp) }}" alt="{{ $rekanan }}."
+                                        class="card-img-top img-thumbnail">
+
+                                </div>
 
                                 <!-- /.card-body -->
                                 <div class="card-footer clearfix">
-                                    <div class="row">
-                                        @if ($tagihan)
-                                            <div class="col-12">
-                                                <div class="d-flex flex-row">
 
-                                                    <div class="p-2">
-                                                        <a href="{{ route('tagihan.word') }}?id={{ $tagihan->id }}&word=rekanan"
-                                                            target="_blank" class="btn btn-primary"><span
-                                                                class="nav-icon fa fa-file-word" aria-hidden="true"></span>
-                                                            Privew Tagihan</a>
-                                                    </div>
+                                </div>
 
-                                                    @if (!auth()->user()->hasRole('rekanan'))
-                                                        <div class="p-2">
-                                                            @if (
-                                                                $tagihan->status === 'disetujui' ||
-                                                                    $tagihan->status === 'dibayar' ||
-                                                                    ($tagihan->status === 'disetujui dirut' ||
-                                                                        $tagihan->status === 'disetujui asmentu' ||
-                                                                        $tagihan->status === 'disetujui mu' ||
-                                                                        $tagihan->status === 'disetujui dirum' ||
-                                                                        $tagihan->status === 'disetujui dirut' ||
-                                                                        $tagihan->status === 'disetujui asmenakuntan' ||
-                                                                        $tagihan->status === 'disetujui asmenanggaran' ||
-                                                                        $tagihan->status === 'disetujui mankeu'))
-                                                                <a href="{{ route('tagihan.word') }}?id={{ $tagihan->id }}"
-                                                                    target="_blank" class="btn btn-success"><span
-                                                                        class="nav-icon fa fa-file-word"
-                                                                        aria-hidden="true"></span>
-                                                                    Privew Tagihan BAPP</a>
-                                                            @endif
-                                                        </div>
-                                                        <div class="p-2">
-                                                            {{-- @if ($tagihan->status === 'disetujui dirut') --}}
-                                                            @if (
-                                                                $tagihan->status === 'disetujui' ||
-                                                                    $tagihan->status === 'dibayar' ||
-                                                                    ($tagihan->status === 'disetujui dirut' ||
-                                                                        $tagihan->status === 'disetujui asmentu' ||
-                                                                        $tagihan->status === 'disetujui mu' ||
-                                                                        $tagihan->status === 'disetujui dirum' ||
-                                                                        $tagihan->status === 'disetujui dirut' ||
-                                                                        $tagihan->status === 'disetujui asmenakuntan' ||
-                                                                        $tagihan->status === 'disetujui asmenanggaran' ||
-                                                                        $tagihan->status === 'disetujui mankeu'))
-                                                                <a href="{{ route('tagihan.word') }}?id={{ $tagihan->id }}&word=bapp"
-                                                                    target="_blank" class="btn btn-success"><span
-                                                                        class="nav-icon fa fa-file-word"
-                                                                        aria-hidden="true"></span>
-                                                                    Privew Tagihan BAPP</a>
-                                                            @endif
-                                                        </div>
-                                                    @endif
+                            </div>
+                            <!-- ./col -->
+
+                        </div>
+                    @endif
+                    @if ($npwp != null)
+
+                        <div class="col-md-3">
+                            <div class="card">
+                                <!-- /.card-header -->
+
+                                <div class="card-body">
+                                    <h1>NPWP Rekanaan</h1>
+                                    {{-- show image --}}
+                                    <img src="{{ asset('storage/rekanan/' . $npwp) }}" alt="{{ $rekanan }}."
+                                        class="card-img-top float-start">
+
+                                </div>
+
+                                <!-- /.card-body -->
+                                <div class="card-footer clearfix">
+
+                                </div>
+
+                            </div>
+                            <!-- ./col -->
+
+                        </div>
+                    @endif
+                </div>
+                @if ($tagihan->status != 'disetujui' || $tagihan->status != 'dikirim' || $tagihan->status != 'disetujui')
+                    <div class="row">
+                        <div class="col-12">
+
+                            <h6>Dokumen Pembayaran</h6>
+                        </div>
+                        <div class="col-7">
+                            <div class="form-group">
+                                <div>
+                                    <label for="no_kwitansi_view" class=" form-control-label">Kwitansi
+                                        Tagihan
+                                    </label>
+                                </div>
+                                <div>
+
+                                    <div class="input-group input-group-button">
+                                        <div class="input-group-prepend">
+                                            <a class="btn btn-primary"
+                                                href="{{ asset('storage/tagihan/' . $tagihan->no_kwitansi_image) }}"
+                                                target="_blank">
+                                                <i class="ik ik-arrow-down"></i> Download Kwitansi
+                                            </a>
+                                        </div>
+                                        <input type="text" class="form-control" placeholder=""
+                                            value="{{ $tagihan->no_kwitansi }}" readonly>
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <input type="checkbox" aria-label="Persyaratan Sesuai"
+                                                    id="checkbok_no_kwitansi"
+                                                    @if (!auth()->user()->hasRole('asisten-manajer-tata-usaha')) onclick="return false;" @endif
+                                                    name="checkbok_no_kwitansi"
+                                                    {{ $tagihan->no_kwitansi_check == 'ya' ? 'checked' : '' }}>
+                                                <span class="pl-2">Persyaratan Sesuai
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="">
+                                        @if (Session::has('erros'))
+                                            @if (in_array('no_kwitansi', session('erros')))
+                                                <div class=" container-fluid alert alert-warning alert-dismissible fade show"
+                                                    role="alert">
+                                                    Kwitansi tagihan tidak boleh kosong
+                                                    <button type="button" class="close" data-dismiss="alert"
+                                                        aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
                                                 </div>
+                                            @endif
 
+                                        @endif
+                                        @if ($errors->has('no_kwitansi_rekanan'))
+                                            <div class=" container-fluid alert alert-warning alert-dismissible fade show"
+                                                role="alert">
+                                                Kwitansi tagihan tidak boleh kosong
+                                                <button type="button" class="close" data-dismiss="alert"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
                                             </div>
                                         @endif
                                     </div>
-                                    <div class="row mt-10">
-                                        @if ($ktp != null)
+                                </div>
+                            </div>
+                            @if ($pkp == 'ya')
 
-                                            <div class="col-md-3">
-                                                <div class="card">
-                                                    <!-- /.card-header -->
-
-                                                    <div class="card-body">
-                                                        <h1>KTP Rekanaan</h1>
-                                                        {{-- show image --}}
-                                                        <img src="{{ asset('storage/rekanan/' . $ktp) }}"
-                                                            alt="{{ $rekanan }}." class="card-img-top img-thumbnail">
-
-                                                    </div>
-
-                                                    <!-- /.card-body -->
-                                                    <div class="card-footer clearfix">
-
-                                                    </div>
-
-                                                </div>
-                                                <!-- ./col -->
-
-                                            </div>
-                                        @endif
-                                        @if ($npwp != null)
-
-                                            <div class="col-md-3">
-                                                <div class="card">
-                                                    <!-- /.card-header -->
-
-                                                    <div class="card-body">
-                                                        <h1>NPWP Rekanaan</h1>
-                                                        {{-- show image --}}
-                                                        <img src="{{ asset('storage/rekanan/' . $npwp) }}"
-                                                            alt="{{ $rekanan }}." class="card-img-top float-start">
-
-                                                    </div>
-
-                                                    <!-- /.card-body -->
-                                                    <div class="card-footer clearfix">
-
-                                                    </div>
-
-                                                </div>
-                                                <!-- ./col -->
-
-                                            </div>
-                                        @endif
+                                <div class="form-group">
+                                    <div>
+                                        <label for="no_faktur_view" class=" form-control-label">No Faktur
+                                            Pajak</label>
                                     </div>
-                                    @if ($tagihan->status != 'disetujui' || $tagihan->status != 'dikirim' || $tagihan->status != 'disetujui')
-                                        <div class="row">
-                                            <div class="col-12">
+                                    <div>
 
-                                                <h6>Dokumen Pembayaran</h6>
+                                        <div class="input-group input-group-button">
+                                            <div class="input-group-prepend">
+                                                <a class="btn btn-primary"
+                                                    href="{{ asset('storage/tagihan/' . $tagihan->no_faktur_pajak_image) }}"
+                                                    target="_blank">
+                                                    <i class="ik ik-arrow-down"></i> Download Faktur
+                                                    Pajak
+                                                </a>
                                             </div>
-                                            <div class="col-7">
-                                                <div class="form-group">
-                                                    <div>
-                                                        <label for="no_kwitansi_view" class=" form-control-label">Kwitansi
-                                                            Tagihan
-                                                        </label>
-                                                    </div>
-                                                    <div>
-
-                                                        <div class="input-group input-group-button">
-                                                            <div class="input-group-prepend">
-                                                                <a class="btn btn-primary"
-                                                                    href="{{ asset('storage/tagihan/' . $tagihan->no_kwitansi_image) }}"
-                                                                    target="_blank">
-                                                                    <i class="ik ik-arrow-down"></i> Download Kwitansi
-                                                                </a>
-                                                            </div>
-                                                            <input type="text" class="form-control" placeholder=""
-                                                                value="{{ $tagihan->no_kwitansi }}" readonly>
-                                                            <div class="input-group-prepend">
-                                                                <div class="input-group-text">
-                                                                    <input type="checkbox" aria-label="Persyaratan Sesuai"
-                                                                        id="checkbok_no_kwitansi"
-                                                                        @if (!auth()->user()->hasRole('asisten-manajer-tata-usaha')) onclick="return false;" @endif
-                                                                        name="checkbok_no_kwitansi"
-                                                                        {{ $tagihan->no_kwitansi_check == 'ya' ? 'checked' : '' }}>
-                                                                    <span class="pl-2">Persyaratan Sesuai
-                                                                    </span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="">
-                                                            @if (Session::has('erros'))
-                                                                @if (in_array('no_kwitansi', session('erros')))
-                                                                    <div class=" container-fluid alert alert-warning alert-dismissible fade show"
-                                                                        role="alert">
-                                                                        Kwitansi tagihan tidak boleh kosong
-                                                                        <button type="button" class="close"
-                                                                            data-dismiss="alert" aria-label="Close">
-                                                                            <span aria-hidden="true">&times;</span>
-                                                                        </button>
-                                                                    </div>
-                                                                @endif
-
-                                                            @endif
-                                                            @if ($errors->has('no_kwitansi_rekanan'))
-                                                                <div class=" container-fluid alert alert-warning alert-dismissible fade show"
-                                                                    role="alert">
-                                                                    Kwitansi tagihan tidak boleh kosong
-                                                                    <button type="button" class="close"
-                                                                        data-dismiss="alert" aria-label="Close">
-                                                                        <span aria-hidden="true">&times;</span>
-                                                                    </button>
-                                                                </div>
-                                                            @endif
-                                                        </div>
-                                                    </div>
+                                            <input type="text" class="form-control" placeholder=""
+                                                value="{{ $tagihan->no_faktur_pajak }}" readonly>
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <input type="checkbox" aria-label="Persyaratan Sesuai"
+                                                        id="checkbok_no_faktur_pajak"
+                                                        @if (!auth()->user()->hasRole('asisten-manajer-tata-usaha')) onclick="return false;" @endif
+                                                        name="checkbok_no_faktur_pajak"
+                                                        {{ old('checkbok_no_faktur_pajak') ? 'checked' : '' }}
+                                                        {{ $tagihan->no_faktur_pajak_check == 'ya' ? 'checked' : '' }}>
+                                                    <span class="pl-2">Persyaratan Sesuai</span>
                                                 </div>
-                                                @if ($pkp == 'ya')
+                                            </div>
+                                        </div>
+                                        <div class="">
+                                            @if (Session::has('erros'))
 
-                                                    <div class="form-group">
-                                                        <div>
-                                                            <label for="no_faktur_view" class=" form-control-label">No Faktur
-                                                                Pajak</label>
-                                                        </div>
-                                                        <div>
-
-                                                            <div class="input-group input-group-button">
-                                                                <div class="input-group-prepend">
-                                                                    <a class="btn btn-primary"
-                                                                        href="{{ asset('storage/tagihan/' . $tagihan->no_faktur_pajak_image) }}"
-                                                                        target="_blank">
-                                                                        <i class="ik ik-arrow-down"></i> Download Faktur
-                                                                        Pajak
-                                                                    </a>
-                                                                </div>
-                                                                <input type="text" class="form-control" placeholder=""
-                                                                    value="{{ $tagihan->no_faktur_pajak }}" readonly>
-                                                                <div class="input-group-prepend">
-                                                                    <div class="input-group-text">
-                                                                        <input type="checkbox" aria-label="Persyaratan Sesuai"
-                                                                            id="checkbok_no_faktur_pajak"
-                                                                            @if (!auth()->user()->hasRole('asisten-manajer-tata-usaha')) onclick="return false;" @endif
-                                                                            name="checkbok_no_faktur_pajak"
-                                                                            {{ old('checkbok_no_faktur_pajak') ? 'checked' : '' }}
-                                                                            {{ $tagihan->no_faktur_pajak_check == 'ya' ? 'checked' : '' }}>
-                                                                        <span class="pl-2">Persyaratan Sesuai</span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="">
-                                                                @if (Session::has('erros'))
-
-                                                                    @if (in_array('no_faktur_pajak_rekanan', session('erros')))
-                                                                        <div class=" container-fluid alert alert-warning alert-dismissible fade show"
-                                                                            role="alert">
-                                                                            Faktur Pajak tidak boleh kosong
-                                                                            <button type="button" class="close"
-                                                                                data-dismiss="alert" aria-label="Close">
-                                                                                <span aria-hidden="true">&times;</span>
-                                                                            </button>
-                                                                        </div>
-                                                                    @endif
-
-                                                                @endif
-                                                                @if ($errors->has('no_faktur_pajak_rekanan'))
-                                                                    <div class=" container-fluid alert alert-warning alert-dismissible fade show"
-                                                                        role="alert">
-                                                                        Faktur Pajak tidak boleh kosong
-                                                                        <button type="button" class="close"
-                                                                            data-dismiss="alert" aria-label="Close">
-                                                                            <span aria-hidden="true">&times;</span>
-                                                                        </button>
-                                                                    </div>
-                                                                @endif
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <div>
-                                                            <label for="e_billing_view"
-                                                                class=" form-control-label">E-Billing</label>
-                                                        </div>
-                                                        <div>
-
-                                                            <div class="input-group input-group-button">
-                                                                <div class="input-group-prepend">
-                                                                    <a class="btn btn-success"
-                                                                        href="{{ asset('storage/tagihan/' . $tagihan->e_billing_image) }}"
-                                                                        target="_blank">
-                                                                        <i class="ik ik-arrow-down"></i> Download E-Billing
-                                                                    </a>
-                                                                </div>
-                                                                <input type="text" class="form-control" placeholder=""
-                                                                    value="{{ $tagihan->e_billing }}" readonly>
-                                                                <div class="input-group-prepend">
-                                                                    <div class="input-group-text">
-                                                                        <input type="checkbox" aria-label="Persyaratan Sesuai"
-                                                                            id="checkbok_e_billing"
-                                                                            @if (!auth()->user()->hasRole('asisten-manajer-tata-usaha')) onclick="return false;" @endif
-                                                                            name="checkbok_e_billing"
-                                                                            {{ old('checkbok_e_billing') ? 'checked' : '' }}
-                                                                            {{ $tagihan->e_billing_check == 'ya' ? 'checked' : '' }}>
-                                                                        <span class="pl-2">Persyaratan Sesuai</span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="">
-                                                                @if (Session::has('erros'))
-
-                                                                    @if (in_array('e_billing', session('erros')))
-                                                                        <div class=" container-fluid alert alert-warning alert-dismissible fade show"
-                                                                            role="alert">
-                                                                            E-Billing tidak boleh kosong
-                                                                            <button type="button" class="close"
-                                                                                data-dismiss="alert" aria-label="Close">
-                                                                                <span aria-hidden="true">&times;</span>
-                                                                            </button>
-                                                                        </div>
-                                                                    @endif
-
-                                                                @endif
-
-                                                                @if ($errors->has('e_billing_rekanan'))
-                                                                    <div class=" container-fluid alert alert-warning alert-dismissible fade show"
-                                                                        role="alert">
-                                                                        E-Billing tidak boleh kosong
-                                                                        <button type="button" class="close"
-                                                                            data-dismiss="alert" aria-label="Close">
-                                                                            <span aria-hidden="true">&times;</span>
-                                                                        </button>
-                                                                    </div>
-                                                                @endif
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <div>
-                                                            <label for="bukti_pembayaran_view"
-                                                                class=" form-control-label">Bukti
-                                                                Pembayaraan
-                                                                PPN atas tagihan</label>
-                                                        </div>
-                                                        <div>
-
-                                                            <div class="input-group input-group-button">
-                                                                <div class="input-group-prepend">
-                                                                    <a class="btn btn-danger"
-                                                                        href="{{ asset('storage/tagihan/' . $tagihan->bukti_pembayaran_image) }}"
-                                                                        target="_blank">
-                                                                        <i class="ik ik-arrow-down"></i> Download Bukti
-                                                                        Pembayaraan
-                                                                    </a>
-                                                                </div>
-                                                                <input type="text" class="form-control" placeholder=""
-                                                                    value="{{ $tagihan->bukti_pembayaran }}" readonly>
-                                                                <div class="input-group-prepend">
-                                                                    <div class="input-group-text">
-                                                                        <input type="checkbox" aria-label="Persyaratan Sesuai"
-                                                                            id="checkbok_bukti_pembayaran"
-                                                                            @if (!auth()->user()->hasRole('asisten-manajer-tata-usaha')) onclick="return false;" @endif
-                                                                            name="checkbok_bukti_pembayaran"
-                                                                            {{ old('checkbok_bukti_pembayaran') ? 'checked' : '' }}
-                                                                            {{ $tagihan->bukti_pembayaran_check == 'ya' ? 'checked' : '' }}>
-                                                                        <span class="pl-2">Persyaratan Sesuai</span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="">
-                                                                @if (Session::has('erros'))
-                                                                    @if (in_array('bukti_pembayaran', session('erros')))
-                                                                        <div class=" container-fluid alert alert-warning alert-dismissible fade show"
-                                                                            role="alert">
-                                                                            Bukti Pembayaran tidak boleh kosong
-                                                                            <button type="button" class="close"
-                                                                                data-dismiss="alert" aria-label="Close">
-                                                                                <span aria-hidden="true">&times;</span>
-                                                                            </button>
-                                                                        </div>
-                                                                    @endif
-
-                                                                @endif
-                                                                @if ($errors->has('bukti_pembayaran_rekanan'))
-                                                                    <div class=" container-fluid alert alert-warning alert-dismissible fade show"
-                                                                        role="alert">
-                                                                        Bukti Pembayaran tidak boleh kosong
-                                                                        <button type="button" class="close"
-                                                                            data-dismiss="alert" aria-label="Close">
-                                                                            <span aria-hidden="true">&times;</span>
-                                                                        </button>
-                                                                    </div>
-                                                                @endif
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <div>
-                                                            <label for="e_spt_view" class=" form-control-label">E-SPT
-                                                                PPN</label>
-                                                        </div>
-                                                        <div>
-
-                                                            <div class="input-group input-group-button">
-                                                                <div class="input-group-prepend">
-                                                                    <a class="btn btn-warning"
-                                                                        href="{{ asset('storage/tagihan/' . $tagihan->e_spt_image) }}"
-                                                                        target="_blank">
-                                                                        <i class="ik ik-arrow-down"></i> Download E-SPT PPN
-                                                                    </a>
-                                                                </div>
-                                                                <input type="text" class="form-control" placeholder=""
-                                                                    value="{{ $tagihan->e_spt }}" readonly>
-                                                                <div class="input-group-prepend">
-                                                                    <div class="input-group-text">
-                                                                        <input type="checkbox" aria-label="Persyaratan Sesuai"
-                                                                            id="checkbok_e_spt"
-                                                                            @if (!auth()->user()->hasRole('asisten-manajer-tata-usaha')) onclick="return false;" @endif
-                                                                            name="checkbok_e_spt"
-                                                                            {{ old('checkbok_e_spt') ? 'checked' : '' }}
-                                                                            {{ $tagihan->e_spt_check == 'ya' ? 'checked' : '' }}>
-                                                                        <span class="pl-2">Persyaratan Sesuai
-                                                                        </span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="">
-                                                                @if (Session::has('erros'))
-                                                                    @if (in_array('e_spt', session('erros')))
-                                                                        <div class=" container-fluid alert alert-warning alert-dismissible fade show"
-                                                                            role="alert">
-                                                                            E-SPT PPN tidak boleh kosong
-                                                                            <button type="button" class="close"
-                                                                                data-dismiss="alert" aria-label="Close">
-                                                                                <span aria-hidden="true">&times;</span>
-                                                                            </button>
-                                                                        </div>
-                                                                    @endif
-
-                                                                @endif
-                                                                @if ($errors->has('e_spt_rekanan'))
-                                                                    <div class=" container-fluid alert alert-warning alert-dismissible fade show"
-                                                                        role="alert">
-                                                                        E-SPT PPN tidak boleh kosong
-                                                                        <button type="button" class="close"
-                                                                            data-dismiss="alert" aria-label="Close">
-                                                                            <span aria-hidden="true">&times;</span>
-                                                                        </button>
-                                                                    </div>
-                                                                @endif
-                                                            </div>
-                                                        </div>
+                                                @if (in_array('no_faktur_pajak_rekanan', session('erros')))
+                                                    <div class=" container-fluid alert alert-warning alert-dismissible fade show"
+                                                        role="alert">
+                                                        Faktur Pajak tidak boleh kosong
+                                                        <button type="button" class="close" data-dismiss="alert"
+                                                            aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
                                                     </div>
                                                 @endif
 
+                                            @endif
+                                            @if ($errors->has('no_faktur_pajak_rekanan'))
+                                                <div class=" container-fluid alert alert-warning alert-dismissible fade show"
+                                                    role="alert">
+                                                    Faktur Pajak tidak boleh kosong
+                                                    <button type="button" class="close" data-dismiss="alert"
+                                                        aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div>
+                                        <label for="e_billing_view" class=" form-control-label">E-Billing</label>
+                                    </div>
+                                    <div>
+
+                                        <div class="input-group input-group-button">
+                                            <div class="input-group-prepend">
+                                                <a class="btn btn-success"
+                                                    href="{{ asset('storage/tagihan/' . $tagihan->e_billing_image) }}"
+                                                    target="_blank">
+                                                    <i class="ik ik-arrow-down"></i> Download E-Billing
+                                                </a>
                                             </div>
-                                            <div class="col-12">
-                                                <button class="btn btn-success" id="btnkirimwa" type="button">Kirim ke
-                                                    Rekanan</button>
+                                            <input type="text" class="form-control" placeholder=""
+                                                value="{{ $tagihan->e_billing }}" readonly>
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <input type="checkbox" aria-label="Persyaratan Sesuai"
+                                                        id="checkbok_e_billing"
+                                                        @if (!auth()->user()->hasRole('asisten-manajer-tata-usaha')) onclick="return false;" @endif
+                                                        name="checkbok_e_billing"
+                                                        {{ old('checkbok_e_billing') ? 'checked' : '' }}
+                                                        {{ $tagihan->e_billing_check == 'ya' ? 'checked' : '' }}>
+                                                    <span class="pl-2">Persyaratan Sesuai</span>
+                                                </div>
                                             </div>
+                                        </div>
+                                        <div class="">
+                                            @if (Session::has('erros'))
+
+                                                @if (in_array('e_billing', session('erros')))
+                                                    <div class=" container-fluid alert alert-warning alert-dismissible fade show"
+                                                        role="alert">
+                                                        E-Billing tidak boleh kosong
+                                                        <button type="button" class="close" data-dismiss="alert"
+                                                            aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                @endif
+
+                                            @endif
+
+                                            @if ($errors->has('e_billing_rekanan'))
+                                                <div class=" container-fluid alert alert-warning alert-dismissible fade show"
+                                                    role="alert">
+                                                    E-Billing tidak boleh kosong
+                                                    <button type="button" class="close" data-dismiss="alert"
+                                                        aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div>
+                                        <label for="bukti_pembayaran_view" class=" form-control-label">Bukti
+                                            Pembayaraan
+                                            PPN atas tagihan</label>
+                                    </div>
+                                    <div>
+
+                                        <div class="input-group input-group-button">
+                                            <div class="input-group-prepend">
+                                                <a class="btn btn-danger"
+                                                    href="{{ asset('storage/tagihan/' . $tagihan->bukti_pembayaran_image) }}"
+                                                    target="_blank">
+                                                    <i class="ik ik-arrow-down"></i> Download Bukti
+                                                    Pembayaraan
+                                                </a>
+                                            </div>
+                                            <input type="text" class="form-control" placeholder=""
+                                                value="{{ $tagihan->bukti_pembayaran }}" readonly>
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <input type="checkbox" aria-label="Persyaratan Sesuai"
+                                                        id="checkbok_bukti_pembayaran"
+                                                        @if (!auth()->user()->hasRole('asisten-manajer-tata-usaha')) onclick="return false;" @endif
+                                                        name="checkbok_bukti_pembayaran"
+                                                        {{ old('checkbok_bukti_pembayaran') ? 'checked' : '' }}
+                                                        {{ $tagihan->bukti_pembayaran_check == 'ya' ? 'checked' : '' }}>
+                                                    <span class="pl-2">Persyaratan Sesuai</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="">
+                                            @if (Session::has('erros'))
+                                                @if (in_array('bukti_pembayaran', session('erros')))
+                                                    <div class=" container-fluid alert alert-warning alert-dismissible fade show"
+                                                        role="alert">
+                                                        Bukti Pembayaran tidak boleh kosong
+                                                        <button type="button" class="close" data-dismiss="alert"
+                                                            aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                @endif
+
+                                            @endif
+                                            @if ($errors->has('bukti_pembayaran_rekanan'))
+                                                <div class=" container-fluid alert alert-warning alert-dismissible fade show"
+                                                    role="alert">
+                                                    Bukti Pembayaran tidak boleh kosong
+                                                    <button type="button" class="close" data-dismiss="alert"
+                                                        aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div>
+                                        <label for="e_spt_view" class=" form-control-label">E-SPT
+                                            PPN</label>
+                                    </div>
+                                    <div>
+
+                                        <div class="input-group input-group-button">
+                                            <div class="input-group-prepend">
+                                                <a class="btn btn-warning"
+                                                    href="{{ asset('storage/tagihan/' . $tagihan->e_spt_image) }}"
+                                                    target="_blank">
+                                                    <i class="ik ik-arrow-down"></i> Download E-SPT PPN
+                                                </a>
+                                            </div>
+                                            <input type="text" class="form-control" placeholder=""
+                                                value="{{ $tagihan->e_spt }}" readonly>
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <input type="checkbox" aria-label="Persyaratan Sesuai"
+                                                        id="checkbok_e_spt"
+                                                        @if (!auth()->user()->hasRole('asisten-manajer-tata-usaha')) onclick="return false;" @endif
+                                                        name="checkbok_e_spt" {{ old('checkbok_e_spt') ? 'checked' : '' }}
+                                                        {{ $tagihan->e_spt_check == 'ya' ? 'checked' : '' }}>
+                                                    <span class="pl-2">Persyaratan Sesuai
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="">
+                                            @if (Session::has('erros'))
+                                                @if (in_array('e_spt', session('erros')))
+                                                    <div class=" container-fluid alert alert-warning alert-dismissible fade show"
+                                                        role="alert">
+                                                        E-SPT PPN tidak boleh kosong
+                                                        <button type="button" class="close" data-dismiss="alert"
+                                                            aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                @endif
+
+                                            @endif
+                                            @if ($errors->has('e_spt_rekanan'))
+                                                <div class=" container-fluid alert alert-warning alert-dismissible fade show"
+                                                    role="alert">
+                                                    E-SPT PPN tidak boleh kosong
+                                                    <button type="button" class="close" data-dismiss="alert"
+                                                        aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+
+                        </div>
+                        <div class="col-12">
+                            <button class="btn btn-success" id="btnkirimwa" type="button">Kirim ke
+                                Rekanan</button>
+                        </div>
+                    </div>
+                @endif
+            </div>
+
+
+        </div>
+        </form>
+        <!-- ./col -->
+        </div>
+        @if (
+            $tagihan->status == 'disetujui' &&
+                auth()->user()->hasRole('rekanan'))
+            <form action="{{ route('tagihan.dokumen', $tagihan->id) }}" method="POST" role="form"
+                enctype="multipart/form-data">
+                {{ csrf_field() }}
+                {{ method_field('PUT') }}
+                <div class="card">
+                    {{-- Upload Ebiling --}}
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <h6>Upload Dokument</h6>
+                                <br>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <div>
+                                        <label for="no_kwitansi" class=" form-control-label">No
+                                            Kwitansi Tagihan</label>
+                                    </div>
+                                    <div>
+                                        <input type="text" name="no_kwitansi" id="no_kwitansi"
+                                            placeholder="Contoh 301123 - Terdiri dari tanggal bulan dan tahun "
+                                            class="form-control" value="{{ $tagihan->no_kwitansi }}">
+                                    </div>
+                                    @if ($errors->has('no_kwitansi'))
+                                        <div class=" container-fluid alert alert-warning alert-dismissible fade show"
+                                            role="alert">
+                                            {{ $errors->first('no_kwitansi') }}
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                    @endif
+
+                                    <div class="">
+                                        <input type="file" value="no_kwitansi_image" name="no_kwitansi_image"
+                                            placeholder="" id="" class="form-control">
+                                        <br>
+
+                                        <div id="preview_no_kwitansi_image"></div>
+                                    </div>
+                                    @if ($errors->has('no_kwitansi_image'))
+                                        <div class=" container-fluid alert alert-warning alert-dismissible fade show"
+                                            role="alert">
+                                            {{ $errors->first('no_kwitansi_image') }}
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
                                         </div>
                                     @endif
                                 </div>
-
-
                             </div>
-                        </form>
-                        <!-- ./col -->
-                    </div>
-                    @if (
-                        $tagihan->status == 'disetujui' &&
-                            auth()->user()->hasRole('rekanan'))
-                        <form action="{{ route('tagihan.dokumen', $tagihan->id) }}" method="POST" role="form"
-                            enctype="multipart/form-data">
-                            {{ csrf_field() }}
-                            {{ method_field('PUT') }}
-                            <div class="card">
-                                {{-- Upload Ebiling --}}
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <h6>Upload Dokument</h6>
+                            @if ($pkp == 'ya')
+
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <div>
+                                            <label for="no_faktur_pajak" class=" form-control-label">No Faktur
+                                                Pajak</label>
+                                        </div>
+                                        <div>
+                                            <input type="text" name="no_faktur_pajak" id=" Faktur Pajak"
+                                                placeholder="Faktur Pajak " class="form-control"
+                                                value="{{ $tagihan->no_faktur_pajak }}">
+                                        </div>
+                                        @if ($errors->has('no_faktur_pajak'))
+                                            <div class=" container-fluid alert alert-warning alert-dismissible fade show"
+                                                role="alert">
+                                                {{ $errors->first('no_faktur_pajak') }}
+                                                <button type="button" class="close" data-dismiss="alert"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                        @endif
+                                        <div class="">
+                                            <input type="file" value="no_faktur_pajak_image" name="no_faktur_pajak_image"
+                                                placeholder="" id="" class="form-control">
                                             <br>
+
+                                            <div id="preview_no_faktur_pajak_image"></div>
                                         </div>
-                                        <div class="col-12">
-                                            <div class="form-group">
-                                                <div>
-                                                    <label for="no_kwitansi" class=" form-control-label">No
-                                                        Kwitansi Tagihan</label>
-                                                </div>
-                                                <div>
-                                                    <input type="text" name="no_kwitansi" id="no_kwitansi"
-                                                        placeholder="Contoh 301123 - Terdiri dari tanggal bulan dan tahun "
-                                                        class="form-control" value="{{ $tagihan->no_kwitansi }}">
-                                                </div>
-                                                @if ($errors->has('no_kwitansi'))
-                                                    <div class=" container-fluid alert alert-warning alert-dismissible fade show"
-                                                        role="alert">
-                                                        {{ $errors->first('no_kwitansi') }}
-                                                        <button type="button" class="close" data-dismiss="alert"
-                                                            aria-label="Close">
-                                                            <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                    </div>
-                                                @endif
-
-                                                <div class="">
-                                                    <input type="file" value="no_kwitansi_image" name="no_kwitansi_image"
-                                                        placeholder="" id="" class="form-control">
-                                                    <br>
-
-                                                    <div id="preview_no_kwitansi_image"></div>
-                                                </div>
-                                                @if ($errors->has('no_kwitansi_image'))
-                                                    <div class=" container-fluid alert alert-warning alert-dismissible fade show"
-                                                        role="alert">
-                                                        {{ $errors->first('no_kwitansi_image') }}
-                                                        <button type="button" class="close" data-dismiss="alert"
-                                                            aria-label="Close">
-                                                            <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                    </div>
-                                                @endif
-                                            </div>
-                                        </div>
-                                        @if ($pkp == 'ya')
-
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    <div>
-                                                        <label for="no_faktur_pajak" class=" form-control-label">No Faktur
-                                                            Pajak</label>
-                                                    </div>
-                                                    <div>
-                                                        <input type="text" name="no_faktur_pajak" id=" Faktur Pajak"
-                                                            placeholder="Faktur Pajak " class="form-control"
-                                                            value="{{ $tagihan->no_faktur_pajak }}">
-                                                    </div>
-                                                    @if ($errors->has('no_faktur_pajak'))
-                                                        <div class=" container-fluid alert alert-warning alert-dismissible fade show"
-                                                            role="alert">
-                                                            {{ $errors->first('no_faktur_pajak') }}
-                                                            <button type="button" class="close" data-dismiss="alert"
-                                                                aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
-                                                            </button>
-                                                        </div>
-                                                    @endif
-                                                    <div class="">
-                                                        <input type="file" value="no_faktur_pajak_image"
-                                                            name="no_faktur_pajak_image" placeholder="" id=""
-                                                            class="form-control">
-                                                        <br>
-
-                                                        <div id="preview_no_faktur_pajak_image"></div>
-                                                    </div>
-                                                    @if ($errors->has('no_faktur_pajak_image'))
-                                                        <div class=" container-fluid alert alert-warning alert-dismissible fade show"
-                                                            role="alert">
-                                                            {{ $errors->first('no_faktur_pajak_image') }}
-                                                            <button type="button" class="close" data-dismiss="alert"
-                                                                aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
-                                                            </button>
-                                                        </div>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    <div>
-                                                        <label for="e_billing" class=" form-control-label">E-Billing</label>
-                                                    </div>
-                                                    <div>
-                                                        <input type="text" name="e_billing" id="e_billing"
-                                                            placeholder="E-Billing " class="form-control"
-                                                            value="{{ $tagihan->e_billing }}">
-                                                        @if ($errors->has('e_billing'))
-                                                            <div class=" container-fluid alert alert-warning alert-dismissible fade show"
-                                                                role="alert">
-                                                                {{ $errors->first('e_billing') }}
-                                                                <button type="button" class="close" data-dismiss="alert"
-                                                                    aria-label="Close">
-                                                                    <span aria-hidden="true">&times;</span>
-                                                                </button>
-                                                            </div>
-                                                        @endif
-                                                    </div>
-                                                    <div class="">
-                                                        <input type="file" value="e_billing_image" name="e_billing_image"
-                                                            placeholder="" id="e_billing_image" class="form-control">
-                                                        <br>
-                                                        @if ($errors->has('e_billing_image'))
-                                                            <div class=" container-fluid alert alert-warning alert-dismissible fade show"
-                                                                role="alert">
-                                                                {{ $errors->first('e_billing_image') }}
-                                                                <button type="button" class="close" data-dismiss="alert"
-                                                                    aria-label="Close">
-                                                                    <span aria-hidden="true">&times;</span>
-                                                                </button>
-                                                            </div>
-                                                        @endif
-                                                        <div id="preview_e_billing_image"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    <div>
-                                                        <label for="bukti_pembayaran" class=" form-control-label">Bukti
-                                                            Pembayaraan
-                                                            PPN atas tagihan</label>
-                                                    </div>
-                                                    <div>
-                                                        <input type="text" name="bukti_pembayaran" id="bukti_pembayaran"
-                                                            placeholder="Bukti Pembayaran" placeholder="Bukti Pembayaran "
-                                                            class="form-control" value="{{ $tagihan->bukti_pembayaran }}">
-                                                        @if ($errors->has('bukti_pembayaran'))
-                                                            <div class=" container-fluid alert alert-warning alert-dismissible fade show"
-                                                                role="alert">
-                                                                {{ $errors->first('bukti_pembayaran') }}
-                                                                <button type="button" class="close" data-dismiss="alert"
-                                                                    aria-label="Close">
-                                                                    <span aria-hidden="true">&times;</span>
-                                                                </button>
-                                                            </div>
-                                                        @endif
-                                                    </div>
-                                                    <div class="">
-                                                        <input type="file" value="bukti_pembayaran_image"
-                                                            name="bukti_pembayaran_image" placeholder=""
-                                                            id="bukti_pembayaran_image" class="form-control">
-                                                        <br>
-                                                        @if ($errors->has('bukti_pembayaran_image'))
-                                                            <div class=" container-fluid alert alert-warning alert-dismissible fade show"
-                                                                role="alert">
-                                                                {{ $errors->first('bukti_pembayaran_image') }}
-                                                                <button type="button" class="close" data-dismiss="alert"
-                                                                    aria-label="Close">
-                                                                    <span aria-hidden="true">&times;</span>
-                                                                </button>
-                                                            </div>
-                                                        @endif
-                                                        <div id="preview_bukti_pembayaran_image"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    <div>
-                                                        <label for="e_spt" class=" form-control-label">E-SPT
-                                                            PPN</label>
-                                                    </div>
-                                                    <div>
-                                                        <input type="text" name="e_spt" id="e_spt"
-                                                            placeholder="e-spt " class="form-control"
-                                                            value="{{ $tagihan->e_spt }}">
-                                                        @if ($errors->has('e_spt'))
-                                                            <div class=" container-fluid alert alert-warning alert-dismissible fade show"
-                                                                role="alert">
-                                                                {{ $errors->first('e_spt') }}
-                                                                <button type="button" class="close" data-dismiss="alert"
-                                                                    aria-label="Close">
-                                                                    <span aria-hidden="true">&times;</span>
-                                                                </button>
-                                                            </div>
-                                                        @endif
-                                                    </div>
-                                                    <div class="">
-                                                        <input type="file" value="e_spt_image" name="e_spt_image"
-                                                            placeholder="" id="e_spt_image" class="form-control">
-                                                        <br>
-                                                        @if ($errors->has('e_spt_image'))
-                                                            <div class=" container-fluid alert alert-warning alert-dismissible fade show"
-                                                                role="alert">
-                                                                {{ $errors->first('e_spt_image') }}
-                                                                <button type="button" class="close" data-dismiss="alert"
-                                                                    aria-label="Close">
-                                                                    <span aria-hidden="true">&times;</span>
-                                                                </button>
-                                                            </div>
-                                                        @endif
-                                                        <div id="preview_e_spt_image"></div>
-                                                    </div>
-                                                </div>
+                                        @if ($errors->has('no_faktur_pajak_image'))
+                                            <div class=" container-fluid alert alert-warning alert-dismissible fade show"
+                                                role="alert">
+                                                {{ $errors->first('no_faktur_pajak_image') }}
+                                                <button type="button" class="close" data-dismiss="alert"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
                                             </div>
                                         @endif
                                     </div>
                                 </div>
-                                <div class="card-footer">
-                                    <button type="submit" class="btn btn-primary">Upload Dokument Pembayaran</button>
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <div>
+                                            <label for="e_billing" class=" form-control-label">E-Billing</label>
+                                        </div>
+                                        <div>
+                                            <input type="text" name="e_billing" id="e_billing" placeholder="E-Billing "
+                                                class="form-control" value="{{ $tagihan->e_billing }}">
+                                            @if ($errors->has('e_billing'))
+                                                <div class=" container-fluid alert alert-warning alert-dismissible fade show"
+                                                    role="alert">
+                                                    {{ $errors->first('e_billing') }}
+                                                    <button type="button" class="close" data-dismiss="alert"
+                                                        aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                            @endif
+                                        </div>
+                                        <div class="">
+                                            <input type="file" value="e_billing_image" name="e_billing_image"
+                                                placeholder="" id="e_billing_image" class="form-control">
+                                            <br>
+                                            @if ($errors->has('e_billing_image'))
+                                                <div class=" container-fluid alert alert-warning alert-dismissible fade show"
+                                                    role="alert">
+                                                    {{ $errors->first('e_billing_image') }}
+                                                    <button type="button" class="close" data-dismiss="alert"
+                                                        aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                            @endif
+                                            <div id="preview_e_billing_image"></div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </form>
-                    @endif
-                    @if (!auth()->user()->hasRole('rekanan'))
-                        @if (auth()->user()->hasRole('asisten-manajer-tata-usaha'))
-                            <form action="{{ route('tagihan.dokumen', $tagihan->id) }}" method="POST" role="form"
-                                id="form-kirim-wa">
-                                {{ csrf_field() }}
-                                {{ method_field('PUT') }}
-                                <input type="hidden" name="kirim_wa" value="kirim">
-                                <input type="hidden" name="no_kwitansi_kirim" value="" id="no_kwitansi_kirim">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <div>
+                                            <label for="bukti_pembayaran" class=" form-control-label">Bukti
+                                                Pembayaraan
+                                                PPN atas tagihan</label>
+                                        </div>
+                                        <div>
+                                            <input type="text" name="bukti_pembayaran" id="bukti_pembayaran"
+                                                placeholder="Bukti Pembayaran" placeholder="Bukti Pembayaran "
+                                                class="form-control" value="{{ $tagihan->bukti_pembayaran }}">
+                                            @if ($errors->has('bukti_pembayaran'))
+                                                <div class=" container-fluid alert alert-warning alert-dismissible fade show"
+                                                    role="alert">
+                                                    {{ $errors->first('bukti_pembayaran') }}
+                                                    <button type="button" class="close" data-dismiss="alert"
+                                                        aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                            @endif
+                                        </div>
+                                        <div class="">
+                                            <input type="file" value="bukti_pembayaran_image"
+                                                name="bukti_pembayaran_image" placeholder="" id="bukti_pembayaran_image"
+                                                class="form-control">
+                                            <br>
+                                            @if ($errors->has('bukti_pembayaran_image'))
+                                                <div class=" container-fluid alert alert-warning alert-dismissible fade show"
+                                                    role="alert">
+                                                    {{ $errors->first('bukti_pembayaran_image') }}
+                                                    <button type="button" class="close" data-dismiss="alert"
+                                                        aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                            @endif
+                                            <div id="preview_bukti_pembayaran_image"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <div>
+                                            <label for="e_spt" class=" form-control-label">E-SPT
+                                                PPN</label>
+                                        </div>
+                                        <div>
+                                            <input type="text" name="e_spt" id="e_spt" placeholder="e-spt "
+                                                class="form-control" value="{{ $tagihan->e_spt }}">
+                                            @if ($errors->has('e_spt'))
+                                                <div class=" container-fluid alert alert-warning alert-dismissible fade show"
+                                                    role="alert">
+                                                    {{ $errors->first('e_spt') }}
+                                                    <button type="button" class="close" data-dismiss="alert"
+                                                        aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                            @endif
+                                        </div>
+                                        <div class="">
+                                            <input type="file" value="e_spt_image" name="e_spt_image" placeholder=""
+                                                id="e_spt_image" class="form-control">
+                                            <br>
+                                            @if ($errors->has('e_spt_image'))
+                                                <div class=" container-fluid alert alert-warning alert-dismissible fade show"
+                                                    role="alert">
+                                                    {{ $errors->first('e_spt_image') }}
+                                                    <button type="button" class="close" data-dismiss="alert"
+                                                        aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                            @endif
+                                            <div id="preview_e_spt_image"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-primary">Upload Dokument Pembayaran</button>
+                    </div>
+                </div>
+            </form>
+        @endif
+        @if (!auth()->user()->hasRole('rekanan'))
+            @if (auth()->user()->hasRole('asisten-manajer-tata-usaha'))
+                <form action="{{ route('tagihan.dokumen', $tagihan->id) }}" method="POST" role="form"
+                    id="form-kirim-wa">
+                    {{ csrf_field() }}
+                    {{ method_field('PUT') }}
+                    <input type="hidden" name="kirim_wa" value="kirim">
+                    <input type="hidden" name="no_kwitansi_kirim" value="" id="no_kwitansi_kirim">
 
-                                <input type="hidden" name="no_faktur_pajak_kirim" value=""
-                                    id="no_faktur_pajak_kirim">
+                    <input type="hidden" name="no_faktur_pajak_kirim" value="" id="no_faktur_pajak_kirim">
 
-                                <input type="hidden" name="e_billing_kirim" value="" id="e_billing_kirim">
+                    <input type="hidden" name="e_billing_kirim" value="" id="e_billing_kirim">
 
-                                <input type="hidden" name="bukti_pembayaran_kirim" value=""
-                                    id="bukti_pembayaran_kirim">
+                    <input type="hidden" name="bukti_pembayaran_kirim" value="" id="bukti_pembayaran_kirim">
 
-                                <input type="hidden" name="e_spt_kirim" value="" id="e_spt_kirim">
+                    <input type="hidden" name="e_spt_kirim" value="" id="e_spt_kirim">
 
-                            </form>
-                        @endif
-                    @endif
+                </form>
+            @endif
+        @endif
 
-                    <!-- /.row -->
-                    <!-- Main row  dataitem-->
-                    <!-- /.row (main row) -->
-                </div><!-- /.container-fluid -->
-            </div><!-- /.container-fluid -->
+        <!-- /.row -->
+        <!-- Main row  dataitem-->
+        <!-- /.row (main row) -->
+        </div><!-- /.container-fluid -->
+        </div><!-- /.container-fluid -->
         </div><!-- /.container-fluid -->
 
     @stop
@@ -1398,7 +1395,8 @@
                 // spasi enter
                 var spasi = String.fromCharCode(13, 10);
                 let textMessage =
-                    `Kepada yang terhormat Bapak/Ibu direktur ${namarekanan} ${spasi}Berikut kami kirimkan link tagihan ${urlTagihan} ${spasi}Terima Kasih ${spasi}${spasi}Persyaratan yang harus dipenuhi : ${spasi}1. Kwitansi Tagihan : ${no_kwitanasi_check}${spasi}2. Faktur Pajak : ${no_faktur_pajak_check} ${spasi}3. E-Billing : ${e_billing_check}${spasi}4. Bukti Pembayaran PPN atas tagihan : ${bukti_pembayaran_check}${spasi}5. E-SPT PPN : ${e_spt_check}
+                    `Kepada yang terhormat Bapak/Ibu direktur ${namarekanan}${spasi}Dimohon segera melengkapi persyaratan yg di tanda silang agar tagihan dapat diproses.${spasi}Terima kasih.${spasi}Diperiksa Oleh,${spasi}Asisten Manajer Tata Usaha${spasi}Perumdam Tirta Kencana${spasi}Persyaratan yang harus dipenuhi :${spasi}1. Kwitansi Tagihan : ${no_kwitanasi_check}${spasi}2. Faktur Pajak : ${no_faktur_pajak_check} ${spasi}3. E-Billing : ${e_billing_check}${spasi}4. Bukti Pembayaran PPN atas tagihan : ${bukti_pembayaran_check}${spasi}5. E-SPT PPN : ${e_spt_check}${spasi} Lakukan login di aplikasi SIP untuk melengkapi dokumen persyaratan tagihan${spasi}Berikut kami kirimkan link tagihan ${urlTagihan}
+
                     `;
                 window.open(`https://api.whatsapp.com/send?phone=62${no_hp_rekanan}&text=` + encodeURI(textMessage));
                 // win.focus();
