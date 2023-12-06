@@ -250,7 +250,11 @@ class PenunjukanPekerjaanController extends Controller
                                 // $penunjukanAduan = $penunjukanAduan->get();
                                 if ($penunjukanAduan) {
                                     $penunjukanAduan = $penunjukanAduan->get()->pluck('aduan_id')->toArray();
-                                    $query->whereIn('id', $penunjukanAduan);
+                                    if ($status == 'not') {
+                                        $query->where('status', 'draft');
+                                    } else {
+                                        $query->whereIn('id', $penunjukanAduan);
+                                    }
                                 }
                             }
                         }
