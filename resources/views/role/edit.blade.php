@@ -67,7 +67,7 @@
                                                                 class="check{{ $task->slug }} hakakses"
                                                                 id="{{ $permission->slug }}"
                                                                 {{ in_array($permission->name, $izin) ? 'checked' : '' }} />
-                                                            {{ $permission->slug }}
+                                                            {{ $permission->name }}
                                                         </div>
                                                     </td>
                                                 @endforeach

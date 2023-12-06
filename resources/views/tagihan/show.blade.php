@@ -1093,8 +1093,7 @@
 
                         </div>
                         <div class="col-12">
-                            <button class="btn btn-success" id="btnkirimwa" type="button">Kirim ke
-                                Rekanan</button>
+                            <button class="btn btn-success" id="btnkirimwa" type="button">Kirim Via Whatsapp</button>
                         </div>
                     </div>
                 @endif

@@ -65,7 +65,7 @@
                                                                 value="{{ $permission->id }}"
                                                                 class="check{{ $task->slug }} hakakses"
                                                                 id="{{ $permission->name }}" />
-                                                            {{ $permission->slug }}
+                                                            {{ $permission->name }}
                                                         </div>
                                                     </td>
                                                 @endforeach
