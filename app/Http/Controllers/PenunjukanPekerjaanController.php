@@ -88,6 +88,7 @@ class PenunjukanPekerjaanController extends Controller
             $query->where('kategori_nps', 'pka');
         }
         if ($search) {
+
             $query->where(function ($query) use ($search) {
                 $query->where('no_ticket', 'like', "%" . $search . "%")
                     ->orWhere('no_aduan', 'like', "%" . $search . "%")
@@ -99,6 +100,7 @@ class PenunjukanPekerjaanController extends Controller
                     ->orWhere('sumber_informasi', 'like', "%" . $search . "%")
                     ->orWhere('no_hp', 'like', "%" . $search . "%");
             });
+            // return 1;
         }
         if ($kategori) {
             $query->where('kategori_aduan', 'like', "%" . $kategori . "%");
@@ -218,6 +220,7 @@ class PenunjukanPekerjaanController extends Controller
                     $id_wilayah = auth()->user()->karyawan->id_wilayah;
                     $wilayah = Wilayah::find($id_wilayah);
                     $penunjukanAduan = PenunjukanPekerjaan::query();
+                    // return $status;
 
                     if (request()->spk != '') {
                         $penunjukanAduan = $penunjukanAduan->where('nomor_pekerjaan', 'like', '%' . $spk . '%');
@@ -235,21 +238,29 @@ class PenunjukanPekerjaanController extends Controller
                     }
 
                     if ($status != '') {
+
                         if ($status != 'all') {
-                            $penunjukanAduan = $penunjukanAduan->whereStatus($status);
+
+                            if ($status != 'not') {
+
+                                $penunjukanAduan = $penunjukanAduan->whereStatus($status);
+                            }
                         }
                     }
                     if (request()->spk != '' || request()->tanggal != '' || $rekananid) {
-                        $penunjukanAduan = $penunjukanAduan->get()->pluck('aduan_id')->toArray();
-                        $query->whereIn('id', $penunjukanAduan);
+                        if ($status != 'not') {
+                            $penunjukanAduan = $penunjukanAduan->get()->pluck('aduan_id')->toArray();
+                            $query->whereIn('id', $penunjukanAduan);
+                        }
                     } else {
 
                         if ($status != '') {
                             if ($status != 'all') {
                                 // return $penunjukanAduan->get();
                                 // $penunjukanAduan = $penunjukanAduan->get();
+
+                                $penunjukanAduan = $penunjukanAduan->get()->pluck('aduan_id')->toArray();
                                 if ($penunjukanAduan) {
-                                    $penunjukanAduan = $penunjukanAduan->get()->pluck('aduan_id')->toArray();
                                     if ($status == 'not') {
                                         $query->where('status', 'draft');
                                     } else {
@@ -282,12 +293,15 @@ class PenunjukanPekerjaanController extends Controller
                             );
                         }
                     } else {
-                        $penunjukan = $query->where('status', '!=', 'draft')->with([
-                            'hasPenunjukanPekerjaan' => function ($query) {
-                                $query->orderBy('status', 'desc');
-                            }
-                        ])->orderBy('status', 'desc')->orderBy('updated_at', 'desc');
-                        $penunjukan = $query->paginate($limit);
+                        if ($status != 'not') {
+                            # code...
+                            $penunjukan = $query->where('status', '!=', 'draft')->with([
+                                'hasPenunjukanPekerjaan' => function ($query) {
+                                    $query->orderBy('status', 'desc');
+                                }
+                            ]);
+                        }
+                        $penunjukan = $query->orderBy('status', 'desc')->orderBy('updated_at', 'desc')->paginate($limit);
 
                         if (auth()->user()->hasRole('staf-pengawas')) {
                             $penunjukan = $penunjukan->setCollection(
@@ -337,6 +351,8 @@ class PenunjukanPekerjaanController extends Controller
             }
         } else {
             // return 1;
+
+
             $penunjukan = $query->paginate(50);
             $penunjukan = $penunjukan->setCollection(
                 $penunjukan->sortBy(function ($pekerjaan) {

@@ -79,7 +79,7 @@
                                     <select name="status" class="selected2 form-control" id="cmbStatus">
                                         <option value="">Pilih Status</option>
                                         <option value="all" {{ $status == 'all' ? 'selected' : '' }}>Semua</option>
-                                        <option value="not" {{ $status == 'all' ? 'selected' : '' }}>Belum ditunjuk
+                                        <option value="not" {{ $status == 'not' ? 'selected' : '' }}>Belum ditunjuk
                                         </option>
                                         {{-- Mulai --}}
                                         <option value="draft" {{ $status == 'draft' ? 'selected' : '' }}>Belum dikerjakan
