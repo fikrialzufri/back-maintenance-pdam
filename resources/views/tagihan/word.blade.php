@@ -103,16 +103,18 @@
                             </ol>
                             <div>
                                 <p style='font-size: 20px; text-align: justify;'>
-                                    <span style=''>Pada hari ini, {{ $now }} telah diadakan pemeriksaan
-                                        pekerjaan service kebocoran pipa periode bulan {{ $bulan }} tahun
-                                        {{ $tahun }} di wilayah {{ $wilayah }} sebanyak {{ $total_lokasi }}
-                                        lokasi. Dengan jumlah tagihan sebesar Rp{{ pembulatan($total_tagihan) }},00
-                                        ({{ ltrim(terbilang(ceil($total_tagihan) - substr(ceil($total_tagihan), -3))) }}rupiah).
-
+                                    <span style=''>Pada hari ini, {{ $now }}.
                                     </span>
                                 </p>
                                 <p style='font-size: 20px; text-align: justify;'>
-                                    Pekerjaan tersebut dilaksanakan oleh :
+                                    <span style=''>
+                                        Telah mengadakan pemeriksaan pekerjaan service kebocoran pipa periode bulan
+                                        {{ $bulan }} tahun {{ $tahun }} di wilayah {{ $wilayah }}
+                                        sebanyak {{ $total_lokasi }} lokasi, di Perumdam Tirta Kencana Kota Samarinda.
+                                    </span>
+                                </p>
+                                <p style='font-size: 20px; text-align: justify;'>
+                                    Pekerjaan perbaikan tersebut dilaksanakan oleh :
                                 </p>
                             </div>
 

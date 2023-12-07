@@ -117,8 +117,8 @@
                                     Sekunder PERUMDAM Tirta Kencana Samarinda Periode bulan {{ $bulan }} tahun
                                     {{ $tahun }} di wilayah {{ $wilayah }} sebanyak {{ $total_lokasi }} Lokasi,
                                     kami mengajukan Permohonan Pembayaran atas pekerjaan tersebut
-                                    senilai Rp{{ pembulatan($total_tagihan) }},00
-                                    ({{ ltrim(terbilang(ceil($total_tagihan) - substr(ceil($total_tagihan), -3))) }}rupiah).
+                                    senilai Rp{{ format_uang($total_tagihan) }},00
+                                    ({{ terbilang($total_tagihan) }} rupiah).
 
                             </p>
                             <p

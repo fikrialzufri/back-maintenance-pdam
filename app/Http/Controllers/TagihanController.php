@@ -58,10 +58,10 @@ class TagihanController extends Controller
                 'name' => 'no_hp_rekanan',
                 'alias' => 'Nomor Hp Rekanan',
             ],
-            // [
-            //     'name' => 'pkp',
-            //     'alias' => 'PKP',
-            // ],
+            [
+                'name' => 'pkp',
+                'alias' => 'PKP',
+            ],
             [
                 'name' => 'tanggal',
                 'alias' => 'Tanggal Tagihan',
@@ -1404,6 +1404,8 @@ class TagihanController extends Controller
         $tahun = tahun_indonesia(Carbon::parse($tagihan->tanggal_adjust));
 
         $total = $tagihan->tagihan + $tagihan->galian;
+        $total = pembulatan($total);
+        $total = str_replace(".", "", $total);
 
         $ppn = 0;
 
@@ -1413,6 +1415,7 @@ class TagihanController extends Controller
             }
         }
         $total_tagihan = $total + $ppn;
+        // $total_tagihan = format_uang($total_tagihan);
         $total_lokasi = $tagihan->total_lokasi_pekerjaan;
 
         $listJabatan = Jabatan::where('slug', 'manajer-perencanaan')->orWhere('slug', 'direktur-teknik')->get()->pluck('id')->toArray();
