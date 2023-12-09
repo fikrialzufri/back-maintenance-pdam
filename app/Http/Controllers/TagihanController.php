@@ -1629,20 +1629,20 @@ class TagihanController extends Controller
             if ($rekanan_pkp == 'ya') {
                 $this->validate(request(), [
                     'no_faktur_pajak' => 'required|unique:tagihan,no_faktur_pajak,' . $id,
-                    'no_faktur_pajak_image' => 'required|mimes:jpeg,bmp,png,jpg,pdf',
+                    'no_faktur_pajak_image' => 'required|mimes:pdf',
                     'bukti_pembayaran' => 'required|unique:tagihan,bukti_pembayaran,' . $id,
-                    'bukti_pembayaran_image' => 'required|mimes:jpeg,bmp,png,jpg,pdf',
+                    'bukti_pembayaran_image' => 'required|mimes:pdf',
                     'e_billing' => 'required|unique:tagihan,e_billing,' . $id,
-                    'e_billing_image' => 'required|mimes:jpeg,bmp,png,jpg,pdf',
+                    'e_billing_image' => 'required|mimes:pdf',
                     'e_spt' => 'required|unique:tagihan,e_spt,' . $id,
-                    'e_spt_image' => 'required|mimes:jpeg,bmp,png,jpg,pdf',
+                    'e_spt_image' => 'required|mimes:pdf',
                     'no_kwitansi' => 'required|unique:tagihan,no_kwitansi,' . $id,
-                    'no_kwitansi_image' => 'required|mimes:jpeg,bmp,png,jpg,pdf',
+                    'no_kwitansi_image' => 'required|mimes:pdf',
                 ], $messages);
             } else {
                 $this->validate(request(), [
                     'no_kwitansi' => 'required|unique:tagihan,no_kwitansi,' . $id,
-                    'no_kwitansi_image' => 'required|mimes:jpeg,bmp,png,jpg,pdf',
+                    'no_kwitansi_image' => 'required|mimes:pdf',
                 ], $messages);
             }
         }
