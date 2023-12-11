@@ -1558,7 +1558,7 @@ class TagihanController extends Controller
         $nomor_tagihan = $data->nomor_tagihan;
         $slug_nomor_tagihan = $data->slug;
         $rekanan = $data->rekanan;
-        $rekanan_pkp = $data->rekanan_pkp;
+        $rekanan_pkp = $data->pkp;
         $kirim_wa = $request->kirim_wa;
 
         $no_faktur_pajak = $request->no_faktur_pajak;
@@ -1624,27 +1624,25 @@ class TagihanController extends Controller
 
 
             return redirect()->route($this->route . '.show', $data->slug)->with('wa', 'kirim')->with('Class', 'success');
+        }
+        if ($rekanan_pkp == 'ya') {
+            $this->validate(request(), [
+                'no_faktur_pajak' => 'required|unique:tagihan,no_faktur_pajak,' . $id,
+                'no_faktur_pajak_image' => 'required|mimes:pdf',
+                'bukti_pembayaran' => 'required|unique:tagihan,bukti_pembayaran,' . $id,
+                'bukti_pembayaran_image' => 'required|mimes:pdf',
+                'e_billing' => 'required|unique:tagihan,e_billing,' . $id,
+                'e_billing_image' => 'required|mimes:pdf',
+                'e_spt' => 'required|unique:tagihan,e_spt,' . $id,
+                'e_spt_image' => 'required|mimes:pdf',
+                'no_kwitansi' => 'required|unique:tagihan,no_kwitansi,' . $id,
+                'no_kwitansi_image' => 'required|mimes:pdf',
+            ], $messages);
         } else {
-
-            if ($rekanan_pkp == 'ya') {
-                $this->validate(request(), [
-                    'no_faktur_pajak' => 'required|unique:tagihan,no_faktur_pajak,' . $id,
-                    'no_faktur_pajak_image' => 'required|mimes:pdf',
-                    'bukti_pembayaran' => 'required|unique:tagihan,bukti_pembayaran,' . $id,
-                    'bukti_pembayaran_image' => 'required|mimes:pdf',
-                    'e_billing' => 'required|unique:tagihan,e_billing,' . $id,
-                    'e_billing_image' => 'required|mimes:pdf',
-                    'e_spt' => 'required|unique:tagihan,e_spt,' . $id,
-                    'e_spt_image' => 'required|mimes:pdf',
-                    'no_kwitansi' => 'required|unique:tagihan,no_kwitansi,' . $id,
-                    'no_kwitansi_image' => 'required|mimes:pdf',
-                ], $messages);
-            } else {
-                $this->validate(request(), [
-                    'no_kwitansi' => 'required|unique:tagihan,no_kwitansi,' . $id,
-                    'no_kwitansi_image' => 'required|mimes:pdf',
-                ], $messages);
-            }
+            $this->validate(request(), [
+                'no_kwitansi' => 'required|unique:tagihan,no_kwitansi,' . $id,
+                'no_kwitansi_image' => 'required|mimes:pdf',
+            ], $messages);
         }
 
         // return "stipo";
