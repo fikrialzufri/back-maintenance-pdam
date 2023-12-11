@@ -1647,7 +1647,7 @@ class TagihanController extends Controller
             }
         }
 
-        return "stipo";
+        // return "stipo";
 
 
         $data->no_faktur_pajak = $no_faktur_pajak;
