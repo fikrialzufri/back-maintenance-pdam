@@ -123,8 +123,8 @@ class RekananController extends Controller
                 'alias' => 'Pimpinana Direktur/Ketua',
                 'value' => [
                     [
-                        'id' => 'direktur',
-                        'value' => 'direktur',
+                        'id' => 'Direktur',
+                        'value' => 'Direktur',
                     ],
                     [
                         'id' => 'Ketua',
