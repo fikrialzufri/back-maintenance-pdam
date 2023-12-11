@@ -120,15 +120,15 @@ class RekananController extends Controller
             [
                 'name' => 'pimpinan',
                 'input' => 'combo',
-                'alias' => 'Pimpinana Direktur/Ketua',
+                'alias' => 'Pimpinan Direktur/Ketua',
                 'value' => [
                     [
-                        'id' => 'Direktur',
-                        'value' => 'Direktur',
+                        'id' => 'direktur',
+                        'value' => 'direktur',
                     ],
                     [
-                        'id' => 'Ketua',
-                        'value' => 'Ketua',
+                        'id' => 'ketua',
+                        'value' => 'ketua',
                     ],
                 ],
                 'validasi' => ['required'],
