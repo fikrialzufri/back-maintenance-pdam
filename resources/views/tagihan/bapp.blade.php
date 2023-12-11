@@ -150,7 +150,7 @@
                                     <br>
                                     {{ $tagihan->rekanan }}
                                     <br>
-                                    {{ $tagihan->rekanan_pimpinan }}
+                                    {{ ucwords($tagihan->rekanan_pimpinan) }}
 
                                     <br>
                                     @if ($tagihan->rekanan_url != null)

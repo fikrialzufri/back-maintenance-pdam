@@ -148,7 +148,7 @@
                                     <br>
                                     {{ $tagihan->rekanan }}
                                     <br>
-                                    {{ $tagihan->rekanan_pimpinan }}
+                                    {{ ucwords($tagihan->rekanan_pimpinan) }}
                                     <br>
                                     @if ($tagihan->rekanan_url != null)
                                         {!! QrCode::size(100)->generate($tagihan->rekanan_url_tdd) !!}

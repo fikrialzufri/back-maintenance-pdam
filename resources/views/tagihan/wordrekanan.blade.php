@@ -171,7 +171,7 @@
 
                                             <p
                                                 style='margin-right:0cm;margin-left:0cm;font-size:16px;font-family:"Times New Roman",serif;margin:0cm;margin-top:0cm;margin-bottom:8.0pt;text-align:center;line-height:105%;'>
-                                                {{ $tagihan->rekanan_pimpinan }}
+                                                {{ ucwords($tagihan->rekanan_pimpinan) }}
                                             </p>
                                         </td>
                                     </tr>
