@@ -18,6 +18,7 @@ class RekananController extends Controller
         $this->route = 'rekanan';
         $this->sort = 'nama';
         $this->plural = 'true';
+        $this->kelipatan = 9;
         $this->upload = 'true';
         $this->manyToMany = ['role'];
         $this->relations = ['user'];
@@ -114,6 +115,22 @@ class RekananController extends Controller
                 'name' => 'alamat',
                 'input' => 'textarea',
                 'alias' => 'Alamat',
+                'validasi' => ['required'],
+            ],
+            [
+                'name' => 'pimpinan',
+                'input' => 'combo',
+                'alias' => 'Pimpinana Direktur/Ketua',
+                'value' => [
+                    [
+                        'id' => 'direktur',
+                        'value' => 'direktur',
+                    ],
+                    [
+                        'id' => 'Ketua',
+                        'value' => 'Ketua',
+                    ],
+                ],
                 'validasi' => ['required'],
             ],
             [

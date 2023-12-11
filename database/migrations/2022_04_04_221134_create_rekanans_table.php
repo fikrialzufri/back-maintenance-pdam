@@ -28,6 +28,7 @@ class CreateRekanansTable extends Migration
             $table->string('url')->nullable();
             $table->longText('alamat');
             $table->enum('pkp', ['tidak', 'ya'])->default('tidak');
+            $table->enum('pimpinan', ['Direktur', 'Ketua'])->default('Direktur');
             $table->foreignUuid('user_id')->nullable()->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });

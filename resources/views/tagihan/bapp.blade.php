@@ -150,7 +150,8 @@
                                     <br>
                                     {{ $tagihan->rekanan }}
                                     <br>
-                                    Direktur
+                                    {{ $tagihan->rekanan_pimpinan }}
+
                                     <br>
                                     @if ($tagihan->rekanan_url != null)
                                         {!! QrCode::size(100)->generate($tagihan->rekanan_url_tdd) !!}
