@@ -815,6 +815,7 @@
                                                 href="{{ asset('storage/tagihan/' . $tagihan->no_kwitansi_image) }}"
                                                 target="_blank">
                                                 <i class="ik ik-arrow-down"></i> Download Kwitansi
+                                                {{ $tagihan->no_kwitansi_image }}
                                             </a>
                                         </div>
                                         <input type="text" class="form-control" placeholder=""
@@ -873,7 +874,7 @@
                                                     href="{{ asset('storage/tagihan/' . $tagihan->no_faktur_pajak_image) }}"
                                                     target="_blank">
                                                     <i class="ik ik-arrow-down"></i> Download Faktur
-                                                    Pajak
+                                                    Pajak {{ $tagihan->no_faktur_pajak_image }}
                                                 </a>
                                             </div>
                                             <input type="text" class="form-control" placeholder=""
@@ -930,6 +931,7 @@
                                                     href="{{ asset('storage/tagihan/' . $tagihan->e_billing_image) }}"
                                                     target="_blank">
                                                     <i class="ik ik-arrow-down"></i> Download E-Billing
+                                                    {{ $tagihan->e_billing_image }}
                                                 </a>
                                             </div>
                                             <input type="text" class="form-control" placeholder=""
@@ -989,7 +991,7 @@
                                                     href="{{ asset('storage/tagihan/' . $tagihan->bukti_pembayaran_image) }}"
                                                     target="_blank">
                                                     <i class="ik ik-arrow-down"></i> Download Bukti
-                                                    Pembayaraan
+                                                    Pembayaraan {{ $tagihan->bukti_pembayaran_image }}
                                                 </a>
                                             </div>
                                             <input type="text" class="form-control" placeholder=""
@@ -1046,6 +1048,7 @@
                                                     href="{{ asset('storage/tagihan/' . $tagihan->e_spt_image) }}"
                                                     target="_blank">
                                                     <i class="ik ik-arrow-down"></i> Download E-SPT PPN
+                                                    {{ $tagihan->e_spt_image }}
                                                 </a>
                                             </div>
                                             <input type="text" class="form-control" placeholder=""
