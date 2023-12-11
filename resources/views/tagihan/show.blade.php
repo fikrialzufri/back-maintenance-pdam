@@ -800,7 +800,7 @@
 
                             <h6>Dokumen Pembayaran</h6>
                         </div>
-                        <div class="col-7">
+                        <div class="col-12">
                             <div class="form-group">
                                 <div>
                                     <label for="no_kwitansi_view" class=" form-control-label">Kwitansi
