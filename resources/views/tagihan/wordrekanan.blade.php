@@ -113,8 +113,8 @@
                             <p
                                 style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:150%;font-size:15px;font-family:"Calibri",sans-serif;text-align:justify;'>
                                 <span style='font-size:16px;line-height:150%;font-family:"Times New Roman",serif;'>
-                                    Sehubungan dengan selesainya pekerjaan service kebocoran pipa PERUMDAM Tirta Kencana
-                                    Samarinda Periode bulan {{ $bulan }} tahun
+                                    Sehubungan dengan selesainya pekerjaan service Kebocoran Pipa, di PERUMDAM Tirta
+                                    Kencana Kota Samarinda Periode bulan {{ $bulan }} tahun
                                     {{ $tahun }} di wilayah {{ $wilayah }} sebanyak {{ $total_lokasi }} Lokasi,
                                     kami mengajukan Permohonan Pembayaran atas pekerjaan tersebut
                                     senilai Rp{{ format_uang($total_tagihan) }},00
