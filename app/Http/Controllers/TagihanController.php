@@ -532,6 +532,22 @@ class TagihanController extends Controller
                     $bntSetuju = false;
                 }
             }
+            if (auth()->user()->hasRole('asisten-manajer-kas')) {
+
+                // list jabatan
+                $listJabatan = Jabatan::where('slug', 'manajer-keuangan')->pluck('id')->toArray();
+
+                // list karyawan bedasarkan jabatan
+                $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get()->pluck('user_id')->toArray();
+
+                $list_persetujuan = $query->whereHas('hasUserMany', function ($q) use ($listKaryawan) {
+                    $q->whereIn('tagihan_user.user_id', $listKaryawan);
+                })->count();
+
+                if ($list_persetujuan > 0) {
+                    $bntSetuju = false;
+                }
+            }
 
 
             if (auth()->user()->hasRole('keuangan')) {
@@ -795,6 +811,9 @@ class TagihanController extends Controller
                 }
                 if (auth()->user()->hasRole('manajer-keuangan')) {
                     $status = 'disetujui mankeu';
+                }
+                if (auth()->user()->hasRole('asisten-manajer-kas')) {
+                    $status = 'disetujui asmenkas';
                 }
 
                 $message = 'Berhasil Membayar Tagihan : ' . $data->nomor_tagihan_setujuh;

@@ -192,6 +192,7 @@ class Tagihan extends Model
             auth()->user()->hasRole('direktur-utama') ||
             auth()->user()->hasRole('asisten-manajer-perencanaan-keuangan') ||
             auth()->user()->hasRole('asisten-manajer-akuntansi') ||
+            auth()->user()->hasRole('asisten-manajer-kas') ||
             auth()->user()->hasRole('manajer-keuangan') ||
             auth()->user()->hasRole('manajer-perencanaan') || auth()->user()->hasRole('direktur-teknik')
         ) {
@@ -479,6 +480,29 @@ class Tagihan extends Model
         }
         return $hasUserMany;
     }
+    public function getListPersetujuanAsmenKasAttribute()
+    {
+        $result = [];
+        $hasUserMany = [];
+        if ($this->hasUserMany) {
+            foreach ($this->hasUserMany as $key => $value) {
+                if ($value->karyawan && $value->karyawan->nama_jabatan === 'Asisten Manajer Kas') {
+                    $hasUserMany = [
+                        'id' => $value->karyawan->user_id,
+                        'karyawan_id' => $value->karyawan->id,
+                        'nama' => $value->karyawan->nama,
+                        'jabatan' => $value->karyawan->nama_jabatan,
+                        'url' => $value->karyawan->url,
+                        'tdd' => $value->karyawan->tdd,
+                        'is_setuju' => true,
+                        'created_at' => $value->pivot->created_at,
+                        'tanggal_disetujui' => isset($value->pivot->created_at) ? tanggal_indonesia($value->pivot->created_at) . " - " . Carbon::parse($value->pivot->created_at)->format('H:i') : ''
+                    ];
+                }
+            }
+        }
+        return $hasUserMany;
+    }
 
     public function getNomorTagihanSetujuhAttribute()
     {
@@ -511,9 +535,9 @@ class Tagihan extends Model
     {
         $tanggal = '';
 
-        if ($this->list_persetujuan_manajer_keuangan) {
-            if (isset($this->list_persetujuan_manajer_keuangan['created_at'])) {
-                $tanggal = tanggal_indonesia($this->list_persetujuan_manajer_keuangan['created_at'], false, false);
+        if ($this->list_persetujuan_asmen_kas) {
+            if (isset($this->list_persetujuan_asmen_kas['created_at'])) {
+                $tanggal = tanggal_indonesia($this->list_persetujuan_asmen_kas['created_at'], false, false);
             }
         }
 
