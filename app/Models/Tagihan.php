@@ -306,6 +306,46 @@ class Tagihan extends Model
         return $result;
     }
 
+    public function getAnggaranSatuAttribute()
+    {
+        $count = 0;
+        if ($this->hasPelaksanaanPekerjaan) {
+            foreach ($this->hasPelaksanaanPekerjaan as $key => $value) {
+
+                if ($this->hasPelaksanaanPekerjaan->kode_anggaran == '31.05.30') {
+                    $count++;
+                }
+            }
+        }
+        return $count;
+    }
+    public function getAnggaranDuaAttribute()
+    {
+        $count = 0;
+        if ($this->hasPelaksanaanPekerjaan) {
+            foreach ($this->hasPelaksanaanPekerjaan as $key => $value) {
+
+                if ($this->hasPelaksanaanPekerjaan->kode_anggaran == '93.02.30') {
+                    $count++;
+                }
+            }
+        }
+        return $count;
+    }
+    public function getAnggaranTigaAttribute()
+    {
+        $count = 0;
+        if ($this->hasPelaksanaanPekerjaan) {
+            foreach ($this->hasPelaksanaanPekerjaan as $key => $value) {
+
+                if ($this->hasPelaksanaanPekerjaan->kode_anggaran == '93.02.40') {
+                    $count++;
+                }
+            }
+        }
+        return $count;
+    }
+
     public function getListPersetujuanAttribute()
     {
         $result = [];

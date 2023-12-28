@@ -198,9 +198,9 @@
 
                                                     </div>
                                                     <div>
-                                                        <input type="text" placeholder="Tanggal Bayar "
+                                                        <input type="text" placeholder="Kode Anggaran 31.05.30"
                                                             class="form-control" readonly
-                                                            value="{{ $tagihan->tanggal_bayar }}">
+                                                            value="{{ $tagihan->anggaran_satu }}">
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
@@ -209,9 +209,9 @@
 
                                                     </div>
                                                     <div>
-                                                        <input type="text" placeholder="Tanggal Bayar "
+                                                        <input type="text" placeholder="Kode Anggaran 93.02.30"
                                                             class="form-control" readonly
-                                                            value="{{ $tagihan->tanggal_bayar }}">
+                                                            value="{{ $tagihan->anggaran_dua }}">
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
@@ -220,9 +220,9 @@
 
                                                     </div>
                                                     <div>
-                                                        <input type="text" placeholder="Tanggal Bayar "
+                                                        <input type="text" placeholder="Kode Anggaran 93.02.40"
                                                             class="form-control" readonly
-                                                            value="{{ $tagihan->tanggal_bayar }}">
+                                                            value="{{ $tagihan->anggaran_tiga }}">
                                                     </div>
                                                 </div>
                                             </div>
