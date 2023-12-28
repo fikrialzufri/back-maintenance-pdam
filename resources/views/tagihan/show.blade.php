@@ -21,7 +21,7 @@
                                 <div class="row">
                                     <div class="col-6">
                                         <div class="col-12">
-                                            <h6>Detail Tagihan Status : {{ $tagihan }}</h6>
+                                            <h6>Detail Tagihan</h6>
                                         </div>
                                         <div class="col-12">
                                             <div class="form-group">
