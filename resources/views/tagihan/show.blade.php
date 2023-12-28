@@ -196,6 +196,7 @@
                                                 auth()->user()->hasRole('direktur-utama') ||
                                                 auth()->user()->hasRole('asisten-manajer-perencanaan-keuangan') ||
                                                 auth()->user()->hasRole('asisten-manajer-akuntansi') ||
+                                                auth()->user()->hasRole('asisten-manajer-kas') ||
                                                 auth()->user()->hasRole('manajer-keuangan'))
 
                                             <div class="col-12">
@@ -284,6 +285,7 @@
                                             auth()->user()->hasRole('direktur-utama') ||
                                             auth()->user()->hasRole('asisten-manajer-perencanaan-keuangan') ||
                                             auth()->user()->hasRole('asisten-manajer-akuntansi') ||
+                                            auth()->user()->hasRole('asisten-manajer-kas') ||
                                             auth()->user()->hasRole('manajer-keuangan'))
                                         <div>
                                             <label for="rekanan" class=" form-control-label">
