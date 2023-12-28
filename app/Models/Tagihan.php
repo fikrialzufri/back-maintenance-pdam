@@ -242,7 +242,7 @@ class Tagihan extends Model
                     }
                 }
             } else {
-                if ($this->status == '' || $this->status == 'dikoreksi') {
+                if ($this->status == '' || $this->status == 'proses') {
                     $danger = 'bg-danger';
                 }
             }
