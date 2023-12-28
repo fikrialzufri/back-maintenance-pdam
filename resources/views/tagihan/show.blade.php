@@ -190,7 +190,7 @@
                                                 </div>
                                             </div> --}}
                                         @endif
-
+                                        {{ $tagihan->status }}
                                         @if ($tagihan->status == 'disetujui asmenanggaran')
                                             <div class="col-12">
                                                 <div class="form-group">
