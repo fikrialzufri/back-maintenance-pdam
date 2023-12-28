@@ -128,3 +128,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/setting', [SettingController::class, 'store'])->name('setting.store');
     Route::get('previewtagihan/{slug}', [TagihanController::class, 'preview'])->name('tagihan.preview');
 });
+
+
+// Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
+Route::get('/abort', function () {
+    return abort(404);
+})->name('abort');
