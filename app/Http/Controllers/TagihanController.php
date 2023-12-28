@@ -281,32 +281,32 @@ class TagihanController extends Controller
 
 
         if (auth()->user()->hasRole('manajer-distribusi')) {
-            $query->orderByRaw("status = 'dikirim' DESC")->orderByRaw("status = 'proses' DESC");
+            $query->orderByRaw("status = 'dikirim' DESC")->orderByRaw("status = 'proses' DESC")->orderByRaw("status = 'disetujui asmenkas' DESC")->orderByRaw("status = 'disetujui mankeu' DESC");
         }
         if (auth()->user()->hasRole('direktur-teknik')) {
-            $query->orderByRaw("status = 'proses' DESC")->orderByRaw("status = 'disetujui' DESC");
+            $query->orderByRaw("status = 'proses' DESC")->orderByRaw("status = 'disetujui' DESC")->orderByRaw("status = 'disetujui asmenkas' DESC")->orderByRaw("status = 'disetujui mankeu' DESC");
         }
         if (auth()->user()->hasRole('manajer-umum-dan-kesekretariatan')) {
-            $query->orderByRaw("status = 'disetujui' DESC")->orderByRaw("status = 'disetujui mu' DESC");
+            $query->orderByRaw("status = 'disetujui' DESC")->orderByRaw("status = 'disetujui mu' DESC")->orderByRaw("status = 'disetujui asmenkas' DESC")->orderByRaw("status = 'disetujui mankeu' DESC");
         }
         if (auth()->user()->hasRole('direktur-umum')) {
-            $query->orderByRaw("status = 'disetujui mu' DESC")->orderByRaw("status = 'disetujui dirum' DESC");
+            $query->orderByRaw("status = 'disetujui mu' DESC")->orderByRaw("status = 'disetujui dirum' DESC")->orderByRaw("status = 'disetujui asmenkas' DESC")->orderByRaw("status = 'disetujui mankeu' DESC");
         }
         if (auth()->user()->hasRole('direktur-utama')) {
-            $query->orderByRaw("status = 'disetujui dirum' DESC")->orderByRaw("status = 'disetujui dirut' DESC");
+            $query->orderByRaw("status = 'disetujui dirum' DESC")->orderByRaw("status = 'disetujui dirut' DESC")->orderByRaw("status = 'disetujui asmenkas' DESC")->orderByRaw("status = 'disetujui mankeu' DESC");
         }
         if (auth()->user()->hasRole('asisten-manajer-tata-usaha')) {
-            $query->orderByRaw("status = 'disetujui dirut' DESC")->orderByRaw("status = 'disetujui asmentu' DESC");
+            $query->orderByRaw("status = 'disetujui dirut' DESC")->orderByRaw("status = 'disetujui asmentu' DESC")->orderByRaw("status = 'disetujui asmenkas' DESC")->orderByRaw("status = 'disetujui mankeu' DESC");
         }
         if (auth()->user()->hasRole('asisten-manajer-perencanaan-keuangan')) {
-            $query->orderByRaw("status = 'disetujui asmentu' DESC")->orderByRaw("status = 'disetujui asmenanggaran' DESC");
+            $query->orderByRaw("status = 'disetujui asmentu' DESC")->orderByRaw("status = 'disetujui asmenanggaran' DESC")->orderByRaw("status = 'disetujui asmenkas' DESC")->orderByRaw("status = 'disetujui mankeu' DESC");
         }
         if (auth()->user()->hasRole('asisten-manajer-akuntansi')) {
-            $query->orderByRaw("status = 'disetujui asmenanggaran' DESC")->orderByRaw("status = 'disetujui asmenakuntan' DESC");
+            $query->orderByRaw("status = 'disetujui asmenanggaran' DESC")->orderByRaw("status = 'disetujui asmenakuntan' DESC")->orderByRaw("status = 'disetujui asmenkas' DESC")->orderByRaw("status = 'disetujui mankeu' DESC");
         }
 
         if (auth()->user()->hasRole('manajer-keuangan')) {
-            $query->orderByRaw("status = 'disetujui asmenakuntan' DESC")->orderByRaw("status = 'disetujui mankeu' DESC");
+            $query->orderByRaw("status = 'disetujui asmenakuntan' DESC")->orderByRaw("status = 'disetujui mankeu' DESC")->orderByRaw("status = 'disetujui asmenkas' DESC");
         }
         if (auth()->user()->hasRole('asisten-manajer-kas')) {
             $query->orderByRaw("status = 'disetujui mankeu' DESC")->orderByRaw("status = 'disetujui asmenkas' DESC");
