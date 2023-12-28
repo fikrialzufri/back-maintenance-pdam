@@ -234,16 +234,14 @@ class Tagihan extends Model
         }
         if (auth()->user()->hasRole('direktur-teknik')) {
             // $danger = 'bg-danger';
-
+            if ($this->status == '' || $this->status == 'proses') {
+                $danger = 'bg-danger';
+            }
             if ($this->hasUserMany) {
                 foreach ($this->hasUserMany as $key => $value) {
                     if ($value->id == $user) {
                         $danger = '';
                     }
-                }
-            } else {
-                if ($this->status == '' || $this->status == 'proses') {
-                    $danger = 'bg-danger';
                 }
             }
         }
