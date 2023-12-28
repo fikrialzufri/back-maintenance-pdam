@@ -190,34 +190,39 @@
                                                 </div>
                                             </div> --}}
                                         @endif
-                                        {{ $tagihan->status }}
                                         @if ($tagihan->status == 'disetujui asmenanggaran')
                                             <div class="col-12">
                                                 <div class="form-group">
                                                     <div>
-                                                        <label class=" form-control-label">31.05.30</label>
+                                                        <label class=" form-control-label">Kode Anggaran 31.05.30</label>
 
                                                     </div>
                                                     <div>
-                                                        <span>1</span>
+                                                        <input type="text" placeholder="Tanggal Bayar "
+                                                            class="form-control" readonly
+                                                            value="{{ $tagihan->tanggal_bayar }}">
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <div>
-                                                        <label class=" form-control-label">93.02.30</label>
+                                                        <label class=" form-control-label">Kode Anggaran 93.02.30</label>
 
                                                     </div>
                                                     <div>
-                                                        <span>1</span>
+                                                        <input type="text" placeholder="Tanggal Bayar "
+                                                            class="form-control" readonly
+                                                            value="{{ $tagihan->tanggal_bayar }}">
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <div>
-                                                        <label class=" form-control-label">93.02.40</label>
+                                                        <label class=" form-control-label">Kode Anggaran 93.02.40</label>
 
                                                     </div>
                                                     <div>
-                                                        <span>1</span>
+                                                        <input type="text" placeholder="Tanggal Bayar "
+                                                            class="form-control" readonly
+                                                            value="{{ $tagihan->tanggal_bayar }}">
                                                     </div>
                                                 </div>
                                             </div>
@@ -285,7 +290,7 @@
                                             auth()->user()->hasRole('manajer-keuangan'))
                                         <div>
                                             <label for="rekanan" class=" form-control-label">
-                                                <h3>Detail Pekerjaan {{ $tagihan->status }}</h3>
+                                                <h3>Detail Pekerjaan</h3>
                                                 </h3>
                                             </label>
 
