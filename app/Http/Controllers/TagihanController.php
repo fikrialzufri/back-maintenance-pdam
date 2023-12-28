@@ -299,20 +299,20 @@ class TagihanController extends Controller
             $query = $query->orderByRaw("status = 'disetujui dirum' DESC")->orderByRaw("status = 'disetujui dirut' DESC");
         }
         if (auth()->user()->hasRole('asisten-manajer-tata-usaha')) {
-            $query = $query->orderByRaw("status = 'disetujui dirut' DESC");
+            $query = $query->orderByRaw("status = 'disetujui dirut' DESC")->orderByRaw("status = 'disetujui asmentu' DESC");
         }
         if (auth()->user()->hasRole('asisten-manajer-perencanaan-keuangan')) {
-            $query = $query->orderByRaw("status = 'disetujui asmentu' DESC");
+            $query = $query->orderByRaw("status = 'disetujui asmentu' DESC")->orderByRaw("status = 'disetujui asmenanggaran' DESC");
         }
         if (auth()->user()->hasRole('asisten-manajer-akuntansi')) {
-            $query = $query->orderByRaw("status = 'disetujui asmenanggaran' DESC");
+            $query = $query->orderByRaw("status = 'disetujui asmenanggaran' DESC")->orderByRaw("status = 'disetujui asmenakuntan' DESC");
         }
 
         if (auth()->user()->hasRole('manajer-keuangan')) {
-            $query = $query->orderByRaw("status = 'disetujui asmenakuntan' DESC");
+            $query = $query->orderByRaw("status = 'disetujui asmenakuntan' DESC")->orderByRaw("status = 'disetujui mankeu' DESC");
         }
         if (auth()->user()->hasRole('asisten-manajer-kas')) {
-            $query = $query->orderByRaw("status = 'disetujui mankeu' DESC");
+            $query = $query->orderByRaw("status = 'disetujui mankeu' DESC")->orderByRaw("status = 'disetujui asmenkas' DESC");
         }
 
         if ($paginate) {
