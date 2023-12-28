@@ -312,7 +312,7 @@ class Tagihan extends Model
         if ($this->hasPelaksanaanPekerjaan) {
             foreach ($this->hasPelaksanaanPekerjaan as $key => $value) {
 
-                if ($this->hasPelaksanaanPekerjaan->kode_anggaran == '31.05.30') {
+                if ($value->kode_anggaran == '31.05.30') {
                     $count++;
                 }
             }
@@ -325,7 +325,7 @@ class Tagihan extends Model
         if ($this->hasPelaksanaanPekerjaan) {
             foreach ($this->hasPelaksanaanPekerjaan as $key => $value) {
 
-                if ($this->hasPelaksanaanPekerjaan->kode_anggaran == '93.02.30') {
+                if ($value->kode_anggaran == '93.02.30') {
                     $count++;
                 }
             }
@@ -338,7 +338,7 @@ class Tagihan extends Model
         if ($this->hasPelaksanaanPekerjaan) {
             foreach ($this->hasPelaksanaanPekerjaan as $key => $value) {
 
-                if ($this->hasPelaksanaanPekerjaan->kode_anggaran == '93.02.40') {
+                if ($value->kode_anggaran == '93.02.40') {
                     $count++;
                 }
             }
