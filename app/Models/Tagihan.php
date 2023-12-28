@@ -207,6 +207,16 @@ class Tagihan extends Model
                 $danger = 'bg-danger';
             }
         }
+        // if ($this->status == 'dikirim') {
+        //     if (auth()->user()->hasRole('manajer-distribusi')) {
+        //         $danger = 'bg-danger';
+        //     }
+        // }
+        // if ($this->status == '') {
+        //     if (auth()->user()->hasRole('direktur-teknik')) {
+        //         $danger = 'bg-danger';
+        //     }
+        // }
         return $danger;
     }
     public function getBelumPersetujuanMobileAttribute()

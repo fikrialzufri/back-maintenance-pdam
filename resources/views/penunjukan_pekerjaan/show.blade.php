@@ -953,7 +953,7 @@
                                                                         <td>{{ $daftarPekerjaan->hasItemPerencanaanAdujst[$key]->pivot->keterangan }}
                                                                         </td>
                                                                         <td>
-                                                                            Rp.{{ format_uang($daftarPekerjaan->hasItemPerencanaanAdujst[$key]->pivot->qty * $daftarPekerjaan->hasItemPerencanaanAdujst[$key]->pivot->harga) }}
+                                                                            Rp.{{ format_uang($daftarPekerjaan->hasItemPerencanaanAdujst[$key]->pivot->harga) }}
                                                                         </td>
                                                                     @endif
 

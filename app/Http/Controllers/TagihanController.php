@@ -58,10 +58,10 @@ class TagihanController extends Controller
                 'name' => 'no_hp_rekanan',
                 'alias' => 'Nomor Hp Rekanan',
             ],
-            // [
-            //     'name' => 'pkp',
-            //     'alias' => 'PKP',
-            // ],
+            [
+                'name' => 'status',
+                'alias' => 'status',
+            ],
             [
                 'name' => 'tanggal',
                 'alias' => 'Tanggal Tagihan',
