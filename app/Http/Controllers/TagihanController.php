@@ -1671,7 +1671,7 @@ class TagihanController extends Controller
         } else {
             $this->validate(request(), [
                 'no_kwitansi' => 'required|unique:tagihan,no_kwitansi,' . $id,
-                'no_kwitansi_image' => 'required|mimes:pdf',
+                'no_kwitansi_image' => 'required|sometimes|mimes:pdf',
             ], $messages);
         }
 

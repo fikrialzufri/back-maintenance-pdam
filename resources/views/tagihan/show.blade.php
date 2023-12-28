@@ -911,7 +911,7 @@
                                         <div class="input-group input-group-button">
                                             <div class="input-group-prepend">
                                                 <a class="btn btn-primary"
-                                                    href="{{ asset('storage/tagihan/' . $tagihan->no_faktur_pajak_image) }}"
+                                                    href="{{ $tagihan->no_faktur_pajak_image ? asset('storage/tagihan/' . $tagihan->no_faktur_pajak_image) : abort('404') }}"
                                                     target="_blank">
                                                     <i class="ik ik-arrow-down"></i> Download Faktur
                                                     Pajak {{ $tagihan->no_faktur_pajak_image }}
