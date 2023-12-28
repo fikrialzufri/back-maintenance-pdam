@@ -112,8 +112,7 @@
                                         lokasi. Dengan jumlah tagihan sebesar Rp{{ format_uang($total_tagihan) }},00
                                         ({{ ltrim(terbilang($total_tagihan)) }}rupiah) @if ($pkp == 'ya')
                                             sudah termasuk pajak
-                                        @endif
-                                        .
+                                        @endif.
                                     </span>
                                 </p>
                                 <p style='font-size: 20px; text-align: justify;'>
