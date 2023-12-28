@@ -239,21 +239,7 @@
                                                 </div>
                                             @endif
                                         @endif
-                                        {{-- @if ($tagihan->kode_anggaran != '')
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    <div>
-                                                        <label for="kode_anggaran" class=" form-control-label">Kode
-                                                            Anggaran</label>
-                                                    </div>
-                                                    <div>
-                                                        <input type="text" placeholder="kode_anggaran"
-                                                            class="form-control" readonly
-                                                            value="{{ $tagihan->kode_anggaran }}">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endif --}}
+
                                     </div>
 
                                     <div class="col-6 timeline">
