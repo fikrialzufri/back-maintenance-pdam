@@ -293,7 +293,7 @@ class TagihanController extends Controller
             $query = $query->orderByRaw("status = 'disetujui' DESC");
         }
         if (auth()->user()->hasRole('direktur-umum')) {
-            $query = $query->orderByRaw("status = 'disetujui mu' DESC");
+            $query = $query->orderByRaw("status = 'disetujui mu' DESC")->orderByRaw("status = 'disetujui dirum' DESC");
         }
         if (auth()->user()->hasRole('direktur-utama')) {
             $query = $query->orderByRaw("status = 'disetujui dirum' DESC");
