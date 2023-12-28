@@ -110,7 +110,9 @@
                                         pekerjaan perbaikan periode bulan {{ $bulan }} tahun
                                         {{ $tahun }} di wilayah {{ $wilayah }} sebanyak {{ $total_lokasi }}
                                         lokasi. Dengan jumlah tagihan sebesar Rp{{ format_uang($total_tagihan) }},00
-                                        ({{ ltrim(terbilang($total_tagihan)) }}rupiah).
+                                        ({{ ltrim(terbilang($total_tagihan)) }}rupiah) @if ($pkp == 'ya')
+                                            sudah termasuk pajak
+                                        @endif
 
                                     </span>
                                 </p>

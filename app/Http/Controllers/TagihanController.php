@@ -1383,6 +1383,8 @@ class TagihanController extends Controller
 
         $singkatan = $rekanan->singkatan;
 
+
+
         $stafPengawas = $rekanan->hasKaryawan;
 
         $wilayah = array_unique($wilayah);
@@ -1408,9 +1410,11 @@ class TagihanController extends Controller
         $total = str_replace(".", "", $total);
 
         $ppn = 0;
+        $pkp = "tidak";
 
         if ($tagihan->hasRekanan->pkp) {
             if ($tagihan->hasRekanan->pkp == 'ya') {
+                $pkp = "ya";
                 $ppn = ($total * 11) / 100;
             }
         }
@@ -1457,6 +1461,7 @@ class TagihanController extends Controller
                     "direktur",
                     "total_lokasi",
                     "filename",
+                    "pkp",
 
                     "bulan",
                     "tahun",
