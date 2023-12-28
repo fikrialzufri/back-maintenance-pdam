@@ -113,7 +113,7 @@
                                         ({{ ltrim(terbilang($total_tagihan)) }}rupiah) @if ($pkp == 'ya')
                                             sudah termasuk pajak
                                         @endif
-
+                                        .
                                     </span>
                                 </p>
                                 <p style='font-size: 20px; text-align: justify;'>
