@@ -217,6 +217,21 @@ class Tagihan extends Model
         //         $danger = 'bg-danger';
         //     }
         // }
+        if (auth()->user()->hasRole('manajer-distribusi')) {
+            $danger = 'bg-danger';
+
+            if ($this->hasUserMany) {
+                foreach ($this->hasUserMany as $key => $value) {
+                    if ($value->id == $user) {
+                        $danger = '';
+                    }
+                }
+            } else {
+                if ($this->status == 'dikirim') {
+                    $danger = 'bg-danger';
+                }
+            }
+        }
         if (auth()->user()->hasRole('direktur-teknik')) {
             $danger = 'bg-danger';
 
@@ -227,7 +242,7 @@ class Tagihan extends Model
                     }
                 }
             } else {
-                if ($this->status == '') {
+                if ($this->status == '' || $this->status == 'dikoreksi') {
                     $danger = 'bg-danger';
                 }
             }

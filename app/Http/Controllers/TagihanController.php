@@ -746,15 +746,15 @@ class TagihanController extends Controller
 
             if ($data->pkp == 'ya') {
                 $this->validate(request(), [
-                    'no_faktur_pajak_rekanan' => 'required|unique:tagihan,no_faktur_pajak,' . $id,
-                    'bukti_pembayaran_rekanan' => 'required|unique:tagihan,bukti_pembayaran,' . $id,
-                    'e_billing_rekanan' => 'required|unique:tagihan,e_billing,' . $id,
-                    'e_spt_rekanan' => 'required|unique:tagihan,e_spt,' . $id,
-                    'no_kwitansi_rekanan' => 'required|unique:tagihan,no_kwitansi,' . $id,
+                    'no_faktur_pajak_rekanan' => 'sometimes|unique:tagihan,no_faktur_pajak,' . $id,
+                    'bukti_pembayaran_rekanan' => 'sometimes|unique:tagihan,bukti_pembayaran,' . $id,
+                    'e_billing_rekanan' => 'sometimes|unique:tagihan,e_billing,' . $id,
+                    'e_spt_rekanan' => 'sometimes|unique:tagihan,e_spt,' . $id,
+                    'no_kwitansi_rekanan' => 'sometimes|unique:tagihan,no_kwitansi,' . $id,
                 ], $messages);
             } else {
                 $this->validate(request(), [
-                    'no_kwitansi_rekanan' => 'required|unique:tagihan,no_kwitansi,' . $id,
+                    'no_kwitansi_rekanan' => 'sometimes|unique:tagihan,no_kwitansi,' . $id,
                 ], $messages);
             }
 
@@ -762,7 +762,9 @@ class TagihanController extends Controller
         }
         try {
             if ($data) {
-                $status = 'dikoreksi';
+                if (auth()->user()->hasRole('manajer-distribusi')) {
+                    $status = 'proses';
+                }
                 if (auth()->user()->karyawan) {
                     $namakaryawan = auth()->user()->karyawan->nama;
                 }
