@@ -58,10 +58,10 @@ class TagihanController extends Controller
                 'name' => 'no_hp_rekanan',
                 'alias' => 'Nomor Hp Rekanan',
             ],
-            [
-                'name' => 'status',
-                'alias' => 'status',
-            ],
+            // [
+            //     'name' => 'status',
+            //     'alias' => 'status',
+            // ],
             [
                 'name' => 'tanggal',
                 'alias' => 'Tanggal Tagihan',
@@ -282,6 +282,10 @@ class TagihanController extends Controller
             }
         }
         //mendapilkan data model setelah query pencarian
+        if (auth()->user()->hasRole('direktur-teknik')) {
+
+            $query = $query->orderByRaw("FIELD(status , '') desc");
+        }
         if ($paginate) {
             $data = $query->paginate($paginate);
         } else {
