@@ -281,12 +281,9 @@ class TagihanController extends Controller
 
 
         if (auth()->user()->hasRole('manajer-distribusi')) {
-
-
             $query = $query->orderByRaw("status = 'dikirim' DESC")->orderByRaw("status = 'proses' DESC");
         }
         if (auth()->user()->hasRole('direktur-teknik')) {
-
             $query = $query->orderByRaw("status = 'proses' DESC")->orderByRaw("status = 'disetujui' DESC");
         }
         if (auth()->user()->hasRole('manajer-umum-dan-kesekretariatan')) {
@@ -314,8 +311,9 @@ class TagihanController extends Controller
         if (auth()->user()->hasRole('asisten-manajer-kas')) {
             $query = $query->orderByRaw("status = 'disetujui mankeu' DESC")->orderByRaw("status = 'disetujui asmenkas' DESC");
         }
-
+        $query = $query->orderBy('created_at', 'asc');
         if ($paginate) {
+
             $data = $query->paginate($paginate);
         } else {
             $data = $query->get();
