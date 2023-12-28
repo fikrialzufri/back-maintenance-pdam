@@ -245,13 +245,7 @@ class TagihanController extends Controller
                 $query->where('user_id', Auth::user()->id);
             }
         }
-        if ($this->sort) {
-            if ($this->desc) {
-                $data = $query->orderBy($this->sort, $this->desc);
-            } else {
-                $data = $query->orderBy($this->sort);
-            }
-        }
+
         if (!auth()->user()->hasRole('superadmin')) {
             if (auth()->user()->hasRole('rekanan')) {
                 $rekanan_id = auth()->user()->id_rekanan;
@@ -282,10 +276,45 @@ class TagihanController extends Controller
             }
         }
         //mendapilkan data model setelah query pencarian
+
+
+
+
+        if (auth()->user()->hasRole('manajer-distribusi')) {
+
+
+            $query = $query->orderByRaw("status = 'dikirim' DESC");
+        }
         if (auth()->user()->hasRole('direktur-teknik')) {
 
-            $query = $query->orderByRaw("FIELD(status , '') desc");
+            $query = $query->orderByRaw("status = 'proses' DESC");
         }
+        if (auth()->user()->hasRole('manajer-umum-dan-kesekretariatan')) {
+            $query = $query->orderByRaw("status = 'disetujui' DESC");
+        }
+        if (auth()->user()->hasRole('direktur-umum')) {
+            $query = $query->orderByRaw("status = 'disetujui mu' DESC");
+        }
+        if (auth()->user()->hasRole('direktur-utama')) {
+            $query = $query->orderByRaw("status = 'disetujui dirum' DESC");
+        }
+        if (auth()->user()->hasRole('asisten-manajer-tata-usaha')) {
+            $query = $query->orderByRaw("status = 'disetujui dirut' DESC");
+        }
+        if (auth()->user()->hasRole('asisten-manajer-perencanaan-keuangan')) {
+            $query = $query->orderByRaw("status = 'disetujui asmentu' DESC");
+        }
+        if (auth()->user()->hasRole('asisten-manajer-akuntansi')) {
+            $query = $query->orderByRaw("status = 'disetujui asmenanggaran' DESC");
+        }
+
+        if (auth()->user()->hasRole('manajer-keuangan')) {
+            $query = $query->orderByRaw("status = 'disetujui asmenakuntan' DESC");
+        }
+        if (auth()->user()->hasRole('asisten-manajer-kas')) {
+            $query = $query->orderByRaw("status = 'disetujui mankeu' DESC");
+        }
+
         if ($paginate) {
             $data = $query->paginate($paginate);
         } else {

@@ -180,43 +180,7 @@ class Tagihan extends Model
     {
         $danger = '';
         $user = auth()->user()->id;
-        // if (
 
-        //     auth()->user()->hasRole('manajer-distribusi') ||
-        //     auth()->user()->hasRole('keuangan') ||
-        //     auth()->user()->hasRole('staf-keuangan') ||
-        //     auth()->user()->hasRole('manajer-pengendalian-kehilangan-air') ||
-        //     auth()->user()->hasRole('asisten-manajer-tata-usaha') ||
-        //     auth()->user()->hasRole('manajer-umum-dan-kesekretariatan') ||
-        //     auth()->user()->hasRole('direktur-umum') ||
-        //     auth()->user()->hasRole('direktur-utama') ||
-        //     auth()->user()->hasRole('asisten-manajer-perencanaan-keuangan') ||
-        //     auth()->user()->hasRole('asisten-manajer-akuntansi') ||
-        //     auth()->user()->hasRole('asisten-manajer-kas') ||
-        //     auth()->user()->hasRole('manajer-keuangan') ||
-        //     auth()->user()->hasRole('manajer-perencanaan') || auth()->user()->hasRole('direktur-teknik')
-        // ) {
-        //     $danger = 'bg-danger';
-        //     if ($this->hasUserMany) {
-        //         foreach ($this->hasUserMany as $key => $value) {
-        //             if ($value->id == $user) {
-        //                 $danger = '';
-        //             }
-        //         }
-        //     } else {
-        //         $danger = 'bg-danger';
-        //     }
-        // }
-        // if ($this->status == 'dikirim') {
-        //     if (auth()->user()->hasRole('manajer-distribusi')) {
-        //         $danger = 'bg-danger';
-        //     }
-        // }
-        // if ($this->status == '') {
-        //     if (auth()->user()->hasRole('direktur-teknik')) {
-        //         $danger = 'bg-danger';
-        //     }
-        // }
         if (auth()->user()->hasRole('manajer-distribusi')) {
             // $danger = 'bg-danger';
             if ($this->status == 'dikirim') {
@@ -349,6 +313,8 @@ class Tagihan extends Model
         }
         return $danger;
     }
+
+
     public function getBelumPersetujuanMobileAttribute()
     {
         $danger = false;
