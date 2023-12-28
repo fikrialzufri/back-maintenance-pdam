@@ -219,16 +219,14 @@ class Tagihan extends Model
         // }
         if (auth()->user()->hasRole('manajer-distribusi')) {
             // $danger = 'bg-danger';
-
+            if ($this->status == 'dikirim') {
+                $danger = 'bg-danger';
+            }
             if ($this->hasUserMany) {
                 foreach ($this->hasUserMany as $key => $value) {
                     if ($value->id == $user) {
                         $danger = '';
                     }
-                }
-            } else {
-                if ($this->status == 'dikirim') {
-                    $danger = 'bg-danger';
                 }
             }
         }
@@ -247,121 +245,105 @@ class Tagihan extends Model
         }
         if (auth()->user()->hasRole('manajer-umum-dan-kesekretariatan')) {
             // $danger = 'bg-danger';
-
+            if ($this->status == 'disetujui') {
+                $danger = 'bg-danger';
+            }
             if ($this->hasUserMany) {
                 foreach ($this->hasUserMany as $key => $value) {
                     if ($value->id == $user) {
                         $danger = '';
                     }
-                }
-            } else {
-                if ($this->status == 'disetujui') {
-                    $danger = 'bg-danger';
                 }
             }
         }
         if (auth()->user()->hasRole('direktur-umum')) {
             // $danger = 'bg-danger';
-
+            if ($this->status == 'disetujui mu') {
+                $danger = 'bg-danger';
+            }
             if ($this->hasUserMany) {
                 foreach ($this->hasUserMany as $key => $value) {
                     if ($value->id == $user) {
                         $danger = '';
                     }
-                }
-            } else {
-                if ($this->status == 'disetujui mu') {
-                    $danger = 'bg-danger';
                 }
             }
         }
         if (auth()->user()->hasRole('direktur-utama')) {
             // $danger = 'bg-danger';
-
+            if ($this->status == 'disetujui dirum') {
+                $danger = 'bg-danger';
+            }
             if ($this->hasUserMany) {
                 foreach ($this->hasUserMany as $key => $value) {
                     if ($value->id == $user) {
                         $danger = '';
                     }
-                }
-            } else {
-                if ($this->status == 'disetujui dirum') {
-                    $danger = 'bg-danger';
                 }
             }
         }
         if (auth()->user()->hasRole('asisten-manajer-tata-usaha')) {
             // $danger = 'bg-danger';
-
+            if ($this->status == 'disetujui dirut') {
+                $danger = 'bg-danger';
+            }
             if ($this->hasUserMany) {
                 foreach ($this->hasUserMany as $key => $value) {
                     if ($value->id == $user) {
                         $danger = '';
                     }
-                }
-            } else {
-                if ($this->status == 'disetujui dirut') {
-                    $danger = 'bg-danger';
                 }
             }
         }
         if (auth()->user()->hasRole('asisten-manajer-perencanaan-keuangan')) {
             // $danger = 'bg-danger';
-
+            if ($this->status == 'disetujui asmentu') {
+                $danger = 'bg-danger';
+            }
             if ($this->hasUserMany) {
                 foreach ($this->hasUserMany as $key => $value) {
                     if ($value->id == $user) {
                         $danger = '';
                     }
-                }
-            } else {
-                if ($this->status == 'disetujui asmentu') {
-                    $danger = 'bg-danger';
                 }
             }
         }
         if (auth()->user()->hasRole('asisten-manajer-akuntansi')) {
             // $danger = 'bg-danger';
-
+            if ($this->status == 'disetujui asmenanggaran') {
+                $danger = 'bg-danger';
+            }
             if ($this->hasUserMany) {
                 foreach ($this->hasUserMany as $key => $value) {
                     if ($value->id == $user) {
                         $danger = '';
                     }
-                }
-            } else {
-                if ($this->status == 'disetujui asmenanggaran') {
-                    $danger = 'bg-danger';
                 }
             }
         }
         if (auth()->user()->hasRole('manajer-keuangan')) {
             // $danger = 'bg-danger';
-
+            if ($this->status == 'disetujui asmenakuntan') {
+                $danger = 'bg-danger';
+            }
             if ($this->hasUserMany) {
                 foreach ($this->hasUserMany as $key => $value) {
                     if ($value->id == $user) {
                         $danger = '';
                     }
-                }
-            } else {
-                if ($this->status == 'disetujui asmenakuntan') {
-                    $danger = 'bg-danger';
                 }
             }
         }
         if (auth()->user()->hasRole('asisten-manajer-kas')) {
             // $danger = 'bg-danger';
-
+            if ($this->status == 'disetujui mankeu') {
+                $danger = 'bg-danger';
+            }
             if ($this->hasUserMany) {
                 foreach ($this->hasUserMany as $key => $value) {
                     if ($value->id == $user) {
                         $danger = '';
                     }
-                }
-            } else {
-                if ($this->status == 'disetujui mankeu') {
-                    $danger = 'bg-danger';
                 }
             }
         }
