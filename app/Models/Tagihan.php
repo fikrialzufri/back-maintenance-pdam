@@ -218,7 +218,7 @@ class Tagihan extends Model
         //     }
         // }
         if (auth()->user()->hasRole('manajer-distribusi')) {
-            $danger = 'bg-danger';
+            // $danger = 'bg-danger';
 
             if ($this->hasUserMany) {
                 foreach ($this->hasUserMany as $key => $value) {
@@ -233,7 +233,7 @@ class Tagihan extends Model
             }
         }
         if (auth()->user()->hasRole('direktur-teknik')) {
-            $danger = 'bg-danger';
+            // $danger = 'bg-danger';
 
             if ($this->hasUserMany) {
                 foreach ($this->hasUserMany as $key => $value) {
@@ -248,7 +248,7 @@ class Tagihan extends Model
             }
         }
         if (auth()->user()->hasRole('manajer-umum-dan-kesekretariatan')) {
-            $danger = 'bg-danger';
+            // $danger = 'bg-danger';
 
             if ($this->hasUserMany) {
                 foreach ($this->hasUserMany as $key => $value) {
@@ -263,7 +263,7 @@ class Tagihan extends Model
             }
         }
         if (auth()->user()->hasRole('direktur-umum')) {
-            $danger = 'bg-danger';
+            // $danger = 'bg-danger';
 
             if ($this->hasUserMany) {
                 foreach ($this->hasUserMany as $key => $value) {
@@ -278,7 +278,7 @@ class Tagihan extends Model
             }
         }
         if (auth()->user()->hasRole('direktur-utama')) {
-            $danger = 'bg-danger';
+            // $danger = 'bg-danger';
 
             if ($this->hasUserMany) {
                 foreach ($this->hasUserMany as $key => $value) {
@@ -293,7 +293,7 @@ class Tagihan extends Model
             }
         }
         if (auth()->user()->hasRole('asisten-manajer-tata-usaha')) {
-            $danger = 'bg-danger';
+            // $danger = 'bg-danger';
 
             if ($this->hasUserMany) {
                 foreach ($this->hasUserMany as $key => $value) {
@@ -308,7 +308,7 @@ class Tagihan extends Model
             }
         }
         if (auth()->user()->hasRole('asisten-manajer-perencanaan-keuangan')) {
-            $danger = 'bg-danger';
+            // $danger = 'bg-danger';
 
             if ($this->hasUserMany) {
                 foreach ($this->hasUserMany as $key => $value) {
@@ -323,7 +323,7 @@ class Tagihan extends Model
             }
         }
         if (auth()->user()->hasRole('asisten-manajer-akuntansi')) {
-            $danger = 'bg-danger';
+            // $danger = 'bg-danger';
 
             if ($this->hasUserMany) {
                 foreach ($this->hasUserMany as $key => $value) {
@@ -338,7 +338,7 @@ class Tagihan extends Model
             }
         }
         if (auth()->user()->hasRole('manajer-keuangan')) {
-            $danger = 'bg-danger';
+            // $danger = 'bg-danger';
 
             if ($this->hasUserMany) {
                 foreach ($this->hasUserMany as $key => $value) {
@@ -353,7 +353,7 @@ class Tagihan extends Model
             }
         }
         if (auth()->user()->hasRole('asisten-manajer-kas')) {
-            $danger = 'bg-danger';
+            // $danger = 'bg-danger';
 
             if ($this->hasUserMany) {
                 foreach ($this->hasUserMany as $key => $value) {
