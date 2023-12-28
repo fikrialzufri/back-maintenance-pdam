@@ -190,42 +190,54 @@
                                                 </div>
                                             </div> --}}
                                         @endif
-                                        @if ($tagihan->status == 'disetujui asmenanggaran')
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    <div>
-                                                        <label class=" form-control-label">Kode Anggaran 31.05.30</label>
 
+                                        @if (auth()->user()->hasRole('asisten-manajer-perencanaan-keuangan') ||
+                                                auth()->user()->hasRole('direktur-umum') ||
+                                                auth()->user()->hasRole('direktur-utama') ||
+                                                auth()->user()->hasRole('asisten-manajer-perencanaan-keuangan') ||
+                                                auth()->user()->hasRole('asisten-manajer-akuntansi') ||
+                                                auth()->user()->hasRole('manajer-keuangan'))
+
+                                            @if ($tagihan->status == 'disetujui asmenanggaran')
+                                                <div class="col-12">
+                                                    <div class="form-group">
+                                                        <div>
+                                                            <label class=" form-control-label">Kode Anggaran
+                                                                31.05.30</label>
+
+                                                        </div>
+                                                        <div>
+                                                            <input type="text" placeholder="Kode Anggaran 31.05.30"
+                                                                class="form-control" readonly
+                                                                value="{{ $tagihan->anggaran_satu }}">
+                                                        </div>
                                                     </div>
-                                                    <div>
-                                                        <input type="text" placeholder="Kode Anggaran 31.05.30"
-                                                            class="form-control" readonly
-                                                            value="{{ $tagihan->anggaran_satu }}">
+                                                    <div class="form-group">
+                                                        <div>
+                                                            <label class=" form-control-label">Kode Anggaran
+                                                                93.02.30</label>
+
+                                                        </div>
+                                                        <div>
+                                                            <input type="text" placeholder="Kode Anggaran 93.02.30"
+                                                                class="form-control" readonly
+                                                                value="{{ $tagihan->anggaran_dua }}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div>
+                                                            <label class=" form-control-label">Kode Anggaran
+                                                                93.02.40</label>
+
+                                                        </div>
+                                                        <div>
+                                                            <input type="text" placeholder="Kode Anggaran 93.02.40"
+                                                                class="form-control" readonly
+                                                                value="{{ $tagihan->anggaran_tiga }}">
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="form-group">
-                                                    <div>
-                                                        <label class=" form-control-label">Kode Anggaran 93.02.30</label>
-
-                                                    </div>
-                                                    <div>
-                                                        <input type="text" placeholder="Kode Anggaran 93.02.30"
-                                                            class="form-control" readonly
-                                                            value="{{ $tagihan->anggaran_dua }}">
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div>
-                                                        <label class=" form-control-label">Kode Anggaran 93.02.40</label>
-
-                                                    </div>
-                                                    <div>
-                                                        <input type="text" placeholder="Kode Anggaran 93.02.40"
-                                                            class="form-control" readonly
-                                                            value="{{ $tagihan->anggaran_tiga }}">
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            @endif
                                         @endif
                                         {{-- @if ($tagihan->kode_anggaran != '')
                                             <div class="col-12">
