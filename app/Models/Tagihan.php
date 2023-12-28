@@ -69,6 +69,12 @@ class Tagihan extends Model
             return $this->hasRekanan->opr;
         }
     }
+    public function getStAttribute()
+    {
+        if ($this->nomor_tagihan) {
+            return str_replace("BAPP", "ST", $this->nomor_tagihan);
+        }
+    }
     public function getPkpAttribute()
     {
         if ($this->hasRekanan) {

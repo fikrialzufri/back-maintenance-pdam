@@ -13,7 +13,7 @@
                             <p
                                 style='margin-top:0cm;margin-right:0cm;margin-bottom:4.0pt;margin-left:0cm;line-height:normal;font-size:15px;font-family:"Calibri",sans-serif;'>
                                 <span style='font-size:16px;font-family:"Times New Roman",serif;'>Nomor :
-                                    {{ $tagihan->nomor_tagihan }}</span>
+                                    {{ $tagihan->st }}</span>
                             </p>
                             <p
                                 style='margin-top:0cm;margin-right:0cm;margin-bottom:4.0pt;margin-left:0cm;line-height:normal;font-size:15px;font-family:"Calibri",sans-serif;'>
