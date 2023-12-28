@@ -190,6 +190,38 @@
                                                 </div>
                                             </div> --}}
                                         @endif
+
+                                        @if ($tagihan->status == 'disetujui asmenanggaran')
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <div>
+                                                        <label class=" form-control-label">31.05.30</label>
+
+                                                    </div>
+                                                    <div>
+                                                        <span>1</span>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div>
+                                                        <label class=" form-control-label">93.02.30</label>
+
+                                                    </div>
+                                                    <div>
+                                                        <span>1</span>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div>
+                                                        <label class=" form-control-label">93.02.40</label>
+
+                                                    </div>
+                                                    <div>
+                                                        <span>1</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endif
                                         {{-- @if ($tagihan->kode_anggaran != '')
                                             <div class="col-12">
                                                 <div class="form-group">
