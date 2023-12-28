@@ -108,7 +108,7 @@
                                 </p>
                                 <p style='font-size: 20px; text-align: justify;'>
                                     <span style=''>
-                                        Telah mengadakan pemeriksaan pekerjaan service kebocoran pipa periode bulan
+                                        Telah mengadakan pemeriksaan pekerjaan perbaikan periode bulan
                                         {{ $bulan }} tahun {{ $tahun }} di wilayah {{ $wilayah }}
                                         sebanyak {{ $total_lokasi }} lokasi, di Perumdam Tirta Kencana Kota Samarinda.
                                     </span>
