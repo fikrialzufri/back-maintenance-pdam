@@ -852,7 +852,7 @@
                                     <div class="input-group input-group-button">
                                         <div class="input-group-prepend">
                                             <a class="btn btn-primary"
-                                                href="{{ $tagihan->no_kwitansi_image != '' ? asset('storage/tagihan/' . $tagihan->no_kwitansi_image) : abort(404) }}"
+                                                href="{{ $tagihan->no_kwitansi_image != '' ? asset('storage/tagihan/' . $tagihan->no_kwitansi_image) : route('404') }}"
                                                 target="_blank">
                                                 <i class="ik ik-arrow-down"></i> Download Kwitansi
                                                 {{ $tagihan->no_kwitansi_image }}
