@@ -746,15 +746,15 @@ class TagihanController extends Controller
 
             if ($data->pkp == 'ya') {
                 $this->validate(request(), [
-                    'no_faktur_pajak_rekanan' => 'sometimes|unique:tagihan,no_faktur_pajak,' . $id,
-                    'bukti_pembayaran_rekanan' => 'sometimes|unique:tagihan,bukti_pembayaran,' . $id,
-                    'e_billing_rekanan' => 'sometimes|unique:tagihan,e_billing,' . $id,
-                    'e_spt_rekanan' => 'sometimes|unique:tagihan,e_spt,' . $id,
-                    'no_kwitansi_rekanan' => 'sometimes|unique:tagihan,no_kwitansi,' . $id,
+                    'no_faktur_pajak_rekanan' => 'required|unique:tagihan,no_faktur_pajak,' . $id,
+                    'bukti_pembayaran_rekanan' => 'required|unique:tagihan,bukti_pembayaran,' . $id,
+                    'e_billing_rekanan' => 'required|unique:tagihan,e_billing,' . $id,
+                    'e_spt_rekanan' => 'required|unique:tagihan,e_spt,' . $id,
+                    'no_kwitansi_rekanan' => 'required|unique:tagihan,no_kwitansi,' . $id,
                 ], $messages);
             } else {
                 $this->validate(request(), [
-                    'no_kwitansi_rekanan' => 'sometimes|unique:tagihan,no_kwitansi,' . $id,
+                    'no_kwitansi_rekanan' => 'required|unique:tagihan,no_kwitansi,' . $id,
                 ], $messages);
             }
 
@@ -1658,15 +1658,15 @@ class TagihanController extends Controller
         if ($rekanan_pkp == 'ya') {
             $this->validate(request(), [
                 'no_faktur_pajak' => 'required|unique:tagihan,no_faktur_pajak,' . $id,
-                'no_faktur_pajak_image' => 'required|mimes:pdf',
+                'no_faktur_pajak_image' => 'sometimes|mimes:pdf',
                 'bukti_pembayaran' => 'required|unique:tagihan,bukti_pembayaran,' . $id,
-                'bukti_pembayaran_image' => 'required|mimes:pdf',
+                'bukti_pembayaran_image' => 'sometimes|mimes:pdf',
                 'e_billing' => 'required|unique:tagihan,e_billing,' . $id,
-                'e_billing_image' => 'required|mimes:pdf',
+                'e_billing_image' => 'sometimes|mimes:pdf',
                 'e_spt' => 'required|unique:tagihan,e_spt,' . $id,
-                'e_spt_image' => 'required|mimes:pdf',
+                'e_spt_image' => 'sometimes|mimes:pdf',
                 'no_kwitansi' => 'required|unique:tagihan,no_kwitansi,' . $id,
-                'no_kwitansi_image' => 'required|mimes:pdf',
+                'no_kwitansi_image' => 'sometimes|mimes:pdf',
             ], $messages);
         } else {
             $this->validate(request(), [
