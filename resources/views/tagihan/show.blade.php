@@ -301,7 +301,7 @@
                                                         <tr>
                                                             <th width="5">#</th>
                                                             <th>SPK</th>
-                                                            <th>Id Pekerjaan</th>
+                                                            {{-- <th>Id Pekerjaan</th> --}}
                                                             <th>Total Harga</th>
                                                             @if (auth()->user()->hasRole('asisten-manajer-perencanaan-keuangan') ||
                                                                     auth()->user()->hasRole('direktur-umum') ||
@@ -324,7 +324,7 @@
                                                                 <td>{{ $index + 1 }}</td>
                                                                 <td><a href="{{ route('penunjukan_pekerjaan.show', $item->hasAduan->slug) }}"
                                                                         target="_blank"> {{ $item->No_Spk }} </a></td>
-                                                                <th>{{ $item->id }}</th>
+                                                                {{-- <th>{{ $item->id }}</th> --}}
                                                                 <th>
                                                                     Rp. {{ format_uang($item->total_pekerjaan) }}
                                                                 </th>
