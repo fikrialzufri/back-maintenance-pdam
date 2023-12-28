@@ -1185,7 +1185,8 @@
 
                                     <div class="">
                                         <input type="file" value="no_kwitansi_image" name="no_kwitansi_image"
-                                            placeholder="" id="" class="form-control">
+                                            placeholder="" id="" class="form-control"
+                                            value="{{ $tagihan->no_kwitansi_image }}">
                                         <br>
 
                                         <div id="preview_no_kwitansi_image"></div>
@@ -1226,7 +1227,8 @@
                                         @endif
                                         <div class="">
                                             <input type="file" value="no_faktur_pajak_image" name="no_faktur_pajak_image"
-                                                placeholder="" id="" class="form-control">
+                                                value="{{ $tagihan->no_faktur_pajak_image }}" placeholder="" id=""
+                                                class="form-control">
                                             <br>
 
                                             <div id="preview_no_faktur_pajak_image"></div>
@@ -1264,7 +1266,8 @@
                                         </div>
                                         <div class="">
                                             <input type="file" value="e_billing_image" name="e_billing_image"
-                                                placeholder="" id="e_billing_image" class="form-control">
+                                                placeholder="" id="e_billing_image" class="form-control"
+                                                value="{{ $tagihan->e_billing_image }}">
                                             <br>
                                             @if ($errors->has('e_billing_image'))
                                                 <div class=" container-fluid alert alert-warning alert-dismissible fade show"
@@ -1305,7 +1308,7 @@
                                         <div class="">
                                             <input type="file" value="bukti_pembayaran_image"
                                                 name="bukti_pembayaran_image" placeholder="" id="bukti_pembayaran_image"
-                                                class="form-control">
+                                                value="{{ $tagihan->bukti_pembayaran_image }}" class="form-control">
                                             <br>
                                             @if ($errors->has('bukti_pembayaran_image'))
                                                 <div class=" container-fluid alert alert-warning alert-dismissible fade show"
@@ -1343,7 +1346,7 @@
                                         </div>
                                         <div class="">
                                             <input type="file" value="e_spt_image" name="e_spt_image" placeholder=""
-                                                id="e_spt_image" class="form-control">
+                                                value="{{ $tagihan->e_spt_image }}" id="e_spt_image" class="form-control">
                                             <br>
                                             @if ($errors->has('e_spt_image'))
                                                 <div class=" container-fluid alert alert-warning alert-dismissible fade show"
