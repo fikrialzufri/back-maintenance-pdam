@@ -225,7 +225,7 @@
                         <a href="" class="btn btn-primary" id="word-export"><span class="nav-icon fa fa-file-word"
                                 aria-hidden="true"></span>
                             Export Tagihan</a>
-                        <button class="btn btn-primary" id="word-export"><span class="nav-icon fa fa-file-pdf"
+                        <button class="btn btn-primary" id="word-print"><span class="nav-icon fa fa-file-pdf"
                                 aria-hidden="true"></span>
                             Print Surat Tagihan</button>
                     </div>
@@ -261,7 +261,8 @@
             document.body.innerHTML = originalContents;
         }
 
-        $('#word-export').click(function() {
+        $('#word-print').click(function() {
+            console.log('apa');
             createPdf()
         });
 
