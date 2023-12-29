@@ -286,30 +286,31 @@ class TagihanController extends Controller
         if (auth()->user()->hasRole('direktur-teknik')) {
             $query->orderByRaw("status = 'proses' DESC")->orderByRaw("status = 'disetujui' DESC")->orderByRaw("status = 'disetujui asmenkas' DESC")->orderByRaw("status = 'disetujui mankeu' DESC")->orderByRaw("status = 'disetujui asmenakuntan' DESC");
         }
+        if (auth()->user()->hasRole('asisten-manajer-tata-usaha')) {
+            $query->orderByRaw("status = 'disetujui' DESC")->orderByRaw("status = 'disetujui asmentu' DESC")->orderByRaw("status = 'disetujui asmenkas' DESC")->orderByRaw("status = 'disetujui mankeu' DESC")->orderByRaw("status = 'disetujui asmenakuntan' DESC");
+        }
         if (auth()->user()->hasRole('manajer-umum-dan-kesekretariatan')) {
-            $query->orderByRaw("status = 'disetujui' DESC")->orderByRaw("status = 'disetujui mu' DESC")->orderByRaw("status = 'disetujui asmenkas' DESC")->orderByRaw("status = 'disetujui mankeu' DESC")->orderByRaw("status = 'disetujui asmenakuntan' DESC");
+            $query->orderByRaw("status = 'disetujui asmentu' DESC")->orderByRaw("status = 'disetujui mu' DESC")->orderByRaw("status = 'disetujui asmenkas' DESC")->orderByRaw("status = 'disetujui mankeu' DESC")->orderByRaw("status = 'disetujui asmenakuntan' DESC")->orderByRaw("status = 'disetujui asmenakuntan' DESC");
         }
         if (auth()->user()->hasRole('direktur-umum')) {
-            $query->orderByRaw("status = 'disetujui mu' DESC")->orderByRaw("status = 'disetujui dirum' DESC")->orderByRaw("status = 'disetujui asmenkas' DESC")->orderByRaw("status = 'disetujui mankeu' DESC")->orderByRaw("status = 'disetujui asmenakuntan' DESC");
+            $query->orderByRaw("status = 'disetujui mu' DESC")->orderByRaw("status = 'disetujui dirum' DESC")->orderByRaw("status = 'disetujui asmenkas' DESC")->orderByRaw("status = 'disetujui mankeu' DESC")->orderByRaw("status = 'disetujui asmenakuntan' DESC")->orderByRaw("status = 'disetujui asmenakuntan' DESC");
         }
         if (auth()->user()->hasRole('direktur-utama')) {
-            $query->orderByRaw("status = 'disetujui dirum' DESC")->orderByRaw("status = 'disetujui dirut' DESC")->orderByRaw("status = 'disetujui asmenkas' DESC")->orderByRaw("status = 'disetujui mankeu' DESC")->orderByRaw("status = 'disetujui asmenakuntan' DESC");
+            $query->orderByRaw("status = 'disetujui dirum' DESC")->orderByRaw("status = 'disetujui dirut' DESC")->orderByRaw("status = 'disetujui asmenkas' DESC")->orderByRaw("status = 'disetujui mankeu' DESC")->orderByRaw("status = 'disetujui asmenakuntan' DESC")->orderByRaw("status = 'disetujui asmenakuntan' DESC");
         }
-        if (auth()->user()->hasRole('asisten-manajer-tata-usaha')) {
-            $query->orderByRaw("status = 'disetujui dirut' DESC")->orderByRaw("status = 'disetujui asmentu' DESC")->orderByRaw("status = 'disetujui asmenkas' DESC")->orderByRaw("status = 'disetujui mankeu' DESC")->orderByRaw("status = 'disetujui asmenakuntan' DESC");
-        }
+
         if (auth()->user()->hasRole('asisten-manajer-perencanaan-keuangan')) {
-            $query->orderByRaw("status = 'disetujui asmentu' DESC")->orderByRaw("status = 'disetujui asmenanggaran' DESC")->orderByRaw("status = 'disetujui asmenkas' DESC")->orderByRaw("status = 'disetujui mankeu' DESC")->orderByRaw("status = 'disetujui asmenakuntan' DESC");
+            $query->orderByRaw("status = 'disetujui asmentu' DESC")->orderByRaw("status = 'disetujui asmenanggaran' DESC")->orderByRaw("status = 'disetujui asmenkas' DESC")->orderByRaw("status = 'disetujui mankeu' DESC")->orderByRaw("status = 'disetujui asmenakuntan' DESC")->orderByRaw("status = 'disetujui asmenakuntan' DESC");
         }
         if (auth()->user()->hasRole('asisten-manajer-akuntansi')) {
             $query->orderByRaw("status = 'disetujui asmenanggaran' DESC")->orderByRaw("status = 'disetujui asmenakuntan' DESC")->orderByRaw("status = 'disetujui asmenkas' DESC")->orderByRaw("status = 'disetujui mankeu' DESC");
         }
 
         if (auth()->user()->hasRole('manajer-keuangan')) {
-            $query->orderByRaw("status = 'disetujui asmenakuntan' DESC")->orderByRaw("status = 'disetujui mankeu' DESC")->orderByRaw("status = 'disetujui asmenkas' DESC");
+            $query->orderByRaw("status = 'disetujui asmenakuntan' DESC")->orderByRaw("status = 'disetujui mankeu' DESC")->orderByRaw("status = 'disetujui asmenkas' DESC")->orderByRaw("status = 'disetujui asmenakuntan' DESC");
         }
         if (auth()->user()->hasRole('asisten-manajer-kas')) {
-            $query->orderByRaw("status = 'disetujui mankeu' DESC")->orderByRaw("status = 'disetujui asmenkas' DESC");
+            $query->orderByRaw("status = 'disetujui mankeu' DESC")->orderByRaw("status = 'disetujui asmenkas' DESC")->orderByRaw("status = 'disetujui asmenakuntan' DESC");
         }
         $query->orderBy('created_at', 'asc');
         if ($paginate) {
@@ -801,6 +802,15 @@ class TagihanController extends Controller
                     // $data->nomor_tagihan = $nomor_tagihan;
                     // $data->slug = Str::slug($nomor_tagihan);
                 }
+                if (auth()->user()->hasRole('asisten-manajer-tata-usaha')) {
+
+                    $status = 'disetujui asmentu';
+                    $data->no_kwitansi_check = $request->no_kwitansi_check;
+                    $data->no_faktur_pajak_check = $request->no_faktur_pajak_check;
+                    $data->bukti_pembayaran_check = $request->bukti_pembayaran_check;
+                    $data->e_billing_check = $request->e_billing_check;
+                    $data->e_spt_check = $request->e_spt_check;
+                }
 
 
                 if (auth()->user()->hasRole('manajer-umum-dan-kesekretariatan')) {
@@ -812,15 +822,7 @@ class TagihanController extends Controller
                 if (auth()->user()->hasRole('direktur-utama')) {
                     $status = 'disetujui dirut';
                 }
-                if (auth()->user()->hasRole('asisten-manajer-tata-usaha')) {
 
-                    $status = 'disetujui asmentu';
-                    $data->no_kwitansi_check = $request->no_kwitansi_check;
-                    $data->no_faktur_pajak_check = $request->no_faktur_pajak_check;
-                    $data->bukti_pembayaran_check = $request->bukti_pembayaran_check;
-                    $data->e_billing_check = $request->e_billing_check;
-                    $data->e_spt_check = $request->e_spt_check;
-                }
 
                 if (auth()->user()->hasRole('asisten-manajer-perencanaan-keuangan')) {
                     $status = 'disetujui asmenanggaran';

@@ -59,6 +59,27 @@ class KaryawanController extends Controller
                 'alias' => 'Nama Karyawan',
                 'value' => null
             ],
+            [
+                'name' => 'jabatan_id',
+                'input' => 'combo',
+                'alias' => 'Jabatan',
+                'value' => $this->combobox(
+                    'Jabatan',
+                    null,
+                    null,
+                    null,
+                    'nama',
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    ['divisi', 'wilayah', 'departemen'],
+                ),
+                'validasi' => ['required'],
+            ],
         ];
     }
     public function configForm()

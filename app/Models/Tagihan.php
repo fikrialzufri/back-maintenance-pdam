@@ -207,9 +207,22 @@ class Tagihan extends Model
                 }
             }
         }
+        if (auth()->user()->hasRole('asisten-manajer-tata-usaha')) {
+            // $danger = 'bg-danger';
+            if ($this->status == '' || $this->status == 'disetujui') {
+                $danger = 'bg-danger';
+            }
+            if ($this->hasUserMany) {
+                foreach ($this->hasUserMany as $key => $value) {
+                    if ($value->id == $user) {
+                        $danger = '';
+                    }
+                }
+            }
+        }
         if (auth()->user()->hasRole('manajer-umum-dan-kesekretariatan')) {
             // $danger = 'bg-danger';
-            if ($this->status == 'disetujui') {
+            if ($this->status == 'disetujui asmentu') {
                 $danger = 'bg-danger';
             }
             if ($this->hasUserMany) {
