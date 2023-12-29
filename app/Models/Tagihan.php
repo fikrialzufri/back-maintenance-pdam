@@ -427,6 +427,19 @@ class Tagihan extends Model
         }
         return $count;
     }
+    public function getTotalAnggaranSatuAttribute()
+    {
+        $sum = 0;
+        if ($this->hasPelaksanaanPekerjaan) {
+            foreach ($this->hasPelaksanaanPekerjaan as $key => $value) {
+
+                if ($value->kode_anggaran == '31.05.30') {
+                    $sum +=  $value->total_pekerjaan;
+                }
+            }
+        }
+        return $sum;
+    }
     public function getAnggaranDuaAttribute()
     {
         $count = 0;
@@ -440,6 +453,19 @@ class Tagihan extends Model
         }
         return $count;
     }
+    public function getTotalAnggaranDuaAttribute()
+    {
+        $sum = 0;
+        if ($this->hasPelaksanaanPekerjaan) {
+            foreach ($this->hasPelaksanaanPekerjaan as $key => $value) {
+
+                if ($value->kode_anggaran == '93.02.30') {
+                    $sum +=  $value->total_pekerjaan;
+                }
+            }
+        }
+        return $sum;
+    }
     public function getAnggaranTigaAttribute()
     {
         $count = 0;
@@ -452,6 +478,19 @@ class Tagihan extends Model
             }
         }
         return $count;
+    }
+    public function getTotalAnggaranTigaAttribute()
+    {
+        $sum = 0;
+        if ($this->hasPelaksanaanPekerjaan) {
+            foreach ($this->hasPelaksanaanPekerjaan as $key => $value) {
+
+                if ($value->kode_anggaran == '93.02.40') {
+                    $sum +=  $value->total_pekerjaan;
+                }
+            }
+        }
+        return $sum;
     }
 
     public function getListPersetujuanAttribute()
