@@ -100,7 +100,7 @@
                                                     </div>
                                                     <input type="text" name="total_tagihan" id="total_tagihan_all"
                                                         placeholder="" class="form-control" readonly
-                                                        value="{{ $total }}">
+                                                        value="{{ format_uang($total) }}">
                                                 </div>
                                             </div>
                                         </div>
@@ -606,7 +606,7 @@
                                                     <tr>
                                                         <th>
                                                             <label for="rekanan" class=" form-control-label">
-                                                                <h4>Total Tagihan : Rp. {{ $total }} </h4>
+                                                                <h4>Total Tagihan : Rp. {{ format_uang($total) }} </h4>
                                                             </label>
                                                         </th>
                                                     </tr>
