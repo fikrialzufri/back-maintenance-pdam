@@ -58,10 +58,10 @@ class TagihanController extends Controller
                 'name' => 'no_hp_rekanan',
                 'alias' => 'Nomor Hp Rekanan',
             ],
-            // [
-            //     'name' => 'status',
-            //     'alias' => 'status',
-            // ],
+            [
+                'name' => 'status',
+                'alias' => 'status',
+            ],
             [
                 'name' => 'tanggal',
                 'alias' => 'Tanggal Tagihan',
@@ -300,7 +300,7 @@ class TagihanController extends Controller
         }
 
         if (auth()->user()->hasRole('asisten-manajer-perencanaan-keuangan')) {
-            $query->orderByRaw("status = 'disetujui asmentu' DESC")->orderByRaw("status = 'disetujui asmenanggaran' DESC")->orderByRaw("status = 'disetujui asmenkas' DESC")->orderByRaw("status = 'disetujui mankeu' DESC")->orderByRaw("status = 'disetujui asmenakuntan' DESC")->orderByRaw("status = 'disetujui asmenakuntan' DESC");
+            $query->orderByRaw("status = 'disetujui dirut' DESC")->orderByRaw("status = 'disetujui asmenanggaran' DESC")->orderByRaw("status = 'disetujui asmenkas' DESC")->orderByRaw("status = 'disetujui mankeu' DESC")->orderByRaw("status = 'disetujui asmenakuntan' DESC")->orderByRaw("status = 'disetujui asmenakuntan' DESC");
         }
         if (auth()->user()->hasRole('asisten-manajer-akuntansi')) {
             $query->orderByRaw("status = 'disetujui asmenanggaran' DESC")->orderByRaw("status = 'disetujui asmenakuntan' DESC")->orderByRaw("status = 'disetujui asmenkas' DESC")->orderByRaw("status = 'disetujui mankeu' DESC");

@@ -259,22 +259,10 @@ class Tagihan extends Model
                 }
             }
         }
-        if (auth()->user()->hasRole('asisten-manajer-tata-usaha')) {
-            // $danger = 'bg-danger';
-            if ($this->status == 'disetujui dirut') {
-                $danger = 'bg-danger';
-            }
-            if ($this->hasUserMany) {
-                foreach ($this->hasUserMany as $key => $value) {
-                    if ($value->id == $user) {
-                        $danger = '';
-                    }
-                }
-            }
-        }
+
         if (auth()->user()->hasRole('asisten-manajer-perencanaan-keuangan')) {
             // $danger = 'bg-danger';
-            if ($this->status == 'disetujui asmentu') {
+            if ($this->status == 'disetujui dirut') {
                 $danger = 'bg-danger';
             }
             if ($this->hasUserMany) {

@@ -110,6 +110,7 @@
                                                             auth()->user()->hasRole('asisten-manajer-akuntansi') ||
                                                             auth()->user()->hasRole('manajer-keuangan') ||
                                                             auth()->user()->hasRole('manajer-perencanaan') ||
+                                                            auth()->user()->hasRole('asisten-manajer-kas') ||
                                                             auth()->user()->hasRole('direktur-teknik'))
                                                         Proses
                                                     @endif
