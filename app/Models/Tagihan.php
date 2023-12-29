@@ -372,8 +372,8 @@ class Tagihan extends Model
                 $total += $value->total_pekerjaan;
             }
         }
-        $total = pembulatan($total);
-        $total = str_replace(".", "", $total);
+        // $total = pembulatan($total);
+        // $total = str_replace(".", "", $total);
         $pkp = 'tidak';
         $ppn = 0;
 
