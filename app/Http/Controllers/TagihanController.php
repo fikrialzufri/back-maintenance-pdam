@@ -385,7 +385,7 @@ class TagihanController extends Controller
             $action = route('tagihan.update', $tagihan->id);
 
             $total = $tagihan->tagihan + $tagihan->galian;
-            $total = pembulatan($total);
+            $total = $total;
             $total = str_replace(".", "", $total);
             $ppn = ($total * 11) / 100;
             $grand_total = $total + $ppn;
@@ -698,7 +698,7 @@ class TagihanController extends Controller
         foreach ($penunjukan as $key => $value) {
             $totalPekerjaan += $value->total_pekerjaan;
         }
-        $totalPekerjaan = pembulatan($totalPekerjaan);
+        $totalPekerjaan = $totalPekerjaan;
         $totalPekerjaan = str_replace(".", "", $totalPekerjaan);
         if ($pkp == 'ya') {
             $ppn = ($totalPekerjaan * 11) / 100;
@@ -1460,7 +1460,7 @@ class TagihanController extends Controller
         $tahun = tahun_indonesia(Carbon::parse($tagihan->tanggal_adjust));
 
         $total = $tagihan->tagihan + $tagihan->galian;
-        $total = pembulatan($total);
+        $total = $total;
         $total = str_replace(".", "", $total);
 
         $ppn = 0;
