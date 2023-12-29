@@ -209,7 +209,7 @@
                                                     <div>
                                                         <input type="text" placeholder="Kode Anggaran 31.05.30"
                                                             class="form-control" readonly
-                                                            value="{{ $tagihan->anggaran_satu }} = {{ $tagihan->total_anggaran_satu }}">
+                                                            value="{{ $tagihan->anggaran_satu }} = {{ format_uang($tagihan->total_anggaran_satu) }}">
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
@@ -221,7 +221,7 @@
                                                     <div>
                                                         <input type="text" placeholder="Kode Anggaran 93.02.30"
                                                             class="form-control" readonly
-                                                            value="{{ $tagihan->anggaran_dua }} = {{ $tagihan->total_anggaran_dua }}">
+                                                            value="{{ $tagihan->anggaran_dua }} = {{ format_uang($tagihan->total_anggaran_dua) }}">
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
@@ -233,7 +233,7 @@
                                                     <div>
                                                         <input type="text" placeholder="Kode Anggaran 93.02.40"
                                                             class="form-control" readonly
-                                                            value="{{ $tagihan->anggaran_tiga }} = {{ $tagihan->total_anggaran_tiga }}">
+                                                            value="{{ $tagihan->anggaran_tiga }} = {{ format_uang($tagihan->total_anggaran_tiga) }}">
                                                     </div>
                                                 </div>
                                             </div>
