@@ -1461,7 +1461,7 @@ class TagihanController extends Controller
 
         $total = $tagihan->tagihan + $tagihan->galian;
         $total = $total;
-        $total = str_replace(".", "", $total);
+        // $total = str_replace(".", "", $total);
 
         $ppn = 0;
         $pkp = "tidak";
