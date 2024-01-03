@@ -46,6 +46,10 @@ class RekananController extends Controller
                 'alias' => 'OPR',
             ],
             [
+                'name' => 'pkp',
+                'alias' => 'pkp',
+            ],
+            [
                 'name' => 'nik',
                 'alias' => 'Nomor KTP',
             ],
