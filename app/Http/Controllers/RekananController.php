@@ -44,7 +44,6 @@ class RekananController extends Controller
             [
                 'name' => 'opr',
                 'alias' => 'OPR',
-
             ],
             [
                 'name' => 'nik',
