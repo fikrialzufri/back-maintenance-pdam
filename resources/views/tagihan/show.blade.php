@@ -245,7 +245,7 @@
                                                     <div>
                                                         <input type="text" placeholder="Kode Anggaran 93.02.40"
                                                             class="form-control" readonly
-                                                            value=" Rp.{{ format_uang($totalAnggaran) }}">
+                                                            value="Rp.{{ format_uang($totalAnggaran) }}">
                                                     </div>
                                                 </div>
                                             </div>
@@ -768,7 +768,7 @@
                                             <a href="{{ route('tagihan.word') }}?id={{ $tagihan->id }}" target="_blank"
                                                 class="btn btn-success"><span class="nav-icon fa fa-file-word"
                                                     aria-hidden="true"></span>
-                                                Privew Tagihan BAPP</a>
+                                                Privew Tagihan - BA PEMERIKSAAN PEKERJAAN</a>
                                         @endif
                                     </div>
                                     <div class="p-2">
@@ -787,7 +787,7 @@
                                             <a href="{{ route('tagihan.word') }}?id={{ $tagihan->id }}&word=bapp"
                                                 target="_blank" class="btn btn-success"><span
                                                     class="nav-icon fa fa-file-word" aria-hidden="true"></span>
-                                                Privew Tagihan BAPP</a>
+                                                Privew Tagihan - BA PENYERAHAN PEKERJAAN</a>
                                         @endif
                                     </div>
                                 @endif
