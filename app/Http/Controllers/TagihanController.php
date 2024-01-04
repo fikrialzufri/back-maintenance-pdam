@@ -1409,10 +1409,10 @@ class TagihanController extends Controller
         }
         if (isset($tagihan->list_persetujuan_direktur_teknik['created_at']) && $word != "bapp") {
             $tanggal = $tagihan->list_persetujuan_direktur_teknik['created_at'];
+            $tahun = Carbon::parse($tanggal)->format('Y');
             $now = tanggal_indonesia_terbilang($tanggal, true, false);
             $nowRekanan = tanggal_indonesia($tanggal, false, false);
             $tanggal = tanggal_indonesia(Carbon::parse($tanggal), false, false);
-            $tahun = Carbon::parse($tanggal)->format('Y');
 
 
             $wilayah = [];
