@@ -1387,6 +1387,7 @@ class TagihanController extends Controller
         $tanggal = '';
         $tanggalDirut = '';
         $bulan = bulan_indonesia(Carbon::parse($tagihan->tanggal_adjust));
+        $tahun = Carbon::parse($tagihan->tanggal_adjust)->format('Y');
         if ($tagihan->hasPelaksanaanPekerjaan()) {
             $PelaksanaanPekerjaan = $tagihan->hasPelaksanaanPekerjaan();
             $tanggalSelesai = $PelaksanaanPekerjaan->pluck('tanggal_selesai')->toArray();;
@@ -1411,6 +1412,8 @@ class TagihanController extends Controller
             $now = tanggal_indonesia_terbilang($tanggal, true, false);
             $nowRekanan = tanggal_indonesia($tanggal, false, false);
             $tanggal = tanggal_indonesia(Carbon::parse($tanggal), false, false);
+            $tahun = Carbon::parse($tanggal)->format('Y');
+
 
             $wilayah = [];
         }
@@ -1418,6 +1421,7 @@ class TagihanController extends Controller
 
             if ($tagihan->list_persetujuan_direktur_utama['created_at']) {
                 $tanggalDirut = $tagihan->list_persetujuan_direktur_utama['created_at'];
+                $tahun = Carbon::parse($tanggalDirut)->format('Y');
                 $now = tanggal_indonesia_terbilang($tanggalDirut, true, false);
 
                 $tanggalDirut = tanggal_indonesia(Carbon::parse($tanggalDirut), false, false);
@@ -1456,8 +1460,6 @@ class TagihanController extends Controller
 
         $filename = "Tagihan Rekenan " . $tagihan->rekanan . " Nomor " . $tagihan->nomor_tagihan_setujuh;
         $title = "Tagihan : " . $tagihan->nomor_tagihan_setujuh;
-
-        $tahun = tahun_indonesia(Carbon::parse($tagihan->tanggal_adjust));
 
         $total = $tagihan->tagihan + $tagihan->galian;
         $total = $total;
