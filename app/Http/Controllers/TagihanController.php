@@ -699,11 +699,13 @@ class TagihanController extends Controller
             $totalPekerjaan += $value->total_pekerjaan;
         }
         $totalPekerjaan = $totalPekerjaan;
-        $totalPekerjaan = str_replace(".", "", $totalPekerjaan);
+        // $totalPekerjaan = str_replace(".", "", $totalPekerjaan);
         if ($pkp == 'ya') {
             $ppn = ($totalPekerjaan * 11) / 100;
         }
         $grand_total = $totalPekerjaan + $ppn;
+
+        // $grand_total =
 
         return view(
             'tagihan.form',
