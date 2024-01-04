@@ -236,6 +236,18 @@
                                                             value="{{ $tagihan->anggaran_tiga }} = Rp.{{ format_uang($tagihan->total_anggaran_tiga) }}">
                                                     </div>
                                                 </div>
+                                                <div class="form-group">
+                                                    <div>
+                                                        <label class=" form-control-label">Total Kode Anggaran
+                                                        </label>
+
+                                                    </div>
+                                                    <div>
+                                                        <input type="text" placeholder="Kode Anggaran 93.02.40"
+                                                            class="form-control" readonly
+                                                            value=" Rp.{{ format_uang($totalAnggaran) }}">
+                                                    </div>
+                                                </div>
                                             </div>
 
                                         @endif

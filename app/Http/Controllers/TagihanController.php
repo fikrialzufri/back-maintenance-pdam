@@ -385,8 +385,9 @@ class TagihanController extends Controller
             $action = route('tagihan.update', $tagihan->id);
 
             $total = $tagihan->tagihan + $tagihan->galian;
-            $total = $total;
-            // $total = str_replace(".", "", $total);
+            $totalAnggaran = $total;
+            $total = pembulatan($total);
+            $total = str_replace(".", "", $total);
             $ppn = ($total * 11) / 100;
             $grand_total = $total + $ppn;
 
@@ -610,6 +611,7 @@ class TagihanController extends Controller
                     'rekanan',
                     'filename',
                     'list_persetujuan',
+                    'totalAnggaran',
                     'bntSetuju',
                     'perencaan',
                     'total_lokasi',
@@ -698,8 +700,8 @@ class TagihanController extends Controller
         foreach ($penunjukan as $key => $value) {
             $totalPekerjaan += $value->total_pekerjaan;
         }
-        $totalPekerjaan = $totalPekerjaan;
-        // $totalPekerjaan = str_replace(".", "", $totalPekerjaan);
+        $totalPekerjaan = pembulatan($totalPekerjaan);
+        $totalPekerjaan = str_replace(".", "", $totalPekerjaan);
         if ($pkp == 'ya') {
             $ppn = ($totalPekerjaan * 11) / 100;
         }
@@ -1464,8 +1466,8 @@ class TagihanController extends Controller
         $title = "Tagihan : " . $tagihan->nomor_tagihan_setujuh;
 
         $total = $tagihan->tagihan + $tagihan->galian;
-        $total = $total;
-        // $total = str_replace(".", "", $total);
+        $total = pembulatan($total);
+        $total = str_replace(".", "", $total);
 
         $ppn = 0;
         $pkp = "tidak";
@@ -1477,7 +1479,7 @@ class TagihanController extends Controller
             }
         }
         $total_tagihan = $total + $ppn;
-        // $total_tagihan = format_uang($total_tagihan);
+        // $total_tagihan = pembulatan($total_tagihan);
         $total_lokasi = $tagihan->total_lokasi_pekerjaan;
 
         $listJabatan = Jabatan::where('slug', 'manajer-perencanaan')->orWhere('slug', 'direktur-teknik')->get()->pluck('id')->toArray();
