@@ -108,7 +108,7 @@
                                 <p style='font-size: 20px; text-align: justify;'>
                                     <span style=''>Pada hari ini, {{ $now }} telah diadakan penyerahan
                                         pekerjaan perbaikan periode bulan {{ $bulan }} tahun
-                                        {{ $tahun }} di wilayah {{ $wilayah }} sebanyak {{ $total_lokasi }}
+                                        {{ $tahunBap }} di wilayah {{ $wilayah }} sebanyak {{ $total_lokasi }}
                                         lokasi. Dengan jumlah tagihan sebesar Rp{{ format_uang($total_tagihan) }},00
                                         ({{ ltrim(terbilang($total_tagihan)) }}rupiah)@if ($pkp == 'ya')
                                             sudah termasuk pajak.

@@ -1392,6 +1392,7 @@ class TagihanController extends Controller
         $tanggalDirut = '';
         $bulan = bulan_indonesia(Carbon::parse($tagihan->tanggal_adjust));
         $tahun = Carbon::parse($tagihan->tanggal_adjust)->format('Y');
+        $tahunBap = Carbon::parse($tagihan->tanggal_adjust)->format('Y');
         if ($tagihan->hasPelaksanaanPekerjaan()) {
             $PelaksanaanPekerjaan = $tagihan->hasPelaksanaanPekerjaan();
             $tanggalSelesai = $PelaksanaanPekerjaan->pluck('tanggal_selesai')->toArray();;
@@ -1410,6 +1411,7 @@ class TagihanController extends Controller
             } else {
                 $bulan = $bulanAwal . ' s/d ' . $bulanAkhir;
             }
+            $tahunBap = Carbon::parse($tanggalAkhir)->format('Y');
         }
         if (isset($tagihan->list_persetujuan_direktur_teknik['created_at']) && $word != "bapp") {
             $tanggal = $tagihan->list_persetujuan_direktur_teknik['created_at'];
@@ -1522,7 +1524,7 @@ class TagihanController extends Controller
                     "total_lokasi",
                     "filename",
                     "pkp",
-
+                    "tahunBap",
                     "bulan",
                     "tahun",
                     "preview",
