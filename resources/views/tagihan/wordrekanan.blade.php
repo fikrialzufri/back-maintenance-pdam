@@ -118,7 +118,7 @@
                                     <span style='font-size:16px;line-height:150%;font-family:"Times New Roman",serif;'>
                                         Sehubungan dengan selesainya pekerjaan perbaikan, di PERUMDAM Tirta
                                         Kencana Kota Samarinda Periode bulan {{ $bulan }} tahun
-                                        {{ $tahun }} di wilayah {{ $wilayah }} sebanyak {{ $total_lokasi }}
+                                        {{ $tahunBap }} di wilayah {{ $wilayah }} sebanyak {{ $total_lokasi }}
                                         Lokasi,
                                         kami mengajukan Permohonan Pembayaran atas pekerjaan tersebut
                                         senilai Rp{{ format_uang($total_tagihan) }},00

@@ -1497,6 +1497,7 @@ class TagihanController extends Controller
                 compact(
                     "title",
                     "wilayah",
+                    "tahunBap",
                     "singkatan",
                     "total_tagihan",
                     "total_lokasi",
@@ -1544,7 +1545,7 @@ class TagihanController extends Controller
                 "wilayah",
                 "singkatan",
                 "total_tagihan",
-
+                "tahunBap",
                 "direktur",
                 "total_lokasi",
                 "filename",
