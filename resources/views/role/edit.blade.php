@@ -137,7 +137,8 @@
                     var countChecked = $('.' + value + ':checked').length;
 
                     var parentClass = $('.' + value).closest('td').attr('class');
-                    if (countChecked == 4) {
+                    var parentClassCount = $('.' + value).length;
+                    if (countChecked == parentClassCount) {
 
                         $(".checkAll" + parentClass).prop('checked', true);
                     }
