@@ -913,105 +913,105 @@ class TagihanController extends Controller
 
         DB::beginTransaction();
 
-        try {
-            $PelaksanaanPekerjaan = PelaksanaanPekerjaan::whereIn('id', $pelaksanaan)
-                ->where('tagihan', 'tidak')->first();
+        $PelaksanaanPekerjaan = PelaksanaanPekerjaan::whereIn('id', $pelaksanaan)
+            ->where('tagihan', 'tidak')->first();
 
-            if (!auth()->user()->hasRole('superadmin')) {
-                if (auth()->user()->hasRole('rekanan')) {
-                    $rekanan_id = auth()->user()->id_rekanan;
-                } else {
-                    $rekanan_id = $PelaksanaanPekerjaan->rekanan_id;
-                }
-            }
-
-            $rekanan = Rekanan::find($rekanan_id);
-
-            $singkatan = "";
-
-            if ($rekanan) {
-
-                $singkatan = $rekanan->singkatan;
-            }
-
-            if ($tagihan >= 1) {
-                $no = str_pad($tagihan + 1, 4, "0", STR_PAD_LEFT);
-                $nomor_tagihan = $no . "/" . rand(0, 900) . "/" . "BAPP-" . $singkatan;
+        if (!auth()->user()->hasRole('superadmin')) {
+            if (auth()->user()->hasRole('rekanan')) {
+                $rekanan_id = auth()->user()->id_rekanan;
             } else {
-                $no = str_pad(1, 4, "0", STR_PAD_LEFT);
-                $nomor_tagihan = $no . "/" . rand(0, 900) . "/" . "BAPP-" . $singkatan;
+                $rekanan_id = $PelaksanaanPekerjaan->rekanan_id;
             }
+        }
 
-            $data = $this->model();
-            $data->nomor_tagihan = $nomor_tagihan;
-            $data->tanggal_tagihan = $tanggal_tagihan;
-            $data->rekanan_id = $rekanan_id;
-            $data->user_id = auth()->user()->id;
-            $data->status = 'dikirim';
-            $data->save();
+        $rekanan = Rekanan::find($rekanan_id);
 
-            $title = "Tagihan telah dibuat";
-            $body = "Nomor Tagihan " . $nomor_tagihan . " telah dibuat";
-            $modul = "tagihan";
+        $singkatan = "";
 
-            // list jabatan
-            $listJabatan = Jabatan::query();
+        if ($rekanan) {
 
+            $singkatan = $rekanan->singkatan;
+        }
+
+        if ($tagihan >= 1) {
+            $no = str_pad($tagihan + 1, 4, "0", STR_PAD_LEFT);
+            $nomor_tagihan = $no . "/" . rand(0, 900) . "/" . "BAPP-" . $singkatan;
+        } else {
+            $no = str_pad(1, 4, "0", STR_PAD_LEFT);
+            $nomor_tagihan = $no . "/" . rand(0, 900) . "/" . "BAPP-" . $singkatan;
+        }
+
+        $data = $this->model();
+        $data->nomor_tagihan = $nomor_tagihan;
+        $data->tanggal_tagihan = $tanggal_tagihan;
+        $data->rekanan_id = $rekanan_id;
+        $data->user_id = auth()->user()->id;
+        $data->status = 'dikirim';
+        $data->save();
+
+        $title = "Tagihan telah dibuat";
+        $body = "Nomor Tagihan " . $nomor_tagihan . " telah dibuat";
+        $modul = "tagihan";
+
+        // list jabatan
+        $listJabatan = Jabatan::query();
+
+
+        if ($PelaksanaanPekerjaan) {
+            $aduanId = $PelaksanaanPekerjaan->pluck('aduan_id')->toArray();
+            $katagori_nps = Aduan::whereIn('id', $aduanId)->pluck('kategori_nps')->toArray();
+            $katagori_nps_unique = array_unique($katagori_nps);
+
+            if (in_array('dis', $katagori_nps_unique)) {
+                $listJabatan = $listJabatan->orWhere('slug', 'manajer-distribusi');
+            }
+            if (in_array('pka', $katagori_nps_unique)) {
+                $listJabatan = $listJabatan->orWhere('slug', 'manajer-pengendalian-kehilangan-air');
+            }
+        }
+
+        $listJabatan = $listJabatan->orWhere('slug', 'manajer-perencanaan')->orWhere('slug', 'direktur-teknik')->pluck('id')->toArray();
+        // list karyawan bedasarkan jabatan
+        $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get();
+
+
+        if (auth()->user()->hasRole('rekanan')) {
+            // $rekanan = Rekanan::find($rekanan_id);
+            // notif ke staf pengawas
+            // if ($rekanan->hasKaryawan) {
+            //     foreach (collect($rekanan->hasKaryawan) as $key => $value) {
+            //         $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $value->user_id);
+            //     }
+            // }
+        }
+
+        if ($listKaryawan) {
+            foreach (collect($listKaryawan) as $i => $kr) {
+                $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $kr->user_id);
+            }
+        }
+
+        foreach ($pelaksanaan as $value) {
+            $PelaksanaanPekerjaan = PelaksanaanPekerjaan::where('id', $value)
+                ->where('tagihan', 'tidak')
+                ->where(
+                    'rekanan_id',
+                    $rekanan_id
+                )->first();
 
             if ($PelaksanaanPekerjaan) {
-                $aduanId = $PelaksanaanPekerjaan->pluck('aduan_id')->toArray();
-                $katagori_nps = Aduan::whereIn('id', $aduanId)->pluck('kategori_nps')->toArray();
-                $katagori_nps_unique = array_unique($katagori_nps);
-
-                if (in_array('dis', $katagori_nps_unique)) {
-                    $listJabatan = $listJabatan->orWhere('slug', 'manajer-distribusi');
-                }
-                if (in_array('pka', $katagori_nps_unique)) {
-                    $listJabatan = $listJabatan->orWhere('slug', 'manajer-pengendalian-kehilangan-air');
-                }
+                $PelaksanaanPekerjaan->tagihan = 'ya';
+                $PelaksanaanPekerjaan->save();
             }
-
-            $listJabatan = $listJabatan->orWhere('slug', 'manajer-perencanaan')->orWhere('slug', 'direktur-teknik')->pluck('id')->toArray();
-            // list karyawan bedasarkan jabatan
-            $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get();
-
-
-            if (auth()->user()->hasRole('rekanan')) {
-                // $rekanan = Rekanan::find($rekanan_id);
-                // notif ke staf pengawas
-                // if ($rekanan->hasKaryawan) {
-                //     foreach (collect($rekanan->hasKaryawan) as $key => $value) {
-                //         $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $value->user_id);
-                //     }
-                // }
+            $penunjukanPekerjaan = PenunjukanPekerjaan::where('id', $PelaksanaanPekerjaan->penunjukan_pekerjaan)->where('tagihan', 'tidak')->first();
+            if ($penunjukanPekerjaan) {
+                $penunjukanPekerjaan->tagihan = 'ya';
+                $penunjukanPekerjaan->save();
             }
+        }
 
-            if ($listKaryawan) {
-                foreach (collect($listKaryawan) as $i => $kr) {
-                    $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $kr->user_id);
-                }
-            }
-
-            foreach ($pelaksanaan as $value) {
-                $PelaksanaanPekerjaan = PelaksanaanPekerjaan::where('id', $value)
-                    ->where('tagihan', 'tidak')
-                    ->where(
-                        'rekanan_id',
-                        $rekanan_id
-                    )->first();
-
-                if ($PelaksanaanPekerjaan) {
-                    $PelaksanaanPekerjaan->tagihan = 'ya';
-                    $PelaksanaanPekerjaan->save();
-                }
-                $penunjukanPekerjaan = PenunjukanPekerjaan::where('id', $PelaksanaanPekerjaan->penunjukan_pekerjaan)->where('tagihan', 'tidak')->first();
-                if ($penunjukanPekerjaan) {
-                    $penunjukanPekerjaan->tagihan = 'ya';
-                    $penunjukanPekerjaan->save();
-                }
-            }
-
-            $data->hasPelaksanaanPekerjaan()->sync($pelaksanaan);
+        $data->hasPelaksanaanPekerjaan()->sync($pelaksanaan);
+        try {
             DB::commit();
 
 
