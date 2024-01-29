@@ -98,8 +98,7 @@
 
                                                 @if ($item->belum_persetujuan === 'bg-danger')
                                                     <i class="nav-icon fas fa-eye"></i>
-                                                    @if (auth()->user()->hasRole('manajer-distribusi') ||
-                                                            auth()->user()->hasRole('keuangan') ||
+                                                    @if (auth()->user()->hasRole('keuangan') ||
                                                             auth()->user()->hasRole('staf-keuangan') ||
                                                             auth()->user()->hasRole('manajer-pengendalian-kehilangan-air') ||
                                                             auth()->user()->hasRole('asisten-manajer-tata-usaha') ||
