@@ -277,10 +277,7 @@ class TagihanController extends Controller
         }
         //mendapilkan data model setelah query pencarian
 
-
-
-
-        if (auth()->user()->hasRole('manajer-distribusi')) {
+        if (auth()->user()->hasRole('manajer-perencanaan')) {
             $query->orderByRaw("status = 'dikirim' DESC")->orderByRaw("status = 'proses' DESC")->orderByRaw("status = 'disetujui asmenkas' DESC")->orderByRaw("status = 'disetujui mankeu' DESC")->orderByRaw("status = 'disetujui asmenakuntan' DESC");
         }
         if (auth()->user()->hasRole('direktur-teknik')) {
@@ -792,106 +789,106 @@ class TagihanController extends Controller
 
             // return $status = 'disetujui asmentu';
         }
-        if ($data) {
-            if (auth()->user()->hasRole('manajer-distribusi')) {
-                $status = 'proses';
-            }
-            if (auth()->user()->karyawan) {
-                $namakaryawan = auth()->user()->karyawan->nama;
-            }
-
-            if (auth()->user()->hasRole('direktur-teknik')) {
-                $status = 'disetujui';
-                // $data->nomor_tagihan = $nomor_tagihan;
-                // $data->slug = Str::slug($nomor_tagihan);
-            }
-            if (auth()->user()->hasRole('asisten-manajer-tata-usaha')) {
-
-                $status = 'disetujui asmentu';
-                $data->no_kwitansi_check = $request->no_kwitansi_check;
-                $data->no_faktur_pajak_check = $request->no_faktur_pajak_check;
-                $data->bukti_pembayaran_check = $request->bukti_pembayaran_check;
-                $data->e_billing_check = $request->e_billing_check;
-                $data->e_spt_check = $request->e_spt_check;
-            }
-
-
-            if (auth()->user()->hasRole('manajer-umum-dan-kesekretariatan')) {
-                $status = 'disetujui mu';
-            }
-            if (auth()->user()->hasRole('direktur-umum')) {
-                $status = 'disetujui dirum';
-            }
-            if (auth()->user()->hasRole('direktur-utama')) {
-                $status = 'disetujui dirut';
-            }
-
-
-            if (auth()->user()->hasRole('asisten-manajer-perencanaan-keuangan')) {
-                $status = 'disetujui asmenanggaran';
-
-                $kode_anggaran = $request->kode_anggaran;
-                $pelaksanaan_pekerjaan_id = $request->pelaksanaan_pekerjaan_id;
-
-                // loop pelaksanaan_pekerjaan_id
-                foreach ($pelaksanaan_pekerjaan_id as $key => $value) {
-                    $pelaksanaan = PelaksanaanPekerjaan::find($value);
-                    $pelaksanaan->kode_anggaran = $kode_anggaran[$key];
-                    $pelaksanaan->save();
+        try {
+            if ($data) {
+                if (auth()->user()->hasRole('manajer-perencanaan')) {
+                    $status = 'proses';
+                }
+                if (auth()->user()->karyawan) {
+                    $namakaryawan = auth()->user()->karyawan->nama;
                 }
 
-                // $data->kode_anggaran = $request->kode_anggaran;
-            }
-            if (auth()->user()->hasRole('asisten-manajer-akuntansi')) {
-                $status = 'disetujui asmenakuntan';
-                $data->kode_vocher = $request->kode_voucher;
-                // $data->total_bayar = str_replace(".", "", $request->total_bayar);
-            }
-            if (auth()->user()->hasRole('manajer-keuangan')) {
-                $status = 'disetujui mankeu';
-            }
-            if (auth()->user()->hasRole('asisten-manajer-kas')) {
-                $status = 'disetujui asmenkas';
-            }
+                if (auth()->user()->hasRole('direktur-teknik')) {
+                    $status = 'disetujui';
+                    // $data->nomor_tagihan = $nomor_tagihan;
+                    // $data->slug = Str::slug($nomor_tagihan);
+                }
+                if (auth()->user()->hasRole('asisten-manajer-tata-usaha')) {
 
-            $message = 'Berhasil Membayar Tagihan : ' . $data->nomor_tagihan_setujuh;
-            $title = "Tagihan telah dibayar";
-            $body = "Nomor Tagihan " . $data->nomor_tagihan_setujuh . " telah disetujui oleh " . $namakaryawan;
-            $modul = "tagihan";
-
-            $data->status = $status;
-            $data->save();
-
-            $user[auth()->user()->id] = [
-                'keterangan' => $status,
-            ];
-            $data->hasUserMany()->attach($user);
-
-            $namakaryawan = '';
+                    $status = 'disetujui asmentu';
+                    $data->no_kwitansi_check = $request->no_kwitansi_check;
+                    $data->no_faktur_pajak_check = $request->no_faktur_pajak_check;
+                    $data->bukti_pembayaran_check = $request->bukti_pembayaran_check;
+                    $data->e_billing_check = $request->e_billing_check;
+                    $data->e_spt_check = $request->e_spt_check;
+                }
 
 
+                if (auth()->user()->hasRole('manajer-umum-dan-kesekretariatan')) {
+                    $status = 'disetujui mu';
+                }
+                if (auth()->user()->hasRole('direktur-umum')) {
+                    $status = 'disetujui dirum';
+                }
+                if (auth()->user()->hasRole('direktur-utama')) {
+                    $status = 'disetujui dirut';
+                }
 
-            $title = "Tagihan telah setujui";
-            $body = "Nomor Tagihan " . $data->nomor_tagihan_setujuh . " telah disetujui oleh " . $namakaryawan;
-            $modul = "tagihan";
 
-            $rekanan = Rekanan::find($data->rekanan_id);
-            if ($rekanan) {
-                // $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $rekanan->user_id);
+                if (auth()->user()->hasRole('asisten-manajer-perencanaan-keuangan')) {
+                    $status = 'disetujui asmenanggaran';
 
-                if ($listKaryawan) {
-                    foreach (collect($listKaryawan) as $i => $kr) {
-                        if (auth()->user()->id !== $kr->user_id) {
-                            $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $kr->user_id);
+                    $kode_anggaran = $request->kode_anggaran;
+                    $pelaksanaan_pekerjaan_id = $request->pelaksanaan_pekerjaan_id;
+
+                    // loop pelaksanaan_pekerjaan_id
+                    foreach ($pelaksanaan_pekerjaan_id as $key => $value) {
+                        $pelaksanaan = PelaksanaanPekerjaan::find($value);
+                        $pelaksanaan->kode_anggaran = $kode_anggaran[$key];
+                        $pelaksanaan->save();
+                    }
+
+                    // $data->kode_anggaran = $request->kode_anggaran;
+                }
+                if (auth()->user()->hasRole('asisten-manajer-akuntansi')) {
+                    $status = 'disetujui asmenakuntan';
+                    $data->kode_vocher = $request->kode_voucher;
+                    // $data->total_bayar = str_replace(".", "", $request->total_bayar);
+                }
+                if (auth()->user()->hasRole('manajer-keuangan')) {
+                    $status = 'disetujui mankeu';
+                }
+                if (auth()->user()->hasRole('asisten-manajer-kas')) {
+                    $status = 'disetujui asmenkas';
+                }
+
+                $message = 'Berhasil Membayar Tagihan : ' . $data->nomor_tagihan_setujuh;
+                $title = "Tagihan telah dibayar";
+                $body = "Nomor Tagihan " . $data->nomor_tagihan_setujuh . " telah disetujui oleh " . $namakaryawan;
+                $modul = "tagihan";
+
+                $data->status = $status;
+                $data->save();
+
+                $user[auth()->user()->id] = [
+                    'keterangan' => $status,
+                ];
+                $data->hasUserMany()->attach($user);
+
+                $namakaryawan = '';
+
+
+
+                $title = "Tagihan telah setujui";
+                $body = "Nomor Tagihan " . $data->nomor_tagihan_setujuh . " telah disetujui oleh " . $namakaryawan;
+                $modul = "tagihan";
+
+                $rekanan = Rekanan::find($data->rekanan_id);
+                if ($rekanan) {
+                    // $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $rekanan->user_id);
+
+                    if ($listKaryawan) {
+                        foreach (collect($listKaryawan) as $i => $kr) {
+                            if (auth()->user()->id !== $kr->user_id) {
+                                $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $kr->user_id);
+                            }
                         }
                     }
                 }
-            }
-            DB::commit();
+                DB::commit();
 
-            return redirect()->route('tagihan.index')->with('message', $message)->with('Class', 'primary');
-        }
-        try {
+                return redirect()->route('tagihan.index')->with('message', $message)->with('Class', 'primary');
+            }
         } catch (\Throwable $th) {
             DB::rollback();
             return redirect()->route('tagihan.index')->with('message', 'Tagihan gagal disetujui')->with('Class', 'danger');

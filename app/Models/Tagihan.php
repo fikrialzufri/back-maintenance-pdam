@@ -181,7 +181,7 @@ class Tagihan extends Model
         $danger = '';
         $user = auth()->user()->id;
 
-        if (auth()->user()->hasRole('manajer-distribusi')) {
+        if (auth()->user()->hasRole('manajer-perencanaan')) {
             // $danger = 'bg-danger';
             if ($this->status == 'dikirim') {
                 $danger = 'bg-danger';
