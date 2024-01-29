@@ -792,106 +792,106 @@ class TagihanController extends Controller
 
             // return $status = 'disetujui asmentu';
         }
-        try {
-            if ($data) {
-                if (auth()->user()->hasRole('manajer-distribusi')) {
-                    $status = 'proses';
-                }
-                if (auth()->user()->karyawan) {
-                    $namakaryawan = auth()->user()->karyawan->nama;
-                }
+        if ($data) {
+            if (auth()->user()->hasRole('manajer-distribusi')) {
+                $status = 'proses';
+            }
+            if (auth()->user()->karyawan) {
+                $namakaryawan = auth()->user()->karyawan->nama;
+            }
 
-                if (auth()->user()->hasRole('direktur-teknik')) {
-                    $status = 'disetujui';
-                    // $data->nomor_tagihan = $nomor_tagihan;
-                    // $data->slug = Str::slug($nomor_tagihan);
-                }
-                if (auth()->user()->hasRole('asisten-manajer-tata-usaha')) {
+            if (auth()->user()->hasRole('direktur-teknik')) {
+                $status = 'disetujui';
+                // $data->nomor_tagihan = $nomor_tagihan;
+                // $data->slug = Str::slug($nomor_tagihan);
+            }
+            if (auth()->user()->hasRole('asisten-manajer-tata-usaha')) {
 
-                    $status = 'disetujui asmentu';
-                    $data->no_kwitansi_check = $request->no_kwitansi_check;
-                    $data->no_faktur_pajak_check = $request->no_faktur_pajak_check;
-                    $data->bukti_pembayaran_check = $request->bukti_pembayaran_check;
-                    $data->e_billing_check = $request->e_billing_check;
-                    $data->e_spt_check = $request->e_spt_check;
-                }
-
-
-                if (auth()->user()->hasRole('manajer-umum-dan-kesekretariatan')) {
-                    $status = 'disetujui mu';
-                }
-                if (auth()->user()->hasRole('direktur-umum')) {
-                    $status = 'disetujui dirum';
-                }
-                if (auth()->user()->hasRole('direktur-utama')) {
-                    $status = 'disetujui dirut';
-                }
+                $status = 'disetujui asmentu';
+                $data->no_kwitansi_check = $request->no_kwitansi_check;
+                $data->no_faktur_pajak_check = $request->no_faktur_pajak_check;
+                $data->bukti_pembayaran_check = $request->bukti_pembayaran_check;
+                $data->e_billing_check = $request->e_billing_check;
+                $data->e_spt_check = $request->e_spt_check;
+            }
 
 
-                if (auth()->user()->hasRole('asisten-manajer-perencanaan-keuangan')) {
-                    $status = 'disetujui asmenanggaran';
+            if (auth()->user()->hasRole('manajer-umum-dan-kesekretariatan')) {
+                $status = 'disetujui mu';
+            }
+            if (auth()->user()->hasRole('direktur-umum')) {
+                $status = 'disetujui dirum';
+            }
+            if (auth()->user()->hasRole('direktur-utama')) {
+                $status = 'disetujui dirut';
+            }
 
-                    $kode_anggaran = $request->kode_anggaran;
-                    $pelaksanaan_pekerjaan_id = $request->pelaksanaan_pekerjaan_id;
 
-                    // loop pelaksanaan_pekerjaan_id
-                    foreach ($pelaksanaan_pekerjaan_id as $key => $value) {
-                        $pelaksanaan = PelaksanaanPekerjaan::find($value);
-                        $pelaksanaan->kode_anggaran = $kode_anggaran[$key];
-                        $pelaksanaan->save();
-                    }
+            if (auth()->user()->hasRole('asisten-manajer-perencanaan-keuangan')) {
+                $status = 'disetujui asmenanggaran';
 
-                    // $data->kode_anggaran = $request->kode_anggaran;
-                }
-                if (auth()->user()->hasRole('asisten-manajer-akuntansi')) {
-                    $status = 'disetujui asmenakuntan';
-                    $data->kode_vocher = $request->kode_voucher;
-                    // $data->total_bayar = str_replace(".", "", $request->total_bayar);
-                }
-                if (auth()->user()->hasRole('manajer-keuangan')) {
-                    $status = 'disetujui mankeu';
-                }
-                if (auth()->user()->hasRole('asisten-manajer-kas')) {
-                    $status = 'disetujui asmenkas';
+                $kode_anggaran = $request->kode_anggaran;
+                $pelaksanaan_pekerjaan_id = $request->pelaksanaan_pekerjaan_id;
+
+                // loop pelaksanaan_pekerjaan_id
+                foreach ($pelaksanaan_pekerjaan_id as $key => $value) {
+                    $pelaksanaan = PelaksanaanPekerjaan::find($value);
+                    $pelaksanaan->kode_anggaran = $kode_anggaran[$key];
+                    $pelaksanaan->save();
                 }
 
-                $message = 'Berhasil Membayar Tagihan : ' . $data->nomor_tagihan_setujuh;
-                $title = "Tagihan telah dibayar";
-                $body = "Nomor Tagihan " . $data->nomor_tagihan_setujuh . " telah disetujui oleh " . $namakaryawan;
-                $modul = "tagihan";
+                // $data->kode_anggaran = $request->kode_anggaran;
+            }
+            if (auth()->user()->hasRole('asisten-manajer-akuntansi')) {
+                $status = 'disetujui asmenakuntan';
+                $data->kode_vocher = $request->kode_voucher;
+                // $data->total_bayar = str_replace(".", "", $request->total_bayar);
+            }
+            if (auth()->user()->hasRole('manajer-keuangan')) {
+                $status = 'disetujui mankeu';
+            }
+            if (auth()->user()->hasRole('asisten-manajer-kas')) {
+                $status = 'disetujui asmenkas';
+            }
 
-                $data->status = $status;
-                $data->save();
+            $message = 'Berhasil Membayar Tagihan : ' . $data->nomor_tagihan_setujuh;
+            $title = "Tagihan telah dibayar";
+            $body = "Nomor Tagihan " . $data->nomor_tagihan_setujuh . " telah disetujui oleh " . $namakaryawan;
+            $modul = "tagihan";
 
-                $user[auth()->user()->id] = [
-                    'keterangan' => $status,
-                ];
-                $data->hasUserMany()->attach($user);
+            $data->status = $status;
+            $data->save();
 
-                $namakaryawan = '';
+            $user[auth()->user()->id] = [
+                'keterangan' => $status,
+            ];
+            $data->hasUserMany()->attach($user);
+
+            $namakaryawan = '';
 
 
 
-                $title = "Tagihan telah setujui";
-                $body = "Nomor Tagihan " . $data->nomor_tagihan_setujuh . " telah disetujui oleh " . $namakaryawan;
-                $modul = "tagihan";
+            $title = "Tagihan telah setujui";
+            $body = "Nomor Tagihan " . $data->nomor_tagihan_setujuh . " telah disetujui oleh " . $namakaryawan;
+            $modul = "tagihan";
 
-                $rekanan = Rekanan::find($data->rekanan_id);
-                if ($rekanan) {
-                    // $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $rekanan->user_id);
+            $rekanan = Rekanan::find($data->rekanan_id);
+            if ($rekanan) {
+                // $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $rekanan->user_id);
 
-                    if ($listKaryawan) {
-                        foreach (collect($listKaryawan) as $i => $kr) {
-                            if (auth()->user()->id !== $kr->user_id) {
-                                $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $kr->user_id);
-                            }
+                if ($listKaryawan) {
+                    foreach (collect($listKaryawan) as $i => $kr) {
+                        if (auth()->user()->id !== $kr->user_id) {
+                            $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $kr->user_id);
                         }
                     }
                 }
-                DB::commit();
-
-                return redirect()->route('tagihan.index')->with('message', $message)->with('Class', 'primary');
             }
+            DB::commit();
+
+            return redirect()->route('tagihan.index')->with('message', $message)->with('Class', 'primary');
+        }
+        try {
         } catch (\Throwable $th) {
             DB::rollback();
             return redirect()->route('tagihan.index')->with('message', 'Tagihan gagal disetujui')->with('Class', 'danger');
@@ -913,105 +913,105 @@ class TagihanController extends Controller
 
         DB::beginTransaction();
 
-        $PelaksanaanPekerjaan = PelaksanaanPekerjaan::whereIn('id', $pelaksanaan)
-            ->where('tagihan', 'tidak')->first();
+        try {
+            $PelaksanaanPekerjaan = PelaksanaanPekerjaan::whereIn('id', $pelaksanaan)
+                ->where('tagihan', 'tidak')->first();
 
-        if (!auth()->user()->hasRole('superadmin')) {
-            if (auth()->user()->hasRole('rekanan')) {
-                $rekanan_id = auth()->user()->id_rekanan;
+            if (!auth()->user()->hasRole('superadmin')) {
+                if (auth()->user()->hasRole('rekanan')) {
+                    $rekanan_id = auth()->user()->id_rekanan;
+                } else {
+                    $rekanan_id = $PelaksanaanPekerjaan->rekanan_id;
+                }
+            }
+
+            $rekanan = Rekanan::find($rekanan_id);
+
+            $singkatan = "";
+
+            if ($rekanan) {
+
+                $singkatan = $rekanan->singkatan;
+            }
+
+            if ($tagihan >= 1) {
+                $no = str_pad($tagihan + 1, 4, "0", STR_PAD_LEFT);
+                $nomor_tagihan = $no . "/" . rand(0, 900) . "/" . "BAPP-" . $singkatan;
             } else {
-                $rekanan_id = $PelaksanaanPekerjaan->rekanan_id;
+                $no = str_pad(1, 4, "0", STR_PAD_LEFT);
+                $nomor_tagihan = $no . "/" . rand(0, 900) . "/" . "BAPP-" . $singkatan;
             }
-        }
 
-        $rekanan = Rekanan::find($rekanan_id);
+            $data = $this->model();
+            $data->nomor_tagihan = $nomor_tagihan;
+            $data->tanggal_tagihan = $tanggal_tagihan;
+            $data->rekanan_id = $rekanan_id;
+            $data->user_id = auth()->user()->id;
+            $data->status = 'dikirim';
+            $data->save();
 
-        $singkatan = "";
+            $title = "Tagihan telah dibuat";
+            $body = "Nomor Tagihan " . $nomor_tagihan . " telah dibuat";
+            $modul = "tagihan";
 
-        if ($rekanan) {
+            // list jabatan
+            $listJabatan = Jabatan::query();
 
-            $singkatan = $rekanan->singkatan;
-        }
-
-        if ($tagihan >= 1) {
-            $no = str_pad($tagihan + 1, 4, "0", STR_PAD_LEFT);
-            $nomor_tagihan = $no . "/" . rand(0, 900) . "/" . "BAPP-" . $singkatan;
-        } else {
-            $no = str_pad(1, 4, "0", STR_PAD_LEFT);
-            $nomor_tagihan = $no . "/" . rand(0, 900) . "/" . "BAPP-" . $singkatan;
-        }
-
-        $data = $this->model();
-        $data->nomor_tagihan = $nomor_tagihan;
-        $data->tanggal_tagihan = $tanggal_tagihan;
-        $data->rekanan_id = $rekanan_id;
-        $data->user_id = auth()->user()->id;
-        $data->status = 'dikirim';
-        $data->save();
-
-        $title = "Tagihan telah dibuat";
-        $body = "Nomor Tagihan " . $nomor_tagihan . " telah dibuat";
-        $modul = "tagihan";
-
-        // list jabatan
-        $listJabatan = Jabatan::query();
-
-
-        if ($PelaksanaanPekerjaan) {
-            $aduanId = $PelaksanaanPekerjaan->pluck('aduan_id')->toArray();
-            $katagori_nps = Aduan::whereIn('id', $aduanId)->pluck('kategori_nps')->toArray();
-            $katagori_nps_unique = array_unique($katagori_nps);
-
-            if (in_array('dis', $katagori_nps_unique)) {
-                $listJabatan = $listJabatan->orWhere('slug', 'manajer-distribusi');
-            }
-            if (in_array('pka', $katagori_nps_unique)) {
-                $listJabatan = $listJabatan->orWhere('slug', 'manajer-pengendalian-kehilangan-air');
-            }
-        }
-
-        $listJabatan = $listJabatan->orWhere('slug', 'manajer-perencanaan')->orWhere('slug', 'direktur-teknik')->pluck('id')->toArray();
-        // list karyawan bedasarkan jabatan
-        $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get();
-
-
-        if (auth()->user()->hasRole('rekanan')) {
-            // $rekanan = Rekanan::find($rekanan_id);
-            // notif ke staf pengawas
-            // if ($rekanan->hasKaryawan) {
-            //     foreach (collect($rekanan->hasKaryawan) as $key => $value) {
-            //         $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $value->user_id);
-            //     }
-            // }
-        }
-
-        if ($listKaryawan) {
-            foreach (collect($listKaryawan) as $i => $kr) {
-                $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $kr->user_id);
-            }
-        }
-
-        foreach ($pelaksanaan as $value) {
-            $PelaksanaanPekerjaan = PelaksanaanPekerjaan::where('id', $value)
-                ->where('tagihan', 'tidak')
-                ->where(
-                    'rekanan_id',
-                    $rekanan_id
-                )->first();
 
             if ($PelaksanaanPekerjaan) {
-                $PelaksanaanPekerjaan->tagihan = 'ya';
-                $PelaksanaanPekerjaan->save();
-            }
-            $penunjukanPekerjaan = PenunjukanPekerjaan::where('id', $PelaksanaanPekerjaan->penunjukan_pekerjaan)->where('tagihan', 'tidak')->first();
-            if ($penunjukanPekerjaan) {
-                $penunjukanPekerjaan->tagihan = 'ya';
-                $penunjukanPekerjaan->save();
-            }
-        }
+                $aduanId = $PelaksanaanPekerjaan->pluck('aduan_id')->toArray();
+                $katagori_nps = Aduan::whereIn('id', $aduanId)->pluck('kategori_nps')->toArray();
+                $katagori_nps_unique = array_unique($katagori_nps);
 
-        $data->hasPelaksanaanPekerjaan()->sync($pelaksanaan);
-        try {
+                if (in_array('dis', $katagori_nps_unique)) {
+                    $listJabatan = $listJabatan->orWhere('slug', 'manajer-distribusi');
+                }
+                if (in_array('pka', $katagori_nps_unique)) {
+                    $listJabatan = $listJabatan->orWhere('slug', 'manajer-pengendalian-kehilangan-air');
+                }
+            }
+
+            $listJabatan = $listJabatan->orWhere('slug', 'manajer-perencanaan')->orWhere('slug', 'direktur-teknik')->pluck('id')->toArray();
+            // list karyawan bedasarkan jabatan
+            $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get();
+
+
+            if (auth()->user()->hasRole('rekanan')) {
+                // $rekanan = Rekanan::find($rekanan_id);
+                // notif ke staf pengawas
+                // if ($rekanan->hasKaryawan) {
+                //     foreach (collect($rekanan->hasKaryawan) as $key => $value) {
+                //         $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $value->user_id);
+                //     }
+                // }
+            }
+
+            if ($listKaryawan) {
+                foreach (collect($listKaryawan) as $i => $kr) {
+                    $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $kr->user_id);
+                }
+            }
+
+            foreach ($pelaksanaan as $value) {
+                $PelaksanaanPekerjaan = PelaksanaanPekerjaan::where('id', $value)
+                    ->where('tagihan', 'tidak')
+                    ->where(
+                        'rekanan_id',
+                        $rekanan_id
+                    )->first();
+
+                if ($PelaksanaanPekerjaan) {
+                    $PelaksanaanPekerjaan->tagihan = 'ya';
+                    $PelaksanaanPekerjaan->save();
+                }
+                $penunjukanPekerjaan = PenunjukanPekerjaan::where('id', $PelaksanaanPekerjaan->penunjukan_pekerjaan)->where('tagihan', 'tidak')->first();
+                if ($penunjukanPekerjaan) {
+                    $penunjukanPekerjaan->tagihan = 'ya';
+                    $penunjukanPekerjaan->save();
+                }
+            }
+
+            $data->hasPelaksanaanPekerjaan()->sync($pelaksanaan);
             DB::commit();
 
 
