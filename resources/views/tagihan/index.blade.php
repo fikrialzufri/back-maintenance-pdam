@@ -129,6 +129,19 @@
                                     </tr>
                                 @endforelse
                             </tbody>
+
+                            <tfoot>
+                                <tr>
+
+                                    <th colspan="7" class="text-right">Total Tagihan Sudah Bayar</th>
+                                    <th>Rp. {{format_uang($sumtotalSudahBayar)}}</th>
+                                </tr>
+                                <tr>
+
+                                    <th colspan="7" class="text-right">Total Tagihan Belum Bayar</th>
+                                    <th>Rp. {{format_uang($sumtotalbelumBayar)}}</th>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                     <!-- /.card-body -->

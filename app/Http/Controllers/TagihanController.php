@@ -59,8 +59,8 @@ class TagihanController extends Controller
                 'alias' => 'Nomor Hp Rekanan',
             ],
             // [
-            //     'name' => 'status',
-            //     'alias' => 'status',
+            //     'name' => 'no_spk',
+            //     'alias' => 'No Spk',
             // ],
             [
                 'name' => 'tanggal',
@@ -323,6 +323,72 @@ class TagihanController extends Controller
             $template = $this->index . '.index';
         }
 
+        $dataSudahBayar = Tagihan::whereNotNull('kode_vocher')->get();
+        $dataBelumBayar = Tagihan::whereNull('kode_vocher')->with('hasPelaksanaanPekerjaan')->get();
+        $sumtotalSudahBayar = 0;
+
+        if (isset($dataSudahBayar)) {
+            # code...
+            foreach ($dataSudahBayar as  $tsb) {
+                # code...
+                $pkpSudahBayar = 'tidak';
+                $ppnSudahBayar = 0;
+                $totalSudahBayar = 0;
+                if ($tsb->hasPelaksanaanPekerjaan) {
+                    foreach ($tsb->hasPelaksanaanPekerjaan as $key => $hpp) {
+
+                        $totalSudahBayar += $hpp->total_pekerjaan;
+                    }
+                }
+                $totalSudahBayar = pembulatan($totalSudahBayar);
+                $totalSudahBayar = str_replace(".", "", $totalSudahBayar);
+
+
+
+                if ($tsb->hasRekanan) {
+                    if ($tsb->hasRekanan->pkp) {
+                        if ($tsb->hasRekanan->pkp === 'ya') {
+                            $ppnSudahBayar = ($totalSudahBayar * 11) / 100;
+                        }
+                    }
+                }
+
+                $sumtotalSudahBayar += $totalSudahBayar + $ppnSudahBayar;
+            }
+
+            $sumtotalSudahBayar;
+        }
+        $sumtotalbelumBayar = 0;
+        if (isset($dataBelumBayar)) {
+            # code...
+            foreach ($dataBelumBayar as  $tbb) {
+                # code...
+                $pkpbelumBayar = 'tidak';
+                $ppnbelumBayar = 0;
+                $totalbelumBayar = 0;
+                if ($tbb->hasPelaksanaanPekerjaan) {
+                    foreach ($tbb->hasPelaksanaanPekerjaan as $key => $hbp) {
+
+                        $totalbelumBayar += $hbp->total_pekerjaan;
+                    }
+                }
+                $totalbelumBayar = pembulatan($totalbelumBayar);
+                $totalbelumBayar = str_replace(".", "", $totalbelumBayar);
+
+
+
+                if ($tbb->hasRekanan) {
+                    if ($tbb->hasRekanan->pkp) {
+                        if ($tbb->hasRekanan->pkp === 'ya') {
+                            $ppnbelumBayar = ($totalbelumBayar * 11) / 100;
+                        }
+                    }
+                }
+
+                $sumtotalbelumBayar += $totalbelumBayar + $ppnbelumBayar;
+            }
+        }
+
         // return  $export;
 
         return view(
@@ -337,6 +403,8 @@ class TagihanController extends Controller
                 'upload',
                 'search',
                 'export',
+                'sumtotalSudahBayar',
+                'sumtotalbelumBayar',
                 'configHeaders',
                 'route'
             )
@@ -922,6 +990,23 @@ class TagihanController extends Controller
                 }
             }
 
+            foreach ($pelaksanaan as $value) {
+                $PelaksanaanPekerjaan = PelaksanaanPekerjaan::where('id', $value)
+                    ->where('tagihan', 'tidak')
+                    ->where(
+                        'rekanan_id',
+                        $rekanan_id
+                    )->first();
+
+                if ($PelaksanaanPekerjaan) {
+                    if ($PelaksanaanPekerjaan->total_pekerjaan > 40000000) {
+
+                        DB::rollback();
+
+                        return redirect()->route($this->route . '.index')->with('message', ucwords(str_replace('-', ' ', $this->route)) . ' ada yang lebih dari Rp. 40.000.00 (Empat Puluh juta rupiah) di SPK ' . $PelaksanaanPekerjaan->nomor_pelaksanaan_pekerjaan)->with('Class', 'danger');
+                    }
+                }
+            }
             $rekanan = Rekanan::find($rekanan_id);
 
             $singkatan = "";

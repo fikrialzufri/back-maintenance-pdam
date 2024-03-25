@@ -163,6 +163,18 @@ class Tagihan extends Model
         }
         return $danger;
     }
+    public function getNoSpkAttribute()
+    {
+        $harga = [];
+        $no_spk = '';
+        if ($this->hasPelaksanaanPekerjaan) {
+            foreach ($this->hasPelaksanaanPekerjaan as $key => $value) {
+
+                $no_spk .= $value->no_spk . " - ";
+            }
+        }
+        return $no_spk;
+    }
     public function getBelumAdjustAttribute()
     {
         $danger = '';
@@ -466,6 +478,7 @@ class Tagihan extends Model
         }
         return $sum;
     }
+
     public function getAnggaranTigaAttribute()
     {
         $count = 0;
