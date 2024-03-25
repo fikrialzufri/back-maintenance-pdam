@@ -360,11 +360,12 @@ class PenunjukanPekerjaanController extends Controller
                 })
             );
         }
-        $penunjukan = $penunjukan->setCollection(
-            $penunjukan->sortByDesc(function ($pekerjaan) {
-                return $pekerjaan->total_pekerjaan;
-            })
-        );
+        // return $penunjukan;
+        // $penunjukan = $penunjukan->setCollection(
+        //     $penunjukan->sortByDesc(function ($pekerjaan) {
+        //         return $pekerjaan->total_pekerjaan;
+        //     })
+        // );
 
         $rekanan = $rekanan->orderBy('nama')->get();
 

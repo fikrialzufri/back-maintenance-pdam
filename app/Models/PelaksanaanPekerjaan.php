@@ -14,7 +14,7 @@ class PelaksanaanPekerjaan extends Model
 
     protected $table = 'pelaksanaan_pekerjaan';
     protected $guarded = ['id'];
-    protected $appends = ['status_mobile'];
+    protected $appends = ['status_mobile', 'total_pekerjaan'];
     protected $fillable = [
         'nomor_pelaksanaan_pekerjaan',
         'status',

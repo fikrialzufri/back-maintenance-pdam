@@ -256,6 +256,7 @@ class PenunjukanPekerjaan extends Model
                         'nama' => $value->nama,
                         'jumlah' => (string) $value->pivot->qty,
                         'keterangan' => $value->pivot->keterangan,
+                        'total_pekerjaan' => $value->pivot->total_pekerjaan,
                     ];
                 }
             }
