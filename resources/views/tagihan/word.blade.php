@@ -171,16 +171,16 @@
                                             <span>{{ $item->jabatan }}</span>
                                             <br>
                                             @if ($item->url != null)
-                                                {{-- <img src="data:image/png;base64, {!! base64_encode(
-                                                    QrCode::format('png')->merge('https://pdam.borneocorner.com/img/logo-pdam.png', 0.3, true)->size(100)->generate($item->url),
-                                                ) !!} "> --}}
-                                                {!! QrCode::size(100)->generate($item->url) !!}
+                                                <img src="data:image/png;base64, {!! base64_encode(
+                                                    QrCode::format('png')->merge('/var/www/sip.pdamsamarinda/public_html/public/img/logo-pdam.png', 0.3, true)->size(100)->generate($item->url),
+                                                ) !!} ">
+                                                {{-- {!! QrCode::size(100)->generate($item->url) !!} --}}
                                             @else
                                                 @if ($item->tdd != null)
-                                                    {{-- <img src="data:image/png;base64, {!! base64_encode(
-                                                        QrCode::format('png')->merge('https://pdam.borneocorner.com/img/logo-pdam.png', 0.3, true)->size(100)->generate(url('tddkaryawan/' . $item->karyawan_id)),
-                                                    ) !!} "> --}}
-                                                    {!! QrCode::size(100)->generate(url('tddkaryawan/' . $item->karyawan_id)) !!}
+                                                    <img src="data:image/png;base64, {!! base64_encode(
+                                                        QrCode::format('png')->merge('/var/www/sip.pdamsamarinda/public_html/public/img/logo-pdam.png', 0.3, true)->size(100)->generate(url('tddkaryawan/' . $item->karyawan_id)),
+                                                    ) !!} ">
+                                                    {{-- {!! QrCode::size(100)->generate(url('tddkaryawan/' . $item->karyawan_id)) !!} --}}
                                                 @endif
                                             @endif
                                         @endif
