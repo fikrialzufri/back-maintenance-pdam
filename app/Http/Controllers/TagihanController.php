@@ -323,8 +323,8 @@ class TagihanController extends Controller
             $template = $this->index . '.index';
         }
 
-        $dataSudahBayar = Tagihan::whereNotNull('kode_vocher')->get();
-        $dataBelumBayar = Tagihan::whereNull('kode_vocher')->with('hasPelaksanaanPekerjaan')->get();
+        // $dataSudahBayar = Tagihan::whereNotNull('kode_vocher')->get();
+        // $dataBelumBayar = Tagihan::whereNull('kode_vocher')->with('hasPelaksanaanPekerjaan')->get();
         // $sumtotalSudahBayar = 0;
 
         // if (isset($dataSudahBayar)) {
