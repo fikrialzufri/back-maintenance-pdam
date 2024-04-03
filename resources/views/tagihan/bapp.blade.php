@@ -180,7 +180,7 @@
                                                     {{-- <img src="data:image/png;base64, {!! base64_encode(
                                                         QrCode::format('png')->merge('https://pdam.borneocorner.com/img/logo-pdam.png', 0.3, true)->size(100)->generate($dirut->url),
                                                     ) !!} "> --}}
-                                                    {!! QrCode::size(100)->generate($dirut->url) !!}
+                                                    {!! QrCode::size(100)->merge('https://pdam.borneocorner.com/img/logo-pdam.png')->generate($dirut->url) !!}
                                                 @else
                                                     @if ($dirut->tdd)
                                                         {{-- <img src="data:image/png;base64, {!! base64_encode(
