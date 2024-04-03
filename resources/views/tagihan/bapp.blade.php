@@ -183,10 +183,10 @@
                                                     {!! QrCode::size(100)->merge('/public/img/logo-pdam.png')->generate($dirut->url) !!}
                                                 @else
                                                     @if ($dirut->tdd)
-                                                        {{-- <img src="data:image/png;base64, {!! base64_encode(
-                                                            QrCode::format('png')->size(100)->merge('https://pdam.borneocorner.com/img/logo-pdam.png', 0.3, true)->generate(url('tddkaryawan/' . $dirut->id)),
-                                                        ) !!} "> --}}
-                                                        {!! QrCode::size(100)->merge('/public/img/logo-pdam.png')->generate(url('tddkaryawan/' . $dirut->id)) !!}
+                                                        <img src="data:image/png;base64, {!! base64_encode(
+                                                            QrCode::format('png')->size(100)->merge('/public/img/logo-pdam.png', 0.3, true)->generate(url('tddkaryawan/' . $dirut->id)),
+                                                        ) !!} ">
+                                                        {{-- {!! QrCode::size(100)->merge('/public/img/logo-pdam.png')->generate(url('tddkaryawan/' . $dirut->id)) !!} --}}
                                                     @endif
                                                 @endif
                                             @endif
