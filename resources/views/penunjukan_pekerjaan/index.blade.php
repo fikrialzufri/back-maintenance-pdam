@@ -156,8 +156,6 @@
                                     <th>Admin</th>
                                     <th width="20%">Lokasi</th>
                                     <th>Status</th>
-                                    {{-- <th>Total Tagihan</th> --}}
-
                                 </tr>
                             </thead>
                             <tbody>
@@ -252,8 +250,6 @@
                                         <td>{{ ucfirst($item->user) }}</td>
                                         <td>{{ $item->lokasi }}</td>
                                         <td>{{ ucfirst($item->status_aduan) }}</td>
-                                        {{-- <td>{{ format_uang($item->total_pekerjaan) }}</td> --}}
-
 
                                     </tr>
                                 @empty

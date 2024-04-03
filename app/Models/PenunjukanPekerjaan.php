@@ -14,7 +14,7 @@ class PenunjukanPekerjaan extends Model
 
     protected $table = 'penunjukan_pekerjaan';
     protected $guarded = ['id'];
-    protected $appends = ['status_mobile'];
+    protected $appends = ['status_mobile', 'total_pekerjaan'];
     protected $fillable = [
         'nomor_pekerjaan',
         'status',
@@ -211,6 +211,12 @@ class PenunjukanPekerjaan extends Model
     {
         if ($this->hasPelaksanaanPekerjaan) {
             return $this->hasPelaksanaanPekerjaan->lat_long;
+        }
+    }
+    public function getTotalPekerjaanAttribute()
+    {
+        if ($this->hasPelaksanaanPekerjaan) {
+            return $this->hasPelaksanaanPekerjaan->total_pekerjaan;
         }
     }
 

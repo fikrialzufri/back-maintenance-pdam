@@ -293,6 +293,7 @@ class PenunjukanPekerjaanController extends Controller
                             );
                         }
                     } else {
+
                         if ($status != 'not') {
                             # code...
                             $penunjukan = $query->where('status', '!=', 'draft')->with([
@@ -302,6 +303,8 @@ class PenunjukanPekerjaanController extends Controller
                             ]);
                         }
                         $penunjukan = $query->orderBy('status', 'desc')->orderBy('updated_at', 'desc')->paginate($limit);
+
+
 
                         if (auth()->user()->hasRole('staf-pengawas')) {
                             $penunjukan = $penunjukan->setCollection(
@@ -334,6 +337,9 @@ class PenunjukanPekerjaanController extends Controller
                                 })
                             );
                         } elseif (auth()->user()->hasRole('asisten-manajer-perencanaan')) {
+                            // $penunjukan = $penunjukan->filter(function ($item) {
+                            //     return $item->total_pekerjaan > 3000000;
+                            // });
                             $penunjukan = $penunjukan->setCollection(
                                 $penunjukan->sortBy(function ($pekerjaan) {
                                     return $pekerjaan->status_order_perencanaan;
@@ -360,6 +366,9 @@ class PenunjukanPekerjaanController extends Controller
                 })
             );
         }
+
+
+
         // return $penunjukan;
         // $penunjukan = $penunjukan->setCollection(
         //     $penunjukan->sortByDesc(function ($pekerjaan) {
