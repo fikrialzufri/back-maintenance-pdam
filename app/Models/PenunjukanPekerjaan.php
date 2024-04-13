@@ -70,12 +70,12 @@ class PenunjukanPekerjaan extends Model
             return $this->hasAduan->atas_nama;
         }
     }
-    public function getNoTiketAttribute()
-    {
-        if ($this->hasAduan) {
-            return $this->hasAduan->no_ticket;
-        }
-    }
+    // public function getNoTiketAttribute()
+    // {
+    //     if ($this->hasAduan) {
+    //         return $this->hasAduan->no_ticket;
+    //     }
+    // }
 
     public function getKategoriAduanttribute()
     {
@@ -325,7 +325,7 @@ class PenunjukanPekerjaan extends Model
     }
     public function getFotoLokasiAttribute()
     {
-        $media = Media::where('modul', 'pelaksanaan_kerja')->where('modul_id', $this->id)->orderBy('created_at', 'desc')->get();
+        $media = Media::where('modul',  'pelaksanaan_kerja')->where('modul_id', $this->id)->orderBy('created_at', 'desc')->get();
         $foto = [];
         if ($media) {
             foreach ($media as $key => $value) {
@@ -340,7 +340,7 @@ class PenunjukanPekerjaan extends Model
 
     public function getFotoBahanAttribute()
     {
-        $media = Media::where('modul', 'bahan_pekerjaan')->where('modul_id', $this->id)->orderBy('created_at', 'desc')->get();
+        $media = Media::where('modul',  'bahan_pekerjaan')->where('modul_id', $this->id)->orderBy('created_at', 'desc')->get();
         $foto = [];
         if ($media) {
             foreach ($media as $key => $value) {
@@ -355,7 +355,7 @@ class PenunjukanPekerjaan extends Model
 
     public function getFotoGalianAttribute()
     {
-        $media = Media::where('modul', 'galian_pekerjaan')->where('modul_id', $this->id)->orderBy('created_at', 'desc')->get();
+        $media = Media::where('modul',  'galian_pekerjaan')->where('modul_id', $this->id)->orderBy('created_at', 'desc')->get();
         $foto = [];
         if ($media) {
             foreach ($media as $key => $value) {
@@ -370,7 +370,7 @@ class PenunjukanPekerjaan extends Model
 
     public function getFotoTransportasiAttribute()
     {
-        $media = Media::where('modul', 'transportasi_pekerjaan')->where('modul_id', $this->id)->orderBy('created_at', 'desc')->get();
+        $media = Media::where('modul',  'transportasi_pekerjaan')->where('modul_id', $this->id)->orderBy('created_at', 'desc')->get();
         $foto = [];
         if ($media) {
             foreach ($media as $key => $value) {
@@ -385,7 +385,7 @@ class PenunjukanPekerjaan extends Model
 
     public function getFotoPenyelesaianAttribute()
     {
-        $media = Media::where('modul', 'penyelesaian_kerja')->where('modul_id', $this->id)->orderBy('created_at', 'desc')->get();
+        $media = Media::where('modul',  'penyelesaian_kerja')->where('modul_id', $this->id)->orderBy('created_at', 'desc')->get();
         $foto = [];
         if ($media) {
             foreach ($media as $key => $value) {

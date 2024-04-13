@@ -2264,7 +2264,84 @@ class PenunjukanPekerjaanController extends Controller
         //     ->with('hasItem', 'hasItemPengawas')
         //     ->whereBetween('created_at', [$start, $end])->orderBy('created_at')->get();
 
-        // return $tanggalNama;
+        $data = PelaksanaanPekerjaan::with([
+            'hasPenunjukanPekerjaan'
+        ])
+            ->with('hasPenunjukanPekerjaan', 'hasItem', 'hasItemPengawas', 'hasItemAsmenPengawas', 'hasItemPerencanaan', 'hasItemPerencanaanAdujst', 'hasGalianPekerjaan')
+            ->when($status != null, function ($q) use ($status) {
+                if ($status != 'all') {
+                    return $q->where('status', $status);
+                }
+            })
+            ->with([
+                'hasAduan' => function ($query) use ($kategori, $status) {
+                    // $query->where('aduan.kategori_aduan', $kategori);
+                    $query->where('aduan.kategori_aduan', $kategori);
+                }
+            ])
+            ->whereBetween('created_at', [$start, $end])->paginate(50);
+
+        // sort by
+        // $data = collect($data);
+        // $data = collect($data);
+
+        // if (auth()->user()->hasRole('staf-pengawas')) {
+        //     $data = $data->setCollection(
+        //         $data->sortBy(function ($pekerjaan) {
+        //             return $pekerjaan->status_order_pengawas;
+        //         })
+        //     );
+        // } elseif (auth()->user()->hasRole('asisten-manajer-pengawas')) {
+        //     $data = $data->setCollection(
+        //         $data->sortBy(function ($pekerjaan) {
+        //             return $pekerjaan->status_order_asem_pengawas;
+        //         })
+        //     );
+        // } elseif (auth()->user()->hasRole('manajer-perawatan')) {
+        //     $data = $data->setCollection(
+        //         $data->sortBy(function ($pekerjaan) {
+        //             return $pekerjaan->status_order_manajer_pengawas;
+        //         })
+        //     );
+        // } elseif (auth()->user()->hasRole('manajer-distribusi')) {
+        //     $data = $data->setCollection(
+        //         $data->sortBy(function ($pekerjaan) {
+        //             return $pekerjaan->status_order_manajer;
+        //         })
+        //     );
+        // } elseif (auth()->user()->hasRole('manajer-pengendalian-kehilangan-air')) {
+        //     $data = $data->setCollection(
+        //         $data->sortBy(function ($pekerjaan) {
+        //             return $pekerjaan->status_order_manajer;
+        //         })
+        //     );
+        // } elseif (auth()->user()->hasRole('asisten-manajer-perencanaan')) {
+        //     // $data = $data->filter(function ($item) {
+        //     //     return $item->total_pekerjaan > 3000000;
+        //     // });
+        //     $data = $data->setCollection(
+        //         $data->sortBy(function ($pekerjaan) {
+        //             return $pekerjaan->status_order_perencanaan;
+        //         })
+        //     );
+        // } else {
+        //     $data = $data->setCollection(
+        //         $data->sortBy(function ($pekerjaan) {
+        //             return $pekerjaan->status_order;
+        //         })
+        //     );
+        // }
+        $title = "Totral";
+
+        // return $data;
+        return view(
+            'penunjukan_pekerjaan.export',
+            compact(
+                'data',
+                'title',
+                'end'
+            )
+        );
         return Excel::download(new PelaksanaanPekerjaanExport($start, $end, $kategori, $rekanan_id, $status), 'Export Pekerjaan ' . $tanggalNama . '.xlsx');
     }
 }

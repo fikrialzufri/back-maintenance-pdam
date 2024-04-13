@@ -1,5 +1,33 @@
 
+@extends('template.app')
+@section('title', 'Detail Pekerjaan ')
 
+@push('head')
+<!-- Load Leaflet from CDN -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+    crossorigin="" />
+<!-- Load Esri Leaflet Geocoder from CDN -->
+<link rel="stylesheet" href="https://unpkg.com/esri-leaflet-geocoder@3.1.2/dist/esri-leaflet-geocoder.css"
+    integrity="sha512-IM3Hs+feyi40yZhDH6kV8vQMg4Fh20s9OzInIIAc4nx7aMYMfo+IenRUekoYsHZqGkREUgx0VvlEsgm7nCDW9g=="
+    crossorigin="">
+<style type="text/css">
+    #map {
+        height: 35vh;
+    }
+
+    #mapdua {
+        height: 36vh;
+    }
+
+    .is-invalid .select2-selection,
+    .needs-validation~span>.select2-dropdown {
+        border-color: red !important;
+    }
+</style>
+@endpush
+
+@section('content')
 <div class="col-md-12">
     <div class="card">
         <!-- /.card-header -->
@@ -13,7 +41,7 @@
                         <tr>
                             <th width="15" colspan="2" style="border: 3px solid black; text-align:left;">No Urut Spk</th>
 
-                            <th width="50" colspan="5" style="border: 3px solid black; text-align:left;">{{$key+1}}</th>
+                            <th width="50" colspan="5" style="border: 3px solid black; text-align:left;">{{$key}}</th>
 
                         </tr>
                         <tr>
@@ -52,11 +80,35 @@
 
                         </tr>
                         <tr>
-                            <th></th>
+                            <th width="15" colspan="2" style="border: 3px solid black;">Total Pekerjaan</th>
+
+                            <th width="50" colspan="5" style="border: 3px solid black;">
+                                <b>Rp. {{format_uang($pekerjaan->total_pekerjaan)}}</b></th>
+
+                        </tr>
+                        @if ($pekerjaan->rekanan_pkp == 'ya')
+                        <tr>
+                            <th width="15" colspan="2" style="border: 3px solid black;">PKP</th>
+
+                            <th width="50" colspan="5" style="border: 3px solid black;">
+                                <b>{{format_uang(($pekerjaan->total_pekerjaan * 11) / 100)}}</b>
+                            </th>
+
                         </tr>
                         <tr>
-                            <th></th>
+                            <th width="15" colspan="2" style="border: 3px solid black;">Grandtotal</th>
+
+                            <th width="50" colspan="5" style="border: 3px solid black;">
+                                <b>
+                                    Rp. {{
+                                    format_uang($pekerjaan->total_pekerjaan + (($pekerjaan->total_pekerjaan * 11) / 100))
+                                    }}
+                                </b>
+                            </th>
+
                         </tr>
+                        @endif
+
                         <tr>
                             <th width="50" style="border: 3px solid black; text-align:center;">Pekerjaan</th>
                             <th width="25" style="border: 3px solid black; text-align:center;">Jenis</th>
@@ -71,12 +123,16 @@
 
                         @forelse ($pekerjaan->hasItem as $key => $item)
                             <tr>
-                                <td style="border: 3px solid black; vertical-align: middle;" rowspan="5">{{$item->nama}}</td>
-                                <td style="border: 3px solid black; vertical-align: middle;" rowspan="5">{{$item->jenis}}</td>
+                                <td style="border: 3px solid black; vertical-align: middle;"
+                                 rowspan="5"
+                                 >{{$item->nama}}</td>
+                                <td style="border: 3px solid black; vertical-align: middle;"
+                                 rowspan="5"
+                                 >{{$item->jenis}}</td>
                                 <td style="border: 3px solid black; ">Rekanan</td>
                                 <td style="border: 3px solid black; text-align:center;">{{$item->pivot->qty}}</td>
                                 <td style="border: 3px solid black; text-align:center;">
-                                    Rp.{{ format_uang($item->pivot->qty ) }}
+                                    Rp.{{ format_uang($item->pivot->harga ) }}
                                 </td>
                                 <td style="border: 3px solid black; text-align:center;">{{$item->pivot->keterangan}}</td>
                                 <td style="border: 3px solid black; text-align:center;">
@@ -199,6 +255,159 @@
 
                     </tbody>
 
+                    <tbody>
+                        @forelse ($pekerjaan->hasGalianPekerjaan as $gl => $galian)
+                        <tr>
+                            <td style="border: 3px solid black; vertical-align: middle;" @if ($galian->galian_perencanaan_adjust_panjang && $galian->galian_perencanaan_adjust_lebar && $galian->galian_perencanaan_adjust_dalam)
+                            rowspan="5"
+                            @else
+                            rowspan="4"
+                            @endif>{{$item->nama}}</td>
+                            <td style="border: 3px solid black; vertical-align: middle;" @if ($galian->galian_perencanaan_adjust_panjang && $galian->galian_perencanaan_adjust_lebar && $galian->galian_perencanaan_adjust_dalam)
+                            rowspan="5"
+                            @else
+                            rowspan="4"
+                            @endif>{{$item->jenis}}</td>
+                            <td style="border: 3px solid black; ">Rekanan</td>
+                            <td style="border: 3px solid black; text-align:center;">
+                                {{ str_replace('.', ',', $galian->panjang) }} *
+                                {{ str_replace('.', ',', $galian->lebar) }}
+                                @if ($galian->dalam !== 0.0)
+                                *
+                                {{ str_replace('.', ',', $galian->dalam) }}
+
+                                @endif
+                                =
+                                {{str_replace('.', ',', round($galian->volume_rekanan, 3))}}
+                            </td>
+                            <td style="border: 3px solid black; text-align:center;">
+                                Rp.{{ format_uang($galian->harga ) }}
+                            </td>
+                            <td style="border: 3px solid black; text-align:center;">{{$galian->keterangan}}</td>
+                            <td style="border: 3px solid black; text-align:center;">
+                                -
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="border: 3px solid black; ">Pengawas</td>
+                            <td style="border: 3px solid black; text-align:center;">
+
+                                {{ str_replace('.', ',', $galian->galian_pengawas_panjang) }}
+
+                                *
+                                {{ str_replace('.', ',', $galian->galian_pengawas_lebar) }}
+
+                                *
+
+                                {{ str_replace('.', ',', $galian->galian_pengawas_dalam) }}
+                                =
+                                {{ str_replace('.', ',', round($galian->volume, 3)) }}
+
+                            </td>
+                            <td style="border: 3px solid black; text-align:center;">
+                                Rp.{{ format_uang($galian->harga ) }}
+                            </td>
+                            <td style="border: 3px solid black; text-align:center;">{{$galian->galian_pengawas_keterangan}}</td>
+                            <td style="border: 3px solid black; text-align:center;">
+                                -
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="border: 3px solid black; ">Asisten Manajer Pengawas</td>
+                            <td style="border: 3px solid black; text-align:center;">
+
+                                {{ str_replace('.', ',', $galian->galian_asmen_pengawas_panjang) }}
+
+                                *
+                                {{ str_replace('.', ',', $galian->galian_asmen_pengawas_lebar) }}
+
+                                *
+
+                                {{ str_replace('.', ',', $galian->galian_asmen_pengawas_dalam) }}
+                                =
+                                {{ str_replace('.', ',', round($galian->volume_asmen, 3)) }}
+
+                            </td>
+                            <td style="border: 3px solid black; text-align:center;">
+                                Rp.{{ format_uang($galian->harga ) }}
+                            </td>
+                            <td style="border: 3px solid black; text-align:center;">{{$galian->galian_asmen_pengawas_keterangan}}</td>
+                            <td style="border: 3px solid black; text-align:center;">
+                                -
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="border: 3px solid black; vertical-align: middle;"
+                            @if ($galian->galian_perencanaan_adjust_panjang && $galian->galian_perencanaan_adjust_lebar && $galian->galian_perencanaan_adjust_dalam)
+                            rowspan="2"
+                            @endif
+                            >Perencanaan</td>
+                            <td style="border: 3px solid black; text-align:center;">
+
+                                {{ str_replace('.', ',', $galian->galian_asmen_pengawas_panjang) }}
+
+                                *
+                                {{ str_replace('.', ',', $galian->galian_asmen_pengawas_lebar) }}
+
+                                *
+
+                                {{ str_replace('.', ',', $galian->galian_asmen_pengawas_dalam) }}
+                                =
+                                {{ str_replace('.', ',', round($galian->volume_asmen, 3)) }}
+
+                            </td>
+                            <td style="border: 3px solid black; text-align:center;">
+                                Rp.{{ format_uang($galian->galian_perencanaan_harga_satuan ) }}
+                            </td>
+                            <td style="border: 3px solid black; text-align:center;">{{$galian->galian_perencanaan_keterangan}}</td>
+                            <td style="border: 3px solid black; text-align:center;">
+                                Rp.
+                                {{ format_uang($galian->galian_perencanaan_harga_satuan * $galian->volume_asmen) }}
+                            </td>
+                        </tr>
+                        @if ($galian->galian_perencanaan_adjust_panjang && $galian->galian_perencanaan_adjust_lebar && $galian->galian_perencanaan_adjust_dalam)
+
+                        <tr>
+                            {{-- <td style="border: 3px solid black; text-align:center;">Perencanaan</td> --}}
+                            <td style="border: 3px solid black; text-align:center;">
+
+                                {{ str_replace('.', ',', $galian->galian_perencanaan_adjust_panjang) }}
+
+                                *
+                                {{ str_replace('.', ',', $galian->galian_perencanaan_adjust_lebar) }}
+
+                                *
+
+                                {{ str_replace('.', ',', $galian->galian_perencanaan_adjust_dalam) }}
+                                =
+                                {{ str_replace('.', ',', round($galian->volume_adjust, 3)) }}
+
+                            </td>
+                            <td style="border: 3px solid black; text-align:center;">
+                                Rp.{{ format_uang($galian->galian_perencanaan_adjust_harga_satuan ) }}
+                            </td>
+                            <td style="border: 3px solid black; text-align:center;">{{$galian->galian_perencanaan_adjust_keterangan}}</td>
+                            <td style="border: 3px solid black; text-align:center;">
+                                Rp.
+                                {{ format_uang($galian->galian_perencanaan_adjust_total) }}
+                            </td>
+                        </tr>
+                        @endif
+                        @empty
+
+                        @endforelse
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th colspan="6" style="border: 3px solid black; text-align:center;">
+                                Grand Total
+                            </th>
+                            <th style="border: 3px solid black; text-align:center;">
+                                Rp.
+                                {{ format_uang($pekerjaan->total_pekerjaan) }}
+                            </th>
+                        </tr>
+                    </tfoot>
                 </table>
             @endforeach
 
@@ -206,4 +415,4 @@
     </div>
     <!-- ./col -->
 </div>
-
+@stop
