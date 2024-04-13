@@ -126,6 +126,17 @@
                                         </button>
                                     </div>
                                 </div>
+                                <div class="col-lg-1">
+                                    <label for="">Export</label>
+                                    <div class="input-group">
+
+
+                                        <a href="{{ route('penunjukan_pekerjaan.excel')}}?tanggal={{$tanggal}}" target="_blank"  class="btn btn-success" id="export-excel">
+                                            <span class="fa fa-file-excel"></span>
+                                            Export Excel
+                                        </a>
+                                    </div>
+                                </div>
                                 @if (auth()->user()->hasRole('asisten-manajer-perencanaan'))
                                     <div class="col-lg-3">
                                         <label for="">Rekapan Pekerjaan</label>
@@ -300,8 +311,29 @@
             }
         });
 
+        // $('#daterange').on('apply.daterangepicker', function(ev, picker) {
+
+
+        // });
+
+        function replaceUrlParam(url, paramName, paramValue){
+            var pattern = new RegExp('(\\?|\\&)('+paramName+'=).*?(&|$)')
+            var newUrl=url
+            if(url.search(pattern)>=0){
+                newUrl = url.replace(pattern,'$1$2' + paramValue + '$3');
+            }
+            else{
+                newUrl = newUrl + (newUrl.indexOf('?')>0 ? '&' : '?') + paramName + '=' + paramValue
+            }
+            return newUrl
+        }
+
         $('input[name="tanggal"]').on('apply.daterangepicker', function(ev, picker) {
             $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+            let urlExcel = $('#export-excel').attr('href');
+            let tanggal = picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY');
+            let urlExport = replaceUrlParam(urlExcel, 'tanggal',tanggal);
+            $('#export-excel').attr('href', urlExport);
         });
 
         $('input[name="tanggal"]').on('cancel.daterangepicker', function(ev, picker) {

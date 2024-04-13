@@ -39,6 +39,10 @@ class ItemController extends Controller
                 'name'    => 'jenis',
                 'alias'    => 'Nama Jenis',
             ],
+            [
+                'name'    => 'aktif',
+                'alias'    => 'Aktif',
+            ],
         ];
     }
     public function configSearch()
@@ -68,6 +72,13 @@ class ItemController extends Controller
                     $hasRelation = 'kategori',
                     $hasColom = 'nama_kategori'
                 )
+            ],
+            [
+                'name'    => 'aktif',
+                'input'    => 'combo',
+                'alias'    => 'Aktif',
+                'value' => ['ya', 'tidak'],
+                'validasi'    => ['required'],
             ],
             [
                 'name'    => 'satuan_id',
@@ -128,6 +139,13 @@ class ItemController extends Controller
                 'value' => $this->combobox(
                     'Satuan'
                 ),
+                'validasi'    => ['required'],
+            ],
+            [
+                'name'    => 'aktif',
+                'input'    => 'radio',
+                'alias'    => 'Aktif',
+                'value' => ['ya', 'tidak'],
                 'validasi'    => ['required'],
             ],
         ];

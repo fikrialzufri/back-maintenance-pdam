@@ -73,6 +73,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::resource('penunjukan-pekerjaan', PenunjukanPekerjaanController::class, ['names' => 'penunjukan_pekerjaan'])->except('destroy');
 
+    Route::get('penunjukan-pekerjaan-excel', [PenunjukanPekerjaanController::class, 'excel'])->name('penunjukan_pekerjaan.excel');
+
     Route::get('penunjukan-pekerjaan-adjust/{slug}', [PenunjukanPekerjaanController::class, 'adjust'])->name('penunjukan_pekerjaan.adjust');
 
     Route::put('penunjukan-pekerjaan-adjust/{slug}', [PenunjukanPekerjaanController::class, 'updateAdjust'])->name('penunjukan_pekerjaan.adjust.ubah');

@@ -29,7 +29,7 @@ class ItemController extends Controller
 
         try {
             $query = $this->model();
-            $query = $query->where('nama', 'like', '%' . $nama . '%');
+            $query = $query->where('aktif', 'ya')->where('nama', 'like', '%' . $nama . '%');
             if ($kategori) {
                 $kategori = Kategori::where('nama', 'like', '%' . $kategori . '%')->first();
                 if ($kategori) {
@@ -38,7 +38,7 @@ class ItemController extends Controller
                 }
             }
 
-            $data = $query->get();
+            $data = $query->orderBy('nama')->get();
             foreach ($data as $key => $value) {
                 $result[$key] = [
                     'id' =>  $value->id,

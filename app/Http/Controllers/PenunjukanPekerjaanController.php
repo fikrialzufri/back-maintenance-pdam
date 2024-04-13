@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\PelaksanaanPekerjaanExport;
 use Illuminate\Http\Request;
 use App\Models\Aduan;
 use App\Models\GalianAsmen;
@@ -2210,5 +2211,37 @@ class PenunjukanPekerjaanController extends Controller
                 'rekanan'
             )
         );
+    }
+
+    public function excel()
+    {
+
+        $tanggal = request()->tanggal;
+        $tanggalNama = '';
+        $start = '';
+        $end = '';
+        // $data = PelaksanaanPekerjaan::query();
+
+        if (request()->tanggal != '') {
+            $date = explode(' - ', request()->tanggal);
+            $start = Carbon::parse($date[0])->format('Y-m-d') . ' 00:00:01';
+            $end = Carbon::parse($date[1])->format('Y-m-d') . ' 23:59:59';
+            $tanggalNama = Carbon::parse($date[0])->format('d-m-Y') . ' ' . Carbon::parse($date[1])->format('d-m-Y');
+        } else {
+            $start = Carbon::now()->startOfMonth()->format('m/d/Y');
+            $end = Carbon::now()->endOfMonth()->format('m/d/Y');
+            $tanggalNama = Carbon::now()->format('d-m-Y') . ' ' .  Carbon::now()->format('d-m-Y');
+        }
+
+        $data = PelaksanaanPekerjaan::with('hasItem', 'hasPenunjukanPekerjaan.hasAduan', 'hasItemPengawas')->whereBetween('created_at', [$start, $end])->orderBy('created_at')->paginate(5);
+
+        return view('penunjukan_pekerjaan.export', compact(
+            'data',
+            'end'
+        ));
+
+
+        // return $tanggalNama;
+        return Excel::download(new PelaksanaanPekerjaanExport($start, $end), 'Export Pekerjaan ' . $tanggalNama . '.xlsx');
     }
 }

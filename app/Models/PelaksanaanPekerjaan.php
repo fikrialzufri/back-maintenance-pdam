@@ -14,7 +14,7 @@ class PelaksanaanPekerjaan extends Model
 
     protected $table = 'pelaksanaan_pekerjaan';
     protected $guarded = ['id'];
-    protected $appends = ['status_mobile', 'total_pekerjaan'];
+    protected $appends = ['status_mobile'];
     protected $fillable = [
         'nomor_pelaksanaan_pekerjaan',
         'status',
@@ -53,6 +53,24 @@ class PelaksanaanPekerjaan extends Model
     {
         if ($this->hasPenunjukanPekerjaan) {
             return $this->hasPenunjukanPekerjaan->nomor_pekerjaan;
+        }
+    }
+    public function getLokasiAttribute()
+    {
+        if ($this->hasPenunjukanPekerjaan) {
+            return $this->hasPenunjukanPekerjaan->lokasi;
+        }
+    }
+    public function getNoTiketAttribute()
+    {
+        if ($this->hasPenunjukanPekerjaan) {
+            return $this->hasPenunjukanPekerjaan->no_tiket;
+        }
+    }
+    public function getKeteranganAduanAttribute()
+    {
+        if ($this->hasPenunjukanPekerjaan) {
+            return $this->hasPenunjukanPekerjaan->keterangan_aduan;
         }
     }
     public function getNoSpkSlugAttribute()
