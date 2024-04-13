@@ -2261,11 +2261,16 @@ class PenunjukanPekerjaanController extends Controller
 
 
         // $data = $data->get();
-        // // ->whereBetween('created_at', [$start, $end])->get();
+        // // // ->whereBetween('created_at', [$start, $end])->get();
+        // // return $data->toSql();
 
+        // // Gets raw SQL from $query using `toSql` and `getBindings` and combines their results with `vsprintf`
+        // // return $rawSql = vsprintf(str_replace(['?'], ['\'%s\''], $data->toSql()), $data->getBindings());
+        // // select * from `pelaksanaan_pekerjaan` where `status` = 'dikoreksi' and exists (select * from `aduan` where `pelaksanaan_pekerjaan`.`aduan_id` = `aduan`.`id` and `kategori_aduan` = 'pipa dinas') and DATE(created_at) between '2023-11-29 00:00:01' and '2023-12-30 23:59:59'
+        // // dd(DB::getQueryLog());
         // $title = "List Pekerjaan";
 
-        // // return $data;
+        // // // return $data;
         // return view(
         //     'penunjukan_pekerjaan.export',
         //     compact(
