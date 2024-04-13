@@ -334,21 +334,29 @@
                         <tr>
                             <td style="border: 3px solid black; ">Pengawas</td>
                             <td style="border: 3px solid black; text-align:center;">
-
+                                @if ($galian->galian_pengawas_panjang)
                                 {{ str_replace('.', ',', $galian->galian_pengawas_panjang) }}
 
                                 *
+                                @endif
+                                @if ($galian->galian_pengawas_lebar)
                                 {{ str_replace('.', ',', $galian->galian_pengawas_lebar) }}
 
                                 *
-
+                                @endif
+                                @if ($galian->galian_pengawas_lebar)
                                 {{ str_replace('.', ',', $galian->galian_pengawas_dalam) }}
+                                @endif
+                                @if ($galian->galian_pengawas_panjang || $galian->galian_pengawas_lebar || $galian->galian_pengawas_lebar )
                                 =
                                 {{ str_replace('.', ',', round($galian->volume, 3)) }}
+                                @endif
 
                             </td>
                             <td style="border: 3px solid black; text-align:center;">
+                                @if ($galian->galian_pengawas_panjang || $galian->galian_pengawas_lebar || $galian->galian_pengawas_lebar )
                                 Rp.{{ format_uang($galian->harga ) }}
+                                @endif
                             </td>
                             <td style="border: 3px solid black; text-align:center;">{{$galian->galian_pengawas_keterangan}}</td>
                             <td style="border: 3px solid black; text-align:center;">
@@ -358,21 +366,33 @@
                         <tr>
                             <td style="border: 3px solid black; ">Asisten Manajer Pengawas</td>
                             <td style="border: 3px solid black; text-align:center;">
-
+                                @if ($galian->galian_asmen_pengawas_panjang)
                                 {{ str_replace('.', ',', $galian->galian_asmen_pengawas_panjang) }}
 
                                 *
+                                @endif
+                                @if ($galian->galian_asmen_pengawas_lebar)
                                 {{ str_replace('.', ',', $galian->galian_asmen_pengawas_lebar) }}
 
                                 *
+                                @endif
+                                @if ($galian->galian_asmen_pengawas_dalam)
+                                    {{ str_replace('.', ',', $galian->galian_asmen_pengawas_dalam) }}
+                                    =
+                                @endif
 
-                                {{ str_replace('.', ',', $galian->galian_asmen_pengawas_dalam) }}
+
+                                @if ($galian->galian_asmen_pengawas_panjang || $galian->galian_asmen_pengawas_lebar || $galian->galian_asmen_pengawas_dalam )
                                 =
                                 {{ str_replace('.', ',', round($galian->volume_asmen, 3)) }}
+                                @endif
 
                             </td>
                             <td style="border: 3px solid black; text-align:center;">
+                                @if ($galian->galian_asmen_pengawas_panjang || $galian->galian_asmen_pengawas_lebar ||
+                                $galian->galian_asmen_pengawas_dalam )
                                 Rp.{{ format_uang($galian->harga ) }}
+                                @endif
                             </td>
                             <td style="border: 3px solid black; text-align:center;">{{$galian->galian_asmen_pengawas_keterangan}}</td>
                             <td style="border: 3px solid black; text-align:center;">
@@ -387,25 +407,41 @@
                             >Perencanaan</td>
                             <td style="border: 3px solid black; text-align:center;">
 
+                                @if ($galian->galian_asmen_pengawas_panjang)
                                 {{ str_replace('.', ',', $galian->galian_asmen_pengawas_panjang) }}
 
                                 *
+                                @endif
+                                @if ($galian->galian_asmen_pengawas_lebar)
                                 {{ str_replace('.', ',', $galian->galian_asmen_pengawas_lebar) }}
 
                                 *
-
+                                @endif
+                                @if ($galian->galian_asmen_pengawas_dalam)
                                 {{ str_replace('.', ',', $galian->galian_asmen_pengawas_dalam) }}
                                 =
-                                {{ str_replace('.', ',', round($galian->volume_asmen, 3)) }}
+                                @endif
 
+
+                                @if ($galian->galian_asmen_pengawas_panjang || $galian->galian_asmen_pengawas_lebar ||
+                                $galian->galian_asmen_pengawas_dalam )
+                                =
+                                {{ str_replace('.', ',', round($galian->volume_asmen, 3)) }}
+                                @endif
                             </td>
                             <td style="border: 3px solid black; text-align:center;">
+
+                                @if ($galian->galian_perencanaan_harga_satuan)
                                 Rp.{{ format_uang($galian->galian_perencanaan_harga_satuan ) }}
+                                @endif
+
                             </td>
                             <td style="border: 3px solid black; text-align:center;">{{$galian->galian_perencanaan_keterangan}}</td>
                             <td style="border: 3px solid black; text-align:center;">
+                                @if ($galian->galian_perencanaan_harga_satuan)
                                 Rp.
                                 {{ format_uang($galian->galian_perencanaan_harga_satuan * $galian->volume_asmen) }}
+                                @endif
                             </td>
                         </tr>
                         @if ($galian->galian_perencanaan_adjust_panjang && $galian->galian_perencanaan_adjust_lebar && $galian->galian_perencanaan_adjust_dalam)
@@ -413,26 +449,40 @@
                         <tr>
                             {{-- <td style="border: 3px solid black; text-align:center;">Perencanaan</td> --}}
                             <td style="border: 3px solid black; text-align:center;">
-
+                                @if ($galian->galian_perencanaan_adjust_panjang)
                                 {{ str_replace('.', ',', $galian->galian_perencanaan_adjust_panjang) }}
 
                                 *
-                                {{ str_replace('.', ',', $galian->galian_perencanaan_adjust_lebar) }}
+                                @endif
+                                @if ($galian->galian_perencanaan_adjust_panjang)
+                                {{ str_replace('.', ',', $galian->galian_perencanaan_adjust_panjang) }}
 
                                 *
+                                @endif
+                                @if ($galian->galian_perencanaan_adjust_lebar)
+                                {{ str_replace('.', ',', $galian->galian_perencanaan_adjust_lebar) }}
+                                =
+                                @endif
 
-                                {{ str_replace('.', ',', $galian->galian_perencanaan_adjust_dalam) }}
+
+                                @if ($galian->galian_perencanaan_adjust_panjang || $galian->galian_perencanaan_adjust_panjang ||
+                                $galian->galian_perencanaan_adjust_lebar )
                                 =
                                 {{ str_replace('.', ',', round($galian->volume_adjust, 3)) }}
+                                @endif
 
                             </td>
                             <td style="border: 3px solid black; text-align:center;">
+                                @if ($galian->galian_perencanaan_adjust_harga_satuan)
                                 Rp.{{ format_uang($galian->galian_perencanaan_adjust_harga_satuan ) }}
+                                @endif
                             </td>
                             <td style="border: 3px solid black; text-align:center;">{{$galian->galian_perencanaan_adjust_keterangan}}</td>
                             <td style="border: 3px solid black; text-align:center;">
+                                @if ($galian->galian_perencanaan_adjust_harga_satuan)
                                 Rp.
                                 {{ format_uang($galian->galian_perencanaan_adjust_total) }}
+                                @endif
                             </td>
                         </tr>
                         @endif
@@ -442,8 +492,8 @@
                     </tbody>
                     <tfoot>
                         <tr>
-                            <th colspan="6" style="border: 3px solid black; text-align:center;">
-                                Grand Total
+                            <th colspan="6" style="border: 3px solid black; text-align:right;">
+                                 Total
                             </th>
                             <th style="border: 3px solid black; text-align:center;">
                                 Rp.

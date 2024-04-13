@@ -2259,21 +2259,13 @@ class PenunjukanPekerjaanController extends Controller
         //     })
         //     ->whereBetween(DB::raw('DATE(created_at)'), array($start, $end));
 
-        // if (auth()->user()->hasRole('staf-distribusi')) {
-        // } else {
-        //     // $data = $data->orderByRaw("FIELD(status, \"dikoreksi\", \"selesai koreksi\", \"selesai\", \"draft\")");
-        // }
 
         // $data = $data->get();
         // // ->whereBetween('created_at', [$start, $end])->get();
-        // $data = $data->collect(
-        //     $data->sortBy(function ($pekerjaan) {
-        //         return $pekerjaan->status_aduan;
-        //     })
-        // );
+
         // $title = "List Pekerjaan";
 
-        // return $data;
+        // // return $data;
         // return view(
         //     'penunjukan_pekerjaan.export',
         //     compact(
