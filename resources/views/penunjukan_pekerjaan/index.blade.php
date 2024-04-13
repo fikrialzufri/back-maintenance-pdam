@@ -126,6 +126,7 @@
                                         </button>
                                     </div>
                                 </div>
+                                @if (!auth()->user()->hasRole('rekanan'))
                                 <div class="col-lg-1">
                                     <label for="">Export</label>
                                     <div class="input-group">
@@ -137,6 +138,7 @@
                                         </a>
                                     </div>
                                 </div>
+                                @endif
                                 @if (auth()->user()->hasRole('asisten-manajer-perencanaan'))
                                     <div class="col-lg-3">
                                         <label for="">Rekapan Pekerjaan</label>

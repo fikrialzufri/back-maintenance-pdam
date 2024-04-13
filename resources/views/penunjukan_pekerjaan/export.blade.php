@@ -108,7 +108,6 @@
                                     <td style="border: 3px solid black; text-align:center;"></td>
                                     <td style="border: 3px solid black; text-align:center;"></td>
                                     <td style="border: 3px solid black; text-align:center;"></td>
-                                    <td style="border: 3px solid black; text-align:center;"></td>
                                 @endif
                             </tr>
                             <tr>

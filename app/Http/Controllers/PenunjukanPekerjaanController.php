@@ -2235,20 +2235,34 @@ class PenunjukanPekerjaanController extends Controller
         } else {
             $start = Carbon::now()->startOfMonth()->format('m/d/Y');
             $end = Carbon::now()->endOfMonth()->format('m/d/Y');
-            $tanggalNama = Carbon::now()->format('d-m-Y') . ' ' .  Carbon::now()->format('d-m-Y');
+            $tanggalNama = Carbon::now()->format('d-m-Y') . ' ' . Carbon::now()->format('d-m-Y');
         }
 
-        return $data = PelaksanaanPekerjaan::with('hasPenunjukanPekerjaan', 'hasItem', 'hasItemPengawas')
-            ->with(['hasAduan' => function ($query) use ($kategori, $status) {
-                // $query->where('aduan.kategori_aduan', $kategori);
-                $query->when($kategori != null, function ($q) use ($kategori) {
-                    return $q->where('aduan.kategori_aduan', $kategori);
-                });
-                $query->when($status != null, function ($q) use ($status) {
-                    return $q->where('aduan.status', $status);
-                });
-            }])
-            ->whereBetween('created_at', [$start, $end])->orderBy('created_at')->get();
+        // return $data = PelaksanaanPekerjaan::with([
+        //     'hasPenunjukanPekerjaan'
+        // ])
+        //     ->with('hasPenunjukanPekerjaan', 'hasItem', 'hasItemPengawas')
+        //     ->when($status != null, function ($q) use ($status) {
+        //         return $q->where('status', $status);
+        //     })
+        //     ->whereBetween('created_at', [$start, $end])->orderBy('created_at')->get();
+        // return $data = PelaksanaanPekerjaan::with([
+        //     'hasPenunjukanPekerjaan' => function ($query) use ($kategori, $status) {
+        //         // $query->where('aduan.kategori_aduan', $kategori);
+        //         $query->when($status != null, function ($q) use ($status) {
+        //             return $q->where('penunjukan_pekerjaan.status', $status);
+        //         });
+        //     }
+        // ])->with([
+        //             'hasAduan' => function ($query) use ($kategori, $status) {
+        //                 // $query->where('aduan.kategori_aduan', $kategori);
+        //                 $query->when($kategori != null, function ($q) use ($kategori) {
+        //                     return $q->where('aduan.kategori_aduan', $kategori);
+        //                 });
+        //             }
+        //         ])
+        //     ->with('hasItem', 'hasItemPengawas')
+        //     ->whereBetween('created_at', [$start, $end])->orderBy('created_at')->get();
 
         // return $tanggalNama;
         return Excel::download(new PelaksanaanPekerjaanExport($start, $end, $kategori, $rekanan_id, $status), 'Export Pekerjaan ' . $tanggalNama . '.xlsx');
