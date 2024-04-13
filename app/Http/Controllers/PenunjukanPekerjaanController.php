@@ -2228,7 +2228,7 @@ class PenunjukanPekerjaanController extends Controller
         $namaFile = '';
         $start = '';
         $end = '';
-        // $data = PelaksanaanPekerjaan::query();
+        $data = PelaksanaanPekerjaan::query();
 
         if (request()->tanggal != '') {
             $date = explode(' - ', request()->tanggal);
@@ -2240,7 +2240,7 @@ class PenunjukanPekerjaanController extends Controller
             $end = Carbon::now()->endOfMonth()->format('m/d/Y');
             $namaFile = Carbon::now()->format('d-m-Y') . ' ' . Carbon::now()->format('d-m-Y');
         }
-        // $data = PelaksanaanPekerjaan::with('hasItem', 'hasAduan', 'hasItemPengawas', 'hasItemAsmenPengawas', 'hasItemPerencanaan', 'hasItemPerencanaanAdujst', 'hasGalianPekerjaan')
+        // $data = $data->with('hasItem', 'hasAduan', 'hasItemPengawas', 'hasItemAsmenPengawas', 'hasItemPerencanaan', 'hasItemPerencanaanAdujst', 'hasGalianPekerjaan')
         //     ->when($status != null, function ($q) use ($status) {
         //         if ($status != 'all') {
         //             return $q->where('status', $status);
@@ -2257,10 +2257,16 @@ class PenunjukanPekerjaanController extends Controller
         //             $query->where('kategori_aduan', $kategori);
         //         }
         //     })
-        //     ->whereDate('created_at', '>=', $start)->whereDate('created_at', '<=', $end)->get();
+        //     ->whereBetween(DB::raw('DATE(created_at)'), array($start, $end));
+
+        // if (auth()->user()->hasRole('staf-distribusi')) {
+        // } else {
+        //     $data = $data->orderByRaw("FIELD(status, \"dikoreksi\", \"selesai koreksi\", \"selesai\", \"draft\")");
+        // }
+
+        // $data = $data->orderBy('updated_at', 'desc')->get();
         // // ->whereBetween('created_at', [$start, $end])->get();
 
-        // $collection = collect($data);
         // $title = "List Pekerjaan";
 
         // return $data;

@@ -355,4 +355,23 @@ class PelaksanaanPekerjaan extends Model
                 break;
         }
     }
+
+    public function getStatusOrderAttribute()
+    {
+        $status = 5;
+
+        if ($this->statuss) {
+            if ($this->status == 'dikoreksi') {
+                $status  = 1;
+            } else if ($this->status == 'selesai koreksi') {
+                $status  = 2;
+            } else if ($this->status == 'selesai') {
+                $status  = 3;
+            } else if ($this->status == 'draft') {
+                $status  = 4;
+            }
+        }
+
+        return $status;
+    }
 }
