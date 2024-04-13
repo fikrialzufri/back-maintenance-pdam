@@ -66,10 +66,9 @@
                             <th width="15" colspan="2" style="border: 3px solid black;">Keterangan</th>
 
                             <th width="50" colspan="5" style="border: 3px solid black;">
-                                <b>{{$pekerjaan->keterangan_aduan}}</b>
                                 @if($pekerjaan->hasAduan != null)
 
-                                <b>{{$pekerjaan->hasAduan->keterangan_aduan}}</b>
+                                <b>{{$pekerjaan->hasAduan->keterangan}}</b>
                                 @endif
                             </th>
 

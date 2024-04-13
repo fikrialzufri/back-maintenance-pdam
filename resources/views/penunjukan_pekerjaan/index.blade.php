@@ -253,6 +253,7 @@
                                         </td>
                                         <td>{{ $item->no_spk }}</td>
                                         <td>{{ $item->nps }}</td>
+                                        {{-- <td>{{ $item->status_aduan }}</td> --}}
                                         <td>{{ $item->no_ticket }}</td>
                                         <td>{{ $item->rekanan }}</td>
                                         <td>{{ ucfirst($item->kategori_aduan) }}</td>
