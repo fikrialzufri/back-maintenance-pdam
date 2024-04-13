@@ -40,18 +40,22 @@ class PelaksanaanPekerjaanExport implements FromView, WithChunkReading
         $rekanan_id = $this->rekanan_id;
         $status = $this->status;
         $title = "List Pekerjaan";
-        $data =
-            PelaksanaanPekerjaan::with('hasItem', 'hasAduan', 'hasItemPengawas', 'hasItemAsmenPengawas', 'hasItemPerencanaan', 'hasItemPerencanaanAdujst', 'hasGalianPekerjaan')
+        $data = PelaksanaanPekerjaan::with('hasItem', 'hasAduan', 'hasItemPengawas', 'hasItemAsmenPengawas', 'hasItemPerencanaan', 'hasItemPerencanaanAdujst', 'hasGalianPekerjaan')
             ->when($status != null, function ($q) use ($status) {
                 if ($status != 'all') {
                     return $q->where('status', $status);
                 }
             })
             ->when($rekanan_id != null, function ($q) use ($rekanan_id) {
-                return $q->where('rekanan_id', $rekanan_id);
+                if ($rekanan_id != 'all') {
+                    return $q->where('rekanan_id', $rekanan_id);
+                }
             })
             ->whereHas('hasAduan', function ($query)  use ($kategori) {
-                $query->where('kategori_aduan', $kategori);
+                if ($kategori != 'all') {
+
+                    $query->where('kategori_aduan', $kategori);
+                }
             })
             ->whereDate('created_at', '>=', $start)->whereDate('created_at', '<=', $end)->get();
 

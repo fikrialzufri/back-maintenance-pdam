@@ -104,7 +104,10 @@ class PenunjukanPekerjaanController extends Controller
             // return 1;
         }
         if ($kategori) {
-            $query->where('kategori_aduan', 'like', "%" . $kategori . "%");
+            if ($kategori != 'all') {
+
+                $query->where('kategori_aduan', 'like', "%" . $kategori . "%");
+            }
         }
 
 
@@ -2222,7 +2225,7 @@ class PenunjukanPekerjaanController extends Controller
         $status = request()->status;
         // &spk=&kategori=&rekanan_id=&tanggal=&status=
         // return request();
-        $tanggalNama = '';
+        $namaFile = '';
         $start = '';
         $end = '';
         // $data = PelaksanaanPekerjaan::query();
@@ -2231,40 +2234,44 @@ class PenunjukanPekerjaanController extends Controller
             $date = explode(' - ', request()->tanggal);
             $start = Carbon::parse($date[0])->format('Y-m-d') . ' 00:00:01';
             $end = Carbon::parse($date[1])->format('Y-m-d') . ' 23:59:59';
-            $tanggalNama = Carbon::parse($date[0])->format('d-m-Y') . ' ' . Carbon::parse($date[1])->format('d-m-Y');
+            $namaFile = Carbon::parse($date[0])->format('d-m-Y') . ' ' . Carbon::parse($date[1])->format('d-m-Y');
         } else {
             $start = Carbon::now()->startOfMonth()->format('m/d/Y');
             $end = Carbon::now()->endOfMonth()->format('m/d/Y');
-            $tanggalNama = Carbon::now()->format('d-m-Y') . ' ' . Carbon::now()->format('d-m-Y');
+            $namaFile = Carbon::now()->format('d-m-Y') . ' ' . Carbon::now()->format('d-m-Y');
         }
+        // $data = PelaksanaanPekerjaan::with('hasItem', 'hasAduan', 'hasItemPengawas', 'hasItemAsmenPengawas', 'hasItemPerencanaan', 'hasItemPerencanaanAdujst', 'hasGalianPekerjaan')
+        //     ->when($status != null, function ($q) use ($status) {
+        //         if ($status != 'all') {
+        //             return $q->where('status', $status);
+        //         }
+        //     })
+        //     ->when($rekanan_id != null, function ($q) use ($rekanan_id) {
+        //         if ($rekanan_id != 'all') {
+        //             return $q->where('rekanan_id', $rekanan_id);
+        //         }
+        //     })
+        //     ->whereHas('hasAduan', function ($query)  use ($kategori) {
+        //         if ($kategori != 'all') {
 
-        $data = PelaksanaanPekerjaan::with('hasItem', 'hasAduan', 'hasItemPengawas', 'hasItemAsmenPengawas', 'hasItemPerencanaan', 'hasItemPerencanaanAdujst', 'hasGalianPekerjaan')
-            ->when($status != null, function ($q) use ($status) {
-                if ($status != 'all') {
-                    return $q->where('status', $status);
-                }
-            })
-            ->when($rekanan_id != null, function ($q) use ($rekanan_id) {
-                return $q->where('rekanan_id', $rekanan_id);
-            })
-            ->whereHas('hasAduan', function ($query)  use ($kategori) {
-                $query->where('kategori_aduan', $kategori);
-            })
-            ->whereDate('created_at', '>=', $start)->whereDate('created_at', '<=', $end)->get();
-        // ->whereBetween('created_at', [$start, $end])->get();
+        //             $query->where('kategori_aduan', $kategori);
+        //         }
+        //     })
+        //     ->whereDate('created_at', '>=', $start)->whereDate('created_at', '<=', $end)->get();
+        // // ->whereBetween('created_at', [$start, $end])->get();
 
-        $collection = collect($data);
-        $title = "List Pekerjaan";
+        // $collection = collect($data);
+        // $title = "List Pekerjaan";
 
-        return $data;
-        return view(
-            'penunjukan_pekerjaan.export',
-            compact(
-                'data',
-                'title',
-                'end'
-            )
-        );
-        return Excel::download(new PelaksanaanPekerjaanExport($start, $end, $kategori, $rekanan_id, $status), 'Export Pekerjaan ' . $tanggalNama . '.xlsx');
+        // return $data;
+        // return view(
+        //     'penunjukan_pekerjaan.export',
+        //     compact(
+        //         'data',
+        //         'title',
+        //         'end'
+        //     )
+        // );
+        return Excel::download(new PelaksanaanPekerjaanExport($start, $end, $kategori, $rekanan_id, $status), 'Export Pekerjaan ' . $namaFile . '.xlsx');
     }
 }

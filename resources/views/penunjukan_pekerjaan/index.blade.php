@@ -31,8 +31,8 @@
                                 </div>
                                 <div class="col-lg-2">
                                     <label for="">Kategori Aduan</label>
-                                    <select name="kategori" class="selected2 form-control">
-                                        <option value="">Semua Kategori</option>
+                                    <select name="kategori" class="selected2 form-control" id="cmbKategori">
+                                        <option value="all" data-allow-clear=true>Semua Kategori</option>
                                         <option value="pipa dinas" {{ $kategori == 'pipa dinas' ? 'selected' : '' }}>Pipa
                                             dinas
                                         </option>
@@ -292,32 +292,6 @@
 @push('script')
     <script script src="{{ asset('plugins/select2/dist/js/select2.min.js') }}"></script>
     <script>
-        $('#cmbrekanan').select2({
-            placeholder: '--- Pilih Rekanan ---',
-            width: '100%'
-        });
-        $('#cmbStatus').select2({
-            placeholder: '--- Pilih Status ---',
-            width: '100%'
-        });
-    </script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-
-    <script type="text/javascript">
-        $('#daterange').daterangepicker({
-            autoUpdateInput: false,
-            locale: {
-                cancelLabel: 'Clear'
-            }
-        });
-
-        // $('#daterange').on('apply.daterangepicker', function(ev, picker) {
-
-
-        // });
-
         function replaceUrlParam(url, paramName, paramValue){
             var pattern = new RegExp('(\\?|\\&)('+paramName+'=).*?(&|$)')
             var newUrl=url
@@ -329,6 +303,65 @@
             }
             return newUrl
         }
+
+        $('#cmbKategori').select2({
+            placeholder: '--- Pilih Kategori ---',
+
+            allowClear: true
+        }).on('change', function(e) {
+            let kategori= $("#cmbKategori option:selected").val();;
+
+            let urlExcel = $('#export-excel').attr('href');
+            let urlExport = replaceUrlParam(urlExcel, 'kategori',kategori);
+            $('#export-excel').attr('href', urlExport);
+            console.log($('#export-excel').attr('href'));
+        });
+        $('#cmbrekanan').select2({
+            placeholder: '--- Pilih Rekanan ---',
+            width: '100%'
+        }).on('change', function(e) {
+            let rekanan_id= $("#cmbrekanan option:selected").val();;
+
+            let urlExcel = $('#export-excel').attr('href');
+            let urlExport = replaceUrlParam(urlExcel, 'rekanan_id',rekanan_id);
+            $('#export-excel').attr('href', urlExport);
+            console.log($('#export-excel').attr('href'));
+        });
+
+        $('#cmbStatus').select2({
+            placeholder: '--- Pilih Status ---',
+            width: '100%'
+        }).on('change', function(e) {
+            let status= $("#cmbStatus option:selected").val();;
+            console.log(status);
+            let urlExcel = $('#export-excel').attr('href');
+            let urlExport = replaceUrlParam(urlExcel, 'status',status);
+            $('#export-excel').attr('href', urlExport);
+            console.log($('#export-excel').attr('href'));
+        });
+        // $('#cmbStatus').on("select2:selecting", function(e) {
+        //     let status= e.params.data;
+        //     let urlExcel = $('#export-excel').attr('href');
+        //     // let tanggal = picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY');
+
+
+        //     // let urlExport = replaceUrlParam(urlExcel, 'status',status);
+        //     // $('#export-excel').attr('href', urlExport);
+        //     // console.log($('#export-excel').attr('href'));
+        // });
+    </script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
+    <script type="text/javascript">
+        $('#daterange').daterangepicker();
+
+        // $('#daterange').on('apply.daterangepicker', function(ev, picker) {
+
+
+        // });
+
 
         $('input[name="tanggal"]').on('apply.daterangepicker', function(ev, picker) {
             $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
