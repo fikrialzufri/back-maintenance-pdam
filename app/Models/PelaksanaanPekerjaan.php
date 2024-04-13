@@ -280,6 +280,12 @@ class PelaksanaanPekerjaan extends Model
     {
         return $this->belongsToMany(User::class, 'pelaksanaan_user')->withPivot('keterangan')->withTimestamps();
     }
+
+
+    public function hasPelaksanaanPekerjaan()
+    {
+        return $this->belongsToMany(Tagihan::class, 'tagihan_pelaksanaan')->withPivot('total')->withTimestamps();
+    }
     public function getStatusAduanAttribute()
     {
         $status = "Belum ditunjuk";

@@ -108,7 +108,14 @@
 
                         </tr>
                         @endif
+                        <tr>
+                            <th width="15" colspan="2" style="border: 3px solid black;">No Vourche</th>
 
+                            <th width="50" colspan="5" style="border: 3px solid black;">
+                                <b>Rp. {{format_uang($pekerjaan->total_pekerjaan)}}</b>
+                            </th>
+
+                        </tr>
                         <tr>
                             <th width="50" style="border: 3px solid black; text-align:center;">Pekerjaan</th>
                             <th width="25" style="border: 3px solid black; text-align:center;">Jenis</th>
