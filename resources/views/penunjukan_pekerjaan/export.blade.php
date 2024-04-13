@@ -1,6 +1,6 @@
-
+{{--
 @extends('template.app')
-@section('title', 'Detail Pekerjaan ')
+@section('title', 'List Pekerjaan ')
 
 @push('head')
 <!-- Load Leaflet from CDN -->
@@ -27,7 +27,7 @@
 </style>
 @endpush
 
-@section('content')
+@section('content') --}}
 <div class="col-md-12">
     <div class="card">
         <!-- /.card-header -->
@@ -41,7 +41,7 @@
                         <tr>
                             <th width="15" colspan="2" style="border: 3px solid black; text-align:left;">No Urut Spk</th>
 
-                            <th width="50" colspan="5" style="border: 3px solid black; text-align:left;">{{$key}}</th>
+                            <th width="50" colspan="5" style="border: 3px solid black; text-align:left;">{{$key+1}}</th>
 
                         </tr>
                         <tr>
@@ -55,21 +55,35 @@
                             <th width="15" colspan="2" style="border: 3px solid black;">Nomor Tiket</th>
 
                             <th width="50" colspan="5" style="border: 3px solid black;">
-                                <b>{{$pekerjaan->no_tiket}}</b></th>
+                                @if($pekerjaan->hasAduan != null)
+
+                                <b>{{$pekerjaan->hasAduan->no_ticket}}</b>
+                                @endif
+                            </th>
 
                         </tr>
                         <tr>
                             <th width="15" colspan="2" style="border: 3px solid black;">Keterangan</th>
 
                             <th width="50" colspan="5" style="border: 3px solid black;">
-                                <b>{{$pekerjaan->keterangan_aduan}}</b></th>
+                                <b>{{$pekerjaan->keterangan_aduan}}</b>
+                                @if($pekerjaan->hasAduan != null)
+
+                                <b>{{$pekerjaan->hasAduan->keterangan_aduan}}</b>
+                                @endif
+                            </th>
 
                         </tr>
                         <tr>
                             <th width="15" colspan="2" style="border: 3px solid black;">Lokasi Pekerjaan</th>
 
                             <th width="50" colspan="5" style="border: 3px solid black;">
-                                <b>{{$pekerjaan->lokasi}}</b></th>
+
+                                @if($pekerjaan->hasAduan != null)
+
+                                <b>{{$pekerjaan->hasAduan->lokasi}}</b>
+                                @endif
+                            </th>
 
                         </tr>
                         <tr>
@@ -88,10 +102,10 @@
                         </tr>
                         @if ($pekerjaan->rekanan_pkp == 'ya')
                         <tr>
-                            <th width="15" colspan="2" style="border: 3px solid black;">PKP</th>
+                            <th width="15" colspan="2" style="border: 3px solid black;">PPN 11 % </th>
 
                             <th width="50" colspan="5" style="border: 3px solid black;">
-                                <b>{{format_uang(($pekerjaan->total_pekerjaan * 11) / 100)}}</b>
+                                <b>Rp. {{format_uang(($pekerjaan->total_pekerjaan * 11) / 100)}}</b>
                             </th>
 
                         </tr>
@@ -108,26 +122,49 @@
 
                         </tr>
                         @endif
+                        @if ($pekerjaan->kode_vourcher)
+
                         <tr>
-                            <th width="15" colspan="2" style="border: 3px solid black;">No Vourche</th>
+                            <th width="15" colspan="2" style="border: 3px solid black;">Nomor Voucher</th>
 
                             <th width="50" colspan="5" style="border: 3px solid black;">
-                                <b>Rp. {{format_uang($pekerjaan->total_pekerjaan)}}</b>
+                                <b>{{$pekerjaan->kode_vourcher}}</b>
                             </th>
 
                         </tr>
+                        @endif
+                        @if ($pekerjaan->tanggal_vourcher)
+                        <tr>
+                            <th width="15" colspan="2" style="border: 3px solid black;">Tanggal Voucher</th>
+
+                            <th width="50" colspan="5" style="border: 3px solid black;">
+                                <b>{{$pekerjaan->tanggal_vourcher}}</b>
+                            </th>
+
+                        </tr>
+                        @endif
+                        @if ($pekerjaan->kode_anggaran)
+                        <tr>
+                            <th width="15" colspan="2" style="border: 3px solid black;">Kode Anggaran</th>
+
+                            <th width="50" colspan="5" style="border: 3px solid black;">
+                                <b>{{$pekerjaan->kode_anggaran}}</b>
+                            </th>
+
+                        </tr>
+                        @endif
+
+                    </thead>
+                    <tbody>
                         <tr>
                             <th width="50" style="border: 3px solid black; text-align:center;">Pekerjaan</th>
                             <th width="25" style="border: 3px solid black; text-align:center;">Jenis</th>
                             <th width="35" style="border: 3px solid black; text-align:center;">Pengguna</th>
-                            <th style="border: 3px solid black; text-align:center;">Jumlah</th>
+                            <th width="25" style="border: 3px solid black; text-align:center;">Jumlah</th>
                             <th width="25" style="border: 3px solid black; text-align:center;">Harga Satuan</th>
                             <th width="50" style="border: 3px solid black; text-align:center;">Keterangan</th>
                             <th width="25" style="border: 3px solid black; text-align:center;">Total</th>
                         </tr>
-                    </thead>
-                    <tbody>
-
                         @forelse ($pekerjaan->hasItem as $key => $item)
                             <tr>
                                 <td style="border: 3px solid black; vertical-align: middle;"
@@ -422,4 +459,4 @@
     </div>
     <!-- ./col -->
 </div>
-@stop
+{{-- @stop --}}

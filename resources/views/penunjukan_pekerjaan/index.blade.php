@@ -38,7 +38,7 @@
                                         </option>
                                         <option value="pipa premier / skunder"
                                             {{ $kategori == 'pipa premier / skunder' ? 'selected' : '' }}>Pipa Premier
-                                            /Sskunder
+                                            /Skunder
                                         </option>
 
                                     </select>
