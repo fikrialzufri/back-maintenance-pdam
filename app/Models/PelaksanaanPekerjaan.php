@@ -55,24 +55,24 @@ class PelaksanaanPekerjaan extends Model
             return $this->hasPenunjukanPekerjaan->nomor_pekerjaan;
         }
     }
-    public function getLokasiAttribute()
-    {
-        if ($this->hasPenunjukanPekerjaan) {
-            return $this->hasPenunjukanPekerjaan->lokasi;
-        }
-    }
-    public function getNoTiketAttribute()
-    {
-        if ($this->hasPenunjukanPekerjaan) {
-            return $this->hasPenunjukanPekerjaan->no_tiket;
-        }
-    }
-    public function getKeteranganAduanAttribute()
-    {
-        if ($this->hasPenunjukanPekerjaan) {
-            return $this->hasPenunjukanPekerjaan->keterangan_aduan;
-        }
-    }
+    // public function getLokasiAttribute()
+    // {
+    //     if ($this->hasPenunjukanPekerjaan) {
+    //         return $this->hasPenunjukanPekerjaan->lokasi;
+    //     }
+    // }
+    // public function getNoTiketAttribute()
+    // {
+    //     if ($this->hasPenunjukanPekerjaan) {
+    //         return $this->hasPenunjukanPekerjaan->no_tiket;
+    //     }
+    // }
+    // public function getKeteranganAduanAttribute()
+    // {
+    //     if ($this->hasPenunjukanPekerjaan) {
+    //         return $this->hasPenunjukanPekerjaan->keterangan_aduan;
+    //     }
+    // }
     public function getNoSpkSlugAttribute()
     {
         if ($this->hasAduan) {

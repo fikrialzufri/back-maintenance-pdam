@@ -11,9 +11,9 @@
                 <table style="border: 3px solid black;" class="table table-bordered table-responsive" width="100%">
                     <thead>
                         <tr>
-                            <th width="15" colspan="2" style="border: 3px solid black;">No Urut Spk</th>
+                            <th width="15" colspan="2" style="border: 3px solid black; text-align:left;">No Urut Spk</th>
 
-                            <th width="50" colspan="5" style="border: 3px solid black;">{{$key+1}}</th>
+                            <th width="50" colspan="5" style="border: 3px solid black; text-align:left;">{{$key+1}}</th>
 
                         </tr>
                         <tr>
@@ -58,22 +58,22 @@
                             <th></th>
                         </tr>
                         <tr>
-                            <th style="border: 3px solid black; text-align:center;">Pekerjaan</th>
-                            <th style="border: 3px solid black; text-align:center;">Jenis</th>
-                            <th style="border: 3px solid black; text-align:center;">Pengguna</th>
+                            <th width="50" style="border: 3px solid black; text-align:center;">Pekerjaan</th>
+                            <th width="25" style="border: 3px solid black; text-align:center;">Jenis</th>
+                            <th width="35" style="border: 3px solid black; text-align:center;">Pengguna</th>
                             <th style="border: 3px solid black; text-align:center;">Jumlah</th>
-                            <th style="border: 3px solid black; text-align:center;">Harga Satuan</th>
-                            <th style="border: 3px solid black; text-align:center;">Keterangan</th>
-                            <th style="border: 3px solid black; text-align:center;">Total</th>
+                            <th width="25" style="border: 3px solid black; text-align:center;">Harga Satuan</th>
+                            <th width="50" style="border: 3px solid black; text-align:center;">Keterangan</th>
+                            <th width="25" style="border: 3px solid black; text-align:center;">Total</th>
                         </tr>
                     </thead>
                     <tbody>
 
                         @forelse ($pekerjaan->hasItem as $key => $item)
                             <tr>
-                                <td style="border: 3px solid black; text-align:center;" rowspan="5">{{$item->nama}}</td>
-                                <td style="border: 3px solid black; text-align:center;" rowspan="5">{{$item->jenis}}</td>
-                                <td style="border: 3px solid black; text-align:center;">Rekanan</td>
+                                <td style="border: 3px solid black; vertical-align: middle;" rowspan="5">{{$item->nama}}</td>
+                                <td style="border: 3px solid black; vertical-align: middle;" rowspan="5">{{$item->jenis}}</td>
+                                <td style="border: 3px solid black; ">Rekanan</td>
                                 <td style="border: 3px solid black; text-align:center;">{{$item->pivot->qty}}</td>
                                 <td style="border: 3px solid black; text-align:center;">
                                     Rp.{{ format_uang($item->pivot->qty ) }}
@@ -84,7 +84,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td style="border: 3px solid black; text-align:center;">Pengawas</td>
+                                <td style="border: 3px solid black; ">Pengawas</td>
                                 @if (isset($pekerjaan->hasItemPengawas[$key]))
                                     <td style="border: 3px solid black; text-align:center;">
                                         {{ $pekerjaan->hasItemPengawas[$key]->pivot->qty }}
@@ -112,7 +112,7 @@
                                 @endif
                             </tr>
                             <tr>
-                                <td style="border: 3px solid black; text-align:center;">Asisten Manajer Pengawas</td>
+                                <td style="border: 3px solid black; ">Asisten Manajer Pengawas</td>
                                 @if (isset($pekerjaan->hasItemAsmenPengawas[$key]))
                                 <td style="border: 3px solid black; text-align:center;">
                                     {{ $pekerjaan->hasItemAsmenPengawas[$key]->pivot->qty }}
@@ -139,7 +139,7 @@
                                 @endif
                             </tr>
                             <tr>
-                                <td style="border: 3px solid black; text-align:center;" rowspan="2">Perencanaan</td>
+                                <td style="border: 3px solid black; vertical-align: middle;" rowspan="2">Perencanaan</td>
                                 @if (isset($pekerjaan->hasItemPerencanaan[$key]))
                                 <td style="border: 3px solid black; text-align:center;">
                                     {{ $pekerjaan->hasItemAsmenPengawas[$key]->pivot->qty }}

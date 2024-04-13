@@ -2217,6 +2217,11 @@ class PenunjukanPekerjaanController extends Controller
     {
 
         $tanggal = request()->tanggal;
+        $kategori = request()->kategori;
+        $rekanan_id = request()->rekanan_id;
+        $status = request()->status;
+        // &spk=&kategori=&rekanan_id=&tanggal=&status=
+        // return request();
         $tanggalNama = '';
         $start = '';
         $end = '';
@@ -2233,15 +2238,19 @@ class PenunjukanPekerjaanController extends Controller
             $tanggalNama = Carbon::now()->format('d-m-Y') . ' ' .  Carbon::now()->format('d-m-Y');
         }
 
-        $data = PelaksanaanPekerjaan::with('hasItem', 'hasPenunjukanPekerjaan.hasAduan', 'hasItemPengawas')->whereBetween('created_at', [$start, $end])->orderBy('created_at')->paginate(5);
-
-        return view('penunjukan_pekerjaan.export', compact(
-            'data',
-            'end'
-        ));
-
+        return $data = PelaksanaanPekerjaan::with('hasPenunjukanPekerjaan', 'hasItem', 'hasItemPengawas')
+            ->with(['hasAduan' => function ($query) use ($kategori, $status) {
+                // $query->where('aduan.kategori_aduan', $kategori);
+                $query->when($kategori != null, function ($q) use ($kategori) {
+                    return $q->where('aduan.kategori_aduan', $kategori);
+                });
+                $query->when($status != null, function ($q) use ($status) {
+                    return $q->where('aduan.status', $status);
+                });
+            }])
+            ->whereBetween('created_at', [$start, $end])->orderBy('created_at')->get();
 
         // return $tanggalNama;
-        return Excel::download(new PelaksanaanPekerjaanExport($start, $end), 'Export Pekerjaan ' . $tanggalNama . '.xlsx');
+        return Excel::download(new PelaksanaanPekerjaanExport($start, $end, $kategori, $rekanan_id, $status), 'Export Pekerjaan ' . $tanggalNama . '.xlsx');
     }
 }

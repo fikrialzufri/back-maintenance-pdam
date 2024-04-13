@@ -70,12 +70,12 @@ class PenunjukanPekerjaan extends Model
             return $this->hasAduan->atas_nama;
         }
     }
-    public function getNoTiketAttribute()
-    {
-        if ($this->hasAduan) {
-            return $this->hasAduan->no_ticket;
-        }
-    }
+    // public function getNoTiketAttribute()
+    // {
+    //     if ($this->hasAduan) {
+    //         return $this->hasAduan->no_ticket;
+    //     }
+    // }
 
     public function getKategoriAduanttribute()
     {

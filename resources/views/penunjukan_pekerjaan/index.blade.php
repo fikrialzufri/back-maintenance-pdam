@@ -131,7 +131,7 @@
                                     <div class="input-group">
 
 
-                                        <a href="{{ route('penunjukan_pekerjaan.excel')}}?tanggal={{$tanggal}}" target="_blank"  class="btn btn-success" id="export-excel">
+                                        <a href="{{ route('penunjukan_pekerjaan.excel')}}?kategori={{$kategori}}&rekanan_id={{$rekananid}}&status={{$status}}&tanggal={{$tanggal}}" target="_blank"  class="btn btn-success" id="export-excel">
                                             <span class="fa fa-file-excel"></span>
                                             Export Excel
                                         </a>
