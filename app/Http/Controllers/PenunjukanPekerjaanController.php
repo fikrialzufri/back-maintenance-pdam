@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\PelaksanaanPekerjaanExport;
+use App\Jobs\GenerateExcel;
 use Illuminate\Http\Request;
 use App\Models\Aduan;
 use App\Models\GalianAsmen;
@@ -30,6 +31,7 @@ use Excel;
 use Str;
 use Carbon\Carbon;
 use App\Models\User;
+use Illuminate\Support\Facades\Artisan;
 
 class PenunjukanPekerjaanController extends Controller
 {
@@ -2293,6 +2295,12 @@ class PenunjukanPekerjaanController extends Controller
         //         'end'
         //     )
         // );
+
         return Excel::download(new PelaksanaanPekerjaanExport($start, $end, $kategori, $rekanan_id, $status), 'Export Pekerjaan ' . $namaFile . '.xlsx');
+        // Artisan::call('queue:listen', ['timeout' => 0]);
+        // pkai job
+        // dispatch(new GenerateExcel($start, $end, $kategori, $rekanan_id, $status, $namaFile));
+
+        return redirect()->back();
     }
 }

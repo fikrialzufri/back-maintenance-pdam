@@ -204,7 +204,7 @@
 
                                             <div class="form-group">
                                                 <div class="p-2 pop">
-                                                    <input type="file" name="file" id="exampleInputFile" required>
+                                                    <input type="file" name="file" class="form-control" required>
                                                 </div>
                                             </div>
 
