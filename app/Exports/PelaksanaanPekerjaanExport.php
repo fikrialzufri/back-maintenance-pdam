@@ -57,7 +57,7 @@ class PelaksanaanPekerjaanExport implements FromView, WithChunkReading
                     $query->where('kategori_aduan', $kategori);
                 }
             })
-            ->whereDate('created_at', '>=', $start)->whereDate('created_at', '<=', $end)->get();
+            ->whereDate('created_at', '>=', $start)->whereDate('created_at', '<=', $end)->get()->chunk(10000);
 
         return view(
             'penunjukan_pekerjaan.export',

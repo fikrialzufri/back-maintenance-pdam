@@ -188,6 +188,38 @@
                                             </div>
                                         @endforeach
                                     </div>
+
+                                    {{$pekerjaanUtama->id}}
+                                    @if ($pekerjaanUtama && $pekerjaanUtama->foto_revisi == 'ya')
+                                    <hr>
+                                    <div class="row d-flex flex-row">
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <h6 class="">Foto Revisi</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @if (!auth()->user()->hasRole('rekanan'))
+                                        <div class="row d-flex flex-row">
+
+                                            <div class="form-group">
+                                                <div class="p-2 pop">
+                                                    <input type="file" name="file" id="exampleInputFile" required>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    @endif
+                                    <div class="row d-flex flex-row">
+
+                                        @foreach ($fotoPenyelesaian as $ftpenyelesaian)
+                                            <div class="p-2 pop">
+                                                <img src="{{ $ftpenyelesaian['url'] }}" width="100px" alt="1"
+                                                    class="img-thumbnail rounded mx-auto d-block">
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                    @endif
                                 </div>
                             </div>
 

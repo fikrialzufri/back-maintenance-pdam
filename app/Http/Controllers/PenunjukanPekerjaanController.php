@@ -2228,6 +2228,7 @@ class PenunjukanPekerjaanController extends Controller
         $namaFile = '';
         $start = '';
         $end = '';
+        $dataPelaksanaanPekerjaan = [];
         $data = PelaksanaanPekerjaan::query();
 
         if (request()->tanggal != '') {
@@ -2240,7 +2241,8 @@ class PenunjukanPekerjaanController extends Controller
             $end = Carbon::now()->endOfMonth()->format('m/d/Y');
             $namaFile = Carbon::now()->format('d-m-Y') . ' ' . Carbon::now()->format('d-m-Y');
         }
-        // $data = $data->with('hasItem', 'hasAduan', 'hasPenunjukanPekerjaan', 'hasItemPengawas', 'hasItemAsmenPengawas', 'hasItemPerencanaan', 'hasItemPerencanaanAdujst', 'hasGalianPekerjaan')
+
+        //  $data = $data->with('hasItem', 'hasAduan', 'hasPenunjukanPekerjaan', 'hasItemPengawas', 'hasItemAsmenPengawas', 'hasItemPerencanaan', 'hasItemPerencanaanAdujst', 'hasGalianPekerjaan')
         //     ->when($status != null, function ($q) use ($status) {
         //         if ($status != 'all') {
         //             return $q->where('status', $status);
@@ -2257,10 +2259,22 @@ class PenunjukanPekerjaanController extends Controller
         //             $query->where('kategori_aduan', $kategori);
         //         }
         //     })
-        //     ->whereBetween(DB::raw('DATE(created_at)'), array($start, $end));
+        //     ->whereBetween(DB::raw('DATE(created_at)'), array($start, $end))->get()->chunk(100);
 
 
-        // $data = $data->get();
+
+        // $data->chunk(10000, function ($pelaksanaanPekerjaan) {
+        //     foreach ($pelaksanaanPekerjaan as $pekerjaan) {
+        //         // Proses data pekerjaan di sini
+        //         $dataPelaksanaanPekerjaan =
+        //             [
+        //                 // 'keterangan' => '',
+        //                 'id' => $pekerjaan->id,
+        //             ];
+        //     }
+        // });
+
+        // return  $dataPelaksanaanPekerjaan;
         // // // ->whereBetween('created_at', [$start, $end])->get();
         // // return $data->toSql();
 
