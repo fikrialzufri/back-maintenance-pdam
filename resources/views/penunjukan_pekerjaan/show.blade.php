@@ -189,13 +189,14 @@
                                         @endforeach
                                     </div>
 
-                                    {{$pekerjaanUtama->id}}
+
                                     @if ($pekerjaanUtama && $pekerjaanUtama->foto_revisi == 'ya')
+                                    {{$pekerjaanUtama->id}}
                                     <hr>
                                     <div class="row d-flex flex-row">
                                         <div class="col-12">
                                             <div class="form-group">
-                                                <h6 class="">Foto Revisi</h6>
+                                                <h6 class="">Foto Lain-lain</h6>
                                             </div>
                                         </div>
                                     </div>
@@ -203,22 +204,26 @@
                                         <div class="row d-flex flex-row">
 
                                             <div class="form-group">
-                                                <div class="p-2 pop">
-                                                    <input type="file" name="file" class="form-control" required>
+                                                <div class="p-2">
+                                                    <input name="fotoUpload" id="fotoUpload" class="form-control" type="file" accept="image/*" multiple>
                                                 </div>
                                             </div>
 
                                         </div>
                                     @endif
-                                    <div class="row d-flex flex-row">
+                                    <div class="row d-flex flex-row" id="foto-lain-lain">
 
-                                        @foreach ($fotoPenyelesaian as $ftpenyelesaian)
-                                            <div class="p-2 pop">
-                                                <img src="{{ $ftpenyelesaian['url'] }}" width="100px" alt="1"
-                                                    class="img-thumbnail rounded mx-auto d-block">
-                                            </div>
-                                        @endforeach
+
+                                            @foreach ($fotoLain as $ftlain)
+
+                                                <div class="p-2 pop" >
+                                                    <img src="{{$ftlain['url']}}" width="100px" alt="1"
+                                                        class="img-thumbnail rounded mx-auto d-block">
+                                                </div>
+                                            @endforeach
+
                                     </div>
+                                    <hr>
                                     @endif
                                 </div>
                             </div>
@@ -386,12 +391,15 @@
         </div>
         <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
             aria-hidden="true">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-body">
                         <button type="button" class="close" data-dismiss="modal"><span
                                 aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                         <img src="" class="imagepreview" style="width: 100%;">
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-danger btn-block" id="hapusFoto">Hapus Foto</button>
                     </div>
                 </div>
             </div>
@@ -1999,6 +2007,7 @@
 @push('script')
     <script script src="{{ asset('plugins/select2/dist/js/select2.min.js') }}"></script>
     <script>
+        $('#hapusFoto').hide();
         $('#cmbRekanan').select2({
             placeholder: '--- Pilih Pekerjaan ---',
             width: '100%'
@@ -2010,6 +2019,18 @@
                 return false;
             }
         })
+
+        $(document).on('click', '.pop', function() {
+            $('.imagepreview').attr('src', $(this).find('img').attr('src'));
+
+            let DataButton = $(this).data('button');
+
+            if (DataButton != undefined) {
+                console.log("apaa");
+                $('#hapusFoto').show();
+            }
+            $('#imagemodal').modal('show');
+        });
     </script>
     @if ($aduan->status != 'draft')
         <script>
@@ -2090,10 +2111,7 @@
                     }
                 });
             });
-            $('.pop').on('click', function() {
-                $('.imagepreview').attr('src', $(this).find('img').attr('src'));
-                $('#imagemodal').modal('show');
-            });
+
 
             function toast(text) {
                 $.toast({
@@ -2466,6 +2484,19 @@
 
                 });
 
+            });
+
+            const preview = (file) => {
+                const fr = new FileReader();
+                fr.onload = (ev) => {
+                    $("#foto-lain-lain").append("<div class='p-2 pop' data-button='hapus'><img src='" + fr.result + "' width='100px' class='img-thumbnail rounded mx-auto d-block' > </div>");
+                };
+                fr.readAsDataURL(file);
+            };
+
+            $("#fotoUpload").on("change", (ev) => {
+                if (!ev.target.files) return; // Do nothing.
+                [...ev.target.files].forEach(preview);
             });
         </script>
     @endif

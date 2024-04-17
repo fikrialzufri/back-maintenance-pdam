@@ -398,6 +398,21 @@ class PenunjukanPekerjaan extends Model
         return $foto;
     }
 
+    public function getFotoLainAttribute()
+    {
+        $media = Media::where('modul',  'lain')->where('modul_id', $this->id)->orderBy('created_at', 'desc')->get();
+        $foto = [];
+        if ($media) {
+            foreach ($media as $key => $value) {
+                $foto[$key] = [
+                    'id' => $value->id,
+                    'url' => asset('storage/proses/' . rawurlencode($value->file)),
+                ];
+            }
+        }
+        return $foto;
+    }
+
     public function hasUser()
     {
         return $this->hasOne(User::class, 'id', 'user_id');

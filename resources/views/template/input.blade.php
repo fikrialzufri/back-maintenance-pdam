@@ -398,7 +398,6 @@
                         // console.log("{{ $item['name'] }}");
 
                         reader.onload = function(e) {
-                            console.log(e);
                             $("#preview" + id).html("<img src='" + e.target.result +
                                 "' width='310' id='image_{{ $item['name'] }}'>");
                         }

@@ -453,6 +453,7 @@ class PenunjukanPekerjaanController extends Controller
         $fotoBahan = [];
         $fotoPekerjaan = [];
         $fotoPenyelesaian = [];
+        $fotoLain = [];
         $tombolEdit = '';
         $lat_long_pekerjaan = '';
         $lokasi_pekerjaan = '';
@@ -487,6 +488,7 @@ class PenunjukanPekerjaanController extends Controller
                 $fotoBahan = (object) $penunjukan->foto_bahan;
                 $fotoPekerjaan = (object) $penunjukan->foto_lokasi;
                 $fotoPenyelesaian = (object) $penunjukan->foto_penyelesaian;
+                $fotoLain = (object) $penunjukan->foto_lain;
 
                 $daftarPekerjaan = $query->with("hasItem")->with('hasItemPengawas')->first();
 
@@ -623,6 +625,7 @@ class PenunjukanPekerjaanController extends Controller
                 'totalPekerjaan',
                 'fotoPekerjaan',
                 'fotoPenyelesaian',
+                'fotoLain',
                 'fotoBahan',
                 'tombolEdit',
                 'action'
