@@ -191,7 +191,6 @@
 
 
                                     @if ($pekerjaanUtama && $pekerjaanUtama->foto_revisi == 'ya')
-                                    {{$pekerjaanUtama->id}}
                                     <hr>
                                     <div class="row d-flex flex-row">
                                         <div class="col-12">
