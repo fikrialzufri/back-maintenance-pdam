@@ -2,6 +2,7 @@
 @section('title', 'Detail Pekerjaan ' . $aduan->no_aduan)
 
 @push('head')
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
     <!-- Load Leaflet from CDN -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
         integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
@@ -188,8 +189,6 @@
                                             </div>
                                         @endforeach
                                     </div>
-
-
                                     @if ($pekerjaanUtama && $pekerjaanUtama->foto_revisi == 'ya')
                                     <hr>
                                     <div class="row d-flex flex-row">
@@ -199,7 +198,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                    @if (!auth()->user()->hasRole('rekanan'))
+
+                                    @if (auth()->user()->hasRole('rekanan') && auth()->user()->id_rekanan == $pekerjaanUtama->rekanan_id)
                                         <div class="row d-flex flex-row">
 
                                             <div class="form-group">
@@ -215,7 +215,7 @@
 
                                             @foreach ($fotoLain as $ftlain)
 
-                                                <div class="p-2 pop" >
+                                                <div class="p-2 pop"  data-btn='hapus' data-id="{{$ftlain['id']}}">
                                                     <img src="{{$ftlain['url']}}" width="100px" alt="1"
                                                         class="img-thumbnail rounded mx-auto d-block">
                                                 </div>
@@ -2006,6 +2006,13 @@
 @push('script')
     <script script src="{{ asset('plugins/select2/dist/js/select2.min.js') }}"></script>
     <script>
+        let penunjukanId = '';
+        let penunjukanSlug = '';
+
+        @if (isset($penunjukan))
+            penunjukanId = "{{$penunjukan->id}}"
+            penunjukanSlug = "{{$penunjukan->slug}}"
+        @endif
         $('#hapusFoto').hide();
         $('#cmbRekanan').select2({
             placeholder: '--- Pilih Pekerjaan ---',
@@ -2021,14 +2028,74 @@
 
         $(document).on('click', '.pop', function() {
             $('.imagepreview').attr('src', $(this).find('img').attr('src'));
-
-            let DataButton = $(this).data('button');
+            $('#hapusFoto').hide();
+            let DataButton = $(this).attr('data-btn');
+            let idGambar = $(this).attr('data-id');
 
             if (DataButton != undefined) {
-                console.log("apaa");
+
                 $('#hapusFoto').show();
+                if (idGambar != undefined || idGambar != '') {
+                    $('#hapusFoto').attr('data-id', idGambar);
+
+                }
             }
             $('#imagemodal').modal('show');
+        });
+        $(document).on('click', '#hapusFoto', function() {
+            let idGambar = $(this).attr('data-id');
+
+            if (idGambar != undefined || idGambar != '') {
+                Swal.fire({
+                title: 'Apakah Kamu Yakin?',
+                text: "ingin menghapus data ini!",
+                icon: 'warning',
+                showCancelButton: true,
+                cancelButtonText: 'TIDAK',
+                confirmButtonText: 'YA, HAPUS!'
+                }).then((result) => {
+                    $.ajax({
+                        url: "{{ route('media.api.destroy') }}",
+                        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                        type: "POST",
+                        data: {
+                            id: idGambar,
+                        },
+                        success: function(response) {
+                            // tampilkan flash message
+                            // tampilkan swal success dan otomatis tutup dengan durasi 2 detik
+                            Swal.fire({
+                                title: 'Success!',
+                                text: "Berhasil hapus gambar",
+                                confirmButtonText: 'OK'
+                            });
+
+                            // close swal setelah 2 detik
+                            setTimeout(function() {
+                                Swal.close();
+                                location.reload();
+                            }, 2000);
+
+
+
+                        },
+                        error: function(xhr) {
+                            console.log(xhr);
+                            // tampilkan swal error
+                            Swal.fire({
+                                title: 'Error!',
+                                text: "Gagal menghapus gambar - Server Down",
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                            setTimeout(function() {
+                                Swal.close();
+                            }, 2000);
+                        }
+                    });
+                });
+
+            }
         });
     </script>
     @if ($aduan->status != 'draft')
@@ -2485,17 +2552,66 @@
 
             });
 
-            const preview = (file) => {
-                const fr = new FileReader();
-                fr.onload = (ev) => {
-                    $("#foto-lain-lain").append("<div class='p-2 pop' data-button='hapus'><img src='" + fr.result + "' width='100px' class='img-thumbnail rounded mx-auto d-block' > </div>");
-                };
-                fr.readAsDataURL(file);
-            };
+
+
+            function convertFileToBase64(file) {
+                return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = reject;
+                }).then((reader) =>{
+
+                    $.ajax({
+                        url: "{{ route('media.api.store') }}",
+                        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                        type: "POST",
+                        data: {
+                            id: penunjukanId,
+                            slug: penunjukanSlug,
+                            modul: 'lain',
+                            image: reader
+                        },
+                        success: function(response) {
+                            // tampilkan flash message
+                            // tampilkan swal success dan otomatis tutup dengan durasi 2 detik
+                            Swal.fire({
+                                title: 'Success!',
+                                text: "Berhasil upload gambar",
+                                confirmButtonText: 'OK'
+                            });
+
+                            // close swal setelah 2 detik
+                            setTimeout(function() {
+                                Swal.close();
+                            }, 2000);
+
+                            console.log(response.data.file);
+                            let idMedia = response.data.id;
+                            let gambar  = "{{ URL::asset('/storage/proses') }}/" + response.data.file
+                            $("#foto-lain-lain").append("<div class='p-2 pop' data-button='hapus' data-id='"+idMedia+"'><img src='" + gambar + "' width='100px' class='img-thumbnail rounded mx-auto d-block' > </div>");
+
+
+                        },
+                        error: function(xhr) {
+                            // tampilkan swal error
+                            Swal.fire({
+                                title: 'Error!',
+                                text: "Gagal upload gambar - Server Down",
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                            setTimeout(function() {
+                                Swal.close();
+                            }, 2000);
+                        }
+                    });
+                });
+            }
 
             $("#fotoUpload").on("change", (ev) => {
                 if (!ev.target.files) return; // Do nothing.
-                [...ev.target.files].forEach(preview);
+                [...ev.target.files].forEach(convertFileToBase64);
             });
         </script>
     @endif
