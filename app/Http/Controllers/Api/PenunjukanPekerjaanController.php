@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\Pekerjaan;
 use App\Http\Resources\PekerjaanDetailResource;
 use App\Models\Aduan;
-
+use App\Models\PelaksanaanPekerjaan;
 use App\Models\PenunjukanPekerjaan;
 use Illuminate\Http\Request;
 use DB;
@@ -202,10 +202,10 @@ class PenunjukanPekerjaanController extends Controller
         $slug = $request->slug;
         $user_id = auth()->user()->id;
         try {
-            DB::commit();
             $data = $this->model()->whereSlug($slug)->first();
             $data->status = $status;
             $data->save();
+            DB::commit();
 
             $keterangan = [
                 'keterangan' => $status,
@@ -214,6 +214,37 @@ class PenunjukanPekerjaanController extends Controller
             $syncData  = array_combine($user_id, $keterangan);
             $data->hasUserMany()->sync($syncData);
 
+            $message = 'Berhasil Mengubah Penunjukan Pekerjaan';
+            return $this->sendResponse($data, $message, 200);
+        } catch (\Throwable $th) {
+            DB::rollback();
+            $response = [
+                'success' => false,
+                'message' => $message,
+                'code' => '404'
+            ];
+            return $this->sendError($response, $th, 404);
+        }
+    }
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function ubahfoto(Request $request)
+    {
+        DB::beginTransaction();
+        $message = 'Gagal Mengubah Penunjukan Pekerjaan';
+
+        $id = $request->id;
+        try {
+            $data = PelaksanaanPekerjaan::where('penunjukan_pekerjaan_id', $id)->first();
+            $foto_revisi = $data->foto_revisi == 'ya' ? 'tidak' : 'ya';
+            $data->foto_revisi = $foto_revisi;
+            $data->save();
+            DB::commit();
             $message = 'Berhasil Mengubah Penunjukan Pekerjaan';
             return $this->sendResponse($data, $message, 200);
         } catch (\Throwable $th) {

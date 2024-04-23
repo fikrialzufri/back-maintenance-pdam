@@ -48,6 +48,9 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     // simpan penunjukan-pekerjaan
     Route::post('penunjukan-pekerjaan', PenunjukanPekerjaanController::class . '@store')->name('penunjukan.api.store');
 
+    // ubah foto revisi penunjukan-pekerjaan
+    Route::post('ubah-foto', PenunjukanPekerjaanController::class . '@ubahfoto')->name('penunjukan.api.ubah-foto');
+
     // pelaksanaan-pekerjaan
     Route::get('pelaksanaan-pekerjaan', PelaksanaanPekerjaanController::class . '@index')->name('pelaksanaan.api.index');
 

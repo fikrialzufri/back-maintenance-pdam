@@ -189,6 +189,12 @@
                                             </div>
                                         @endforeach
                                     </div>
+                                    @can('tambah-foto')
+                                    <hr>
+                                    <div class="row d-flex flex-row">
+                                        <button class="btn btn-danger" id="ubahFotoRevisi">Tambah Foto</button>
+                                    </div>
+                                    @endcan
                                     @if ($pekerjaanUtama && $pekerjaanUtama->foto_revisi == 'ya')
                                     <hr>
                                     <div class="row d-flex flex-row">
@@ -2097,12 +2103,87 @@
 
             }
         });
+
     </script>
     @if ($aduan->status != 'draft')
         <script>
             let id = $('#idPekerjaan').val();
 
+            $('#ubahFotoRevisi').on('click', function() {
+                let Namaspk = "{{ $aduan->no_spk }}";
 
+
+                const swalWithBootstrapButtons = swal.mixin({
+                    confirmButtonClass: "btn btn-success",
+                    cancelButtonClass: "btn btn-danger",
+                    buttonsStyling: false,
+                });
+                swalWithBootstrapButtons({
+                    title: "Anda Yakin ?",
+                    text: "Menambah Foto Pekerjaan : " + Namaspk,
+                    type: "question",
+                    showCancelButton: true,
+                    confirmButtonText: "Ya, yakin menambah Foto data!",
+                    cancelButtonText: "Tidak, kembali!",
+                }).then((result) => {
+                    if (result.value) {
+                        swalWithBootstrapButtons(
+                            "Selamat!",
+                            "anda dapat menambah foto.",
+                            "success"
+                        );
+                        $.ajax({
+                            url: "{{ route('penunjukan.api.ubah-foto') }}",
+                            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                            type: "POST",
+                            data: {
+                                id: penunjukanId,
+                            },
+                            success: function(response) {
+                                // tampilkan flash message
+                                // tampilkan swal success dan otomatis tutup dengan durasi 2 detik
+                                Swal.fire({
+                                    title: 'Success!',
+                                    text: "Berhasil upload gambar",
+                                    confirmButtonText: 'OK'
+                                });
+
+                                // close swal setelah 2 detik
+                                setTimeout(function() {
+                                    Swal.close();
+                                }, 2000);
+
+                                console.log(response);
+
+
+
+                            },
+                            error: function(xhr) {
+                                // tampilkan swal error
+                                Swal.fire({
+                                    title: 'Error!',
+                                    text: "Gagal upload gambar - Server Down",
+                                    icon: 'error',
+                                    confirmButtonText: 'OK'
+                                });
+                                setTimeout(function() {
+                                    Swal.close();
+                                }, 2000);
+                            }
+                        });
+                        // document.getElementById("form-update").submit();
+                    } else if (
+                        // Read more about handling dismissals
+                        result.dismiss === swal.DismissReason.cancel
+                    ) {
+                        swalWithBootstrapButtons(
+                            "Kembali",
+                            "Mohon berhati-hati untuk mengoreksi data",
+                            "error"
+                        );
+                    }
+                });
+            });
 
             function capitalizeFirstLetter(string) {
                 return string.replace(/^./, string[0].toUpperCase());
@@ -2177,6 +2258,7 @@
                     }
                 });
             });
+
 
 
             function toast(text) {
