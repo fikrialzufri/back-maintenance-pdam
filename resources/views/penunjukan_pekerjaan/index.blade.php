@@ -127,17 +127,19 @@
                                     </div>
                                 </div>
                                 @if (!auth()->user()->hasRole('rekanan'))
-                                <div class="col-lg-1">
-                                    <label for="">Export</label>
-                                    <div class="input-group">
+                                @can('export-pekerjaan')
+                                    <div class="col-lg-1">
+                                        <label for="">Export</label>
+                                        <div class="input-group">
 
 
-                                        <a href="{{ route('penunjukan_pekerjaan.excel')}}?kategori={{$kategori}}&rekanan_id={{$rekananid}}&status={{$status}}&tanggal={{$tanggal}}"   class="btn btn-success" id="export-excel">
-                                            <span class="fa fa-file-excel"></span>
-                                            Export Excel
-                                        </a>
+                                            <a href="{{ route('penunjukan_pekerjaan.excel')}}?kategori={{$kategori}}&rekanan_id={{$rekananid}}&status={{$status}}&tanggal={{$tanggal}}"   class="btn btn-success" id="export-excel">
+                                                <span class="fa fa-file-excel"></span>
+                                                Export Excel
+                                            </a>
+                                        </div>
                                     </div>
-                                </div>
+                                @endcan
                                 @endif
                                 @if (auth()->user()->hasRole('asisten-manajer-perencanaan'))
                                     <div class="col-lg-3">
