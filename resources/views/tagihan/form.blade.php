@@ -40,7 +40,9 @@
                                             class="{{ $item->keterangan_barang != null ? 'bg-danger' : '' }} list_pelaksanaan">
                                             <td class="text-center">
                                                 <input type="checkbox" name="pelaksanaan[]" id="pelaksanaan" class="check"
-                                                    value="{{ $item->id }}" onclick="return false;" checked>
+                                                    value="{{ $item->id }}"
+                                                    {{-- onclick="return false;"  --}}
+                                                    checked>
                                             </td>
                                             <td>{{ $index + 1 }}
                                             </td>
