@@ -469,11 +469,13 @@ class PenunjukanPekerjaanController extends Controller
         $jenisGalian = Jenis::where('kategori_id', $galian)->pluck('id')->toArray();
         $listPekerjaanGalian = Item::orderBy('nama')->whereIn('jenis_id', $jenisGalian)->get();
         $listPekerjaan = Item::orderBy('nama')->whereNotIn('jenis_id', $jenisGalian)->get();
-
+        $penunjukan_id = '';
+        $penunjukan_slug = '';
         if ($aduan->status != 'draft') {
             $penunjukan = PenunjukanPekerjaan::where('aduan_id', $aduan->id)->with('hasUserMany')->first();
             $query = PelaksanaanPekerjaan::where('penunjukan_pekerjaan_id', $penunjukan->id);
-
+            $penunjukan_id = $penunjukan->id;
+            $penunjukan_slug = $penunjukan->slug;
             if (auth()->user()->hasRole('asisten-manajer-perencanaan')) {
                 $perencaan = true;
             }
@@ -607,6 +609,8 @@ class PenunjukanPekerjaanController extends Controller
                 'list_persetujuan',
                 'perencaan',
                 'penunjukan',
+                'penunjukan_id',
+                'penunjukan_slug',
                 'pekerjaanUtama',
                 'daftarPekerjaan',
                 'daftarGalian',

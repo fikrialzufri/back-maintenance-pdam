@@ -2016,8 +2016,8 @@
         let penunjukanSlug = '';
 
         @if (isset($penunjukan))
-            penunjukanId = "{{$penunjukan->id}}"
-            penunjukanSlug = "{{$penunjukan->slug}}"
+            penunjukanId = "{{$penunjukan_id}}"
+            penunjukanSlug = "{{$penunjukan_slug}}"
         @endif
         $('#hapusFoto').hide();
         $('#cmbRekanan').select2({
