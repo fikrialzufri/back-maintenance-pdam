@@ -468,40 +468,40 @@ class PenunjukanPekerjaan extends Model
     {
         switch ($this->status) {
             case 'proses':
-                return 2;
+                return 1;
                 break;
             case 'proses-akhir':
-                return 3;
+                return 2;
                 break;
             case 'selesai':
-                return 4;
+                return 3;
                 break;
             case 'approve':
-                return 5;
+                return 4;
                 break;
             case 'approve manajer':
-                return 6;
+                return 5;
                 break;
             case 'diadjust':
-                return 7;
+                return 6;
                 break;
             case 'koreksi pengawas':
-                return 8;
+                return 7;
                 break;
             case 'koreksi asmen':
-                return 9;
+                return 8;
                 break;
             case 'dikoreksi':
-                return 10;
+                return 9;
                 break;
             case 'selesai koreksi':
-                return 11;
+                return 10;
                 break;
             case 'disetujui':
-                return 12;
+                return 11;
                 break;
             default:
-                return 1;
+                return 0;
                 break;
         }
     }
