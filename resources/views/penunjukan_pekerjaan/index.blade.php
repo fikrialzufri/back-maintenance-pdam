@@ -91,21 +91,21 @@
                                             dikerjakan
                                         </option>
                                         <option value="approve" {{ $status == 'approve' ? 'selected' : '' }}>
-                                            DiApprove Asisten Manajer
+                                            Disetujui Asisten Manajer Distribusi
                                         </option>
                                         <option value="approve manajer"
                                             {{ $status == 'approve manajer' ? 'selected' : '' }}>
-                                            Diapprove Manajer
+                                            Disetujui Manajer Distribusi
                                         </option>
                                         <option value="koreksi pengawas"
-                                            {{ $status == 'koreksi pengawas' ? 'selected' : '' }}>Dikoreksi
+                                            {{ $status == 'koreksi pengawas' ? 'selected' : '' }}>Disetujui
                                             Pengawas
                                         </option>
                                         <option value="koreksi asmen" {{ $status == 'koreksi asmen' ? 'selected' : '' }}>
-                                            Dikoreksi Asmen Pengawas
+                                            Disetujui Asmen Pengawas
                                         </option>
                                         <option value="dikoreksi" {{ $status == 'selesai koreksi' ? 'selected' : '' }}>
-                                            Disetujui Manajer
+                                            Disetujui Manajer Perawatan
                                         </option>
                                         <option value="selesai koreksi"
                                             {{ $status == 'selesai koreksi' ? 'selected' : '' }}>Selesai
