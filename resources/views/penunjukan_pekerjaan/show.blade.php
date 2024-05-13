@@ -116,6 +116,21 @@
 
                                                     </div>
                                                 </div>
+                                                <div class="col-12">
+                                                    <div class="form-group">
+                                                        <div>
+                                                            <label for="no_ticket" class=" form-control-label">Status Tagihan</label>
+                                                        </div>
+                                                        <div>
+                                                            <h3>
+                                                                <strong id="total_tagihan_pekerjaan">
+                                                                    {{$pekerjaanUtama->tagihan == 'ya' ? "Tertagih" : 'Belum Tertagih'}}
+                                                                </strong>
+                                                            </h3>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
                                             @endif
 
                                         @endif
