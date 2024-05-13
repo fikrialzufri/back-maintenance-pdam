@@ -123,7 +123,7 @@
                                                         </div>
                                                         <div>
                                                             <h3>
-                                                                <strong id="total_tagihan_pekerjaan" class="text-danger">
+                                                                <strong id="total_tagihan_pekerjaan" class="{{$pekerjaanUtama->tagihan == 'ya' ? 'text-danger' : ''}}">
                                                                     {{$pekerjaanUtama->tagihan == 'ya' ? "Sudah dibayar" : 'Belum dibayar'}}
                                                                 </strong>
                                                             </h3>

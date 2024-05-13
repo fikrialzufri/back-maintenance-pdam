@@ -53,6 +53,7 @@ class PenunjukanPekerjaanController extends Controller
         $search = request()->search;
         $kategori = request()->kategori;
         $status = request()->status;
+        $tagihan = request()->tagihan;
         $rekananid = request()->rekanan_id;
         $limit = request()->limit ?? 50;
         $rekanan_id = null;
@@ -133,12 +134,17 @@ class PenunjukanPekerjaanController extends Controller
                         $penunjukanAduan = $penunjukanAduan->whereStatus($status);
                     }
                 }
+                if ($tagihan != '') {
+                    if ($tagihan != 'all') {
+                         $penunjukanAduan = $penunjukanAduan->where('tagihan',$tagihan);
+                    }
+                }
 
-                $penunjukanAduan = $penunjukanAduan->get()->pluck('aduan_id')->toArray();
+                 $penunjukanAduan = $penunjukanAduan->get()->pluck('aduan_id')->toArray();
 
 
                 $query->whereIn('id', $penunjukanAduan);
-                $penunjukan = $query->paginate($limit);
+                 $penunjukan = $query->paginate($limit);
 
                 $penunjukan = $penunjukan->setCollection(
                     $penunjukan->sortBy(function ($pekerjaan) {
@@ -398,6 +404,7 @@ class PenunjukanPekerjaanController extends Controller
                 'kategori',
                 'penunjukan',
                 'search',
+                'tagihan',
                 'status',
                 'limit',
             )
