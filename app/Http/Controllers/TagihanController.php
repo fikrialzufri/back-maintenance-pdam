@@ -1024,13 +1024,7 @@ class TagihanController extends Controller
                 $nomor_tagihan = $no . "/" . rand(0, 900) . "/" . "BAPP-" . $singkatan;
             }
 
-            $data = $this->model();
-            $data->nomor_tagihan = $nomor_tagihan;
-            $data->tanggal_tagihan = $tanggal_tagihan;
-            $data->rekanan_id = $rekanan_id;
-            $data->user_id = auth()->user()->id;
-            $data->status = 'dikirim';
-            $data->save();
+
 
             $title = "Tagihan telah dibuat";
             $body = "Nomor Tagihan " . $nomor_tagihan . " telah dibuat";
@@ -1092,7 +1086,13 @@ class TagihanController extends Controller
                     $penunjukanPekerjaan->save();
                 }
             }
-
+            $data = $this->model();
+            $data->nomor_tagihan = $nomor_tagihan;
+            $data->tanggal_tagihan = $tanggal_tagihan;
+            $data->rekanan_id = $rekanan_id;
+            $data->user_id = auth()->user()->id;
+            $data->status = 'dikirim';
+            $data->save();
             $data->hasPelaksanaanPekerjaan()->sync($pelaksanaan);
             DB::commit();
 
