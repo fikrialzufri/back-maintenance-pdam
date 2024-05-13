@@ -990,23 +990,23 @@ class TagihanController extends Controller
                 }
             }
 
-            foreach ($pelaksanaan as $value) {
-                $PelaksanaanPekerjaan = PelaksanaanPekerjaan::where('id', $value)
-                    ->where('tagihan', 'tidak')
-                    ->where(
-                        'rekanan_id',
-                        $rekanan_id
-                    )->first();
+            // foreach ($pelaksanaan as $value) {
+            //     $PelaksanaanPekerjaan = PelaksanaanPekerjaan::where('id', $value)
+            //         ->where('tagihan', 'tidak')
+            //         ->where(
+            //             'rekanan_id',
+            //             $rekanan_id
+            //         )->first();
 
-                if ($PelaksanaanPekerjaan) {
-                    if ($PelaksanaanPekerjaan->total_pekerjaan > 40000000) {
+            //     // if ($PelaksanaanPekerjaan) {
+            //     //     if ($PelaksanaanPekerjaan->total_pekerjaan > 40000000) {
 
-                        DB::rollback();
+            //     //         DB::rollback();
 
-                        return redirect()->route($this->route . '.index')->with('message', ucwords(str_replace('-', ' ', $this->route)) . ' ada yang lebih dari Rp. 40.000.00 (Empat Puluh juta rupiah) di SPK ' . $PelaksanaanPekerjaan->nomor_pelaksanaan_pekerjaan)->with('Class', 'danger');
-                    }
-                }
-            }
+            //     //         return redirect()->route($this->route . '.index')->with('message', ucwords(str_replace('-', ' ', $this->route)) . ' ada yang lebih dari Rp. 40.000.00 (Empat Puluh juta rupiah) di SPK ' . $PelaksanaanPekerjaan->nomor_pelaksanaan_pekerjaan)->with('Class', 'danger');
+            //     //     }
+            //     // }
+            // }
             $rekanan = Rekanan::find($rekanan_id);
 
             $singkatan = "";
@@ -1068,11 +1068,11 @@ class TagihanController extends Controller
                 // }
             }
 
-            if ($listKaryawan) {
-                foreach (collect($listKaryawan) as $i => $kr) {
-                    $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $kr->user_id);
-                }
-            }
+            // if ($listKaryawan) {
+            //     foreach (collect($listKaryawan) as $i => $kr) {
+            //         $this->notification($data->id, $data->slug, $title, $body, $modul, auth()->user()->id, $kr->user_id);
+            //     }
+            // }
 
             foreach ($pelaksanaan as $value) {
                 $PelaksanaanPekerjaan = PelaksanaanPekerjaan::where('id', $value)
