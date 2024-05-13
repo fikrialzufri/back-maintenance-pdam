@@ -133,6 +133,7 @@
                                         <br>
 
                                     </div>
+
                                     <div class="col-12">
                                         <div class="form-group">
                                             <h6 class="">Lokasi Pekerjaan</h6>

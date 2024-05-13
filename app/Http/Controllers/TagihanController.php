@@ -83,34 +83,58 @@ class TagihanController extends Controller
     }
     public function configSearch()
     {
-        return [
-            [
-                'name' => 'nomor_tagihan',
-                'input' => 'text',
-                'alias' => 'Nomor Tagihan',
-                'value' => null
-            ],
-            [
-                'name' => 'kode_vocher',
-                'input' => 'text',
-                'alias' => 'Nomor Voucher',
-                'value' => null
-            ],
-            [
-                'name' => 'rekanan_id',
-                'input' => 'combo',
-                'alias' => 'Rekanan',
-                'value' => $this->combobox(
-                    'Rekanan',
-                )
-            ],
-            [
-                'name' => 'created_at',
-                'input' => 'daterange',
-                'alias' => 'Tanggal',
-                'value' => null
-            ],
-        ];
+        if (auth()->user()->hasRole('rekanan')) {
+            # code...
+            return [
+                [
+                    'name' => 'nomor_tagihan',
+                    'input' => 'text',
+                    'alias' => 'Nomor Tagihan',
+                    'value' => null
+                ],
+                [
+                    'name' => 'kode_vocher',
+                    'input' => 'text',
+                    'alias' => 'Nomor Voucher',
+                    'value' => null
+                ],
+                [
+                    'name' => 'created_at',
+                    'input' => 'daterange',
+                    'alias' => 'Tanggal',
+                    'value' => null
+                ],
+            ];
+        }else{
+            return [
+                [
+                    'name' => 'nomor_tagihan',
+                    'input' => 'text',
+                    'alias' => 'Nomor Tagihan',
+                    'value' => null
+                ],
+                [
+                    'name' => 'kode_vocher',
+                    'input' => 'text',
+                    'alias' => 'Nomor Voucher',
+                    'value' => null
+                ],
+                [
+                    'name' => 'rekanan_id',
+                    'input' => 'combo',
+                    'alias' => 'Rekanan',
+                    'value' => $this->combobox(
+                        'Rekanan',
+                    )
+                ],
+                [
+                    'name' => 'created_at',
+                    'input' => 'daterange',
+                    'alias' => 'Tanggal',
+                    'value' => null
+                ],
+            ];
+        }
     }
     public function configForm()
     {
