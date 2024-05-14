@@ -996,23 +996,23 @@ class TagihanController extends Controller
     {
         // return $request;
         $pelaksanaan = $request->pelaksanaan;
-        $tanggal_tagihan = Carbon::now();
-        $tagihan = $this->model()->count();
-        $bulan = date('m');
-
-        DB::beginTransaction();
-
         try {
-            $PelaksanaanPekerjaan = PelaksanaanPekerjaan::whereIn('id', $pelaksanaan)
-                ->where('tagihan', 'tidak')->first();
+            $tanggal_tagihan = Carbon::now();
+            $tagihan = $this->model()->count();
+            $bulan = date('m');
 
-            if (!auth()->user()->hasRole('superadmin')) {
-                if (auth()->user()->hasRole('rekanan')) {
-                    $rekanan_id = auth()->user()->id_rekanan;
-                } else {
-                    $rekanan_id = $PelaksanaanPekerjaan->rekanan_id;
-                }
-            }
+            DB::beginTransaction();
+
+            // $PelaksanaanPekerjaan = PelaksanaanPekerjaan::whereIn('id', $pelaksanaan)
+            //     ->where('tagihan', 'tidak')->first();
+
+            // if (!auth()->user()->hasRole('superadmin')) {
+            //     if (auth()->user()->hasRole('rekanan')) {
+            //     } else {
+            //         $rekanan_id = $PelaksanaanPekerjaan->rekanan_id;
+            //     }
+            // }
+            $rekanan_id = auth()->user()->id_rekanan;
 
             // foreach ($pelaksanaan as $value) {
             //     $PelaksanaanPekerjaan = PelaksanaanPekerjaan::where('id', $value)
@@ -1055,25 +1055,25 @@ class TagihanController extends Controller
             $modul = "tagihan";
 
             // list jabatan
-            $listJabatan = Jabatan::query();
+            // $listJabatan = Jabatan::query();
 
 
-            if ($PelaksanaanPekerjaan) {
-                $aduanId = $PelaksanaanPekerjaan->pluck('aduan_id')->toArray();
-                $katagori_nps = Aduan::whereIn('id', $aduanId)->pluck('kategori_nps')->toArray();
-                $katagori_nps_unique = array_unique($katagori_nps);
+            // if ($PelaksanaanPekerjaan) {
+            //     $aduanId = $PelaksanaanPekerjaan->pluck('aduan_id')->toArray();
+            //     $katagori_nps = Aduan::whereIn('id', $aduanId)->pluck('kategori_nps')->toArray();
+            //     $katagori_nps_unique = array_unique($katagori_nps);
 
-                if (in_array('dis', $katagori_nps_unique)) {
-                    $listJabatan = $listJabatan->orWhere('slug', 'manajer-distribusi');
-                }
-                if (in_array('pka', $katagori_nps_unique)) {
-                    $listJabatan = $listJabatan->orWhere('slug', 'manajer-pengendalian-kehilangan-air');
-                }
-            }
+            //     if (in_array('dis', $katagori_nps_unique)) {
+            //         $listJabatan = $listJabatan->orWhere('slug', 'manajer-distribusi');
+            //     }
+            //     if (in_array('pka', $katagori_nps_unique)) {
+            //         $listJabatan = $listJabatan->orWhere('slug', 'manajer-pengendalian-kehilangan-air');
+            //     }
+            // }
 
-            $listJabatan = $listJabatan->orWhere('slug', 'manajer-perencanaan')->orWhere('slug', 'direktur-teknik')->pluck('id')->toArray();
-            // list karyawan bedasarkan jabatan
-            $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get();
+            // $listJabatan = $listJabatan->orWhere('slug', 'manajer-perencanaan')->orWhere('slug', 'direktur-teknik')->pluck('id')->toArray();
+            // // list karyawan bedasarkan jabatan
+            // $listKaryawan = Karyawan::whereIn('jabatan_id', $listJabatan)->get();
 
 
             if (auth()->user()->hasRole('rekanan')) {
@@ -1092,24 +1092,34 @@ class TagihanController extends Controller
             //     }
             // }
 
-            foreach ($pelaksanaan as $value) {
-                $PelaksanaanPekerjaan = PelaksanaanPekerjaan::where('id', $value)
-                    ->where('tagihan', 'tidak')
-                    ->where(
-                        'rekanan_id',
-                        $rekanan_id
-                    )->first();
+            $fifteenMinutesAgo = Carbon::now()->subMinutes(15);
 
-                if ($PelaksanaanPekerjaan) {
-                    $PelaksanaanPekerjaan->tagihan = 'ya';
-                    $PelaksanaanPekerjaan->save();
-                }
-                $penunjukanPekerjaan = PenunjukanPekerjaan::where('id', $PelaksanaanPekerjaan->penunjukan_pekerjaan)->where('tagihan', 'tidak')->first();
-                if ($penunjukanPekerjaan) {
-                    $penunjukanPekerjaan->tagihan = 'ya';
-                    $penunjukanPekerjaan->save();
-                }
+            $hasRecentPosts = $this->model()->where('created_at', '>=', $fifteenMinutesAgo) ->where(
+                'rekanan_id',
+                $rekanan_id
+            )->exists();
+
+            if ($hasRecentPosts) {
+                return redirect()->route($this->route . '.index')->with('message', ucwords(str_replace('-', ' ', $this->route)) . " " . ' sudah berhasil ditambahkan')->with('Class', 'success');
             }
+
+            PelaksanaanPekerjaan::whereIn('id', $pelaksanaan)
+                ->where('tagihan', 'tidak')
+                ->where(
+                    'rekanan_id',
+                    $rekanan_id
+                )->update(['tagihan' => 'ya']);
+
+            $penunjukanPekerjaanIds = PelaksanaanPekerjaan::whereIn('id', $pelaksanaan)
+                ->where('rekanan_id', $rekanan_id)
+                ->pluck('penunjukan_pekerjaan_id')
+                ->toArray();
+
+            // Update tagihan in PenunjukanPekerjaan
+            PenunjukanPekerjaan::whereIn('id', $penunjukanPekerjaanIds)
+                ->where('tagihan', 'tidak')
+                ->update(['tagihan' => 'ya']);
+
             $data = $this->model();
             $data->nomor_tagihan = $nomor_tagihan;
             $data->tanggal_tagihan = $tanggal_tagihan;
@@ -1117,6 +1127,7 @@ class TagihanController extends Controller
             $data->user_id = auth()->user()->id;
             $data->status = 'dikirim';
             $data->save();
+
             $data->hasPelaksanaanPekerjaan()->sync($pelaksanaan);
             DB::commit();
 
