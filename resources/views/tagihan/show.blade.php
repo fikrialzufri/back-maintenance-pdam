@@ -1144,6 +1144,62 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <div>
+                                        <label for="berita_acara_view" class=" form-control-label">Berita Acara</label>
+                                    </div>
+                                    <div>
+
+                                        <div class="input-group input-group-button">
+                                            <div class="input-group-prepend">
+                                                <a class="btn btn-warning"
+                                                    href="{{ asset('storage/tagihan/' . $tagihan->berita_acara_image) }}"
+                                                    target="_blank">
+                                                    <i class="ik ik-arrow-down"></i> Download Berita Acara
+                                                    {{ $tagihan->berita_acara_image }}
+                                                </a>
+                                            </div>
+                                            <input type="text" class="form-control" placeholder=""
+                                                value="{{ $tagihan->berita_acara }}" readonly>
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <input type="checkbox" aria-label="Persyaratan Sesuai"
+                                                        id="checkbok_berita_acara"
+                                                        @if (!auth()->user()->hasRole('asisten-manajer-tata-usaha')) onclick="return false;" @endif
+                                                        name="checkbok_berita_acara" {{ old('checkbok_berita_acara') ? 'checked' : '' }}
+                                                        {{ $tagihan->berita_acara_check == 'ya' ? 'checked' : '' }}>
+                                                    <span class="pl-2">Persyaratan Sesuai
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="">
+                                            @if (Session::has('erros'))
+                                                @if (in_array('berita_acara', session('erros')))
+                                                    <div class=" container-fluid alert alert-warning alert-dismissible fade show"
+                                                        role="alert">
+                                                        Berita Acara tidak boleh kosong
+                                                        <button type="button" class="close" data-dismiss="alert"
+                                                            aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                @endif
+
+                                            @endif
+                                            @if ($errors->has('berita_acara_rekanan'))
+                                                <div class=" container-fluid alert alert-warning alert-dismissible fade show"
+                                                    role="alert">
+                                                    Berita Acara tidak boleh kosong
+                                                    <button type="button" class="close" data-dismiss="alert"
+                                                        aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
                             @endif
 
                         </div>
@@ -1374,6 +1430,43 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <div>
+                                            <label for="berita_acara" class=" form-control-label">Berita acara</label>
+                                        </div>
+                                        <div>
+                                            <input type="text" name="berita_acara" id="berita_acara" placeholder="e-spt "
+                                                class="form-control" value="{{ $tagihan->berita_acara }}">
+                                            @if ($errors->has('berita_acara'))
+                                                <div class=" container-fluid alert alert-warning alert-dismissible fade show"
+                                                    role="alert">
+                                                    {{ $errors->first('berita_acara') }}
+                                                    <button type="button" class="close" data-dismiss="alert"
+                                                        aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                            @endif
+                                        </div>
+                                        <div class="">
+                                            <input type="file" value="berita_acara_image" name="berita_acara_image" placeholder=""
+                                                value="{{ $tagihan->berita_acara_image }}" id="berita_acara_image" class="form-control">
+                                            <br>
+                                            @if ($errors->has('berita_acara_image'))
+                                                <div class=" container-fluid alert alert-warning alert-dismissible fade show"
+                                                    role="alert">
+                                                    {{ $errors->first('berita_acara_image') }}
+                                                    <button type="button" class="close" data-dismiss="alert"
+                                                        aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                            @endif
+                                            <div id="preview_berita_acara_image"></div>
+                                        </div>
+                                    </div>
+                                </div>
                             @endif
                         </div>
                     </div>
@@ -1399,6 +1492,7 @@
                     <input type="hidden" name="bukti_pembayaran_kirim" value="" id="bukti_pembayaran_kirim">
 
                     <input type="hidden" name="e_spt_kirim" value="" id="e_spt_kirim">
+                    <input type="hidden" name="berita_acara_kirim" value="" id="berita_acara_kirim">
 
                 </form>
             @endif
@@ -1448,11 +1542,12 @@
                 var e_billing_check = $('#checkbok_e_billing').is(':checked') ? emoji_check : emoji;
                 var bukti_pembayaran_check = $('#checkbok_bukti_pembayaran').is(':checked') ? emoji_check : emoji;
                 var e_spt_check = $('#checkbok_e_spt').is(':checked') ? emoji_check : emoji;
+                var berita_acara_check = $('#checkbok_berita_acara').is(':checked') ? emoji_check : emoji;
 
                 // spasi enter
                 var spasi = String.fromCharCode(13, 10);
                 let textMessage =
-                    `Kepada yang terhormat Bapak/Ibu direktur ${namarekanan}${spasi}Dimohon segera melengkapi persyaratan yg di tanda silang agar tagihan dapat diproses.${spasi}Terima kasih.${spasi}Diperiksa Oleh,${spasi}Asisten Manajer Tata Usaha${spasi}Perumdam Tirta Kencana${spasi}Persyaratan yang harus dipenuhi :${spasi}1. Kwitansi Tagihan : ${no_kwitanasi_check}${spasi}2. Faktur Pajak : ${no_faktur_pajak_check} ${spasi}3. E-Billing : ${e_billing_check}${spasi}4. Bukti Pembayaran PPN atas tagihan : ${bukti_pembayaran_check}${spasi}5. E-SPT PPN : ${e_spt_check}${spasi} Lakukan login di aplikasi SIP untuk melengkapi dokumen persyaratan tagihan${spasi}Berikut kami kirimkan link tagihan ${urlTagihan}
+                    `Kepada yang terhormat Bapak/Ibu direktur ${namarekanan}${spasi}Dimohon segera melengkapi persyaratan yg di tanda silang agar tagihan dapat diproses.${spasi}Terima kasih.${spasi}Diperiksa Oleh,${spasi}Asisten Manajer Tata Usaha${spasi}Perumdam Tirta Kencana${spasi}Persyaratan yang harus dipenuhi :${spasi}1. Kwitansi Tagihan : ${no_kwitanasi_check}${spasi}2. Faktur Pajak : ${no_faktur_pajak_check} ${spasi}3. E-Billing : ${e_billing_check}${spasi}4. Bukti Pembayaran PPN atas tagihan : ${bukti_pembayaran_check}${spasi}5. E-SPT PPN : ${e_spt_check}${spasi}6. Berita Acara : ${e_spt_check}${spasi} Lakukan login di aplikasi SIP untuk melengkapi dokumen persyaratan tagihan${spasi}Berikut kami kirimkan link tagihan ${urlTagihan}
 
                     `;
                 window.open(`https://api.whatsapp.com/send?phone=62${no_hp_rekanan}&text=` + encodeURI(textMessage));
@@ -1523,12 +1618,14 @@
                     var e_billing_check = $('#checkbok_e_billing').is(':checked') ? 'ya' : 'tidak';
                     var bukti_pembayaran_check = $('#checkbok_bukti_pembayaran').is(':checked') ? 'ya' : 'tidak';
                     var e_spt_check = $('#checkbok_e_spt').is(':checked') ? 'ya' : 'tidak';
+                    var berita_acara_check = $('#checkbok_berita_acara').is(':checked') ? 'ya' : 'tidak';
 
                     $('#no_kwitansi_kirim').val(no_kwitanasi_check);
                     $('#no_faktur_pajak_kirim').val(no_faktur_pajak_check);
                     $('#e_billing_kirim').val(e_billing_check);
                     $('#bukti_pembayaran_kirim').val(bukti_pembayaran_check);
                     $('#e_spt_kirim').val(e_spt_check);
+                    $('#berita_acara_kirim').val(berita_acara_check);
 
                     $('#form-kirim-wa').submit();
 
@@ -1544,7 +1641,7 @@
                         }
                         if ($('#checkbok_e_billing').is(':checked') && $('#checkbok_no_faktur_pajak').is(':checked') &&
                             $(
-                                '#checkbok_bukti_pembayaran').is(':checked') && $('#checkbok_e_spt').is(':checked')) {
+                                '#checkbok_bukti_pembayaran').is(':checked') && $('#checkbok_e_spt').is(':checked') && $('#checkbok_berita_acara').is(':checked')) {
                             if ($(this).is(':checked')) {
                                 $('#btn_setujui').prop('disabled', false);
                             } else {
@@ -1564,7 +1661,7 @@
                         }
                         if ($('#checkbok_no_kwitansi').is(':checked') && $('#checkbok_no_faktur_pajak').is(
                                 ':checked') && $(
-                                '#checkbok_bukti_pembayaran').is(':checked') && $('#checkbok_e_spt').is(':checked')) {
+                                '#checkbok_bukti_pembayaran').is(':checked') && $('#checkbok_e_spt').is(':checked') && $('#checkbok_berita_acara').is(':checked')) {
                             if ($(this).is(':checked')) {
                                 $('#btn_setujui').prop('disabled', false);
                             } else {
@@ -1583,7 +1680,7 @@
                             $('#no_faktur_pajak_check').val('tidak');
                         }
                         if ($('#checkbok_no_kwitansi').is(':checked') && $('#checkbok_e_billing').is(':checked') && $(
-                                '#checkbok_bukti_pembayaran').is(':checked') && $('#checkbok_e_spt').is(':checked')) {
+                                '#checkbok_bukti_pembayaran').is(':checked') && $('#checkbok_e_spt').is(':checked') && $('#checkbok_berita_acara').is(':checked')) {
                             if ($(this).is(':checked')) {
                                 $('#btn_setujui').prop('disabled', false);
                             } else {
@@ -1602,7 +1699,7 @@
                             $('#bukti_pembayaran_check').val('tidak');
                         }
                         if ($('#checkbok_no_kwitansi').is(':checked') && $('#checkbok_e_billing').is(':checked') && $(
-                                '#checkbok_no_faktur_pajak').is(':checked') && $('#checkbok_e_spt').is(':checked')) {
+                                '#checkbok_no_faktur_pajak').is(':checked') && $('#checkbok_e_spt').is(':checked') && $('#checkbok_berita_acara').is(':checked')) {
                             if ($(this).is(':checked')) {
                                 $('#btn_setujui').prop('disabled', false);
                             } else {
@@ -1622,7 +1719,25 @@
                         }
                         if ($('#checkbok_no_kwitansi').is(':checked') && $('#checkbok_e_billing').is(':checked') && $(
                                 '#checkbok_no_faktur_pajak').is(':checked') && $('#checkbok_bukti_pembayaran').is(
-                                ':checked')) {
+                                ':checked') && $('#checkbok_berita_acara').is(':checked')) {
+                            if ($(this).is(':checked')) {
+                                $('#btn_setujui').prop('disabled', false);
+                            } else {
+                                $('#btn_setujui').prop('disabled', true);
+
+                            }
+                        } else {
+                            $('#btn_setujui').prop('disabled', true);
+                        }
+                    });
+                    $('#checkbok_berita_acara').on('click', function() {
+                        if ($(this).is(':checked')) {
+                            $('#bukti_pembayaran_check').val('ya');
+                        } else {
+                            $('#bukti_pembayaran_check').val('tidak');
+                        }
+                        if ($('#checkbok_no_kwitansi').is(':checked') && $('#checkbok_e_billing').is(':checked') && $(
+                                '#checkbok_no_faktur_pajak').is(':checked') && $('#checkbok_e_spt').is(':checked') && $('#checkbok_bukti_pembayaran').is(':checked')) {
                             if ($(this).is(':checked')) {
                                 $('#btn_setujui').prop('disabled', false);
                             } else {
