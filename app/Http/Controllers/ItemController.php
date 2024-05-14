@@ -146,6 +146,7 @@ class ItemController extends Controller
                 'input'    => 'radio',
                 'alias'    => 'Aktif',
                 'value' => ['ya', 'tidak'],
+                'default' => 'ya',
                 'validasi'    => ['required'],
             ],
         ];
