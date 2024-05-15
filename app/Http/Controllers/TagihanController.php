@@ -871,7 +871,7 @@ class TagihanController extends Controller
                     'bukti_pembayaran_rekanan' => 'required|unique:tagihan,bukti_pembayaran,' . $id,
                     'e_billing_rekanan' => 'required|unique:tagihan,e_billing,' . $id,
                     'e_spt_rekanan' => 'required|unique:tagihan,e_spt,' . $id,
-                    'berita_acara_rekanan' => 'required|unique:tagihan,berita_acara,' . $id,
+                    'berita_acara_rekanan' => 'unique:tagihan,berita_acara,' . $id,
                     'no_kwitansi_rekanan' => 'required|unique:tagihan,no_kwitansi,' . $id,
                 ], $messages);
             } else {
@@ -1833,8 +1833,8 @@ class TagihanController extends Controller
                     'e_spt_image' => 'required|sometimes|mimes:pdf',
                     'no_kwitansi' => 'required|unique:tagihan,no_kwitansi,' . $id,
                     'no_kwitansi_image' => 'required|sometimes|mimes:pdf',
-                    'berita_acara' => 'required|unique:tagihan,berita_acara,' . $id,
-                    'berita_acara_image' => 'required|sometimes|mimes:pdf',
+                    'berita_acara' => 'unique:tagihan,berita_acara,' . $id,
+                    'berita_acara_image' => 'sometimes|mimes:pdf',
                 ], $messages);
             } else {
                 $this->validate(request(), [
