@@ -1832,7 +1832,7 @@ class TagihanController extends Controller
                 'e_spt_image' => 'required|sometimes|mimes:pdf',
                 'no_kwitansi' => 'required|unique:tagihan,no_kwitansi,' . $id,
                 'no_kwitansi_image' => 'required|sometimes|mimes:pdf',
-                'berita_acara' => 'sometimes|unique:tagihan,berita_acara,' . $id,
+                'berita_acara' => 'nullable|sometimes|unique:tagihan,berita_acara,' . $id,
                 'berita_acara_image' => 'sometimes|mimes:pdf',
             ], $messages);
         } else {
