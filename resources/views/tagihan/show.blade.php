@@ -1436,7 +1436,7 @@
                                             <label for="berita_acara" class=" form-control-label">Berita acara</label>
                                         </div>
                                         <div>
-                                            <input type="text" name="berita_acara" id="berita_acara" placeholder="e-spt "
+                                            <input type="text" name="berita_acara" id="berita_acara" placeholder="Berita Acara"
                                                 class="form-control" value="{{ $tagihan->berita_acara }}">
                                             @if ($errors->has('berita_acara'))
                                                 <div class=" container-fluid alert alert-warning alert-dismissible fade show"

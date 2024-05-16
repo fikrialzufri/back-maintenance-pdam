@@ -1832,7 +1832,7 @@ class TagihanController extends Controller
                 'e_spt_image' => 'required|sometimes|mimes:pdf',
                 'no_kwitansi' => 'required|unique:tagihan,no_kwitansi,' . $id,
                 'no_kwitansi_image' => 'required|sometimes|mimes:pdf',
-                'berita_acara' => 'unique:tagihan,berita_acara,' . $id,
+                'berita_acara' => 'sometimes|unique:tagihan,berita_acara,' . $id,
                 'berita_acara_image' => 'sometimes|mimes:pdf',
             ], $messages);
         } else {
@@ -1845,71 +1845,71 @@ class TagihanController extends Controller
         // return "stipo";
 
 
-        $data->no_faktur_pajak = $no_faktur_pajak;
-        // upload file no_faktur_pajak ke storage
-        if ($request->hasFile('no_faktur_pajak_image')) {
-            $file = $request->file('no_faktur_pajak_image');
-            $filename = $slug_nomor_tagihan . '.' . $file->getClientOriginalName();
-            // ganti nama file
-            $file->storeAs('public/' . $route . '/', $filename);
-            $data->no_faktur_pajak_image = $filename;
-        }
-
-        $data->bukti_pembayaran = $bukti_pembayaran;
-        // upload file bukti_pembayaran ke storage
-        if ($request->hasFile('bukti_pembayaran_image')) {
-            $file = $request->file('bukti_pembayaran_image');
-            $filename = $slug_nomor_tagihan . '.' . $file->getClientOriginalName();
-            // ganti nama file
-            $file->storeAs('public/' . $route . '/', $filename);
-            $data->bukti_pembayaran_image = $filename;
-        }
-
-        $data->e_billing = $e_billing;
-        // upload file e_billing ke storage
-        if ($request->hasFile('e_billing_image')) {
-            $file = $request->file('e_billing_image');
-            $filename = $slug_nomor_tagihan . '.' . $file->getClientOriginalName();
-            // ganti nama file
-            $file->storeAs('public/' . $route . '/', $filename);
-            $data->e_billing_image = $filename;
-        }
-
-        $data->e_spt = $e_spt;
-        // upload file e_spt ke storage
-        if ($request->hasFile('e_spt_image')) {
-            $file = $request->file('e_spt_image');
-            $filename = $slug_nomor_tagihan . '.' . $file->getClientOriginalName();
-            // ganti nama file
-            $file->storeAs('public/' . $route . '/', $filename);
-            $data->e_spt_image = $filename;
-        }
-
-        $data->no_kwitansi = $no_kwitansi;
-        // upload file no_kwitansi ke storage
-        if ($request->hasFile('no_kwitansi_image')) {
-            $file = $request->file('no_kwitansi_image');
-            $filename = $slug_nomor_tagihan . '.' . $file->getClientOriginalName();
-            // ganti nama file
-            $file->storeAs('public/' . $route . '/', $filename);
-            $data->no_kwitansi_image = $filename;
-        }
-        $data->berita_acara = $berita_acara;
-        // upload file berita_acara ke storage
-        if ($request->hasFile('berita_acara_image')) {
-            $file = $request->file('berita_acara_image');
-            $filename = $slug_nomor_tagihan . '.' . $file->getClientOriginalName();
-            // ganti nama file
-            $file->storeAs('public/' . $route . '/', $filename);
-            $data->berita_acara_image = $filename;
-        }
-
-        $data->save();
-
-        DB::commit();
-
-        return redirect()->route($this->route . '.index')->with('message', ucwords(str_replace('-', ' ', $this->route)) . " " . $nomor_tagihan . ' Berhasil Ditambahkan')->with('Class', 'success');
         try {
+            $data->no_faktur_pajak = $no_faktur_pajak;
+            // upload file no_faktur_pajak ke storage
+            if ($request->hasFile('no_faktur_pajak_image')) {
+                $file = $request->file('no_faktur_pajak_image');
+                $filename = $slug_nomor_tagihan . '.' . $file->getClientOriginalName();
+                // ganti nama file
+                $file->storeAs('public/' . $route . '/', $filename);
+                $data->no_faktur_pajak_image = $filename;
+            }
+
+            $data->bukti_pembayaran = $bukti_pembayaran;
+            // upload file bukti_pembayaran ke storage
+            if ($request->hasFile('bukti_pembayaran_image')) {
+                $file = $request->file('bukti_pembayaran_image');
+                $filename = $slug_nomor_tagihan . '.' . $file->getClientOriginalName();
+                // ganti nama file
+                $file->storeAs('public/' . $route . '/', $filename);
+                $data->bukti_pembayaran_image = $filename;
+            }
+
+            $data->e_billing = $e_billing;
+            // upload file e_billing ke storage
+            if ($request->hasFile('e_billing_image')) {
+                $file = $request->file('e_billing_image');
+                $filename = $slug_nomor_tagihan . '.' . $file->getClientOriginalName();
+                // ganti nama file
+                $file->storeAs('public/' . $route . '/', $filename);
+                $data->e_billing_image = $filename;
+            }
+
+            $data->e_spt = $e_spt;
+            // upload file e_spt ke storage
+            if ($request->hasFile('e_spt_image')) {
+                $file = $request->file('e_spt_image');
+                $filename = $slug_nomor_tagihan . '.' . $file->getClientOriginalName();
+                // ganti nama file
+                $file->storeAs('public/' . $route . '/', $filename);
+                $data->e_spt_image = $filename;
+            }
+
+            $data->no_kwitansi = $no_kwitansi;
+            // upload file no_kwitansi ke storage
+            if ($request->hasFile('no_kwitansi_image')) {
+                $file = $request->file('no_kwitansi_image');
+                $filename = $slug_nomor_tagihan . '.' . $file->getClientOriginalName();
+                // ganti nama file
+                $file->storeAs('public/' . $route . '/', $filename);
+                $data->no_kwitansi_image = $filename;
+            }
+            $data->berita_acara = $berita_acara;
+            // upload file berita_acara ke storage
+            if ($request->hasFile('berita_acara_image')) {
+                $file = $request->file('berita_acara_image');
+                $filename = $slug_nomor_tagihan . '.' . $file->getClientOriginalName();
+                // ganti nama file
+                $file->storeAs('public/' . $route . '/', $filename);
+                $data->berita_acara_image = $filename;
+            }
+
+            $data->save();
+
+            DB::commit();
+
+            return redirect()->route($this->route . '.index')->with('message', ucwords(str_replace('-', ' ', $this->route)) . " " . $nomor_tagihan . ' Berhasil Ditambahkan')->with('Class', 'success');
         } catch (\Throwable $th) {
             DB::rollback();
 
