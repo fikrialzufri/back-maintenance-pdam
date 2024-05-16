@@ -1740,176 +1740,176 @@ class TagihanController extends Controller
     {
 
         DB::beginTransaction();
-        try {
-            $route = $this->route;
-            $data = $this->model()->find($id);
-            $nomor_tagihan = $data->nomor_tagihan;
-            $slug_nomor_tagihan = $data->slug;
-            $rekanan = $data->rekanan;
-            $rekanan_pkp = $data->pkp;
-            $kirim_wa = $request->kirim_wa;
+        $route = $this->route;
+        $data = $this->model()->find($id);
+        $nomor_tagihan = $data->nomor_tagihan;
+        $slug_nomor_tagihan = $data->slug;
+        $rekanan = $data->rekanan;
+        $rekanan_pkp = $data->pkp;
+        $kirim_wa = $request->kirim_wa;
 
-            $no_faktur_pajak = $request->no_faktur_pajak;
-            $no_faktur_pajak_image = $request->no_faktur_pajak_image;
-            $e_billing = $request->e_billing;
-            $e_billing_image = $request->e_billing_image;
-            $bukti_pembayaran = $request->bukti_pembayaran;
-            $bukti_pembayaran_image = $request->bukti_pembayaran_image;
-            $e_spt = $request->e_spt;
-            $e_spt_image = $request->e_spt_image;
-            $berita_acara = $request->berita_acara;
-            $berita_acara_image = $request->berita_acara_image;
-            $no_kwitansi = $request->no_kwitansi;
-            $no_kwitansi_image = $request->no_kwitansi_image;
+        $no_faktur_pajak = $request->no_faktur_pajak;
+        $no_faktur_pajak_image = $request->no_faktur_pajak_image;
+        $e_billing = $request->e_billing;
+        $e_billing_image = $request->e_billing_image;
+        $bukti_pembayaran = $request->bukti_pembayaran;
+        $bukti_pembayaran_image = $request->bukti_pembayaran_image;
+        $e_spt = $request->e_spt;
+        $e_spt_image = $request->e_spt_image;
+        $berita_acara = $request->berita_acara;
+        $berita_acara_image = $request->berita_acara_image;
+        $no_kwitansi = $request->no_kwitansi;
+        $no_kwitansi_image = $request->no_kwitansi_image;
 
-            $messages = [
-                'required' => ':attribute tidak boleh kosong',
-                'unique' => ':attribute tidak boleh sama',
-                'same' => 'Password dan konfirmasi password harus sama',
-            ];
-            if ($kirim_wa == 'kirim') {
-                $erros = [];
-                if ($data->no_kwitansi == null) {
-                    $data->no_kwitansi_check = 'tidak';
-                    $erros[] = 'no_kwitansi';
-                } else {
-                    $data->no_kwitansi_check = $request->no_kwitansi_kirim != null ? $request->no_kwitansi_kirim : "tidak";
-                }
-                if ($data->pkp == 'ya') {
-
-                    if ($data->no_faktur_pajak == null) {
-                        $data->no_faktur_pajak_check = 'tidak';
-                        $erros[] = 'no_faktur_pajak_rekanan';
-                    } else {
-                        $data->no_faktur_pajak_check = $request->no_faktur_pajak_kirim != null ? $request->no_faktur_pajak_kirim : "tidak";
-                    }
-
-                    if ($data->bukti_pembayaran == null) {
-                        $data->bukti_pembayaran_check = 'tidak';
-                        $erros[] = 'bukti_pembayaran';
-                    } else {
-                        $data->bukti_pembayaran_check = $request->bukti_pembayaran_kirim != null ? $request->bukti_pembayaran_kirim : "tidak";
-                    }
-                    if ($data->e_billing == null) {
-                        $data->e_billing_check = 'tidak';
-                        $erros[] = 'e_billing';
-                    } else {
-                        $data->e_billing_check = $request->e_billing_kirim != null ? $request->e_billing_kirim : "tidak";
-                    }
-                    if ($data->e_spt == null) {
-                        $data->e_spt_check = 'tidak';
-                        $erros[] = 'e_spt';
-                    } else {
-                        $data->e_spt_check = $request->e_spt_kirim != null ? $request->e_spt_kirim : "tidak";
-                    }
-                    if ($data->berita_acara == null) {
-                        $data->berita_acara_check = 'tidak';
-                        $erros[] = 'berita_acara';
-                    } else {
-                        $data->berita_acara_check = $request->berita_acara_kirim != null ? $request->berita_acara_kirim : "tidak";
-                    }
-                }
-
-                $data->save();
-
-                DB::commit();
-
-                if (count($erros) > 0) {
-                    return redirect()->route($this->route . '.show', $data->slug)->with('message', ucwords(str_replace('-', ' ', $this->route)) . ' Persyaratan tidak sesuai')->with('Class', 'success')->with('wa', 'kirim')->with('erros', $erros);
-                }
-
-
-                return redirect()->route($this->route . '.show', $data->slug)->with('wa', 'kirim')->with('Class', 'success');
-            }
-            if ($rekanan_pkp == 'ya') {
-                $this->validate(request(), [
-                    'no_faktur_pajak' => 'required|unique:tagihan,no_faktur_pajak,' . $id,
-                    'no_faktur_pajak_image' => 'required|sometimes|mimes:pdf',
-                    'bukti_pembayaran' => 'required|unique:tagihan,bukti_pembayaran,' . $id,
-                    'bukti_pembayaran_image' => 'required|sometimes|mimes:pdf',
-                    'e_billing' => 'required|unique:tagihan,e_billing,' . $id,
-                    'e_billing_image' => 'required|sometimes|mimes:pdf',
-                    'e_spt' => 'required|unique:tagihan,e_spt,' . $id,
-                    'e_spt_image' => 'required|sometimes|mimes:pdf',
-                    'no_kwitansi' => 'required|unique:tagihan,no_kwitansi,' . $id,
-                    'no_kwitansi_image' => 'required|sometimes|mimes:pdf',
-                    'berita_acara' => 'unique:tagihan,berita_acara,' . $id,
-                    'berita_acara_image' => 'sometimes|mimes:pdf',
-                ], $messages);
+        $messages = [
+            'required' => ':attribute tidak boleh kosong',
+            'unique' => ':attribute tidak boleh sama',
+            'same' => 'Password dan konfirmasi password harus sama',
+        ];
+        if ($kirim_wa == 'kirim') {
+            $erros = [];
+            if ($data->no_kwitansi == null) {
+                $data->no_kwitansi_check = 'tidak';
+                $erros[] = 'no_kwitansi';
             } else {
-                $this->validate(request(), [
-                    'no_kwitansi' => 'required|unique:tagihan,no_kwitansi,' . $id,
-                    'no_kwitansi_image' => 'required|sometimes|mimes:pdf',
-                ], $messages);
+                $data->no_kwitansi_check = $request->no_kwitansi_kirim != null ? $request->no_kwitansi_kirim : "tidak";
             }
+            if ($data->pkp == 'ya') {
 
-            // return "stipo";
+                if ($data->no_faktur_pajak == null) {
+                    $data->no_faktur_pajak_check = 'tidak';
+                    $erros[] = 'no_faktur_pajak_rekanan';
+                } else {
+                    $data->no_faktur_pajak_check = $request->no_faktur_pajak_kirim != null ? $request->no_faktur_pajak_kirim : "tidak";
+                }
 
-
-            $data->no_faktur_pajak = $no_faktur_pajak;
-            // upload file no_faktur_pajak ke storage
-            if ($request->hasFile('no_faktur_pajak_image')) {
-                $file = $request->file('no_faktur_pajak_image');
-                $filename = $slug_nomor_tagihan . '.' . $file->getClientOriginalName();
-                // ganti nama file
-                $file->storeAs('public/' . $route . '/', $filename);
-                $data->no_faktur_pajak_image = $filename;
-            }
-
-            $data->bukti_pembayaran = $bukti_pembayaran;
-            // upload file bukti_pembayaran ke storage
-            if ($request->hasFile('bukti_pembayaran_image')) {
-                $file = $request->file('bukti_pembayaran_image');
-                $filename = $slug_nomor_tagihan . '.' . $file->getClientOriginalName();
-                // ganti nama file
-                $file->storeAs('public/' . $route . '/', $filename);
-                $data->bukti_pembayaran_image = $filename;
-            }
-
-            $data->e_billing = $e_billing;
-            // upload file e_billing ke storage
-            if ($request->hasFile('e_billing_image')) {
-                $file = $request->file('e_billing_image');
-                $filename = $slug_nomor_tagihan . '.' . $file->getClientOriginalName();
-                // ganti nama file
-                $file->storeAs('public/' . $route . '/', $filename);
-                $data->e_billing_image = $filename;
-            }
-
-            $data->e_spt = $e_spt;
-            // upload file e_spt ke storage
-            if ($request->hasFile('e_spt_image')) {
-                $file = $request->file('e_spt_image');
-                $filename = $slug_nomor_tagihan . '.' . $file->getClientOriginalName();
-                // ganti nama file
-                $file->storeAs('public/' . $route . '/', $filename);
-                $data->e_spt_image = $filename;
-            }
-
-            $data->no_kwitansi = $no_kwitansi;
-            // upload file no_kwitansi ke storage
-            if ($request->hasFile('no_kwitansi_image')) {
-                $file = $request->file('no_kwitansi_image');
-                $filename = $slug_nomor_tagihan . '.' . $file->getClientOriginalName();
-                // ganti nama file
-                $file->storeAs('public/' . $route . '/', $filename);
-                $data->no_kwitansi_image = $filename;
-            }
-            $data->berita_acara = $berita_acara;
-            // upload file berita_acara ke storage
-            if ($request->hasFile('berita_acara_image')) {
-                $file = $request->file('berita_acara_image');
-                $filename = $slug_nomor_tagihan . '.' . $file->getClientOriginalName();
-                // ganti nama file
-                $file->storeAs('public/' . $route . '/', $filename);
-                $data->berita_acara_image = $filename;
+                if ($data->bukti_pembayaran == null) {
+                    $data->bukti_pembayaran_check = 'tidak';
+                    $erros[] = 'bukti_pembayaran';
+                } else {
+                    $data->bukti_pembayaran_check = $request->bukti_pembayaran_kirim != null ? $request->bukti_pembayaran_kirim : "tidak";
+                }
+                if ($data->e_billing == null) {
+                    $data->e_billing_check = 'tidak';
+                    $erros[] = 'e_billing';
+                } else {
+                    $data->e_billing_check = $request->e_billing_kirim != null ? $request->e_billing_kirim : "tidak";
+                }
+                if ($data->e_spt == null) {
+                    $data->e_spt_check = 'tidak';
+                    $erros[] = 'e_spt';
+                } else {
+                    $data->e_spt_check = $request->e_spt_kirim != null ? $request->e_spt_kirim : "tidak";
+                }
+                if ($data->berita_acara == null) {
+                    $data->berita_acara_check = 'tidak';
+                    $erros[] = 'berita_acara';
+                } else {
+                    $data->berita_acara_check = $request->berita_acara_kirim != null ? $request->berita_acara_kirim : "tidak";
+                }
             }
 
             $data->save();
 
             DB::commit();
 
-            return redirect()->route($this->route . '.index')->with('message', ucwords(str_replace('-', ' ', $this->route)) . " " . $nomor_tagihan . ' Berhasil Ditambahkan')->with('Class', 'success');
+            if (count($erros) > 0) {
+                return redirect()->route($this->route . '.show', $data->slug)->with('message', ucwords(str_replace('-', ' ', $this->route)) . ' Persyaratan tidak sesuai')->with('Class', 'success')->with('wa', 'kirim')->with('erros', $erros);
+            }
+
+
+            return redirect()->route($this->route . '.show', $data->slug)->with('wa', 'kirim')->with('Class', 'success');
+        }
+        if ($rekanan_pkp == 'ya') {
+            $this->validate(request(), [
+                'no_faktur_pajak' => 'required|unique:tagihan,no_faktur_pajak,' . $id,
+                'no_faktur_pajak_image' => 'required|sometimes|mimes:pdf',
+                'bukti_pembayaran' => 'required|unique:tagihan,bukti_pembayaran,' . $id,
+                'bukti_pembayaran_image' => 'required|sometimes|mimes:pdf',
+                'e_billing' => 'required|unique:tagihan,e_billing,' . $id,
+                'e_billing_image' => 'required|sometimes|mimes:pdf',
+                'e_spt' => 'required|unique:tagihan,e_spt,' . $id,
+                'e_spt_image' => 'required|sometimes|mimes:pdf',
+                'no_kwitansi' => 'required|unique:tagihan,no_kwitansi,' . $id,
+                'no_kwitansi_image' => 'required|sometimes|mimes:pdf',
+                'berita_acara' => 'unique:tagihan,berita_acara,' . $id,
+                'berita_acara_image' => 'sometimes|mimes:pdf',
+            ], $messages);
+        } else {
+            $this->validate(request(), [
+                'no_kwitansi' => 'required|unique:tagihan,no_kwitansi,' . $id,
+                'no_kwitansi_image' => 'required|sometimes|mimes:pdf',
+            ], $messages);
+        }
+
+        // return "stipo";
+
+
+        $data->no_faktur_pajak = $no_faktur_pajak;
+        // upload file no_faktur_pajak ke storage
+        if ($request->hasFile('no_faktur_pajak_image')) {
+            $file = $request->file('no_faktur_pajak_image');
+            $filename = $slug_nomor_tagihan . '.' . $file->getClientOriginalName();
+            // ganti nama file
+            $file->storeAs('public/' . $route . '/', $filename);
+            $data->no_faktur_pajak_image = $filename;
+        }
+
+        $data->bukti_pembayaran = $bukti_pembayaran;
+        // upload file bukti_pembayaran ke storage
+        if ($request->hasFile('bukti_pembayaran_image')) {
+            $file = $request->file('bukti_pembayaran_image');
+            $filename = $slug_nomor_tagihan . '.' . $file->getClientOriginalName();
+            // ganti nama file
+            $file->storeAs('public/' . $route . '/', $filename);
+            $data->bukti_pembayaran_image = $filename;
+        }
+
+        $data->e_billing = $e_billing;
+        // upload file e_billing ke storage
+        if ($request->hasFile('e_billing_image')) {
+            $file = $request->file('e_billing_image');
+            $filename = $slug_nomor_tagihan . '.' . $file->getClientOriginalName();
+            // ganti nama file
+            $file->storeAs('public/' . $route . '/', $filename);
+            $data->e_billing_image = $filename;
+        }
+
+        $data->e_spt = $e_spt;
+        // upload file e_spt ke storage
+        if ($request->hasFile('e_spt_image')) {
+            $file = $request->file('e_spt_image');
+            $filename = $slug_nomor_tagihan . '.' . $file->getClientOriginalName();
+            // ganti nama file
+            $file->storeAs('public/' . $route . '/', $filename);
+            $data->e_spt_image = $filename;
+        }
+
+        $data->no_kwitansi = $no_kwitansi;
+        // upload file no_kwitansi ke storage
+        if ($request->hasFile('no_kwitansi_image')) {
+            $file = $request->file('no_kwitansi_image');
+            $filename = $slug_nomor_tagihan . '.' . $file->getClientOriginalName();
+            // ganti nama file
+            $file->storeAs('public/' . $route . '/', $filename);
+            $data->no_kwitansi_image = $filename;
+        }
+        $data->berita_acara = $berita_acara;
+        // upload file berita_acara ke storage
+        if ($request->hasFile('berita_acara_image')) {
+            $file = $request->file('berita_acara_image');
+            $filename = $slug_nomor_tagihan . '.' . $file->getClientOriginalName();
+            // ganti nama file
+            $file->storeAs('public/' . $route . '/', $filename);
+            $data->berita_acara_image = $filename;
+        }
+
+        $data->save();
+
+        DB::commit();
+
+        return redirect()->route($this->route . '.index')->with('message', ucwords(str_replace('-', ' ', $this->route)) . " " . $nomor_tagihan . ' Berhasil Ditambahkan')->with('Class', 'success');
+        try {
         } catch (\Throwable $th) {
             DB::rollback();
 
