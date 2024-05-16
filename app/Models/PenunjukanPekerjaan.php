@@ -14,7 +14,6 @@ class PenunjukanPekerjaan extends Model
 
     protected $table = 'penunjukan_pekerjaan';
     protected $guarded = ['id'];
-    protected $appends = ['status_mobile'];
     protected $fillable = [
         'nomor_pekerjaan',
         'status',
@@ -466,43 +465,23 @@ class PenunjukanPekerjaan extends Model
 
     public function getStatusMobileAttribute()
     {
-        switch ($this->status) {
-            case 'proses':
-                return 1;
-                break;
-            case 'proses-akhir':
-                return 2;
-                break;
-            case 'selesai':
-                return 3;
-                break;
-            case 'approve':
-                return 4;
-                break;
-            case 'approve manajer':
-                return 5;
-                break;
-            case 'diadjust':
-                return 6;
-                break;
-            case 'koreksi pengawas':
-                return 7;
-                break;
-            case 'koreksi asmen':
-                return 8;
-                break;
-            case 'dikoreksi':
-                return 9;
-                break;
-            case 'selesai koreksi':
-                return 10;
-                break;
-            case 'disetujui':
-                return 11;
-                break;
-            default:
-                return 0;
-                break;
+        if ($this->hasPelaksanaanPekerjaan) {
+            return $this->hasPelaksanaanPekerjaan->status_mobile;
+        } else {
+            switch ($this->status) {
+                case 'proses':
+                    return 1;
+                    break;
+                case 'selesai':
+                    return 2;
+                    break;
+                case 'disetujui':
+                    return 3;
+                    break;
+                default:
+                    return 0;
+                    break;
+            }
         }
     }
 }
