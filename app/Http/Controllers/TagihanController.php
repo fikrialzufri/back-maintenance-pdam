@@ -771,7 +771,7 @@ class TagihanController extends Controller
 
 
         // $hasValue = $this->hasValue;
-        $start = Carbon::now()->subMonths(5)->startOfMonth()->format('Y-m-d') . ' 00:00:01';
+        $start = Carbon::now()->subMonths(15)->startOfMonth()->format('Y-m-d') . ' 00:00:01';
         $end = Carbon::now()->endOfMonth()->format('Y-m-d') . ' 23:59:59';
 
         // ->where('status', 'selesai koreksi');
