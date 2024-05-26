@@ -33,6 +33,14 @@ class GalianPerencanaanAdjust extends Model
             return $this->hasItem->harga;
         }
     }
+
+    public function getSatuanAttribute()
+    {
+        if ($this->hasItem) {
+            return $this->hasItem->satuan;
+        }
+    }
+
     public function getGalianPengawasPanjangAttribute()
     {
         if ($this->hasGalianPengawas) {

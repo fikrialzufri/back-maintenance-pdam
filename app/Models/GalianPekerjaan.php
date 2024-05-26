@@ -44,6 +44,12 @@ class GalianPekerjaan extends Model
             return $this->hasItem->nama;
         }
     }
+    public function getSatuanAttribute()
+    {
+        if ($this->hasItem) {
+            return $this->hasItem->satuan;
+        }
+    }
     public function getHargaAttribute()
     {
         if ($this->hasItem) {
