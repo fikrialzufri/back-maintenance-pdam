@@ -63,6 +63,12 @@ class PenunjukanPekerjaan extends Model
             return $this->hasAduan->jenis;
         }
     }
+    public function getSatuanAttribute()
+    {
+        if ($this->hasAduan) {
+            return $this->hasAduan->satuan;
+        }
+    }
     public function getAtasNamaAttribute()
     {
         if ($this->hasAduan) {

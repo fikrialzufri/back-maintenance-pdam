@@ -622,6 +622,7 @@
                                                         <th width="100">Jenis</th>
                                                         <th width="50">Pengguna</th>
                                                         <th width="150">Jumlah </th>
+                                                        <th width="150">Satuan </th>
                                                         @if ($perencaan == false && $pekerjaanUtama->status === 'dikoreksi')
                                                             <th width="300">Keterangan</th>
                                                         @endif
@@ -691,16 +692,20 @@
                                                                     <td>{{ $pekerjaan->pivot->keterangan }}</td>
                                                                 @endif
                                                                 @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
+                                                                    <td>{{ $pekerjaan->satuan }}</td>
                                                                     <td>Rp. {{ format_uang($pekerjaan->pivot->harga) }}</td>
                                                                     <td>{{ $pekerjaan->pivot->keterangan }}</td>
                                                                     <td>
                                                                         Rp.{{ format_uang($pekerjaan->pivot->qty * $pekerjaan->pivot->harga) }}
                                                                     </td>
                                                                 @elseif ($perencaan == false && $pekerjaanUtama->status === 'dikoreksi')
+                                                                    <td>{{ $pekerjaan->satuan }}</td>
+                                                                    <td></td>
                                                                     <td>{{ $pekerjaan->pivot->keterangan }}</td>
                                                                 @endif
 
                                                                 @if ($pekerjaanUtama->status === 'selesai koreksi' || $pekerjaanUtama->status === 'diadjust')
+                                                                    <td>{{ $pekerjaan->satuan }}</td>
                                                                     <td></td>
                                                                     <td>{{ $pekerjaan->pivot->keterangan }}</td>
                                                                     <td>
@@ -713,6 +718,7 @@
                                                             <tr>
                                                                 <td>Pengawas</td>
                                                                 @if ($pengawas === true && $pekerjaanUtama->status === 'approve manajer')
+                                                                    <td>{{ $pekerjaan->satuan }}</td>
                                                                     <td><input type="text"
                                                                             name="qty_pengawas[{{ $pekerjaan->pivot->item_id }}]"
                                                                             id="qty_pengawas_{{ $pekerjaan->pivot->item_id }}"
@@ -731,6 +737,7 @@
                                                                         <td>
                                                                             {{ str_replace('.', ',', $daftarPekerjaan->hasItemPengawas[$key]->pivot->qty) }}
                                                                         </td>
+                                                                        <td>{{ $pekerjaan->satuan }}</td>
                                                                         @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
                                                                             <td>Rp.
                                                                                 {{ format_uang($daftarPekerjaan->hasItemPengawas[$key]->pivot->harga) }}
@@ -745,6 +752,7 @@
                                                                         @endif
 
                                                                         @if ($pekerjaanUtama->status === 'selesai koreksi' || $pekerjaanUtama->status === 'diadjust')
+
                                                                             <td>
 
                                                                             </td>
@@ -791,6 +799,7 @@
                                                                             @else
                                                                             value="{{ $pekerjaan->pivot->qty }}" @endif>
                                                                         </td>
+                                                                        <td>{{ $pekerjaan->satuan }}</td>
                                                                         <td><input type="text"
                                                                                 name="keterangan_pengawas[{{ $pekerjaan->pivot->item_id }}]"
                                                                                 id="keterangan_pengawas_{{ $pekerjaan->pivot->item_id }}"
@@ -801,6 +810,7 @@
                                                                         <td>
 
                                                                         </td>
+                                                                        <td>{{ $pekerjaan->satuan }}</td>
                                                                         <td>
 
                                                                         </td>
@@ -815,6 +825,7 @@
                                                                         <td>
                                                                             {{ str_replace('.', ',', $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty) }}
                                                                         </td>
+                                                                        <td>{{ $pekerjaan->satuan }}</td>
                                                                         @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
                                                                             <td>Rp.
                                                                                 {{ format_uang($daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->harga) }}
@@ -855,6 +866,7 @@
                                                                         <td>
                                                                             {{ str_replace('.', ',', $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty) }}
                                                                         </td>
+                                                                        <td>{{ $pekerjaan->satuan }}</td>
                                                                         @if ($perencaan == true && $pekerjaanUtama->status === 'dikoreksi')
                                                                             <td>Rp.
                                                                                 {{ format_uang($daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->harga) }}
@@ -885,6 +897,7 @@
                                                                                 {{ str_replace('.', ',', $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty) }}
                                                                             </td>
                                                                         @endif
+                                                                        <td>{{ $pekerjaan->satuan }}</td>
                                                                         <td>
                                                                             <div class="input-group mb-2 mr-sm-2">
                                                                                 <div class="input-group-prepend">
@@ -923,6 +936,7 @@
                                                                         <td>
                                                                             {{ str_replace('.', ',', $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty) }}
                                                                         </td>
+                                                                        <td>{{ $pekerjaan->satuan }}</td>
                                                                         <td>
                                                                         </td>
                                                                         <td>
@@ -938,6 +952,7 @@
                                                                         <td>{{ str_replace('.', ',', $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty) }}
                                                                         </td>
                                                                     @endif
+                                                                    <td>{{ $pekerjaan->satuan }}</td>
                                                                     @if (isset($daftarPekerjaan->hasItemPerencanaan[$key]))
                                                                         <td>
                                                                             Rp.
@@ -961,6 +976,7 @@
                                                                         <td>
                                                                             {{ str_replace('.', ',', $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty) }}
                                                                         </td>
+                                                                        <td>{{ $pekerjaan->satuan }}</td>
                                                                         <td>
                                                                         </td>
                                                                         <td>
@@ -977,6 +993,7 @@
                                                                         <td>{{ str_replace('.', ',', $daftarPekerjaan->hasItemAsmenPengawas[$key]->pivot->qty) }}
                                                                         </td>
                                                                     @endif
+                                                                    <td>{{ $pekerjaan->satuan }}</td>
                                                                     @if (isset($daftarPekerjaan->hasItemPerencanaan[$key]))
                                                                         <td>
                                                                             Rp.
@@ -1007,6 +1024,7 @@
                                                                     @if (isset($daftarPekerjaan->hasItemPerencanaanAdujst[$key]))
                                                                         <td> {{ str_replace('.', ',', $daftarPekerjaan->hasItemPerencanaanAdujst[$key]->pivot->qty) }}
                                                                         </td>
+                                                                        <td>{{ $pekerjaan->satuan }}</td>
                                                                         <td>
                                                                             Rp.
                                                                             {{ format_uang($daftarPekerjaan->hasItemPerencanaanAdujst[$key]->pivot->harga) }}
@@ -1035,7 +1053,7 @@
                                                     @if ($pekerjaanUtama->status === 'selesai koreksi' || $pekerjaanUtama->status === 'diadjust')
                                                         @if (isset($daftarPekerjaan->hasItem))
                                                             <tr>
-                                                                <th colspan="7" class="text-right">Total
+                                                                <th colspan="8" class="text-right">Total
                                                                 </th>
                                                                 <th>
                                                                     <span id="grand_total_pekerjaan_tampil">
