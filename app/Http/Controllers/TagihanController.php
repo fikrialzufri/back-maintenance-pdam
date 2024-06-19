@@ -1191,7 +1191,6 @@ class TagihanController extends Controller
         $this->validate(request(), [
             'nomor_tagihan' => 'required',
             'unique:tagihan,nomor_tagihan,' . $nomor_tagihan . ',NULL,id,rekanan_id,' . $rekanan_id,
-            'nomor_tagihan' => 'required',
             'rekanan_id' => 'required',
             'bulan' => 'required',
         ], $messages);
