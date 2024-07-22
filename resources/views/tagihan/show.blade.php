@@ -263,7 +263,7 @@
                                                         <div class="bullet bg-primary"></div>
                                                         <div class="time">{{ $item->tanggal_disetujui }}</div>
                                                         <div class="desc">
-                                                            <h3 class="persetujuan_jabatan">Plt. {{ $item->jabatan }}</h3>
+                                                            <h3 class="persetujuan_jabatan">{{ $item->jabatan }}</h3>
                                                             <h4 class="persetujuan_nama">{{ $item->nama }}</h4>
                                                         </div>
                                                     </li>

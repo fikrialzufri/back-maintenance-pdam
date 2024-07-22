@@ -192,7 +192,7 @@
                                 <span style=' font-size: 20px;'>
                                     @forelse ($tagihan->list_persetujuan as $index => $item)
                                         @if ($item->jabatan === 'Direktur Teknik')
-                                            <p style=' font-size: 20px;'> Mengetahui, <br> Plt. {{ $item->jabatan }}
+                                            <p style=' font-size: 20px;'> Mengetahui, <br> {{ $item->jabatan }}
                                                 <br> Perumdam Tirta Kencana Kota Samarinda
                                             </p>
                                             @if ($direktur)
