@@ -41,7 +41,6 @@
                                             <td class="text-center">
                                                 <input type="checkbox" name="pelaksanaan[]" id="pelaksanaan" class="check"
                                                     value="{{ $item->id }}"
-                                                    onclick="return false;"
                                                     checked>
                                             </td>
                                             <td>{{ $index + 1 }}
